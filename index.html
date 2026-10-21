@@ -231,6 +231,11 @@ header{box-shadow:0 6px 25px #183c3b08;border-bottom:1px solid #e4ebe7}
 .hero-rebuilt .hero-action-blue{background:linear-gradient(90deg,#0b9bc6 0%,#189bc4bd 55%,#189bc444 100%),url('https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=1050&q=90') center/cover!important}
 .hero-rebuilt[dir="rtl"] .hero-rebuilt-left,.hero-rebuilt[dir="rtl"] .hero-action{text-align:right!important}
 @media(max-width:760px){.hero-rebuilt .hero-rebuilt-inner{height:auto!important;min-height:0!important}.hero-rebuilt .hero-action{height:auto!important;min-height:100px!important}}
+</style><style id="hero-sync-readable">
+.hero-rebuilt .hero-action strong{font-family:Arial,"Noto Sans",sans-serif!important;font-size:clamp(12px,1.2vw,18px)!important;line-height:1.3!important;word-break:normal!important;overflow-wrap:anywhere!important}
+.hero-rebuilt .hero-action small{font-family:Arial,"Noto Sans",sans-serif!important;line-height:1.35!important}
+.hero-rebuilt .herovisual .float small{overflow-wrap:anywhere!important}
+@media(min-width:761px){.hero-rebuilt .hero-rebuilt-inner{height:clamp(370px,calc(100dvh - 245px),620px)!important;grid-template-rows:minmax(0,1fr) clamp(92px,16vh,130px)!important}.hero-rebuilt .hero-action{height:100%!important}}
 </style></head>
 <body>
 <div class="notice" id="notice"></div>
@@ -308,14 +313,14 @@ function translate(){return I18N[lang]}
 function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e}
 function render(){const t=translate();document.documentElement.lang=lang;$("language").value=lang;$("notice").innerHTML=t.notice;$("query").placeholder=t.search;$("query").setAttribute("aria-label",t.search);$("searchButton").textContent=t.searchButton;$("topSeller").textContent=t.topSeller;$("heroTitle").innerHTML=t.heroTitle;$("heroText").textContent=t.heroText;$("explore").textContent=t.explore;$("heroSeller").textContent=t.heroSeller;t.floats.forEach((x,i)=>$("float"+(i+1)).textContent=x);
 for(const key of ["academyTitle","academyDesc","academyLink","academyQuick","catTitle","catSubtitle","featureTitle","featureSubtitle","showAll","youtubeTitle","youtubeDesc","youtubeLink","bandTitle","bandText","bandSeller","creatorTitle","creatorSubtitle","footerText"])$(key).textContent=t[key];
-const nav=$("nav");nav.replaceChildren();t.nav.forEach((label,i)=>{const key=i===0?"all":CONTENT[i-1].id;const b=el("button",active===key?"selected":"",label);b.type="button";b.onclick=()=>{active=key;renderCards();renderNav();$("featured").scrollIntoView({behavior:"smooth",block:"start"})};nav.append(b)});
+const nav=$("nav");nav.replaceChildren();t.nav.forEach((label,i)=>{const key=i===0?"all":CONTENT[i-1].id;const b=el("button",active===key?"selected":"",label);b.type="button";b.onclick=()=>{if(key==="all"){active="all";renderCards();renderNav();window.scrollTo({top:0,behavior:"smooth"});return}const routes={learn:"learn.html",daily:"daily.html",students:"students.html",drama:"drama.html",kpop:"kpop.html",culture:"culture.html",market:"market.html"};window.location.href="./"+routes[key]};nav.append(b)});
 for(const key of ["placementTitle","placementDesc","placementButton"])$(key).textContent=t[key];for(const key of ["studyTitle","studyIntro","studyBasic","studyBasicDesc","studyMid","studyMidDesc","studyHigh","studyHighDesc"])$(key).textContent=t[key];for(const id of ["studyStart1","studyStart2","studyStart3"])$(id).textContent=t.studyStart;const stats=$("stats");stats.replaceChildren();t.stats.forEach(s=>{const c=el("div","stat");c.append(el("i","",s[0]));const wrap=el("div");wrap.append(el("strong","",s[1]),el("small","",s[2]));c.append(wrap);stats.append(c)});
 const categories=$("categories");categories.replaceChildren();CONTENT.forEach((c,i)=>{const b=el("button","cat"+(active===c.id?" active":""));b.type="button";b.append(el("span","emoji",c.icon),el("b","",t.nav[i+1]));b.onclick=()=>{active=c.id;renderCategories();renderCards();renderNav();$("featured").scrollIntoView({behavior:"smooth",block:"start"})};categories.append(b)});
 const creators=$("creatorGrid");creators.replaceChildren();t.creators.forEach(c=>{const e=el("article","creator"),a=el("div","avatar",c[0]),w=el("div");w.append(el("h3","",c[1]),el("p","",c[2]),el("small","",t.sample));e.append(a,w);creators.append(e)});renderCards()}
 function renderNav(){[...$("nav").children].forEach((b,i)=>b.classList.toggle("selected",(i===0?"all":CONTENT[i-1].id)===active))}
 function renderCategories(){[...$("categories").children].forEach((b,i)=>b.classList.toggle("active",CONTENT[i].id===active))}
 function renderCards(){const t=translate(),q=$("query").value.trim().toLocaleLowerCase(),container=$("cards");container.replaceChildren();let count=0;CONTENT.forEach((c,i)=>{const words=[...c.ko,...c.en,I18N.ko.nav[i+1],I18N.en.nav[i+1]].join(" ").toLocaleLowerCase();if(active!=="all"&&active!==c.id||q&&!words.includes(q))return;count++;const card=el("article","card"),art=el("div","art tone"+i%7,c.emoji),body=el("div","cardbody"),title=el("h3","",c[lang] ? c[lang][0] : c.en[0]),desc=el("p","",c[lang] ? c[lang][1] : c.en[1]),bottom=el("div","cardbottom"),button=el("button","",t.exploreCard);button.type="button";button.onclick=()=>{window.location.href="./"+({learn:"academy.html",daily:"daily.html",students:"students.html",drama:"drama.html",kpop:"kpop.html",culture:"culture.html",market:"market.html"}[c.id]||"guide.html")};bottom.append(el("span","",t.sample),button);body.append(el("span","pill",t.nav[i+1]),title,desc,bottom);card.append(art,body);container.append(card)});if(!count)container.append(el("div","empty",t.empty))}
-function setLanguage(value){if(!I18N[value]){document.getElementById("language").value=lang;return}lang=value;localStorage.setItem("hs-language",lang);render();renderExtra();renderPortal();renderJourney()}$("language").addEventListener("change",e=>setLanguage(e.target.value));
+function setLanguage(value){if(!I18N[value]){document.getElementById("language").value=lang;return}lang=value;localStorage.setItem("hs-language",lang);render();renderExtra();renderPortal();renderJourney();if(window.heroSyncLanguage)window.heroSyncLanguage()}$("language").addEventListener("change",e=>setLanguage(e.target.value));
 $("search").onsubmit=e=>{e.preventDefault();active="all";renderNav();renderCategories();renderCards();$("featured").scrollIntoView({behavior:"smooth",block:"start"})};
 $("showAll").onclick=()=>{active="all";$("query").value="";renderNav();renderCategories();renderCards()};
 $("explore").onclick=()=>{window.location.href="./live.html#partners"};
@@ -334,16 +339,13 @@ for(const opt of originals){if(!localized[opt.value]){opt.hidden=true;opt.disabl
 function sync(){
 const code=select.value;const t=localized[code]||localized.en;
 ids.forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=t[i]});
-const title=document.getElementById("heroTitle");
-if(title&&code==="ko"&&title.innerHTML!=="한국을 배우고,<br>세계를 연결하다.")title.innerHTML="한국을 배우고,<br>세계를 연결하다.";
-const text=document.getElementById("heroText");
-if(text&&code==="ko")text.textContent="한국어를 배우고, 한국의 일상을 발견하고, 좋아하는 크리에이터를 만나보세요. 한국을 사랑하는 모두를 위한 글로벌 플랫폼.";
+
 document.querySelectorAll(".hero-rebuilt [data-localized-label]").forEach(el=>el.setAttribute("aria-label",el.textContent.trim()));
 document.documentElement.dir=["ar","ur","fa","he"].includes(code)?"rtl":"ltr";
 document.querySelector(".hero-rebuilt")?.setAttribute("dir",["ar","ur","fa","he"].includes(code)?"rtl":"ltr");
 }
-select.addEventListener("change",()=>setTimeout(sync,0));
-new MutationObserver(()=>{const code=select.value;if(localized[code])sync()}).observe(document.getElementById("heroTitle"),{childList:true,subtree:true});
+window.heroSyncLanguage=sync;select.addEventListener("change",()=>setTimeout(sync,0));
+
 sync();
 })();
 </script></body></html>
