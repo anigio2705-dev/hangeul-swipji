@@ -1,0 +1,28 @@
+name: Save Gyeongbokgung Hanbok Hero
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/save-gyeongbokgung-hero.yml'
+permissions:
+  contents: write
+jobs:
+  save:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download actual Gyeongbokgung palace and hanbok image
+        run: |
+          mkdir -p assets
+          curl -fL --retry 3 --connect-timeout 20 -A 'HangeulSwipji/1.0 (educational website; Wikimedia attribution)' 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Cherry_trees_at_the_Gyeongbokgung_Palace_with_traditional_dressed_women_in_the_background%2C_Seoul%2C_South_Korea.jpg?width=1920' -o assets/gyeongbokgung-hanbok-spring.jpg
+          file assets/gyeongbokgung-hanbok-spring.jpg
+          test $(stat -c%s assets/gyeongbokgung-hanbok-spring.jpg) -gt 20000
+      - name: Commit photo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/gyeongbokgung-hanbok-spring.jpg
+          if ! git diff --cached --quiet; then
+            git commit -m "Store authentic Gyeongbokgung palace hanbok cherry blossoms photo"
+            git push
+          fi
