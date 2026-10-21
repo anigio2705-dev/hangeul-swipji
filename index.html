@@ -519,19 +519,4 @@ select.addEventListener('change',()=>queueMicrotask(update));
 window.addEventListener('pageshow',update);
 update();
 })();
-</script><script id="enforce-nine-languages">
-(function(){
-const allowed=[["ko","🇰🇷 한국어"],["en","🇺🇸 English"],["es","🇪🇸 Español"],["fr","🇫🇷 Français"],["zh-CN","🇨🇳 简体中文"],["zh-TW","🇹🇼 繁體中文"],["ja","🇯🇵 日本語"],["mn","🇲🇳 Монгол"],["vi","🇻🇳 Tiếng Việt"]];
-const select=document.getElementById("language");if(!select)return;
-const codes=new Set(allowed.map(x=>x[0]));
-function enforce(){
-const current=select.value;
-const items=Array.from(select.options);
-if(items.length===allowed.length&&items.every((o,i)=>o.value===allowed[i][0]))return;
-select.replaceChildren(...allowed.map(([value,label])=>{const o=document.createElement("option");o.value=value;o.textContent=label;return o}));
-select.value=codes.has(current)?current:"ko";
-}
-enforce();
-new MutationObserver(enforce).observe(select,{childList:true,subtree:true});
-})();
-</script><script defer src="./site-language.js"></script></body></html>
+</script><script defer src="./site-language.js?v=4"></script></body></html>
