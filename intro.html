@@ -58,4 +58,4 @@ else{const count=Object.keys(progress).filter(x=>progress[x]).length;const compl
 }
 const originalRender=render;window.addEventListener("hs-course-render",render);const obs=new MutationObserver(()=>{const heading=$("lessonTitle");if(heading&&heading.textContent!==root.dataset.unitTitle){root.dataset.unitTitle=heading.textContent;render()}});obs.observe($("lessonTitle"),{childList:true,subtree:true});$("lang").addEventListener("change",()=>setTimeout(render,0));render();
 })();
-</script><script src="./active-recall.js" defer></script><script src="./active-recall.js" defer></script></body></html>
+</script><script src="./active-recall.js" defer></script></body></html>
