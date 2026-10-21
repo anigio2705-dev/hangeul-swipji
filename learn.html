@@ -34,6 +34,6 @@ function render(){
  document.querySelector(".workspace").style.display="none";
  $("note").textContent=en?"The 350 lessons are hosted in the seven course pages above. The old separate sample curriculum has been retired to prevent conflicting lessons and progress.":"350단원은 위 7개 학습실에서 제공합니다. 기존의 별도 체험용 단원 목록은 내용과 진도가 충돌하여 연결을 해제했습니다.";
 }
-$("lang").onchange=e=>{lang=e.target.value;localStorage.setItem("hs-language",lang);render()};
+$("lang").onchange=e=>{if(e.target.value!=="ko"&&e.target.value!=="en"){const world=document.getElementById("hs-world-lang");if(world){world.value=e.target.value;world.dispatchEvent(new Event("change"))}return}lang=e.target.value;localStorage.setItem("hs-language",lang);render()};
 render();
 </script><script>window.addEventListener('DOMContentLoaded',()=>{const native=document.getElementById('lang');if(!native)return;native.addEventListener('change',()=>{const value=native.value;if(value==='ko'||value==='en')return;setTimeout(()=>{const global=document.getElementById('hs-world-lang');if(global){global.value=value;global.dispatchEvent(new Event('change'))}},30)});});</script><script defer src="./global-language.js"></script></body></html>
