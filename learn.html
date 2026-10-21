@@ -15,8 +15,9 @@ const courses=[
 ["고급 1","Advanced 1","advanced1.html","논증·학술·사회적 의사소통","Argumentation and academic communication"],
 ["고급 2","Advanced 2","advanced2.html","전문 토론·비평·학술적 글쓰기","Advanced debate, critique and academic writing"]
 ];
+const localeTitles={ja:{back:"ホーム",heroTitle:"韓国語を学ぶ・7段階350レッスン",heroDesc:"学習レベルを選ぶと50レッスンのコースが開きます。",roadTitle:"学習の流れ",roadDesc:"各レベルに50レッスンあります。",roadNote:"下のコースを選んでください。",note:"韓国語の原文を学びながら、各コースで発音と問題を練習できます。"},ru:{back:"Главная",heroTitle:"Изучайте корейский: 7 уровней, 350 уроков",heroDesc:"Выберите уровень, чтобы открыть курс из 50 уроков.",roadTitle:"Путь обучения",roadDesc:"На каждом уровне по 50 уроков.",roadNote:"Выберите курс ниже.",note:"Изучайте корейский язык с упражнениями и аудио."},es:{back:"Inicio",heroTitle:"Aprende coreano: 7 niveles, 350 lecciones",heroDesc:"Elige un nivel para abrir su curso de 50 lecciones.",roadTitle:"Tu ruta de aprendizaje",roadDesc:"Cada nivel contiene 50 lecciones.",roadNote:"Selecciona un curso.",note:"Aprende coreano con ejercicios y audio."}};
 const $=id=>document.getElementById(id);
-let lang=localStorage.getItem("hs-language")==="en"?"en":"ko";
+let lang=["en","ko","ja","ru","es"].includes(localStorage.getItem("hs-language"))?localStorage.getItem("hs-language"):"ko";
 const initial=Math.max(0,Math.min(6,Number(new URLSearchParams(location.search).get("level"))||0));
 function render(){
  const en=lang==="en";document.documentElement.lang=lang;$("lang").value=lang;
@@ -30,10 +31,11 @@ function render(){
  courses.forEach((c,i)=>{const x=document.createElement("div");x.className="roadstep";x.textContent=(i+1)+". "+c[en?1:0];$("roadSteps").append(x)});
  $("levels").replaceChildren();
  courses.forEach((c,i)=>{const a=document.createElement("a");a.className="level"+(i===initial?" active":"");a.href="./"+c[2];a.innerHTML='<div class="symbol">📖</div><h2></h2><p></p><span class="pill"></span>';a.querySelector("h2").textContent=c[en?1:0];a.querySelector("p").textContent=c[en?4:3];a.querySelector(".pill").textContent=en?"50 lessons · Open course →":"50단원 · 학습실 열기 →";$("levels").append(a)});
+ if(localeTitles[lang]){const t=localeTitles[lang];for(const id of Object.keys(t)){const e=$(id);if(e)e.textContent=t[id]}}
  $("beginnerLab").style.display="none";
  document.querySelector(".workspace").style.display="none";
  $("note").textContent=en?"The 350 lessons are hosted in the seven course pages above. The old separate sample curriculum has been retired to prevent conflicting lessons and progress.":"350단원은 위 7개 학습실에서 제공합니다. 기존의 별도 체험용 단원 목록은 내용과 진도가 충돌하여 연결을 해제했습니다.";
 }
-$("lang").onchange=e=>{if(e.target.value!=="ko"&&e.target.value!=="en"){localStorage.setItem("hs-requested-language",e.target.value);return}lang=e.target.value;localStorage.setItem("hs-language",lang);render()};
+$("lang").onchange=e=>{if(!["ko","en","ja","ru","es"].includes(e.target.value)){return}lang=e.target.value;localStorage.setItem("hs-language",lang);render()};
 render();
 </script></body></html>
