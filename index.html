@@ -26,6 +26,44 @@ footer{margin-top:65px;background:#102342;color:#d7e1f2;padding:38px 0}footer .f
 .academy-quick{display:inline-block;color:#315de5;font-size:13px;font-weight:850;padding:0 0 13px;text-decoration:underline;text-underline-offset:4px}
 .academy-entry{background:white;border:1px solid var(--line);border-radius:21px;padding:28px 30px;margin:23px 0}.academy-entry-head h2{font-size:26px;margin:8px 0}.academy-entry-head p{font-size:13px;color:var(--muted);margin:0 0 21px}.academy-entry-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.academy-level{display:flex;flex-direction:column;align-items:flex-start;gap:9px;border:1px solid #dce6f6;background:#f7faff;border-radius:15px;padding:21px;transition:transform .2s}.academy-level:hover{transform:translateY(-3px);border-color:#315de5}.academy-level span{font-size:32px}.academy-level strong{font-size:19px}.academy-level small{color:#64758d;line-height:1.5}.academy-level b{color:#315de5;font-size:12px;margin-top:5px}@media(max-width:760px){.academy-entry{padding:22px}.academy-entry-grid{grid-template-columns:1fr}}
 .placement-entry{display:flex;align-items:center;justify-content:space-between;gap:20px;background:#eaf0ff;border-radius:18px;padding:26px 32px;margin:22px 0}.placement-entry h2{margin:8px 0;font-size:23px}.placement-entry p{margin:0;color:#516586;font-size:13px;line-height:1.7}.placement-entry a{display:inline-block;text-align:center}@media(max-width:760px){.placement-entry{flex-direction:column;align-items:stretch;padding:22px}}
+
+/* Hangeul Swipji editorial visual system */
+:root{--navy:#142b3e;--blue:#176c76;--muted:#697c89;--line:#e3e9e7;--bg:#f6f8f6;--white:#fff}
+body{background:#f6f8f6;color:#1b3342;letter-spacing:-.15px}
+.notice{background:#133b43;color:#d2e8e4}
+header{box-shadow:0 6px 25px #183c3b08;border-bottom:1px solid #e4ebe7}
+.brandmark{background:linear-gradient(140deg,#0c827d,#16495c);border-radius:13px}
+.brand strong{color:#163b42}.search{background:#f5f8f6;border-color:#dce8e4}.search button,.primary{background:#087d77}.primary:hover{background:#096c69}
+.nav button.selected{color:#087d77;border-color:#087d77}
+.hero{background:radial-gradient(circle at 78% 25%,#237e7a99,transparent 35%),linear-gradient(115deg,#132d3b 5%,#18516a 56%,#0c7873 100%);min-height:440px;border-radius:26px;box-shadow:0 22px 45px #193b4d24}
+.hero h1{letter-spacing:-2px;line-height:1.15}.hero p{line-height:1.85}
+.herovisual .float{box-shadow:0 20px 40px #0002}
+.academy-entry,.placement-entry,.academy-banner,.youtube-feature{border-radius:22px;border-color:#e0eae6}
+.academy-entry{background:linear-gradient(135deg,#fff,#f0f9f5)}
+.academy-level{border-color:#e2ece9}.academy-level:hover{border-color:#0c817b}
+.academy-quick{color:#087d77!important}
+.sectionhead h2,.academy-entry h2,.academy-banner h2{letter-spacing:-1px}
+.premium-reading{margin:26px 0 35px;border:1px solid #dce9e5;border-radius:25px;background:linear-gradient(120deg,#f0faf5,#fff 65%);padding:34px;display:grid;grid-template-columns:1.1fr .9fr;gap:25px;align-items:center;overflow:hidden}
+.premium-reading .eyebrow{color:#087b74;font-size:11px;letter-spacing:2px;font-weight:900}
+.premium-reading h2{font-size:clamp(27px,3vw,40px);letter-spacing:-1.5px;line-height:1.25;margin:12px 0}
+.premium-reading p{line-height:1.8;color:#5d7580;max-width:560px}
+.reading-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.reading-actions a{display:inline-flex;align-items:center;justify-content:center;padding:13px 18px;border-radius:11px;background:#087d77;color:white;font-weight:800;font-size:13px}
+.reading-actions a.outline{background:white;color:#0b6666;border:1px solid #b9d6cf}
+.reading-art{height:260px;position:relative}
+.reading-art .paper{position:absolute;left:19%;top:10px;width:210px;height:240px;background:#f9e6bf;border-radius:10px 20px 20px 10px;transform:rotate(-12deg);box-shadow:16px 14px 0 #14485c,25px 25px 45px #17434c3d;padding:28px;color:#205260}
+.reading-art .paper strong{font-size:46px;display:block;line-height:1.2;margin:25px 0}
+.reading-art .paper small{font-weight:850;letter-spacing:2px}
+.reading-art .sun{position:absolute;width:135px;height:135px;right:7%;top:4%;border-radius:50%;background:#b8e9d8}
+.site-map{margin:24px 0 45px}
+.site-map h2{font-size:26px;letter-spacing:-1px}
+.site-map-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.site-map-card{border:1px solid #e2ebe8;border-radius:17px;background:white;padding:20px;min-height:175px;transition:transform .15s}
+.site-map-card:hover{transform:translateY(-3px)}
+.site-map-card .symbol{font-size:29px}.site-map-card strong{display:block;margin:13px 0 8px;font-size:16px}.site-map-card p{font-size:12px;color:#657887;line-height:1.7;margin:0}
+.site-map-card span.link{display:block;color:#087d77;font-size:12px;font-weight:800;margin-top:12px}
+@media(max-width:850px){.premium-reading{grid-template-columns:1fr}.reading-art{display:none}.site-map-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:500px){.premium-reading{padding:24px 20px}.site-map-grid{grid-template-columns:1fr}.site-map-card{min-height:0}}
 </style></head>
 <body>
 <div class="notice" id="notice"></div>
@@ -37,7 +75,13 @@ footer{margin-top:65px;background:#102342;color:#d7e1f2;padding:38px 0}footer .f
 <div class="nav" id="nav"></div><a class="academy-quick" id="academyQuick" href="./learn.html">📚 한국어 학습관 바로가기 →</a></div></header>
 <main class="shell">
 <section class="hero"><div class="herocopy"><span class="eyebrow">LEARN · WATCH · CREATE · CONNECT</span><h1 id="heroTitle"></h1><p id="heroText"></p><div class="heroactions"><button class="light" id="explore"></button><button class="ghost" id="heroSeller"></button></div></div><div class="herovisual"><div class="float"><span>🇰🇷</span><b id="float1"></b></div><div class="float"><span>🎬</span><b id="float2"></b></div><div class="float"><span>🎤</span><b id="float3"></b></div><div class="float"><span>🛍️</span><b id="float4"></b></div></div></section>
-<section class="placement-entry" id="placement"><div><span class="eyebrow" style="color:#315de5">KOREAN PLACEMENT TEST</span><h2 id="placementTitle"></h2><p id="placementDesc"></p></div><a href="./placement.html" class="primary" id="placementButton"></a></section><section class="academy-entry" id="korean-study"><div class="academy-entry-head"><span class="eyebrow" style="color:#315de5">KOREAN ACADEMY · 한국어 학습관</span><h2 id="studyTitle"></h2><p id="studyIntro"></p></div><div class="academy-entry-grid"><a href="./learn.html" class="academy-level"><span>🌱</span><strong id="studyBasic"></strong><small id="studyBasicDesc"></small><b id="studyStart1"></b></a><a href="./learn.html" class="academy-level"><span>🌿</span><strong id="studyMid"></strong><small id="studyMidDesc"></small><b id="studyStart2"></b></a><a href="./learn.html" class="academy-level"><span>🌳</span><strong id="studyHigh"></strong><small id="studyHighDesc"></small><b id="studyStart3"></b></a></div></section><div class="stats" id="stats"></div>
+<section class="premium-reading" id="reading-library"><div><span class="eyebrow">THE READING COLLECTION · 15 LEVELS</span><h2 id="readingPromoTitle">읽기의 힘으로 한국어를 완성하세요.</h2><p id="readingPromoDesc">15단계 × 40권, 총 600개 읽기 연습. 이야기 읽기, 한국어 듣기, 영어 해석, 독해 퀴즈와 독서 진도를 한곳에서 관리하세요.</p><div class="reading-actions"><a href="./reading.html" id="readingPromoGo">600권 리딩 라이브러리 →</a><a href="./dashboard.html" class="outline" id="readingPromoProgress">나의 학습 기록 →</a></div></div><div class="reading-art" aria-hidden="true"><div class="sun"></div><div class="paper"><small>HANGEUL SWIPJI</small><strong>읽고<br>배우다.</strong><small>15 LEVELS · 600 BOOKS</small></div></div></section>
+<section class="site-map" id="site-map"><div class="sectionhead"><div><h2 id="siteMapTitle">한글쉽지의 모든 배움, 한곳에서.</h2><p id="siteMapDesc">진단부터 읽기, 회화, 문화 콘텐츠까지 하나의 학습 흐름으로 연결합니다.</p></div></div><div class="site-map-grid">
+<a class="site-map-card" href="./placement.html"><span class="symbol">🧭</span><strong id="map1Title">레벨 진단</strong><p id="map1Desc">20문항으로 나에게 맞는 학습 출발점을 찾아보세요.</p><span class="link">Explore ↗</span></a>
+<a class="site-map-card" href="./learn.html"><span class="symbol">📖</span><strong id="map2Title">한국어 7단계</strong><p id="map2Desc">입문부터 고급 2까지 350단원 학습과 문제 풀이.</p><span class="link">Explore ↗</span></a>
+<a class="site-map-card" href="./reading.html"><span class="symbol">📚</span><strong id="map3Title">15단계 리딩</strong><p id="map3Desc">600개 읽기 연습, 듣기와 독해 평가.</p><span class="link">Explore ↗</span></a>
+<a class="site-map-card" href="./dashboard.html"><span class="symbol">📊</span><strong id="map4Title">나의 학습 기록</strong><p id="map4Desc">진도와 오답 복습, 데이터 백업 및 복원.</p><span class="link">Explore ↗</span></a>
+</div></section><section class="placement-entry" id="placement"><div><span class="eyebrow" style="color:#315de5">KOREAN PLACEMENT TEST</span><h2 id="placementTitle"></h2><p id="placementDesc"></p></div><a href="./placement.html" class="primary" id="placementButton"></a></section><section class="academy-entry" id="korean-study"><div class="academy-entry-head"><span class="eyebrow" style="color:#315de5">KOREAN ACADEMY · 한국어 학습관</span><h2 id="studyTitle"></h2><p id="studyIntro"></p></div><div class="academy-entry-grid"><a href="./learn.html" class="academy-level"><span>🌱</span><strong id="studyBasic"></strong><small id="studyBasicDesc"></small><b id="studyStart1"></b></a><a href="./learn.html" class="academy-level"><span>🌿</span><strong id="studyMid"></strong><small id="studyMidDesc"></small><b id="studyStart2"></b></a><a href="./learn.html" class="academy-level"><span>🌳</span><strong id="studyHigh"></strong><small id="studyHighDesc"></small><b id="studyStart3"></b></a></div></section><div class="stats" id="stats"></div>
 <section class="academy-banner" id="academy"><div><span class="eyebrow" style="color:#315de5">HANGEUL SWIPJI · KOREAN ACADEMY</span><h2 id="academyTitle"></h2><p id="academyDesc"></p></div><a class="primary" href="./learn.html" id="academyLink"></a></section><section class="section" id="discover"><div class="sectionhead"><div><h2 id="catTitle"></h2><p id="catSubtitle"></p></div></div><div class="categories" id="categories"></div></section>
 <section class="section" id="featured"><div class="sectionhead"><div><h2 id="featureTitle"></h2><p id="featureSubtitle"></p></div><button class="more" id="showAll"></button></div><div class="cards" id="cards"></div></section>
 <section class="youtube-feature" id="youtube"><div class="youtube-icon" aria-hidden="true">▶️</div><div><span class="youtube-label">YOUTUBE · @knowledge_hippo</span><h2 id="youtubeTitle"></h2><p id="youtubeDesc"></p></div><a class="primary" id="youtubeLink" href="https://www.youtube.com/@knowledge_hippo" target="_blank" rel="noopener noreferrer"></a></section>
@@ -47,6 +91,7 @@ footer{margin-top:65px;background:#102342;color:#d7e1f2;padding:38px 0}footer .f
 <footer><div class="shell foot"><div><strong>한글쉽지 <span style="font-size:12px">HANGEUL SWIPJI</span></strong><p id="footerText"></p></div><p>LEARN · WATCH · CREATE · CONNECT</p></div></footer>
 <script>
 "use strict";
+const extraTexts={ko:{readingPromoTitle:"읽기의 힘으로 한국어를 완성하세요.",readingPromoDesc:"15단계 × 40권, 총 600개 읽기 연습. 이야기 읽기, 한국어 듣기, 영어 해석, 독해 퀴즈와 독서 진도를 한곳에서 관리하세요.",readingPromoGo:"600권 리딩 라이브러리 →",readingPromoProgress:"나의 학습 기록 →",siteMapTitle:"한글쉽지의 모든 배움, 한곳에서.",siteMapDesc:"진단부터 읽기, 회화, 문화 콘텐츠까지 하나의 학습 흐름으로 연결합니다.",map1Title:"레벨 진단",map1Desc:"20문항으로 나에게 맞는 학습 출발점을 찾아보세요.",map2Title:"한국어 7단계",map2Desc:"입문부터 고급 2까지 350단원 학습과 문제 풀이.",map3Title:"15단계 리딩",map3Desc:"600개 읽기 연습, 듣기와 독해 평가.",map4Title:"나의 학습 기록",map4Desc:"진도와 오답 복습, 데이터 백업 및 복원."},en:{readingPromoTitle:"Build your Korean, one story at a time.",readingPromoDesc:"15 levels × 40 reading exercises: 600 opportunities to read, listen, check comprehension and track progress.",readingPromoGo:"Explore 600 reading exercises →",readingPromoProgress:"My learning progress →",siteMapTitle:"Everything you need to learn Korean.",siteMapDesc:"From placement to reading, conversation and culture — connected in one learning journey.",map1Title:"Placement quiz",map1Desc:"Find your starting point with 20 questions.",map2Title:"Seven-stage academy",map2Desc:"350 learning units from Hangul to advanced Korean.",map3Title:"15-level reading",map3Desc:"600 reading exercises with listening and quizzes.",map4Title:"My dashboard",map4Desc:"Track lessons, review mistakes, and back up progress."}};function renderExtra(){const t=extraTexts[lang];Object.keys(t).forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t[id]})};
 const CONTENT=[
 {id:"learn",icon:"📚",emoji:"가",ko:["한국어 첫걸음","한글 자음·모음부터 시작하는 한국어"],en:["Your First Korean Lesson","Start with Hangul consonants and vowels"]},
 {id:"daily",icon:"📹",emoji:"☕",ko:["한국의 하루","한국 사람들의 일상과 브이로그"],en:["A Day in Korea","Everyday life and vlogs from Korea"]},
@@ -72,10 +117,10 @@ const creators=$("creatorGrid");creators.replaceChildren();t.creators.forEach(c=
 function renderNav(){[...$("nav").children].forEach((b,i)=>b.classList.toggle("selected",(i===0?"all":CONTENT[i-1].id)===active))}
 function renderCategories(){[...$("categories").children].forEach((b,i)=>b.classList.toggle("active",CONTENT[i].id===active))}
 function renderCards(){const t=translate(),q=$("query").value.trim().toLocaleLowerCase(),container=$("cards");container.replaceChildren();let count=0;CONTENT.forEach((c,i)=>{const words=[...c.ko,...c.en,I18N.ko.nav[i+1],I18N.en.nav[i+1]].join(" ").toLocaleLowerCase();if(active!=="all"&&active!==c.id||q&&!words.includes(q))return;count++;const card=el("article","card"),art=el("div","art tone"+i%7,c.emoji),body=el("div","cardbody"),title=el("h3","",c[lang][0]),desc=el("p","",c[lang][1]),bottom=el("div","cardbottom"),button=el("button","",t.exploreCard);button.type="button";button.onclick=()=>alert(t.preview);bottom.append(el("span","",t.sample),button);body.append(el("span","pill",t.nav[i+1]),title,desc,bottom);card.append(art,body);container.append(card)});if(!count)container.append(el("div","empty",t.empty))}
-$("language").onchange=e=>{lang=e.target.value;localStorage.setItem("hs-language",lang);render()};
+$("language").onchange=e=>{lang=e.target.value;localStorage.setItem("hs-language",lang);render();renderExtra()};
 $("search").onsubmit=e=>{e.preventDefault();active="all";renderNav();renderCategories();renderCards();$("featured").scrollIntoView({behavior:"smooth",block:"start"})};
 $("showAll").onclick=()=>{active="all";$("query").value="";renderNav();renderCategories();renderCards()};
 $("explore").onclick=()=>$("discover").scrollIntoView({behavior:"smooth"});
 for(const id of ["topSeller","heroSeller","bandSeller"])$(id).onclick=()=>alert(translate().sellerAlert);
-render();
+render();renderExtra();
 </script></body></html>
