@@ -236,6 +236,18 @@ header{box-shadow:0 6px 25px #183c3b08;border-bottom:1px solid #e4ebe7}
 .hero-rebuilt .hero-action small{font-family:Arial,"Noto Sans",sans-serif!important;line-height:1.35!important}
 .hero-rebuilt .herovisual .float small{overflow-wrap:anywhere!important}
 @media(min-width:761px){.hero-rebuilt .hero-rebuilt-inner{height:clamp(370px,calc(100dvh - 245px),620px)!important;grid-template-rows:minmax(0,1fr) clamp(92px,16vh,130px)!important}.hero-rebuilt .hero-action{height:100%!important}}
+</style><style id="hero-four-card-compact">
+/* Make the four discovery cards visually lighter and less dominant, without changing the overall hero height. */
+@media(min-width:761px){
+.hero-rebuilt .hero-rebuilt-inner{grid-template-columns:minmax(0,53%) minmax(0,47%)!important}
+.hero-rebuilt .herovisual{width:88%!important;justify-self:end!important;align-self:center!important;height:83%!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+.hero-rebuilt .herovisual .float{padding:9px 11px!important;border-radius:13px!important;gap:3px!important;min-width:0!important}
+.hero-rebuilt .herovisual .float b,.hero-rebuilt .herovisual .float .hero-card-heading{font-size:clamp(12px,1.13vw,16px)!important;line-height:1.22!important}
+.hero-rebuilt .herovisual .float small{font-size:clamp(8px,.7vw,10px)!important;line-height:1.25!important}
+.hero-rebuilt .herovisual .float .hero-card-emoji{font-size:15px!important}
+.hero-rebuilt .hero-free-title{font-size:9px!important}
+.hero-rebuilt .hero-free-badge{font-size:10px!important;padding:4px 7px!important;top:6px!important;right:6px!important}
+}
 </style></head>
 <body>
 <div class="notice" id="notice"></div>
