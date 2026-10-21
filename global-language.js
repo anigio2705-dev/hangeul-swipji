@@ -6,8 +6,8 @@ const select=document.createElement('select');select.id='hs-world-lang';select.s
 const reset=document.createElement('button');reset.textContent='↺ Original / 원문';reset.style.cssText='margin-top:7px;padding:6px 9px;border:0;border-radius:7px;background:#e7f2f1;color:#12575a;font:inherit;cursor:pointer';
 const status=document.createElement('div');status.setAttribute('role','status');status.style.cssText='font-size:10px;color:#607887;font-weight:400;margin-top:6px;max-width:240px';status.textContent='Select a language to translate this page.';
 const initial=document.createElement('option');initial.value='';initial.textContent='Choose language / 언어 선택';select.append(initial);langs.forEach(([code,name])=>{const o=document.createElement('option');o.value=code;o.textContent=name;select.append(o)});
-box.append(label,select,reset,status);document.body.append(box);
-let target='',busy=false,queued=false;const originals=new WeakMap();const translated=new Map();const excluded=new Set(['SCRIPT','STYLE','NOSCRIPT','TEXTAREA','INPUT','OPTION','CODE','PRE','SVG']);
+box.append(label,select,reset,status);box.style.display='none';document.body.append(box);
+let target='',busy=false,queued=false;const native=document.getElementById('language')||document.getElementById('lang');const originals=new WeakMap();const translated=new Map();const excluded=new Set(['SCRIPT','STYLE','NOSCRIPT','TEXTAREA','INPUT','OPTION','CODE','PRE','SVG']);
 function sourceLang(){return document.documentElement.lang==='en'?'en':'ko'}
 function nodes(){const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode(n){const el=n.parentElement;if(!el||el.closest('#hs-global-language')||excluded.has(el.tagName)||el.isContentEditable||!n.nodeValue.trim()||n.nodeValue.trim().length<2)return NodeFilter.FILTER_REJECT;return NodeFilter.FILTER_ACCEPT}});const out=[];while(walker.nextNode())out.push(walker.currentNode);return out}
 function decode(s){const e=document.createElement('textarea');e.innerHTML=s;return e.value}
@@ -16,6 +16,7 @@ async function translatePage(){if(busy){queued=true;return}if(!target)return;bus
 select.addEventListener('change',()=>{target=select.value;try{localStorage.setItem('hs-translation-language',target)}catch(e){}if(!target){restore();return}translatePage()});
 function restore(){target='';for(const n of nodes()){const s=originals.get(n);if(s!==undefined)n.nodeValue=s}status.textContent='Original text restored.'}
 reset.onclick=()=>{select.value='';try{localStorage.removeItem('hs-translation-language')}catch(e){}restore()};
+if(native){native.addEventListener('change',()=>{if(native.value==='ko'||native.value==='en'){target='';return}select.value=native.value;select.dispatchEvent(new Event('change'))},true)}
 const observer=new MutationObserver(mutations=>{if(!target||busy)return;if(mutations.some(m=>m.addedNodes.length>0)){clearTimeout(observer.pending);observer.pending=setTimeout(translatePage,450)}});observer.observe(document.body,{childList:true,subtree:true});
 try{const saved=localStorage.getItem('hs-translation-language');if(saved&&langs.some(x=>x[0]===saved)){select.value=saved;target=saved;setTimeout(translatePage,300)}}catch(e){}
 })();
