@@ -41,4 +41,4 @@ function render(){
 }
 $("lang").onchange=e=>{if(!["ko","en",...Object.keys(localeTitles)].includes(e.target.value)){e.target.value=lang;return}lang=e.target.value;localStorage.setItem("hs-language",lang);render()};
 render();
-</script></body></html>
+</script><script defer src="./site-language.js"></script></body></html>
