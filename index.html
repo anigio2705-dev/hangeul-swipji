@@ -335,7 +335,7 @@ function sync(){
 const code=select.value;const t=localized[code]||localized.en;
 ids.forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=t[i]});
 const title=document.getElementById("heroTitle");
-if(title&&code==="ko")title.innerHTML="한국을 배우고,<br>세계를 연결하다.";
+if(title&&code==="ko"&&title.innerHTML!=="한국을 배우고,<br>세계를 연결하다.")title.innerHTML="한국을 배우고,<br>세계를 연결하다.";
 const text=document.getElementById("heroText");
 if(text&&code==="ko")text.textContent="한국어를 배우고, 한국의 일상을 발견하고, 좋아하는 크리에이터를 만나보세요. 한국을 사랑하는 모두를 위한 글로벌 플랫폼.";
 document.querySelectorAll(".hero-rebuilt [data-localized-label]").forEach(el=>el.setAttribute("aria-label",el.textContent.trim()));
