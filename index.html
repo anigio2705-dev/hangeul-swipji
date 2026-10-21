@@ -240,7 +240,7 @@ header{box-shadow:0 6px 25px #183c3b08;border-bottom:1px solid #e4ebe7}
 <body>
 <div class="notice" id="notice"></div>
 <header><div class="shell"><div class="top">
-<a href="#" class="brand" aria-label="Hangeul Swipji home"><span class="brandmark">ㅎ</span><span><strong>한글쉽지</strong><small>HANGEUL SWIPJI</small></span></a>
+<a href="#" class="brand" aria-label="Hangeul Swipji home"><span class="brandmark">ㅎ</span><span><strong id="siteBrandName">한글쉽지</strong><small>HANGEUL SWIPJI</small></span></a>
 <form class="search" id="search"><input id="query" type="search" autocomplete="off"><button id="searchButton" type="submit"></button></form>
 <a href="./guide.html" class="guide-toplink" id="guideTopLink">처음 오셨나요? 학습 안내 →</a><select class="lang" id="language" aria-label="Select language"><option value="ko">🇰🇷 한국어</option><option value="en">🇺🇸 English</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="pt">Português</option><option value="it">Italiano</option><option value="ru">Русский</option><option value="zh-CN">简体中文</option><option value="zh-TW">繁體中文</option><option value="ja">日本語</option><option value="vi">Tiếng Việt</option><option value="th">ไทย</option><option value="id">Bahasa Indonesia</option><option value="ms">Bahasa Melayu</option><option value="tl">Filipino</option><option value="hi">हिन्दी</option><option value="bn">বাংলা</option><option value="ur">اردو</option><option value="ar">العربية</option><option value="fa">فارسی</option><option value="tr">Türkçe</option><option value="nl">Nederlands</option><option value="pl">Polski</option><option value="uk">Українська</option><option value="sv">Svenska</option><option value="no">Norsk</option><option value="da">Dansk</option><option value="fi">Suomi</option><option value="el">Ελληνικά</option><option value="he">עברית</option><option value="sw">Kiswahili</option><option value="my">မြန်မာ</option><option value="km">ខ្មែរ</option><option value="mn">Монгол</option><option value="ne">नेपाली</option><option value="ta">தமிழ்</option><option value="te">తెలుగు</option><option value="mr">मराठी</option><option value="gu">ગુજરાતી</option><option value="pa">ਪੰਜਾਬી</option><option value="ro">Română</option><option value="hu">Magyar</option><option value="cs">Čeština</option><option value="sk">Slovenčina</option><option value="bg">Български</option><option value="hr">Hrvatski</option><option value="sr">Српски</option><option value="sq">Shqip</option><option value="af">Afrikaans</option><option value="am">አማርኛ</option><option value="zu">isiZulu</option></select>
 <button class="primary" id="topSeller"></button></div>
@@ -311,7 +311,7 @@ for(const code of Object.keys(LOCALE_EXTRAS)){extraTexts[code]={...extraTexts.en
 const $=id=>document.getElementById(id);let lang=I18N[localStorage.getItem("hs-language")]?localStorage.getItem("hs-language"):"ko",active="all";
 function translate(){return I18N[lang]}
 function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e}
-function render(){const t=translate();document.documentElement.lang=lang;$("language").value=lang;$("notice").innerHTML=t.notice;$("query").placeholder=t.search;$("query").setAttribute("aria-label",t.search);$("searchButton").textContent=t.searchButton;$("topSeller").textContent=t.topSeller;$("heroTitle").innerHTML=t.heroTitle;$("heroText").textContent=t.heroText;$("explore").textContent=t.explore;$("heroSeller").textContent=t.heroSeller;t.floats.forEach((x,i)=>$("float"+(i+1)).textContent=x);
+function render(){const t=translate();document.documentElement.lang=lang;document.getElementById("siteBrandName").textContent=lang==="ko"?"한글쉽지":"Hangeul Swipji";document.getElementById("guideTopLink").textContent=lang==="ko"?"처음 오셨나요? 학습 안내 →":"New here? Study guide →";$("language").value=lang;$("notice").innerHTML=t.notice;$("query").placeholder=t.search;$("query").setAttribute("aria-label",t.search);$("searchButton").textContent=t.searchButton;$("topSeller").textContent=t.topSeller;$("heroTitle").innerHTML=t.heroTitle;$("heroText").textContent=t.heroText;$("explore").textContent=t.explore;$("heroSeller").textContent=t.heroSeller;t.floats.forEach((x,i)=>$("float"+(i+1)).textContent=x);
 for(const key of ["academyTitle","academyDesc","academyLink","academyQuick","catTitle","catSubtitle","featureTitle","featureSubtitle","showAll","youtubeTitle","youtubeDesc","youtubeLink","bandTitle","bandText","bandSeller","creatorTitle","creatorSubtitle","footerText"])$(key).textContent=t[key];
 const nav=$("nav");nav.replaceChildren();t.nav.forEach((label,i)=>{const key=i===0?"all":CONTENT[i-1].id;const b=el("button",active===key?"selected":"",label);b.type="button";b.onclick=()=>{if(key==="all"){active="all";renderCards();renderNav();window.scrollTo({top:0,behavior:"smooth"});return}const routes={learn:"learn.html",daily:"daily.html",students:"students.html",drama:"drama.html",kpop:"kpop.html",culture:"culture.html",market:"market.html"};window.location.href="./"+routes[key]};nav.append(b)});
 for(const key of ["placementTitle","placementDesc","placementButton"])$(key).textContent=t[key];for(const key of ["studyTitle","studyIntro","studyBasic","studyBasicDesc","studyMid","studyMidDesc","studyHigh","studyHighDesc"])$(key).textContent=t[key];for(const id of ["studyStart1","studyStart2","studyStart3"])$(id).textContent=t.studyStart;const stats=$("stats");stats.replaceChildren();t.stats.forEach(s=>{const c=el("div","stat");c.append(el("i","",s[0]));const wrap=el("div");wrap.append(el("strong","",s[1]),el("small","",s[2]));c.append(wrap);stats.append(c)});
@@ -325,7 +325,7 @@ $("search").onsubmit=e=>{e.preventDefault();active="all";renderNav();renderCateg
 $("showAll").onclick=()=>{active="all";$("query").value="";renderNav();renderCategories();renderCards()};
 $("explore").onclick=()=>{window.location.href="./live.html#partners"};
 for(const id of ["topSeller","heroSeller"])$(id).onclick=()=>{window.location.href="./guide.html"};$("bandSeller").onclick=()=>{window.location.href="./market.html"};
-render();renderExtra();renderPortal();renderJourney();
+render();renderExtra();renderPortal();renderJourney();if(window.heroSyncLanguage)window.heroSyncLanguage();
 const cinemaPlay=document.getElementById("cinemaPlay");if(cinemaPlay)cinemaPlay.addEventListener("click",()=>{const preview=document.getElementById("cinemaPreview"),player=document.getElementById("cinemaPlayer");preview.hidden=true;player.hidden=false;player.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/1YP2Sd1xb14?autoplay=1&rel=0" title="Arirang TV Korean Culture" loading="eager" allow="accelerometer;autoplay;encrypted-media;picture-in-picture" allowfullscreen></iframe>';});
 </script><script id="hero-language-sync">
 (function(){
@@ -347,5 +347,31 @@ document.querySelector(".hero-rebuilt")?.setAttribute("dir",["ar","ur","fa","he"
 window.heroSyncLanguage=sync;select.addEventListener("change",()=>setTimeout(sync,0));
 
 sync();
+})();
+</script><script id="header-language-consistency">
+(function(){
+const select=document.getElementById('language');
+if(!select)return;
+const brand=document.getElementById('siteBrandName'),guide=document.getElementById('guideTopLink');
+const names={ko:['한글쉽지','처음 오셨나요? 학습 안내 →'],en:['Hangeul Swipji','New here? Study guide →'],ja:['ハングルスイプジ','初めてですか？ 学習ガイド →'],'zh-CN':['韩语轻松学','初次访问？学习指南 →'],'zh-TW':['輕鬆學韓語','初次造訪？學習指南 →'],es:['Hangeul Swipji','¿Eres nuevo? Guía de estudio →'],fr:['Hangeul Swipji','Nouveau ? Guide d’étude →'],de:['Hangeul Swipji','Neu hier? Lernleitfaden →'],pt:['Hangeul Swipji','Primeira visita? Guia de estudo →'],it:['Hangeul Swipji','Prima visita? Guida allo studio →'],ru:['Хангыль Свипджи','Впервые здесь? Учебный гид →'],vi:['Hangeul Swipji','Mới đến? Hướng dẫn học →'],th:['Hangeul Swipji','มาใหม่ใช่ไหม? คู่มือเรียน →'],id:['Hangeul Swipji','Baru di sini? Panduan belajar →'],ar:['هانغول سويبجي','جديد هنا؟ دليل الدراسة ←'],hi:['हंगुल स्विपजी','पहली बार आए हैं? अध्ययन गाइड →'],tr:['Hangeul Swipji','Yeni misiniz? Öğrenme rehberi →'],nl:['Hangeul Swipji','Nieuw hier? Studiegids →'],pl:['Hangeul Swipji','Pierwszy raz? Poradnik →'],uk:['Хангиль Свіпджі','Вперше тут? Навчальний гід →']};
+function update(){
+const code=select.value;const n=names[code]||names.en;
+if(brand)brand.textContent=n[0];if(guide)guide.textContent=n[1];
+if(window.heroSyncLanguage)window.heroSyncLanguage();
+const nav=document.getElementById('nav');
+if(nav&&typeof I18N!=='undefined'&&I18N[code]){
+const labels=I18N[code].nav;
+Array.from(nav.children).forEach((el,i)=>{if(labels[i])el.textContent=labels[i]});
+}
+const academy=document.getElementById('academyQuick');
+if(academy&&typeof I18N!=='undefined'&&I18N[code])academy.textContent=I18N[code].academyQuick;
+const search=document.getElementById('searchButton');
+if(search&&typeof I18N!=='undefined'&&I18N[code])search.textContent=I18N[code].searchButton;
+const seller=document.getElementById('topSeller');
+if(seller&&typeof I18N!=='undefined'&&I18N[code])seller.textContent=I18N[code].topSeller;
+}
+select.addEventListener('change',()=>queueMicrotask(update));
+window.addEventListener('pageshow',update);
+update();
 })();
 </script></body></html>
