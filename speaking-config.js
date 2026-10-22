@@ -1,6 +1,5 @@
-// Supabase 대시보드 > Project Settings > API에서 공개용 URL 및 anon/publishable key만 입력하세요.
-// service_role/secret 키는 절대 이 파일에 넣지 마세요.
+// Supabase 공개 클라이언트 설정. 비밀키를 저장하지 마세요.
 window.HS_CONFIG = {
-  supabaseUrl: "",
-  supabaseAnonKey: ""
+  supabaseUrl: "https://iljmzmhpyviasopdmfds.supabase.co",
+  supabaseAnonKey: "sb_publishable_NovzPKi6alzWehWZaWSO2w_o7EX2FxA"
 };
