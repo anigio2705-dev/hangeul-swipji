@@ -12,6 +12,7 @@ on:
       - 'hangul-*.html'
       - 'scripts/audit-350-lessons.cjs'
       - 'scripts/check-phase2-pages.cjs'
+      - 'scripts/browser-smoke-phase2.cjs'
       - '.github/workflows/phase2-validation.yml'
   workflow_dispatch:
 jobs:
@@ -30,6 +31,12 @@ jobs:
         run: node scripts/check-phase2-pages.cjs
       - name: Verify original curriculum and 7-day materials
         run: node scripts/check-foundations.cjs
+      - name: Install browser test dependencies
+        run: |
+          npm install --no-save playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Desktop and mobile Chromium smoke test
+        run: node scripts/browser-smoke-phase2.cjs
       - name: Upload audit report
         if: always()
         uses: actions/upload-artifact@v4
