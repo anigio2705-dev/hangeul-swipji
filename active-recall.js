@@ -2,13 +2,13 @@
 (function(){
 "use strict";
 const course=(location.pathname.split("/").pop()||"intro.html").replace(".html","");
-const key="hs-recall-"+course+"-v1";
+const key="hs-recall-"+course+(course==="intro"?"-foundations-v2":"-v1");
 const $=id=>document.getElementById(id);
 const safeLoad=()=>{try{const x=JSON.parse(localStorage.getItem(key)||"{}");return x&&typeof x==="object"&&!Array.isArray(x)?x:{}}catch{return {}}};
 let records=safeLoad(),shown=-1,attempted=false;
 function txt(ko,en){return lang==="ko"?ko:en}
 function normalize(s){return String(s||"").normalize("NFC").toLowerCase().replace(/[\s.,!?~"'‘’“”]/g,"")}
-function getTarget(u){const options=(u.sent||[]).filter(x=>Array.isArray(x)&&x[0]&&x[1]);return options.length?options[Math.min(1,options.length-1)]:null}
+function getTarget(u){if(u.recall)return u.recall;const options=(u.sent||[]).filter(x=>Array.isArray(x)&&x[0]&&x[1]);return options.length?options[Math.min(1,options.length-1)]:null}
 function due(rec){return !rec||!rec.next||Date.now()>=rec.next}
 function updateStats(){
 const all=units.map((_,i)=>records[i]).filter(Boolean);
@@ -24,11 +24,11 @@ if(!box)return;
 box.hidden=!target;
 if(!target)return;
 shown=unit;attempted=false;
-$("recallHeading").textContent=txt("기억하고 직접 말하기","Recall and produce Korean");
-$("recallHelp").textContent=txt("뜻을 보고 한국어 문장을 직접 입력하세요. 띄어쓰기와 문장부호는 채점에서 제외합니다.","Read the meaning, then type the Korean sentence from memory. Spacing and punctuation are ignored in grading.");
+$("recallHeading").textContent=u.recall?txt("글자를 합쳐 써 보기","Build and write a block"):txt("기억하고 직접 말하기","Recall and produce Korean");
+$("recallHelp").textContent=u.recall?txt("자음과 모음을 합쳐 글자를 입력하세요. 이 문제는 발음 평가가 아닙니다.","Combine the letters and type the block. This is not a pronunciation test."):txt("뜻을 보고 한국어 문장을 직접 입력하세요. 띄어쓰기와 문장부호는 채점에서 제외합니다.","Read the meaning, then type the Korean sentence from memory. Spacing and punctuation are ignored in grading.");
 $("recallPrompt").textContent=target[1];
 $("recallAnswer").value="";
-$("recallAnswer").placeholder=txt("한국어 문장을 입력하세요","Type the Korean sentence");
+$("recallAnswer").placeholder=u.recall?txt("합친 글자를 입력하세요","Type the combined block"):txt("한국어 문장을 입력하세요","Type the Korean sentence");
 $("recallFeedback").textContent="";
 $("recallCheck").textContent=txt("내 답 확인하기","Check my answer");
 $("recallReveal").textContent=txt("모범 답안 보기","Show model answer");

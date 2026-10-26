@@ -1,98 +1,13 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="한글쉽지 입문 0단계: 한글 자음과 모음, 글자 만들기, 가나다 읽기, 받침과 발음 연습"><title>입문 0단계 · 한글 읽기 | 한글쉽지</title>
-<style>
-:root{--navy:#152e55;--blue:#2857b8;--gold:#9a7140;--line:#e3e8ef;--muted:#52667c;--bg:#f8fafc}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--navy);font-family:system-ui,"Noto Sans KR","Malgun Gothic",sans-serif;line-height:1.65}a{color:var(--blue)}button,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #8bb2ff;outline-offset:3px}
-.wrap{width:min(1100px,calc(100% - 32px));margin:auto}header{background:white;border-bottom:1px solid var(--line)}header .wrap{display:flex;justify-content:space-between;align-items:center;gap:14px;min-height:68px}.brand{font-size:20px;font-weight:900;color:var(--navy);text-decoration:none}.back{font-size:14px;font-weight:750}
-.hero{background:linear-gradient(120deg,#142e58,#284d79);color:white;border-radius:24px;padding:35px;margin:28px 0 24px;position:relative;overflow:hidden}.hero:after{content:"가 나 다 라";position:absolute;right:15px;top:0;writing-mode:vertical-rl;opacity:.08;font-size:70px;pointer-events:none}.hero .eyebrow{color:#eed5a4;font-size:13px;font-weight:900;letter-spacing:1.2px}.hero h1{font-size:clamp(29px,5vw,43px);margin:10px 0}.hero p{max-width:720px;margin:0;color:#e1eaf7;font-size:16px}
-.panel{background:white;border:1px solid var(--line);border-radius:19px;padding:24px;margin:20px 0}.panel h2{font-size:24px;letter-spacing:-.7px;margin:0 0 7px}.hint{color:var(--muted);font-size:14px;margin:0 0 18px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.tabs button{background:#eef3fa;color:#314967;border:1px solid #dce5f0;border-radius:30px;padding:9px 16px;font-weight:750}.tabs button.active{background:var(--navy);color:white}
-.tiles{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:9px}.tile{background:#f7faff;border:1px solid #d9e5f4;border-radius:13px;padding:12px 3px;min-height:102px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}.tile:hover,.tile:focus-visible{background:#e9f1ff;border-color:var(--blue)}.tile strong{font-size:31px;line-height:1.2}.tile small{font-size:12px;color:#5a6e84}.tile em{font-style:normal;font-size:12px;color:#826136}
-.syllables{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}.syllables button{border:1px solid #d7e3f3;background:#f3f7ff;color:var(--navy);border-radius:12px;padding:12px 4px;font-size:26px;font-weight:850}.syllables button:hover{background:#dfeafe}
-.builder{display:grid;grid-template-columns:1fr 1fr;gap:18px}.chooser{display:flex;gap:8px;flex-wrap:wrap}.chooser button{min-width:45px;border:1px solid #d8e2f0;background:#fff;border-radius:10px;padding:9px;font-size:22px}.chooser button.active{background:#e2ecff;border:2px solid var(--blue);padding:8px}.result{background:#f1f5fc;border-radius:18px;padding:25px;display:grid;place-items:center;text-align:center}.result .big{font-size:100px;font-weight:850;line-height:1.2}.result p{color:var(--muted);margin:8px 0}.speak{border:0;background:var(--blue);color:white;border-radius:11px;padding:11px 17px;font-weight:850}.note{background:#fff8e9;border-left:4px solid #bc955a;padding:15px 18px;border-radius:9px;font-size:14px;margin-top:18px}
-.quiz-options{display:flex;gap:10px;flex-wrap:wrap}.quiz-options button{border:1px solid #c9d7ea;border-radius:11px;padding:12px 23px;background:#fff;font-size:21px;font-weight:800}.quiz-options button:hover{background:#edf4ff}.feedback{min-height:28px;font-weight:800;margin:12px 0}.footer{padding:30px 0 55px;color:var(--muted);font-size:14px}.footer a{font-weight:800}.screen-reader{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
-@media(max-width:760px){.tiles{grid-template-columns:repeat(4,1fr)}.syllables{grid-template-columns:repeat(4,1fr)}.builder{grid-template-columns:1fr}.panel{padding:18px}.hero{padding:25px}.tile strong{font-size:28px}.result .big{font-size:78px}}
-@media(max-width:380px){.tiles{grid-template-columns:repeat(3,1fr)}.syllables{grid-template-columns:repeat(3,1fr)}}
-@media print{header,.tabs,.speak,.quiz-options,.footer{display:none!important}.hero{color:#152e55;background:#fff;border:1px solid #ccc}.hero p{color:#152e55}.panel{break-inside:avoid;margin:12px 0;padding:10px}.tiles{grid-template-columns:repeat(7,1fr)}.tile{min-height:65px;padding:5px}.tile strong{font-size:22px}.builder{grid-template-columns:1fr 1fr}}
-.practice-actions{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0 18px}.practice-actions .secondary{background:#eaf0f9;color:#152e55}.tile small{font-weight:750;font-size:13px}.tile em{font-weight:700}.tiles{grid-template-columns:repeat(7,minmax(0,1fr))}@media(max-width:760px){.tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:380px){.tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}</style></head><body>
-<header><div class="wrap"><a class="brand" href="./index.html">ㅎ 한글쉽지</a><a class="back" href="./learn.html">전체 학습으로 돌아가기 →</a></div></header>
-<main class="wrap">
-<section class="hero"><div class="eyebrow">HANGEUL STEP 0 · 한글 읽기 기초</div><h1>가나다부터, 한글 읽기 완성!</h1><p>자음과 모음을 누르고, 소리를 듣고, 직접 글자를 만들어 보세요. 한글을 처음 배우는 분을 위한 무료 입문 학습입니다.</p></section>
-<section class="panel" aria-label="발음 재생 설정"><label for="koreanVoice"><b>한국어 음성 선택</b></label> <select id="koreanVoice" class="notranslate" translate="no" aria-describedby="speechStatus"></select><button type="button" class="speak" id="stopSpeech">■ 재생 멈추기</button><p class="hint" id="speechStatus" role="status" aria-live="polite">한국어 음성을 확인하고 있습니다.</p><small>기기 음성(TTS)으로 연습합니다. 실제 녹음 음성과 다를 수 있습니다. 음성이 없으면 기기의 한국어 음성을 설치한 뒤 다시 열어 주세요.</small></section><section class="panel"><h2>1. 자음 19개 · 한눈에 연습</h2><p class="hint">기본 자음 14개와 쌍자음 5개입니다. 글자 아래에는 이름과 실제 연습 음절을 함께 표시합니다. ㄱ의 이름은 기역, 연습 소리는 가입니다. 글자를 누르면 가·나·다처럼 들립니다.</p><div class="practice-actions"><button type="button" class="speak" id="sayAllC">▶ 자음 소리 전체 듣기 (가 나 다 라…)</button><button type="button" class="speak secondary" id="sayCNames">▶ 자음 이름 듣기 (기역 니은…)</button></div><div class="tiles" translate="no" id="consonants"></div><div class="note">ㄱ은 ‘기역’이라는 이름을 갖지만, ‘가’에서는 <b>가</b>라고 읽습니다. ㅇ은 첫소리에서 소리가 나지 않습니다. ㄹ, ㄱ, ㄷ, ㅂ 등의 소리는 위치에 따라 달라질 수 있습니다.</div></section>
-<section class="panel"><h2>2. 모음 21개 · 한눈에 연습</h2><p class="hint">기본 모음 10개와 확장 모음 11개입니다. 아 야 어 여 오 요 우 유 으 이부터 애 얘 에 예 와 왜 외 워 웨 위 의까지 모두 한 번에 보세요. 각 글자를 누르면 발음을 듣습니다.</p><div class="practice-actions"><button type="button" class="speak" id="sayAllV">▶ 모음 전체 듣기 (아 야 어 여…)</button><button type="button" class="speak secondary" id="sayBasicV">▶ 기본 모음 10개만 듣기</button></div><div class="tiles" translate="no" id="vowels"></div><div class="note">영어식 표기(a, eo, eu 등)는 참고용입니다. 한국어 소리를 완벽하게 대신하지 않으니 발음을 직접 듣고 따라 하세요.</div></section>
-<section class="panel"><h2>3. 자음 + 모음 = 한 글자</h2><p class="hint">자음과 모음을 각각 하나씩 선택하면 실제 한글 음절이 만들어집니다.</p><div class="builder"><div><h3>① 자음 선택</h3><div class="chooser" translate="no" id="chooseC"></div><h3>② 모음 선택</h3><div class="chooser" translate="no" id="chooseV"></div></div><div class="result notranslate" translate="no"><div class="big" id="built">가</div><p id="builtDesc">ㄱ + ㅏ = 가 (ga)</p><button type="button" class="speak" id="sayBuilt">▶ 발음 듣기</button></div></div><div class="note">세로 모음(ㅏ, ㅓ, ㅣ 등)은 자음 오른쪽에, 가로 모음(ㅗ, ㅜ, ㅡ 등)은 자음 아래에 놓입니다. 예: ㄱ+ㅏ=가, ㄱ+ㅗ=고.</div></section>
-<section class="panel"><h2>4. 가나다 읽기 연습</h2><p class="hint">각 글자를 눌러 소리를 듣고 따라 읽으세요. 모음을 선택하면 가·나·다, 거·너·더, 고·노·도처럼 연습할 수 있습니다.</p><div class="chooser notranslate" translate="no" id="practiceVowels" role="group" aria-label="읽기 연습 모음 선택"></div><div class="practice-actions"><button type="button" class="speak" id="sayPractice">▶ 선택한 줄 전체 듣기</button></div><div class="syllables notranslate" translate="no" id="practice"></div></section>
-<section class="panel"><h2>5. 받침 기초</h2><p class="hint">글자 아래에 오는 자음을 받침이라고 합니다. 같은 자음도 받침에서는 소리가 달라질 수 있습니다.</p><div class="tiles" translate="no" id="finals"></div><div class="note">기초 받침 대표 소리 7가지: ㄱ[k̚], ㄴ[n], ㄷ[t̚], ㄹ[l], ㅁ[m], ㅂ[p̚], ㅇ[ŋ]. 예를 들어 ‘옷’의 ㅅ은 받침에서 [ㄷ] 계열 소리로 납니다. 실제 단어 발음은 연음 등으로 달라질 수 있습니다.</div></section>
-<section class="panel"><h2>6. 확인 문제</h2><p class="hint">제시된 소리를 듣고 맞는 한글을 골라 보세요.</p><button type="button" class="speak" id="playQuiz">▶ 문제 소리 듣기</button><p id="quizPrompt">다음 소리에 해당하는 글자는?</p><div class="quiz-options" translate="no" id="quizOptions"></div><div class="feedback" id="feedback" aria-live="polite"></div><button type="button" class="speak" id="nextQuiz">다음 문제 →</button></section>
-</main><div class="wrap footer"><a href="./intro.html">입문 50단원 계속 배우기 →</a> · <a href="./learn.html">전체 한국어 학습관</a><p>발음 버튼은 브라우저의 한국어 음성 합성 기능을 사용합니다. 기기에 한국어 음성이 없으면 재생되지 않거나 자연스럽지 않을 수 있습니다. 실제 녹음 음성은 추후 보강할 수 있습니다.</p></div>
-<script>
-const cs=[['ㄱ','기역','g/k','가'],['ㄴ','니은','n','나'],['ㄷ','디귿','d/t','다'],['ㄹ','리을','r/l','라'],['ㅁ','미음','m','마'],['ㅂ','비읍','b/p','바'],['ㅅ','시옷','s','사'],['ㅇ','이응','silent/ng','아'],['ㅈ','지읒','j','자'],['ㅊ','치읓','ch','차'],['ㅋ','키읔','k','카'],['ㅌ','티읕','t','타'],['ㅍ','피읖','p','파'],['ㅎ','히읗','h','하']];
-const ds=[['ㄲ','쌍기역','kk','까'],['ㄸ','쌍디귿','tt','따'],['ㅃ','쌍비읍','pp','빠'],['ㅆ','쌍시옷','ss','싸'],['ㅉ','쌍지읒','jj','짜']];
-const vs=[['ㅏ','a','아'],['ㅑ','ya','야'],['ㅓ','eo','어'],['ㅕ','yeo','여'],['ㅗ','o','오'],['ㅛ','yo','요'],['ㅜ','u','우'],['ㅠ','yu','유'],['ㅡ','eu','으'],['ㅣ','i','이']];
-const ws=[['ㅐ','ae','애'],['ㅒ','yae','얘'],['ㅔ','e','에'],['ㅖ','ye','예'],['ㅘ','wa','와'],['ㅙ','wae','왜'],['ㅚ','oe','외'],['ㅝ','wo','워'],['ㅞ','we','웨'],['ㅟ','wi','위'],['ㅢ','ui','의']];
-const cOrder='ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ'.split('');const vOrder=['ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅘ','ㅙ','ㅚ','ㅛ','ㅜ','ㅝ','ㅞ','ㅟ','ㅠ','ㅡ','ㅢ','ㅣ'];
-function syllable(c,v,final=0){return String.fromCharCode(0xac00+(cOrder.indexOf(c)*21+vOrder.indexOf(v))*28+final)}
-// Explicit Korean voices only. Never fall back to an unrelated device language.
-const synth=window.speechSynthesis;
-const voiceSelect=document.getElementById('koreanVoice');
-const speechStatus=document.getElementById('speechStatus');
-let koreanVoices=[],speechRun=0,heldUtterance=null,speechTimer;
-function loadVoices(){
- const selected=voiceSelect.value;
- koreanVoices=synth?synth.getVoices().filter(v=>/^ko(?:[-_]|$)/i.test(v.lang)):[];
- voiceSelect.replaceChildren();
- if(!koreanVoices.length){const o=document.createElement('option');o.textContent='한국어 음성 없음';voiceSelect.append(o);speechStatus.textContent=synth?'한국어 음성이 아직 없습니다. 기기의 한국어 음성을 설치하거나 다른 브라우저에서 열어 주세요.':'이 브라우저는 음성 재생을 지원하지 않습니다.';return}
- koreanVoices.forEach(v=>{const o=document.createElement('option');o.value=v.voiceURI;o.textContent=v.name+' ('+v.lang+')';voiceSelect.append(o)});
- voiceSelect.value=koreanVoices.some(v=>v.voiceURI===selected)?selected:koreanVoices[0].voiceURI;
- speechStatus.textContent='한국어 음성 준비됨 · '+voiceSelect.selectedOptions[0].textContent;
-}
-function stopSpeech(){speechRun++;clearTimeout(speechTimer);if(synth)synth.cancel();heldUtterance=null;speechStatus.textContent='재생을 멈췄습니다.'}
-function speak(s){
- if(!synth){loadVoices();return}
- if(!koreanVoices.length)loadVoices();
- const voice=koreanVoices.find(v=>v.voiceURI===voiceSelect.value);
- if(!voice){speechStatus.textContent='한국어 음성이 없습니다. 다른 언어의 음성으로 대신 읽지 않습니다.';return}
- stopSpeech();const run=speechRun;
- const words=Array.isArray(s)?s:String(s).split(/[\s,]+/).filter(Boolean);
- let index=0;
- function next(){
-  if(run!==speechRun)return;
-  if(index===words.length){speechStatus.textContent='재생 완료';heldUtterance=null;return}
-  const text=words[index++];const u=new SpeechSynthesisUtterance(text);heldUtterance=u;
-  u.lang='ko-KR';u.voice=voice;u.rate=.75;u.pitch=1;
-  speechStatus.textContent='재생 중: '+text+' ('+index+'/'+words.length+')';
-  u.onend=()=>{if(run!==speechRun)return;clearTimeout(speechTimer);speechTimer=setTimeout(next,180)};
-  u.onerror=e=>{if(run!==speechRun)return;clearTimeout(speechTimer);speechRun++;heldUtterance=null;speechStatus.textContent='음성을 재생하지 못했습니다 ('+e.error+'). 한국어 음성을 바꾸거나 다시 눌러 주세요.'};
-  speechTimer=setTimeout(()=>{if(run!==speechRun)return;stopSpeech();speechStatus.textContent='음성 응답이 없습니다. 한국어 음성을 바꾸거나 다시 눌러 주세요.'},15000);
-  synth.speak(u);
- }
- next();
-}
-if(synth)synth.addEventListener('voiceschanged',loadVoices);
-voiceSelect.addEventListener('change',stopSpeech);
-document.getElementById('stopSpeech').onclick=stopSpeech;
-document.addEventListener('visibilitychange',()=>{if(document.hidden)stopSpeech()});
-window.addEventListener('pagehide',stopSpeech);
-loadVoices();
-function button(text,sub,extra,word){let b=document.createElement('button');b.type='button';b.className='tile notranslate';b.setAttribute('translate','no');b.setAttribute('aria-label',text+' · '+word+' 발음 듣기');b.innerHTML='<strong></strong><small></small><em></em>';b.querySelector('strong').textContent=text;b.querySelector('small').textContent=sub;b.querySelector('em').textContent=extra;b.onclick=()=>speak(word);return b}
-function showC(){const el=document.getElementById('consonants');el.replaceChildren(...[...cs,...ds].map(a=>button(a[0],a[1]+' · '+a[3],a[2],a[3])))}
-function showV(){const el=document.getElementById('vowels');el.replaceChildren(...[...vs,...ws].map(a=>button(a[0],a[2],a[1],a[2])))}
-function tabs(id,fn){document.querySelectorAll('#'+id+' button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#'+id+' button').forEach(x=>x.classList.toggle('active',x===b));fn(b.dataset.kind)})}
-showC();showV();document.getElementById('sayAllC').onclick=()=>speak([...cs,...ds].map(a=>a[3]).join(' '));document.getElementById('sayCNames').onclick=()=>speak([...cs,...ds].map(a=>a[1]).join(', '));document.getElementById('sayAllV').onclick=()=>speak([...vs,...ws].map(a=>a[2]).join(' '));document.getElementById('sayBasicV').onclick=()=>speak(vs.map(a=>a[2]).join(' '));
-let currentC='ㄱ',currentV='ㅏ';
-function update(){let s=syllable(currentC,currentV);document.getElementById('built').textContent=s;document.getElementById('builtDesc').textContent=currentC+' + '+currentV+' = '+s;document.querySelectorAll('#chooseC button').forEach(b=>(b.classList.toggle('active',b.textContent===currentC),b.setAttribute('aria-pressed',String(b.textContent===currentC))));document.querySelectorAll('#chooseV button').forEach(b=>(b.classList.toggle('active',b.textContent===currentV),b.setAttribute('aria-pressed',String(b.textContent===currentV))))}
-for(const c of cOrder){let b=document.createElement('button');b.textContent=c;b.onclick=()=>{currentC=c;update()};document.getElementById('chooseC').append(b)}
-for(const v of vOrder){let b=document.createElement('button');b.textContent=v;b.onclick=()=>{currentV=v;update()};document.getElementById('chooseV').append(b)}
-update();document.getElementById('sayBuilt').onclick=()=>speak(syllable(currentC,currentV));
-let practiceVowel='ㅏ';
-function renderPractice(){
- const box=document.getElementById('practice');box.replaceChildren();
- for(const c of cs){const b=document.createElement('button');const word=syllable(c[0],practiceVowel);b.type='button';b.textContent=word;b.setAttribute('aria-label',word+' 발음 듣기');b.onclick=()=>speak(word);box.append(b)}
- document.querySelectorAll('#practiceVowels button').forEach(b=>{const active=b.textContent===practiceVowel;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});
-}
-for(const v of [...vs,...ws]){const b=document.createElement('button');b.type='button';b.textContent=v[0];b.setAttribute('aria-label',v[0]+' 모음으로 연습');b.onclick=()=>{practiceVowel=v[0];renderPractice()};document.getElementById('practiceVowels').append(b)}
-document.getElementById('sayPractice').onclick=()=>speak(cs.map(c=>syllable(c[0],practiceVowel)));
-renderPractice();
-for(const [letter,word,roman] of [['ㄱ','국','k'],['ㄴ','산','n'],['ㄷ','옷','t'],['ㄹ','달','l'],['ㅁ','밤','m'],['ㅂ','밥','p'],['ㅇ','강','ng']])document.getElementById('finals').append(button(letter,word,roman,word));
-const quiz=['가','나','다','라','마','바','사','아','자','차','카','타','파','하','고','구','기','너','도','무'];let answer='',round=0;
-function newQuiz(){answer=quiz[round%quiz.length];let options=[answer,quiz[(round+3)%quiz.length],quiz[(round+7)%quiz.length],quiz[(round+11)%quiz.length]];options=[...new Set(options)].sort(()=>Math.random()-.5);const box=document.getElementById('quizOptions');box.replaceChildren();for(const opt of options){let b=document.createElement('button');b.textContent=opt;b.onclick=()=>{const ok=opt===answer;document.getElementById('feedback').textContent=ok?'정답입니다! 잘했어요.':'다시 들어보세요.';if(ok)speak(answer)};box.append(b)}document.getElementById('feedback').textContent='';document.getElementById('quizPrompt').textContent='소리를 듣고 알맞은 글자를 선택하세요.'}
-document.getElementById('playQuiz').onclick=()=>speak(answer);document.getElementById('nextQuiz').onclick=()=>{round++;newQuiz();speak(answer)};newQuiz();
-</script><script defer src="./site-language.js?v=20261026-r2"></script></body></html>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="자음과 모음 전체를 함께 보고 가·나·다, 거·너·더를 합쳐 읽는 한글 글자판."><title>한눈에 보는 한글 글자판 | 한글쉽지</title><link rel="stylesheet" href="./hangul-foundations.css?v=20261026-foundations"><script src="./hangul-core.js?v=20261026-foundations" defer></script><script src="./hangul-board.js?v=20261026-foundations" defer></script><script src="./site-language.js?v=20261026-r2" defer></script></head><body>
+<header><div class="wrap"><a class="brand" href="./index.html">ㅎ 한글쉽지</a><nav class="links"><a href="./hangul-week.html">7일 한글 입문</a><a href="./hangul-week.html?mode=teacher">교사용 교재</a><a href="./learn.html">전체 학습관</a></nav></div></header>
+<main class="wrap"><div class="intro"><span class="tag">HANGEUL · SEE / LISTEN / READ</span><h1>자음과 모음을 합치면, 한 글자.</h1><p>글자 전체를 보고, 하나씩 눌러서 읽어 보세요. <span lang="en">See the whole board. Choose a letter and read.</span></p></div>
+<section aria-labelledby="consonant-title"><h2 id="consonant-title">자음 19개 <small class="small">기본 14개 + 쌍자음 5개 · 이름 듣기</small></h2><div id="consonants" class="letter-list notranslate" translate="no"></div></section>
+<section aria-labelledby="vowel-title"><h2 id="vowel-title">모음 21개 <small class="small">기본 10개 + 확장 11개 · 소리 듣기</small></h2><div id="vowels" class="letter-list notranslate" translate="no"></div></section>
+<div class="selected notranslate" translate="no" aria-live="polite"><strong id="selected-syllable" class="big">가</strong><div><p id="selected-formula">ㄱ + ㅏ = 가</p><small id="selected-help">표의 글자를 누르세요.</small></div><button class="btn secondary" type="button" id="repeat-selected">다시 듣기</button></div>
+<div class="controls audio-controls"><button class="btn secondary" type="button" id="stop-audio">■ 멈추기</button><label class="small"><input type="checkbox" id="device-fallback"> 녹음이 없는 글자에 기기 음성 사용 / Allow device voice</label></div>
+<p class="status" data-audio-status role="status">♪ 표시가 있는 글자는 녹음 음성입니다. 표시가 없으면 녹음 준비 중입니다.</p>
+<section class="board-wrap" aria-labelledby="basic-board-title"><h2 id="basic-board-title">기본 글자판 <small class="small">왼쪽 자음 + 위쪽 모음</small></h2><p class="small">처음에는 기본 자음 14개와 기본 모음 10개로 연습하세요. 아래 다섯 줄은 쌍자음입니다.</p><div class="board-scroll" id="basic-board"></div></section>
+<section class="panel" aria-labelledby="extended-title"><h2 id="extended-title">확장 모음도 함께 보기</h2><p class="small">기본 글자판이 익숙해지면 ㅐ·ㅔ·ㅘ·ㅝ 등의 조합으로 넘어가세요.</p><div class="board-scroll" id="extended-board"></div></section>
+<section class="panel"><h2>다음은 7일 동안 함께 연습해요.</h2><div class="controls"><a class="btn" href="./hangul-week.html">학생용 1일차 시작 →</a><a class="btn secondary" href="./hangul-week.html?mode=teacher">같은 단원의 교사용 교재 →</a></div><p class="small">자음 → 모음 → 합치기 → 낱말 → 쉬운 받침 → 확인. 속도는 학습자에 맞춰 조절합니다.</p></section>
+<details class="panel"><summary>기존 글자 만들기·받침·읽기 연습</summary><div class="two-col"><div><h3>글자 만들기</h3><label>자음 <select id="builder-c" class="notranslate" translate="no"></select></label> <label>모음 <select id="builder-v" class="notranslate" translate="no"></select></label><button class="btn" id="builder-play" type="button">합쳐서 듣기</button></div><div><h3>받침 예시</h3><div id="finals" class="letter-list"></div></div></div><h3>가나다 읽기</h3><div id="practice" class="letter-list"></div><p class="small">글자 고르기·쓰기·확인 문제는 7일 과정에서 이어집니다.</p></details>
+</main><footer class="wrap footer"><p>♪ 녹음 음원 <span data-recording-count>0</span>개 · <a href="./hangul-audio-credits.html">음원 출처·이용 조건</a>. 녹음 준비 중인 항목은 기계음으로 자동 대체하지 않습니다.</p><p>자음 이름 ‘기역’과 완성된 음절 ‘가’는 다릅니다. 자음 이름 버튼과 글자판 음절 버튼을 구분해 연습하세요.</p></footer></body></html>
