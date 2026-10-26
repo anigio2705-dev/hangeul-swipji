@@ -1,7 +1,7 @@
 {
   "baseline": "46745d28b17554f7d0f67e3e5515778b7ccb35e3",
   "scope": "automated source checks; AI teaching review is recorded separately",
-  "generatedAt": "2026-10-26T14:52:20.163Z",
+  "generatedAt": "2026-10-26T14:56:58.996Z",
   "errors": [],
   "warnings": [
     "Audio: missing human recordings and listening approval remain; no synthetic substitution.",
@@ -6954,7 +6954,7 @@
     "complete": false,
     "blockers": [
       "Required Hangul human recordings missing: 375",
-      "All actual pronunciation listening approvals remain pending."
+      "Actual pronunciation listening approvals incomplete."
     ],
     "limits": [
       "AI source review does not establish learning effectiveness.",

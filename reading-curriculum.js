@@ -334,5 +334,27 @@
  ].map(row=>row.split('\n').map(line=>line.split('|')));
  const sources=rows.map(row=>row.trim().split('\n').map(line=>line.trim().split('|')));
  if(sources.length!==20||sources.some(row=>row.length!==14||row.some(p=>p.length!==2)))throw Error('Invalid paired reading source');
- window.HSReadingCurriculum={sources,branches,alternatives,version:'phase2-20261026'};
+ const glosses=[
+ '아침|morning;창문|window;일어나다|get up;조건|condition',
+ '도서관|library;책|book;공책|notebook;문맥|context',
+ '비|rain;우산|umbrella;친구|friend;협력|cooperation',
+ '공원|park;나무|tree;벤치|bench;서식 환경|habitat',
+ '시장|market;채소|vegetables;가격|price;소비량|consumption',
+ '요리|cooking;냄비|pot;재료|ingredients;조리 조건|cooking conditions',
+ '버스|bus;정류장|bus stop;기다리다|wait;예측|prediction',
+ '교실|classroom;이름|name;음악|music;취향|preference',
+ '장갑|glove;주머니|pocket;찾다|look for;단서|clue',
+ '여행|travel;지도|map;기차표|train ticket;우선순위|priority',
+ '휴대전화|mobile phone;대화|conversation;메시지|message;상호작용|interaction',
+ '나무|tree;물|water;잎|leaf;관찰 기록|observation record',
+ '약속|appointment;시계|clock;미안하다|be sorry;신뢰 회복|restoring trust',
+ '도시|city;길|street;안내소|information desk;신뢰도|reliability',
+ '공연|performance;연습|practice;역할|role;공정성|fairness',
+ '소풍|picnic;교실|classroom;활동|activity;선택지|option',
+ '표지판|sign;역|station;안내하다|give directions;선택권|freedom to choose',
+ '사진|photograph;서랍|drawer;가족|family;해석|interpretation',
+ '화분|plant pot;햇빛|sunlight;식물|plant;통제 조건|controlled condition',
+ '선택|choice;방법|method;시간|time;평가 기준|evaluation criterion'
+ ].map(row=>row.split(';').map(pair=>pair.split('|')));
+ window.HSReadingCurriculum={sources,branches,alternatives,glosses,version:'phase2-20261026'};
 })();

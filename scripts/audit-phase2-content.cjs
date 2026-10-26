@@ -62,6 +62,7 @@ for(let l=1;l<=15;l++){
    const family=(b-1)%20,developmentEnd=ko.curriculum.sources[family][6][0],followup=ko.curriculum.branches[family][0];
    check(x.paragraphs.indexOf(developmentEnd)>=0&&x.paragraphs.indexOf(followup)>x.paragraphs.indexOf(developmentEnd),id+' follow-up occurs before the initial decision/development ends');
   }
+  check(Array.isArray(x.vocab)&&x.vocab.length===(l>=9?4:3)&&x.vocab.every(p=>p.length===2&&p.every(Boolean)&&!/[.!?]/.test(p[0])),id+' invalid word glossary');
   check(x.paragraphs.length===x.translations.length&&x.translations.every(t=>typeof t==='string'&&t.trim()),id+' translation alignment');
   check(JSON.stringify(x.paragraphs)===JSON.stringify(y.paragraphs)&&JSON.stringify(x.translations)===JSON.stringify(y.translations),id+' language toggling changes source');
   if(seen.has(text)){report.reading.exactDuplicates++;report.errors.push('Duplicate passage '+id+' and '+seen.get(text))}seen.set(text,id);
@@ -87,16 +88,16 @@ check(report.reading.items===600&&report.reading.questions===1800,'Reading count
 const audio=JSON.parse(fs.readFileSync(path.join(root,'hangul-audio-audit.json'),'utf8'));
 report.audio={...audio.counts,groups:{}};
 const required=audio.targets.filter(t=>t.groups.some(g=>['자음 이름','모음','글자판 음절'].includes(g)));
-report.audio.requiredHangul={uniqueTargets:required.length,filePresent:required.filter(t=>t.recordingAvailable).length,missing:required.filter(t=>!t.recordingAvailable).length,playbackAvailable:required.filter(t=>t.playbackAvailable).length,listeningApproved:0};
+report.audio.requiredHangul={uniqueTargets:required.length,filePresent:required.filter(t=>t.recordingAvailable).length,missing:required.filter(t=>!t.recordingAvailable).length,playbackAvailable:required.filter(t=>t.playbackAvailable).length,listeningApproved:required.filter(t=>t.listeningStatus==='approved').length};
 for(const [label,group,total] of [['consonantNames','자음 이름',19],['vowels','모음',21],['syllables','글자판 음절',399]]){
  const items=audio.targets.filter(t=>t.groups.includes(group));
- report.audio.groups[label]={targets:items.length,filePresent:items.filter(t=>t.recordingAvailable).length,playbackAvailable:items.filter(t=>t.playbackAvailable).length,missing:items.filter(t=>!t.recordingAvailable).length,listeningApproved:0};check(items.length===total,'Audio alphabet count '+label);
+ report.audio.groups[label]={targets:items.length,filePresent:items.filter(t=>t.recordingAvailable).length,playbackAvailable:items.filter(t=>t.playbackAvailable).length,missing:items.filter(t=>!t.recordingAvailable).length,listeningApproved:items.filter(t=>t.listeningStatus==='approved').length};check(items.length===total,'Audio alphabet count '+label);
 }
 report.warnings.push('Audio: missing human recordings and listening approval remain; no synthetic substitution.');
 report.warnings.push('Exact supported-option uniqueness is an automated property, not a proof of every possible semantic interpretation.');
 report.warnings.push('Level metrics describe this graded curriculum; no CEFR/TOPIK calibration or learner trial was performed.');
 report.preservation.homepageUnchanged=fs.readFileSync(path.join(root,'index.html'),'utf8')===cp.execFileSync('git',['show',baseline+':index.html'],{cwd:root,encoding:'utf8'});check(report.preservation.homepageUnchanged,'Homepage modified');
-report.completion={sourceChecksPassed:report.errors.length===0,complete:false,blockers:['Required Hangul human recordings missing: '+report.audio.requiredHangul.missing,'All actual pronunciation listening approvals remain pending.'],limits:['AI source review does not establish learning effectiveness.','Browser mobile emulation does not establish iPhone/Android physical-device compatibility.']};
+report.completion={sourceChecksPassed:report.errors.length===0,complete:report.errors.length===0&&report.audio.requiredHangul.missing===0&&report.audio.requiredHangul.listeningApproved===report.audio.requiredHangul.uniqueTargets,blockers:[report.audio.requiredHangul.missing?'Required Hangul human recordings missing: '+report.audio.requiredHangul.missing:null,report.audio.requiredHangul.listeningApproved<report.audio.requiredHangul.uniqueTargets?'Actual pronunciation listening approvals incomplete.':null].filter(Boolean),limits:['AI source review does not establish learning effectiveness.','Browser mobile emulation does not establish iPhone/Android physical-device compatibility.']};
 fs.mkdirSync(path.join(root,'audit'),{recursive:true});fs.writeFileSync(path.join(root,'audit/phase2-content.json'),JSON.stringify(report,null,2)+'\n');
 const csvValue=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
 const queue=[['text','groups','source','filePresent','playbackAvailable','listeningStatus'],...audio.targets.map(t=>[t.text,t.groups.join(' / '),t.src||'',t.recordingAvailable,t.playbackAvailable,t.listeningStatus])];
