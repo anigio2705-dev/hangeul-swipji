@@ -1,0 +1,38 @@
+{
+  "profiles": [
+    {
+      "name": "desktop",
+      "nativeLanguage": true,
+      "lessonNavigation": true,
+      "quizAndPersistence": true,
+      "readingAndInference": true,
+      "introHeldCompletionBlocked": true,
+      "actualMp3Ended": true,
+      "allRegisteredMedia": {
+        "total": 78,
+        "ended": 78
+      },
+      "media404": true
+    },
+    {
+      "name": "mobile",
+      "nativeLanguage": true,
+      "lessonNavigation": true,
+      "quizAndPersistence": true,
+      "readingAndInference": true,
+      "introHeldCompletionBlocked": true,
+      "actualMp3Ended": true,
+      "allRegisteredMedia": {
+        "total": 78,
+        "ended": 78
+      },
+      "media404": true
+    }
+  ],
+  "errors": [],
+  "limits": [
+    "Mobile Chromium emulation only.",
+    "Audio media ended events are not teacher listening approval.",
+    "External machine translation quality is unverified."
+  ]
+}

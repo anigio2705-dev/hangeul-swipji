@@ -1,0 +1,887 @@
+{
+  "codeCommit": "4b6e7923c6fa1e0de2b0b4f3e2df133e9870f856",
+  "previousMain": "2e5bb3283944bf737189abe120526499d6454dba",
+  "ci": {
+    "id": 40403980066,
+    "url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40403980066",
+    "status": "completed",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 121856862040,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "run_id": 40403980066,
+        "logs_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Audit 350 lessons and 1758 questions",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Verify audio failure and cancellation handling",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Check source pairs, all reading entries and preservation",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Check all reading similarity pairs",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Check page structures and navigation shells",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Verify original curriculum and 7-day materials",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Install browser test dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Desktop and mobile Chromium smoke test",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Exercise progression, languages, quizzes and actual media on desktop and mobile",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Audit all 600 reading entries and quizzes in Chromium",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          },
+          {
+            "name": "Render every course unit in Korean and English",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14
+          },
+          {
+            "name": "Upload audit report",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15
+          },
+          {
+            "name": "Post Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 29
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 30
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 31
+          }
+        ]
+      }
+    ]
+  },
+  "pages": {
+    "id": 40403979745,
+    "url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40403979745",
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "browserFunctional": {
+    "profiles": [
+      {
+        "name": "desktop",
+        "nativeLanguage": true,
+        "lessonNavigation": true,
+        "quizAndPersistence": true,
+        "readingAndInference": true,
+        "introHeldCompletionBlocked": true,
+        "actualMp3Ended": true,
+        "allRegisteredMedia": {
+          "total": 78,
+          "ended": 78
+        },
+        "media404": true
+      },
+      {
+        "name": "mobile",
+        "nativeLanguage": true,
+        "lessonNavigation": true,
+        "quizAndPersistence": true,
+        "readingAndInference": true,
+        "introHeldCompletionBlocked": true,
+        "actualMp3Ended": true,
+        "allRegisteredMedia": {
+          "total": 78,
+          "ended": 78
+        },
+        "media404": true
+      }
+    ],
+    "errors": [],
+    "limits": [
+      "Mobile Chromium emulation only.",
+      "Audio media ended events are not teacher listening approval.",
+      "External machine translation quality is unverified."
+    ]
+  },
+  "sourceChecks": {
+    "units": 350,
+    "courseQuestions": 1758,
+    "examples": 1050,
+    "vocabularyPairs": 2112,
+    "readingEntries": 600,
+    "readingQuestions": 1800,
+    "legacyReadingPreserved": 600,
+    "languageViews": 700,
+    "smokeScreens": 24,
+    "automatedErrors": 0,
+    "homepageUnchanged": true
+  },
+  "reading": {
+    "sameLevelPairs": 11700,
+    "diagnosticThreshold": 0.65,
+    "nearPairsBefore": 97,
+    "nearPairsAfter": 0,
+    "adjacentLevelPrefixRepetitions": 560,
+    "inferenceQuestions": 60
+  },
+  "audio": {
+    "registered": 78,
+    "decoded": 78,
+    "held": 57,
+    "enabled": 21,
+    "requiredTargets": 418,
+    "requiredPresent": 59,
+    "requiredMissing": 359,
+    "requiredEnabled": 19,
+    "humanListeningApprovals": 0,
+    "signalWarningFiles": 6
+  },
+  "completionGate": {
+    "command": "node scripts/audit-phase2-content.cjs --require-complete",
+    "expectedExitCode": 1,
+    "complete": false,
+    "blockers": [
+      "359 required human recordings missing",
+      "Human pronunciation listening approvals incomplete"
+    ]
+  },
+  "phase3": {
+    "writesPerformed": false,
+    "refUpdatedByThisTask": "main only; expected-SHA non-force updates"
+  },
+  "limits": [
+    "Source checks are not a human teaching approval.",
+    "78 ended events per emulated browser profile are not listening verification.",
+    "Physical Android/iPhone and actual beginner learner trials not performed.",
+    "600 graded variants belong to 40 story families; prefix repetition remains."
+  ],
+  "liveDelivery": {
+    "checkedAt": "2026-10-26T21:27:16.411081+00:00",
+    "codeCommit": "4b6e7923c6fa1e0de2b0b4f3e2df133e9870f856",
+    "scope": "Actual GitHub Pages HTTP responses and exact SHA256 correspondence; not a listening approval",
+    "files": 93,
+    "audioFiles": 78,
+    "passed": true,
+    "results": [
+      {
+        "path": "intro.html",
+        "status": 200,
+        "bytes": 142863,
+        "sha256": "c25da89d48c9bc44036afbdb6c82c8368d8195554ee04844c91860f082c688ed",
+        "matchesLocal": true
+      },
+      {
+        "path": "beginner1.html",
+        "status": 200,
+        "bytes": 212759,
+        "sha256": "5711ddb1808101b9e5b9ac08bfd2a0ee2273617025d7c9481a53f33ce5c673c9",
+        "matchesLocal": true
+      },
+      {
+        "path": "beginner2.html",
+        "status": 200,
+        "bytes": 233894,
+        "sha256": "d864182aceda52799d2f927e81a4680d0d3a7742ad0f996728b688ac023e6dde",
+        "matchesLocal": true
+      },
+      {
+        "path": "intermediate1.html",
+        "status": 200,
+        "bytes": 296095,
+        "sha256": "af62e66636606eca0a8bc3b3e44dda6a50dd6f97bfad37e3b016df1f7266f3c6",
+        "matchesLocal": true
+      },
+      {
+        "path": "intermediate2.html",
+        "status": 200,
+        "bytes": 336824,
+        "sha256": "8bdba8738a5fa539be44827184c2fa13faca406a563061f6fef8c0ce8060a256",
+        "matchesLocal": true
+      },
+      {
+        "path": "advanced1.html",
+        "status": 200,
+        "bytes": 351134,
+        "sha256": "3875c89f3ac766203943cf6b3076827fa64204166ea20d780da23fa07081fbab",
+        "matchesLocal": true
+      },
+      {
+        "path": "advanced2.html",
+        "status": 200,
+        "bytes": 354904,
+        "sha256": "cad574d0552276ea55e7a8423f6238081b1dd8b285d9e1beb343ff5a1f2e5147",
+        "matchesLocal": true
+      },
+      {
+        "path": "hangul-basics.html",
+        "status": 200,
+        "bytes": 4691,
+        "sha256": "1c1940fe6c9e20bd60a3e3d93f33620cc01934cfbbc535f72c63ab79a7f87f7e",
+        "matchesLocal": true
+      },
+      {
+        "path": "hangul-week.html",
+        "status": 200,
+        "bytes": 3177,
+        "sha256": "21aa77365e2fefcd7cece2cca3b714274b3bd2bbe2ea49a2e3b663e945d91c6b",
+        "matchesLocal": true
+      },
+      {
+        "path": "reading.html",
+        "status": 200,
+        "bytes": 47329,
+        "sha256": "799738bcff9d29f521852932e055653a26f24fd479ac72c117ddd5f9d2c8f497",
+        "matchesLocal": true
+      },
+      {
+        "path": "reading-curriculum.js",
+        "status": 200,
+        "bytes": 48484,
+        "sha256": "eafa9805cf70a182f5983624227009c0927a83c82fdbde4234028173db4b71da",
+        "matchesLocal": true
+      },
+      {
+        "path": "reading-alternates.js",
+        "status": 200,
+        "bytes": 44011,
+        "sha256": "74acc7ed0ff43b62bbbadbb0d889946219c5c8fdc9a67108de8cf8140e6fc4de",
+        "matchesLocal": true
+      },
+      {
+        "path": "hangul-core.js",
+        "status": 200,
+        "bytes": 6565,
+        "sha256": "2cf6d6b1f3e9b9621e4d4df034b93c2393139bedf9e241db8377ff8c266dd80f",
+        "matchesLocal": true
+      },
+      {
+        "path": "site-language.js",
+        "status": 200,
+        "bytes": 9029,
+        "sha256": "37c46e202349c43a7135ec0176fd7288008dc392c4511388055b31be7a4fe698",
+        "matchesLocal": true
+      },
+      {
+        "path": "hangul-audio-manifest.json",
+        "status": 200,
+        "bytes": 120768,
+        "sha256": "579d2c52c44a75659dfc307e8171984d361f6093e00651ba6547f0e7c8c71553",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/ac00-r2.mp3",
+        "status": 200,
+        "bytes": 8294,
+        "sha256": "965da2ae69b5d91ded4f3586e1ddb66aa4b2795338ad1b05cdc04c25e980da5f",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/b098-r2.mp3",
+        "status": 200,
+        "bytes": 7518,
+        "sha256": "5db86fc855f8aaf41a72de0bdf651527c2ee83c8c9b763d2d8a187a5da954a43",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c0ac.mp3",
+        "status": 200,
+        "bytes": 5254,
+        "sha256": "25375405b69339344af94f72fa604a4f2b12d4c8b71b8e89ca054308110fb144",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/cc28.mp3",
+        "status": 200,
+        "bytes": 10499,
+        "sha256": "10eaf00d5ea14470b9fef93dd1bda5a2063b480b94932e628e0653f2514c8e63",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c5b4.mp3",
+        "status": 200,
+        "bytes": 9886,
+        "sha256": "d010f659690ba8796ae211dc8157b3e8ed0f0c05c4596f5ce6c3228f4a56462f",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c624.mp3",
+        "status": 200,
+        "bytes": 4676,
+        "sha256": "2a28207fd592601ead771fc318a801ef84cf429043ecb3c4119777e267ef828b",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/ac70.mp3",
+        "status": 200,
+        "bytes": 6003,
+        "sha256": "960ad545a2b8e3fb1af3c1510eb4ca39c99efa2f8841b17c3fd7288cdbfc6745",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/b108.mp3",
+        "status": 200,
+        "bytes": 9354,
+        "sha256": "2249653697e0d1ca975840ca2a5137c67d7f8fc4a81e10236281d793339e282b",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c560.mp3",
+        "status": 200,
+        "bytes": 9316,
+        "sha256": "79321098cb1076bb072fde6456901b740019e5ea655d08f8a3c742ceb987e545",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c5d0.mp3",
+        "status": 200,
+        "bytes": 10933,
+        "sha256": "1155c0e3897a23643965ec636c1e49391ed6fae15bf40eaaeeb1f9ea71860dff",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c65c.mp3",
+        "status": 200,
+        "bytes": 8722,
+        "sha256": "3398661b0a3fd71865e17d5d8941fbbf459df966c77b0a39300e5b17d7e7f283",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c678.mp3",
+        "status": 200,
+        "bytes": 12467,
+        "sha256": "361fc1647e53eacd8d7f677acce44289309104a65126f6765042b17a1e11bd0f",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c704.mp3",
+        "status": 200,
+        "bytes": 6917,
+        "sha256": "668823ef795e184d0cdcd5e00790d68f68a3b7f2965390ab78a8b4dbf8a2a8c7",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c774.mp3",
+        "status": 200,
+        "bytes": 7893,
+        "sha256": "2be3886b335bb2a1da0475779ef261630137456525a27b93f6dcc772fa6d4511",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c608.mp3",
+        "status": 200,
+        "bytes": 4624,
+        "sha256": "0ec0e855481e9943c2fac3a6c899fb20be257b875957db6ae1a1d8e744d808eb",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c640.mp3",
+        "status": 200,
+        "bytes": 5488,
+        "sha256": "c30f98328acdc182682edbe2f8345258e386bd664e7f6f26693a743820f9ea68",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/b354.mp3",
+        "status": 200,
+        "bytes": 6243,
+        "sha256": "59455179afa932300d3ac1adb2e341bb6c95e9b8bc09874df917abd267b2219b",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c800.mp3",
+        "status": 200,
+        "bytes": 10026,
+        "sha256": "b5bf2bf6cca11c0f4adf140620f8c79e6d6dbc95f6e0c900fe7ea85ff9c9a1cb",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/b450.mp3",
+        "status": 200,
+        "bytes": 7545,
+        "sha256": "8cf3cd04bda4dbec3081c8e72084d10dbfdc35e29a4c7e1eb92e80926fad707c",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c18c.mp3",
+        "status": 200,
+        "bytes": 4937,
+        "sha256": "8adbc2e3c1e60d8b7fcd64d8d32dd0a0bab34652769c2ba725c5e8212673707b",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c9d1.mp3",
+        "status": 200,
+        "bytes": 6655,
+        "sha256": "c5360e4b83ce1ed9024a55865dd51ee5a0689ee9645a49098234bb0e97b1102b",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/cc45.mp3",
+        "status": 200,
+        "bytes": 12844,
+        "sha256": "9d139452979c4d4275b7c8dae7e0ff7696411472c07e2aa3b258b1dd7fcd4e9b",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c544-week1.mp3",
+        "status": 200,
+        "bytes": 9995,
+        "sha256": "ab56a8382eeef2b3ec1f6d25bea866b6dbfc89446ae9d2d64874f661459b1bf0",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c57c-week1.mp3",
+        "status": 200,
+        "bytes": 14879,
+        "sha256": "89d32492f1cfaa3dc9d035d3b5d83f3a505a590056d7f46fbab8cfde5f6fa98e",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c5ec-week1.mp3",
+        "status": 200,
+        "bytes": 12582,
+        "sha256": "11cb805cb325852901bbfd58d2b32e51f4505ce7242a916b4ab008ffbc6ab7f9",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c694-week1.mp3",
+        "status": 200,
+        "bytes": 14068,
+        "sha256": "2a89c685e137c26da4916664019e36d0759316ee78107ce8e5a8217d0b7b9709",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c6b0-week1.mp3",
+        "status": 200,
+        "bytes": 11853,
+        "sha256": "7ef51ef27326b6149fd14b91fc703b0c9e0de8b15bab0dc0c0c39b926de5ceeb",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c720-week1.mp3",
+        "status": 200,
+        "bytes": 12689,
+        "sha256": "9d72c12aa14250262edf28510d4e2f09c8bea7933da28b15931e704001b5fd46",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c73c-week1.mp3",
+        "status": 200,
+        "bytes": 13313,
+        "sha256": "98dc3a560894ccf1b771b1c5e5c0ba3d46819808023f9a09518529913477c6d2",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/ad6c-week1.mp3",
+        "status": 200,
+        "bytes": 9297,
+        "sha256": "cecef399eb9e86e03ab6afda4bfe35ae69040826fa7791731e4c4259f8fdbdfc",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/b2e4-week1.mp3",
+        "status": 200,
+        "bytes": 7339,
+        "sha256": "5a1ef65dd8dc922ea4fb42fb7fbc8fc1314ed12dd664a7b8063ba292048c3d07",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c544-c774-week1.mp3",
+        "status": 200,
+        "bytes": 7132,
+        "sha256": "7487d62565c4d66ae9d4ec6d83cc32758be195a0c26c5757eacc14319f5c55c8",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c624-c774-week1.mp3",
+        "status": 200,
+        "bytes": 11334,
+        "sha256": "b026973b97753bd4ac00f7ddc088e45e076b1c0f35b9614bb9a024dcd3d9bf27",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c6b0-c720-week1.mp3",
+        "status": 200,
+        "bytes": 9507,
+        "sha256": "ed9cb80d4eb6a2f6dc32a53ea4f8fb8d015f6ad44306ccd779bd30b7bdf1f6f6",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/b098-bb34-week1.mp3",
+        "status": 200,
+        "bytes": 11829,
+        "sha256": "245f54765e4b646b21bc0106448281c20538a957d3bd1b2b7df5e97b7564f217",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/bc14-b2e4-week1.mp3",
+        "status": 200,
+        "bytes": 13002,
+        "sha256": "704e9c8d26765087386972eabaae9ac9f7564388b68c06b25950ddc331a40a30",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c544-ae30-week1.mp3",
+        "status": 200,
+        "bytes": 6371,
+        "sha256": "da246844fe6580d12ed683e59b8c2b0e07e30c3657a3fe64ed7050e643280180",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/bc14-b098-b098-week1.mp3",
+        "status": 200,
+        "bytes": 15142,
+        "sha256": "59146c07d8350b06687f8ecf810607e7413ed5520c99d4d998ec9af45904232b",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/b098-be44-week1.mp3",
+        "status": 200,
+        "bytes": 13078,
+        "sha256": "f4ff39ec4c3ef2f988dd46448821a0bc0295a425a0fb172198b65ac5b3afa43f",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/baa8-c790-week1.mp3",
+        "status": 200,
+        "bytes": 6891,
+        "sha256": "68389518feed68bd87d48a2bad2c7a376b3cfa0e4482e88a634e25368450f7b7",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c0b0-week1.mp3",
+        "status": 200,
+        "bytes": 8953,
+        "sha256": "cf7ee30557c7fa26108c64c2b9426a8809b15d0f5cc3366e5cb07bf7e69c7270",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/bb38-week1.mp3",
+        "status": 200,
+        "bytes": 9873,
+        "sha256": "3d7bad4e4f88178fdb408d2b3fc5aada5f5920caa8ce4225ec22c77a230f7580",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c190-week1.mp3",
+        "status": 200,
+        "bytes": 8778,
+        "sha256": "f6b8f2508cc7625095942cbcb41d963cae832d35921c4a125d3dbb6b6d35ad02",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/bc24-week1.mp3",
+        "status": 200,
+        "bytes": 10078,
+        "sha256": "5e3faa438e3747a76142fa805d3c00572e62479ca7dbe244783cd1627d9a79ba",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/acf0-week1.mp3",
+        "status": 200,
+        "bytes": 10968,
+        "sha256": "afb5afef7d4e234a30c50fe208774bb7058408a80b27b61a940db8bb4e65ae82",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/acf5-week1.mp3",
+        "status": 200,
+        "bytes": 6867,
+        "sha256": "b6518ff966608e179e436bbc0fc19f9191f6859ed3356624c820ba93e5eb870d",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/b2ec-week1.mp3",
+        "status": 200,
+        "bytes": 10126,
+        "sha256": "b0313383f2f655e3142e1d2487fe0ff29efa694d27224bca835feb6684e356ae",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/bb3c-week1.mp3",
+        "status": 200,
+        "bytes": 12784,
+        "sha256": "50544432e74f643dd14be1587469a22944c55118e568dce7642b3a63866e6f49",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/ae30-c5ed-human-name.mp3",
+        "status": 200,
+        "bytes": 11858,
+        "sha256": "b379a5af380fe62ffb3bc6f163a63291e65d38c3641a231f8655ea6410d8e753",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/b2c8-c740-human-name.mp3",
+        "status": 200,
+        "bytes": 13524,
+        "sha256": "30c37df9d6003ac0752f239075890a72cc3bda16657cb042811fa405feecd935",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/b514-adff-human-name.mp3",
+        "status": 200,
+        "bytes": 13681,
+        "sha256": "c6f4cfb8363de686abbd5b3569823d6dbb6ff6c30bec081a65721b4d32ff02c9",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/b9ac-c744-human-name.mp3",
+        "status": 200,
+        "bytes": 15245,
+        "sha256": "57cd177252eb43d08ad75d8d2d8f59cfab9565b91663bf66b1188ddb2afeca3e",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/bbf8-c74c-human-name.mp3",
+        "status": 200,
+        "bytes": 12167,
+        "sha256": "0e09014e460ee0232200fa65d601d0224e44135aba67830afe7bf52fa03f8b34",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/be44-c74d-human-name.mp3",
+        "status": 200,
+        "bytes": 14462,
+        "sha256": "ca4773714bfc4ce5753314ab42e6470a66f9040d9e5cc4d1b1ddc2903277def4",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c2dc-c637-human-name.mp3",
+        "status": 200,
+        "bytes": 13734,
+        "sha256": "1bece01b8bcb0eb0fec6c2911bde2a20f0ac5979f9748f604ae38202dc460651",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c774-c751-human-name.mp3",
+        "status": 200,
+        "bytes": 13839,
+        "sha256": "668b0d1f86534897666591a6c8443fa37d09df5f1c9287b7725756b9052945d6",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c9c0-c752-human-name.mp3",
+        "status": 200,
+        "bytes": 12484,
+        "sha256": "eea5ba0fce30553b2bf0907af3749c59e4297eb715dd3269948cd907235c23a7",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/ce58-c753-human-name.mp3",
+        "status": 200,
+        "bytes": 13811,
+        "sha256": "5ad0c27938888388515fa32488f4edcd5517558c2cde9d139bdbd259104c212e",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/d0a4-c754-human-name.mp3",
+        "status": 200,
+        "bytes": 13211,
+        "sha256": "d4644c3510d1b049eee0fb6981e81b6bc0d58cfeed7cb062615b41690497cd3a",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/d2f0-c755-human-name.mp3",
+        "status": 200,
+        "bytes": 13158,
+        "sha256": "e95b57e6e05dbcf479699607815716cc4309dd6493942397f0c21f94bf7331db",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/d53c-c756-human-name.mp3",
+        "status": 200,
+        "bytes": 12794,
+        "sha256": "0c9ff13abc9b34934da7d3e1341503f98e4e74c2a20453e18b3560b24653af1b",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/d788-c757-human-name.mp3",
+        "status": 200,
+        "bytes": 13002,
+        "sha256": "0473ee2a3d04e456e78a2ca687314342d3f89308b36509943cdad7df17be4d86",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/ac1c-20261027.mp3",
+        "status": 200,
+        "bytes": 17480,
+        "sha256": "c10e85a84c69fe1eef1a179a07d358793b3ccf352b626c294e0300e212c9a818",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/ac8c-20261027.mp3",
+        "status": 200,
+        "bytes": 15399,
+        "sha256": "4fcd85786b7bb329ccf8b8eb5b845095a3e159eba797e0d7c739977491bff3cf",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/acc4-20261027.mp3",
+        "status": 200,
+        "bytes": 9048,
+        "sha256": "946ed7301a5a39d486c783151fa9ad20f4c81d83a401c70da01bf15e66c410fa",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/acfc-20261027.mp3",
+        "status": 200,
+        "bytes": 11987,
+        "sha256": "b37dad2e446e47bc3226430c669ec4155d218147f9431585c6e07e02cc9dd1f6",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/ad34-20261027.mp3",
+        "status": 200,
+        "bytes": 8919,
+        "sha256": "c064a99e683c1e62c1718820f3a87265c90dad4b1e8c547c6eb61d21dddcf55b",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/adf8-20261027.mp3",
+        "status": 200,
+        "bytes": 8613,
+        "sha256": "93eee2d3292929300bca9c22a283f309c7d11cfe49285440617acfba788a7c86",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/b370-20261027.mp3",
+        "status": 200,
+        "bytes": 7524,
+        "sha256": "53f683ddfcde3d8a9787ed1b550c7388b72e600e781a73e7c2f7aa692c8cf162",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/b4a4-20261027.mp3",
+        "status": 200,
+        "bytes": 9711,
+        "sha256": "01356a7f6c08c7665c1b9ecdaf730c9cc16654dfcdfd07c9a57c383872bf10a2",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/bb50-20261027.mp3",
+        "status": 200,
+        "bytes": 15516,
+        "sha256": "8f7e9b6a97826ad3a9cb30fab8bb4415f9a578a8b2ca7e7a69424ef98b878ca1",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c218-20261027.mp3",
+        "status": 200,
+        "bytes": 6532,
+        "sha256": "491b1e388a00df52ff8e52b34a8649b952039bcf487773da779428c4ac894b88",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c2dc-20261027.mp3",
+        "status": 200,
+        "bytes": 7480,
+        "sha256": "c390850c1e2a5f2c2ce34c86e7ef798081499021b646870efbed84a2c57cf45c",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/cc44-20261027.mp3",
+        "status": 200,
+        "bytes": 9723,
+        "sha256": "50d01ec8256cd3b7a822283ecf0219430ae707ce8ee3dabb1bfdecaa4c32bb86",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/d6c4-20261027.mp3",
+        "status": 200,
+        "bytes": 12491,
+        "sha256": "33ae2021a256b1b62ee417bb7a5b443894bf95b6961bbbd4550617eb13c7b988",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/b610-20261027.mp3",
+        "status": 200,
+        "bytes": 4501,
+        "sha256": "104aea132421d607aa34b9a22d8679ecf181e2dbdc39b40d443f134595aa99dc",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/b54c-20261027.mp3",
+        "status": 200,
+        "bytes": 5959,
+        "sha256": "65875194764cb4435476f624cce6b3ac7ac0247470bc0ac4c7aed86c46e01a0b",
+        "matchesLocal": true
+      },
+      {
+        "path": "assets/hangul-audio/c528-20261027.mp3",
+        "status": 200,
+        "bytes": 7603,
+        "sha256": "646e4a8d5aa8d66b4e335c9881b7d0b3c9aa64894af59683d9290bc7c3dcb5ed",
+        "matchesLocal": true
+      }
+    ]
+  }
+}

@@ -15,7 +15,7 @@
       if(!source){row.append(el('p','녹음 없음 · 정확한 소리로 녹음한 뒤 검수가 필요합니다.'));$('list').append(row);return;}
       const type=el('p',source.kind==='synthetic'?'합성 음성 후보 · 실제 사람의 녹음이 아닙니다.':(source.stage1Candidate||source.stage2Candidate)?'사람의 녹음 · 청취 검수 전 후보입니다.':'사람의 녹음 · 교사 청취 승인 전입니다.');type.className=source.kind==='synthetic'?'held':'small';row.append(type);if(source.stage2Candidate){const check=el('p','연속 녹음에서 순서대로 분리한 임시 대응입니다. 이름과 구간이 맞는지 직접 확인해야 합니다.');check.className='held';row.append(check);}if(source.kind==='synthetic'&&source.alignmentObserved){const ref=el('p','자동 전사 참고: '+source.alignmentObserved+' · 오인식이 있을 수 있으며 실제 발음 판정이 아닙니다.');ref.className='small';row.append(ref);}
       if(source.held){const notice=el('p','일반 학습 화면 재생 보류 · '+(source.holdReason||source.signalWarnings.join(' / ')));notice.className='held';row.append(notice);}
-      row.append(el('p',`파일 검사: 재생 가능 · ${source.duration}초 · 앞 여백 ${source.leadingSilence}초 · 뒤 여백 ${source.trailingSilence}초`));
+      row.append(el('p',`자동 해독 검사 통과 · 실제 청취 미검증 · ${source.duration}초 · 앞 여백 ${source.leadingSilence}초 · 뒤 여백 ${source.trailingSilence}초`));
       const audio=el('audio');audio.controls=true;audio.preload='none';audio.src=source.src;audio.setAttribute('aria-label',item.text+' 검수용 녹음');row.append(audio);
       const id=source.src,old=notes[id]||{},label=el('label','내 청취 메모 '),select=el('select');
       for(const [value,text] of [['pending','미검토'],['checked','소리 확인함 · 내 메모'],['rerecord','재녹음 필요'],['uncertain','판단 보류']]){const opt=el('option',text);opt.value=value;select.append(opt);}select.value=old.status||'pending';select.disabled=true;label.append(select);row.append(label);
