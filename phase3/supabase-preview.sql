@@ -1,4 +1,4 @@
--- DESIGN PREVIEW ONLY — not applied, not a generated/verified migration.
+-- DESIGN PREVIEW ONLY — not applied, not a generated/hosted-verified migration. Local PGlite fixture checks only.
 -- Use an EMPTY DISPOSABLE Supabase project. Never run on the existing Work 2 DB.
 -- A future adapter must implement the transactional state machine described in
 -- SUPABASE-INTEGRATION.md. These tables alone do not implement those services.

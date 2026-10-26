@@ -6,6 +6,9 @@ import hashlib
 import hmac
 import http.cookies
 import json
+import math
+import payments
+import supabase_auth
 import os
 from pathlib import Path
 import re
@@ -57,7 +60,10 @@ def get_unit(uid):
     return found
 def stamp(value):
     try:
-        if isinstance(value,(int,float)): return float(value)
+        if isinstance(value,bool): raise ValueError()
+        if isinstance(value,(int,float)):
+            if not math.isfinite(value): raise ValueError()
+            return float(value)
         parsed = dt.datetime.fromisoformat(value.replace('Z','+00:00'))
         if parsed.tzinfo is None: raise ValueError()
         return parsed.timestamp()
@@ -71,6 +77,22 @@ def money(price, commission=2000, referral=300, processor=300, tax=0, refund=300
     fee = price*processor//10000
     tax_reserve=price*tax//10000; refund_reserve=price*refund//10000
     return dict(gross=price,teacher=teacher,referral=reward,processor=fee,tax=tax_reserve,refund=refund_reserve,platform=price-teacher-reward-fee-tax_reserve-refund_reserve)
+
+def expire_holds(db):
+    for b in list(db.execute("SELECT b.id FROM bookings b JOIN slots s ON s.id=b.slot_id WHERE b.status='reserved' AND (b.created_at+900<=? OR s.start<=?)",(time.time(),time.time()))):
+        db.execute("UPDATE bookings SET status='expired' WHERE id=?",(b['id'],))
+        audit(db,'system','unpaid_hold_expired',b['id'],'15 minute hold or lesson start reached')
+
+def shared_seconds(db,bid):
+    b=db.execute('SELECT learner_id,teacher_id FROM bookings WHERE id=?',(bid,)).fetchone()
+    intervals=[]
+    for uid in (b['learner_id'],b['teacher_id']):
+        merged=[]
+        for row in db.execute('SELECT start,end FROM attendance_intervals WHERE booking_id=? AND user_id=? ORDER BY start',(bid,uid)):
+            if merged and row['start']<=merged[-1][1]: merged[-1][1]=max(merged[-1][1],row['end'])
+            else: merged.append([row['start'],row['end']])
+        intervals.append(merged)
+    return sum(max(0,min(a[1],b[1])-max(a[0],b[0])) for a in intervals[0] for b in intervals[1])
 
 class Handler(BaseHTTPRequestHandler):
     server_version = 'HSPhase3Test'
@@ -103,13 +125,18 @@ class Handler(BaseHTTPRequestHandler):
                 if self.headers.get('Content-Type','').split(';')[0] != 'application/json': raise Error('JSON 요청이 필요합니다',415)
                 size=int(self.headers.get('Content-Length','0'))
                 if size<0 or size>MAX_BODY: raise Error('요청이 너무 큽니다',413)
-                try: data=json.loads(self.rfile.read(size) or b'{}')
+                try:
+                    self.raw_body=self.rfile.read(size) or b'{}'
+                    data=json.loads(self.raw_body)
                 except (ValueError,UnicodeDecodeError): raise Error('잘못된 JSON')
                 if not isinstance(data,dict): raise Error('JSON 객체가 필요합니다')
             else: data={}
-            db=connect(); db.execute('BEGIN IMMEDIATE')
+            db=connect(); db.execute('BEGIN IMMEDIATE'); expire_holds(db)
             result,cookie=self.route(db,path,data,parse_qs(urlsplit(self.path).query))
             db.commit(); self.send(200,result,cookie)
+        except (payments.PaymentError,supabase_auth.AuthError) as e:
+            if db: db.rollback()
+            self.send(503 if isinstance(e,(payments.NotConfigured,supabase_auth.NotConfigured)) else 400,dict(error=str(e)))
         except Error as e:
             if db: db.rollback()
             self.send(e.status,dict(error=e.message))
@@ -126,7 +153,7 @@ class Handler(BaseHTTPRequestHandler):
             if db: db.close()
     def static(self,path):
         name=path.lstrip('/') or 'index.html'
-        allowed={'index.html':'text/html','app.js':'text/javascript','style.css':'text/css',**{name:'text/plain' for name in ('POLICIES-DRAFT.md','LEGAL-REVIEW.md','REFERENCE-RESEARCH.md','CURRICULUM.md','README.md','BUSINESS.md','SECURITY-REVIEW.md','SUPABASE-INTEGRATION.md','STATUS.md')}}
+        allowed={'index.html':'text/html','app.js':'text/javascript','style.css':'text/css',**{name:'text/plain' for name in ('POLICIES-DRAFT.md','LEGAL-REVIEW.md','REFERENCE-RESEARCH.md','CURRICULUM.md','README.md','BUSINESS.md','SECURITY-REVIEW.md','SUPABASE-INTEGRATION.md','STATUS.md','PAYMENTS.md','AUTH-TESTING.md','REVIEW-ROUND2.md')}}
         if name not in allowed or not (ROOT/name).exists(): raise Error('페이지 없음',404)
         body=(ROOT/name).read_bytes(); self.send_response(200)
         self.send_header('Content-Type',allowed[name]+'; charset=utf-8')
@@ -156,6 +183,43 @@ class Handler(BaseHTTPRequestHandler):
         return b
     def route(self,db,path,d,q):
         method=self.command
+        if method=='GET' and path=='/api/integrations':
+            return {'supabaseTestConfigured':supabase_auth.configured(),'pgTestConfigured':payments.configured(),'realMoneyEnabled':False,'productionDatabaseUsed':False},None
+        if method=='POST' and path=='/api/auth/supabase':
+            if d.get('role') not in ('learner','partner','teacher') or d.get('adultConsent') is not True: raise Error('참여 유형과 성인 테스트 동의가 필요합니다')
+            verified=supabase_auth.verify_user(d.get('token'))
+            mapped=db.execute('SELECT user_id FROM external_identities WHERE project_ref=? AND subject=?',(verified['projectRef'],verified['subject'])).fetchone()
+            if mapped: uid=mapped['user_id']
+            else:
+                nickname=text(d.get('nickname',''),40)
+                if len(nickname)<2:raise Error('활동명은 2자 이상 필요합니다')
+                if db.execute('SELECT 1 FROM users WHERE email=?',(verified['email'],)).fetchone():raise Error('같은 이메일의 로컬 계정이 있습니다. 자동 연결하지 않습니다',409)
+                uid=ident()
+                db.execute('INSERT INTO users(id,email,password,nickname,role,referral_code,created_at) VALUES(?,?,?,?,?,?,?)',(uid,verified['email'],hash_password(secrets.token_urlsafe(48)),nickname,d['role'],secrets.token_hex(5),time.time()))
+                db.execute('INSERT INTO external_identities VALUES(?,?,?)',(verified['projectRef'],verified['subject'],uid))
+            audit(db,uid,'supabase_test_identity_verified',uid,verified['projectRef'])
+            return {'user':public_user(db.execute('SELECT * FROM users WHERE id=?',(uid,)).fetchone()),'identityMode':'supabase-test-verified'},self.session(db,uid)
+        if method=='POST' and path=='/api/payments/stripe-test/webhook':
+            event=payments.verify_event(self.raw_body,self.headers.get('Stripe-Signature',''),os.environ.get('HS_STRIPE_TEST_WEBHOOK_SECRET',''))
+            obj=event.get('data',{}).get('object',{})
+            session=db.execute('SELECT * FROM payment_sessions WHERE session_id=?',(obj.get('id'),)).fetchone()
+            if not session:raise Error('저장된 테스트 결제 세션이 없습니다',409)
+            booking=db.execute('SELECT * FROM bookings WHERE id=?',(session['booking_id'],)).fetchone()
+            verified=payments.validate_checkout_event(event,dict(booking),session['session_id'])
+            prior=db.execute('SELECT * FROM provider_events WHERE event_id=?',(verified['event_id'],)).fetchone()
+            if prior:
+                if prior['booking_id']!=booking['id'] or prior['session_id']!=session['session_id']:raise Error('이벤트 재사용 충돌',409)
+                return {'received':True,'duplicate':True,'realMoney':False},None
+            db.execute('INSERT INTO provider_events VALUES(?,?,?,?)',(verified['event_id'],session['session_id'],booking['id'],time.time()))
+            charged=db.execute("SELECT 1 FROM ledger WHERE booking_id=? AND kind='test_charge'",(booking['id'],)).fetchone()
+            if booking['status']=='reserved' and not charged:
+                db.execute("INSERT INTO ledger(booking_id,kind,amount,beneficiary,created_at) VALUES(?,?,?,?,?)",(booking['id'],'test_charge',booking['price'],booking['learner_id'],time.time()))
+                db.execute("UPDATE bookings SET status='test_paid' WHERE id=?",(booking['id'],))
+                audit(db,'stripe-test','provider_test_payment_confirmed',booking['id'],verified['event_id'])
+            elif booking['status'] not in ('test_paid','in_class','completed','test_settled'):
+                audit(db,'stripe-test','late_payment_review_required',booking['id'],verified['event_id'])
+                return {'received':True,'heldForReview':True,'realMoney':False},None
+            return {'received':True,'duplicate':bool(charged),'realMoney':False},None
         if method=='POST' and path=='/api/register':
             email=text(d.get('email',''),254).lower(); password=d.get('password',''); nickname=text(d.get('nickname',''),40); role=d.get('role')
             if not re.fullmatch(r'[^\s@]+@[^\s@]+\.[^\s@]+',email) or not isinstance(password,str) or not 12<=len(password)<=128 or len(nickname)<2 or role not in ('learner','partner','teacher') or d.get('adultConsent') is not True: raise Error('이메일·12자 이상 비밀번호·이름·성인 동의를 확인하세요')
@@ -170,12 +234,13 @@ class Handler(BaseHTTPRequestHandler):
             return {'user':public_user(db.execute('SELECT * FROM users WHERE id=?',(uid,)).fetchone())},self.session(db,uid)
         if method=='POST' and path=='/api/login':
             # bounded per-IP failures, held in memory; local test server only.
-            key=self.client_address[0]; attempts=self.server.failures.setdefault(key,[]); now=time.time(); attempts[:]=[t for t in attempts if t>now-300]
-            if len(attempts)>=12: raise Error('로그인 시도가 많습니다. 잠시 후 다시 시도하세요',429)
+            key=(self.client_address[0],text(d.get('email',''),254).lower()); attempts=self.server.failures.setdefault(key,[]); now=time.time(); attempts[:]=[t for t in attempts if t>now-300]
+            ip_attempts=self.server.failures.setdefault(('aggregate',self.client_address[0]),[]); ip_attempts[:]=[t for t in ip_attempts if t>now-300]
+            if len(attempts)>=12 or len(ip_attempts)>=60: raise Error('로그인 시도가 많습니다. 잠시 후 다시 시도하세요',429)
             u=db.execute('SELECT * FROM users WHERE email=?',(text(d.get('email',''),254).lower(),)).fetchone()
             pw=d.get('password','')
             if not isinstance(pw,str) or len(pw)>128 or not u or not password_ok(pw,u['password']):
-                attempts.append(now); raise Error('로그인 정보를 확인하세요',401)
+                attempts.append(now);ip_attempts.append(now); raise Error('로그인 정보를 확인하세요',401)
             attempts.clear(); audit(db,u['id'],'login',u['id'])
             return {'user':public_user(u)},self.session(db,u['id'])
         if method=='GET' and path=='/api/units': return {'units':[{k:v for k,v in x.items() if k!='teacherGuide'} for x in units()]},None
@@ -217,7 +282,7 @@ class Handler(BaseHTTPRequestHandler):
         if path=='/api/availability':
             if method=='GET':
                 tid=q.get('teacherId',[uid])[0]
-                return {'slots':[dict(x) for x in db.execute("SELECT s.* FROM slots s JOIN users u ON u.id=s.teacher_id WHERE s.teacher_id=? AND u.approved=1 AND s.start>? AND NOT EXISTS(SELECT 1 FROM bookings b WHERE b.slot_id=s.id AND b.status NOT IN ('cancelled','refunded')) ORDER BY s.start",(tid,time.time()))]},None
+                return {'slots':[dict(x) for x in db.execute("SELECT s.* FROM slots s JOIN users u ON u.id=s.teacher_id WHERE s.teacher_id=? AND u.approved=1 AND s.start>? AND NOT EXISTS(SELECT 1 FROM bookings b WHERE b.slot_id=s.id AND b.status NOT IN ('cancelled','refunded','expired')) ORDER BY s.start",(tid,time.time()))]},None
             if method=='POST':
                 if u['role'] not in ('partner','teacher') or not u['approved']: raise Error('승인된 수업 제공자만 가능합니다',403)
                 start,end=stamp(d.get('start')),stamp(d.get('end'))
@@ -229,14 +294,14 @@ class Handler(BaseHTTPRequestHandler):
             if method=='GET':
                 rows=[]
                 for b in db.execute('SELECT * FROM bookings WHERE learner_id=? OR teacher_id=? ORDER BY created_at DESC',(uid,uid)):
-                    v=dict(b); v.pop('room',None); v['attendance']=[dict(a) for a in db.execute('SELECT * FROM attendance WHERE booking_id=?',(b['id'],))]; v['slot']=dict(db.execute('SELECT * FROM slots WHERE id=?',(b['slot_id'],)).fetchone()); v['disputes']=[dict(x) for x in db.execute('SELECT * FROM disputes WHERE booking_id=?',(b['id'],))]; rows.append(v)
+                    v=dict(b); v.pop('room',None); v['sharedSeconds']=shared_seconds(db,b['id']); v['paymentMode']='provider-test' if db.execute('SELECT 1 FROM payment_sessions WHERE booking_id=?',(b['id'],)).fetchone() else 'simulated-test-only'; v['attendance']=[dict(a) for a in db.execute('SELECT * FROM attendance WHERE booking_id=?',(b['id'],))]; v['slot']=dict(db.execute('SELECT * FROM slots WHERE id=?',(b['slot_id'],)).fetchone()); v['disputes']=[dict(x) for x in db.execute('SELECT * FROM disputes WHERE booking_id=?',(b['id'],))]; rows.append(v)
                 return {'bookings':rows},None
             if method=='POST':
                 if u['role']!='learner': raise Error('학습자만 예약할 수 있습니다',403)
                 unit=get_unit(d.get('unitId')); slot=db.execute('SELECT s.*,u.price,u.approved,u.role FROM slots s JOIN users u ON s.teacher_id=u.id WHERE s.id=?',(d.get('slotId'),)).fetchone()
                 if not slot or slot['teacher_id']!=d.get('teacherId') or slot['teacher_id']==uid or not slot['approved'] or slot['role'] not in ('teacher','partner') or slot['start']<=time.time(): raise Error('예약 가능한 일정이 아닙니다')
                 if slot['end']-slot['start'] < int(unit.get('durationMinutes',30))*60: raise Error('단원 수업시간보다 일정이 짧습니다')
-                if db.execute("SELECT 1 FROM bookings b JOIN slots s ON s.id=b.slot_id WHERE b.learner_id=? AND b.status NOT IN ('cancelled','refunded') AND s.start<? AND s.end>?",(uid,slot['end'],slot['start'])).fetchone(): raise Error('학습자 일정이 겹칩니다',409)
+                if db.execute("SELECT 1 FROM bookings b JOIN slots s ON s.id=b.slot_id WHERE b.learner_id=? AND b.status NOT IN ('cancelled','refunded','expired') AND s.start<? AND s.end>?",(uid,slot['end'],slot['start'])).fetchone(): raise Error('학습자 일정이 겹칩니다',409)
                 ref=u['referred_by']
                 if d.get('referralCode'):
                     r=db.execute('SELECT id FROM users WHERE referral_code=?',(text(d['referralCode'],40),)).fetchone()
@@ -244,6 +309,9 @@ class Handler(BaseHTTPRequestHandler):
                     if ref and ref!=r['id']: raise Error('가입 시 추천인을 변경할 수 없습니다')
                     ref=r['id']
                 if ref in (uid,slot['teacher_id']): raise Error('본인 또는 거래 상대 추천은 보상 대상이 아닙니다')
+                if ref and not u['referred_by']:
+                    db.execute('UPDATE users SET referred_by=? WHERE id=? AND referred_by IS NULL',(ref,uid))
+                    audit(db,uid,'direct_referrer_bound',uid,ref)
                 bid=ident(); db.execute('INSERT INTO bookings(id,learner_id,teacher_id,slot_id,unit_id,price,referrer_id,room,created_at) VALUES(?,?,?,?,?,?,?,?,?)',(bid,uid,slot['teacher_id'],slot['id'],str(unit['id']),slot['price'],ref,'hs-test-'+secrets.token_urlsafe(24),time.time())); audit(db,uid,'booking',bid)
                 db.execute('INSERT INTO rate_snapshots(booking_id,commission_bps,referral_bps,processor_bps,refund_bps,tax_bps) VALUES(?,?,?,?,?,?)',(bid,2000,300 if ref else 0,300,300,0))
                 content=json.dumps(unit,ensure_ascii=False,sort_keys=True); db.execute('INSERT INTO unit_snapshots VALUES(?,?,?)',(bid,content,hashlib.sha256(content.encode()).hexdigest()))
@@ -257,9 +325,21 @@ class Handler(BaseHTTPRequestHandler):
         if m and method=='POST':
             bid,action=m.groups(); b=self.booking(db,bid,u)
             if u['role']=='admin': raise Error('수업 참가자만 수행할 수 있습니다',403)
+            if action=='checkout-test':
+                if uid!=b['learner_id'] or b['status']!='reserved':raise Error('학습자의 유효한 미결제 예약만 가능합니다',409)
+                existing=db.execute('SELECT * FROM payment_sessions WHERE booking_id=?',(bid,)).fetchone()
+                if existing:return {'checkoutUrl':existing['url'],'paymentMode':'provider-test','realMoney':False},None
+                base='http://'+self.headers['Host']
+                checkout=payments.create_checkout(dict(b),success_url=base+'/?checkout=test-return',cancel_url=base+'/?checkout=test-cancel')
+                db.execute('INSERT INTO payment_sessions VALUES(?,?,?,?)',(bid,checkout['id'],checkout['url'],time.time()))
+                audit(db,uid,'provider_test_checkout_created',bid,checkout['id'])
+                return {'checkoutUrl':checkout['url'],'paymentMode':'provider-test','realMoney':False},None
             if action=='pay-test':
                 if uid!=b['learner_id']: raise Error('학습자만 가능합니다',403)
+                if db.execute('SELECT 1 FROM payment_sessions WHERE booking_id=?',(bid,)).fetchone():raise Error('PG 테스트 세션이 있어 모의 결제와 혼합할 수 없습니다',409)
                 if b['status']=='reserved':
+                    slot=db.execute('SELECT start FROM slots WHERE id=?',(b['slot_id'],)).fetchone()
+                    if time.time()>=min(b['created_at']+900,slot['start']): raise Error('미결제 예약 유효기간이 지났습니다',409)
                     db.execute("UPDATE bookings SET status='test_paid' WHERE id=?",(bid,)); db.execute('INSERT INTO ledger(booking_id,kind,amount,beneficiary,created_at) VALUES(?,?,?,?,?)',(bid,'test_charge',b['price'],uid,time.time())); audit(db,uid,'test_charge',bid)
                 elif b['status'] not in ('test_paid','in_class','completed','test_settled'): raise Error('테스트 결제 불가 상태',409)
                 return {'ok':True,'payment':'simulated-test-only','chargedRealMoney':False},None
@@ -272,6 +352,7 @@ class Handler(BaseHTTPRequestHandler):
                     # Heartbeat interval <=90s is counted; leaving a tab idle does not grant elapsed hours.
                     delta=max(0,now-previous['last_seen']); increment=max(0,min(now,slot['end'])-max(previous['last_seen'],slot['start'])) if delta<=90 else 0
                     db.execute('UPDATE attendance SET last_seen=?,seconds=seconds+? WHERE booking_id=? AND user_id=?',(now,increment,bid,uid))
+                    if increment>0: db.execute('INSERT INTO attendance_intervals(booking_id,user_id,start,end) VALUES(?,?,?,?)',(bid,uid,max(previous['last_seen'],slot['start']),min(now,slot['end'])))
                 else: db.execute('INSERT INTO attendance(booking_id,user_id,joined,last_seen) VALUES(?,?,?,?)',(bid,uid,now,now))
                 db.execute("UPDATE bookings SET status='in_class' WHERE id=?",(bid,)); audit(db,uid,action,bid)
                 return {'roomUrl':'https://meet.jit.si/'+b['room'],'unitId':b['unit_id'],'warning':'공개 Jitsi 테스트 방은 인증된 비공개 수업이 아닙니다. 녹화 금지.'},None
@@ -283,11 +364,12 @@ class Handler(BaseHTTPRequestHandler):
                 if not attendance or attendance['seconds']<duration: raise Error('서버 확인 수업시간이 부족합니다',409)
                 db.execute('UPDATE attendance SET confirmed=1 WHERE booking_id=? AND user_id=?',(bid,uid))
                 count=db.execute('SELECT count(*) FROM attendance WHERE booking_id=? AND confirmed=1 AND seconds>=?',(bid,duration)).fetchone()[0]
+                if count==2 and shared_seconds(db,bid)<duration: raise Error('양측이 함께 참여한 수업시간이 부족합니다',409)
                 if count==2 and b['evidence'] and not db.execute("SELECT 1 FROM disputes WHERE booking_id=? AND status='open'",(bid,)).fetchone(): db.execute("UPDATE bookings SET status='completed' WHERE id=?",(bid,))
                 audit(db,uid,'completion_confirmation',bid)
                 return {'ok':True,'status':db.execute('SELECT status FROM bookings WHERE id=?',(bid,)).fetchone()[0]},None
             if action=='homework':
-                if uid!=b['learner_id'] or b['status'] in ('cancelled','refunded'): raise Error('과제 제출 권한이 없습니다',403)
+                if uid!=b['learner_id'] or b['status'] in ('cancelled','refunded','expired'): raise Error('과제 제출 권한이 없습니다',403)
                 value=text(d.get('text',''),10000)
                 db.execute('UPDATE bookings SET homework=? WHERE id=?',(value,bid)); audit(db,uid,'homework',bid)
                 return {'ok':True},None
@@ -373,9 +455,10 @@ class Handler(BaseHTTPRequestHandler):
                     if not replacement or replacement['start']<=time.time(): raise Error('같은 강사의 미래 대체 일정을 선택하세요')
                     duration=int(json.loads(db.execute('SELECT content FROM unit_snapshots WHERE booking_id=?',(b['id'],)).fetchone()[0]).get('durationMinutes',30))*60
                     if replacement['end']-replacement['start']<duration: raise Error('대체 일정 수업시간 부족')
-                    if db.execute("SELECT 1 FROM bookings x JOIN slots s ON x.slot_id=s.id WHERE x.id<>? AND x.learner_id=? AND x.status NOT IN ('cancelled','refunded') AND s.start<? AND s.end>?",(b['id'],b['learner_id'],replacement['end'],replacement['start'])).fetchone(): raise Error('학습자 대체 일정 충돌',409)
+                    if db.execute("SELECT 1 FROM bookings x JOIN slots s ON x.slot_id=s.id WHERE x.id<>? AND x.learner_id=? AND x.status NOT IN ('cancelled','refunded','expired') AND s.start<? AND s.end>?",(b['id'],b['learner_id'],replacement['end'],replacement['start'])).fetchone(): raise Error('학습자 대체 일정 충돌',409)
                     audit(db,uid,'reschedule_previous_slot',b['id'],json.dumps({'slotId':b['slot_id'],'replacementSlotId':replacement['id'],'consentEvidence':reason,'attendance':[dict(x) for x in db.execute('SELECT * FROM attendance WHERE booking_id=?',(b['id'],))]}))
                     db.execute('DELETE FROM attendance WHERE booking_id=?',(b['id'],))
+                    db.execute('DELETE FROM attendance_intervals WHERE booking_id=?',(b['id'],))
                     db.execute('DELETE FROM reschedule_consents WHERE booking_id=?',(b['id'],))
                     db.execute("UPDATE bookings SET slot_id=?,status=CASE WHEN status='reserved' THEN 'reserved' ELSE 'test_paid' END,evidence='' WHERE id=?",(replacement['id'],b['id']))
                 db.execute("UPDATE disputes SET status='resolved',decision=?,resolution=? WHERE id=?",(decision,reason,case['id'])); audit(db,uid,'dispute_'+decision,case['id'],reason)

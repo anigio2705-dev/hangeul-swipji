@@ -19,3 +19,12 @@ CREATE TRIGGER IF NOT EXISTS audit_no_update BEFORE UPDATE ON audit BEGIN SELECT
 CREATE TRIGGER IF NOT EXISTS audit_no_delete BEFORE DELETE ON audit BEGIN SELECT RAISE(ABORT,'append-only audit'); END;
 CREATE TRIGGER IF NOT EXISTS ledger_no_update BEFORE UPDATE ON ledger BEGIN SELECT RAISE(ABORT,'append-only ledger'); END;
 CREATE TRIGGER IF NOT EXISTS ledger_no_delete BEFORE DELETE ON ledger BEGIN SELECT RAISE(ABORT,'append-only ledger'); END;
+
+CREATE TABLE IF NOT EXISTS attendance_intervals(id INTEGER PRIMARY KEY AUTOINCREMENT,booking_id TEXT NOT NULL REFERENCES bookings(id),user_id TEXT NOT NULL REFERENCES users(id),start REAL NOT NULL,end REAL NOT NULL,CHECK(end>start));
+CREATE INDEX IF NOT EXISTS attendance_intervals_lookup ON attendance_intervals(booking_id,user_id,start);
+DROP INDEX IF EXISTS active_slot;
+CREATE UNIQUE INDEX IF NOT EXISTS active_slot_v2 ON bookings(slot_id) WHERE status NOT IN ('cancelled','refunded','expired');
+
+CREATE TABLE IF NOT EXISTS external_identities(project_ref TEXT NOT NULL,subject TEXT NOT NULL,user_id TEXT NOT NULL REFERENCES users(id),PRIMARY KEY(project_ref,subject));
+CREATE TABLE IF NOT EXISTS payment_sessions(booking_id TEXT PRIMARY KEY REFERENCES bookings(id),session_id TEXT UNIQUE NOT NULL,url TEXT NOT NULL,created_at REAL NOT NULL);
+CREATE TABLE IF NOT EXISTS provider_events(event_id TEXT PRIMARY KEY,session_id TEXT NOT NULL,booking_id TEXT NOT NULL REFERENCES bookings(id),created_at REAL NOT NULL);

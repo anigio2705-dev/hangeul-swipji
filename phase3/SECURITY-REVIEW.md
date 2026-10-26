@@ -31,3 +31,7 @@ Attendance credit initially included the early/late room-entry allowance. It now
 - Test ledger reversals do not constitute lawful recovery of earned instructor pay. No live payout/referral/payment endpoints are available. Legal, payment-provider, and security approvals remain prerequisites.
 - Proposed Supabase SQL is a separate, unapplied design. Passing SQLite tests does not validate PostgreSQL permissions, RLS, concurrency, or deployment.
 - Six adversarial tests are focused regression evidence, not an exhaustive security certification.
+
+## Round2 보강
+
+독립 회귀검사에서 기존568b6a9의 출석 비겹침 완료, 종료 후 미결제 청구, 예약별 추천인 변경을 재현하고 수정했다. 실패 재현과 수정은 REVIEW-ROUND2.md·test_regressions.py에 보존했다. 공유 시간은 참여자별 구간 합집합의 교집합으로 계산한다. 로그인은 IP+계정 및 IP 합산 제한을 적용한다. 실제 PG 네트워크 없이 서명·위조·금액 불일치·재전송·만료 이벤트의 원자적 처리와 Supabase 테스트 식별자 연결을 HTTP 계약 검사했다. 로컬 PostgreSQL의 RLS도 실행했으나 호스팅 Supabase·PG·실제 Jitsi 출석의 보안을 증명하지 않는다.

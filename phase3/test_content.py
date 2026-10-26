@@ -19,6 +19,15 @@ class CurriculumTests(unittest.TestCase):
             self.assertEqual({'listening','speaking','reading','writing','roleplay'},set(unit['activities']))
             for item in unit['assessment']:
                 self.assertTrue(all(item.get(k) for k in ('question','answer','explanation')),unit['id'])
+    def test_assessment_evidence_is_present_in_declared_source(self):
+        for unit in self.units:
+            self.assertTrue(unit['objectivesEn']);self.assertTrue(unit['learnerGuideEn']);self.assertTrue(unit['performanceTask'])
+            for item in unit['assessment']:
+                source=unit['reading']+' '+' '.join(unit['dialogue']) if item['sourceType']=='reading_dialogue' else unit[item['sourceType']]
+                if isinstance(source,list):source=' '.join(source)
+                elif isinstance(source,dict):source=' '.join(str(v) for v in source.values())
+                self.assertTrue(item['evidence']);self.assertTrue(item['scoringNote'])
+                for quote in item['evidence']:self.assertIn(quote,source,(unit['id'],item['question']))
     def test_independent_readings_and_internal_level_progression(self):
         self.assertEqual(12,len({x['id'] for x in self.units}))
         self.assertEqual(12,len({x['reading'] for x in self.units}))

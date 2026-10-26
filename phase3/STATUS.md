@@ -19,20 +19,20 @@
 |공유 교재|독자 12단원·36평가; 예약 시 교재 SHA-256 스냅샷, 학습자 지도서 접근 차단|교사 독립 검수·실학습자 파일럿·전체 전문 교육과정 확대 필요|
 |화상 수업|같은 예약의 양측에게 같은 Jitsi 시험방 URL; 실제 UI 확인|두 기기 음성·영상 통화 미검증, 인증된 비공개 Jitsi 미연동|
 |과제·피드백·진도|예약별 제출·점수·교사 피드백·수업 상태 저장; UI 검사|단원/예약별 진도이며 전체 학습 분석 시스템 아님|
-|완료·정산 게이트|시간 내 heartbeat·양측 확인·운영자 증빙·분쟁 보류; 테스트 시계 30분 검사|실제 Jitsi 출석 증거가 아님; 실제 지급 불가|
-|테스트 결제·분배|모의 청구 중복 방지, 고정 요율 스냅샷, 거래별 가상 원장, 개인·관리자 수익표|PG sandbox 자체도 미연동; 실제 결제 아님|
+|완료·정산 게이트|시간 내 heartbeat 구간의 양측 교집합·양측 확인·운영자 증빙·분쟁 보류; 테스트 시계30분 검사|실제 Jitsi 출석 증거가 아님; 실제 지급 불가|
+|테스트 결제·분배|모의 청구 중복 방지, 고정 요율 스냅샷, 거래별 가상 원장, 개인·관리자 수익표|Stripe 테스트 전용 어댑터·서명 callback·원장 중복 방지 HTTP 계약 검사. 실제 PG 계정/API 화면은 미검증|
 |추천|가입 추천 관계, 완료 거래 직접 학습자 추천 가상 보상, 본인/거래 상대 추천 차단|현금 비활성; 강사 모집 보상·추가 단계 보상 없음|
 |분쟁·환불·이의|사유·판정·가상 원장 역분개·이의신청·양측 직접 동의 재수업; HTTP/UI 검사|실제 환불·차지백·국가별 정책 적용 미연동|
 |후기·재예약|완료 학습자 후기, 환불 후기 집계 제외, 다시 예약 화면 연결|모니터링·후기 콘텐츠 심사 고도화 필요|
 |관리자|회원/강사·거래·신고·원장·강사/추천인 가상 발생액·감사 추적|로컬 단일 관리자; MFA·운영 권한분리·외부 감사 백업 필요|
 |법률·사업성|공식 근거·검토일·5개 정책 초안·수수료9시나리오·부가수익 가정|변호사·세무사·PG 확인 미완료; 법률 승인 아님|
-|Supabase|기존 정책 읽기 조사, 격리 hs3 SQL 설계와 deny-by-default 경계|제안 SQL 미적용·Postgres RLS 실검증 미완료|
+|Supabase|격리 hs3 SQL 전체를 로컬 PostgreSQL에 설치; RLS/제약12검사와 별도 Auth 검증 어댑터 추가|운영·호스팅 Supabase에는 미적용. 로컬 PostgreSQL 검증은 통과했지만 Auth는 모형·호스팅 브랜치 생성 요청 실패|
 
 ## 검사 근거
 
-- `python -m unittest discover -s phase3 -p 'test_*.py' -v`: **23개 통과** (교재2, 독립 보안6, 서버15).
+- `python -m unittest discover -s phase3 -p 'test_*.py' -v`: **46개 통과** (교재3, HTTP 통합6, PG 계약9, 신규 회귀3, 독립 보안6, 기존 서버15, Supabase 인증 계약4).
 - `node --check phase3/app.js`, `node --check phase3/browser-test.cjs`, `git diff --check`: 통과.
-- `browser-test.cjs`: 실제 Chromium에서 **17개 흐름/검사항목 통과**. 4개 분리 세션, 가입3역할·운영자 승인·예약·모의결제·동일 교재해시·같은 시험방URL·과제/평가·조기완료차단·신고/환불/이의·9시나리오·PC1440/모바일390 화면·정책링크를 확인했다. 결과는 `browser-results.json`.
+- `browser-test.cjs`: 실제 Chromium에서 **20개 흐름/검사항목 통과**. 4개 분리 세션, 가입3역할·운영자 승인·예약·모의결제·동일 교재해시·같은 시험방URL·과제/평가·조기완료차단·신고/환불/이의·9시나리오·PC1440/모바일390 화면·정책링크를 확인했다. 결과는 `browser-results.json`.
 - 초기 브라우저 검사에서 일정 select 기본값 오류를 발견해 수정했다. 모바일 금액 줄바꿈은 숫자 셀 줄바꿈 차단과 표 내부 가로 스크롤로 수정했다. 한글 글꼴 없는 검사 환경에 Noto CJK를 설치해 실제 표시도 확인했다.
 - 원격 보존 커밋 `48366f8`의 GitHub Actions PR 실행 #2 (run `40371027383`) **success** 확인. 이후 확대 검사는 해당 최신 커밋의 Actions 결과를 별도로 확인해야 한다.
 - 브라우저 검사는 실제 스마트폰 장치, 실제 두 사람 수업, 교육 효과, 외부 영상 통화, 실제 결제·지급 검증을 대신하지 않는다.
@@ -40,3 +40,15 @@
 ## 남은 운영 차단 항목
 
 운영 전용 서버/Supabase Auth·PostgreSQL 트랜잭션·RLS 검증, PG sandbox와 서명 웹훅/대사, 신원·성인·자격 검증, Jitsi 인증/출석 이벤트, 실제 PC·폰 통화, MFA·침투·부하·백업복구, 교사/학습자 검수, 다국어/접근성 강화, 국가별 법률·세무·정책 승인. 운영 환경 또는 main에 자동 활성화되는 스위치는 제공하지 않는다.
+
+
+## 568b6a9 이후 이번 작업
+
+- 독립검토의 재현 실패3건을 수정: 서로 겹치지 않는 출석으로 완료, 지난 수업 신규 청구, 예약별 추천인 변경. 미결제15분/수업시작 만료와 슬롯 해제, IP+이메일 로그인 제한도 검사했다.
+- 교재pilot-v2: 12/36 보존, B1 답 근거 오류와 B2/C1 문법 활용 교정, 모든 문항 직접 근거 검증, 영어 학습 안내·수행 기준 추가. 외부 교사 승인 아님.
+- PG: Checkout/서명 webhook/재전송 방지/예약 금액 대사/만료 건 보류를 구현하고 오프라인 전송 모형으로 HTTP 검사. 실제 PG sandbox 미실행.
+- Supabase: 테스트 프로젝트 Auth 검증 어댑터와 운영 프로젝트 차단·관리자 자기부여/이메일 자동합치기 차단. 실제 호스팅 계정 호출은 미실행. 브랜치 생성 요청은 requestState 오류였으며 재조회한 목록은 비어 있었다.
+- `node phase3/postgres-test.cjs`: 실제 PostgreSQL WASM에서12검사 통과. Auth 사용자/claims는 명시적인 모형이고 로컬18.6 엔진은 기존 Supabase17.11과 배포 환경이 다르다.
+- 브라우저20검사: 예약→공유교재→30분 겹친 출석(모의 시계)→증빙·양측확인→완료→후기→가상 정산→환불/이의까지 확대했다. 실제 통화·실제30분 수업 이행을 판정하지 않는다.
+- 이번 수정 파일: server.py/schema.sql/app.js, content.json/test_content.py, payments.py/test_payments.py/test_integration_flows.py, supabase_auth.py/test_supabase_auth.py, test_regressions.py, postgres-test.cjs/postgres-results.json, browser_server.py/browser-test.cjs/browser-results.json, package.json/lockfile, AUTH-TESTING.md/PAYMENTS.md/REVIEW-ROUND2.md/CURRICULUM.md/SUPABASE-INTEGRATION.md/README.md/SECURITY-REVIEW.md/STATUS.md, supabase-preview.sql, 전용 Actions workflow.
+- 기존main 파일·무료350단원·읽기600개·운영DB는 수정하지 않는다. 최신 CI 결과는 이 변경을 담은 커밋의 Actions 실행을 별도로 확인한다.

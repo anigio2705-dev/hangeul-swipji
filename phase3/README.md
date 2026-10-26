@@ -77,3 +77,16 @@ node phase3/browser-test.cjs
 ```
 
 CI에는 한글 표시 확인을 위한 Noto CJK 글꼴을 설치합니다. UI는 시스템 한글 글꼴을 사용하며 외부 폰트 CDN으로 개인정보를 전송하지 않습니다. 모바일 확인은 390px Chromium 에뮬레이션이며 실제 Android/iPhone 장치 검사와 다릅니다.
+
+## 이번 보강 검증
+
+```bash
+python -m unittest discover -s phase3 -p 'test_*.py' -v
+npm ci --prefix phase3 --ignore-scripts
+node phase3/postgres-test.cjs
+node phase3/browser-test.cjs
+```
+
+PostgreSQL 검사는 로컬 PGlite 엔진과 Auth 모형을 사용합니다. 현재 엔진은 PostgreSQL18이며 기존 호스팅 프로젝트 PostgreSQL17과 동일한 배포 환경이 아닙니다. 호스팅 Supabase 로그인·JWT·PostgREST·네트워크 정책 검증으로 표시하지 않습니다. 자세한 경계는 [AUTH-TESTING.md](AUTH-TESTING.md), PG 테스트 계약과 실제 계정 미검증 범위는 [PAYMENTS.md](PAYMENTS.md)에 있습니다.
+
+브라우저 검사에 사용하는 `browser_server.py`는 일회성 테스트 DB 및 파일 기반 모의 시계 전용 실행기입니다. 운영 서버에는 시간을 바꾸는 HTTP API가 없습니다. 예약→30분 겹친 출석→양측 확인→관리자 증빙→완료→후기→모의 정산→모의 환불 흐름을 짧은 시간에 재현하되, 실제 화상통화나 강의 제공을 입증하지 않습니다.

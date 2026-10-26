@@ -1,6 +1,6 @@
 {
   "mode": "local-test-only",
-  "checkedAt": "2026-10-26T17:49:46.770Z",
+  "checkedAt": "2026-10-26T21:15:26.221Z",
   "browser": "Chromium134 / Playwright1.51.1",
   "checks": [
     "teacher UI signup",
@@ -15,6 +15,9 @@
     "both users same Jitsi test room URL",
     "homework and feedback UI persisted",
     "UI premature completion blocked",
+    "full booking to completion with shared30m simulated server clock",
+    "completed lesson review and admin test settlement UI",
+    "provider private earnings UI after settlement",
     "dispute refund appeal UI",
     "9 profitability scenarios rendered",
     "desktop1440 mobile390 no page horizontal overflow",
@@ -28,5 +31,8 @@
   "errors": [],
   "externalVideoMediaTested": false,
   "physicalMobileTested": false,
-  "realPaymentsTested": false
+  "realPaymentsTested": false,
+  "serverClockSimulated": true,
+  "hostedSupabaseTested": false,
+  "providerSandboxTested": false
 }

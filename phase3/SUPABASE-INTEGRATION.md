@@ -4,12 +4,12 @@
 
 The runnable 3rd-phase pilot uses Python + SQLite locally. It does **not** use Supabase Auth or persist its transactions to Supabase. Existing `speaking-config.js`, `public.profiles`, `public.matches`, the existing Jitsi flow, and all 2nd-phase files remain unchanged. The parent agent inspected the existing project's policies read-only; no production user data was copied into this pilot.
 
-`supabase-preview.sql` is a **design proposal**, not an applied or database-verified migration. It has an explicit install gate; `hs3` must remain outside the Supabase Data API's exposed schemas. There are no end-user grants and no exposed security-definer functions. Dormant own/participant SELECT policies describe the future access boundary; RLS is not a substitute for grants or server authorization.
+`supabase-preview.sql` is a **design proposal**, not an applied or hosted-database-verified migration. It has an explicit install gate; `hs3` must remain outside the Supabase Data API's exposed schemas. There are no end-user grants and no exposed security-definer functions. Dormant own/participant SELECT policies describe the future access boundary; RLS is not a substitute for grants or server authorization.
 
 ## Isolated validation before any integration
 
 1. Create a disposable test project/database, with no production Auth users or copied personal data. Inspect its version, schema, default privileges, extension installation schema, and Data API exposure settings.
-2. Enable `btree_gist` in `extensions` within that disposable project. Its UUID GiST operator class is required by the overlap exclusions. This preview assumes `auth.users`, `auth.uid()`, `anon`, and `authenticated` exist as in Supabase; plain PostgreSQL needs test stubs. No SQL application or PostgreSQL execution was performed for this proposal.
+2. Enable `btree_gist` in `extensions` within that disposable project. Its UUID GiST operator class is required by the overlap exclusions. This preview assumes `auth.users`, `auth.uid()`, `anon`, and `authenticated` exist as in Supabase; plain PostgreSQL needs test stubs. A later isolated PGlite PostgreSQL test now executes the complete proposal with explicit Auth fixtures; no hosted Supabase application was performed. See AUTH-TESTING.md.
 3. Explicitly set `hs3.allow_preview_install` to `isolated-test-only` in that session, then run the preview once inside a disposable database. A second install is intentionally rejected by `create schema hs3` rather than silently accepting a divergent schema.
 4. Test anonymous denial, authenticated cross-user denial, own-participant read boundaries using SET ROLE/JWT test fixtures, teacher approval escalation rejection, no browser ledger writes, concurrent learner/provider overlap, slot uniqueness, callback replay, refund races, and settlement idempotency. Run security advisors and inspect all grants and functions.
 5. Only after the adapter and tests exist, generate a real migration using the current Supabase CLI workflow; do not rename this preview into a migration or claim it is production ready. The live 2nd-phase project must not be its test target.
@@ -47,3 +47,6 @@ Production requires an approved authenticated Jitsi deployment (or approved vend
 - [Custom schemas](https://supabase.com/docs/guides/api/using-custom-schemas): consult when designing a future deliberately exposed API schema; `hs3` is intentionally private in this proposal.
 
 No claim of Supabase deployment, migration success, RLS execution testing, payment-provider integration, or real two-party Jitsi attendance verification is made by these files.
+
+
+Round2 update: see AUTH-TESTING.md for actual local PostgreSQL/RLS results and the optional isolated Supabase Auth adapter. The hosted development branch request failed; no production mutation occurred. Local SQLite transactions are still the runnable platform storage. These checks do not establish real Supabase Auth/PostgREST integration.
