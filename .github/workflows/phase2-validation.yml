@@ -1,0 +1,39 @@
+name: Phase 2 curriculum and page checks
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'intro.html'
+      - 'beginner*.html'
+      - 'intermediate*.html'
+      - 'advanced*.html'
+      - 'learn.html'
+      - 'reading.html'
+      - 'hangul-*.html'
+      - 'scripts/audit-350-lessons.cjs'
+      - 'scripts/check-phase2-pages.cjs'
+      - '.github/workflows/phase2-validation.yml'
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Audit 350 lessons and 1758 questions
+        run: node scripts/audit-350-lessons.cjs
+      - name: Check page structures and navigation shells
+        run: node scripts/check-phase2-pages.cjs
+      - name: Verify original curriculum and 7-day materials
+        run: node scripts/check-foundations.cjs
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-lesson-audit
+          path: phase2-lesson-audit.json
+          if-no-files-found: ignore
