@@ -1,0 +1,26 @@
+{
+  "version": "20261026-human-only",
+  "policy": "Actual human recordings only; no synthesized or device speech in Hangul foundations playback or review",
+  "weekTargets": 63,
+  "humanCandidates": 51,
+  "missingHuman": [
+    "고",
+    "노",
+    "누",
+    "도",
+    "라",
+    "마",
+    "바",
+    "자",
+    "카",
+    "타",
+    "파",
+    "하"
+  ],
+  "excludedSynthetic": 26,
+  "newConsonantSegments": 14,
+  "consonantMappingStatus": "provisional, ordered segment assignment; teacher listening needed",
+  "listeningApproved": 0,
+  "step2Complete": false,
+  "note": "The user liked the earlier synthetic samples under a mistaken belief that they were human; that feedback was not recorded as approval of the new human files."
+}

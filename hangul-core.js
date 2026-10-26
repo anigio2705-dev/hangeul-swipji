@@ -20,9 +20,9 @@
     return String.fromCharCode(0xac00+(a*21+b)*28);
   }
   const records={},holds={};let current=null,run=0,release=null;
-  const ready=fetch('./hangul-audio-manifest.json?v=20261026-week-audio-step1')
+  const ready=fetch('./hangul-audio-manifest.json?v=20261026-human-only')
     .then(r=>{if(!r.ok)throw Error('audio manifest');return r.json()})
-    .then(m=>{Object.assign(records,Object.fromEntries(Object.entries(m.recordings).filter(([,a])=>!a.disabled)));Object.assign(holds,Object.fromEntries(Object.entries(m.recordings).filter(([,a])=>a.disabled)));document.dispatchEvent(new Event('hs-audio-ready'))})
+    .then(m=>{Object.assign(records,Object.fromEntries(Object.entries(m.recordings).filter(([,a])=>!a.disabled&&a.kind!=='synthetic')));Object.assign(holds,Object.fromEntries(Object.entries(m.recordings).filter(([,a])=>a.disabled&&a.kind!=='synthetic')));document.dispatchEvent(new Event('hs-audio-ready'))})
     .catch(()=>{document.dispatchEvent(new Event('hs-audio-ready'))});
   function status(message){
     document.querySelectorAll('[data-audio-status]').forEach(x=>x.textContent=message);
@@ -44,28 +44,15 @@
     });
     if(token===run){current=null;release=null}
   }
-  async function deviceVoice(word,token){
-    const synth=window.speechSynthesis;
-    const voice=synth?.getVoices().find(v=>/^ko(?:[-_]|$)/i.test(v.lang));
-    if(!voice)throw Error('한국어 기기 음성이 없습니다. 선생님의 소리를 듣고 따라 해 주세요.');
-    status('기기 음성: '+word+' · 녹음 음성이 아닙니다.');
-    await new Promise((resolve,reject)=>{
-      const utterance=new SpeechSynthesisUtterance(word);utterance.lang='ko-KR';utterance.voice=voice;utterance.rate=.8;
-      release=resolve;utterance.onend=resolve;utterance.onerror=()=>token===run?reject(Error('기기 음성을 재생하지 못했습니다.')):resolve();
-      synth.speak(utterance);
-    });
-    if(token===run)release=null;
-  }
   async function play(value){
     stop();const token=run;
     await ready;if(token!==run)return;
     const words=Array.isArray(value)?value:[value];
-    const allowDevice=!!document.querySelector('#device-fallback:checked');
     const missing=words.filter(word=>!records[word]);
-    if(missing.some(w=>holds[w])&&!allowDevice){status('재생 보류: '+missing.filter(w=>holds[w]).map(w=>w+' · '+holds[w].holdReason).join(' / '));return}
-    if(missing.length&&!allowDevice){status('녹음 준비 중: '+missing.join(' · ')+'. 선생님과 함께 읽어 주세요. 기기 음성은 직접 선택할 때만 사용합니다.');return}
+    if(missing.some(w=>holds[w])){status('재생 보류: '+missing.filter(w=>holds[w]).map(w=>w+' · '+holds[w].holdReason).join(' / '));return}
+    if(missing.length){status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요.');return}
     try{
-      for(const word of words){if(token!==run)return;await (records[word]?recording(word,token):deviceVoice(word,token))}
+      for(const word of words){if(token!==run)return;await recording(word,token)}
       if(token===run)status('재생 완료 · Listen and repeat.');
     }catch(e){if(token===run){stop();status(e.message)}}
   }
