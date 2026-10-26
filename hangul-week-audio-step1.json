@@ -1,0 +1,432 @@
+{
+  "version": "20261026-week-audio-step1",
+  "step": 1,
+  "purpose": "7일 과정의 누락된 음성 후보 파일 확보. 정확성 청취 검수는 2단계.",
+  "baselineMissing": 52,
+  "prepared": 52,
+  "newHuman": 26,
+  "newSynthetic": 26,
+  "weekTargets": 63,
+  "weekAvailableBefore": 11,
+  "weekFilesNow": 63,
+  "listeningApproved": 0,
+  "publicPlaybackOfNewCandidates": false,
+  "items": [
+    {
+      "text": "기역",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/ae30-c5ed-week1.mp3",
+      "sha256": "75dde9220efd941a53fc4dd964ddfad6e9c20a963120872886b5b0d4128afb69",
+      "duration": 1.358367,
+      "disabled": true
+    },
+    {
+      "text": "니은",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/b2c8-c740-week1.mp3",
+      "sha256": "6e5c36a3068b85e12aa9de19fdc783ab53922293c5ca9d53fdf93eea9ca3238c",
+      "duration": 1.38449,
+      "disabled": true
+    },
+    {
+      "text": "디귿",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/b514-adff-week1.mp3",
+      "sha256": "d6eeda5e27bc3ca3814f16a14cd562eaf07258837d523d4c3533a6057bd5143a",
+      "duration": 1.724082,
+      "disabled": true
+    },
+    {
+      "text": "리을",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/b9ac-c744-week1.mp3",
+      "sha256": "2a2dbde5a5f211e68fc6101960dee91f7f120a9ed924e2e9df20e798227f23a5",
+      "duration": 1.253878,
+      "disabled": true
+    },
+    {
+      "text": "미음",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/bbf8-c74c-week1.mp3",
+      "sha256": "9b267e7c90047d9a8cbd97826575cc8b125649f36eb69c5e1107592848534218",
+      "duration": 1.462857,
+      "disabled": true
+    },
+    {
+      "text": "비읍",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/be44-c74d-week1.mp3",
+      "sha256": "93a56ddc8fe01d9cc3771cc22250eec75229c5c25c857c179b123911531948f6",
+      "duration": 1.358367,
+      "disabled": true
+    },
+    {
+      "text": "시옷",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/c2dc-c637-week1.mp3",
+      "sha256": "cd408bfdb2cda7788735b646c9e41bdf85079da04b683aa66102951a638e3d13",
+      "duration": 1.436735,
+      "disabled": true
+    },
+    {
+      "text": "이응",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/c774-c751-week1.mp3",
+      "sha256": "274a5313fb0523e7b8ac901e9d36ab0d9ed62bda7610aa390be37a3cd99c88bb",
+      "duration": 1.515102,
+      "disabled": true
+    },
+    {
+      "text": "지읒",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/c9c0-c752-week1.mp3",
+      "sha256": "1549a655e9dcffa546396de83bec7e8354eeb35e8832eab37d39d7751625bd08",
+      "duration": 1.253878,
+      "disabled": true
+    },
+    {
+      "text": "치읓",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/ce58-c753-week1.mp3",
+      "sha256": "fb4fcb17edf23d553d56896d6df67090e6e31c359872488baf63dcc65f68f875",
+      "duration": 2.089796,
+      "disabled": true
+    },
+    {
+      "text": "키읔",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/d0a4-c754-week1.mp3",
+      "sha256": "6eab9c67c1b9025faa67b95dfe45b6c916ffa454d3c2fa7201c09635aa405167",
+      "duration": 2.142041,
+      "disabled": true
+    },
+    {
+      "text": "티읕",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/d2f0-c755-week1.mp3",
+      "sha256": "9111a4583dbb1944b16bc98c07ec1aaf278c7701cbee880676cd9e97d5e55411",
+      "duration": 1.201633,
+      "disabled": true
+    },
+    {
+      "text": "피읖",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/d53c-c756-week1.mp3",
+      "sha256": "4a481e02c10f4d8e359be73ea91234dcc2c8a3a0066d4d8c560f022b6cbcea19",
+      "duration": 1.332245,
+      "disabled": true
+    },
+    {
+      "text": "히읗",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/d788-c757-week1.mp3",
+      "sha256": "abb1adfa529104248ee45019050c0ebbb02364330de9a44a6627f4b2097b3edc",
+      "duration": 1.671837,
+      "disabled": true
+    },
+    {
+      "text": "아",
+      "kind": "human",
+      "src": "./assets/hangul-audio/c544-week1.mp3",
+      "sha256": "ab56a8382eeef2b3ec1f6d25bea866b6dbfc89446ae9d2d64874f661459b1bf0",
+      "duration": 1.149388,
+      "disabled": true
+    },
+    {
+      "text": "야",
+      "kind": "human",
+      "src": "./assets/hangul-audio/c57c-week1.mp3",
+      "sha256": "89d32492f1cfaa3dc9d035d3b5d83f3a505a590056d7f46fbab8cfde5f6fa98e",
+      "duration": 1.567347,
+      "disabled": true
+    },
+    {
+      "text": "여",
+      "kind": "human",
+      "src": "./assets/hangul-audio/c5ec-week1.mp3",
+      "sha256": "11cb805cb325852901bbfd58d2b32e51f4505ce7242a916b4ab008ffbc6ab7f9",
+      "duration": 1.332245,
+      "disabled": true
+    },
+    {
+      "text": "요",
+      "kind": "human",
+      "src": "./assets/hangul-audio/c694-week1.mp3",
+      "sha256": "2a89c685e137c26da4916664019e36d0759316ee78107ce8e5a8217d0b7b9709",
+      "duration": 1.515102,
+      "disabled": true
+    },
+    {
+      "text": "우",
+      "kind": "human",
+      "src": "./assets/hangul-audio/c6b0-week1.mp3",
+      "sha256": "7ef51ef27326b6149fd14b91fc703b0c9e0de8b15bab0dc0c0c39b926de5ceeb",
+      "duration": 1.253878,
+      "disabled": true
+    },
+    {
+      "text": "유",
+      "kind": "human",
+      "src": "./assets/hangul-audio/c720-week1.mp3",
+      "sha256": "9d72c12aa14250262edf28510d4e2f09c8bea7933da28b15931e704001b5fd46",
+      "duration": 1.358367,
+      "disabled": true
+    },
+    {
+      "text": "으",
+      "kind": "human",
+      "src": "./assets/hangul-audio/c73c-week1.mp3",
+      "sha256": "98dc3a560894ccf1b771b1c5e5c0ba3d46819808023f9a09518529913477c6d2",
+      "duration": 1.410612,
+      "disabled": true
+    },
+    {
+      "text": "고",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/ace0-week1.mp3",
+      "sha256": "b801b460b4aafd16947091ec1bf59e293e1c6a83149b0a5250c9b777bdb1ad20",
+      "duration": 1.07102,
+      "disabled": true
+    },
+    {
+      "text": "구",
+      "kind": "human",
+      "src": "./assets/hangul-audio/ad6c-week1.mp3",
+      "sha256": "cecef399eb9e86e03ab6afda4bfe35ae69040826fa7791731e4c4259f8fdbdfc",
+      "duration": 0.966531,
+      "disabled": true
+    },
+    {
+      "text": "노",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/b178-week1.mp3",
+      "sha256": "a4a764136a624edf1e524b7fa181cdab1882c131aa906a23074a8f6fba2656b5",
+      "duration": 0.966531,
+      "disabled": true
+    },
+    {
+      "text": "누",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/b204-week1.mp3",
+      "sha256": "26c94697d19b7181f462fd9719a4b592d00e94ca0b9b5a4984ef97a34d9d8fc7",
+      "duration": 0.940408,
+      "disabled": true
+    },
+    {
+      "text": "다",
+      "kind": "human",
+      "src": "./assets/hangul-audio/b2e4-week1.mp3",
+      "sha256": "5a1ef65dd8dc922ea4fb42fb7fbc8fc1314ed12dd664a7b8063ba292048c3d07",
+      "duration": 0.914286,
+      "disabled": true
+    },
+    {
+      "text": "도",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/b3c4-week1.mp3",
+      "sha256": "1bad70ad7e9c233e4f703a182e5af066ba221602e553dec17081b260531806fa",
+      "duration": 0.992653,
+      "disabled": true
+    },
+    {
+      "text": "라",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/b77c-week1.mp3",
+      "sha256": "cc9d900524d042681a59c8d0d0a69aeb5196247eb01f451266bf4139636c5454",
+      "duration": 0.940408,
+      "disabled": true
+    },
+    {
+      "text": "마",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/b9c8-week1.mp3",
+      "sha256": "a5da725e5d9c9f1af18a20f06c76f3cca0037a71de9958185723f931e54b8801",
+      "duration": 0.966531,
+      "disabled": true
+    },
+    {
+      "text": "바",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/bc14-week1.mp3",
+      "sha256": "2660b193534c8c86d4275ce902a7fe04f4048fbdae1292ba119aa7fdce9f3fa0",
+      "duration": 1.619592,
+      "disabled": true
+    },
+    {
+      "text": "자",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/c790-week1.mp3",
+      "sha256": "5bdac4aa741c736ce3fdfecf24e318d2ad49783badd2718c7a21547edbe27591",
+      "duration": 1.515102,
+      "disabled": true
+    },
+    {
+      "text": "카",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/ce74-week1.mp3",
+      "sha256": "f55e101796ddbfc9e709372ddea827fec9f3a67b56769e28a819e73381f6be59",
+      "duration": 1.697959,
+      "disabled": true
+    },
+    {
+      "text": "타",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/d0c0-week1.mp3",
+      "sha256": "e11a08ef156f00d5066b9c65ce229ceed82e9d08ef6fb0eaf75d6f66c7ba74a9",
+      "duration": 1.645714,
+      "disabled": true
+    },
+    {
+      "text": "파",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/d30c-week1.mp3",
+      "sha256": "d11b4e40c654dd19c0582e45d16e054337ce3332e6b6f30ae17a4090b89a94ee",
+      "duration": 1.28,
+      "disabled": true
+    },
+    {
+      "text": "하",
+      "kind": "synthetic",
+      "src": "./assets/hangul-audio/d558-week1.mp3",
+      "sha256": "16e47931e73e68a2dcfa6888711633e887733cdfcd4f308423658ad8301886da",
+      "duration": 1.776327,
+      "disabled": true
+    },
+    {
+      "text": "아이",
+      "kind": "human",
+      "src": "./assets/hangul-audio/c544-c774-week1.mp3",
+      "sha256": "7487d62565c4d66ae9d4ec6d83cc32758be195a0c26c5757eacc14319f5c55c8",
+      "duration": 0.835918,
+      "disabled": true
+    },
+    {
+      "text": "오이",
+      "kind": "human",
+      "src": "./assets/hangul-audio/c624-c774-week1.mp3",
+      "sha256": "b026973b97753bd4ac00f7ddc088e45e076b1c0f35b9614bb9a024dcd3d9bf27",
+      "duration": 1.07102,
+      "disabled": true
+    },
+    {
+      "text": "우유",
+      "kind": "human",
+      "src": "./assets/hangul-audio/c6b0-c720-week1.mp3",
+      "sha256": "ed9cb80d4eb6a2f6dc32a53ea4f8fb8d015f6ad44306ccd779bd30b7bdf1f6f6",
+      "duration": 1.018776,
+      "disabled": true
+    },
+    {
+      "text": "나무",
+      "kind": "human",
+      "src": "./assets/hangul-audio/b098-bb34-week1.mp3",
+      "sha256": "245f54765e4b646b21bc0106448281c20538a957d3bd1b2b7df5e97b7564f217",
+      "duration": 1.018776,
+      "disabled": true
+    },
+    {
+      "text": "바다",
+      "kind": "human",
+      "src": "./assets/hangul-audio/bc14-b2e4-week1.mp3",
+      "sha256": "704e9c8d26765087386972eabaae9ac9f7564388b68c06b25950ddc331a40a30",
+      "duration": 1.044898,
+      "disabled": true
+    },
+    {
+      "text": "아기",
+      "kind": "human",
+      "src": "./assets/hangul-audio/c544-ae30-week1.mp3",
+      "sha256": "da246844fe6580d12ed683e59b8c2b0e07e30c3657a3fe64ed7050e643280180",
+      "duration": 0.966531,
+      "disabled": true
+    },
+    {
+      "text": "바나나",
+      "kind": "human",
+      "src": "./assets/hangul-audio/bc14-b098-b098-week1.mp3",
+      "sha256": "59146c07d8350b06687f8ecf810607e7413ed5520c99d4d998ec9af45904232b",
+      "duration": 1.17551,
+      "disabled": true
+    },
+    {
+      "text": "나비",
+      "kind": "human",
+      "src": "./assets/hangul-audio/b098-be44-week1.mp3",
+      "sha256": "f4ff39ec4c3ef2f988dd46448821a0bc0295a425a0fb172198b65ac5b3afa43f",
+      "duration": 1.123265,
+      "disabled": true
+    },
+    {
+      "text": "모자",
+      "kind": "human",
+      "src": "./assets/hangul-audio/baa8-c790-week1.mp3",
+      "sha256": "68389518feed68bd87d48a2bad2c7a376b3cfa0e4482e88a634e25368450f7b7",
+      "duration": 0.992653,
+      "disabled": true
+    },
+    {
+      "text": "산",
+      "kind": "human",
+      "src": "./assets/hangul-audio/c0b0-week1.mp3",
+      "sha256": "cf7ee30557c7fa26108c64c2b9426a8809b15d0f5cc3366e5cb07bf7e69c7270",
+      "duration": 1.044898,
+      "disabled": true
+    },
+    {
+      "text": "문",
+      "kind": "human",
+      "src": "./assets/hangul-audio/bb38-week1.mp3",
+      "sha256": "3d7bad4e4f88178fdb408d2b3fc5aada5f5920caa8ce4225ec22c77a230f7580",
+      "duration": 0.966531,
+      "disabled": true
+    },
+    {
+      "text": "손",
+      "kind": "human",
+      "src": "./assets/hangul-audio/c190-week1.mp3",
+      "sha256": "f6b8f2508cc7625095942cbcb41d963cae832d35921c4a125d3dbb6b6d35ad02",
+      "duration": 0.809796,
+      "disabled": true
+    },
+    {
+      "text": "밤",
+      "kind": "human",
+      "src": "./assets/hangul-audio/bc24-week1.mp3",
+      "sha256": "5e3faa438e3747a76142fa805d3c00572e62479ca7dbe244783cd1627d9a79ba",
+      "duration": 0.914286,
+      "disabled": true
+    },
+    {
+      "text": "곰",
+      "kind": "human",
+      "src": "./assets/hangul-audio/acf0-week1.mp3",
+      "sha256": "afb5afef7d4e234a30c50fe208774bb7058408a80b27b61a940db8bb4e65ae82",
+      "duration": 0.966531,
+      "disabled": true
+    },
+    {
+      "text": "공",
+      "kind": "human",
+      "src": "./assets/hangul-audio/acf5-week1.mp3",
+      "sha256": "b6518ff966608e179e436bbc0fc19f9191f6859ed3356624c820ba93e5eb870d",
+      "duration": 0.757551,
+      "disabled": true
+    },
+    {
+      "text": "달",
+      "kind": "human",
+      "src": "./assets/hangul-audio/b2ec-week1.mp3",
+      "sha256": "b0313383f2f655e3142e1d2487fe0ff29efa694d27224bca835feb6684e356ae",
+      "duration": 1.123265,
+      "disabled": true
+    },
+    {
+      "text": "물",
+      "kind": "human",
+      "src": "./assets/hangul-audio/bb3c-week1.mp3",
+      "sha256": "50544432e74f643dd14be1587469a22944c55118e568dce7642b3a63866e6f49",
+      "duration": 1.436735,
+      "disabled": true
+    }
+  ]
+}

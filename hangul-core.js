@@ -20,7 +20,7 @@
     return String.fromCharCode(0xac00+(a*21+b)*28);
   }
   const records={},holds={};let current=null,run=0,release=null;
-  const ready=fetch('./hangul-audio-manifest.json?v=20261026-audio-audit')
+  const ready=fetch('./hangul-audio-manifest.json?v=20261026-week-audio-step1')
     .then(r=>{if(!r.ok)throw Error('audio manifest');return r.json()})
     .then(m=>{Object.assign(records,Object.fromEntries(Object.entries(m.recordings).filter(([,a])=>!a.disabled)));Object.assign(holds,Object.fromEntries(Object.entries(m.recordings).filter(([,a])=>a.disabled)));document.dispatchEvent(new Event('hs-audio-ready'))})
     .catch(()=>{document.dispatchEvent(new Event('hs-audio-ready'))});

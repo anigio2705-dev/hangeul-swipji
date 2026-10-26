@@ -1,16 +1,24 @@
 {
-  "version": "20261026-audio-audit",
+  "version": "20261026-week-audio-step1",
   "scope": "글자판·7일 과정·입문 50단원의 재생 대상",
   "note": "파일·문자 연결 검사는 실제 소리의 정확성이나 잘림 여부를 청취 승인한 것이 아닙니다. 기기 TTS는 음성이 달라 전수 품질 인증 대상이 될 수 없습니다.",
   "counts": {
     "targets": 463,
-    "available": 22,
-    "missing": 441,
-    "decodedFiles": 22,
+    "available": 74,
+    "missing": 389,
+    "decodedFiles": 74,
     "playbackAvailable": 21,
-    "held": 1,
+    "humanFiles": 48,
+    "syntheticFiles": 26,
+    "held": 53,
     "listeningApproved": 0,
     "signalWarnings": 1
+  },
+  "week": {
+    "targets": 63,
+    "available": 63,
+    "missing": 0,
+    "listeningApproved": 0
   },
   "recordings": [
     {
@@ -22,7 +30,11 @@
       "leadingSilence": 0.254,
       "trailingSilence": 0.566,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EA%B0%80.ogg",
       "license": "CC BY-SA 4.0",
       "held": false,
@@ -38,7 +50,11 @@
       "leadingSilence": 0.259,
       "trailingSilence": 0.424,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EB%82%98.ogg",
       "license": "CC BY-SA 4.0",
       "held": false,
@@ -54,7 +70,11 @@
       "leadingSilence": 0.12,
       "trailingSilence": 0.216,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-CHK2605-%EC%82%AC.wav",
       "license": "CC0",
       "held": false,
@@ -70,7 +90,11 @@
       "leadingSilence": 0.088,
       "trailingSilence": 0.187,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-%ED%98%B8%EB%A1%9C%EC%A1%B0-%EC%B0%A8.wav",
       "license": "CC0",
       "held": false,
@@ -86,7 +110,11 @@
       "leadingSilence": 0.199,
       "trailingSilence": 0.055,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EC%96%B4.ogg",
       "license": "CC BY-SA 4.0",
       "held": false,
@@ -102,7 +130,11 @@
       "leadingSilence": 0.236,
       "trailingSilence": 0.194,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-CHK2605-%EC%98%A4.wav",
       "license": "CC0",
       "held": false,
@@ -118,7 +150,11 @@
       "leadingSilence": 0.309,
       "trailingSilence": 0.163,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EA%B1%B0.ogg",
       "license": "CC BY-SA 4.0",
       "held": false,
@@ -134,7 +170,11 @@
       "leadingSilence": 0.199,
       "trailingSilence": 0.04,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-%ED%98%B8%EB%A1%9C%EC%A1%B0-%EB%84%88.wav",
       "license": "CC0",
       "held": false,
@@ -152,7 +192,11 @@
       "signalWarnings": [
         "끝 여백 부족: 잘림 청취 확인 필요"
       ],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "파일 끝 여백 부족: 잘림 여부를 청취 확인할 때까지 재생 보류",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EC%95%A0.ogg",
       "license": "CC BY-SA 4.0",
       "held": true,
@@ -168,7 +212,11 @@
       "leadingSilence": 0.218,
       "trailingSilence": 0.109,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EC%97%90.ogg",
       "license": "CC BY-SA 4.0",
       "held": false,
@@ -184,7 +232,11 @@
       "leadingSilence": 0.298,
       "trailingSilence": 0.214,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EC%99%9C.ogg",
       "license": "CC BY-SA 4.0",
       "held": false,
@@ -200,7 +252,11 @@
       "leadingSilence": 0.388,
       "trailingSilence": 0.081,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EC%99%B8.ogg",
       "license": "CC BY-SA 4.0",
       "held": false,
@@ -216,7 +272,11 @@
       "leadingSilence": 0.225,
       "trailingSilence": 0.43,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EC%9C%84.ogg",
       "license": "CC BY-SA 4.0",
       "held": false,
@@ -232,7 +292,11 @@
       "leadingSilence": 0.023,
       "trailingSilence": 0.06,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-%ED%98%B8%EB%A1%9C%EC%A1%B0-%EC%9D%B4.wav",
       "license": "CC0",
       "held": false,
@@ -248,7 +312,11 @@
       "leadingSilence": 0.194,
       "trailingSilence": 0.201,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-CHK2605-%EC%98%88.wav",
       "license": "CC0",
       "held": false,
@@ -264,7 +332,11 @@
       "leadingSilence": 0.239,
       "trailingSilence": 0.187,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-CHK2605-%EC%99%80.wav",
       "license": "CC0",
       "held": false,
@@ -280,7 +352,11 @@
       "leadingSilence": 0.159,
       "trailingSilence": 0.173,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EB%8D%94.ogg",
       "license": "CC BY-SA 4.0",
       "held": false,
@@ -296,7 +372,11 @@
       "leadingSilence": 0.143,
       "trailingSilence": 0.132,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-%ED%98%B8%EB%A1%9C%EC%A1%B0-%EC%A0%80.wav",
       "license": "CC0",
       "held": false,
@@ -312,7 +392,11 @@
       "leadingSilence": 0.337,
       "trailingSilence": 0.323,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EB%91%90.ogg",
       "license": "CC BY-SA 4.0",
       "held": false,
@@ -328,7 +412,11 @@
       "leadingSilence": 0.108,
       "trailingSilence": 0.213,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-CHK2605-%EC%86%8C.wav",
       "license": "CC0",
       "held": false,
@@ -344,7 +432,11 @@
       "leadingSilence": 0.307,
       "trailingSilence": 0.438,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EC%A7%91.ogg",
       "license": "CC BY-SA 4.0",
       "held": false,
@@ -360,10 +452,1054 @@
       "leadingSilence": 0.464,
       "trailingSilence": 0.576,
       "signalWarnings": [],
-      "sourceLabelMatches": true,
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": false,
+      "holdReason": "",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EC%B1%85.ogg",
       "license": "CC BY-SA 4.0",
       "held": false,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "기역",
+      "src": "./assets/hangul-audio/ae30-c5ed-week1.mp3",
+      "duration": 1.317,
+      "peakDbfs": -4.3,
+      "rmsDbfs": -19.45,
+      "leadingSilence": 0.058,
+      "trailingSilence": 0.211,
+      "signalWarnings": [],
+      "alignmentObserved": "기억, 기억.",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "니은",
+      "src": "./assets/hangul-audio/b2c8-c740-week1.mp3",
+      "duration": 1.352,
+      "peakDbfs": -7.19,
+      "rmsDbfs": -18.54,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.2,
+      "signalWarnings": [],
+      "alignmentObserved": "니은. 니은.",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "디귿",
+      "src": "./assets/hangul-audio/b514-adff-week1.mp3",
+      "duration": 1.696,
+      "peakDbfs": -2.87,
+      "rmsDbfs": -19.92,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.716,
+      "signalWarnings": [],
+      "alignmentObserved": "디그트, 디그트.",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "리을",
+      "src": "./assets/hangul-audio/b9ac-c744-week1.mp3",
+      "duration": 1.21,
+      "peakDbfs": -6.24,
+      "rmsDbfs": -18.63,
+      "leadingSilence": 0.064,
+      "trailingSilence": 0.201,
+      "signalWarnings": [],
+      "alignmentObserved": "리얼 리얼",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "미음",
+      "src": "./assets/hangul-audio/bbf8-c74c-week1.mp3",
+      "duration": 1.412,
+      "peakDbfs": -5.6,
+      "rmsDbfs": -18.3,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.2,
+      "signalWarnings": [],
+      "alignmentObserved": "미음, 미음.",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "비읍",
+      "src": "./assets/hangul-audio/be44-c74d-week1.mp3",
+      "duration": 1.307,
+      "peakDbfs": -5.75,
+      "rmsDbfs": -18.63,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.216,
+      "signalWarnings": [],
+      "alignmentObserved": "비읍, 비읍",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "시옷",
+      "src": "./assets/hangul-audio/c2dc-c637-week1.mp3",
+      "duration": 1.398,
+      "peakDbfs": -3.43,
+      "rmsDbfs": -19.24,
+      "leadingSilence": 0.192,
+      "trailingSilence": 0.249,
+      "signalWarnings": [],
+      "alignmentObserved": "시옷, 시옷",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "이응",
+      "src": "./assets/hangul-audio/c774-c751-week1.mp3",
+      "duration": 1.477,
+      "peakDbfs": -5.46,
+      "rmsDbfs": -18.43,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.2,
+      "signalWarnings": [],
+      "alignmentObserved": "ASR did not identify the target; teacher review required",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "지읒",
+      "src": "./assets/hangul-audio/c9c0-c752-week1.mp3",
+      "duration": 1.221,
+      "peakDbfs": -5.8,
+      "rmsDbfs": -19.03,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.202,
+      "signalWarnings": [],
+      "alignmentObserved": "지읒, 지읒.",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "치읓",
+      "src": "./assets/hangul-audio/ce58-c753-week1.mp3",
+      "duration": 2.04,
+      "peakDbfs": -2.97,
+      "rmsDbfs": -21.39,
+      "leadingSilence": 0.075,
+      "trailingSilence": 0.744,
+      "signalWarnings": [],
+      "alignmentObserved": "치읏, 치읏",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "키읔",
+      "src": "./assets/hangul-audio/d0a4-c754-week1.mp3",
+      "duration": 2.104,
+      "peakDbfs": -3.69,
+      "rmsDbfs": -20.79,
+      "leadingSilence": 0.048,
+      "trailingSilence": 0.727,
+      "signalWarnings": [],
+      "alignmentObserved": "키우, 키우.",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "티읕",
+      "src": "./assets/hangul-audio/d2f0-c755-week1.mp3",
+      "duration": 1.172,
+      "peakDbfs": -4.62,
+      "rmsDbfs": -18.93,
+      "leadingSilence": 0.196,
+      "trailingSilence": 0.201,
+      "signalWarnings": [],
+      "alignmentObserved": "티윳, 티윳.",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "피읖",
+      "src": "./assets/hangul-audio/d53c-c756-week1.mp3",
+      "duration": 1.293,
+      "peakDbfs": -4.79,
+      "rmsDbfs": -19.3,
+      "leadingSilence": 0.008,
+      "trailingSilence": 0.204,
+      "signalWarnings": [],
+      "alignmentObserved": "피읍, 피읍",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "히읗",
+      "src": "./assets/hangul-audio/d788-c757-week1.mp3",
+      "duration": 1.64,
+      "peakDbfs": -5.13,
+      "rmsDbfs": -20.9,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.618,
+      "signalWarnings": [],
+      "alignmentObserved": "히. 히.",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "아",
+      "src": "./assets/hangul-audio/c544-week1.mp3",
+      "duration": 1.103,
+      "peakDbfs": -3.22,
+      "rmsDbfs": -20.81,
+      "leadingSilence": 0.203,
+      "trailingSilence": 0.589,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EC%95%84.ogg",
+      "license": "CC BY-SA 4.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "야",
+      "src": "./assets/hangul-audio/c57c-week1.mp3",
+      "duration": 1.54,
+      "peakDbfs": -6.04,
+      "rmsDbfs": -23.0,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.121,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "segment-alignment-provisional; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Korean_vowels.ogg",
+      "license": "CC BY-SA 3.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "여",
+      "src": "./assets/hangul-audio/c5ec-week1.mp3",
+      "duration": 1.29,
+      "peakDbfs": -6.34,
+      "rmsDbfs": -21.19,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.12,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "segment-alignment-provisional; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Korean_vowels.ogg",
+      "license": "CC BY-SA 3.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "요",
+      "src": "./assets/hangul-audio/c694-week1.mp3",
+      "duration": 1.47,
+      "peakDbfs": -6.4,
+      "rmsDbfs": -21.51,
+      "leadingSilence": 0.001,
+      "trailingSilence": 0.12,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "segment-alignment-provisional; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Korean_vowels.ogg",
+      "license": "CC BY-SA 3.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "우",
+      "src": "./assets/hangul-audio/c6b0-week1.mp3",
+      "duration": 1.22,
+      "peakDbfs": -7.22,
+      "rmsDbfs": -20.52,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.12,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "segment-alignment-provisional; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Korean_vowels.ogg",
+      "license": "CC BY-SA 3.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "유",
+      "src": "./assets/hangul-audio/c720-week1.mp3",
+      "duration": 1.31,
+      "peakDbfs": -8.45,
+      "rmsDbfs": -21.44,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.122,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "segment-alignment-provisional; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Korean_vowels.ogg",
+      "license": "CC BY-SA 3.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "으",
+      "src": "./assets/hangul-audio/c73c-week1.mp3",
+      "duration": 1.38,
+      "peakDbfs": -7.81,
+      "rmsDbfs": -21.75,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.121,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "segment-alignment-provisional; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Korean_vowels.ogg",
+      "license": "CC BY-SA 3.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "고",
+      "src": "./assets/hangul-audio/ace0-week1.mp3",
+      "duration": 1.031,
+      "peakDbfs": -5.05,
+      "rmsDbfs": -18.85,
+      "leadingSilence": 0.059,
+      "trailingSilence": 0.217,
+      "signalWarnings": [],
+      "alignmentObserved": "고, 고.",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "구",
+      "src": "./assets/hangul-audio/ad6c-week1.mp3",
+      "duration": 0.939,
+      "peakDbfs": -2.67,
+      "rmsDbfs": -20.43,
+      "leadingSilence": 0.173,
+      "trailingSilence": 0.296,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-%ED%98%B8%EB%A1%9C%EC%A1%B0-%EA%B5%AC.wav",
+      "license": "CC0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "노",
+      "src": "./assets/hangul-audio/b178-week1.mp3",
+      "duration": 0.937,
+      "peakDbfs": -5.03,
+      "rmsDbfs": -18.65,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.2,
+      "signalWarnings": [],
+      "alignmentObserved": "노, 노.",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "누",
+      "src": "./assets/hangul-audio/b204-week1.mp3",
+      "duration": 0.9,
+      "peakDbfs": -6.3,
+      "rmsDbfs": -18.28,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.229,
+      "signalWarnings": [],
+      "alignmentObserved": "누, 누",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "다",
+      "src": "./assets/hangul-audio/b2e4-week1.mp3",
+      "duration": 0.878,
+      "peakDbfs": -2.0,
+      "rmsDbfs": -24.07,
+      "leadingSilence": 0.239,
+      "trailingSilence": 0.305,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EB%8B%A4.ogg",
+      "license": "CC BY-SA 4.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "도",
+      "src": "./assets/hangul-audio/b3c4-week1.mp3",
+      "duration": 0.959,
+      "peakDbfs": -5.74,
+      "rmsDbfs": -18.42,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.249,
+      "signalWarnings": [],
+      "alignmentObserved": "도, 도.",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "라",
+      "src": "./assets/hangul-audio/b77c-week1.mp3",
+      "duration": 0.913,
+      "peakDbfs": -3.39,
+      "rmsDbfs": -18.46,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.201,
+      "signalWarnings": [],
+      "alignmentObserved": "라, 라.",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "마",
+      "src": "./assets/hangul-audio/b9c8-week1.mp3",
+      "duration": 0.918,
+      "peakDbfs": -2.69,
+      "rmsDbfs": -19.53,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.2,
+      "signalWarnings": [],
+      "alignmentObserved": "마, 마.",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "바",
+      "src": "./assets/hangul-audio/bc14-week1.mp3",
+      "duration": 1.577,
+      "peakDbfs": -2.9,
+      "rmsDbfs": -21.26,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.648,
+      "signalWarnings": [],
+      "alignmentObserved": "봐. 봐.",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "자",
+      "src": "./assets/hangul-audio/c790-week1.mp3",
+      "duration": 1.475,
+      "peakDbfs": -2.09,
+      "rmsDbfs": -22.74,
+      "leadingSilence": 0.02,
+      "trailingSilence": 0.637,
+      "signalWarnings": [],
+      "alignmentObserved": "자, 자.",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "카",
+      "src": "./assets/hangul-audio/ce74-week1.mp3",
+      "duration": 1.667,
+      "peakDbfs": -5.54,
+      "rmsDbfs": -22.82,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.651,
+      "signalWarnings": [],
+      "alignmentObserved": "ASR did not identify the target; teacher review required",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "타",
+      "src": "./assets/hangul-audio/d0c0-week1.mp3",
+      "duration": 1.607,
+      "peakDbfs": -5.28,
+      "rmsDbfs": -21.27,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.516,
+      "signalWarnings": [],
+      "alignmentObserved": "타타",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "파",
+      "src": "./assets/hangul-audio/d30c-week1.mp3",
+      "duration": 1.249,
+      "peakDbfs": -5.06,
+      "rmsDbfs": -19.99,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.2,
+      "signalWarnings": [],
+      "alignmentObserved": "파! 파!",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "하",
+      "src": "./assets/hangul-audio/d558-week1.mp3",
+      "duration": 1.737,
+      "peakDbfs": -2.11,
+      "rmsDbfs": -20.94,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.532,
+      "signalWarnings": [],
+      "alignmentObserved": "ASR did not identify the target; teacher review required",
+      "kind": "synthetic",
+      "labelStatus": "generation-input-matched; listening-pending",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://huggingface.co/Supertone/supertonic-3",
+      "license": "Generated output; model OpenRAIL-M terms",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "아이",
+      "src": "./assets/hangul-audio/c544-c774-week1.mp3",
+      "duration": 0.798,
+      "peakDbfs": -2.0,
+      "rmsDbfs": -21.36,
+      "leadingSilence": 0.2,
+      "trailingSilence": 0.247,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EC%95%84%EC%9D%B4.ogg",
+      "license": "CC BY-SA 4.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "오이",
+      "src": "./assets/hangul-audio/c624-c774-week1.mp3",
+      "duration": 1.032,
+      "peakDbfs": -4.29,
+      "rmsDbfs": -20.31,
+      "leadingSilence": 0.024,
+      "trailingSilence": 0.307,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-%ED%98%B8%EB%A1%9C%EC%A1%B0-%EC%98%A4%EC%9D%B4.wav",
+      "license": "CC0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "우유",
+      "src": "./assets/hangul-audio/c6b0-c720-week1.mp3",
+      "duration": 0.971,
+      "peakDbfs": -5.76,
+      "rmsDbfs": -20.67,
+      "leadingSilence": 0.235,
+      "trailingSilence": 0.273,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-%ED%98%B8%EB%A1%9C%EC%A1%B0-%EC%9A%B0%EC%9C%A0.wav",
+      "license": "CC0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "나무",
+      "src": "./assets/hangul-audio/b098-bb34-week1.mp3",
+      "duration": 0.979,
+      "peakDbfs": -2.09,
+      "rmsDbfs": -22.93,
+      "leadingSilence": 0.236,
+      "trailingSilence": 0.267,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-%ED%98%B8%EB%A1%9C%EC%A1%B0-%EB%82%98%EB%AC%B4.wav",
+      "license": "CC0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "바다",
+      "src": "./assets/hangul-audio/bc14-b2e4-week1.mp3",
+      "duration": 1.008,
+      "peakDbfs": -2.05,
+      "rmsDbfs": -22.81,
+      "leadingSilence": 0.196,
+      "trailingSilence": 0.12,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-%ED%98%B8%EB%A1%9C%EC%A1%B0-%EB%B0%94%EB%8B%A4.wav",
+      "license": "CC0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "아기",
+      "src": "./assets/hangul-audio/c544-ae30-week1.mp3",
+      "duration": 0.928,
+      "peakDbfs": -2.18,
+      "rmsDbfs": -25.56,
+      "leadingSilence": 0.189,
+      "trailingSilence": 0.325,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-CHK2605-%EC%95%84%EA%B8%B0.wav",
+      "license": "CC0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "바나나",
+      "src": "./assets/hangul-audio/bc14-b098-b098-week1.mp3",
+      "duration": 1.131,
+      "peakDbfs": -2.02,
+      "rmsDbfs": -23.08,
+      "leadingSilence": 0.214,
+      "trailingSilence": 0.301,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-%ED%98%B8%EB%A1%9C%EC%A1%B0-%EB%B0%94%EB%82%98%EB%82%98.wav",
+      "license": "CC0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "나비",
+      "src": "./assets/hangul-audio/b098-be44-week1.mp3",
+      "duration": 1.075,
+      "peakDbfs": -2.0,
+      "rmsDbfs": -22.93,
+      "leadingSilence": 0.228,
+      "trailingSilence": 0.265,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-%ED%98%B8%EB%A1%9C%EC%A1%B0-%EB%82%98%EB%B9%84.wav",
+      "license": "CC0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "모자",
+      "src": "./assets/hangul-audio/baa8-c790-week1.mp3",
+      "duration": 0.947,
+      "peakDbfs": -3.31,
+      "rmsDbfs": -20.72,
+      "leadingSilence": 0.21,
+      "trailingSilence": 0.324,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-CHK2605-%EB%AA%A8%EC%9E%90.wav",
+      "license": "CC0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "산",
+      "src": "./assets/hangul-audio/c0b0-week1.mp3",
+      "duration": 1.011,
+      "peakDbfs": -2.65,
+      "rmsDbfs": -22.43,
+      "leadingSilence": 0.209,
+      "trailingSilence": 0.331,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-Diahasy-%EC%82%B0.wav",
+      "license": "CC0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "문",
+      "src": "./assets/hangul-audio/bb38-week1.mp3",
+      "duration": 0.915,
+      "peakDbfs": -3.02,
+      "rmsDbfs": -20.95,
+      "leadingSilence": 0.244,
+      "trailingSilence": 0.201,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-%ED%98%B8%EB%A1%9C%EC%A1%B0-%EB%AC%B8.wav",
+      "license": "CC0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "손",
+      "src": "./assets/hangul-audio/c190-week1.mp3",
+      "duration": 0.763,
+      "peakDbfs": -2.12,
+      "rmsDbfs": -21.44,
+      "leadingSilence": 0.117,
+      "trailingSilence": 0.15,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-%ED%98%B8%EB%A1%9C%EC%A1%B0-%EC%86%90.wav",
+      "license": "CC0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "밤",
+      "src": "./assets/hangul-audio/bc24-week1.mp3",
+      "duration": 0.872,
+      "peakDbfs": -2.0,
+      "rmsDbfs": -22.69,
+      "leadingSilence": 0.25,
+      "trailingSilence": 0.216,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-%ED%98%B8%EB%A1%9C%EC%A1%B0-%EB%B0%A4.wav",
+      "license": "CC0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "곰",
+      "src": "./assets/hangul-audio/acf0-week1.mp3",
+      "duration": 0.933,
+      "peakDbfs": -2.84,
+      "rmsDbfs": -20.39,
+      "leadingSilence": 0.0,
+      "trailingSilence": 0.226,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:LL-Q9176_(kor)-%ED%98%B8%EB%A1%9C%EC%A1%B0-%EA%B3%B0.wav",
+      "license": "CC0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "공",
+      "src": "./assets/hangul-audio/acf5-week1.mp3",
+      "duration": 0.725,
+      "peakDbfs": -1.97,
+      "rmsDbfs": -20.16,
+      "leadingSilence": 0.201,
+      "trailingSilence": 0.211,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EA%B3%B5.ogg",
+      "license": "CC BY-SA 4.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "달",
+      "src": "./assets/hangul-audio/b2ec-week1.mp3",
+      "duration": 1.077,
+      "peakDbfs": -5.89,
+      "rmsDbfs": -22.25,
+      "leadingSilence": 0.131,
+      "trailingSilence": 0.52,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EB%8B%AC.ogg",
+      "license": "CC BY-SA 4.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "물",
+      "src": "./assets/hangul-audio/bb3c-week1.mp3",
+      "duration": 1.401,
+      "peakDbfs": -4.81,
+      "rmsDbfs": -22.67,
+      "leadingSilence": 0.402,
+      "trailingSilence": 0.592,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched",
+      "stage1Candidate": true,
+      "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EB%AC%BC.ogg",
+      "license": "CC BY-SA 4.0",
+      "held": true,
       "technicalStatus": "decoded-and-hash-checked",
       "listeningStatus": "pending"
     }
@@ -381,9 +1517,10 @@
         "기역",
         "ㄱ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/ae30-c5ed-week1.mp3"
     },
     {
       "text": "니은",
@@ -397,9 +1534,10 @@
         "니은",
         "ㄴ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b2c8-c740-week1.mp3"
     },
     {
       "text": "디귿",
@@ -413,9 +1551,10 @@
         "디귿",
         "ㄷ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b514-adff-week1.mp3"
     },
     {
       "text": "리을",
@@ -429,9 +1568,10 @@
         "리을",
         "ㄹ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b9ac-c744-week1.mp3"
     },
     {
       "text": "미음",
@@ -445,9 +1585,10 @@
         "미음",
         "ㅁ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/bbf8-c74c-week1.mp3"
     },
     {
       "text": "비읍",
@@ -461,9 +1602,10 @@
         "비읍",
         "ㅂ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/be44-c74d-week1.mp3"
     },
     {
       "text": "시옷",
@@ -477,9 +1619,10 @@
         "시옷",
         "ㅅ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c2dc-c637-week1.mp3"
     },
     {
       "text": "이응",
@@ -493,9 +1636,10 @@
         "이응",
         "ㅇ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c774-c751-week1.mp3"
     },
     {
       "text": "지읒",
@@ -509,9 +1653,10 @@
         "지읒",
         "ㅈ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c9c0-c752-week1.mp3"
     },
     {
       "text": "치읓",
@@ -525,9 +1670,10 @@
         "치읓",
         "ㅊ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/ce58-c753-week1.mp3"
     },
     {
       "text": "키읔",
@@ -541,9 +1687,10 @@
         "키읔",
         "ㅋ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/d0a4-c754-week1.mp3"
     },
     {
       "text": "티읕",
@@ -557,9 +1704,10 @@
         "티읕",
         "ㅌ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/d2f0-c755-week1.mp3"
     },
     {
       "text": "피읖",
@@ -573,9 +1721,10 @@
         "피읖",
         "ㅍ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/d53c-c756-week1.mp3"
     },
     {
       "text": "히읗",
@@ -589,9 +1738,10 @@
         "히읗",
         "ㅎ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/d788-c757-week1.mp3"
     },
     {
       "text": "쌍기역",
@@ -672,9 +1822,10 @@
         "아",
         "ㅏ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c544-week1.mp3"
     },
     {
       "text": "야",
@@ -689,9 +1840,10 @@
         "야",
         "ㅑ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c57c-week1.mp3"
     },
     {
       "text": "어",
@@ -724,9 +1876,10 @@
         "여",
         "ㅕ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c5ec-week1.mp3"
     },
     {
       "text": "오",
@@ -759,9 +1912,10 @@
         "요",
         "ㅛ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c694-week1.mp3"
     },
     {
       "text": "우",
@@ -776,9 +1930,10 @@
         "우",
         "ㅜ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c6b0-week1.mp3"
     },
     {
       "text": "유",
@@ -793,9 +1948,10 @@
         "유",
         "ㅠ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c720-week1.mp3"
     },
     {
       "text": "으",
@@ -810,9 +1966,10 @@
         "으",
         "ㅡ"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c73c-week1.mp3"
     },
     {
       "text": "이",
@@ -1075,9 +2232,10 @@
       "labels": [
         "고"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/ace0-week1.mp3"
     },
     {
       "text": "교",
@@ -1101,9 +2259,10 @@
       "labels": [
         "구"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/ad6c-week1.mp3"
     },
     {
       "text": "규",
@@ -1346,9 +2505,10 @@
       "labels": [
         "노"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b178-week1.mp3"
     },
     {
       "text": "뇨",
@@ -1372,9 +2532,10 @@
       "labels": [
         "누"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b204-week1.mp3"
     },
     {
       "text": "뉴",
@@ -1562,9 +2723,10 @@
       "labels": [
         "다"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b2e4-week1.mp3"
     },
     {
       "text": "댜",
@@ -1615,9 +2777,10 @@
       "labels": [
         "도"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b3c4-week1.mp3"
     },
     {
       "text": "됴",
@@ -1823,9 +2986,10 @@
       "labels": [
         "라"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b77c-week1.mp3"
     },
     {
       "text": "랴",
@@ -2079,9 +3243,10 @@
       "labels": [
         "마"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b9c8-week1.mp3"
     },
     {
       "text": "먀",
@@ -2335,9 +3500,10 @@
       "labels": [
         "바"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/bc14-week1.mp3"
     },
     {
       "text": "뱌",
@@ -2846,9 +4012,10 @@
       "labels": [
         "자"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c790-week1.mp3"
     },
     {
       "text": "쟈",
@@ -3358,9 +4525,10 @@
       "labels": [
         "카"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/ce74-week1.mp3"
     },
     {
       "text": "캬",
@@ -3614,9 +4782,10 @@
       "labels": [
         "타"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/d0c0-week1.mp3"
     },
     {
       "text": "탸",
@@ -3870,9 +5039,10 @@
       "labels": [
         "파"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/d30c-week1.mp3"
     },
     {
       "text": "퍄",
@@ -4126,9 +5296,10 @@
       "labels": [
         "하"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/d558-week1.mp3"
     },
     {
       "text": "햐",
@@ -5646,9 +6817,10 @@
       "labels": [
         "아이"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c544-c774-week1.mp3"
     },
     {
       "text": "오이",
@@ -5659,9 +6831,10 @@
       "labels": [
         "오이"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c624-c774-week1.mp3"
     },
     {
       "text": "우유",
@@ -5672,9 +6845,10 @@
       "labels": [
         "우유"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c6b0-c720-week1.mp3"
     },
     {
       "text": "나무",
@@ -5685,9 +6859,10 @@
       "labels": [
         "나무"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b098-bb34-week1.mp3"
     },
     {
       "text": "바다",
@@ -5698,9 +6873,10 @@
       "labels": [
         "바다"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/bc14-b2e4-week1.mp3"
     },
     {
       "text": "아기",
@@ -5711,9 +6887,10 @@
       "labels": [
         "아기"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c544-ae30-week1.mp3"
     },
     {
       "text": "바나나",
@@ -5723,9 +6900,10 @@
       "labels": [
         "바나나"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/bc14-b098-b098-week1.mp3"
     },
     {
       "text": "나비",
@@ -5735,9 +6913,10 @@
       "labels": [
         "나비"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b098-be44-week1.mp3"
     },
     {
       "text": "모자",
@@ -5747,9 +6926,10 @@
       "labels": [
         "모자"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/baa8-c790-week1.mp3"
     },
     {
       "text": "산",
@@ -5761,9 +6941,10 @@
       "labels": [
         "산"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c0b0-week1.mp3"
     },
     {
       "text": "문",
@@ -5774,9 +6955,10 @@
       "labels": [
         "문"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/bb38-week1.mp3"
     },
     {
       "text": "손",
@@ -5787,9 +6969,10 @@
       "labels": [
         "손"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c190-week1.mp3"
     },
     {
       "text": "밤",
@@ -5801,9 +6984,10 @@
       "labels": [
         "밤"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/bc24-week1.mp3"
     },
     {
       "text": "곰",
@@ -5813,9 +6997,10 @@
       "labels": [
         "곰"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/acf0-week1.mp3"
     },
     {
       "text": "공",
@@ -5825,9 +7010,10 @@
       "labels": [
         "공"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/acf5-week1.mp3"
     },
     {
       "text": "달",
@@ -5839,9 +7025,10 @@
       "labels": [
         "달"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b2ec-week1.mp3"
     },
     {
       "text": "물",
@@ -5851,9 +7038,10 @@
       "labels": [
         "물"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/bb3c-week1.mp3"
     },
     {
       "text": "국",

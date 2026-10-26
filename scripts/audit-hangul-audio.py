@@ -69,13 +69,22 @@ for word, meta in manifest['recordings'].items():
     if rms < 184:
         warnings.append('작은 평균 음량')
     assert hashlib.sha256(file.read_bytes()).hexdigest() == meta['sha256'], word
-    assert meta['sourceTitle'].removeprefix('File:').rsplit('.', 1)[0].endswith(word), word
+    kind = meta.get('kind', 'human')
+    if kind == 'synthetic':
+        assert meta['inputText'].rstrip('.') == word and meta['modelRevision'], word
+        label_status = 'generation-input-matched; listening-pending'
+    elif 'segment' in meta:
+        assert meta['segment']['text'] == word and 0 <= meta['segment']['start'] < meta['segment']['end'], word
+        label_status = 'segment-alignment-provisional; listening-pending'
+    else:
+        assert meta['sourceTitle'].removeprefix('File:').rsplit('.', 1)[0].endswith(word), word
+        label_status = 'source-title-matched'
     assert meta['author'] and meta['licenseUrl'] and meta['sourceUrl'], word
     recordings.append({'text': word, 'src': meta['src'], 'duration': round(duration, 3),
         'peakDbfs': round(20 * math.log10(max(1, peak) / 32768), 2),
         'rmsDbfs': round(20 * math.log10(max(1, rms) / 32768), 2),
         'leadingSilence': round(lead, 3), 'trailingSilence': round(tail, 3),
-        'signalWarnings': warnings, 'sourceLabelMatches': True,
+        'signalWarnings': warnings, 'alignmentObserved': meta.get('segment',{}).get('observedText',''), 'kind': kind, 'labelStatus': label_status, 'stage1Candidate': bool(meta.get('stage1Candidate')), 'holdReason': meta.get('holdReason', ''),
         'sourceUrl': meta['sourceUrl'], 'license': meta['license'],
         'held': bool(meta.get('disabled')), 'technicalStatus': 'decoded-and-hash-checked', 'listeningStatus': 'pending'})
 for word, item in targets.items():
@@ -84,12 +93,15 @@ for word, item in targets.items():
     item['listeningStatus'] = 'pending' if item['recordingAvailable'] else 'no-recording'
     if item['recordingAvailable']:
         item['src'] = manifest['recordings'][word]['src']
-report = {'version': '20261026-audio-audit', 'scope': '글자판·7일 과정·입문 50단원의 재생 대상',
+report = {'version': '20261026-week-audio-step1', 'scope': '글자판·7일 과정·입문 50단원의 재생 대상',
     'note': '파일·문자 연결 검사는 실제 소리의 정확성이나 잘림 여부를 청취 승인한 것이 아닙니다. 기기 TTS는 음성이 달라 전수 품질 인증 대상이 될 수 없습니다.',
     'counts': {'targets': len(targets), 'available': sum(x['recordingAvailable'] for x in targets.values()),
         'missing': sum(not x['recordingAvailable'] for x in targets.values()), 'decodedFiles': len(recordings),
         'playbackAvailable': sum(x['playbackAvailable'] for x in targets.values()),
+        'humanFiles': sum(x.get('kind','human') == 'human' for x in manifest['recordings'].values()),
+        'syntheticFiles': sum(x.get('kind') == 'synthetic' for x in manifest['recordings'].values()),
         'held': sum(bool(x.get('disabled')) for x in manifest['recordings'].values()), 'listeningApproved': 0, 'signalWarnings': sum(bool(x['signalWarnings']) for x in recordings)},
+    'week': {'targets': sum('7일 과정' in x['groups'] for x in targets.values()), 'available': sum('7일 과정' in x['groups'] and x['recordingAvailable'] for x in targets.values()), 'missing': sum('7일 과정' in x['groups'] and not x['recordingAvailable'] for x in targets.values()), 'listeningApproved': 0},
     'recordings': recordings, 'targets': list(targets.values())}
 (ROOT / 'hangul-audio-audit.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
 print(json.dumps(report['counts'], ensure_ascii=False))
