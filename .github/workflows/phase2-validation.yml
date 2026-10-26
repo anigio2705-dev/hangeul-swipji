@@ -13,6 +13,7 @@ on:
       - 'scripts/audit-350-lessons.cjs'
       - 'scripts/check-phase2-pages.cjs'
       - 'scripts/browser-smoke-phase2.cjs'
+      - 'scripts/browser-audit-reading-600.cjs'
       - '.github/workflows/phase2-validation.yml'
   workflow_dispatch:
 jobs:
@@ -37,6 +38,8 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Desktop and mobile Chromium smoke test
         run: node scripts/browser-smoke-phase2.cjs
+      - name: Audit all 600 reading entries and quizzes in Chromium
+        run: node scripts/browser-audit-reading-600.cjs
       - name: Upload audit report
         if: always()
         uses: actions/upload-artifact@v4
