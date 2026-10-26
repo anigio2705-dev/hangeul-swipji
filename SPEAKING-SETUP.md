@@ -1,10 +1,10 @@
 # 한글쉽지 1·2·3번 실서비스 연결 절차
 
-현재 GitHub Pages에는 회원가입·개인 공간·매칭·화상방 UI와 Supabase SQL이 업로드되어 있습니다. **서버 연결 전에는 실제 서비스가 작동하지 않습니다.**
+현재 GitHub Pages는 기존 Supabase 프로젝트 `itljmzmhpviasopdmdfs`에 연결되어 있습니다. 회원 인증, 프로필, 대기·매칭용 DB 함수와 Jitsi 시험방을 사용하는 시범 서비스입니다. 별도 프로젝트를 다시 만들지 마세요.
 
 ## 1. Supabase 연결 (운영자 1회)
-1. https://supabase.com 에 로그인하여 새 프로젝트를 생성합니다.
-2. 프로젝트 SQL Editor에서 저장소의 `supabase-speaking.sql` 전체를 실행합니다.
+1. https://supabase.com 에 로그인하여 기존 `hangeul-swipji` 프로젝트를 선택합니다.
+2. 먼저 `supabase-speaking-audit.sql`로 실제 구조를 확인하고 저장소와 비교합니다. `supabase-speaking.sql`은 전체 구성 기준이며, 운영 중에는 검토된 차이만 적용합니다.
 3. Authentication > URL Configuration에서 Site URL을 `https://anigio2705-dev.github.io/hangeul-swipji/` 로 지정하고 Redirect URLs에 `https://anigio2705-dev.github.io/hangeul-swipji/**` 를 추가합니다.
 4. Authentication > Providers에서 Email 인증 정책을 확인합니다.
 5. Project Settings > API의 **Project URL과 anon/publishable key만** `speaking-config.js`에 입력합니다. **service_role 또는 secret 키는 절대로 공개 저장소에 넣지 않습니다.**
@@ -28,7 +28,15 @@
 - 공개 출시 전 보안 및 2인 실통화 테스트를 통과해야 합니다.
 
 ## 현 상태
-1. 회원가입·개인 공간: 프런트엔드와 데이터베이스 설계 구현, 서버 연결 대기
-2. 실시간 대기·매칭: 주기적 갱신 방식 구현, 서버 연결 대기
+1. 회원가입·개인 공간: 기존 Supabase 연결 설정됨. 최초 프로필은 INSERT, 기존 프로필은 허용된 네 필드만 UPDATE합니다.
+2. 실시간 대기·매칭: 승인된 파트너의 대기 및 요청·수락·거절·종료 함수가 실제 DB에 존재합니다.
 3. 1:1 화상: Jitsi 시험방 연결 구현, 전용 인증 서버 미구축
 4. 공통 교재: 별도 개발
+
+## DB와 파일 동기화 기준
+- `respond_match`의 난수 생성은 `extensions.gen_random_bytes(18)`로 명시합니다. 빈 `search_path`에서 경로 없는 호출로 되돌리지 마세요.
+- 일반 회원은 자기 프로필의 `nickname`, `role`, `level`, `topic`만 수정합니다. `approved`, `is_online`, `last_seen`, `id`, `created_at`은 직접 수정하지 못합니다.
+- 프로필 저장 오류를 해결하려고 테이블 전체 UPDATE 권한을 주지 마세요. 기존 프로필 저장은 ID를 UPDATE하는 upsert 대신 `.update(fields).eq('id', user.id)`를 사용합니다.
+- 일반 회원과 비로그인 사용자에게 테이블 TRUNCATE 권한을 부여하지 마세요.
+- `supabase-speaking-audit.sql`은 구조·권한만 읽습니다. 실제 회원이나 매칭 내용은 출력하지 않습니다.
+- DB 기능 검증과 두 실제 기기 간 카메라·마이크 통화 검증은 별개입니다.
