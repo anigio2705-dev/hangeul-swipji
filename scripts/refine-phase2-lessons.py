@@ -83,7 +83,7 @@ BEGINNER2 = '''
 아프다는 아파요로 바뀝니다. 머리가 아파요는 머리에 통증이 있다는 증상 표현입니다.|아프다 becomes 아파요. 머리가 아파요 describes a headache.
 부터는 시작 시점을 표시합니다. 어제부터 기침이 나요는 기침이 어제 시작해 이어진다는 말입니다.|부터 marks a starting time. This says the cough began yesterday and continues.
 열이 있어요는 몸에 열이 난다는 말입니다. 좀은 조금의 줄임말로 정도를 부드럽게 표현합니다.|열이 있어요 describes having a fever. 좀 is short for 조금 and softens the description.
--아/어야 해요는 필요나 의무를 나타냅니다. 먹다 → 먹어야 해요입니다. 이 문장은 언어 예문이며 복약 지시가 아닙니다.|-아/어야 해요 expresses necessity: 먹다 → 먹어야 해요. This is a language example, not a medication instruction.
+-아/어야 해요는 필요나 의무를 나타냅니다. 먹다 → 먹어야 해요입니다.|-아/어야 해요 expresses necessity: 먹다 → 먹어야 해요.
 -(으)려고 해요는 의도를 말합니다. 가다 → 가려고 해요이며 병원에는 목적지입니다.|-(으)려고 해요 expresses intention. 가다 becomes 가려고 해요; 병원에 marks destination.
 보여 주세요는 보다의 명령이 아니라 보여 주다의 요청형입니다. 상대에게 여권을 제시해 달라고 합니다.|보여 주세요 requests showing something, from 보여 주다. It asks the listener to present a passport.
 예약했어요는 예약하다의 과거형입니다. 표를은 예약한 대상을 표시합니다.|예약했어요 is the past of 예약하다. 표를 marks what was booked.
