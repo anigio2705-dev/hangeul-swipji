@@ -1,0 +1,29 @@
+{
+  "pythonTests": 56,
+  "browserChecks": 28,
+  "staticScreens": 26,
+  "postgresChecks": 12,
+  "authoredLessons": 24,
+  "newLessons": 12,
+  "plannedLessons": 72,
+  "originalLessons": 350,
+  "originalQuizzes": 1758,
+  "readingItems": 600,
+  "supportedCoreUILanguages": [
+    "ko",
+    "en",
+    "ja",
+    "es",
+    "ru",
+    "zh-CN",
+    "mn",
+    "vi"
+  ],
+  "realMoneyEnabled": false,
+  "hostedSupabaseTested": false,
+  "externalVideoMediaTested": false,
+  "physicalMobileTested": false,
+  "productionDeployed": false,
+  "sourceTestsPassed": true,
+  "educationComplete": false
+}

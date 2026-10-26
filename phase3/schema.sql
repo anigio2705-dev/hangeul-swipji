@@ -28,3 +28,11 @@ CREATE UNIQUE INDEX IF NOT EXISTS active_slot_v2 ON bookings(slot_id) WHERE stat
 CREATE TABLE IF NOT EXISTS external_identities(project_ref TEXT NOT NULL,subject TEXT NOT NULL,user_id TEXT NOT NULL REFERENCES users(id),PRIMARY KEY(project_ref,subject));
 CREATE TABLE IF NOT EXISTS payment_sessions(booking_id TEXT PRIMARY KEY REFERENCES bookings(id),session_id TEXT UNIQUE NOT NULL,url TEXT NOT NULL,created_at REAL NOT NULL);
 CREATE TABLE IF NOT EXISTS provider_events(event_id TEXT PRIMARY KEY,session_id TEXT NOT NULL,booking_id TEXT NOT NULL REFERENCES bookings(id),created_at REAL NOT NULL);
+
+-- Local integration records only. This file is never applied to hosted Supabase.
+CREATE TABLE IF NOT EXISTS learning_placements(user_id TEXT PRIMARY KEY REFERENCES users(id),stage INTEGER NOT NULL CHECK(stage BETWEEN 0 AND 6),groups_json TEXT NOT NULL,source TEXT NOT NULL,created_at REAL NOT NULL);
+CREATE TABLE IF NOT EXISTS learning_checks(id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),unit_id TEXT NOT NULL,booking_id TEXT REFERENCES bookings(id),phase TEXT NOT NULL CHECK(phase IN ('pre','post')),kind TEXT NOT NULL CHECK(kind IN ('text-check','teacher-observation')),score INTEGER NOT NULL,max_score INTEGER NOT NULL,skills_json TEXT NOT NULL,notes TEXT NOT NULL,created_at REAL NOT NULL,assessor_id TEXT NOT NULL REFERENCES users(id),CHECK(score>=0 AND score<=max_score));
+CREATE INDEX IF NOT EXISTS learning_checks_owner ON learning_checks(user_id,created_at DESC);
+CREATE INDEX IF NOT EXISTS learning_checks_booking ON learning_checks(booking_id);
+CREATE INDEX IF NOT EXISTS providers_search ON users(approved,role,price,nickname,id);
+CREATE INDEX IF NOT EXISTS provider_future_slots ON slots(teacher_id,start,end);

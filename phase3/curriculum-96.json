@@ -1,0 +1,1905 @@
+{
+  "version": "four-stage-96-v1",
+  "basis": "User-specified working framework, not a four-week business limit; no instructor or learner quota.",
+  "scope": "Internal levels, not certified CEFR/TOPIK alignment. 24 authored / 72 planned lessons.",
+  "stages": [
+    {
+      "id": 1,
+      "title": "생활 기초",
+      "goal": "기본 정보를 묻고 짧게 응답한다.",
+      "lessonCount": 24,
+      "lessons": [
+        {
+          "slot": "S1-01",
+          "title": "처음 만나는 사람",
+          "status": "authored",
+          "unitId": "HS3-A0-01"
+        },
+        {
+          "slot": "S1-02",
+          "title": "이것은 무엇이에요?",
+          "status": "authored",
+          "unitId": "HS3-A0-02"
+        },
+        {
+          "slot": "S1-03",
+          "title": "카페에서 주문하기",
+          "status": "authored",
+          "unitId": "HS3-A1-01"
+        },
+        {
+          "slot": "S1-04",
+          "title": "도서관에 어떻게 가요?",
+          "status": "authored",
+          "unitId": "HS3-A1-02"
+        },
+        {
+          "slot": "S1-05",
+          "title": "빵집에서 수량 확인하기",
+          "status": "authored",
+          "unitId": "HS4-S1-05"
+        },
+        {
+          "slot": "S1-06",
+          "title": "수업에 필요한 물건 빌리기",
+          "status": "authored",
+          "unitId": "HS4-S1-06"
+        },
+        {
+          "slot": "S1-07",
+          "title": "하루 일과와 수업 시간 말하기",
+          "status": "authored",
+          "unitId": "HS4-S1-07"
+        },
+        {
+          "slot": "S1-08",
+          "title": "날짜와 생일",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S1-09",
+          "title": "가족 소개",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S1-10",
+          "title": "취미 묻기",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S1-11",
+          "title": "날씨와 옷",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S1-12",
+          "title": "버스 타기",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S1-13",
+          "title": "약국 위치 묻기",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S1-14",
+          "title": "음식 취향",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S1-15",
+          "title": "주말 계획",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S1-16",
+          "title": "가격 비교",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S1-17",
+          "title": "방 위치 설명",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S1-18",
+          "title": "전화 인사",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S1-19",
+          "title": "사진 속 사람",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S1-20",
+          "title": "휴일 일정",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S1-21",
+          "title": "대화 되묻기",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S1-22",
+          "title": "초대와 답장",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S1-23",
+          "title": "간단한 안내",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S1-24",
+          "title": "생활 기초 통합 과제",
+          "status": "planned",
+          "unitId": null
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "생활 해결",
+      "goal": "생활 문제의 조건과 대안을 설명한다.",
+      "lessonCount": 24,
+      "lessons": [
+        {
+          "slot": "S2-01",
+          "title": "약속 시간을 바꿔도 될까요?",
+          "status": "authored",
+          "unitId": "HS3-A2-01"
+        },
+        {
+          "slot": "S2-02",
+          "title": "처음 가 본 전통 시장",
+          "status": "authored",
+          "unitId": "HS3-A2-02"
+        },
+        {
+          "slot": "S2-03",
+          "title": "분실물의 특징 설명하기",
+          "status": "authored",
+          "unitId": "HS4-S2-03"
+        },
+        {
+          "slot": "S2-04",
+          "title": "택배 수령 장소 바꾸기",
+          "status": "authored",
+          "unitId": "HS4-S2-04"
+        },
+        {
+          "slot": "S2-05",
+          "title": "교환 조건을 묻고 선택하기",
+          "status": "authored",
+          "unitId": "HS4-S2-05"
+        },
+        {
+          "slot": "S2-06",
+          "title": "병원 접수 대화",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S2-07",
+          "title": "집 수리 요청",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S2-08",
+          "title": "공과금 문의",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S2-09",
+          "title": "수강 신청",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S2-10",
+          "title": "여행 숙소 문의",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S2-11",
+          "title": "문화 행사 참여",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S2-12",
+          "title": "교통 지연 안내",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S2-13",
+          "title": "온라인 주문 확인",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S2-14",
+          "title": "모임 준비",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S2-15",
+          "title": "경험과 변화",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S2-16",
+          "title": "습관 바꾸기",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S2-17",
+          "title": "도움 거절하기",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S2-18",
+          "title": "서비스 불편 설명",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S2-19",
+          "title": "이사 일정 조정",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S2-20",
+          "title": "친구에게 조언",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S2-21",
+          "title": "공공시설 문의",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S2-22",
+          "title": "면접 일정 문의",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S2-23",
+          "title": "생활 정보 비교",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S2-24",
+          "title": "생활 해결 통합 과제",
+          "status": "planned",
+          "unitId": null
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "사회·직무",
+      "goal": "근거를 비교하고 협업의 합의를 만든다.",
+      "lessonCount": 24,
+      "lessons": [
+        {
+          "slot": "S3-01",
+          "title": "공유 공간의 소음을 줄이려면",
+          "status": "authored",
+          "unitId": "HS3-B1-01"
+        },
+        {
+          "slot": "S3-02",
+          "title": "비가 와도 여행을 즐기는 방법",
+          "status": "authored",
+          "unitId": "HS3-B1-02"
+        },
+        {
+          "slot": "S3-03",
+          "title": "후기의 숫자와 신뢰 사이",
+          "status": "authored",
+          "unitId": "HS3-B2-01"
+        },
+        {
+          "slot": "S3-04",
+          "title": "편리한 번역기가 바꾸는 대화",
+          "status": "authored",
+          "unitId": "HS3-B2-02"
+        },
+        {
+          "slot": "S3-05",
+          "title": "회의 일정의 충돌 조정하기",
+          "status": "authored",
+          "unitId": "HS4-S3-05"
+        },
+        {
+          "slot": "S3-06",
+          "title": "공동 생활의 비용 나누기",
+          "status": "authored",
+          "unitId": "HS4-S3-06"
+        },
+        {
+          "slot": "S3-07",
+          "title": "설문 결과를 과장 없이 전달하기",
+          "status": "authored",
+          "unitId": "HS4-S3-07"
+        },
+        {
+          "slot": "S3-08",
+          "title": "직무 경험 설명",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S3-09",
+          "title": "업무 인수인계",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S3-10",
+          "title": "팀 목표 합의",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S3-11",
+          "title": "지역 문제 토론",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S3-12",
+          "title": "광고 주장 검토",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S3-13",
+          "title": "온라인 예절",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S3-14",
+          "title": "갈등의 관점 비교",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S3-15",
+          "title": "자료 출처 확인",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S3-16",
+          "title": "행사 제안",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S3-17",
+          "title": "협업 피드백",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S3-18",
+          "title": "공식 이메일",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S3-19",
+          "title": "뉴스 요약",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S3-20",
+          "title": "직장 문화 비교",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S3-21",
+          "title": "협상 조건 정리",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S3-22",
+          "title": "발표 질의응답",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S3-23",
+          "title": "의견서 작성",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S3-24",
+          "title": "사회 직무 통합 과제",
+          "status": "planned",
+          "unitId": null
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "심화 표현",
+      "goal": "관점과 한계를 검토하고 복합 과제를 수행한다.",
+      "lessonCount": 24,
+      "lessons": [
+        {
+          "slot": "S4-01",
+          "title": "지역 축제의 성과를 누구의 기준으로 볼 것인가",
+          "status": "authored",
+          "unitId": "HS3-C1-01"
+        },
+        {
+          "slot": "S4-02",
+          "title": "교육 데이터의 활용과 설명받을 권리",
+          "status": "authored",
+          "unitId": "HS3-C1-02"
+        },
+        {
+          "slot": "S4-03",
+          "title": "지역 기록의 공개 범위 협의하기",
+          "status": "authored",
+          "unitId": "HS4-S4-03"
+        },
+        {
+          "slot": "S4-04",
+          "title": "원격 근무 성과 지표 재설계하기",
+          "status": "authored",
+          "unitId": "HS4-S4-04"
+        },
+        {
+          "slot": "S4-05",
+          "title": "공공 안내문의 쉬운 표현 합의하기",
+          "status": "authored",
+          "unitId": "HS4-S4-05"
+        },
+        {
+          "slot": "S4-06",
+          "title": "주장과 반증",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S4-07",
+          "title": "정책 대안 비교",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S4-08",
+          "title": "공정성 기준",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S4-09",
+          "title": "불확실성 설명",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S4-10",
+          "title": "이해관계 조정",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S4-11",
+          "title": "문화 해석의 차이",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S4-12",
+          "title": "통계 표현의 한계",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S4-13",
+          "title": "공적 사과문",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S4-14",
+          "title": "연구 요약",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S4-15",
+          "title": "논평의 관점",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S4-16",
+          "title": "비유와 함축",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S4-17",
+          "title": "토론 사회",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S4-18",
+          "title": "장기 프로젝트",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S4-19",
+          "title": "근거 평가",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S4-20",
+          "title": "번역 선택의 이유",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S4-21",
+          "title": "이견 조율",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S4-22",
+          "title": "발표 수정",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S4-23",
+          "title": "포트폴리오 협의",
+          "status": "planned",
+          "unitId": null
+        },
+        {
+          "slot": "S4-24",
+          "title": "심화 표현 통합 과제",
+          "status": "planned",
+          "unitId": null
+        }
+      ]
+    }
+  ],
+  "unitMapping": {
+    "HS3-A0-01": {
+      "stage": 1,
+      "slot": "S1-01",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": "HS3-A0-02",
+      "teacherNotes": {
+        "pronunciation": "의미 전달을 확인한 뒤 학습자가 어려워하는 소리와 끊어 읽기를 실제로 듣고 교정합니다.",
+        "errorDiagnosis": "정답 제시 전에 학습자가 사용한 근거를 묻고 원문과 비교하여 다시 시도하게 합니다."
+      }
+    },
+    "HS3-A0-02": {
+      "stage": 1,
+      "slot": "S1-02",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": "HS3-A1-01",
+      "teacherNotes": {
+        "pronunciation": "의미 전달을 확인한 뒤 학습자가 어려워하는 소리와 끊어 읽기를 실제로 듣고 교정합니다.",
+        "errorDiagnosis": "정답 제시 전에 학습자가 사용한 근거를 묻고 원문과 비교하여 다시 시도하게 합니다."
+      }
+    },
+    "HS3-A1-01": {
+      "stage": 1,
+      "slot": "S1-03",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": "HS3-A1-02",
+      "teacherNotes": {
+        "pronunciation": "의미 전달을 확인한 뒤 학습자가 어려워하는 소리와 끊어 읽기를 실제로 듣고 교정합니다.",
+        "errorDiagnosis": "정답 제시 전에 학습자가 사용한 근거를 묻고 원문과 비교하여 다시 시도하게 합니다."
+      }
+    },
+    "HS3-A1-02": {
+      "stage": 1,
+      "slot": "S1-04",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": "HS4-S1-05",
+      "teacherNotes": {
+        "pronunciation": "의미 전달을 확인한 뒤 학습자가 어려워하는 소리와 끊어 읽기를 실제로 듣고 교정합니다.",
+        "errorDiagnosis": "정답 제시 전에 학습자가 사용한 근거를 묻고 원문과 비교하여 다시 시도하게 합니다."
+      }
+    },
+    "HS4-S1-05": {
+      "stage": 1,
+      "slot": "S1-05",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": "HS4-S1-06",
+      "teacherNotes": {
+        "pronunciation": "발음 교정: 두 개의 개를 게와 혼동하지 않도록 입 벌림을 확인하되 모국어 억양을 정답 기준으로 삼지 않습니다.",
+        "errorDiagnosis": "오류 진단: 두 개 빵 주세요라고 하면 뜻을 확인한 뒤 빵 두 개 주세요를 재진술하고 다른 수량으로 다시 말하게 합니다."
+      }
+    },
+    "HS4-S1-06": {
+      "stage": 1,
+      "slot": "S1-06",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": "HS4-S1-07",
+      "teacherNotes": {
+        "pronunciation": "발음 교정: 연필의 받침 ㄴ 뒤 연결을 천천히 들려주고, 의미가 통하는 속도에서 다시 확인합니다.",
+        "errorDiagnosis": "오류 진단: 저는 연필 안 있어요를 연필이 없어요로 다시 말해 주고 있어요/없어요를 대조합니다."
+      }
+    },
+    "HS4-S1-07": {
+      "stage": 1,
+      "slot": "S1-07",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": null,
+      "teacherNotes": {
+        "pronunciation": "발음 교정: 여섯 시의 받침 연결은 교사가 자연스럽게 읽고 의미와 시간을 먼저 확인합니다.",
+        "errorDiagnosis": "오류 진단: 여섯 시간에 시작해요와 여섯 시에 시작해요를 비교해 시각과 기간을 구분합니다."
+      }
+    },
+    "HS3-A2-01": {
+      "stage": 2,
+      "slot": "S2-01",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": "HS3-A2-02",
+      "teacherNotes": {
+        "pronunciation": "의미 전달을 확인한 뒤 학습자가 어려워하는 소리와 끊어 읽기를 실제로 듣고 교정합니다.",
+        "errorDiagnosis": "정답 제시 전에 학습자가 사용한 근거를 묻고 원문과 비교하여 다시 시도하게 합니다."
+      }
+    },
+    "HS3-A2-02": {
+      "stage": 2,
+      "slot": "S2-02",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": "HS4-S2-03",
+      "teacherNotes": {
+        "pronunciation": "의미 전달을 확인한 뒤 학습자가 어려워하는 소리와 끊어 읽기를 실제로 듣고 교정합니다.",
+        "errorDiagnosis": "정답 제시 전에 학습자가 사용한 근거를 묻고 원문과 비교하여 다시 시도하게 합니다."
+      }
+    },
+    "HS4-S2-03": {
+      "stage": 2,
+      "slot": "S2-03",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": "HS4-S2-04",
+      "teacherNotes": {
+        "pronunciation": "발음 교정: 노란 끈에서 ㄴ과 된소리 ㄲ을 분리해 들려준 뒤 전체 묘사를 다시 말하게 합니다.",
+        "errorDiagnosis": "오류 진단: 파란색 우산만 반복하면 다른 우산과 구별되는 표식을 추가 질문으로 끌어냅니다."
+      }
+    },
+    "HS4-S2-04": {
+      "stage": 2,
+      "slot": "S2-04",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": "HS4-S2-05",
+      "teacherNotes": {
+        "pronunciation": "발음 교정: 맡겨의 자연스러운 소리를 교사가 읽어 주고 맡아요와 맡겨요의 의미 차이를 확인합니다.",
+        "errorDiagnosis": "오류 진단: 문 앞 대신에만 말하면 맡길 장소를 완성하도록 어디에요?라고 되묻습니다."
+      }
+    },
+    "HS4-S2-05": {
+      "stage": 2,
+      "slot": "S2-05",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": null,
+      "teacherNotes": {
+        "pronunciation": "발음 교정: 교환의 두 음절을 명확히 읽고 교안과 구별되는지 학습자에게 의미를 확인합니다.",
+        "errorDiagnosis": "오류 진단: 교환하거나 환불받았어요라고 확정하면 실제 선택은 하나였음을 확인해 결정 문장을 따로 쓰게 합니다."
+      }
+    },
+    "HS3-B1-01": {
+      "stage": 3,
+      "slot": "S3-01",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": "HS3-B1-02",
+      "teacherNotes": {
+        "pronunciation": "의미 전달을 확인한 뒤 학습자가 어려워하는 소리와 끊어 읽기를 실제로 듣고 교정합니다.",
+        "errorDiagnosis": "정답 제시 전에 학습자가 사용한 근거를 묻고 원문과 비교하여 다시 시도하게 합니다."
+      }
+    },
+    "HS3-B1-02": {
+      "stage": 3,
+      "slot": "S3-02",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": "HS3-B2-01",
+      "teacherNotes": {
+        "pronunciation": "의미 전달을 확인한 뒤 학습자가 어려워하는 소리와 끊어 읽기를 실제로 듣고 교정합니다.",
+        "errorDiagnosis": "정답 제시 전에 학습자가 사용한 근거를 묻고 원문과 비교하여 다시 시도하게 합니다."
+      }
+    },
+    "HS3-B2-01": {
+      "stage": 3,
+      "slot": "S3-03",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": "HS3-B2-02",
+      "teacherNotes": {
+        "pronunciation": "의미 전달을 확인한 뒤 학습자가 어려워하는 소리와 끊어 읽기를 실제로 듣고 교정합니다.",
+        "errorDiagnosis": "정답 제시 전에 학습자가 사용한 근거를 묻고 원문과 비교하여 다시 시도하게 합니다."
+      }
+    },
+    "HS3-B2-02": {
+      "stage": 3,
+      "slot": "S3-04",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": "HS4-S3-05",
+      "teacherNotes": {
+        "pronunciation": "의미 전달을 확인한 뒤 학습자가 어려워하는 소리와 끊어 읽기를 실제로 듣고 교정합니다.",
+        "errorDiagnosis": "정답 제시 전에 학습자가 사용한 근거를 묻고 원문과 비교하여 다시 시도하게 합니다."
+      }
+    },
+    "HS4-S3-05": {
+      "stage": 3,
+      "slot": "S3-05",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": "HS4-S3-06",
+      "teacherNotes": {
+        "pronunciation": "발음 교정: 목요일 오후처럼 시간과 일정의 핵심어에 적절한 끊어 읽기를 표시합니다.",
+        "errorDiagnosis": "오류 진단: 모든 사람이 참여해요라고 과장하면 일부만 가능한 조건과 문서 보완을 분리해 말하도록 유도합니다."
+      }
+    },
+    "HS4-S3-06": {
+      "stage": 3,
+      "slot": "S3-06",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": "HS4-S3-07",
+      "teacherNotes": {
+        "pronunciation": "발음 교정: 기본요금과 추가 사용료의 대조를 억양과 문장 경계로 분명하게 표현하도록 돕습니다.",
+        "errorDiagnosis": "오류 진단: 많이 쓰면 기본요금도 많아요라고 말하면 고정비와 변동비의 근거를 본문에서 구별하게 합니다."
+      }
+    },
+    "HS4-S3-07": {
+      "stage": 3,
+      "slot": "S3-07",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": null,
+      "teacherNotes": {
+        "pronunciation": "발음 교정: 수치 오십육 명과 팔십 명의 명료도를 확인하고 핵심 한계 앞에서 끊어 읽게 합니다.",
+        "errorDiagnosis": "오류 진단: 주민 전체의 의견이라고 일반화하면 모집 대상과 실제 응답자를 각각 표시하고 주장을 고치게 합니다."
+      }
+    },
+    "HS3-C1-01": {
+      "stage": 4,
+      "slot": "S4-01",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": "HS3-C1-02",
+      "teacherNotes": {
+        "pronunciation": "의미 전달을 확인한 뒤 학습자가 어려워하는 소리와 끊어 읽기를 실제로 듣고 교정합니다.",
+        "errorDiagnosis": "정답 제시 전에 학습자가 사용한 근거를 묻고 원문과 비교하여 다시 시도하게 합니다."
+      }
+    },
+    "HS3-C1-02": {
+      "stage": 4,
+      "slot": "S4-02",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": "HS4-S4-03",
+      "teacherNotes": {
+        "pronunciation": "의미 전달을 확인한 뒤 학습자가 어려워하는 소리와 끊어 읽기를 실제로 듣고 교정합니다.",
+        "errorDiagnosis": "정답 제시 전에 학습자가 사용한 근거를 묻고 원문과 비교하여 다시 시도하게 합니다."
+      }
+    },
+    "HS4-S4-03": {
+      "stage": 4,
+      "slot": "S4-03",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": "HS4-S4-04",
+      "teacherNotes": {
+        "pronunciation": "발음 교정: 조건·양보·최종 제안의 문장 경계를 구별하여 듣는 사람이 논거를 따라갈 수 있게 읽게 합니다.",
+        "errorDiagnosis": "오류 진단: 이름을 지우면 안전이 보장된다고 단정하면 조합으로 인물이 드러날 가능성을 근거로 표현을 제한하게 합니다."
+      }
+    },
+    "HS4-S4-04": {
+      "stage": 4,
+      "slot": "S4-04",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": "HS4-S4-05",
+      "teacherNotes": {
+        "pronunciation": "발음 교정: 단정과 유보를 전달하는 문장 말미를 구별하고 근거를 나열할 때 일정한 속도를 유지하게 합니다.",
+        "errorDiagnosis": "오류 진단: 새 지표로 공정성이 입증됐다고 말하면 시행 계획과 검증 결과를 구분하도록 다음 분기의 재확인 문장을 찾게 합니다."
+      }
+    },
+    "HS4-S4-05": {
+      "stage": 4,
+      "slot": "S4-05",
+      "skills": [
+        "vocabulary",
+        "reading",
+        "grammar",
+        "interaction"
+      ],
+      "nextUnitId": null,
+      "teacherNotes": {
+        "pronunciation": "발음 교정: 공식 이름과 쉬운 설명 사이에서 잠시 쉬고 신청 순서의 숫자를 분명하게 읽게 합니다.",
+        "errorDiagnosis": "오류 진단: 짧은 문장이면 이해하기 쉽다는 주장에는 예외와 실제 행동 확인을 요구하여 길이와 이해도의 차이를 설명하게 합니다."
+      }
+    }
+  },
+  "preDiagnostics": {
+    "1": [
+      {
+        "question": "저___ 학생이에요.",
+        "choices": [
+          "는",
+          "을",
+          "에"
+        ],
+        "answerIndex": 0,
+        "skill": "grammar"
+      },
+      {
+        "question": "처음 만났을 때 인사는?",
+        "choices": [
+          "잘 먹겠습니다",
+          "안녕하세요",
+          "죄송합니다"
+        ],
+        "answerIndex": 1,
+        "skill": "interaction"
+      },
+      {
+        "question": "빵 두 개는 몇 개예요?",
+        "choices": [
+          "한 개",
+          "세 개",
+          "두 개"
+        ],
+        "answerIndex": 2,
+        "skill": "vocabulary"
+      }
+    ],
+    "2": [
+      {
+        "question": "허락을 구하는 말은?",
+        "choices": [
+          "빌려도 돼요?",
+          "빌렸어요.",
+          "빌리지 않았어요."
+        ],
+        "answerIndex": 0,
+        "skill": "interaction"
+      },
+      {
+        "question": "비가 와서 못 갔어요. 못 간 이유는?",
+        "choices": [
+          "시간이 남아서",
+          "비가 와서",
+          "표가 있어서"
+        ],
+        "answerIndex": 1,
+        "skill": "reading"
+      },
+      {
+        "question": "선택을 나타내는 연결은?",
+        "choices": [
+          "-기 전에",
+          "-았어요",
+          "-거나"
+        ],
+        "answerIndex": 2,
+        "skill": "grammar"
+      }
+    ],
+    "3": [
+      {
+        "question": "조건을 나타내는 말은?",
+        "choices": [
+          "시간이 있다면",
+          "시간이 있었어요",
+          "시간을 봤어요"
+        ],
+        "answerIndex": 0,
+        "skill": "grammar"
+      },
+      {
+        "question": "주장을 뒷받침하는 것은?",
+        "choices": [
+          "이름표",
+          "확인 가능한 근거",
+          "접속 비밀번호"
+        ],
+        "answerIndex": 1,
+        "skill": "vocabulary"
+      },
+      {
+        "question": "상대의 우선순위를 확인하는 질문은?",
+        "choices": [
+          "그냥 제 말대로 하세요.",
+          "대답하지 마세요.",
+          "무엇이 가장 중요한가요?"
+        ],
+        "answerIndex": 2,
+        "skill": "interaction"
+      }
+    ],
+    "4": [
+      {
+        "question": "일부 응답자 결과를 전체로 단정하면 안 되는 이유는?",
+        "choices": [
+          "대표성 한계 때문",
+          "문장이 짧아서",
+          "숫자가 있어서"
+        ],
+        "answerIndex": 0,
+        "skill": "reading"
+      },
+      {
+        "question": "한계를 인정하는 표현은?",
+        "choices": [
+          "반드시 증명된다",
+          "단정하기 어렵다",
+          "예외 없이 같다"
+        ],
+        "answerIndex": 1,
+        "skill": "grammar"
+      },
+      {
+        "question": "의견이 다른 사람과 논의를 잇는 말은?",
+        "choices": [
+          "더 말하지 마세요.",
+          "확인할 필요 없어요.",
+          "그 판단의 기준을 설명해 주시겠어요?"
+        ],
+        "answerIndex": 2,
+        "skill": "interaction"
+      }
+    ]
+  },
+  "postDiagnostics": {
+    "HS3-A0-01": [
+      {
+        "question": "민수는 누구예요? (본문·제시 표현 기준)",
+        "choices": [
+          "한국어 선생님이에요.",
+          "대학생이에요.",
+          "회사원이에요."
+        ],
+        "answerIndex": 0,
+        "skill": "reading"
+      },
+      {
+        "question": "안나의 이름을 묻는 질문은? (본문·제시 표현 기준)",
+        "choices": [
+          "어디에 가요?",
+          "이름이 뭐예요?",
+          "몇 시예요?"
+        ],
+        "answerIndex": 1,
+        "skill": "interaction"
+      },
+      {
+        "question": "수진 뒤에는 이에요와 예요 중 무엇을 쓰나요? (본문·제시 표현 기준)",
+        "choices": [
+          "예요.",
+          "을요.",
+          "이에요. 저는 수진이에요."
+        ],
+        "answerIndex": 2,
+        "skill": "grammar"
+      }
+    ],
+    "HS3-A0-02": [
+      {
+        "question": "이 글에서 큰 물건은 무엇이에요? (본문·제시 표현 기준)",
+        "choices": [
+          "펜이에요.",
+          "책이에요.",
+          "공책이에요."
+        ],
+        "answerIndex": 1,
+        "skill": "reading"
+      },
+      {
+        "question": "공책은 커요, 작아요? (본문·제시 표현 기준)",
+        "choices": [
+          "커요.",
+          "없어요.",
+          "작아요."
+        ],
+        "answerIndex": 2,
+        "skill": "interaction"
+      },
+      {
+        "question": "펜을 가리키며 이름을 묻는 말은? (본문·제시 표현 기준)",
+        "choices": [
+          "이것은 뭐예요?",
+          "어디에 있어요?",
+          "얼마예요?"
+        ],
+        "answerIndex": 0,
+        "skill": "grammar"
+      }
+    ],
+    "HS3-A1-01": [
+      {
+        "question": "유나는 어떤 음료를 주문해요? (본문·제시 표현 기준)",
+        "choices": [
+          "찬 물 두 잔이에요.",
+          "따뜻한 커피 두 잔이에요.",
+          "따뜻한 차 한 잔을 주문해요."
+        ],
+        "answerIndex": 2,
+        "skill": "reading"
+      },
+      {
+        "question": "두 사람이 낼 돈은 모두 얼마예요? (본문·제시 표현 기준)",
+        "choices": [
+          "칠천 원이에요.",
+          "사천 원이에요.",
+          "만원이에요."
+        ],
+        "answerIndex": 0,
+        "skill": "interaction"
+      },
+      {
+        "question": "물 두 잔을 부탁하는 말을 쓰세요. (본문·제시 표현 기준)",
+        "choices": [
+          "물 한 잔 마셨어요.",
+          "물 두 잔 주세요.",
+          "물이 어디에 있어요?"
+        ],
+        "answerIndex": 1,
+        "skill": "grammar"
+      }
+    ],
+    "HS3-A1-02": [
+      {
+        "question": "도서관은 어디에 있어요? (본문·제시 표현 기준)",
+        "choices": [
+          "은행 옆에 있어요.",
+          "학교 안에 있어요.",
+          "시장 앞에 있어요."
+        ],
+        "answerIndex": 0,
+        "skill": "reading"
+      },
+      {
+        "question": "역에서 도서관까지 걸어서 얼마나 걸려요? (본문·제시 표현 기준)",
+        "choices": [
+          "삼십 분이에요.",
+          "오 분이에요.",
+          "한 시간이에요."
+        ],
+        "answerIndex": 1,
+        "skill": "interaction"
+      },
+      {
+        "question": "이동을 말하는 문장을 고르세요: 도서관에 가요 / 도서관에 있어요. (본문·제시 표현 기준)",
+        "choices": [
+          "도서관에 있어요.",
+          "도서관이 작아요.",
+          "도서관에 가요."
+        ],
+        "answerIndex": 2,
+        "skill": "grammar"
+      }
+    ],
+    "HS3-A2-01": [
+      {
+        "question": "리나가 처음 제안한 새 시간은 언제예요? (본문·제시 표현 기준)",
+        "choices": [
+          "토요일 오후 두 시예요.",
+          "금요일 저녁 여덟 시예요.",
+          "금요일 오전 열 시예요."
+        ],
+        "answerIndex": 1,
+        "skill": "reading"
+      },
+      {
+        "question": "준호가 여덟 시에 만날 수 없는 이유는? (본문·제시 표현 기준)",
+        "choices": [
+          "친구를 만나기 때문이에요.",
+          "수업이 없기 때문이에요.",
+          "가족과 저녁을 먹기 때문이에요."
+        ],
+        "answerIndex": 2,
+        "skill": "interaction"
+      },
+      {
+        "question": "최종 약속은 언제예요? (본문·제시 표현 기준)",
+        "choices": [
+          "토요일 오전 열 시예요.",
+          "금요일 저녁 여덟 시예요.",
+          "토요일 저녁 열 시예요."
+        ],
+        "answerIndex": 0,
+        "skill": "grammar"
+      }
+    ],
+    "HS3-A2-02": [
+      {
+        "question": "다니엘이 산 것은 무엇이에요? (본문·제시 표현 기준)",
+        "choices": [
+          "큰 빵 두 개예요.",
+          "사과 세 개예요.",
+          "작은 빵 세 개예요."
+        ],
+        "answerIndex": 2,
+        "skill": "reading"
+      },
+      {
+        "question": "새 봉투를 받지 않은 이유는? (본문·제시 표현 기준)",
+        "choices": [
+          "개인 가방을 가지고 있었기 때문이에요.",
+          "돈이 없었기 때문이에요.",
+          "봉투가 없었기 때문이에요."
+        ],
+        "answerIndex": 0,
+        "skill": "interaction"
+      },
+      {
+        "question": "친구를 만난 때는 언제예요? (본문·제시 표현 기준)",
+        "choices": [
+          "시장에 가기 전이에요.",
+          "시장을 구경한 후예요.",
+          "빵을 사기 전이에요."
+        ],
+        "answerIndex": 1,
+        "skill": "grammar"
+      }
+    ],
+    "HS3-B1-01": [
+      {
+        "question": "운영자가 처음부터 통화를 금지하지 않은 이유를 설명하세요. (본문·제시 표현 기준)",
+        "choices": [
+          "서로 다른 업무 요구와 실제 소음 상황을 확인할 필요가 있었기 때문이에요.",
+          "통화가 항상 조용했기 때문이에요.",
+          "요구를 확인할 필요가 없었기 때문이에요."
+        ],
+        "answerIndex": 0,
+        "skill": "reading"
+      },
+      {
+        "question": "합의한 긴 통화의 기준은? (본문·제시 표현 기준)",
+        "choices": [
+          "오 분 미만의 통화예요.",
+          "오 분이 넘는 통화예요.",
+          "모든 통화예요."
+        ],
+        "answerIndex": 1,
+        "skill": "interaction"
+      },
+      {
+        "question": "본문과 대화에서 이 규칙을 다시 검토하기로 한 근거는 무엇인가요? (본문·제시 표현 기준)",
+        "choices": [
+          "규칙이 영구적이어서예요.",
+          "불편을 묻지 않기 위해서예요.",
+          "본문에서는 다음 달에 불편이 줄었는지 다시 확인하기로 했고, 대화에서는 한 달간 해 본 뒤 다시 의견을 모으기로 했어요."
+        ],
+        "answerIndex": 2,
+        "skill": "grammar"
+      }
+    ],
+    "HS3-B1-02": [
+      {
+        "question": "현우의 우선순위는 무엇인가요? (본문·제시 표현 기준)",
+        "choices": [
+          "비싼 음식을 먹는 것이에요.",
+          "이동 시간을 줄이는 것이에요.",
+          "이동을 최대한 늘리는 것이에요."
+        ],
+        "answerIndex": 1,
+        "skill": "reading"
+      },
+      {
+        "question": "비가 계속 오면 두 사람은 무엇을 하기로 했나요? (본문·제시 표현 기준)",
+        "choices": [
+          "먼 곳으로 이동해요.",
+          "바로 귀가해요.",
+          "숙소에서 다음 여행을 계획하기로 했어요."
+        ],
+        "answerIndex": 2,
+        "skill": "interaction"
+      },
+      {
+        "question": "원래 계획이 바뀌었지만 지킨 것은 무엇인가요? (본문·제시 표현 기준)",
+        "choices": [
+          "역사를 알아보려는 관심과 짧은 이동 시간이라는 서로의 우선순위예요.",
+          "모든 장소를 방문하는 것이에요.",
+          "원래의 일정 전체예요."
+        ],
+        "answerIndex": 0,
+        "skill": "grammar"
+      }
+    ],
+    "HS3-B2-01": [
+      {
+        "question": "마리아가 비슷한 후기를 모두 허위로 보지 않은 이유는? (본문·제시 표현 기준)",
+        "choices": [
+          "비슷한 후기는 항상 진짜이기 때문이에요.",
+          "후기를 전혀 읽지 않았기 때문이에요.",
+          "문장이 비슷하다는 사실만으로 허위 여부를 입증할 수 없기 때문이에요."
+        ],
+        "answerIndex": 2,
+        "skill": "reading"
+      },
+      {
+        "question": "마리아의 최종 행동은 무엇인가요? (본문·제시 표현 기준)",
+        "choices": [
+          "부족한 정보가 남아 짧은 체험 수업부터 신청하기로 했어요.",
+          "장기 수업을 즉시 결제해요.",
+          "모든 수업을 거절해요."
+        ],
+        "answerIndex": 0,
+        "skill": "interaction"
+      },
+      {
+        "question": "글의 핵심 주장에 가장 가까운 설명은? (본문·제시 표현 기준)",
+        "choices": [
+          "후기 숫자만 많으면 충분해요.",
+          "신뢰할 수 있는 판단에는 확인 가능한 정보와 자신의 필요를 함께 검토하는 과정이 필요해요.",
+          "자신의 필요는 중요하지 않아요."
+        ],
+        "answerIndex": 1,
+        "skill": "grammar"
+      }
+    ],
+    "HS3-B2-02": [
+      {
+        "question": "진행자는 번역기 사용을 금지했나요? (본문·제시 표현 기준)",
+        "choices": [
+          "아니요. 사용 목적과 상황을 나누어 기준을 정했어요.",
+          "네, 모든 번역기를 금지했어요.",
+          "번역기 사용만 평가했어요."
+        ],
+        "answerIndex": 0,
+        "skill": "reading"
+      },
+      {
+        "question": "한 달 뒤 대화 속도가 항상 빨라졌다고 할 수 있나요? (본문·제시 표현 기준)",
+        "choices": [
+          "네, 항상 빨라졌어요.",
+          "아니요. 본문은 항상 빨라진 것은 아니라고 명시해요.",
+          "대화가 전혀 없었어요."
+        ],
+        "answerIndex": 1,
+        "skill": "interaction"
+      },
+      {
+        "question": "아는 말로 먼저 설명하는 활동의 목적은? (본문·제시 표현 기준)",
+        "choices": [
+          "틀릴 가능성을 모두 없애려고요.",
+          "번역기만 쓰게 하려고요.",
+          "참가자가 직접 표현하고 대화에 참여할 기회를 남기기 위해서예요."
+        ],
+        "answerIndex": 2,
+        "skill": "grammar"
+      }
+    ],
+    "HS3-C1-01": [
+      {
+        "question": "방문객 증가만으로 지역 전체의 경제 효과를 확정하기 어려운 이유는? (본문·제시 표현 기준)",
+        "choices": [
+          "모든 집단의 이익이 같기 때문입니다.",
+          "이익이 지역과 집단에 고르게 분포하지 않고 소음·쓰레기 등 비용도 발생하기 때문입니다.",
+          "비용이 전혀 없기 때문입니다."
+        ],
+        "answerIndex": 1,
+        "skill": "reading"
+      },
+      {
+        "question": "기존 주민 설문의 대표성 한계는 무엇인가요? (본문·제시 표현 기준)",
+        "choices": [
+          "모든 주민이 의무 응답했다는 점입니다.",
+          "방문객 수가 정확하다는 점입니다.",
+          "자발적 응답자가 전체 주민을 대표하지 않을 수 있다는 점입니다."
+        ],
+        "answerIndex": 2,
+        "skill": "interaction"
+      },
+      {
+        "question": "글에서 성과 기준을 넓힌다는 것은 무엇을 뜻하나요? (본문·제시 표현 기준)",
+        "choices": [
+          "이익과 비용의 분포를 공개하고 선택 근거를 토론할 수 있게 하는 것입니다.",
+          "방문객 숫자만 높이는 것입니다.",
+          "비용 정보를 비공개로 두는 것입니다."
+        ],
+        "answerIndex": 0,
+        "skill": "grammar"
+      }
+    ],
+    "HS3-C1-02": [
+      {
+        "question": "접속 시간이 길다고 학습 의지가 높다고 확정할 수 없는 이유는? (본문·제시 표현 기준)",
+        "choices": [
+          "접속 시간이 항상 부정확하기 때문입니다.",
+          "누구도 화면을 읽지 않기 때문입니다.",
+          "화면을 켜 둔 채 자리를 비우거나 같은 내용을 천천히 읽는 등 서로 다른 상황이 같은 시간으로 나타날 수 있기 때문입니다."
+        ],
+        "answerIndex": 2,
+        "skill": "reading"
+      },
+      {
+        "question": "직접 식별자를 제거하면 재식별 위험이 완전히 사라지나요? (본문·제시 표현 기준)",
+        "choices": [
+          "아니요. 여러 정보가 결합될 때 개인이 다시 드러날 수 있습니다.",
+          "네, 완전히 사라집니다.",
+          "자료는 결합될 수 없습니다."
+        ],
+        "answerIndex": 0,
+        "skill": "interaction"
+      },
+      {
+        "question": "이 시험 운영에서 성과를 평가한 기준 세 가지는? (본문·제시 표현 기준)",
+        "choices": [
+          "접속 시간·화면 수·순위입니다.",
+          "선택 이유 이해, 원치 않는 자료 이용의 거절 가능성, 실제 과제 수행에 대한 도움입니다.",
+          "정답 수·연령·홍보 횟수입니다."
+        ],
+        "answerIndex": 1,
+        "skill": "grammar"
+      }
+    ],
+    "HS4-S1-05": [
+      {
+        "question": "미나는 빵을 몇 개 사요?",
+        "choices": [
+          "두 개",
+          "한 개",
+          "세 개"
+        ],
+        "answerIndex": 0,
+        "skill": "vocabulary"
+      },
+      {
+        "question": "내야 할 돈은 얼마예요?",
+        "choices": [
+          "이천 원",
+          "사천 원",
+          "육천 원"
+        ],
+        "answerIndex": 1,
+        "skill": "reading"
+      },
+      {
+        "question": "미나는 봉투를 받아요?",
+        "choices": [
+          "두 장 받아요",
+          "네, 받아요",
+          "아니요, 받지 않아요"
+        ],
+        "answerIndex": 2,
+        "skill": "interaction"
+      }
+    ],
+    "HS4-S1-06": [
+      {
+        "question": "준에게 없는 물건은?",
+        "choices": [
+          "공책",
+          "연필",
+          "가방"
+        ],
+        "answerIndex": 1,
+        "skill": "vocabulary"
+      },
+      {
+        "question": "언제 연필을 돌려줘요?",
+        "choices": [
+          "다음 달",
+          "수업 전",
+          "수업 후"
+        ],
+        "answerIndex": 2,
+        "skill": "reading"
+      },
+      {
+        "question": "허락을 구하는 말은?",
+        "choices": [
+          "잠깐 빌려도 돼요?",
+          "제 연필이에요.",
+          "안녕히 가세요."
+        ],
+        "answerIndex": 0,
+        "skill": "interaction"
+      }
+    ],
+    "HS4-S1-07": [
+      {
+        "question": "루이는 언제 일어나요?",
+        "choices": [
+          "일곱 시",
+          "아홉 시",
+          "여섯 시"
+        ],
+        "answerIndex": 0,
+        "skill": "reading"
+      },
+      {
+        "question": "한국어 수업 요일은?",
+        "choices": [
+          "월요일",
+          "화요일",
+          "금요일"
+        ],
+        "answerIndex": 1,
+        "skill": "vocabulary"
+      },
+      {
+        "question": "수업 시작 시각은?",
+        "choices": [
+          "오전 아홉 시",
+          "오후 일곱 시",
+          "저녁 여섯 시"
+        ],
+        "answerIndex": 2,
+        "skill": "interaction"
+      }
+    ],
+    "HS4-S2-03": [
+      {
+        "question": "우산을 잃어버린 곳은?",
+        "choices": [
+          "지하철",
+          "도서관",
+          "버스"
+        ],
+        "answerIndex": 2,
+        "skill": "reading"
+      },
+      {
+        "question": "우산을 구별한 특징은?",
+        "choices": [
+          "노란 끈",
+          "빨간 손잡이",
+          "흰 무늬"
+        ],
+        "answerIndex": 0,
+        "skill": "vocabulary"
+      },
+      {
+        "question": "맞는 묘사는?",
+        "choices": [
+          "끈이 없는 우산",
+          "노란 끈이 달린 파란 우산",
+          "노란색 우산"
+        ],
+        "answerIndex": 1,
+        "skill": "grammar"
+      }
+    ],
+    "HS4-S2-04": [
+      {
+        "question": "맡기기로 한 곳은?",
+        "choices": [
+          "문 앞",
+          "관리실",
+          "이웃집"
+        ],
+        "answerIndex": 1,
+        "skill": "reading"
+      },
+      {
+        "question": "관리실은 몇 시에 닫아요?",
+        "choices": [
+          "다섯 시",
+          "다섯 시 반",
+          "여섯 시"
+        ],
+        "answerIndex": 2,
+        "skill": "vocabulary"
+      },
+      {
+        "question": "정중한 부탁은?",
+        "choices": [
+          "맡겨 주시겠어요?",
+          "맡겨 주셨네요.",
+          "맡기지 않았어요."
+        ],
+        "answerIndex": 0,
+        "skill": "interaction"
+      }
+    ],
+    "HS4-S2-05": [
+      {
+        "question": "가게에 다시 간 이유는?",
+        "choices": [
+          "색이 어두워서",
+          "영수증이 없어서",
+          "셔츠가 작아서"
+        ],
+        "answerIndex": 2,
+        "skill": "reading"
+      },
+      {
+        "question": "최종 선택은?",
+        "choices": [
+          "파란 셔츠로 교환",
+          "같은 색 큰 셔츠",
+          "바로 환불"
+        ],
+        "answerIndex": 0,
+        "skill": "vocabulary"
+      },
+      {
+        "question": "제시된 대안 표현은?",
+        "choices": [
+          "교환한 적이 있다",
+          "교환하거나 환불받다",
+          "교환하기 전에 사다"
+        ],
+        "answerIndex": 1,
+        "skill": "grammar"
+      }
+    ],
+    "HS4-S3-05": [
+      {
+        "question": "금요일로 미루기 어려운 이유는?",
+        "choices": [
+          "교육이 없어서",
+          "제출 기한을 넘겨서",
+          "통역이 끝나서"
+        ],
+        "answerIndex": 1,
+        "skill": "reading"
+      },
+      {
+        "question": "합의한 방법은?",
+        "choices": [
+          "회의를 모두 취소",
+          "금요일 하루 종일 회의",
+          "목요일 오후 핵심 안건 우선"
+        ],
+        "answerIndex": 2,
+        "skill": "interaction"
+      },
+      {
+        "question": "나머지 내용을 보완할 수단은?",
+        "choices": [
+          "문서",
+          "추가 출장",
+          "전화 녹음 공개"
+        ],
+        "answerIndex": 0,
+        "skill": "vocabulary"
+      }
+    ],
+    "HS4-S3-06": [
+      {
+        "question": "함께 균등하게 나누는 비용은?",
+        "choices": [
+          "모든 사용료",
+          "벌금",
+          "기본요금"
+        ],
+        "answerIndex": 2,
+        "skill": "reading"
+      },
+      {
+        "question": "추가 사용료의 기준은?",
+        "choices": [
+          "기록된 시간",
+          "나이",
+          "방문 순서"
+        ],
+        "answerIndex": 0,
+        "skill": "vocabulary"
+      },
+      {
+        "question": "아직 결정되지 않은 것은?",
+        "choices": [
+          "기본요금 존재",
+          "기록 누락 처리",
+          "민의 이름"
+        ],
+        "answerIndex": 1,
+        "skill": "interaction"
+      }
+    ],
+    "HS4-S3-07": [
+      {
+        "question": "저녁 수업을 원하는 응답자는?",
+        "choices": [
+          "80명",
+          "56명",
+          "70명"
+        ],
+        "answerIndex": 1,
+        "skill": "reading"
+      },
+      {
+        "question": "결과를 한정할 집단은?",
+        "choices": [
+          "모든 주민",
+          "전국 학습자",
+          "기존 수강생 중 응답자"
+        ],
+        "answerIndex": 2,
+        "skill": "interaction"
+      },
+      {
+        "question": "센터가 추가로 할 일은?",
+        "choices": [
+          "미참여 주민 의견 수집",
+          "조사를 숨기기",
+          "모든 강좌 폐쇄"
+        ],
+        "answerIndex": 0,
+        "skill": "vocabulary"
+      }
+    ],
+    "HS4-S4-03": [
+      {
+        "question": "최초 동의의 전제는?",
+        "choices": [
+          "온라인 전체 공개",
+          "현장 열람",
+          "판매 목적 이용"
+        ],
+        "answerIndex": 1,
+        "skill": "reading"
+      },
+      {
+        "question": "이름 삭제 후에도 남는 가능성은?",
+        "choices": [
+          "모든 위험 소멸",
+          "동의 자동 확정",
+          "내용 조합으로 인물 추정"
+        ],
+        "answerIndex": 2,
+        "skill": "vocabulary"
+      },
+      {
+        "question": "새 절차의 특징은?",
+        "choices": [
+          "구간별 선택과 보류",
+          "전체 공개만 허용",
+          "주민 의견 제외"
+        ],
+        "answerIndex": 0,
+        "skill": "interaction"
+      }
+    ],
+    "HS4-S4-04": [
+      {
+        "question": "접속 시간 증가 뒤에도 줄지 않은 것은?",
+        "choices": [
+          "과제 지연",
+          "조직 규모",
+          "분기 수"
+        ],
+        "answerIndex": 0,
+        "skill": "reading"
+      },
+      {
+        "question": "새 평가에 포함되는 것은?",
+        "choices": [
+          "온라인 표시만",
+          "결과물과 협업 근거",
+          "근무자 나이만"
+        ],
+        "answerIndex": 1,
+        "skill": "vocabulary"
+      },
+      {
+        "question": "새 지표의 효과는 언제 다시 확인해요?",
+        "choices": [
+          "이미 확정됨",
+          "확인하지 않음",
+          "다음 분기"
+        ],
+        "answerIndex": 2,
+        "skill": "interaction"
+      }
+    ],
+    "HS4-S4-05": [
+      {
+        "question": "핵심 용어를 유지한 이유는?",
+        "choices": [
+          "공식 서류와의 연결",
+          "문장을 길게 하려고",
+          "번역을 막으려고"
+        ],
+        "answerIndex": 0,
+        "skill": "reading"
+      },
+      {
+        "question": "용어 옆에 붙일 것은?",
+        "choices": [
+          "설명 없는 약어",
+          "쉬운 설명과 예시",
+          "관련 없는 광고"
+        ],
+        "answerIndex": 1,
+        "skill": "vocabulary"
+      },
+      {
+        "question": "완성 여부를 확인하는 방법은?",
+        "choices": [
+          "글자 수만 계산",
+          "담당자 직함 비교",
+          "실제 이용자의 행동 찾기 확인"
+        ],
+        "answerIndex": 2,
+        "skill": "interaction"
+      }
+    ]
+  },
+  "rubric": {
+    "pronunciation": [
+      "0: 시도했으나 핵심어를 전달하지 못함",
+      "1: 반복 도움으로 핵심어 전달",
+      "2: 일부 소리 오류가 있으나 뜻 전달",
+      "3: 대체로 명료하고 스스로 재시도",
+      "4: 낯선 상황에서도 명료하게 전달"
+    ],
+    "grammar": [
+      "0: 목표 표현을 사용하지 못함",
+      "1: 모형을 그대로 따라 함",
+      "2: 도움으로 문장을 변형",
+      "3: 대부분 적절하게 스스로 사용",
+      "4: 조건 변화에도 적절하게 조절"
+    ],
+    "interaction": [
+      "0: 상호작용을 수행하지 못함",
+      "1: 반복 질문에 짧게 반응",
+      "2: 도움으로 묻고 확인",
+      "3: 스스로 묻고 확인하며 이어감",
+      "4: 예상 밖 조건도 조정하며 합의"
+    ]
+  },
+  "limits": [
+    "Automated text checks do not assess pronunciation or live interaction.",
+    "Pre/post short quizzes are different tasks; scores alone do not prove learning gains.",
+    "Planned lessons cannot be opened or booked."
+  ]
+}

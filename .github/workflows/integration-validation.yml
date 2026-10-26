@@ -30,8 +30,12 @@ jobs:
       - run: node scripts/audit-reading-similarity.cjs
       - run: node scripts/check-foundations.cjs
       - run: node scripts/check-phase2-pages.cjs
+      - run: node --check phase3/app.js
       - run: node phase3/browser-test.cjs
       - run: node scripts/browser-smoke-phase2.cjs
+        env:
+          NODE_PATH: ./phase3/node_modules
+      - run: node scripts/browser-functional-phase2.cjs
         env:
           NODE_PATH: ./phase3/node_modules
       - uses: actions/upload-artifact@v4

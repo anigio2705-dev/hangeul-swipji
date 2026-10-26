@@ -1,0 +1,1554 @@
+{
+  "version": "independent-20261027",
+  "scope": "12 newly written lessons; separate from free curriculum",
+  "units": [
+    {
+      "id": "HS4-S1-05",
+      "title": "빵집에서 수량 확인하기",
+      "level": "A1",
+      "version": "independent-v1",
+      "durationMinutes": 30,
+      "objectives": [
+        "손님은 빵 종류와 수량을 고르고, 직원은 수량과 가격을 확인하세요. 주문을 한 번 바꿔 보세요.",
+        "수량을 말할 때 명사 뒤에 수와 단위를 씁니다. 빵 두 개 주세요."
+      ],
+      "objectivesEn": [
+        "Understand the scenario and negotiate an appropriate response.",
+        "Use the target expression and explain your choice."
+      ],
+      "vocabulary": [
+        {
+          "ko": "빵집",
+          "en": "bakery"
+        },
+        {
+          "ko": "소금빵",
+          "en": "salt bread"
+        },
+        {
+          "ko": "두 개",
+          "en": "two items"
+        },
+        {
+          "ko": "봉투",
+          "en": "bag"
+        }
+      ],
+      "grammar": [
+        "수량을 말할 때 명사 뒤에 수와 단위를 씁니다. 빵 두 개 주세요."
+      ],
+      "reading": "미나는 빵집에 있어요. 소금빵 두 개를 사요. 빵 한 개는 이천 원이에요. 미나는 사천 원을 내요. 봉투는 필요 없어요.",
+      "dialogue": [
+        "직원: 무엇을 드릴까요?",
+        "미나: 소금빵 두 개 주세요.",
+        "직원: 봉투도 드릴까요?",
+        "미나: 아니요. 가방이 있어요."
+      ],
+      "learnerGuide": [
+        "먼저 목표와 진단을 확인하세요. 모르는 말은 질문하고 역할을 바꿔 연습하세요.",
+        "읽기와 대화 내용을 근거로 답한 뒤 자신의 상황으로 바꾸어 말하세요."
+      ],
+      "learnerGuideEn": [
+        "Check the goals and diagnostic, then ask about unfamiliar expressions.",
+        "Read for evidence, swap roles, and adapt the conversation to your own situation."
+      ],
+      "teacherGuide": [
+        "0~4분: 수업 전 진단과 목적 확인",
+        "4~10분: 대화 듣기와 핵심 표현 확인. 교사가 원문을 직접 읽습니다.",
+        "10~18분: 읽기 근거 확인과 표현 교체 연습",
+        "18~26분: 정보차 역할극, 역할 교환, 조건 변경",
+        "26~30분: 사후 내용 확인과 수행 루브릭 기록, 다음 과제 합의",
+        "발음 교정: 두 개의 개를 자연스러운 속도로 읽습니다. 현대 한국어에서 ㅐ와 ㅔ를 같게 발음하는 화자도 있으므로 구별 발음만을 정답 기준으로 강요하지 않습니다.",
+        "오류 진단: 두 개 빵 주세요라고 하면 뜻을 확인한 뒤 빵 두 개 주세요를 재진술하고 다른 수량으로 다시 말하게 합니다."
+      ],
+      "activities": {
+        "listening": "교사가 대화문을 두 번 읽습니다. 첫 번째는 상황, 두 번째는 선택·조건을 메모하세요.",
+        "speaking": "손님은 빵 종류와 수량을 고르고, 직원은 수량과 가격을 확인하세요. 주문을 한 번 바꿔 보세요.",
+        "reading": "본문에서 결정의 이유와 최종 선택에 밑줄을 그으세요.",
+        "writing": "사고 싶은 물건 세 가지를 수량과 함께 쓰고 주문을 20초 동안 말하세요.",
+        "roleplay": "손님은 빵 종류와 수량을 고르고, 직원은 수량과 가격을 확인하세요. 주문을 한 번 바꿔 보세요."
+      },
+      "performanceTask": {
+        "instruction": "손님은 빵 종류와 수량을 고르고, 직원은 수량과 가격을 확인하세요. 주문을 한 번 바꿔 보세요.",
+        "successCriteria": [
+          "정보를 본문과 맞게 전달한다.",
+          "상대의 질문에 반응하고 확인한다.",
+          "목표 표현을 사용하여 선택이나 조건을 말한다."
+        ]
+      },
+      "homework": "사고 싶은 물건 세 가지를 수량과 함께 쓰고 주문을 20초 동안 말하세요.",
+      "assessment": [
+        {
+          "question": "미나는 빵을 몇 개 사요?",
+          "answer": "두 개",
+          "choices": [
+            "두 개",
+            "한 개",
+            "세 개"
+          ],
+          "answerIndex": 0,
+          "skill": "vocabulary",
+          "explanation": "근거: 소금빵 두 개를 사요.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "소금빵 두 개를 사요."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "내야 할 돈은 얼마예요?",
+          "answer": "사천 원",
+          "choices": [
+            "이천 원",
+            "사천 원",
+            "육천 원"
+          ],
+          "answerIndex": 1,
+          "skill": "reading",
+          "explanation": "근거: 미나는 사천 원을 내요.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "미나는 사천 원을 내요."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "미나는 봉투를 받아요?",
+          "answer": "아니요, 받지 않아요",
+          "choices": [
+            "두 장 받아요",
+            "네, 받아요",
+            "아니요, 받지 않아요"
+          ],
+          "answerIndex": 2,
+          "skill": "interaction",
+          "explanation": "근거: 봉투는 필요 없어요.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "봉투는 필요 없어요."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        }
+      ]
+    },
+    {
+      "id": "HS4-S1-06",
+      "title": "수업에 필요한 물건 빌리기",
+      "level": "A1",
+      "version": "independent-v1",
+      "durationMinutes": 30,
+      "objectives": [
+        "학습자 A는 필요한 물건을 빌리고, B는 돌려받을 때를 정하세요. 없는 물건이면 다른 물건을 제안하세요.",
+        "있어요/없어요로 소지 여부를 말하고, 빌려도 돼요?로 허락을 구합니다."
+      ],
+      "objectivesEn": [
+        "Understand the scenario and negotiate an appropriate response.",
+        "Use the target expression and explain your choice."
+      ],
+      "vocabulary": [
+        {
+          "ko": "연필",
+          "en": "pencil"
+        },
+        {
+          "ko": "빌리다",
+          "en": "to borrow"
+        },
+        {
+          "ko": "돌려주다",
+          "en": "to return"
+        },
+        {
+          "ko": "옆자리",
+          "en": "next seat"
+        }
+      ],
+      "grammar": [
+        "있어요/없어요로 소지 여부를 말하고, 빌려도 돼요?로 허락을 구합니다."
+      ],
+      "reading": "준은 한국어 수업에 와요. 공책은 있지만 연필은 없어요. 옆자리의 하나에게 연필을 빌려요. 수업이 끝나고 연필을 돌려줘요.",
+      "dialogue": [
+        "준: 연필 있어요?",
+        "하나: 네. 여기 있어요.",
+        "준: 잠깐 빌려도 돼요?",
+        "하나: 네. 수업 후에 주세요."
+      ],
+      "learnerGuide": [
+        "먼저 목표와 진단을 확인하세요. 모르는 말은 질문하고 역할을 바꿔 연습하세요.",
+        "읽기와 대화 내용을 근거로 답한 뒤 자신의 상황으로 바꾸어 말하세요."
+      ],
+      "learnerGuideEn": [
+        "Check the goals and diagnostic, then ask about unfamiliar expressions.",
+        "Read for evidence, swap roles, and adapt the conversation to your own situation."
+      ],
+      "teacherGuide": [
+        "0~4분: 수업 전 진단과 목적 확인",
+        "4~10분: 대화 듣기와 핵심 표현 확인. 교사가 원문을 직접 읽습니다.",
+        "10~18분: 읽기 근거 확인과 표현 교체 연습",
+        "18~26분: 정보차 역할극, 역할 교환, 조건 변경",
+        "26~30분: 사후 내용 확인과 수행 루브릭 기록, 다음 과제 합의",
+        "발음 교정: 연필의 받침 ㄴ 뒤 연결을 천천히 들려주고, 의미가 통하는 속도에서 다시 확인합니다.",
+        "오류 진단: 저는 연필 안 있어요를 연필이 없어요로 다시 말해 주고 있어요/없어요를 대조합니다."
+      ],
+      "activities": {
+        "listening": "교사가 대화문을 두 번 읽습니다. 첫 번째는 상황, 두 번째는 선택·조건을 메모하세요.",
+        "speaking": "학습자 A는 필요한 물건을 빌리고, B는 돌려받을 때를 정하세요. 없는 물건이면 다른 물건을 제안하세요.",
+        "reading": "본문에서 결정의 이유와 최종 선택에 밑줄을 그으세요.",
+        "writing": "가방에 있는 것 두 가지와 없는 것 한 가지를 쓰고, 빌리는 대화를 녹음 없이 직접 연습하세요.",
+        "roleplay": "학습자 A는 필요한 물건을 빌리고, B는 돌려받을 때를 정하세요. 없는 물건이면 다른 물건을 제안하세요."
+      },
+      "performanceTask": {
+        "instruction": "학습자 A는 필요한 물건을 빌리고, B는 돌려받을 때를 정하세요. 없는 물건이면 다른 물건을 제안하세요.",
+        "successCriteria": [
+          "정보를 본문과 맞게 전달한다.",
+          "상대의 질문에 반응하고 확인한다.",
+          "목표 표현을 사용하여 선택이나 조건을 말한다."
+        ]
+      },
+      "homework": "가방에 있는 것 두 가지와 없는 것 한 가지를 쓰고, 빌리는 대화를 녹음 없이 직접 연습하세요.",
+      "assessment": [
+        {
+          "question": "준에게 없는 물건은?",
+          "answer": "연필",
+          "choices": [
+            "공책",
+            "연필",
+            "가방"
+          ],
+          "answerIndex": 1,
+          "skill": "vocabulary",
+          "explanation": "근거: 공책은 있지만 연필은 없어요.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "공책은 있지만 연필은 없어요."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "언제 연필을 돌려줘요?",
+          "answer": "수업 후",
+          "choices": [
+            "다음 달",
+            "수업 전",
+            "수업 후"
+          ],
+          "answerIndex": 2,
+          "skill": "reading",
+          "explanation": "근거: 하나: 네. 수업 후에 주세요.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "하나: 네. 수업 후에 주세요."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "허락을 구하는 말은?",
+          "answer": "잠깐 빌려도 돼요?",
+          "choices": [
+            "잠깐 빌려도 돼요?",
+            "제 연필이에요.",
+            "안녕히 가세요."
+          ],
+          "answerIndex": 0,
+          "skill": "interaction",
+          "explanation": "근거: 준: 잠깐 빌려도 돼요?",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "준: 잠깐 빌려도 돼요?"
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        }
+      ]
+    },
+    {
+      "id": "HS4-S1-07",
+      "title": "하루 일과와 수업 시간 말하기",
+      "level": "A1",
+      "version": "independent-v1",
+      "durationMinutes": 30,
+      "objectives": [
+        "서로 다른 시간표를 보고 하루 일과를 묻고 두 사람 모두 가능한 공부 시간을 찾으세요.",
+        "때를 나타내는 말에 에를 붙입니다. 화요일에 공부해요. 아침/점심/저녁은 에 없이도 자연스럽습니다."
+      ],
+      "objectivesEn": [
+        "Understand the scenario and negotiate an appropriate response.",
+        "Use the target expression and explain your choice."
+      ],
+      "vocabulary": [
+        {
+          "ko": "일어나다",
+          "en": "to get up"
+        },
+        {
+          "ko": "동료",
+          "en": "coworker"
+        },
+        {
+          "ko": "화요일",
+          "en": "Tuesday"
+        },
+        {
+          "ko": "시작하다",
+          "en": "to start"
+        }
+      ],
+      "grammar": [
+        "때를 나타내는 말에 에를 붙입니다. 화요일에 공부해요. 아침/점심/저녁은 에 없이도 자연스럽습니다."
+      ],
+      "reading": "루이는 아침 일곱 시에 일어나요. 아홉 시에 일을 시작해요. 점심에는 동료와 밥을 먹어요. 한국어 수업은 화요일 저녁 여섯 시예요.",
+      "dialogue": [
+        "선생님: 언제 한국어를 공부해요?",
+        "루이: 화요일 저녁에 공부해요.",
+        "선생님: 몇 시에 시작해요?",
+        "루이: 여섯 시에 시작해요."
+      ],
+      "learnerGuide": [
+        "먼저 목표와 진단을 확인하세요. 모르는 말은 질문하고 역할을 바꿔 연습하세요.",
+        "읽기와 대화 내용을 근거로 답한 뒤 자신의 상황으로 바꾸어 말하세요."
+      ],
+      "learnerGuideEn": [
+        "Check the goals and diagnostic, then ask about unfamiliar expressions.",
+        "Read for evidence, swap roles, and adapt the conversation to your own situation."
+      ],
+      "teacherGuide": [
+        "0~4분: 수업 전 진단과 목적 확인",
+        "4~10분: 대화 듣기와 핵심 표현 확인. 교사가 원문을 직접 읽습니다.",
+        "10~18분: 읽기 근거 확인과 표현 교체 연습",
+        "18~26분: 정보차 역할극, 역할 교환, 조건 변경",
+        "26~30분: 사후 내용 확인과 수행 루브릭 기록, 다음 과제 합의",
+        "발음 교정: 여섯 시의 받침 연결은 교사가 자연스럽게 읽고 의미와 시간을 먼저 확인합니다.",
+        "오류 진단: 여섯 시간에 시작해요와 여섯 시에 시작해요를 비교해 시각과 기간을 구분합니다."
+      ],
+      "activities": {
+        "listening": "교사가 대화문을 두 번 읽습니다. 첫 번째는 상황, 두 번째는 선택·조건을 메모하세요.",
+        "speaking": "서로 다른 시간표를 보고 하루 일과를 묻고 두 사람 모두 가능한 공부 시간을 찾으세요.",
+        "reading": "본문에서 결정의 이유와 최종 선택에 밑줄을 그으세요.",
+        "writing": "자신의 하루를 시간 표현 세 개와 함께 네 문장으로 적으세요.",
+        "roleplay": "서로 다른 시간표를 보고 하루 일과를 묻고 두 사람 모두 가능한 공부 시간을 찾으세요."
+      },
+      "performanceTask": {
+        "instruction": "서로 다른 시간표를 보고 하루 일과를 묻고 두 사람 모두 가능한 공부 시간을 찾으세요.",
+        "successCriteria": [
+          "정보를 본문과 맞게 전달한다.",
+          "상대의 질문에 반응하고 확인한다.",
+          "목표 표현을 사용하여 선택이나 조건을 말한다."
+        ]
+      },
+      "homework": "자신의 하루를 시간 표현 세 개와 함께 네 문장으로 적으세요.",
+      "assessment": [
+        {
+          "question": "루이는 언제 일어나요?",
+          "answer": "일곱 시",
+          "choices": [
+            "일곱 시",
+            "아홉 시",
+            "여섯 시"
+          ],
+          "answerIndex": 0,
+          "skill": "reading",
+          "explanation": "근거: 루이는 아침 일곱 시에 일어나요.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "루이는 아침 일곱 시에 일어나요."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "한국어 수업 요일은?",
+          "answer": "화요일",
+          "choices": [
+            "월요일",
+            "화요일",
+            "금요일"
+          ],
+          "answerIndex": 1,
+          "skill": "vocabulary",
+          "explanation": "근거: 한국어 수업은 화요일 저녁 여섯 시예요.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "한국어 수업은 화요일 저녁 여섯 시예요."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "수업 시작 시각은?",
+          "answer": "저녁 여섯 시",
+          "choices": [
+            "오전 아홉 시",
+            "오후 일곱 시",
+            "저녁 여섯 시"
+          ],
+          "answerIndex": 2,
+          "skill": "interaction",
+          "explanation": "근거: 한국어 수업은 화요일 저녁 여섯 시예요.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "한국어 수업은 화요일 저녁 여섯 시예요."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        }
+      ]
+    },
+    {
+      "id": "HS4-S2-03",
+      "title": "분실물의 특징 설명하기",
+      "level": "A2",
+      "version": "independent-v1",
+      "durationMinutes": 30,
+      "objectives": [
+        "비슷한 물건 세 개를 묘사하고 색 이외의 특징 두 가지를 질문해서 주인을 확인하세요.",
+        "관형 표현 -(으)ㄴ/는으로 물건을 구별합니다. 끈이 달린 우산, 이름이 있는 손잡이."
+      ],
+      "objectivesEn": [
+        "Understand the scenario and negotiate an appropriate response.",
+        "Use the target expression and explain your choice."
+      ],
+      "vocabulary": [
+        {
+          "ko": "분실물",
+          "en": "lost item"
+        },
+        {
+          "ko": "손잡이",
+          "en": "handle"
+        },
+        {
+          "ko": "끈",
+          "en": "strap"
+        },
+        {
+          "ko": "확인하다",
+          "en": "to check"
+        }
+      ],
+      "grammar": [
+        "관형 표현 -(으)ㄴ/는으로 물건을 구별합니다. 끈이 달린 우산, 이름이 있는 손잡이."
+      ],
+      "reading": "엘라는 버스에서 파란 우산을 잃어버렸어요. 손잡이에 노란 끈이 달려 있어요. 안내소에는 파란 우산이 두 개 있지만 노란 끈이 있는 우산은 하나예요. 엘라는 그 우산을 확인하고 찾아갔어요.",
+      "dialogue": [
+        "직원: 어떤 물건을 잃어버리셨어요?",
+        "엘라: 노란 끈이 달린 파란 우산이에요.",
+        "직원: 이 우산이 맞나요?",
+        "엘라: 네. 손잡이에 제 이름도 있어요."
+      ],
+      "learnerGuide": [
+        "먼저 목표와 진단을 확인하세요. 모르는 말은 질문하고 역할을 바꿔 연습하세요.",
+        "읽기와 대화 내용을 근거로 답한 뒤 자신의 상황으로 바꾸어 말하세요."
+      ],
+      "learnerGuideEn": [
+        "Check the goals and diagnostic, then ask about unfamiliar expressions.",
+        "Read for evidence, swap roles, and adapt the conversation to your own situation."
+      ],
+      "teacherGuide": [
+        "0~4분: 수업 전 진단과 목적 확인",
+        "4~10분: 대화 듣기와 핵심 표현 확인. 교사가 원문을 직접 읽습니다.",
+        "10~18분: 읽기 근거 확인과 표현 교체 연습",
+        "18~26분: 정보차 역할극, 역할 교환, 조건 변경",
+        "26~30분: 사후 내용 확인과 수행 루브릭 기록, 다음 과제 합의",
+        "발음 교정: 노란 끈에서 ㄴ과 된소리 ㄲ을 분리해 들려준 뒤 전체 묘사를 다시 말하게 합니다.",
+        "오류 진단: 파란색 우산만 반복하면 다른 우산과 구별되는 표식을 추가 질문으로 끌어냅니다."
+      ],
+      "activities": {
+        "listening": "교사가 대화문을 두 번 읽습니다. 첫 번째는 상황, 두 번째는 선택·조건을 메모하세요.",
+        "speaking": "비슷한 물건 세 개를 묘사하고 색 이외의 특징 두 가지를 질문해서 주인을 확인하세요.",
+        "reading": "본문에서 결정의 이유와 최종 선택에 밑줄을 그으세요.",
+        "writing": "잃어버린 물건을 가정하여 색·모양·표식과 마지막으로 본 장소를 80자 안팎으로 적으세요.",
+        "roleplay": "비슷한 물건 세 개를 묘사하고 색 이외의 특징 두 가지를 질문해서 주인을 확인하세요."
+      },
+      "performanceTask": {
+        "instruction": "비슷한 물건 세 개를 묘사하고 색 이외의 특징 두 가지를 질문해서 주인을 확인하세요.",
+        "successCriteria": [
+          "정보를 본문과 맞게 전달한다.",
+          "상대의 질문에 반응하고 확인한다.",
+          "목표 표현을 사용하여 선택이나 조건을 말한다."
+        ]
+      },
+      "homework": "잃어버린 물건을 가정하여 색·모양·표식과 마지막으로 본 장소를 80자 안팎으로 적으세요.",
+      "assessment": [
+        {
+          "question": "우산을 잃어버린 곳은?",
+          "answer": "버스",
+          "choices": [
+            "지하철",
+            "도서관",
+            "버스"
+          ],
+          "answerIndex": 2,
+          "skill": "reading",
+          "explanation": "근거: 엘라는 버스에서 파란 우산을 잃어버렸어요.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "엘라는 버스에서 파란 우산을 잃어버렸어요."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "우산을 구별한 특징은?",
+          "answer": "노란 끈",
+          "choices": [
+            "노란 끈",
+            "빨간 손잡이",
+            "흰 무늬"
+          ],
+          "answerIndex": 0,
+          "skill": "vocabulary",
+          "explanation": "근거: 손잡이에 노란 끈이 달려 있어요.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "손잡이에 노란 끈이 달려 있어요."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "맞는 묘사는?",
+          "answer": "노란 끈이 달린 파란 우산",
+          "choices": [
+            "끈이 없는 우산",
+            "노란 끈이 달린 파란 우산",
+            "노란색 우산"
+          ],
+          "answerIndex": 1,
+          "skill": "grammar",
+          "explanation": "근거: 엘라: 노란 끈이 달린 파란 우산이에요.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "엘라: 노란 끈이 달린 파란 우산이에요."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        }
+      ]
+    },
+    {
+      "id": "HS4-S2-04",
+      "title": "택배 수령 장소 바꾸기",
+      "level": "A2",
+      "version": "independent-v1",
+      "durationMinutes": 30,
+      "objectives": [
+        "배송 기사와 수령자가 통화합니다. 관리실이 닫힌 경우에도 가능한 대안을 합의하세요.",
+        "대신으로 대안을 말하고 -아/어 주시겠어요?로 정중히 부탁합니다."
+      ],
+      "objectivesEn": [
+        "Understand the scenario and negotiate an appropriate response.",
+        "Use the target expression and explain your choice."
+      ],
+      "vocabulary": [
+        {
+          "ko": "택배",
+          "en": "parcel"
+        },
+        {
+          "ko": "관리실",
+          "en": "management office"
+        },
+        {
+          "ko": "맡기다",
+          "en": "to leave in care"
+        },
+        {
+          "ko": "문자",
+          "en": "text message"
+        }
+      ],
+      "grammar": [
+        "대신으로 대안을 말하고 -아/어 주시겠어요?로 정중히 부탁합니다."
+      ],
+      "reading": "리암은 오후에 집을 비울 예정이에요. 택배 기사에게 문 앞 대신 관리실에 물건을 맡겨 달라고 부탁했어요. 관리실은 여섯 시에 문을 닫아요. 리암은 다섯 시 반까지 택배를 찾기로 했어요.",
+      "dialogue": [
+        "리암: 오늘 오후에는 집에 없어요.",
+        "기사: 어디에 맡겨 드릴까요?",
+        "리암: 관리실에 맡겨 주시겠어요?",
+        "기사: 네. 도착하면 문자 드릴게요."
+      ],
+      "learnerGuide": [
+        "먼저 목표와 진단을 확인하세요. 모르는 말은 질문하고 역할을 바꿔 연습하세요.",
+        "읽기와 대화 내용을 근거로 답한 뒤 자신의 상황으로 바꾸어 말하세요."
+      ],
+      "learnerGuideEn": [
+        "Check the goals and diagnostic, then ask about unfamiliar expressions.",
+        "Read for evidence, swap roles, and adapt the conversation to your own situation."
+      ],
+      "teacherGuide": [
+        "0~4분: 수업 전 진단과 목적 확인",
+        "4~10분: 대화 듣기와 핵심 표현 확인. 교사가 원문을 직접 읽습니다.",
+        "10~18분: 읽기 근거 확인과 표현 교체 연습",
+        "18~26분: 정보차 역할극, 역할 교환, 조건 변경",
+        "26~30분: 사후 내용 확인과 수행 루브릭 기록, 다음 과제 합의",
+        "발음 교정: 맡겨의 자연스러운 소리를 교사가 읽어 주고 맡아요와 맡겨요의 의미 차이를 확인합니다.",
+        "오류 진단: 문 앞 대신에만 말하면 맡길 장소를 완성하도록 어디에요?라고 되묻습니다."
+      ],
+      "activities": {
+        "listening": "교사가 대화문을 두 번 읽습니다. 첫 번째는 상황, 두 번째는 선택·조건을 메모하세요.",
+        "speaking": "배송 기사와 수령자가 통화합니다. 관리실이 닫힌 경우에도 가능한 대안을 합의하세요.",
+        "reading": "본문에서 결정의 이유와 최종 선택에 밑줄을 그으세요.",
+        "writing": "수령 장소·이유·수령 가능 시간을 포함한 정중한 배송 요청 메시지를 쓰세요. 실제 주소는 쓰지 마세요.",
+        "roleplay": "배송 기사와 수령자가 통화합니다. 관리실이 닫힌 경우에도 가능한 대안을 합의하세요."
+      },
+      "performanceTask": {
+        "instruction": "배송 기사와 수령자가 통화합니다. 관리실이 닫힌 경우에도 가능한 대안을 합의하세요.",
+        "successCriteria": [
+          "정보를 본문과 맞게 전달한다.",
+          "상대의 질문에 반응하고 확인한다.",
+          "목표 표현을 사용하여 선택이나 조건을 말한다."
+        ]
+      },
+      "homework": "수령 장소·이유·수령 가능 시간을 포함한 정중한 배송 요청 메시지를 쓰세요. 실제 주소는 쓰지 마세요.",
+      "assessment": [
+        {
+          "question": "맡기기로 한 곳은?",
+          "answer": "관리실",
+          "choices": [
+            "문 앞",
+            "관리실",
+            "이웃집"
+          ],
+          "answerIndex": 1,
+          "skill": "reading",
+          "explanation": "근거: 택배 기사에게 문 앞 대신 관리실에 물건을 맡겨 달라고 부탁했어요.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "택배 기사에게 문 앞 대신 관리실에 물건을 맡겨 달라고 부탁했어요."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "관리실은 몇 시에 닫아요?",
+          "answer": "여섯 시",
+          "choices": [
+            "다섯 시",
+            "다섯 시 반",
+            "여섯 시"
+          ],
+          "answerIndex": 2,
+          "skill": "vocabulary",
+          "explanation": "근거: 관리실은 여섯 시에 문을 닫아요.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "관리실은 여섯 시에 문을 닫아요."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "정중한 부탁은?",
+          "answer": "맡겨 주시겠어요?",
+          "choices": [
+            "맡겨 주시겠어요?",
+            "맡겨 주셨네요.",
+            "맡기지 않았어요."
+          ],
+          "answerIndex": 0,
+          "skill": "interaction",
+          "explanation": "근거: 리암: 관리실에 맡겨 주시겠어요?",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "리암: 관리실에 맡겨 주시겠어요?"
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        }
+      ]
+    },
+    {
+      "id": "HS4-S2-05",
+      "title": "교환 조건을 묻고 선택하기",
+      "level": "A2",
+      "version": "independent-v1",
+      "durationMinutes": 30,
+      "objectives": [
+        "교환 가능한 상품과 재고표를 보고 점원은 선택지를 설명하고 손님은 이유를 붙여 결정하세요.",
+        "-거나로 선택 가능한 대안을 나열하고 -아/어 본 뒤로 확인 후의 결정을 말합니다."
+      ],
+      "objectivesEn": [
+        "Understand the scenario and negotiate an appropriate response.",
+        "Use the target expression and explain your choice."
+      ],
+      "vocabulary": [
+        {
+          "ko": "교환",
+          "en": "exchange"
+        },
+        {
+          "ko": "환불",
+          "en": "refund"
+        },
+        {
+          "ko": "영수증",
+          "en": "receipt"
+        },
+        {
+          "ko": "사이즈",
+          "en": "size"
+        }
+      ],
+      "grammar": [
+        "-거나로 선택 가능한 대안을 나열하고 -아/어 본 뒤로 확인 후의 결정을 말합니다."
+      ],
+      "reading": "나디아는 어제 산 셔츠가 작아서 가게에 다시 갔어요. 영수증은 있지만 같은 색의 큰 셔츠는 없었어요. 직원은 다른 색으로 교환하거나 환불받을 수 있다고 설명했어요. 나디아는 다른 색도 입어 본 뒤 파란 셔츠로 교환했어요.",
+      "dialogue": [
+        "나디아: 이 셔츠를 교환할 수 있을까요?",
+        "직원: 영수증을 보여 주시겠어요?",
+        "나디아: 같은 색으로 큰 사이즈가 있나요?",
+        "직원: 그 색은 없지만 파란색은 있어요."
+      ],
+      "learnerGuide": [
+        "먼저 목표와 진단을 확인하세요. 모르는 말은 질문하고 역할을 바꿔 연습하세요.",
+        "읽기와 대화 내용을 근거로 답한 뒤 자신의 상황으로 바꾸어 말하세요."
+      ],
+      "learnerGuideEn": [
+        "Check the goals and diagnostic, then ask about unfamiliar expressions.",
+        "Read for evidence, swap roles, and adapt the conversation to your own situation."
+      ],
+      "teacherGuide": [
+        "0~4분: 수업 전 진단과 목적 확인",
+        "4~10분: 대화 듣기와 핵심 표현 확인. 교사가 원문을 직접 읽습니다.",
+        "10~18분: 읽기 근거 확인과 표현 교체 연습",
+        "18~26분: 정보차 역할극, 역할 교환, 조건 변경",
+        "26~30분: 사후 내용 확인과 수행 루브릭 기록, 다음 과제 합의",
+        "발음 교정: 교환의 두 음절을 명확히 읽고 교안과 구별되는지 학습자에게 의미를 확인합니다.",
+        "오류 진단: 교환하거나 환불받았어요라고 확정하면 실제 선택은 하나였음을 확인해 결정 문장을 따로 쓰게 합니다."
+      ],
+      "activities": {
+        "listening": "교사가 대화문을 두 번 읽습니다. 첫 번째는 상황, 두 번째는 선택·조건을 메모하세요.",
+        "speaking": "교환 가능한 상품과 재고표를 보고 점원은 선택지를 설명하고 손님은 이유를 붙여 결정하세요.",
+        "reading": "본문에서 결정의 이유와 최종 선택에 밑줄을 그으세요.",
+        "writing": "원하는 물건이 없었던 경험이나 가상 상황을 이유→대안→결정 순서로 5문장 쓰세요.",
+        "roleplay": "교환 가능한 상품과 재고표를 보고 점원은 선택지를 설명하고 손님은 이유를 붙여 결정하세요."
+      },
+      "performanceTask": {
+        "instruction": "교환 가능한 상품과 재고표를 보고 점원은 선택지를 설명하고 손님은 이유를 붙여 결정하세요.",
+        "successCriteria": [
+          "정보를 본문과 맞게 전달한다.",
+          "상대의 질문에 반응하고 확인한다.",
+          "목표 표현을 사용하여 선택이나 조건을 말한다."
+        ]
+      },
+      "homework": "원하는 물건이 없었던 경험이나 가상 상황을 이유→대안→결정 순서로 5문장 쓰세요.",
+      "assessment": [
+        {
+          "question": "가게에 다시 간 이유는?",
+          "answer": "셔츠가 작아서",
+          "choices": [
+            "색이 어두워서",
+            "영수증이 없어서",
+            "셔츠가 작아서"
+          ],
+          "answerIndex": 2,
+          "skill": "reading",
+          "explanation": "근거: 나디아는 어제 산 셔츠가 작아서 가게에 다시 갔어요.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "나디아는 어제 산 셔츠가 작아서 가게에 다시 갔어요."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "최종 선택은?",
+          "answer": "파란 셔츠로 교환",
+          "choices": [
+            "파란 셔츠로 교환",
+            "같은 색 큰 셔츠",
+            "바로 환불"
+          ],
+          "answerIndex": 0,
+          "skill": "vocabulary",
+          "explanation": "근거: 나디아는 다른 색도 입어 본 뒤 파란 셔츠로 교환했어요.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "나디아는 다른 색도 입어 본 뒤 파란 셔츠로 교환했어요."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "제시된 대안 표현은?",
+          "answer": "교환하거나 환불받다",
+          "choices": [
+            "교환한 적이 있다",
+            "교환하거나 환불받다",
+            "교환하기 전에 사다"
+          ],
+          "answerIndex": 1,
+          "skill": "grammar",
+          "explanation": "근거: 직원은 다른 색으로 교환하거나 환불받을 수 있다고 설명했어요.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "직원은 다른 색으로 교환하거나 환불받을 수 있다고 설명했어요."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        }
+      ]
+    },
+    {
+      "id": "HS4-S3-05",
+      "title": "회의 일정의 충돌 조정하기",
+      "level": "B1",
+      "version": "independent-v1",
+      "durationMinutes": 30,
+      "objectives": [
+        "마감이 다른 세 사람의 일정표를 보고 불가능한 안을 설명한 뒤 실행 가능한 대안을 합의하세요.",
+        "-(으)ㄹ 수는 없지만으로 제약을 밝히고 -(으)ㄴ다면/라면으로 가능한 조건을 제시합니다."
+      ],
+      "objectivesEn": [
+        "Understand the scenario and negotiate an appropriate response.",
+        "Use the target expression and explain your choice."
+      ],
+      "vocabulary": [
+        {
+          "ko": "안건",
+          "en": "agenda item"
+        },
+        {
+          "ko": "기한",
+          "en": "deadline"
+        },
+        {
+          "ko": "보완하다",
+          "en": "to supplement"
+        },
+        {
+          "ko": "제약",
+          "en": "constraint"
+        }
+      ],
+      "grammar": [
+        "-(으)ㄹ 수는 없지만으로 제약을 밝히고 -(으)ㄴ다면/라면으로 가능한 조건을 제시합니다."
+      ],
+      "reading": "지수 팀은 목요일 오전에 회의를 열려고 했다. 그러나 통역 담당자는 그 시간에 다른 교육을 진행한다. 금요일로 미루면 자료 제출 기한을 넘긴다. 팀은 목요일 오후에 핵심 안건을 먼저 논의하고 세부 내용은 문서로 보완하기로 했다. 모든 팀원이 같은 시간을 길게 비울 수는 없지만, 결정에 필요한 질문은 회의 전에 모으기로 했다.",
+      "dialogue": [
+        "지수: 금요일로 미루기는 어려울 것 같아요.",
+        "담당자: 목요일 오후라면 삼십 분은 참여할 수 있어요.",
+        "지수: 핵심 안건부터 다루고 나머지는 문서로 정리할까요?",
+        "담당자: 네. 질문을 미리 공유하면 시간을 줄일 수 있겠네요."
+      ],
+      "learnerGuide": [
+        "먼저 목표와 진단을 확인하세요. 모르는 말은 질문하고 역할을 바꿔 연습하세요.",
+        "읽기와 대화 내용을 근거로 답한 뒤 자신의 상황으로 바꾸어 말하세요."
+      ],
+      "learnerGuideEn": [
+        "Check the goals and diagnostic, then ask about unfamiliar expressions.",
+        "Read for evidence, swap roles, and adapt the conversation to your own situation."
+      ],
+      "teacherGuide": [
+        "0~4분: 수업 전 진단과 목적 확인",
+        "4~10분: 대화 듣기와 핵심 표현 확인. 교사가 원문을 직접 읽습니다.",
+        "10~18분: 읽기 근거 확인과 표현 교체 연습",
+        "18~26분: 정보차 역할극, 역할 교환, 조건 변경",
+        "26~30분: 사후 내용 확인과 수행 루브릭 기록, 다음 과제 합의",
+        "발음 교정: 목요일 오후처럼 시간과 일정의 핵심어에 적절한 끊어 읽기를 표시합니다.",
+        "오류 진단: 모든 사람이 참여해요라고 과장하면 일부만 가능한 조건과 문서 보완을 분리해 말하도록 유도합니다."
+      ],
+      "activities": {
+        "listening": "교사가 대화문을 두 번 읽습니다. 첫 번째는 상황, 두 번째는 선택·조건을 메모하세요.",
+        "speaking": "마감이 다른 세 사람의 일정표를 보고 불가능한 안을 설명한 뒤 실행 가능한 대안을 합의하세요.",
+        "reading": "본문에서 결정의 이유와 최종 선택에 밑줄을 그으세요.",
+        "writing": "회의 변경 요청 메일을 목적·제약·대안·확인 요청의 네 부분으로 쓰세요.",
+        "roleplay": "마감이 다른 세 사람의 일정표를 보고 불가능한 안을 설명한 뒤 실행 가능한 대안을 합의하세요."
+      },
+      "performanceTask": {
+        "instruction": "마감이 다른 세 사람의 일정표를 보고 불가능한 안을 설명한 뒤 실행 가능한 대안을 합의하세요.",
+        "successCriteria": [
+          "정보를 본문과 맞게 전달한다.",
+          "상대의 질문에 반응하고 확인한다.",
+          "목표 표현을 사용하여 선택이나 조건을 말한다."
+        ]
+      },
+      "homework": "회의 변경 요청 메일을 목적·제약·대안·확인 요청의 네 부분으로 쓰세요.",
+      "assessment": [
+        {
+          "question": "금요일로 미루기 어려운 이유는?",
+          "answer": "제출 기한을 넘겨서",
+          "choices": [
+            "교육이 없어서",
+            "제출 기한을 넘겨서",
+            "통역이 끝나서"
+          ],
+          "answerIndex": 1,
+          "skill": "reading",
+          "explanation": "근거: 금요일로 미루면 자료 제출 기한을 넘긴다.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "금요일로 미루면 자료 제출 기한을 넘긴다."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "합의한 방법은?",
+          "answer": "목요일 오후 핵심 안건 우선",
+          "choices": [
+            "회의를 모두 취소",
+            "금요일 하루 종일 회의",
+            "목요일 오후 핵심 안건 우선"
+          ],
+          "answerIndex": 2,
+          "skill": "interaction",
+          "explanation": "근거: 팀은 목요일 오후에 핵심 안건을 먼저 논의하고 세부 내용은 문서로 보완하기로 했다.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "팀은 목요일 오후에 핵심 안건을 먼저 논의하고 세부 내용은 문서로 보완하기로 했다."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "나머지 내용을 보완할 수단은?",
+          "answer": "문서",
+          "choices": [
+            "문서",
+            "추가 출장",
+            "전화 녹음 공개"
+          ],
+          "answerIndex": 0,
+          "skill": "vocabulary",
+          "explanation": "근거: 팀은 목요일 오후에 핵심 안건을 먼저 논의하고 세부 내용은 문서로 보완하기로 했다.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "팀은 목요일 오후에 핵심 안건을 먼저 논의하고 세부 내용은 문서로 보완하기로 했다."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        }
+      ]
+    },
+    {
+      "id": "HS4-S3-06",
+      "title": "공동 생활의 비용 나누기",
+      "level": "B1",
+      "version": "independent-v1",
+      "durationMinutes": 30,
+      "objectives": [
+        "사용 시간이 다른 세 사람의 비용안을 비교하고 모두가 수용할 수 있는 기준과 누락 처리 방법을 제시하세요.",
+        "-에 따라로 기준을, -와/과 관계없이로 예외가 없는 조건을 설명합니다."
+      ],
+      "objectivesEn": [
+        "Understand the scenario and negotiate an appropriate response.",
+        "Use the target expression and explain your choice."
+      ],
+      "vocabulary": [
+        {
+          "ko": "기본요금",
+          "en": "base fee"
+        },
+        {
+          "ko": "균등하게",
+          "en": "equally"
+        },
+        {
+          "ko": "부담하다",
+          "en": "to bear a cost"
+        },
+        {
+          "ko": "누락",
+          "en": "omission"
+        }
+      ],
+      "grammar": [
+        "-에 따라로 기준을, -와/과 관계없이로 예외가 없는 조건을 설명합니다."
+      ],
+      "reading": "세 사람은 공동 작업실의 냉난방비를 똑같이 나누어 왔다. 그러나 주말에만 사용하는 민은 사용 시간이 적다는 점을 이야기했다. 다른 두 사람은 기본요금은 사용 시간과 관계없이 발생한다고 설명했다. 세 사람은 기본요금을 균등하게 나누고 추가 사용료는 기록된 시간에 따라 부담하는 방식을 한 달간 시험해 보기로 했다. 사용 기록이 누락되면 어떻게 할지는 다시 정해야 했다.",
+      "dialogue": [
+        "민: 같은 금액을 내는 게 조금 부담스러워요.",
+        "수아: 기본요금은 모두 함께 내야 하지 않을까요?",
+        "민: 기본요금과 추가 사용료를 나누어 계산하면 어때요?",
+        "수아: 좋아요. 기록이 빠진 경우의 기준도 정해요."
+      ],
+      "learnerGuide": [
+        "먼저 목표와 진단을 확인하세요. 모르는 말은 질문하고 역할을 바꿔 연습하세요.",
+        "읽기와 대화 내용을 근거로 답한 뒤 자신의 상황으로 바꾸어 말하세요."
+      ],
+      "learnerGuideEn": [
+        "Check the goals and diagnostic, then ask about unfamiliar expressions.",
+        "Read for evidence, swap roles, and adapt the conversation to your own situation."
+      ],
+      "teacherGuide": [
+        "0~4분: 수업 전 진단과 목적 확인",
+        "4~10분: 대화 듣기와 핵심 표현 확인. 교사가 원문을 직접 읽습니다.",
+        "10~18분: 읽기 근거 확인과 표현 교체 연습",
+        "18~26분: 정보차 역할극, 역할 교환, 조건 변경",
+        "26~30분: 사후 내용 확인과 수행 루브릭 기록, 다음 과제 합의",
+        "발음 교정: 기본요금과 추가 사용료의 대조를 억양과 문장 경계로 분명하게 표현하도록 돕습니다.",
+        "오류 진단: 많이 쓰면 기본요금도 많아요라고 말하면 고정비와 변동비의 근거를 본문에서 구별하게 합니다."
+      ],
+      "activities": {
+        "listening": "교사가 대화문을 두 번 읽습니다. 첫 번째는 상황, 두 번째는 선택·조건을 메모하세요.",
+        "speaking": "사용 시간이 다른 세 사람의 비용안을 비교하고 모두가 수용할 수 있는 기준과 누락 처리 방법을 제시하세요.",
+        "reading": "본문에서 결정의 이유와 최종 선택에 밑줄을 그으세요.",
+        "writing": "공동 비용 분담안 두 가지의 장단점을 비교하고 한 가지를 조건부로 제안하세요.",
+        "roleplay": "사용 시간이 다른 세 사람의 비용안을 비교하고 모두가 수용할 수 있는 기준과 누락 처리 방법을 제시하세요."
+      },
+      "performanceTask": {
+        "instruction": "사용 시간이 다른 세 사람의 비용안을 비교하고 모두가 수용할 수 있는 기준과 누락 처리 방법을 제시하세요.",
+        "successCriteria": [
+          "정보를 본문과 맞게 전달한다.",
+          "상대의 질문에 반응하고 확인한다.",
+          "목표 표현을 사용하여 선택이나 조건을 말한다."
+        ]
+      },
+      "homework": "공동 비용 분담안 두 가지의 장단점을 비교하고 한 가지를 조건부로 제안하세요.",
+      "assessment": [
+        {
+          "question": "함께 균등하게 나누는 비용은?",
+          "answer": "기본요금",
+          "choices": [
+            "모든 사용료",
+            "벌금",
+            "기본요금"
+          ],
+          "answerIndex": 2,
+          "skill": "reading",
+          "explanation": "근거: 세 사람은 기본요금을 균등하게 나누고 추가 사용료는 기록된 시간에 따라 부담하는 방식을 한 달간 시험해 보기로 했다.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "세 사람은 기본요금을 균등하게 나누고 추가 사용료는 기록된 시간에 따라 부담하는 방식을 한 달간 시험해 보기로 했다."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "추가 사용료의 기준은?",
+          "answer": "기록된 시간",
+          "choices": [
+            "기록된 시간",
+            "나이",
+            "방문 순서"
+          ],
+          "answerIndex": 0,
+          "skill": "vocabulary",
+          "explanation": "근거: 세 사람은 기본요금을 균등하게 나누고 추가 사용료는 기록된 시간에 따라 부담하는 방식을 한 달간 시험해 보기로 했다.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "세 사람은 기본요금을 균등하게 나누고 추가 사용료는 기록된 시간에 따라 부담하는 방식을 한 달간 시험해 보기로 했다."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "아직 결정되지 않은 것은?",
+          "answer": "기록 누락 처리",
+          "choices": [
+            "기본요금 존재",
+            "기록 누락 처리",
+            "민의 이름"
+          ],
+          "answerIndex": 1,
+          "skill": "interaction",
+          "explanation": "근거: 사용 기록이 누락되면 어떻게 할지는 다시 정해야 했다.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "사용 기록이 누락되면 어떻게 할지는 다시 정해야 했다."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        }
+      ]
+    },
+    {
+      "id": "HS4-S3-07",
+      "title": "설문 결과를 과장 없이 전달하기",
+      "level": "B2",
+      "version": "independent-v1",
+      "durationMinutes": 30,
+      "objectives": [
+        "설문 요약문에서 과장된 표현을 찾아 표본·수치·확인되지 않은 정보를 구분한 보고문을 합의하세요.",
+        "-에 한정하면으로 주장의 범위를 제한하고 -다고 단정하기 어렵다로 근거의 한계를 설명합니다."
+      ],
+      "objectivesEn": [
+        "Understand the scenario and negotiate an appropriate response.",
+        "Use the target expression and explain your choice."
+      ],
+      "vocabulary": [
+        {
+          "ko": "응답자",
+          "en": "respondent"
+        },
+        {
+          "ko": "자발적",
+          "en": "voluntary"
+        },
+        {
+          "ko": "범위",
+          "en": "scope"
+        },
+        {
+          "ko": "단정하다",
+          "en": "to conclude categorically"
+        }
+      ],
+      "grammar": [
+        "-에 한정하면으로 주장의 범위를 제한하고 -다고 단정하기 어렵다로 근거의 한계를 설명합니다."
+      ],
+      "reading": "문화센터는 저녁 강좌 수요를 알아보기 위해 기존 수강생에게 설문 링크를 보냈다. 응답자 80명 중 56명이 저녁 수업을 원했다. 담당자는 이를 지역 주민의 70퍼센트가 저녁 수업을 원한다는 뜻으로 발표하려 했다. 동료는 응답자가 기존 수강생 중 자발적으로 참여한 사람이라는 점을 지적했다. 센터는 결과의 범위를 응답자로 한정하고, 아직 참여하지 않은 주민의 의견도 별도로 모으기로 했다.",
+      "dialogue": [
+        "담당자: 주민 열 명 중 일곱 명이 찬성한다고 써도 될까요?",
+        "동료: 이번 조사의 응답자 범위부터 밝혀야 할 것 같아요.",
+        "담당자: 기존 수강생 응답자의 칠십 퍼센트라고 바꾸겠습니다.",
+        "동료: 응답하지 않은 사람의 의견은 확인되지 않았다는 점도 넣어요."
+      ],
+      "learnerGuide": [
+        "먼저 목표와 진단을 확인하세요. 모르는 말은 질문하고 역할을 바꿔 연습하세요.",
+        "읽기와 대화 내용을 근거로 답한 뒤 자신의 상황으로 바꾸어 말하세요."
+      ],
+      "learnerGuideEn": [
+        "Check the goals and diagnostic, then ask about unfamiliar expressions.",
+        "Read for evidence, swap roles, and adapt the conversation to your own situation."
+      ],
+      "teacherGuide": [
+        "0~4분: 수업 전 진단과 목적 확인",
+        "4~10분: 대화 듣기와 핵심 표현 확인. 교사가 원문을 직접 읽습니다.",
+        "10~18분: 읽기 근거 확인과 표현 교체 연습",
+        "18~26분: 정보차 역할극, 역할 교환, 조건 변경",
+        "26~30분: 사후 내용 확인과 수행 루브릭 기록, 다음 과제 합의",
+        "발음 교정: 수치 오십육 명과 팔십 명의 명료도를 확인하고 핵심 한계 앞에서 끊어 읽게 합니다.",
+        "오류 진단: 주민 전체의 의견이라고 일반화하면 모집 대상과 실제 응답자를 각각 표시하고 주장을 고치게 합니다."
+      ],
+      "activities": {
+        "listening": "교사가 대화문을 두 번 읽습니다. 첫 번째는 상황, 두 번째는 선택·조건을 메모하세요.",
+        "speaking": "설문 요약문에서 과장된 표현을 찾아 표본·수치·확인되지 않은 정보를 구분한 보고문을 합의하세요.",
+        "reading": "본문에서 결정의 이유와 최종 선택에 밑줄을 그으세요.",
+        "writing": "가상의 설문 결과를 120자 안팎으로 요약하고, 해석상의 한계를 한 문장 붙이세요.",
+        "roleplay": "설문 요약문에서 과장된 표현을 찾아 표본·수치·확인되지 않은 정보를 구분한 보고문을 합의하세요."
+      },
+      "performanceTask": {
+        "instruction": "설문 요약문에서 과장된 표현을 찾아 표본·수치·확인되지 않은 정보를 구분한 보고문을 합의하세요.",
+        "successCriteria": [
+          "정보를 본문과 맞게 전달한다.",
+          "상대의 질문에 반응하고 확인한다.",
+          "목표 표현을 사용하여 선택이나 조건을 말한다."
+        ]
+      },
+      "homework": "가상의 설문 결과를 120자 안팎으로 요약하고, 해석상의 한계를 한 문장 붙이세요.",
+      "assessment": [
+        {
+          "question": "저녁 수업을 원하는 응답자는?",
+          "answer": "56명",
+          "choices": [
+            "80명",
+            "56명",
+            "70명"
+          ],
+          "answerIndex": 1,
+          "skill": "reading",
+          "explanation": "근거: 응답자 80명 중 56명이 저녁 수업을 원했다.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "응답자 80명 중 56명이 저녁 수업을 원했다."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "결과를 한정할 집단은?",
+          "answer": "기존 수강생 중 응답자",
+          "choices": [
+            "모든 주민",
+            "전국 학습자",
+            "기존 수강생 중 응답자"
+          ],
+          "answerIndex": 2,
+          "skill": "interaction",
+          "explanation": "근거: 기존 수강생 응답자의 칠십 퍼센트",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "기존 수강생 응답자의 칠십 퍼센트"
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "센터가 추가로 할 일은?",
+          "answer": "미참여 주민 의견 수집",
+          "choices": [
+            "미참여 주민 의견 수집",
+            "조사를 숨기기",
+            "모든 강좌 폐쇄"
+          ],
+          "answerIndex": 0,
+          "skill": "vocabulary",
+          "explanation": "근거: 센터는 결과의 범위를 응답자로 한정하고, 아직 참여하지 않은 주민의 의견도 별도로 모으기로 했다.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "센터는 결과의 범위를 응답자로 한정하고, 아직 참여하지 않은 주민의 의견도 별도로 모으기로 했다."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        }
+      ]
+    },
+    {
+      "id": "HS4-S4-03",
+      "title": "지역 기록의 공개 범위 협의하기",
+      "level": "C1",
+      "version": "independent-v1",
+      "durationMinutes": 30,
+      "objectives": [
+        "기록 담당자·인터뷰 참여자·연구자가 되어 공개 목적과 위험을 비교하고 구간별 동의 절차를 작성하세요.",
+        "-을 전제로로 기존 조건을, -더라도로 조치 후에도 남는 한계를 드러냅니다."
+      ],
+      "objectivesEn": [
+        "Understand the scenario and negotiate an appropriate response.",
+        "Use the target expression and explain your choice."
+      ],
+      "vocabulary": [
+        {
+          "ko": "열람",
+          "en": "inspection"
+        },
+        {
+          "ko": "전제",
+          "en": "premise"
+        },
+        {
+          "ko": "구간",
+          "en": "segment"
+        },
+        {
+          "ko": "접근 범위",
+          "en": "scope of access"
+        }
+      ],
+      "grammar": [
+        "-을 전제로로 기존 조건을, -더라도로 조치 후에도 남는 한계를 드러냅니다."
+      ],
+      "reading": "마을 기록관은 오래된 주민 인터뷰를 온라인에 공개하려고 한다. 기록을 만든 당시에는 현장에서 자료를 열람하는 것만을 전제로 동의를 받았다. 일부 주민은 지역 역사를 널리 알리는 데 찬성하지만, 검색으로 가족의 과거가 쉽게 드러날 수 있다는 점을 걱정한다. 담당자는 이름을 지우면 문제가 모두 해결된다고 보았다. 그러나 특정 직업과 사건의 조합만으로도 인물을 알아볼 가능성이 남는다. 기록관은 공개 목적과 접근 범위를 새로 설명하고, 당사자가 구간별로 공개를 선택하거나 보류할 수 있는 절차를 마련하기로 했다.",
+      "dialogue": [
+        "기록자: 이름을 지우면 바로 공개할 수 있지 않을까요?",
+        "주민: 내용으로 누구인지 짐작할 수도 있어요.",
+        "기록자: 온라인 공개의 범위를 다시 설명하고 의견을 받을게요.",
+        "주민: 전체 찬반뿐 아니라 일부 구간만 보류할 수 있으면 좋겠어요."
+      ],
+      "learnerGuide": [
+        "먼저 목표와 진단을 확인하세요. 모르는 말은 질문하고 역할을 바꿔 연습하세요.",
+        "읽기와 대화 내용을 근거로 답한 뒤 자신의 상황으로 바꾸어 말하세요."
+      ],
+      "learnerGuideEn": [
+        "Check the goals and diagnostic, then ask about unfamiliar expressions.",
+        "Read for evidence, swap roles, and adapt the conversation to your own situation."
+      ],
+      "teacherGuide": [
+        "0~4분: 수업 전 진단과 목적 확인",
+        "4~10분: 대화 듣기와 핵심 표현 확인. 교사가 원문을 직접 읽습니다.",
+        "10~18분: 읽기 근거 확인과 표현 교체 연습",
+        "18~26분: 정보차 역할극, 역할 교환, 조건 변경",
+        "26~30분: 사후 내용 확인과 수행 루브릭 기록, 다음 과제 합의",
+        "발음 교정: 조건·양보·최종 제안의 문장 경계를 구별하여 듣는 사람이 논거를 따라갈 수 있게 읽게 합니다.",
+        "오류 진단: 이름을 지우면 안전이 보장된다고 단정하면 조합으로 인물이 드러날 가능성을 근거로 표현을 제한하게 합니다."
+      ],
+      "activities": {
+        "listening": "교사가 대화문을 두 번 읽습니다. 첫 번째는 상황, 두 번째는 선택·조건을 메모하세요.",
+        "speaking": "기록 담당자·인터뷰 참여자·연구자가 되어 공개 목적과 위험을 비교하고 구간별 동의 절차를 작성하세요.",
+        "reading": "본문에서 결정의 이유와 최종 선택에 밑줄을 그으세요.",
+        "writing": "일괄 동의와 구간별 동의의 장단점을 구별하고 철회 후 처리까지 포함한 제안문을 쓰세요. 실제 개인정보는 쓰지 마세요.",
+        "roleplay": "기록 담당자·인터뷰 참여자·연구자가 되어 공개 목적과 위험을 비교하고 구간별 동의 절차를 작성하세요."
+      },
+      "performanceTask": {
+        "instruction": "기록 담당자·인터뷰 참여자·연구자가 되어 공개 목적과 위험을 비교하고 구간별 동의 절차를 작성하세요.",
+        "successCriteria": [
+          "정보를 본문과 맞게 전달한다.",
+          "상대의 질문에 반응하고 확인한다.",
+          "목표 표현을 사용하여 선택이나 조건을 말한다."
+        ]
+      },
+      "homework": "일괄 동의와 구간별 동의의 장단점을 구별하고 철회 후 처리까지 포함한 제안문을 쓰세요. 실제 개인정보는 쓰지 마세요.",
+      "assessment": [
+        {
+          "question": "최초 동의의 전제는?",
+          "answer": "현장 열람",
+          "choices": [
+            "온라인 전체 공개",
+            "현장 열람",
+            "판매 목적 이용"
+          ],
+          "answerIndex": 1,
+          "skill": "reading",
+          "explanation": "근거: 기록을 만든 당시에는 현장에서 자료를 열람하는 것만을 전제로 동의를 받았다.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "기록을 만든 당시에는 현장에서 자료를 열람하는 것만을 전제로 동의를 받았다."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "이름 삭제 후에도 남는 가능성은?",
+          "answer": "내용 조합으로 인물 추정",
+          "choices": [
+            "모든 위험 소멸",
+            "동의 자동 확정",
+            "내용 조합으로 인물 추정"
+          ],
+          "answerIndex": 2,
+          "skill": "vocabulary",
+          "explanation": "근거: 특정 직업과 사건의 조합만으로도 인물을 알아볼 가능성이 남는다.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "특정 직업과 사건의 조합만으로도 인물을 알아볼 가능성이 남는다."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "새 절차의 특징은?",
+          "answer": "구간별 선택과 보류",
+          "choices": [
+            "구간별 선택과 보류",
+            "전체 공개만 허용",
+            "주민 의견 제외"
+          ],
+          "answerIndex": 0,
+          "skill": "interaction",
+          "explanation": "근거: 당사자가 구간별로 공개를 선택하거나 보류할 수 있는 절차",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "당사자가 구간별로 공개를 선택하거나 보류할 수 있는 절차"
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        }
+      ]
+    },
+    {
+      "id": "HS4-S4-04",
+      "title": "원격 근무 성과 지표 재설계하기",
+      "level": "C1",
+      "version": "independent-v1",
+      "durationMinutes": 30,
+      "objectives": [
+        "관리자와 구성원으로 나누어 두 사례의 성과를 평가하고 단일 지표가 놓친 점을 설명한 뒤 수정안을 합의하세요.",
+        "-는 대신으로 대안적 조치를 제시하고 -는지는으로 검증할 질문을 간접적으로 표현합니다."
+      ],
+      "objectivesEn": [
+        "Understand the scenario and negotiate an appropriate response.",
+        "Use the target expression and explain your choice."
+      ],
+      "vocabulary": [
+        {
+          "ko": "성과 지표",
+          "en": "performance measure"
+        },
+        {
+          "ko": "기여도",
+          "en": "contribution"
+        },
+        {
+          "ko": "이의 제기",
+          "en": "objection"
+        },
+        {
+          "ko": "난도",
+          "en": "difficulty"
+        }
+      ],
+      "grammar": [
+        "-는 대신으로 대안적 조치를 제시하고 -는지는으로 검증할 질문을 간접적으로 표현합니다."
+      ],
+      "reading": "한 조직은 원격 근무자의 접속 시간을 성과 지표로 사용했다. 접속 시간이 길어진 뒤에도 공동 과제의 지연은 줄지 않았다. 구성원들은 복잡한 과제를 맡은 사람이 단순 업무를 처리한 사람보다 불리해질 수 있다고 지적했다. 관리자는 접속 기록을 모두 버리는 대신 그것이 보여 줄 수 있는 범위를 분명히 하자고 제안했다. 팀은 과제의 난도, 합의한 결과물, 협업에 기여한 근거를 함께 검토하고 평가 결과에 이의를 제기할 절차를 마련했다. 새 지표가 실제 협업을 돕는지는 다음 분기에 다시 확인하기로 했다.",
+      "dialogue": [
+        "관리자: 접속 시간만으로 기여도를 판단하기는 어렵겠네요.",
+        "구성원: 결과물의 난도와 협업 과정도 살펴봐야 해요.",
+        "관리자: 기록의 한계를 설명하고 검토 근거를 남기겠습니다.",
+        "구성원: 평가에 대한 이의 제기 경로도 필요합니다."
+      ],
+      "learnerGuide": [
+        "먼저 목표와 진단을 확인하세요. 모르는 말은 질문하고 역할을 바꿔 연습하세요.",
+        "읽기와 대화 내용을 근거로 답한 뒤 자신의 상황으로 바꾸어 말하세요."
+      ],
+      "learnerGuideEn": [
+        "Check the goals and diagnostic, then ask about unfamiliar expressions.",
+        "Read for evidence, swap roles, and adapt the conversation to your own situation."
+      ],
+      "teacherGuide": [
+        "0~4분: 수업 전 진단과 목적 확인",
+        "4~10분: 대화 듣기와 핵심 표현 확인. 교사가 원문을 직접 읽습니다.",
+        "10~18분: 읽기 근거 확인과 표현 교체 연습",
+        "18~26분: 정보차 역할극, 역할 교환, 조건 변경",
+        "26~30분: 사후 내용 확인과 수행 루브릭 기록, 다음 과제 합의",
+        "발음 교정: 단정과 유보를 전달하는 문장 말미를 구별하고 근거를 나열할 때 일정한 속도를 유지하게 합니다.",
+        "오류 진단: 새 지표로 공정성이 입증됐다고 말하면 시행 계획과 검증 결과를 구분하도록 다음 분기의 재확인 문장을 찾게 합니다."
+      ],
+      "activities": {
+        "listening": "교사가 대화문을 두 번 읽습니다. 첫 번째는 상황, 두 번째는 선택·조건을 메모하세요.",
+        "speaking": "관리자와 구성원으로 나누어 두 사례의 성과를 평가하고 단일 지표가 놓친 점을 설명한 뒤 수정안을 합의하세요.",
+        "reading": "본문에서 결정의 이유와 최종 선택에 밑줄을 그으세요.",
+        "writing": "성과를 측정할 지표 세 가지와 각 지표의 한계·자료 확인 방법을 연결한 3행 표를 작성하세요.",
+        "roleplay": "관리자와 구성원으로 나누어 두 사례의 성과를 평가하고 단일 지표가 놓친 점을 설명한 뒤 수정안을 합의하세요."
+      },
+      "performanceTask": {
+        "instruction": "관리자와 구성원으로 나누어 두 사례의 성과를 평가하고 단일 지표가 놓친 점을 설명한 뒤 수정안을 합의하세요.",
+        "successCriteria": [
+          "정보를 본문과 맞게 전달한다.",
+          "상대의 질문에 반응하고 확인한다.",
+          "목표 표현을 사용하여 선택이나 조건을 말한다."
+        ]
+      },
+      "homework": "성과를 측정할 지표 세 가지와 각 지표의 한계·자료 확인 방법을 연결한 3행 표를 작성하세요.",
+      "assessment": [
+        {
+          "question": "접속 시간 증가 뒤에도 줄지 않은 것은?",
+          "answer": "과제 지연",
+          "choices": [
+            "과제 지연",
+            "조직 규모",
+            "분기 수"
+          ],
+          "answerIndex": 0,
+          "skill": "reading",
+          "explanation": "근거: 접속 시간이 길어진 뒤에도 공동 과제의 지연은 줄지 않았다.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "접속 시간이 길어진 뒤에도 공동 과제의 지연은 줄지 않았다."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "새 평가에 포함되는 것은?",
+          "answer": "결과물과 협업 근거",
+          "choices": [
+            "온라인 표시만",
+            "결과물과 협업 근거",
+            "근무자 나이만"
+          ],
+          "answerIndex": 1,
+          "skill": "vocabulary",
+          "explanation": "근거: 과제의 난도, 합의한 결과물, 협업에 기여한 근거",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "과제의 난도, 합의한 결과물, 협업에 기여한 근거"
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "새 지표의 효과는 언제 다시 확인해요?",
+          "answer": "다음 분기",
+          "choices": [
+            "이미 확정됨",
+            "확인하지 않음",
+            "다음 분기"
+          ],
+          "answerIndex": 2,
+          "skill": "interaction",
+          "explanation": "근거: 새 지표가 실제 협업을 돕는지는 다음 분기에 다시 확인하기로 했다.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "새 지표가 실제 협업을 돕는지는 다음 분기에 다시 확인하기로 했다."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        }
+      ]
+    },
+    {
+      "id": "HS4-S4-05",
+      "title": "공공 안내문의 쉬운 표현 합의하기",
+      "level": "C1",
+      "version": "independent-v1",
+      "durationMinutes": 30,
+      "objectives": [
+        "번역자·행정 담당자·신청자가 되어 용어 정확성과 이해 가능성이 충돌하는 문장을 고치고 행동 확인 질문을 만드세요.",
+        "-되로 원칙과 보완 조건을 함께 제시하고 -만으로로 충분하지 않은 판단 근거를 설명합니다."
+      ],
+      "objectivesEn": [
+        "Understand the scenario and negotiate an appropriate response.",
+        "Use the target expression and explain your choice."
+      ],
+      "vocabulary": [
+        {
+          "ko": "행정 용어",
+          "en": "administrative term"
+        },
+        {
+          "ko": "예외 조건",
+          "en": "exception condition"
+        },
+        {
+          "ko": "신청 순서",
+          "en": "application steps"
+        },
+        {
+          "ko": "수정안",
+          "en": "revision proposal"
+        }
+      ],
+      "grammar": [
+        "-되로 원칙과 보완 조건을 함께 제시하고 -만으로로 충분하지 않은 판단 근거를 설명합니다."
+      ],
+      "reading": "시청은 외국인 주민을 위한 안내문을 고치고 있다. 기존 문서는 정확한 행정 용어를 사용했지만 신청 순서와 예외 조건을 찾기 어려웠다. 번역자는 어려운 용어를 모두 짧은 일상어로 바꾸자고 제안했다. 담당자는 일부 용어가 공식 서류 이름과 연결되므로 무조건 지우면 오히려 신청자가 서류를 잘못 준비할 수 있다고 설명했다. 팀은 핵심 용어는 유지하되 쉬운 설명과 실제 예시를 바로 붙이고, 해야 할 행동을 순서대로 나누었다. 수정안은 문장을 짧게 만든 것만으로 완성됐다고 보지 않고 실제 이용자가 필요한 행동을 찾을 수 있는지 확인하기로 했다.",
+      "dialogue": [
+        "번역자: 전문 용어를 전부 없애면 쉬워지지 않을까요?",
+        "담당자: 서류 이름까지 달라지면 창구에서 혼동할 수 있어요.",
+        "번역자: 공식 이름 옆에 뜻과 예시를 붙이는 건 어떨까요?",
+        "담당자: 좋습니다. 이용자가 순서를 이해하는지도 확인합시다."
+      ],
+      "learnerGuide": [
+        "먼저 목표와 진단을 확인하세요. 모르는 말은 질문하고 역할을 바꿔 연습하세요.",
+        "읽기와 대화 내용을 근거로 답한 뒤 자신의 상황으로 바꾸어 말하세요."
+      ],
+      "learnerGuideEn": [
+        "Check the goals and diagnostic, then ask about unfamiliar expressions.",
+        "Read for evidence, swap roles, and adapt the conversation to your own situation."
+      ],
+      "teacherGuide": [
+        "0~4분: 수업 전 진단과 목적 확인",
+        "4~10분: 대화 듣기와 핵심 표현 확인. 교사가 원문을 직접 읽습니다.",
+        "10~18분: 읽기 근거 확인과 표현 교체 연습",
+        "18~26분: 정보차 역할극, 역할 교환, 조건 변경",
+        "26~30분: 사후 내용 확인과 수행 루브릭 기록, 다음 과제 합의",
+        "발음 교정: 공식 이름과 쉬운 설명 사이에서 잠시 쉬고 신청 순서의 숫자를 분명하게 읽게 합니다.",
+        "오류 진단: 짧은 문장이면 이해하기 쉽다는 주장에는 예외와 실제 행동 확인을 요구하여 길이와 이해도의 차이를 설명하게 합니다."
+      ],
+      "activities": {
+        "listening": "교사가 대화문을 두 번 읽습니다. 첫 번째는 상황, 두 번째는 선택·조건을 메모하세요.",
+        "speaking": "번역자·행정 담당자·신청자가 되어 용어 정확성과 이해 가능성이 충돌하는 문장을 고치고 행동 확인 질문을 만드세요.",
+        "reading": "본문에서 결정의 이유와 최종 선택에 밑줄을 그으세요.",
+        "writing": "가상의 신청 안내를 5단계 이하로 고쳐 쓰고 핵심 용어 두 개에 쉬운 설명을 붙이세요. 실제 법률 안내로 사용하지 마세요.",
+        "roleplay": "번역자·행정 담당자·신청자가 되어 용어 정확성과 이해 가능성이 충돌하는 문장을 고치고 행동 확인 질문을 만드세요."
+      },
+      "performanceTask": {
+        "instruction": "번역자·행정 담당자·신청자가 되어 용어 정확성과 이해 가능성이 충돌하는 문장을 고치고 행동 확인 질문을 만드세요.",
+        "successCriteria": [
+          "정보를 본문과 맞게 전달한다.",
+          "상대의 질문에 반응하고 확인한다.",
+          "목표 표현을 사용하여 선택이나 조건을 말한다."
+        ]
+      },
+      "homework": "가상의 신청 안내를 5단계 이하로 고쳐 쓰고 핵심 용어 두 개에 쉬운 설명을 붙이세요. 실제 법률 안내로 사용하지 마세요.",
+      "assessment": [
+        {
+          "question": "핵심 용어를 유지한 이유는?",
+          "answer": "공식 서류와의 연결",
+          "choices": [
+            "공식 서류와의 연결",
+            "문장을 길게 하려고",
+            "번역을 막으려고"
+          ],
+          "answerIndex": 0,
+          "skill": "reading",
+          "explanation": "근거: 일부 용어가 공식 서류 이름과 연결되므로",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "일부 용어가 공식 서류 이름과 연결되므로"
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "용어 옆에 붙일 것은?",
+          "answer": "쉬운 설명과 예시",
+          "choices": [
+            "설명 없는 약어",
+            "쉬운 설명과 예시",
+            "관련 없는 광고"
+          ],
+          "answerIndex": 1,
+          "skill": "vocabulary",
+          "explanation": "근거: 핵심 용어는 유지하되 쉬운 설명과 실제 예시를 바로 붙이고",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "핵심 용어는 유지하되 쉬운 설명과 실제 예시를 바로 붙이고"
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        },
+        {
+          "question": "완성 여부를 확인하는 방법은?",
+          "answer": "실제 이용자의 행동 찾기 확인",
+          "choices": [
+            "글자 수만 계산",
+            "담당자 직함 비교",
+            "실제 이용자의 행동 찾기 확인"
+          ],
+          "answerIndex": 2,
+          "skill": "interaction",
+          "explanation": "근거: 실제 이용자가 필요한 행동을 찾을 수 있는지 확인하기로 했다.",
+          "sourceType": "reading_dialogue",
+          "evidence": [
+            "실제 이용자가 필요한 행동을 찾을 수 있는지 확인하기로 했다."
+          ],
+          "scoringNote": "내용 이해 확인용. 말하기·발음의 수행 능력을 이 점수만으로 판단하지 않습니다."
+        }
+      ]
+    }
+  ]
+}

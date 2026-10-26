@@ -7,6 +7,7 @@ import hmac
 import http.cookies
 import json
 import math
+import learning
 import payments
 import supabase_auth
 import os
@@ -53,7 +54,9 @@ def public_user(row): return {k:row[k] for k in ('id','nickname','role','approve
 def units():
     path = ROOT / 'content.json'
     data = json.loads(path.read_text()) if path.exists() else []
-    return data.get('units', []) if isinstance(data,dict) else data
+    original=data.get('units', []) if isinstance(data,dict) else data
+    extra=json.loads((ROOT/'content-expansion.json').read_text())['units']
+    return [learning.decorate(u) for u in original+extra]
 def get_unit(uid):
     found = next((u for u in units() if str(u['id']) == str(uid)), None)
     if found is None: raise Error('단원이 없습니다',404)
@@ -152,29 +155,28 @@ class Handler(BaseHTTPRequestHandler):
         finally:
             if db: db.close()
     def static(self,path):
-        if path.startswith('/free/'):
-            # Frozen public-resource allowlist: never expose Python, SQL, DBs, reports or secrets.
-            name = unquote(path[len('/free/'):]) or 'index.html'
-            public = set(json.loads((ROOT/'free-public-files.json').read_text()))
-            target = (ROOT.parent/name).resolve()
-            if name not in public or not target.is_relative_to(ROOT.parent) or not target.is_file():
-                raise Error('페이지 없음',404)
-            import mimetypes
-            body = target.read_bytes()
-            self.send_response(200)
-            self.send_header('Content-Type',(mimetypes.guess_type(name)[0] or 'application/octet-stream') + ('; charset=utf-8' if target.suffix in ('.html','.js','.css','.json') else ''))
-            self.send_header('X-Content-Type-Options','nosniff')
-            self.send_header('Cache-Control','no-cache')
-            self.send_header('Content-Length',str(len(body)))
-            self.end_headers(); self.wfile.write(body); return
-        name=path.lstrip('/') or 'index.html'
-        allowed={'index.html':'text/html','app.js':'text/javascript','style.css':'text/css',**{name:'text/plain' for name in ('POLICIES-DRAFT.md','LEGAL-REVIEW.md','REFERENCE-RESEARCH.md','CURRICULUM.md','README.md','BUSINESS.md','SECURITY-REVIEW.md','SUPABASE-INTEGRATION.md','STATUS.md','PAYMENTS.md','AUTH-TESTING.md','REVIEW-ROUND2.md')}}
-        if name not in allowed or not (ROOT/name).exists(): raise Error('페이지 없음',404)
-        body=(ROOT/name).read_bytes(); self.send_response(200)
-        self.send_header('Content-Type',allowed[name]+'; charset=utf-8')
-        self.send_header('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self'; frame-src https://meet.jit.si; connect-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'")
-        self.send_header('X-Content-Type-Options','nosniff')
-        self.send_header('Content-Length',str(len(body))); self.end_headers(); self.wfile.write(body)
+        # One canonical homepage; old studio/free URLs are compatibility redirects only.
+        query=urlsplit(self.path).query
+        if path.startswith('/free/') or path in ('/phase3/','/phase3/index.html','/teaching-platform.html'):
+            destination=path[len('/free/'):] if path.startswith('/free/') else 'index.html'
+            destination='/' + (destination or 'index.html')
+            if query: destination+='?'+query
+            if not path.startswith('/free/'):destination+='#teaching-platform'
+            self.send_response(302);self.send_header('Location',destination);self.send_header('Content-Length','0');self.end_headers();return
+        name=unquote(path.lstrip('/')) or 'index.html'
+        public=set(json.loads((ROOT/'free-public-files.json').read_text()))
+        studio={'phase3/shell.html','phase3/app.js','phase3/style.css'}
+        docs={f:f for f in ('POLICIES-DRAFT.md','LEGAL-REVIEW.md','REFERENCE-RESEARCH.md','CURRICULUM.md','README.md','BUSINESS.md','SECURITY-REVIEW.md','SUPABASE-INTEGRATION.md','STATUS.md','PAYMENTS.md','AUTH-TESTING.md','REVIEW-ROUND2.md')}
+        if name in public or name in studio:
+            target=(ROOT.parent/name).resolve()
+        elif name in docs:target=(ROOT/name).resolve()
+        else:raise Error('페이지 없음',404)
+        if not target.is_relative_to(ROOT.parent) or not target.is_file():raise Error('페이지 없음',404)
+        import mimetypes
+        body=target.read_bytes();self.send_response(200)
+        self.send_header('Content-Type',(mimetypes.guess_type(name)[0] or 'application/octet-stream') + ('; charset=utf-8' if target.suffix in ('.html','.js','.css','.json','.md') else ''))
+        self.send_header('X-Content-Type-Options','nosniff');self.send_header('X-Frame-Options','DENY');self.send_header('Referrer-Policy','no-referrer');self.send_header('Cache-Control','no-cache')
+        self.send_header('Content-Length',str(len(body)));self.end_headers();self.wfile.write(body)
     def user(self,db):
         try:
             cookies=http.cookies.SimpleCookie(self.headers.get('Cookie',''))
@@ -258,16 +260,51 @@ class Handler(BaseHTTPRequestHandler):
                 attempts.append(now);ip_attempts.append(now); raise Error('로그인 정보를 확인하세요',401)
             attempts.clear(); audit(db,u['id'],'login',u['id'])
             return {'user':public_user(u)},self.session(db,u['id'])
-        if method=='GET' and path=='/api/units': return {'units':[{k:v for k,v in x.items() if k!='teacherGuide'} for x in units()]},None
+        if method=='GET' and path=='/api/curriculum': return learning.catalog(),None
+        if method=='GET' and path=='/api/units': return {'units':[learning.public_unit(x) for x in units()]},None
         if method=='GET' and path.startswith('/api/units/'):
             unit=dict(get_unit(path.split('/')[-1])); u=self.user(db)
-            if u['role']=='learner': unit.pop('teacherGuide',None)
+            unit=learning.public_unit(unit,u['role']=='admin' or (u['role'] in ('teacher','partner') and bool(u['approved'])))
             return {'unit':unit},None
         if method=='GET' and path=='/api/scenarios':
             price=int(q.get('price',['20000'])[0]); tax=int(q.get('taxBps',['0'])[0]); refund=int(q.get('refundBps',['300'])[0])
             if not 1000<=price<=1000000: raise Error('가격 범위를 확인하세요')
             return {'currency':'KRW','basis':'hypothetical-test-only','scenarios':[dict(commissionBps=c,referralBps=r,processorBps=300,refundReserveBps=refund,taxReserveBps=tax,**money(price,c,r,300,tax,refund)) for c in (1500,2000,2500) for r in (0,300,500)],'note':'PG 3%·환불 충당·세금 충당은 가정값입니다. 법정 세율·확정 요율·순이익이 아니며 고정비·실제 세금은 별도입니다.'},None
         u=self.user(db); uid=u['id']
+        if method=='GET' and path=='/api/learning':return learning.summary(db,uid),None
+        learning_booking=re.fullmatch('/api/learning/booking/([0-9a-f]+)',path)
+        if method=='GET' and learning_booking:
+            b=self.booking(db,learning_booking[1],u);records=[]
+            for row in db.execute('SELECT * FROM learning_checks WHERE booking_id=? ORDER BY created_at DESC,rowid DESC LIMIT 100',(b['id'],)):
+                record=dict(row);record['skills']=json.loads(record.pop('skills_json'));records.append(record)
+            return {'records':records,'bookingId':b['id']},None
+        if method=='POST' and path=='/api/learning/placement':
+            if u['role']!='learner':raise Error('학습자만 저장할 수 있습니다',403)
+            return learning.save_placement(db,uid,d.get('groups')),None
+        diagnostic_match=re.fullmatch('/api/diagnostics/([A-Za-z0-9-]+)',path)
+        if diagnostic_match and method=='GET':
+            unit=get_unit(diagnostic_match[1]);phase=q.get('phase',['pre'])[0]
+            qs=learning.diagnostic(unit['id'],phase)
+            if q.get('bookingId'):
+                b=self.booking(db,q['bookingId'][0],u)
+                if b['unit_id']!=unit['id']:raise Error('예약 교재가 다릅니다',403)
+                snap=db.execute('SELECT content FROM unit_snapshots WHERE booking_id=?',(b['id'],)).fetchone();qs=json.loads(snap['content']).get('_diagnostics',{}).get(phase,qs)
+            return {'questions':learning.safe_questions(qs),'phase':phase,'kind':'text-check'},None
+        if method=='POST' and path=='/api/learning/check':
+            if u['role']!='learner':raise Error('학습자만 응답할 수 있습니다',403)
+            unit=get_unit(d.get('unitId'));phase=d.get('phase');bid=d.get('bookingId');frozen=None
+            if phase=='post' or bid:
+                b=self.booking(db,bid,u)
+                allowed_states=('reserved','test_paid','in_class','completed','test_settled') if phase=='pre' else ('in_class','completed','test_settled')
+                if b['learner_id']!=uid or b['unit_id']!=unit['id'] or b['status'] not in allowed_states:raise Error('진단 가능한 본인 수업이 아닙니다',403)
+                snapshot=db.execute('SELECT content FROM unit_snapshots WHERE booking_id=?',(bid,)).fetchone();frozen=json.loads(snapshot['content']).get('_diagnostics',{}).get(phase)
+            return learning.submit(db,uid,unit['id'],phase,d.get('answers'),bid,questions=frozen),None
+        if method=='POST' and path=='/api/learning/observation':
+            b=self.booking(db,d.get('bookingId'),u)
+            if uid!=b['teacher_id'] or u['role'] not in ('teacher','partner'):raise Error('예약된 수업 제공자만 수행 평가할 수 있습니다',403)
+            permitted=('reserved','test_paid','in_class','completed','test_settled') if d.get('phase')=='pre' else ('in_class','completed','test_settled')
+            if b['status'] not in permitted:raise Error('이 수업 상태에서는 수행 평가할 수 없습니다',409)
+            return learning.teacher_rating(db,b,uid,d.get('phase'),d.get('ratings'),d.get('note')),None
         if method=='POST' and path=='/api/logout':
             cookie=http.cookies.SimpleCookie(self.headers.get('Cookie',''))
             db.execute('DELETE FROM sessions WHERE token=?',(hashlib.sha256(cookie['hs3'].value.encode()).hexdigest(),))
@@ -284,22 +321,36 @@ class Handler(BaseHTTPRequestHandler):
             audit(db,uid,'profile_update',uid,'provider reapproval required')
             return {'user':public_user(db.execute('SELECT * FROM users WHERE id=?',(uid,)).fetchone())},None
         if method=='GET' and path=='/api/teachers':
-            rows=[public_user(x) for x in db.execute("SELECT * FROM users WHERE approved=1 AND role IN ('teacher','partner') ORDER BY nickname")]
-            for field,param in [('role','role'),('languages','language'),('level','level')]:
-                if q.get(param): rows=[r for r in rows if q[param][0].lower() in str(r[field]).lower()]
-            if q.get('maxPrice'): rows=[r for r in rows if r['price']<=int(q['maxPrice'][0])]
-            if q.get('q'): rows=[r for r in rows if q['q'][0].lower() in (r['nickname']+' '+r['specialty']).lower()]
+            clauses=["u.approved=1", "u.role IN ('teacher','partner')"];params=[]
+            for field,param in [('role','role'),('languages','language'),('level','level'),('specialty','purpose')]:
+                if q.get(param):clauses.append('instr(lower(u.'+field+'),lower(?))>0');params.append(text(q[param][0],200))
+            if q.get('maxPrice'):
+                price=int(q['maxPrice'][0])
+                if not 1000<=price<=1000000:raise Error('가격 범위를 확인하세요')
+                clauses.append('u.price<=?');params.append(price)
+            if q.get('q'):
+                clauses.append("instr(lower(u.nickname||' '||u.specialty),lower(?))>0");params.append(text(q['q'][0],200))
+            if q.get('from') or q.get('to'):
+                if not q.get('from') or not q.get('to'):raise Error('검색 시작과 종료 시각이 모두 필요합니다')
+                start,end=stamp(q['from'][0]),stamp(q['to'][0])
+                if end<=start:raise Error('검색 종료는 시작 이후여야 합니다')
+                clauses.append("EXISTS(SELECT 1 FROM slots s WHERE s.teacher_id=u.id AND s.start>=? AND s.end<=? AND s.start>? AND NOT EXISTS(SELECT 1 FROM bookings b WHERE b.slot_id=s.id AND b.status NOT IN ('cancelled','refunded','expired')))");params.extend((start,end,time.time()))
+            limit=int(q.get('limit',['20'])[0]);offset=int(q.get('offset',['0'])[0])
+            if not 1<=limit<=100 or offset<0:raise Error('페이지 범위를 확인하세요')
+            where=' AND '.join(clauses)
+            total=db.execute('SELECT count(*) FROM users u WHERE '+where,params).fetchone()[0]
+            rows=[public_user(x) for x in db.execute('SELECT u.* FROM users u WHERE '+where+' ORDER BY u.nickname,u.id LIMIT ? OFFSET ?',(*params,limit,offset))]
             for r in rows:
                 r.pop('referral_code',None)
                 avg=db.execute("SELECT avg(rating),count(rating) FROM bookings WHERE teacher_id=? AND rating IS NOT NULL AND status IN ('completed','test_settled')",(r['id'],)).fetchone()
                 r.update(rating=avg[0],reviewCount=avg[1],verification='local-test-review-only')
-            return {'teachers':rows},None
+            return {'teachers':rows,'total':total,'offset':offset,'limit':limit,'hasMore':offset+len(rows)<total},None
         if path=='/api/availability':
             if method=='GET':
                 tid=q.get('teacherId',[uid])[0]
-                return {'slots':[dict(x) for x in db.execute("SELECT s.* FROM slots s JOIN users u ON u.id=s.teacher_id WHERE s.teacher_id=? AND u.approved=1 AND s.start>? AND NOT EXISTS(SELECT 1 FROM bookings b WHERE b.slot_id=s.id AND b.status NOT IN ('cancelled','refunded','expired')) ORDER BY s.start",(tid,time.time()))]},None
+                return {'slots':[dict(x) for x in db.execute("SELECT s.* FROM slots s JOIN users u ON u.id=s.teacher_id WHERE s.teacher_id=? AND (u.approved=1 OR s.teacher_id=?) AND s.start>? AND NOT EXISTS(SELECT 1 FROM bookings b WHERE b.slot_id=s.id AND b.status NOT IN ('cancelled','refunded','expired')) ORDER BY s.start",(tid,uid,time.time()))]},None
             if method=='POST':
-                if u['role'] not in ('partner','teacher') or not u['approved']: raise Error('승인된 수업 제공자만 가능합니다',403)
+                if u['role'] not in ('partner','teacher'): raise Error('수업 제공자만 가능합니다',403)
                 start,end=stamp(d.get('start')),stamp(d.get('end'))
                 if start<time.time() or not 300<=end-start<=7200: raise Error('미래의 5~120분 수업만 등록하세요')
                 if db.execute('SELECT 1 FROM slots WHERE teacher_id=? AND start<? AND end>?',(uid,end,start)).fetchone(): raise Error('시간이 겹칩니다',409)
@@ -334,7 +385,7 @@ class Handler(BaseHTTPRequestHandler):
         snapshot_match=re.fullmatch('/api/bookings/([0-9a-f]+)/unit',path)
         if snapshot_match and method=='GET':
             b=self.booking(db,snapshot_match[1],u); snapshot=db.execute('SELECT * FROM unit_snapshots WHERE booking_id=?',(b['id'],)).fetchone(); unit=json.loads(snapshot['content'])
-            if uid==b['learner_id']: unit.pop('teacherGuide',None)
+            unit=learning.public_unit(unit,uid==b['teacher_id'] or u['role']=='admin')
             return {'unit':unit,'sha256':snapshot['sha256'],'version':'booking-snapshot'},None
         m=re.fullmatch('/api/bookings/([0-9a-f]+)/([a-z-]+)',path)
         if m and method=='POST':

@@ -18,10 +18,14 @@ class FreeMountTests(unittest.TestCase):
         c.request('GET',path);r=c.getresponse();status=r.status;body=r.read();c.close();return status,body
     def test_free_content_bytes_preserved(self):
         for f in ['index.html','intro.html','advanced2.html','reading.html','reading-curriculum.js','hangul-audio-manifest.json','teaching-entry.js']:
-            status,body=self.get('/free/'+f)
+            status,body=self.get('/'+f)
             self.assertEqual(status,200,f);self.assertEqual(body,(server.ROOT.parent/f).read_bytes())
     def test_no_private_files_or_traversal(self):
         for f in ['phase3/server.py','phase3/schema.sql','phase3/content.json','phase3/free-public-files.json','.git/config','.env','../phase3/server.py','%2e%2e/phase3/server.py','assets/../../phase3/server.py','PHASE2-RECHECK-20261027.md']:
-            self.assertEqual(self.get('/free/'+f)[0],404,f)
+            self.assertEqual(self.get('/'+f)[0],404,f)
     def test_unknown_public_file_not_exposed(self):
-        self.assertEqual(self.get('/free/unlisted.json')[0],404)
+        self.assertEqual(self.get('/unlisted.json')[0],404)
+
+    def test_legacy_urls_redirect_to_the_one_homepage(self):
+        for url in ['/free/index.html','/phase3/index.html','/teaching-platform.html']:
+            self.assertEqual(302,self.get(url)[0])
