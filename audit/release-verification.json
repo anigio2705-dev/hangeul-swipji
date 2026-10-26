@@ -1,0 +1,219 @@
+{
+  "testedCodeCommit": "4b3f57cde5228a00166898c5812a689eef6aa61c",
+  "sourceValidation": {
+    "runId": 40345861584,
+    "url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40345861584",
+    "status": "completed",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 121652472286,
+        "name": "validate",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-node@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Audit 350 lessons and 1758 questions",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check source pairs, all reading entries and preservation",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check page structures and navigation shells",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify original curriculum and 7-day materials",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install browser test dependencies",
+            "conclusion": "success"
+          },
+          {
+            "name": "Desktop and mobile Chromium smoke test",
+            "conclusion": "success"
+          },
+          {
+            "name": "Audit all 600 reading entries and quizzes in Chromium",
+            "conclusion": "success"
+          },
+          {
+            "name": "Render every course unit in Korean and English",
+            "conclusion": "success"
+          },
+          {
+            "name": "Upload audit report",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-node@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  },
+  "deployment": {
+    "runId": 40345858497,
+    "url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40345858497",
+    "status": "completed",
+    "conclusion": "success",
+    "sha": "4b3f57cde5228a00166898c5812a689eef6aa61c"
+  },
+  "browserProof": [
+    "2026-10-26T15:05:52.7148028Z PASS desktop index.html",
+    "2026-10-26T15:05:53.0283321Z PASS desktop learn.html",
+    "2026-10-26T15:05:53.3668555Z PASS desktop intro.html",
+    "2026-10-26T15:05:53.7027002Z PASS desktop beginner1.html",
+    "2026-10-26T15:05:54.0192206Z PASS desktop beginner2.html",
+    "2026-10-26T15:05:54.3485879Z PASS desktop intermediate1.html",
+    "2026-10-26T15:05:54.6790855Z PASS desktop intermediate2.html",
+    "2026-10-26T15:05:55.0095543Z PASS desktop advanced1.html",
+    "2026-10-26T15:05:55.3250331Z PASS desktop advanced2.html",
+    "2026-10-26T15:05:55.6391148Z PASS desktop hangul-basics.html",
+    "2026-10-26T15:05:55.9557695Z PASS desktop hangul-week.html",
+    "2026-10-26T15:05:56.2724673Z PASS desktop reading.html",
+    "2026-10-26T15:05:57.2259685Z PASS mobile index.html",
+    "2026-10-26T15:05:57.5383063Z PASS mobile learn.html",
+    "2026-10-26T15:05:57.8534887Z PASS mobile intro.html",
+    "2026-10-26T15:05:58.1846471Z PASS mobile beginner1.html",
+    "2026-10-26T15:05:58.5009346Z PASS mobile beginner2.html",
+    "2026-10-26T15:05:58.8285155Z PASS mobile intermediate1.html",
+    "2026-10-26T15:05:59.1577070Z PASS mobile intermediate2.html",
+    "2026-10-26T15:05:59.4743541Z PASS mobile advanced1.html",
+    "2026-10-26T15:05:59.7901271Z PASS mobile advanced2.html",
+    "2026-10-26T15:06:00.1046507Z PASS mobile hangul-basics.html",
+    "2026-10-26T15:06:00.4321986Z PASS mobile hangul-week.html",
+    "2026-10-26T15:06:00.7537226Z PASS mobile reading.html",
+    "2026-10-26T15:06:01.8741624Z PASS reading 600 browser content+quiz audit {\"count\":600,\"original\":0,\"generated\":600,\"failures\":[]}",
+    "2026-10-26T15:06:02.3471993Z Rendered intro 50 units x 2 languages",
+    "2026-10-26T15:06:02.4406831Z Rendered beginner1 50 units x 2 languages",
+    "2026-10-26T15:06:02.5176358Z Rendered beginner2 50 units x 2 languages",
+    "2026-10-26T15:06:02.5858819Z Rendered intermediate1 50 units x 2 languages",
+    "2026-10-26T15:06:02.6560616Z Rendered intermediate2 50 units x 2 languages",
+    "2026-10-26T15:06:02.7248249Z Rendered advanced1 50 units x 2 languages",
+    "2026-10-26T15:06:02.7908889Z Rendered advanced2 50 units x 2 languages"
+  ],
+  "productionObservations": {
+    "readingUrl": "https://anigio2705-dev.github.io/hangeul-swipji/reading.html",
+    "curriculumScript": "reading-curriculum.js?v=phase2-20261026-r3",
+    "lowLevelStoryAndWordGlossesRendered": true,
+    "legacySourceRendered": true,
+    "alphabetUrl": "https://anigio2705-dev.github.io/hangeul-swipji/hangul-basics.html",
+    "consonants": 19,
+    "vowels": 21,
+    "syllables": 399,
+    "gaAudioPlaybackEnded": true,
+    "pronunciationListeningApproved": false,
+    "physicalMobileDeviceTest": false
+  },
+  "publishedSourceFiles": [
+    {
+      "path": "audit/lesson-review.json",
+      "blobSha": "618ce4af7b3ef2a5a16dec6625fe5ecc1056ecf1"
+    },
+    {
+      "path": "audit/phase2-content.json",
+      "blobSha": "65b540b92bafa33d37e1a53d89658623b22fa4de"
+    },
+    {
+      "path": "reading-curriculum.js",
+      "blobSha": "c1612fbb9636e2b10d26af024a66c3dc5f750614"
+    },
+    {
+      "path": "scripts/audit-phase2-content.cjs",
+      "blobSha": "64fd6fbe61bc6be8b60cddb9820bf084679e05cf"
+    },
+    {
+      "path": "scripts/browser-audit-lessons.cjs",
+      "blobSha": "258b66c90916f366ee3f09d4304a0a40a9a49a34"
+    },
+    {
+      "path": "scripts/curriculum-source.cjs",
+      "blobSha": "72ee99b85c14b091d092a0baea5b5f85b363bb07"
+    },
+    {
+      "path": "scripts/refine-phase2-lessons.py",
+      "blobSha": "053f179c834978530a64425c224a52e91991cd48"
+    },
+    {
+      "path": ".github/workflows/phase2-validation.yml",
+      "blobSha": "c2af526950c21015f5510d83c0c9538f3ab8e555"
+    },
+    {
+      "path": "advanced1.html",
+      "blobSha": "2995147fe60df670520bd68ae5995c039b46f358"
+    },
+    {
+      "path": "advanced2.html",
+      "blobSha": "39712cbf54ab75d758353d849e5ad789fa3a0e85"
+    },
+    {
+      "path": "beginner1.html",
+      "blobSha": "345c319371b01dd64969fbe802d4978d30efd48a"
+    },
+    {
+      "path": "beginner2.html",
+      "blobSha": "e54b3f2ea79ccce755037014c29729d89788a40b"
+    },
+    {
+      "path": "hangul-core.js",
+      "blobSha": "87d5f1834d9bcbd37079f3bca667b7610f93a2d6"
+    },
+    {
+      "path": "intermediate1.html",
+      "blobSha": "5114ccb866e518d7a55f7c78d0ac48c9c3a2f08d"
+    },
+    {
+      "path": "intermediate2.html",
+      "blobSha": "5b004ec2b73e5964b2378612fb5413f55023c2a9"
+    },
+    {
+      "path": "intro.html",
+      "blobSha": "639d813f9d17492a6538d578141f5c3d644ef9ef"
+    },
+    {
+      "path": "reading.html",
+      "blobSha": "e22c6769bdb069df2347024538f8e9a3c1502cf3"
+    },
+    {
+      "path": "audit/audio-listening-queue.csv",
+      "blobSha": "53180185d2d9063aabe82e366e3447ac1c2088b2"
+    },
+    {
+      "path": "hangul-basics.html",
+      "blobSha": "ed0ef390527dca56b89c9120b1ecf8ecb6e8bb05"
+    },
+    {
+      "path": "hangul-week.html",
+      "blobSha": "4c5cc1fc2c94b1175d9082da0c8a908867ca65a6"
+    }
+  ],
+  "overallPhase2Complete": false,
+  "blockers": [
+    "375 required human recordings are not registered.",
+    "Actual pronunciation listening approval is pending."
+  ]
+}
