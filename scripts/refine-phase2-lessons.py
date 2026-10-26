@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import re
 import subprocess
+import hashlib
 
 ROOT = Path(__file__).resolve().parents[1]
 COURSES = ['intro','beginner1','beginner2','intermediate1','intermediate2','advanced1','advanced2']
@@ -224,7 +225,12 @@ def main():
             # Existing items were literal duplicates; replace just their slot with a transfer check.
             if course=='beginner2' and i==3:u['quiz'][3]=['어제 여행이 재미있___. 과거형으로 완성하세요.','Complete the past-tense sentence.', ['어요','었어요','을 거예요','으세요'],1]
             if course=='beginner2' and i==4:u['quiz'][3]=['물건을 바꾸기 전에 가능 여부를 묻는 말은?','Which asks whether an exchange is possible?', ['바꿨어요.','바꿀 수 있어요?','바꿀 거예요.','바꾸지 마세요.'],1]
-            evidence.append({'course':course,'unit':i+1,'title':u['title'][0],'examples':len(u['sent']),'vocabulary':len(u['v']),'questions':len(u['quiz']),'teachingNotesChanged':before[i]['grammar']!=u['grammar'],'contentChanged':before[i]!=u,'review':'AI linguistic review of shared source pairs and unit application; no learner trial','corrections':applied})
+            # Sort by content-derived hashes so repeated runs are stable and keys move with answers.
+            for qi,q in enumerate(u['quiz']):
+                answer=q[2][q[3]]
+                q[2]=sorted(q[2],key=lambda option:hashlib.sha256((course+':'+str(i+1)+':'+str(qi+1)+':'+option).encode()).hexdigest())
+                q[3]=q[2].index(answer)
+            evidence.append({'course':course,'unit':i+1,'title':u['title'][0],'examples':len(u['sent']),'vocabulary':len(u['v']),'questions':len(u['quiz']),'teachingNotesChanged':before[i]['grammar']!=u['grammar'],'contentChanged':before[i]!=u,'changedFields':[key for key in u if before[i].get(key)!=u[key]],'review':'AI linguistic review of shared source pairs and unit application; no learner trial','corrections':[[a,b] for a,b in fixes if a!=b and a in json.dumps(before[i],ensure_ascii=False)]})
         assert len(units)==50 and sum(len(x['quiz']) for x in units)==(258 if course=='intro' else 250)
         file.write_text(source[:m.start(1)]+json.dumps(units,ensure_ascii=False,separators=(',',':'))+source[m.end(1):])
     if unmatched:raise RuntimeError('No teaching rule selected: '+json.dumps(unmatched,ensure_ascii=False))

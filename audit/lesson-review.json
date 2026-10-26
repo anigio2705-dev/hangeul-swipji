@@ -9,7 +9,10 @@
       "vocabulary": 10,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -21,7 +24,10 @@
       "vocabulary": 14,
       "questions": 7,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -33,7 +39,10 @@
       "vocabulary": 6,
       "questions": 7,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -45,7 +54,10 @@
       "vocabulary": 6,
       "questions": 7,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -57,7 +69,10 @@
       "vocabulary": 6,
       "questions": 7,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -69,7 +84,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -81,7 +99,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -93,7 +114,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -105,7 +129,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -117,7 +144,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -129,7 +159,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -141,7 +174,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -153,7 +189,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -165,7 +204,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -177,7 +219,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -189,7 +234,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -201,7 +249,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -213,7 +264,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -225,7 +279,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -237,7 +294,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -249,7 +309,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -261,7 +324,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -273,7 +339,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -285,7 +354,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -297,7 +369,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -309,7 +384,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -321,7 +399,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -333,7 +414,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -345,7 +429,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -357,7 +444,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -369,7 +459,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -381,7 +474,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -393,7 +489,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -405,7 +504,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -417,7 +519,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -429,7 +534,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -441,7 +549,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -453,7 +564,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -465,7 +579,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -477,7 +594,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -489,7 +609,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -501,7 +624,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -514,6 +640,9 @@
       "questions": 5,
       "teachingNotesChanged": false,
       "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -525,7 +654,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -537,7 +669,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -549,7 +684,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -561,7 +699,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -574,6 +715,9 @@
       "questions": 5,
       "teachingNotesChanged": false,
       "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -585,7 +729,10 @@
       "vocabulary": 6,
       "questions": 5,
       "teachingNotesChanged": false,
-      "contentChanged": false,
+      "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -598,6 +745,9 @@
       "questions": 5,
       "teachingNotesChanged": false,
       "contentChanged": true,
+      "changedFields": [
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -610,6 +760,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -622,6 +776,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -634,6 +792,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -646,6 +808,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -658,6 +824,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -670,6 +840,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -682,6 +857,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -694,6 +874,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -706,6 +891,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -718,6 +908,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -730,6 +925,12 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "v",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -742,6 +943,12 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "v",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -754,6 +961,12 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "v",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -766,6 +979,12 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "v",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -778,6 +997,12 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "v",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -790,6 +1015,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -802,6 +1032,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -814,6 +1049,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -826,6 +1066,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -838,6 +1083,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -850,8 +1100,19 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "sent",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "I wake up at seven.",
+          "I wake up at seven in the morning."
+        ]
+      ]
     },
     {
       "course": "beginner1",
@@ -862,8 +1123,18 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "I go to bed at eleven.",
+          "I go to bed at eleven at night."
+        ]
+      ]
     },
     {
       "course": "beginner1",
@@ -874,8 +1145,23 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "sent",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "I wake up at seven.",
+          "I wake up at seven in the morning."
+        ],
+        [
+          "I go to bed at eleven.",
+          "I go to bed at eleven at night."
+        ]
+      ]
     },
     {
       "course": "beginner1",
@@ -886,8 +1172,23 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "sent",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "I wake up at seven.",
+          "I wake up at seven in the morning."
+        ],
+        [
+          "I go to bed at eleven.",
+          "I go to bed at eleven at night."
+        ]
+      ]
     },
     {
       "course": "beginner1",
@@ -898,8 +1199,23 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "sent",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "I wake up at seven.",
+          "I wake up at seven in the morning."
+        ],
+        [
+          "I go to bed at eleven.",
+          "I go to bed at eleven at night."
+        ]
+      ]
     },
     {
       "course": "beginner1",
@@ -910,6 +1226,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -922,6 +1243,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -934,6 +1260,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -946,6 +1277,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -958,6 +1294,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -970,6 +1311,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -982,6 +1328,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -994,6 +1345,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1006,6 +1362,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1018,6 +1379,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1030,6 +1396,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1042,6 +1413,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1054,6 +1430,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1066,6 +1447,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1078,6 +1464,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1090,6 +1481,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1102,6 +1498,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1114,6 +1515,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1126,6 +1532,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1138,6 +1549,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1150,6 +1566,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1162,6 +1583,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1174,6 +1600,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1186,6 +1617,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1198,6 +1634,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1210,6 +1651,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1222,6 +1667,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1234,6 +1683,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1246,6 +1699,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1258,6 +1715,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1270,6 +1731,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1282,6 +1748,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1294,6 +1765,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1306,6 +1782,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1318,6 +1799,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1330,6 +1816,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1342,6 +1833,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1354,6 +1850,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1366,6 +1867,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1378,6 +1884,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1390,6 +1901,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1402,6 +1918,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1414,6 +1935,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1426,6 +1952,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1438,6 +1969,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1450,6 +1986,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1462,6 +2003,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1474,6 +2020,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1486,6 +2037,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1498,6 +2054,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1510,6 +2071,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1522,6 +2088,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1534,6 +2105,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1546,6 +2122,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1558,6 +2139,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1570,6 +2156,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1582,6 +2173,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1594,6 +2190,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1606,6 +2207,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1618,6 +2224,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1630,6 +2241,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1642,6 +2258,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1654,6 +2275,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1666,6 +2292,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1678,6 +2309,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1690,6 +2326,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1702,6 +2343,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1714,6 +2360,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1726,6 +2377,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1738,6 +2394,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1750,6 +2411,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1762,6 +2428,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1774,6 +2445,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1786,6 +2462,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1798,6 +2479,11 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1810,6 +2496,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1822,6 +2512,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1834,6 +2528,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1846,6 +2544,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1858,6 +2560,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1870,6 +2576,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1882,6 +2592,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1894,6 +2608,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1906,6 +2624,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1918,6 +2640,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1930,6 +2656,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1942,6 +2672,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1954,6 +2688,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1966,6 +2704,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1978,6 +2720,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -1990,8 +2736,24 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "v",
+        "sent",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "서울은 부산보다 커요.",
+          "이 가방은 저 가방보다 커요."
+        ],
+        [
+          "Seoul is larger than Busan.",
+          "This bag is larger than that bag."
+        ]
+      ]
     },
     {
       "course": "intermediate1",
@@ -2002,8 +2764,22 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "v",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "서울은 부산보다 커요.",
+          "이 가방은 저 가방보다 커요."
+        ],
+        [
+          "Seoul is larger than Busan.",
+          "This bag is larger than that bag."
+        ]
+      ]
     },
     {
       "course": "intermediate1",
@@ -2014,8 +2790,22 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "v",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "서울은 부산보다 커요.",
+          "이 가방은 저 가방보다 커요."
+        ],
+        [
+          "Seoul is larger than Busan.",
+          "This bag is larger than that bag."
+        ]
+      ]
     },
     {
       "course": "intermediate1",
@@ -2026,8 +2816,23 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "v",
+        "sent",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "서울은 부산보다 커요.",
+          "이 가방은 저 가방보다 커요."
+        ],
+        [
+          "Seoul is larger than Busan.",
+          "This bag is larger than that bag."
+        ]
+      ]
     },
     {
       "course": "intermediate1",
@@ -2038,8 +2843,23 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "v",
+        "sent",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "서울은 부산보다 커요.",
+          "이 가방은 저 가방보다 커요."
+        ],
+        [
+          "Seoul is larger than Busan.",
+          "This bag is larger than that bag."
+        ]
+      ]
     },
     {
       "course": "intermediate1",
@@ -2050,6 +2870,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2062,6 +2886,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2074,6 +2902,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2086,6 +2918,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2098,6 +2934,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2110,6 +2950,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2122,6 +2966,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2134,6 +2982,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2146,6 +2998,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2158,6 +3014,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2170,6 +3030,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2182,6 +3046,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2194,6 +3062,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2206,6 +3078,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2218,6 +3094,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2230,6 +3110,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2242,6 +3126,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2254,6 +3142,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2266,6 +3158,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2278,6 +3174,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2290,6 +3190,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2302,6 +3206,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2314,6 +3222,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2326,6 +3238,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2338,6 +3254,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2350,6 +3270,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2362,6 +3286,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2374,6 +3302,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2386,6 +3318,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2398,6 +3334,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2410,6 +3350,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2422,6 +3366,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2434,6 +3382,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2446,6 +3398,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2458,6 +3414,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2470,6 +3430,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2482,6 +3446,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2494,6 +3462,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2506,6 +3478,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2518,6 +3494,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2530,6 +3510,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2542,6 +3526,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2554,6 +3542,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2566,6 +3558,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2578,6 +3574,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2590,6 +3590,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2602,6 +3606,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2614,6 +3622,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2626,6 +3638,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2638,6 +3654,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2650,8 +3670,18 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "v",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "We apologize for the inconvenience.",
+          "We ask for your understanding regarding the inconvenience."
+        ]
+      ]
     },
     {
       "course": "intermediate2",
@@ -2662,8 +3692,18 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "v",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "We apologize for the inconvenience.",
+          "We ask for your understanding regarding the inconvenience."
+        ]
+      ]
     },
     {
       "course": "intermediate2",
@@ -2674,8 +3714,19 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "v",
+        "sent",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "We apologize for the inconvenience.",
+          "We ask for your understanding regarding the inconvenience."
+        ]
+      ]
     },
     {
       "course": "intermediate2",
@@ -2686,8 +3737,19 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "v",
+        "sent",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "We apologize for the inconvenience.",
+          "We ask for your understanding regarding the inconvenience."
+        ]
+      ]
     },
     {
       "course": "intermediate2",
@@ -2698,8 +3760,19 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "v",
+        "sent",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "We apologize for the inconvenience.",
+          "We ask for your understanding regarding the inconvenience."
+        ]
+      ]
     },
     {
       "course": "intermediate2",
@@ -2710,6 +3783,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2722,6 +3799,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2734,6 +3815,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2746,6 +3831,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2758,6 +3847,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2770,6 +3863,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2782,6 +3879,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2794,6 +3895,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2806,6 +3911,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2818,6 +3927,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2830,6 +3943,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2842,6 +3959,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2854,6 +3975,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2866,6 +3991,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2878,6 +4007,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2890,6 +4023,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2902,6 +4039,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2914,6 +4055,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2926,6 +4071,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2938,6 +4087,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2950,6 +4103,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2962,6 +4119,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2974,6 +4135,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2986,6 +4151,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -2998,6 +4167,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3010,6 +4183,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3022,6 +4199,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3034,6 +4215,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3046,6 +4231,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3058,6 +4247,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3070,6 +4263,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3082,6 +4279,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3094,6 +4295,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3106,6 +4311,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3118,6 +4327,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3130,6 +4343,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3142,6 +4359,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3154,6 +4375,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3166,6 +4391,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3178,6 +4407,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3190,6 +4423,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3202,6 +4439,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3214,6 +4455,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3226,6 +4471,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3238,6 +4487,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3250,6 +4503,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3262,6 +4519,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3274,6 +4535,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3286,6 +4551,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3298,6 +4567,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3310,6 +4583,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3322,6 +4599,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3334,6 +4615,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3346,6 +4631,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3358,6 +4647,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3370,6 +4663,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3382,6 +4679,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3394,6 +4695,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3406,6 +4711,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3418,6 +4727,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3430,6 +4743,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3442,6 +4759,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3454,6 +4775,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3466,6 +4791,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3478,6 +4807,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3490,6 +4823,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3502,6 +4839,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3514,6 +4855,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3526,6 +4871,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3538,6 +4887,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3550,6 +4903,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3562,6 +4919,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3574,6 +4935,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3586,6 +4951,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3598,6 +4967,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3610,8 +4983,18 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "sent",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "We should consider counterevidence.",
+          "We should consider falsifiability."
+        ]
+      ]
     },
     {
       "course": "advanced2",
@@ -3622,6 +5005,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3634,6 +5021,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3646,6 +5037,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3658,6 +5053,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3670,6 +5069,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3682,6 +5085,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3694,6 +5101,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3706,6 +5117,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3718,6 +5133,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3730,6 +5149,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3742,6 +5165,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3754,6 +5181,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3766,6 +5197,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3778,6 +5213,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3790,6 +5229,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3802,6 +5245,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3814,6 +5261,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3826,6 +5277,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3838,6 +5293,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3850,6 +5309,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3862,6 +5325,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3874,6 +5341,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3886,6 +5357,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3898,6 +5373,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3910,6 +5389,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3922,6 +5405,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3934,6 +5421,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3946,6 +5437,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3958,6 +5453,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -3970,8 +5469,19 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "v",
+        "sent",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "검증되지 않은 주장은 확산을 경계해야 합니다.",
+          "검증되지 않은 주장의 확산을 경계해야 합니다."
+        ]
+      ]
     },
     {
       "course": "advanced2",
@@ -3982,8 +5492,19 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "v",
+        "sent",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "검증되지 않은 주장은 확산을 경계해야 합니다.",
+          "검증되지 않은 주장의 확산을 경계해야 합니다."
+        ]
+      ]
     },
     {
       "course": "advanced2",
@@ -3994,8 +5515,20 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "title",
+        "v",
+        "sent",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "검증되지 않은 주장은 확산을 경계해야 합니다.",
+          "검증되지 않은 주장의 확산을 경계해야 합니다."
+        ]
+      ]
     },
     {
       "course": "advanced2",
@@ -4006,8 +5539,18 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "v",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "검증되지 않은 주장은 확산을 경계해야 합니다.",
+          "검증되지 않은 주장의 확산을 경계해야 합니다."
+        ]
+      ]
     },
     {
       "course": "advanced2",
@@ -4018,8 +5561,18 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "v",
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
-      "corrections": []
+      "corrections": [
+        [
+          "검증되지 않은 주장은 확산을 경계해야 합니다.",
+          "검증되지 않은 주장의 확산을 경계해야 합니다."
+        ]
+      ]
     },
     {
       "course": "advanced2",
@@ -4030,6 +5583,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -4042,6 +5599,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -4054,6 +5615,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -4066,6 +5631,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -4078,6 +5647,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -4090,6 +5663,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -4102,6 +5679,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -4114,6 +5695,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -4126,6 +5711,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -4138,6 +5727,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -4150,6 +5743,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -4162,6 +5759,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -4174,6 +5775,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -4186,6 +5791,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     },
@@ -4198,6 +5807,10 @@
       "questions": 5,
       "teachingNotesChanged": true,
       "contentChanged": true,
+      "changedFields": [
+        "grammar",
+        "quiz"
+      ],
       "review": "AI linguistic review of shared source pairs and unit application; no learner trial",
       "corrections": []
     }

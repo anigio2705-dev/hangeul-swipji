@@ -31,7 +31,7 @@ function content(l,b){
  const ko=base[2].split(/(?<=[.!?])\s+/),en=base[3].split(/(?<=[.!?])\s+/);
  const paired=[...basic,...ko.map((v,i)=>[v,en[i]]),...source.slice(3)];
  // The second task follows the same event from a new opening, with a later follow-up.
- if(b>20&&l>=7)paired[8]=data.branches[index];
+ if(b>20&&l>=9)paired[10]=data.branches[index];
  const selected=paired.slice(0,l+2),language=lang==="ko"?0:1;
  const raw=[{q:["이 글의 주제로 알맞은 것은?","Which topic fits this passage?"],options:[0,1,2,3].map(n=>seeds[(index+n*3)%20][language]),correct:0,evidence:selected[0][0],type:"topic"}];
  const own=selected[1][language];

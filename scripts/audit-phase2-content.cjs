@@ -49,11 +49,19 @@ for(const name of courses){
 }
 check(report.lessons.units===350&&report.lessons.questions===1758,'Curriculum counts');check(report.lessons.placeholderNotes===0,'Placeholder notes remain');
 const ko=reading('ko'),en=reading('en'),seen=new Map();
+const oldHTML=cp.execFileSync('git',['show',baseline+':reading.html'],{cwd:root,encoding:'utf8'});
+const oldContext={document:{getElementById(){return {}}},localStorage:{getItem(){return null}}};vm.createContext(oldContext);
+vm.runInContext(oldHTML.match(/<script>\s*([\s\S]*?)<\/script>/)[1].split('function icon(')[0]+';globalThis.oldContent=content;',oldContext);
+report.preservation.readingLegacyEntriesChecked=0;
 for(let l=1;l<=15;l++){
  const counts=[],lengths=[],vocab=new Set();
  for(let b=1;b<=40;b++){
   const id=l+'-'+b,x=ko.get(l,b),y=en.get(l,b),text=x.paragraphs.join(' ');report.reading.items++;report.reading.questions+=x.q.length;
   check(x.paragraphs.length===l+2,id+' unexpected graded sentence count');
+  if(b>20&&l>=9){
+   const family=(b-1)%20,developmentEnd=ko.curriculum.sources[family][6][0],followup=ko.curriculum.branches[family][0];
+   check(x.paragraphs.indexOf(developmentEnd)>=0&&x.paragraphs.indexOf(followup)>x.paragraphs.indexOf(developmentEnd),id+' follow-up occurs before the initial decision/development ends');
+  }
   check(x.paragraphs.length===x.translations.length&&x.translations.every(t=>typeof t==='string'&&t.trim()),id+' translation alignment');
   check(JSON.stringify(x.paragraphs)===JSON.stringify(y.paragraphs)&&JSON.stringify(x.translations)===JSON.stringify(y.translations),id+' language toggling changes source');
   if(seen.has(text)){report.reading.exactDuplicates++;report.errors.push('Duplicate passage '+id+' and '+seen.get(text))}seen.set(text,id);
@@ -65,6 +73,11 @@ for(let l=1;l<=15;l++){
    if(k>0){check(x.paragraphs.filter(p=>p===q.options[q.correct]).length===1,id+' nonunique Korean support');check(x.paragraphs.filter(p=>q.options.includes(p)).length===1,id+' distractor also occurs');check(y.translations.filter(p=>e.options.includes(p)).length===1,id+' English distractor also occurs')}
   }
   check(x.legacy.paragraphs.length>0&&x.legacy.translations.length===x.legacy.paragraphs.length,id+' legacy source lost');
+  const old=oldContext.oldContent(l,b);
+  check(JSON.stringify(old.paragraphs)===JSON.stringify(x.legacy.paragraphs),id+' changed legacy Korean');
+  const correctedEnglish=old.translations.map(t=>t.replace('The building in the photo looked very different now.','The building in the photo looked very different from how it looks now.'));
+  check(JSON.stringify(correctedEnglish)===JSON.stringify(x.legacy.translations),id+' changed legacy English beyond documented correction');
+  report.preservation.readingLegacyEntriesChecked++;
   const words=text.split(/\s+/);counts.push(words.length);for(const p of x.paragraphs)lengths.push(p.split(/\s+/).length);words.forEach(w=>vocab.add(w));
   report.reading.entries.push({id,sentences:x.paragraphs.length,eojeol:words.length,questions:x.q.length,translationPairs:x.translations.length,sourceFamily:x.sourceFamily,legacyPreserved:true,sourceSha256:crypto.createHash('sha256').update(text).digest('hex')});
  }
@@ -73,6 +86,8 @@ for(let l=1;l<=15;l++){
 check(report.reading.items===600&&report.reading.questions===1800,'Reading counts');
 const audio=JSON.parse(fs.readFileSync(path.join(root,'hangul-audio-audit.json'),'utf8'));
 report.audio={...audio.counts,groups:{}};
+const required=audio.targets.filter(t=>t.groups.some(g=>['자음 이름','모음','글자판 음절'].includes(g)));
+report.audio.requiredHangul={uniqueTargets:required.length,filePresent:required.filter(t=>t.recordingAvailable).length,missing:required.filter(t=>!t.recordingAvailable).length,playbackAvailable:required.filter(t=>t.playbackAvailable).length,listeningApproved:0};
 for(const [label,group,total] of [['consonantNames','자음 이름',19],['vowels','모음',21],['syllables','글자판 음절',399]]){
  const items=audio.targets.filter(t=>t.groups.includes(group));
  report.audio.groups[label]={targets:items.length,filePresent:items.filter(t=>t.recordingAvailable).length,playbackAvailable:items.filter(t=>t.playbackAvailable).length,missing:items.filter(t=>!t.recordingAvailable).length,listeningApproved:0};check(items.length===total,'Audio alphabet count '+label);
@@ -81,5 +96,9 @@ report.warnings.push('Audio: missing human recordings and listening approval rem
 report.warnings.push('Exact supported-option uniqueness is an automated property, not a proof of every possible semantic interpretation.');
 report.warnings.push('Level metrics describe this graded curriculum; no CEFR/TOPIK calibration or learner trial was performed.');
 report.preservation.homepageUnchanged=fs.readFileSync(path.join(root,'index.html'),'utf8')===cp.execFileSync('git',['show',baseline+':index.html'],{cwd:root,encoding:'utf8'});check(report.preservation.homepageUnchanged,'Homepage modified');
+report.completion={sourceChecksPassed:report.errors.length===0,complete:false,blockers:['Required Hangul human recordings missing: '+report.audio.requiredHangul.missing,'All actual pronunciation listening approvals remain pending.'],limits:['AI source review does not establish learning effectiveness.','Browser mobile emulation does not establish iPhone/Android physical-device compatibility.']};
 fs.mkdirSync(path.join(root,'audit'),{recursive:true});fs.writeFileSync(path.join(root,'audit/phase2-content.json'),JSON.stringify(report,null,2)+'\n');
-console.log(JSON.stringify({lessons:report.lessons,reading:{...report.reading,entries:undefined},audio:report.audio,errors:report.errors,warnings:report.warnings},null,2));if(report.errors.length)process.exitCode=1;
+const csvValue=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+const queue=[['text','groups','source','filePresent','playbackAvailable','listeningStatus'],...audio.targets.map(t=>[t.text,t.groups.join(' / '),t.src||'',t.recordingAvailable,t.playbackAvailable,t.listeningStatus])];
+fs.writeFileSync(path.join(root,'audit/audio-listening-queue.csv'),'\uFEFF'+queue.map(row=>row.map(csvValue).join(',')).join('\n')+'\n');
+console.log(JSON.stringify({lessons:{...report.lessons,otherQuestionSources:undefined},reading:{...report.reading,entries:undefined},audio:report.audio,completion:report.completion,errors:report.errors,warnings:report.warnings},null,2));if(report.errors.length||(process.argv.includes('--require-complete')&&!report.completion.complete))process.exitCode=1;

@@ -1,7 +1,7 @@
 {
   "baseline": "46745d28b17554f7d0f67e3e5515778b7ccb35e3",
   "scope": "automated source checks; AI teaching review is recorded separately",
-  "generatedAt": "2026-10-26T14:40:14.232Z",
+  "generatedAt": "2026-10-26T14:52:20.163Z",
   "errors": [],
   "warnings": [
     "Audio: missing human recordings and listening approval remain; no synthetic substitution.",
@@ -24,8 +24,8 @@
         "answer": "아",
         "options": [
           "야",
-          "어",
           "아",
+          "어",
           "여"
         ]
       },
@@ -34,10 +34,10 @@
         "prompt": "‘ㄱ’의 이름은?",
         "answer": "기역",
         "options": [
-          "기역",
-          "니은",
+          "리을",
           "디귿",
-          "리을"
+          "니은",
+          "기역"
         ]
       },
       {
@@ -45,10 +45,10 @@
         "prompt": "니은을 고르세요.",
         "answer": "ㄴ",
         "options": [
-          "ㄱ",
-          "ㄴ",
           "ㄷ",
-          "ㄹ"
+          "ㄹ",
+          "ㄴ",
+          "ㄱ"
         ]
       },
       {
@@ -56,10 +56,10 @@
         "prompt": "미음을 고르세요.",
         "answer": "ㅁ",
         "options": [
-          "ㅂ",
-          "ㅅ",
+          "ㅇ",
           "ㅁ",
-          "ㅇ"
+          "ㅅ",
+          "ㅂ"
         ]
       },
       {
@@ -67,10 +67,10 @@
         "prompt": "받침이 없는 글자는?",
         "answer": "사",
         "options": [
-          "사",
           "산",
+          "손",
           "문",
-          "손"
+          "사"
         ]
       },
       {
@@ -78,9 +78,9 @@
         "prompt": "도움을 받았을 때 정중하게 하는 말은?",
         "answer": "감사합니다",
         "options": [
-          "아니요",
           "감사합니다",
           "안녕히 가세요",
+          "아니요",
           "네"
         ]
       },
@@ -89,10 +89,10 @@
         "prompt": "상대방이 떠날 때 하는 인사는?",
         "answer": "안녕히 가세요",
         "options": [
-          "네",
+          "아니요",
           "감사합니다",
           "안녕히 가세요",
-          "아니요"
+          "네"
         ]
       },
       {
@@ -101,9 +101,9 @@
         "answer": "야",
         "options": [
           "아",
+          "여",
           "어",
-          "야",
-          "여"
+          "야"
         ]
       },
       {
@@ -111,8 +111,8 @@
         "prompt": "‘ㅕ’에 ㅇ을 앞에 쓰면?",
         "answer": "여",
         "options": [
-          "아",
           "야",
+          "아",
           "여",
           "어"
         ]
@@ -123,9 +123,9 @@
         "answer": "요",
         "options": [
           "아",
+          "어",
           "야",
-          "요",
-          "어"
+          "요"
         ]
       },
       {
@@ -134,8 +134,8 @@
         "answer": "유",
         "options": [
           "아",
-          "야",
           "유",
+          "야",
           "어"
         ]
       },
@@ -144,10 +144,10 @@
         "prompt": "‘ㅐ’에 ㅇ을 앞에 쓰면?",
         "answer": "애",
         "options": [
-          "아",
+          "어",
           "야",
-          "애",
-          "어"
+          "아",
+          "애"
         ]
       },
       {
@@ -156,9 +156,9 @@
         "answer": "와",
         "options": [
           "아",
-          "야",
           "와",
-          "어"
+          "어",
+          "야"
         ]
       },
       {
@@ -166,10 +166,10 @@
         "prompt": "‘ㅝ’에 ㅇ을 앞에 쓰면?",
         "answer": "워",
         "options": [
-          "아",
+          "어",
           "야",
-          "워",
-          "어"
+          "아",
+          "워"
         ]
       },
       {
@@ -188,10 +188,10 @@
         "prompt": "‘ㅞ’에 ㅇ을 앞에 쓰면?",
         "answer": "웨",
         "options": [
-          "아",
-          "야",
           "웨",
-          "어"
+          "야",
+          "어",
+          "아"
         ]
       },
       {
@@ -201,8 +201,8 @@
         "options": [
           "아",
           "야",
-          "외",
-          "어"
+          "어",
+          "외"
         ]
       },
       {
@@ -221,9 +221,9 @@
         "prompt": "‘ㄲ’의 이름은?",
         "answer": "쌍기역",
         "options": [
+          "니은",
           "쌍기역",
           "기역",
-          "니은",
           "디귿"
         ]
       },
@@ -232,10 +232,10 @@
         "prompt": "‘ㄷ’의 이름은?",
         "answer": "디귿",
         "options": [
-          "디귿",
-          "기역",
+          "리을",
           "니은",
-          "리을"
+          "디귿",
+          "기역"
         ]
       },
       {
@@ -243,9 +243,9 @@
         "prompt": "‘ㄸ’의 이름은?",
         "answer": "쌍디귿",
         "options": [
-          "쌍디귿",
           "기역",
           "니은",
+          "쌍디귿",
           "디귿"
         ]
       },
@@ -255,9 +255,9 @@
         "answer": "비읍",
         "options": [
           "비읍",
-          "기역",
           "니은",
-          "디귿"
+          "디귿",
+          "기역"
         ]
       },
       {
@@ -266,8 +266,8 @@
         "answer": "키읔",
         "options": [
           "키읔",
-          "기역",
           "니은",
+          "기역",
           "디귿"
         ]
       },
@@ -276,10 +276,10 @@
         "prompt": "‘ㅌ’의 이름은?",
         "answer": "티읕",
         "options": [
-          "티읕",
-          "기역",
           "니은",
-          "디귿"
+          "디귿",
+          "티읕",
+          "기역"
         ]
       },
       {
@@ -287,10 +287,10 @@
         "prompt": "‘ㅍ’의 이름은?",
         "answer": "피읖",
         "options": [
+          "디귿",
           "피읖",
-          "기역",
           "니은",
-          "디귿"
+          "기역"
         ]
       },
       {
@@ -300,8 +300,8 @@
         "options": [
           "치읓",
           "기역",
-          "니은",
-          "디귿"
+          "디귿",
+          "니은"
         ]
       },
       {
@@ -309,9 +309,9 @@
         "prompt": "‘ㅎ’의 이름은?",
         "answer": "히읗",
         "options": [
-          "히읗",
-          "기역",
           "니은",
+          "기역",
+          "히읗",
           "디귿"
         ]
       },
@@ -321,9 +321,9 @@
         "answer": "는",
         "options": [
           "은",
-          "는",
+          "이",
           "을",
-          "이"
+          "는"
         ]
       },
       {
@@ -331,10 +331,10 @@
         "prompt": "'저는'에서 화제 조사는?",
         "answer": "는",
         "options": [
+          "에",
           "가",
-          "는",
           "를",
-          "에"
+          "는"
         ]
       },
       {
@@ -343,9 +343,9 @@
         "answer": "예요",
         "options": [
           "이에요",
-          "예요",
+          "에서",
           "을",
-          "에서"
+          "예요"
         ]
       },
       {
@@ -353,10 +353,10 @@
         "prompt": "'친구가'에서 주어 조사는?",
         "answer": "가",
         "options": [
-          "는",
           "가",
-          "를",
-          "도"
+          "도",
+          "는",
+          "를"
         ]
       },
       {
@@ -364,10 +364,10 @@
         "prompt": "'책___ 있어요.' 알맞은 조사는?",
         "answer": "이",
         "options": [
+          "를",
           "가",
-          "는",
           "이",
-          "를"
+          "는"
         ]
       },
       {
@@ -375,10 +375,10 @@
         "prompt": "'책을'에서 목적격 조사는?",
         "answer": "을",
         "options": [
-          "이",
+          "는",
           "을",
-          "에",
-          "는"
+          "이",
+          "에"
         ]
       },
       {
@@ -386,10 +386,10 @@
         "prompt": "'저는 밥___ 먹어요.' 알맞은 조사는?",
         "answer": "을",
         "options": [
-          "이",
+          "는",
           "가",
-          "을",
-          "는"
+          "이",
+          "을"
         ]
       },
       {
@@ -399,8 +399,8 @@
         "options": [
           "를",
           "에",
-          "은",
-          "가"
+          "가",
+          "은"
         ]
       },
       {
@@ -419,10 +419,10 @@
         "prompt": "'밥을 먹어요'의 목적어는?",
         "answer": "밥",
         "options": [
-          "먹어요",
           "밥",
+          "없음",
           "을",
-          "없음"
+          "먹어요"
         ]
       },
       {
@@ -430,10 +430,10 @@
         "prompt": "'물___ 주세요.'에서 'also'의 의미를 더하는 조사는?",
         "answer": "도",
         "options": [
-          "만",
-          "를",
+          "에",
           "도",
-          "에"
+          "를",
+          "만"
         ]
       },
       {
@@ -441,10 +441,10 @@
         "prompt": "'물도 주세요'에서 '도'의 뜻은?",
         "answer": "also",
         "options": [
-          "only",
           "also",
+          "until",
           "from",
-          "until"
+          "only"
         ]
       },
       {
@@ -453,9 +453,9 @@
         "answer": "에",
         "options": [
           "를",
+          "은",
           "에서",
-          "에",
-          "은"
+          "에"
         ]
       },
       {
@@ -463,8 +463,8 @@
         "prompt": "'세 시에'에서 시간 조사는?",
         "answer": "에",
         "options": [
-          "은",
           "에",
+          "은",
           "을",
           "도"
         ]
@@ -476,8 +476,8 @@
         "options": [
           "으로",
           "로",
-          "에",
-          "를"
+          "를",
+          "에"
         ]
       },
       {
@@ -485,10 +485,10 @@
         "prompt": "'버스로'에서 수단을 나타내는 조사는?",
         "answer": "로",
         "options": [
-          "가",
           "로",
           "를",
-          "는"
+          "는",
+          "가"
         ]
       },
       {
@@ -496,10 +496,10 @@
         "prompt": "'가다'의 자연스러운 과거형은?",
         "answer": "갔어요",
         "options": [
-          "가요",
           "갔어요",
+          "가세요",
           "갈 거예요",
-          "가세요"
+          "가요"
         ]
       },
       {
@@ -507,10 +507,10 @@
         "prompt": "어제 여행이 재미있___. 과거형으로 완성하세요.",
         "answer": "었어요",
         "options": [
+          "으세요",
           "어요",
           "었어요",
-          "을 거예요",
-          "으세요"
+          "을 거예요"
         ]
       },
       {
@@ -518,10 +518,10 @@
         "prompt": "'바꾸다'를 정중한 부탁으로 바꾸면?",
         "answer": "바꿔 주세요",
         "options": [
-          "바꿨어요",
+          "바꾸지 않아요",
           "바꿀 거예요",
-          "바꿔 주세요",
-          "바꾸지 않아요"
+          "바꿨어요",
+          "바꿔 주세요"
         ]
       },
       {
@@ -529,9 +529,9 @@
         "prompt": "물건을 바꾸기 전에 가능 여부를 묻는 말은?",
         "answer": "바꿀 수 있어요?",
         "options": [
-          "바꿨어요.",
-          "바꿀 수 있어요?",
           "바꿀 거예요.",
+          "바꿀 수 있어요?",
+          "바꿨어요.",
           "바꾸지 마세요."
         ]
       },
@@ -541,8 +541,8 @@
         "answer": "topic",
         "options": [
           "object",
-          "topic",
           "destination",
+          "topic",
           "past tense"
         ]
       },
@@ -551,9 +551,9 @@
         "prompt": "'공부할 거예요'의 시제는?",
         "answer": "future",
         "options": [
-          "past",
           "future",
           "present",
+          "past",
           "imperative"
         ]
       },
@@ -562,10 +562,10 @@
         "prompt": "'피곤해서'의 '-어서'는?",
         "answer": "reason",
         "options": [
+          "command",
           "contrast",
-          "reason",
           "quotation",
-          "command"
+          "reason"
         ]
       },
       {
@@ -574,9 +574,9 @@
         "answer": "condition",
         "options": [
           "past",
-          "condition",
           "comparison",
-          "prohibition"
+          "prohibition",
+          "condition"
         ]
       },
       {
@@ -584,10 +584,10 @@
         "prompt": "'가 봤어요'는 무엇을 나타내나요?",
         "answer": "experience",
         "options": [
-          "obligation",
-          "experience",
           "negation",
-          "quotation"
+          "quotation",
+          "experience",
+          "obligation"
         ]
       },
       {
@@ -595,9 +595,9 @@
         "prompt": "'온다고 했어요'는?",
         "answer": "reported statement",
         "options": [
-          "direct command",
-          "reported statement",
           "wish",
+          "reported statement",
+          "direct command",
           "comparison"
         ]
       },
@@ -606,10 +606,10 @@
         "prompt": "'올 수도 있어요'는?",
         "answer": "might come",
         "options": [
-          "must come",
-          "might come",
           "cannot come",
-          "came yesterday"
+          "must come",
+          "came yesterday",
+          "might come"
         ]
       },
       {
@@ -617,10 +617,10 @@
         "prompt": "'-지만'은?",
         "answer": "contrast",
         "options": [
+          "command",
           "cause",
-          "contrast",
           "future",
-          "command"
+          "contrast"
         ]
       },
       {
@@ -628,10 +628,10 @@
         "prompt": "'-아/어야 하다'는?",
         "answer": "obligation",
         "options": [
-          "possibility",
-          "obligation",
           "quotation",
-          "comparison"
+          "comparison",
+          "obligation",
+          "possibility"
         ]
       },
       {
@@ -640,9 +640,9 @@
         "answer": "specific evidence",
         "options": [
           "repeated claim",
+          "personal insult",
           "specific evidence",
-          "unrelated example",
-          "personal insult"
+          "unrelated example"
         ]
       },
       {
@@ -650,10 +650,10 @@
         "prompt": "논증 평가에 필요한 것은?",
         "answer": "check evidence",
         "options": [
-          "ignore evidence",
+          "repeat conclusions",
           "check evidence",
-          "avoid objections",
-          "repeat conclusions"
+          "ignore evidence",
+          "avoid objections"
         ]
       },
       {
@@ -661,10 +661,10 @@
         "prompt": "사회 분석에서 피해야 할 것은?",
         "answer": "unsupported generalization",
         "options": [
-          "acknowledging exceptions",
           "unsupported generalization",
-          "comparing views",
-          "defining terms"
+          "defining terms",
+          "acknowledging exceptions",
+          "comparing views"
         ]
       },
       {
@@ -673,9 +673,9 @@
         "answer": "verified facts",
         "options": [
           "headlines",
-          "verified facts",
+          "quotations",
           "paragraphs",
-          "quotations"
+          "verified facts"
         ]
       },
       {
@@ -683,10 +683,10 @@
         "prompt": "격식 있는 요청은?",
         "answer": "검토해 주시기 바랍니다",
         "options": [
-          "해 줘",
+          "그냥 해",
           "검토해 주시기 바랍니다",
           "봐",
-          "그냥 해"
+          "해 줘"
         ]
       },
       {
@@ -695,9 +695,9 @@
         "answer": "set criteria",
         "options": [
           "choose winner",
+          "assume result",
           "set criteria",
-          "ignore alternatives",
-          "assume result"
+          "ignore alternatives"
         ]
       },
       {
@@ -706,9 +706,9 @@
         "answer": "implicit basis",
         "options": [
           "explicit title",
-          "implicit basis",
+          "font size",
           "publication date",
-          "font size"
+          "implicit basis"
         ]
       },
       {
@@ -716,10 +716,10 @@
         "prompt": "학술 결과 해석에 필요한 것은?",
         "answer": "evidence and limits",
         "options": [
-          "only the title",
+          "page count",
           "evidence and limits",
           "personal preference",
-          "page count"
+          "only the title"
         ]
       },
       {
@@ -727,9 +727,9 @@
         "prompt": "협상에서 절충안은?",
         "answer": "mutually adjusted proposal",
         "options": [
+          "refusal",
           "threat",
           "mutually adjusted proposal",
-          "refusal",
           "repeated demand"
         ]
       },
@@ -738,10 +738,10 @@
         "prompt": "'-므로'는?",
         "answer": "reason",
         "options": [
-          "contrast",
           "reason",
-          "quotation",
-          "wish"
+          "contrast",
+          "wish",
+          "quotation"
         ]
       },
       {
@@ -749,10 +749,10 @@
         "prompt": "논리적인 발표 구성은?",
         "answer": "problem evidence conclusion",
         "options": [
+          "examples without topic",
           "conclusion only",
-          "problem evidence conclusion",
           "unrelated facts",
-          "examples without topic"
+          "problem evidence conclusion"
         ]
       }
     ]
@@ -821,26 +821,26 @@
         "level": 7,
         "entries": 40,
         "minEojeol": 39,
-        "maxEojeol": 54,
-        "meanEojeol": 46.42,
-        "maxSentenceEojeol": 12,
-        "uniqueSurfaceForms": 730
+        "maxEojeol": 52,
+        "meanEojeol": 45.55,
+        "maxSentenceEojeol": 11,
+        "uniqueSurfaceForms": 641
       },
       {
         "level": 8,
         "entries": 40,
         "minEojeol": 46,
-        "maxEojeol": 62,
-        "meanEojeol": 53.92,
-        "maxSentenceEojeol": 12,
-        "uniqueSurfaceForms": 803
+        "maxEojeol": 63,
+        "meanEojeol": 53.05,
+        "maxSentenceEojeol": 11,
+        "uniqueSurfaceForms": 720
       },
       {
         "level": 9,
         "entries": 40,
         "minEojeol": 55,
         "maxEojeol": 73,
-        "meanEojeol": 63.88,
+        "meanEojeol": 62.92,
         "maxSentenceEojeol": 12,
         "uniqueSurfaceForms": 932
       },
@@ -848,8 +848,8 @@
         "level": 10,
         "entries": 40,
         "minEojeol": 64,
-        "maxEojeol": 83,
-        "meanEojeol": 73.58,
+        "maxEojeol": 84,
+        "meanEojeol": 72.63,
         "maxSentenceEojeol": 12,
         "uniqueSurfaceForms": 1044
       },
@@ -857,8 +857,8 @@
         "level": 11,
         "entries": 40,
         "minEojeol": 74,
-        "maxEojeol": 94,
-        "meanEojeol": 83.28,
+        "maxEojeol": 95,
+        "meanEojeol": 82.33,
         "maxSentenceEojeol": 12,
         "uniqueSurfaceForms": 1149
       },
@@ -866,8 +866,8 @@
         "level": 12,
         "entries": 40,
         "minEojeol": 82,
-        "maxEojeol": 105,
-        "meanEojeol": 92.92,
+        "maxEojeol": 106,
+        "meanEojeol": 91.97,
         "maxSentenceEojeol": 13,
         "uniqueSurfaceForms": 1245
       },
@@ -875,8 +875,8 @@
         "level": 13,
         "entries": 40,
         "minEojeol": 89,
-        "maxEojeol": 116,
-        "meanEojeol": 102.88,
+        "maxEojeol": 117,
+        "meanEojeol": 101.92,
         "maxSentenceEojeol": 13,
         "uniqueSurfaceForms": 1342
       },
@@ -884,8 +884,8 @@
         "level": 14,
         "entries": 40,
         "minEojeol": 99,
-        "maxEojeol": 126,
-        "meanEojeol": 112.88,
+        "maxEojeol": 127,
+        "meanEojeol": 111.92,
         "maxSentenceEojeol": 13,
         "uniqueSurfaceForms": 1435
       },
@@ -893,8 +893,8 @@
         "level": 15,
         "entries": 40,
         "minEojeol": 106,
-        "maxEojeol": 136,
-        "meanEojeol": 123.28,
+        "maxEojeol": 137,
+        "meanEojeol": 122.33,
         "maxSentenceEojeol": 14,
         "uniqueSurfaceForms": 1527
       }
@@ -3503,42 +3503,42 @@
       {
         "id": "7-21",
         "sentences": 9,
-        "eojeol": 45,
+        "eojeol": 43,
         "questions": 3,
         "translationPairs": 9,
         "sourceFamily": 1,
         "legacyPreserved": true,
-        "sourceSha256": "7e1b30130a758e6ef19aa52d029001fb54645dc00b3c99602be5a31544ce950e"
+        "sourceSha256": "bc7d395d1f253c23191265af580fe4585e3e7a665e3709d34331a36f59b30b85"
       },
       {
         "id": "7-22",
         "sentences": 9,
-        "eojeol": 50,
+        "eojeol": 48,
         "questions": 3,
         "translationPairs": 9,
         "sourceFamily": 2,
         "legacyPreserved": true,
-        "sourceSha256": "fdde2df8f7b4c005dca29a97bbb3e9ce5655aa90383fdf6577639a27789621ce"
+        "sourceSha256": "60b1854e5fb1752dffadea9e45716a41692bd746d6135073aa2099ad0b466744"
       },
       {
         "id": "7-23",
         "sentences": 9,
-        "eojeol": 48,
+        "eojeol": 44,
         "questions": 3,
         "translationPairs": 9,
         "sourceFamily": 3,
         "legacyPreserved": true,
-        "sourceSha256": "6dac0a0cbdc1c6b1960f291cc4fa3843efcfb2a91e9ffa10d4b1e11ef21b22b3"
+        "sourceSha256": "5d14658fc8fed33ed12b5c040163f18867637c235716eae08a9f81456ef3519f"
       },
       {
         "id": "7-24",
         "sentences": 9,
-        "eojeol": 47,
+        "eojeol": 46,
         "questions": 3,
         "translationPairs": 9,
         "sourceFamily": 4,
         "legacyPreserved": true,
-        "sourceSha256": "315ae5aa9a7df2dd37199ca6cbe25c7b01e69f5840289ce063acf4d72b30778f"
+        "sourceSha256": "8f11c7736542b251a8135d0b403d2e364437a8d3e249c9d56d7b40366284973c"
       },
       {
         "id": "7-25",
@@ -3548,97 +3548,97 @@
         "translationPairs": 9,
         "sourceFamily": 5,
         "legacyPreserved": true,
-        "sourceSha256": "b825805d55f2309f22a658bd86ba28b792e83c1cd94271806f0afaf6c9f92a59"
+        "sourceSha256": "19e047ee2431b5051925a6aaeea8c79190091b22173473184e9d598f3b51f992"
       },
       {
         "id": "7-26",
         "sentences": 9,
-        "eojeol": 43,
+        "eojeol": 42,
         "questions": 3,
         "translationPairs": 9,
         "sourceFamily": 6,
         "legacyPreserved": true,
-        "sourceSha256": "64530181cd56df6d549414d574dbee57a33474ee42f27829ce28d54b6ec5f690"
+        "sourceSha256": "cb4607b85cb8b44a9f2a70426a10f76ff98f6eb71c9edb409d1dcf4d251b9a12"
       },
       {
         "id": "7-27",
         "sentences": 9,
-        "eojeol": 48,
+        "eojeol": 45,
         "questions": 3,
         "translationPairs": 9,
         "sourceFamily": 7,
         "legacyPreserved": true,
-        "sourceSha256": "d91c7b2ef2713d3e0b3e91d730b5c2fceaf5975c467415b8276a9228cf44694a"
+        "sourceSha256": "7d1d8b6887614a6e528ce5004401822510b0cbb421de731cbf5ab4411043df92"
       },
       {
         "id": "7-28",
         "sentences": 9,
-        "eojeol": 44,
+        "eojeol": 42,
         "questions": 3,
         "translationPairs": 9,
         "sourceFamily": 8,
         "legacyPreserved": true,
-        "sourceSha256": "51f5dd19954ef318e9b5becf4d288598776017363c4ff0a7c78bbb7342d7e53d"
+        "sourceSha256": "416533c5fd71dc88bd99876354e77c4e8b532fb74c0480be9d1d95b84e62e456"
       },
       {
         "id": "7-29",
         "sentences": 9,
-        "eojeol": 48,
+        "eojeol": 49,
         "questions": 3,
         "translationPairs": 9,
         "sourceFamily": 9,
         "legacyPreserved": true,
-        "sourceSha256": "2c0ee53186e1bd91ee9e2009736563fb834a8c9aa8998f9162193446081db047"
+        "sourceSha256": "5d84d63710a555be8f8e800613161ee1fe77853c0326a8aeb550c39e40980e44"
       },
       {
         "id": "7-30",
         "sentences": 9,
-        "eojeol": 48,
+        "eojeol": 44,
         "questions": 3,
         "translationPairs": 9,
         "sourceFamily": 10,
         "legacyPreserved": true,
-        "sourceSha256": "4e581ccb9fd0763f36e51bb5b027b3cea69e4231fde29f6aee590580fb809038"
+        "sourceSha256": "672e4dddf18e8662481811cd68577e1ce993c0878b3cae7a00ce7918c83c972d"
       },
       {
         "id": "7-31",
         "sentences": 9,
-        "eojeol": 51,
+        "eojeol": 46,
         "questions": 3,
         "translationPairs": 9,
         "sourceFamily": 11,
         "legacyPreserved": true,
-        "sourceSha256": "43652670e26a12a321e7faf0454ef08be4e5252d7b26a6874738dda9fe11cea2"
+        "sourceSha256": "b1b6945cd9526e7d79315c385a639f8796426e48a0348d96e0b26318af0855fe"
       },
       {
         "id": "7-32",
         "sentences": 9,
-        "eojeol": 54,
+        "eojeol": 49,
         "questions": 3,
         "translationPairs": 9,
         "sourceFamily": 12,
         "legacyPreserved": true,
-        "sourceSha256": "38408f68b1b7773d6f9865044f55390b0eb772245af0c09b9a2c687ce97a0b65"
+        "sourceSha256": "4c090c2ffec1301337e3fcd833d78745d75787f2d2f5165657d44ff4f7c4c985"
       },
       {
         "id": "7-33",
         "sentences": 9,
-        "eojeol": 42,
+        "eojeol": 43,
         "questions": 3,
         "translationPairs": 9,
         "sourceFamily": 13,
         "legacyPreserved": true,
-        "sourceSha256": "2507d82c561ed8ec6b9c2c8b24f83fa3d9b446adc9dbbea1c0cbf05faecf2e64"
+        "sourceSha256": "c46cc47eb9d10aa9666b2ed878ac9fd88221209a733663948bb33a204d195a2a"
       },
       {
         "id": "7-34",
         "sentences": 9,
-        "eojeol": 45,
+        "eojeol": 44,
         "questions": 3,
         "translationPairs": 9,
         "sourceFamily": 14,
         "legacyPreserved": true,
-        "sourceSha256": "fcb48e954907affcbc57bbfe7f370da9e254bd5f56f89e7383b7b75b8cf28fd8"
+        "sourceSha256": "454067805dab44b06f6cf08b440712adaa282870aa6beed5e2a4f489ccc6d9fa"
       },
       {
         "id": "7-35",
@@ -3648,27 +3648,27 @@
         "translationPairs": 9,
         "sourceFamily": 15,
         "legacyPreserved": true,
-        "sourceSha256": "b4434c65f2d87c9e2a9c25b33037373a970ebfb81623aa34bf9409dd3c048285"
+        "sourceSha256": "7d8d9bf9a3d96d81947e76b10ad5c6078b72f39852412772073f16d8d04d610a"
       },
       {
         "id": "7-36",
         "sentences": 9,
-        "eojeol": 54,
+        "eojeol": 51,
         "questions": 3,
         "translationPairs": 9,
         "sourceFamily": 16,
         "legacyPreserved": true,
-        "sourceSha256": "1349669b166685b032c914d219f7dedcb0bb7c3b2da5d49c63ed91009c5ebfe2"
+        "sourceSha256": "6f4739675e95832c9d1d5788899c4099204d8c2a196c5f107baf428aadf4a0e4"
       },
       {
         "id": "7-37",
         "sentences": 9,
-        "eojeol": 47,
+        "eojeol": 45,
         "questions": 3,
         "translationPairs": 9,
         "sourceFamily": 17,
         "legacyPreserved": true,
-        "sourceSha256": "b4018f1eaeba2788011860b9fb3db0d2e874950d7f8fb1522442fe3c3d52e0e1"
+        "sourceSha256": "7ad4f4fd7ff0f16807472cc2ec6703ec21968d1547c1130520c7c0d603952941"
       },
       {
         "id": "7-38",
@@ -3678,27 +3678,27 @@
         "translationPairs": 9,
         "sourceFamily": 18,
         "legacyPreserved": true,
-        "sourceSha256": "fec100cb6937255b893c86ce5fe145f0b54480963c9e3462b6428031ce871854"
+        "sourceSha256": "82f62631a67e10e72e70ef29240bd96e666828c302c5155aa16af6f3d9fbcf3c"
       },
       {
         "id": "7-39",
         "sentences": 9,
-        "eojeol": 52,
+        "eojeol": 49,
         "questions": 3,
         "translationPairs": 9,
         "sourceFamily": 19,
         "legacyPreserved": true,
-        "sourceSha256": "68e39efbff12d3894e3cd1265eeac6844853b1ee45400ecd7d5b473ea266313d"
+        "sourceSha256": "a6d13bf462da5813b4cf48b3819fcaacb3c7b5dc5962bbc892c2466a57ed5011"
       },
       {
         "id": "7-40",
         "sentences": 9,
-        "eojeol": 51,
+        "eojeol": 52,
         "questions": 3,
         "translationPairs": 9,
         "sourceFamily": 20,
         "legacyPreserved": true,
-        "sourceSha256": "93286f285c809d59943b2d574d9e6b1805608a43bc5546aa877321246fc1e693"
+        "sourceSha256": "7b189f4ec7e211c47bf113693d7f80c83b0fc33039ce17524d304ebe25c29712"
       },
       {
         "id": "8-1",
@@ -3903,42 +3903,42 @@
       {
         "id": "8-21",
         "sentences": 10,
-        "eojeol": 52,
+        "eojeol": 50,
         "questions": 3,
         "translationPairs": 10,
         "sourceFamily": 1,
         "legacyPreserved": true,
-        "sourceSha256": "7116b35d082900ee86c11d1279c5f4916c2fdcb5bbacb37a01cc22195fbe5786"
+        "sourceSha256": "a13661b5e8697656eb2570d5fa1f7a2a1441520cc34374cde85c6a50f11971f8"
       },
       {
         "id": "8-22",
         "sentences": 10,
-        "eojeol": 59,
+        "eojeol": 57,
         "questions": 3,
         "translationPairs": 10,
         "sourceFamily": 2,
         "legacyPreserved": true,
-        "sourceSha256": "276d37623f907903b0c862a84aa0934bf5216de5db5789356cbbb35548e30c56"
+        "sourceSha256": "772a9942184993287fffdc925000dd32ebacff72469343e7c817f7f18b2e3f3e"
       },
       {
         "id": "8-23",
         "sentences": 10,
-        "eojeol": 54,
+        "eojeol": 50,
         "questions": 3,
         "translationPairs": 10,
         "sourceFamily": 3,
         "legacyPreserved": true,
-        "sourceSha256": "bdefd9fb4261dc61dc9670a264f85be756496e00668078879a52bac4e0d1c3f2"
+        "sourceSha256": "07e1f939c43e7e64dfee0d4029d7239ed8b8a8b4376ffd4f88eb23431ddab8fb"
       },
       {
         "id": "8-24",
         "sentences": 10,
-        "eojeol": 53,
+        "eojeol": 52,
         "questions": 3,
         "translationPairs": 10,
         "sourceFamily": 4,
         "legacyPreserved": true,
-        "sourceSha256": "fbe102dbb388912fd91eeb7c8ac047e447180380654841c0c426d967f9624e99"
+        "sourceSha256": "26ad231bbb9daf7c2369605da0e20fa6fbaffd199c61fe7a0c8437c40ea114fb"
       },
       {
         "id": "8-25",
@@ -3948,97 +3948,97 @@
         "translationPairs": 10,
         "sourceFamily": 5,
         "legacyPreserved": true,
-        "sourceSha256": "3ded7ef835b26f6cf904cd4c15d845a0b617e8c96ced6b9bdbdb2086d846a32a"
+        "sourceSha256": "2520bc99d18011e5dc7687e73628f0d119ed35ec5d5dba9bda722198ffdf0fc4"
       },
       {
         "id": "8-26",
         "sentences": 10,
-        "eojeol": 50,
+        "eojeol": 49,
         "questions": 3,
         "translationPairs": 10,
         "sourceFamily": 6,
         "legacyPreserved": true,
-        "sourceSha256": "557f16fe255b3f2f022d509ff9b5609e8ca8873289d96b6ff0685d507c02aa2f"
+        "sourceSha256": "5ea31fcd82df0ca5b789234f1bd4abb972861e9b583cad389d4e470b38a1bba0"
       },
       {
         "id": "8-27",
         "sentences": 10,
-        "eojeol": 55,
+        "eojeol": 52,
         "questions": 3,
         "translationPairs": 10,
         "sourceFamily": 7,
         "legacyPreserved": true,
-        "sourceSha256": "738599f460fd500509022cec8c8a26a9cb55993a27248b41e6d0db5970e5e157"
+        "sourceSha256": "a2aba6700e7fb0b9f894c07cf504f8d13973934cfb419da93221ec94d15be883"
       },
       {
         "id": "8-28",
         "sentences": 10,
-        "eojeol": 51,
+        "eojeol": 49,
         "questions": 3,
         "translationPairs": 10,
         "sourceFamily": 8,
         "legacyPreserved": true,
-        "sourceSha256": "7b792d0e6bb7ffb4eb4ab5d09a41aac4065cd1db67bd2c8dd366900bb52c7713"
+        "sourceSha256": "e541d231a1214fedca02f72a3d6233d2b0b05d2283ec4da3904c5aa12be711e5"
       },
       {
         "id": "8-29",
         "sentences": 10,
-        "eojeol": 55,
+        "eojeol": 56,
         "questions": 3,
         "translationPairs": 10,
         "sourceFamily": 9,
         "legacyPreserved": true,
-        "sourceSha256": "fed4326cf0dca18a6d5f2c445ee902ed599fdb390377686c52e3ace3e8a7ef52"
+        "sourceSha256": "1a71357a87634b42a24db7d06c86f665eab12583c6c82684e05e70d72ea12718"
       },
       {
         "id": "8-30",
         "sentences": 10,
-        "eojeol": 56,
+        "eojeol": 52,
         "questions": 3,
         "translationPairs": 10,
         "sourceFamily": 10,
         "legacyPreserved": true,
-        "sourceSha256": "c15a3775f4c148e0158a1ceb770c7c17804bfc492dcf739cd21b871412a1b9d7"
+        "sourceSha256": "6e2bc934b0f292262dee44335a408268d30e359fd210ff9748d8431584f7b696"
       },
       {
         "id": "8-31",
         "sentences": 10,
-        "eojeol": 59,
+        "eojeol": 54,
         "questions": 3,
         "translationPairs": 10,
         "sourceFamily": 11,
         "legacyPreserved": true,
-        "sourceSha256": "953b571f5527e6e19af0cb81a654d3620224378fbd201b65490d1d9a35d2c203"
+        "sourceSha256": "3f4cf706f98ebcb37ed34a3d105d42dad41e0645d518fb10fcddc584460c3e94"
       },
       {
         "id": "8-32",
         "sentences": 10,
-        "eojeol": 61,
+        "eojeol": 56,
         "questions": 3,
         "translationPairs": 10,
         "sourceFamily": 12,
         "legacyPreserved": true,
-        "sourceSha256": "142579b32a37ed7d9e9ad7c507047d4896a74116c586ba512b1876d85549c6f3"
+        "sourceSha256": "ae76bd6aa9315d66827d2d04dbe4f3fc131a97a11188eb0dc14712b66802f4c9"
       },
       {
         "id": "8-33",
         "sentences": 10,
-        "eojeol": 48,
+        "eojeol": 49,
         "questions": 3,
         "translationPairs": 10,
         "sourceFamily": 13,
         "legacyPreserved": true,
-        "sourceSha256": "28f9abe3ec4e73980af41730a256b1945b672446cfe31bcb5885909ccd988f8e"
+        "sourceSha256": "1201c7d09394a339def504cd30af6b39552a4ad28d7eb67724e59a797fa6fc83"
       },
       {
         "id": "8-34",
         "sentences": 10,
-        "eojeol": 51,
+        "eojeol": 50,
         "questions": 3,
         "translationPairs": 10,
         "sourceFamily": 14,
         "legacyPreserved": true,
-        "sourceSha256": "a0147fd77d767f5dc17f745080dc20989f4ff0ff925a1f3f7e3ee2a3dee14a76"
+        "sourceSha256": "97697ae6f7443503827a347288c0b24a8031338a7f3f27706baf9c8e062fcefb"
       },
       {
         "id": "8-35",
@@ -4048,27 +4048,27 @@
         "translationPairs": 10,
         "sourceFamily": 15,
         "legacyPreserved": true,
-        "sourceSha256": "b1dcee06fa36a81d6b4a32672cb0d9cbf8659324b8ecb96269fe5a2acbc0c5a9"
+        "sourceSha256": "8f4b3924f72a134551842fa6756203f562fdf1da12eeace26b19b612683cb0ce"
       },
       {
         "id": "8-36",
         "sentences": 10,
-        "eojeol": 61,
+        "eojeol": 58,
         "questions": 3,
         "translationPairs": 10,
         "sourceFamily": 16,
         "legacyPreserved": true,
-        "sourceSha256": "71b5bfb727268ffdc9749f899e7d55867ba770973dce7e4d04bf2023297c7c5e"
+        "sourceSha256": "35b47c6cfe24eeb281861afd9f9cb2bd29ce9b6d23196a2136d4aa1716f270a6"
       },
       {
         "id": "8-37",
         "sentences": 10,
-        "eojeol": 56,
+        "eojeol": 54,
         "questions": 3,
         "translationPairs": 10,
         "sourceFamily": 17,
         "legacyPreserved": true,
-        "sourceSha256": "79323f186eaa6f2a4670e6b4e16ee82c678fb9b95a775ddfcceb539f9beb2e22"
+        "sourceSha256": "b1bdfa1da67511e7f61db5fe59661c7f518d1ae1ea971797c57134e0cd607054"
       },
       {
         "id": "8-38",
@@ -4078,27 +4078,27 @@
         "translationPairs": 10,
         "sourceFamily": 18,
         "legacyPreserved": true,
-        "sourceSha256": "c41bd1019fca2747e4945b99d3dbee0e65b3536cb14ab3075e242ec6bcbacd5c"
+        "sourceSha256": "b3e34668c6ef994d15d4fe9e1e4e16ac85053129724099013c47c3cefaef4d66"
       },
       {
         "id": "8-39",
         "sentences": 10,
-        "eojeol": 62,
+        "eojeol": 59,
         "questions": 3,
         "translationPairs": 10,
         "sourceFamily": 19,
         "legacyPreserved": true,
-        "sourceSha256": "ddb7278a714dd9fc7aeae92643c1233e2798d8618e17e01eb091eb95fb135e2d"
+        "sourceSha256": "b4fed009d15c13786756eff0368074657345966ed58ebd4cd41185e7335f4c82"
       },
       {
         "id": "8-40",
         "sentences": 10,
-        "eojeol": 62,
+        "eojeol": 63,
         "questions": 3,
         "translationPairs": 10,
         "sourceFamily": 20,
         "legacyPreserved": true,
-        "sourceSha256": "29d5546083fb851d272a86de58aaec1081f9487b5e226780efa6a5b0cb2a3722"
+        "sourceSha256": "6ea633e2896c383d5ff18096918ce5e42101663d83c0b2449ba3477027f9bca3"
       },
       {
         "id": "9-1",
@@ -4303,52 +4303,52 @@
       {
         "id": "9-21",
         "sentences": 11,
-        "eojeol": 62,
+        "eojeol": 60,
         "questions": 3,
         "translationPairs": 11,
         "sourceFamily": 1,
         "legacyPreserved": true,
-        "sourceSha256": "f5374cdd395f84a4a8c87085088cf0379733f85c3ea743d71958a7fb7d4f43f1"
+        "sourceSha256": "2ed3c4efdaba7369042a67cdac3cee529a27411de6ea6cea5e08d6e9b75d76e4"
       },
       {
         "id": "9-22",
         "sentences": 11,
-        "eojeol": 70,
+        "eojeol": 67,
         "questions": 3,
         "translationPairs": 11,
         "sourceFamily": 2,
         "legacyPreserved": true,
-        "sourceSha256": "595f7ae7a6aca80f835d27c02f779190769633c899e7129ff9635ca76d4b4f52"
+        "sourceSha256": "a3aa2b5426490d00fab8622898c1a2724e52a3a84ee6fbfb5763b25664adf597"
       },
       {
         "id": "9-23",
         "sentences": 11,
-        "eojeol": 64,
+        "eojeol": 61,
         "questions": 3,
         "translationPairs": 11,
         "sourceFamily": 3,
         "legacyPreserved": true,
-        "sourceSha256": "61633e407b485fc92b2c970d2469cbde4c8b8ffc065963e41815fd6cdc362804"
+        "sourceSha256": "e3e9e2c15d5dff722cef756e21961ef946748e2b443539e5bf8585ec5460ccf1"
       },
       {
         "id": "9-24",
         "sentences": 11,
-        "eojeol": 61,
+        "eojeol": 60,
         "questions": 3,
         "translationPairs": 11,
         "sourceFamily": 4,
         "legacyPreserved": true,
-        "sourceSha256": "fc708994a3da1d0ccf108e204cbb3e51c8701ed4ddc9a7593e5312cd8fa57708"
+        "sourceSha256": "2427707a759c0ed566fb5e52dce79ffda6bfe854dcbc9158b8bb0241773ec14c"
       },
       {
         "id": "9-25",
         "sentences": 11,
-        "eojeol": 66,
+        "eojeol": 64,
         "questions": 3,
         "translationPairs": 11,
         "sourceFamily": 5,
         "legacyPreserved": true,
-        "sourceSha256": "7f3118f5b362d99701c03eac874a1f0840ae15466d4844d25d54d24367dd1880"
+        "sourceSha256": "a22fbd9bf4e275138227dc32814c25be7798d3d696164d65ab267b6243a8fc2e"
       },
       {
         "id": "9-26",
@@ -4358,87 +4358,87 @@
         "translationPairs": 11,
         "sourceFamily": 6,
         "legacyPreserved": true,
-        "sourceSha256": "2623bf4dfaa859a53a52033a4dc55c2fd41a5682badd4b95db6c76cc475d1e59"
+        "sourceSha256": "efaad1d354eb5ca5b8ce1423d7b422c92de4e3ad76068f1683c4b203548b78e7"
       },
       {
         "id": "9-27",
         "sentences": 11,
-        "eojeol": 64,
+        "eojeol": 62,
         "questions": 3,
         "translationPairs": 11,
         "sourceFamily": 7,
         "legacyPreserved": true,
-        "sourceSha256": "abb5038aa25e383c6134d761c13906ed8fc3b2045d6fd2e6aaa029c060a83154"
+        "sourceSha256": "8f9b9b97115c2ce051ddef5fd1aa19a89dc6f0c6c309164b2542beae057ff00b"
       },
       {
         "id": "9-28",
         "sentences": 11,
-        "eojeol": 61,
+        "eojeol": 58,
         "questions": 3,
         "translationPairs": 11,
         "sourceFamily": 8,
         "legacyPreserved": true,
-        "sourceSha256": "32271be8692936ef1ce8bf1978ffdb56ff6656485a055d0e418685c437002987"
+        "sourceSha256": "8361d8d9987aa8b22e6deb0f904a1f786f47dcabf2835450de06b1041889cb33"
       },
       {
         "id": "9-29",
         "sentences": 11,
-        "eojeol": 67,
+        "eojeol": 64,
         "questions": 3,
         "translationPairs": 11,
         "sourceFamily": 9,
         "legacyPreserved": true,
-        "sourceSha256": "c08c5e63c0899e5862cebac57540460640bc3d73e40a725ebf65bf5642795c70"
+        "sourceSha256": "fabb40f30ee089a21e12ccd530ace586dbb52b87b59d2bb8f867f0b84265b19b"
       },
       {
         "id": "9-30",
         "sentences": 11,
-        "eojeol": 64,
+        "eojeol": 62,
         "questions": 3,
         "translationPairs": 11,
         "sourceFamily": 10,
         "legacyPreserved": true,
-        "sourceSha256": "d9c143a3d6897da49266373f3da436a67f0345ef508d6099bbf031c38cfd776d"
+        "sourceSha256": "b36507605891a17a039caa995216a727cea87799e3ed0ec28841a7909bc134a7"
       },
       {
         "id": "9-31",
         "sentences": 11,
-        "eojeol": 68,
+        "eojeol": 65,
         "questions": 3,
         "translationPairs": 11,
         "sourceFamily": 11,
         "legacyPreserved": true,
-        "sourceSha256": "43f5abf1152c8d3ed134a6675c6360b0fd5c0837fe286e7ffbe13b461cfff8b0"
+        "sourceSha256": "3ceb95f7d7875d5dd10636ee5e23aabd741bc29a51133111168df7e608503065"
       },
       {
         "id": "9-32",
         "sentences": 11,
-        "eojeol": 71,
+        "eojeol": 68,
         "questions": 3,
         "translationPairs": 11,
         "sourceFamily": 12,
         "legacyPreserved": true,
-        "sourceSha256": "b9711fbd2fdd8e011cbc80fb4d7fa1db86a756c0974af859ec4b09c89bd928f3"
+        "sourceSha256": "772f1bc670509318bef90aeeffb6f53c5597698f465740d6001b80d4e6f84773"
       },
       {
         "id": "9-33",
         "sentences": 11,
-        "eojeol": 58,
+        "eojeol": 56,
         "questions": 3,
         "translationPairs": 11,
         "sourceFamily": 13,
         "legacyPreserved": true,
-        "sourceSha256": "f4f033b99f7b6762a1b65548c0c11d3a56d219be04958022470dabcdfe116cdf"
+        "sourceSha256": "44fddbc65ae101e6ca1f56ae4e07746b3e0028954b9626f85b7c3ed2755383b1"
       },
       {
         "id": "9-34",
         "sentences": 11,
-        "eojeol": 63,
+        "eojeol": 59,
         "questions": 3,
         "translationPairs": 11,
         "sourceFamily": 14,
         "legacyPreserved": true,
-        "sourceSha256": "4fa82f76c344237e47a4743b01a9986f3e1b9547408a3e233c6b630dd7a8d91e"
+        "sourceSha256": "424190ee294cd186be1b965854a7ab91b16d35fcda0b6a6182b326561aa99a3d"
       },
       {
         "id": "9-35",
@@ -4448,7 +4448,7 @@
         "translationPairs": 11,
         "sourceFamily": 15,
         "legacyPreserved": true,
-        "sourceSha256": "c73613df9bb318e82eab6b6a2b68f88f79424c31b1be9fbf8bf9310da5048ec7"
+        "sourceSha256": "239a0d572c5a641dad9f205b7efdbdf6077d9f63b17c45ccb367e491000e7162"
       },
       {
         "id": "9-36",
@@ -4458,17 +4458,17 @@
         "translationPairs": 11,
         "sourceFamily": 16,
         "legacyPreserved": true,
-        "sourceSha256": "f0b1275ea0587bfbaa076a93fc539e16bd82f27ad92d438626b4a567767e5311"
+        "sourceSha256": "d1916902ef49536f8cc73ba2b493e649775d49368da2a750b7ae2a5e9c9b6127"
       },
       {
         "id": "9-37",
         "sentences": 11,
-        "eojeol": 67,
+        "eojeol": 64,
         "questions": 3,
         "translationPairs": 11,
         "sourceFamily": 17,
         "legacyPreserved": true,
-        "sourceSha256": "f8a9d5788878578ab12974e353f567c5923d5e9eac12acb965a0ad8c853f58d1"
+        "sourceSha256": "b8e295ceef8a5ad40f20aad37a0a2044dbedb5f988fc511ce9511ffbb6d189d9"
       },
       {
         "id": "9-38",
@@ -4478,27 +4478,27 @@
         "translationPairs": 11,
         "sourceFamily": 18,
         "legacyPreserved": true,
-        "sourceSha256": "840b216a2c4b7867b1abedc2e16f0fbf9c5a3941172922f20dcff25ae38eb4e9"
+        "sourceSha256": "16b030236d2e3105ef5d1b0c90fce37eb1ca043b48448954cb3399fb67ae7f26"
       },
       {
         "id": "9-39",
         "sentences": 11,
-        "eojeol": 73,
+        "eojeol": 70,
         "questions": 3,
         "translationPairs": 11,
         "sourceFamily": 19,
         "legacyPreserved": true,
-        "sourceSha256": "155eec1f1e2f5915aa920860f382d3efdfbd2dc017f655428e543890c1853aaa"
+        "sourceSha256": "e2cd343476e648be84f77dd0c47ee5c6f5ada3d08691b5fe5d5846d64e0739c0"
       },
       {
         "id": "9-40",
         "sentences": 11,
-        "eojeol": 72,
+        "eojeol": 73,
         "questions": 3,
         "translationPairs": 11,
         "sourceFamily": 20,
         "legacyPreserved": true,
-        "sourceSha256": "68ea1bc02fc32f775d530eaec26df3c700063adf74002b71c39a30abc1bef0d3"
+        "sourceSha256": "7b9fd8d0a12598906c02c7ba2788e11bdd76ca04ec343ea37437b16089792182"
       },
       {
         "id": "10-1",
@@ -4703,52 +4703,52 @@
       {
         "id": "10-21",
         "sentences": 12,
-        "eojeol": 73,
+        "eojeol": 71,
         "questions": 3,
         "translationPairs": 12,
         "sourceFamily": 1,
         "legacyPreserved": true,
-        "sourceSha256": "b6b3529a21a9e094bc5dc370b2c6e7f216d6ff36fb2751d9db75664d7c8002a1"
+        "sourceSha256": "e3e784b5478c7668e13a7c9b6951074d207c1f6c8d1591b3959b13929dcc90f5"
       },
       {
         "id": "10-22",
         "sentences": 12,
-        "eojeol": 80,
+        "eojeol": 77,
         "questions": 3,
         "translationPairs": 12,
         "sourceFamily": 2,
         "legacyPreserved": true,
-        "sourceSha256": "8c377e9620d48a850d624232729ea66bc43851dfd5fbaf2d85ea8478d8125db2"
+        "sourceSha256": "b32cf6c378b713536239d0a4c43ad5da2cb662c450d4a0ba7dac161d8deea511"
       },
       {
         "id": "10-23",
         "sentences": 12,
-        "eojeol": 72,
+        "eojeol": 69,
         "questions": 3,
         "translationPairs": 12,
         "sourceFamily": 3,
         "legacyPreserved": true,
-        "sourceSha256": "23a7d5597033478647861edf41ece9af64a8cc2caa55606da99621355f3ccd31"
+        "sourceSha256": "6fb81d322ae448ee6212e9d2b3ea16ebc3691299781c738517f09b486e7c165d"
       },
       {
         "id": "10-24",
         "sentences": 12,
-        "eojeol": 71,
+        "eojeol": 70,
         "questions": 3,
         "translationPairs": 12,
         "sourceFamily": 4,
         "legacyPreserved": true,
-        "sourceSha256": "bdb01f4c2fd72877f2a0b5fd8efbce38c3daa54fe981d301dfcd26ed04f1aeb2"
+        "sourceSha256": "9791b43fc8938b268b7652ac293796f4c3d635c5172400ae98a1776ee1f5ada4"
       },
       {
         "id": "10-25",
         "sentences": 12,
-        "eojeol": 75,
+        "eojeol": 73,
         "questions": 3,
         "translationPairs": 12,
         "sourceFamily": 5,
         "legacyPreserved": true,
-        "sourceSha256": "d75d376d2eb33106a9ed23e2c0a24009fe682cfe4c0a347a809f8f196a5a1991"
+        "sourceSha256": "a7b3aec77688794f1a41def19872c9544780231d05b1c9dfb9f3318d4a750b92"
       },
       {
         "id": "10-26",
@@ -4758,87 +4758,87 @@
         "translationPairs": 12,
         "sourceFamily": 6,
         "legacyPreserved": true,
-        "sourceSha256": "0c4275c3e19c0886415e5eed55305b0d9fe9fbd83d42eb9348412bee90543850"
+        "sourceSha256": "2b6bc068fae1e84e99cbdb446157ec92bfe6ed8e0eefc7ac896d8a7e6b56f3c0"
       },
       {
         "id": "10-27",
         "sentences": 12,
-        "eojeol": 74,
+        "eojeol": 72,
         "questions": 3,
         "translationPairs": 12,
         "sourceFamily": 7,
         "legacyPreserved": true,
-        "sourceSha256": "8879e3e1231dc8db65fbfee8b0460958eb13a364e0e4540ce723b72af6dbbf94"
+        "sourceSha256": "482abc8a8d22ea0d03cf28a7cf5217c135fd0da125c8b20393f713c6a84d5cbe"
       },
       {
         "id": "10-28",
         "sentences": 12,
-        "eojeol": 73,
+        "eojeol": 70,
         "questions": 3,
         "translationPairs": 12,
         "sourceFamily": 8,
         "legacyPreserved": true,
-        "sourceSha256": "307552bcc0e549f89763078e237cec9be64900a9007f44fb5e3ab551f9f30f98"
+        "sourceSha256": "ace7e903da5b2c6822bd7b2aaf4716a6523602f43c66508a9db5554824dbd677"
       },
       {
         "id": "10-29",
         "sentences": 12,
-        "eojeol": 77,
+        "eojeol": 74,
         "questions": 3,
         "translationPairs": 12,
         "sourceFamily": 9,
         "legacyPreserved": true,
-        "sourceSha256": "66d24bfa67a8c5c79c1aea4be101957d0bc7eaea5455391f78d9b235d3bebb5c"
+        "sourceSha256": "be6511d9d177d0ae7c5c81a8c1526c08e84e099f2165e180f288bc37fd6b2ead"
       },
       {
         "id": "10-30",
         "sentences": 12,
-        "eojeol": 74,
+        "eojeol": 72,
         "questions": 3,
         "translationPairs": 12,
         "sourceFamily": 10,
         "legacyPreserved": true,
-        "sourceSha256": "f8802d4910b43e133d3717b6ae16f363aed4340f06f0bb874c43e9d627755b50"
+        "sourceSha256": "369319d5a9c4b4a7a3ec995dfe75b46b27126fc796818fb60946f88ec9be72c4"
       },
       {
         "id": "10-31",
         "sentences": 12,
-        "eojeol": 76,
+        "eojeol": 73,
         "questions": 3,
         "translationPairs": 12,
         "sourceFamily": 11,
         "legacyPreserved": true,
-        "sourceSha256": "39e99d5da4c3258d86e06decabc3e14ae3b73b905bec6cc73284c4c8f1a0b937"
+        "sourceSha256": "2733c01a77a193c0df261eb63d69245b246f7c15ed04f7de8b635f8ef68d01aa"
       },
       {
         "id": "10-32",
         "sentences": 12,
-        "eojeol": 79,
+        "eojeol": 76,
         "questions": 3,
         "translationPairs": 12,
         "sourceFamily": 12,
         "legacyPreserved": true,
-        "sourceSha256": "28e8dd11836479dd2f38b4e1fbedd65c9eae95d1eb77a8f7530bf7a89a198e09"
+        "sourceSha256": "4f5ea3edb1b649558d10b60097616961702435cde6d4eaa5d5288a4bdbadb67c"
       },
       {
         "id": "10-33",
         "sentences": 12,
-        "eojeol": 69,
+        "eojeol": 67,
         "questions": 3,
         "translationPairs": 12,
         "sourceFamily": 13,
         "legacyPreserved": true,
-        "sourceSha256": "10e7cec63e9fe01f4a44b83963071dcf713cd3cd4e628303549f6907621c8005"
+        "sourceSha256": "742ce1f95c969168a46fb1a67e79347e8f5f1a5fd06a5ee1117a7b9bed9fa036"
       },
       {
         "id": "10-34",
         "sentences": 12,
-        "eojeol": 71,
+        "eojeol": 67,
         "questions": 3,
         "translationPairs": 12,
         "sourceFamily": 14,
         "legacyPreserved": true,
-        "sourceSha256": "0e1e66161d24899ea29e2d3b107f435940cc78ada2259e1c768ac1f29f141bdb"
+        "sourceSha256": "c6cbae13acb98e9534237053bb1de46f15cf92d1a00a19a5c9b23ffdb3942336"
       },
       {
         "id": "10-35",
@@ -4848,7 +4848,7 @@
         "translationPairs": 12,
         "sourceFamily": 15,
         "legacyPreserved": true,
-        "sourceSha256": "5190224c74fea40f922184412380e975bad6787e989e6fad582b9f1db3bcb926"
+        "sourceSha256": "b1ea9e66944ca5f8be2986daf28ca77fa2458adf5bf44a2653f024f652fc0a2a"
       },
       {
         "id": "10-36",
@@ -4858,17 +4858,17 @@
         "translationPairs": 12,
         "sourceFamily": 16,
         "legacyPreserved": true,
-        "sourceSha256": "b3d017dc0686e508362022301a066a493b39ac810e06932becb6f5e5c04ac766"
+        "sourceSha256": "e6f709183c63bb0de1e722ceb8865a162fdd76b66ec1c4c92380159c08c03415"
       },
       {
         "id": "10-37",
         "sentences": 12,
-        "eojeol": 76,
+        "eojeol": 73,
         "questions": 3,
         "translationPairs": 12,
         "sourceFamily": 17,
         "legacyPreserved": true,
-        "sourceSha256": "6ca8e4f957eca0bc042a795b173a2e8ea1ee6a113e812af8f0e550df212fe97a"
+        "sourceSha256": "bfbed3c404757c886c8b3504f295b1c07da62264dad7cc810474234d6e1da219"
       },
       {
         "id": "10-38",
@@ -4878,27 +4878,27 @@
         "translationPairs": 12,
         "sourceFamily": 18,
         "legacyPreserved": true,
-        "sourceSha256": "7686afcdbfd26378110a504ac00436e55103b8a913c460dacf14922c0f126ae8"
+        "sourceSha256": "9760ff0710bce9fa7b221b62b281d29e8fac6665eab2b5f7cd769d1ffb29a7ec"
       },
       {
         "id": "10-39",
         "sentences": 12,
-        "eojeol": 81,
+        "eojeol": 78,
         "questions": 3,
         "translationPairs": 12,
         "sourceFamily": 19,
         "legacyPreserved": true,
-        "sourceSha256": "3f2ec3d7159d36565d1978cbd544342c5e95c08ac348148c97b1a2bee7c1a183"
+        "sourceSha256": "31a8db88e42944a143eae7f17d2dfb6297f9e19bb9070998fc3244cec554062d"
       },
       {
         "id": "10-40",
         "sentences": 12,
-        "eojeol": 83,
+        "eojeol": 84,
         "questions": 3,
         "translationPairs": 12,
         "sourceFamily": 20,
         "legacyPreserved": true,
-        "sourceSha256": "4fccb018d67721755146b3c8c01b6d4b509812f2164ec6ca194a2528862998a5"
+        "sourceSha256": "d016ff4efa005627d9da5be7a8174e00799730fc444991d99ddc787d4c810880"
       },
       {
         "id": "11-1",
@@ -5103,52 +5103,52 @@
       {
         "id": "11-21",
         "sentences": 13,
-        "eojeol": 82,
+        "eojeol": 80,
         "questions": 3,
         "translationPairs": 13,
         "sourceFamily": 1,
         "legacyPreserved": true,
-        "sourceSha256": "4bef4f138d8efe685cec85148e1c94487ec2d286f8f86bc1471bfcca0ec479f4"
+        "sourceSha256": "263301c69c905d24bb184ba4ba9e91c3133591b42e1f4a025c9d6ba127e3cb1c"
       },
       {
         "id": "11-22",
         "sentences": 13,
-        "eojeol": 90,
+        "eojeol": 87,
         "questions": 3,
         "translationPairs": 13,
         "sourceFamily": 2,
         "legacyPreserved": true,
-        "sourceSha256": "132ec02565fdd1ddea2b8ba4cab69e241b2df2f60e38e3149a6bf9ba6a047a6a"
+        "sourceSha256": "35f665dd5ad768d3a8142a80e3b7d6966fe46266d48c9df39abe11b13da45733"
       },
       {
         "id": "11-23",
         "sentences": 13,
-        "eojeol": 81,
+        "eojeol": 78,
         "questions": 3,
         "translationPairs": 13,
         "sourceFamily": 3,
         "legacyPreserved": true,
-        "sourceSha256": "28ff60bf399da81d9b456609ea0d76dbea4491ff4d35ad6a7065db8986e23975"
+        "sourceSha256": "13db732dd5a8abdc5425893f0586bbb2c8cea717ec0b07fa209cc6457ca5d316"
       },
       {
         "id": "11-24",
         "sentences": 13,
-        "eojeol": 82,
+        "eojeol": 81,
         "questions": 3,
         "translationPairs": 13,
         "sourceFamily": 4,
         "legacyPreserved": true,
-        "sourceSha256": "bbf41dad6cfbb42cf4b791431ffb5b4249cca58a3eb7ffa6de15cba5b585d8a3"
+        "sourceSha256": "104db233c49c625c7324ed0467bc9d3b0a099460f6f5278da98c89019d93d3c9"
       },
       {
         "id": "11-25",
         "sentences": 13,
-        "eojeol": 84,
+        "eojeol": 82,
         "questions": 3,
         "translationPairs": 13,
         "sourceFamily": 5,
         "legacyPreserved": true,
-        "sourceSha256": "76816edf596b4241c08ec0eba885e88734e0861f9c7e7c10f43f3c65855333f4"
+        "sourceSha256": "721a6486a014334843d4a3f4d0dd3c1234d120c3efd60542d628cc627687de07"
       },
       {
         "id": "11-26",
@@ -5158,87 +5158,87 @@
         "translationPairs": 13,
         "sourceFamily": 6,
         "legacyPreserved": true,
-        "sourceSha256": "7987c55ffdcb97e71cb6c298d552bf5369e7e26ff7671c0da347750ffcf9dc52"
+        "sourceSha256": "48b3c7e96f09110d52cb2d56a7af6627152c493c3a8ec050fb23df79f4078afd"
       },
       {
         "id": "11-27",
         "sentences": 13,
-        "eojeol": 83,
+        "eojeol": 81,
         "questions": 3,
         "translationPairs": 13,
         "sourceFamily": 7,
         "legacyPreserved": true,
-        "sourceSha256": "f42b7e7a0a4fcf10a1c2dfa14de866db70134ebf309b5e896e8113f5836dda3a"
+        "sourceSha256": "bef42d8937d9de092ccbe88983da9d90789ef48cf5efb00c9710ec737832e14f"
       },
       {
         "id": "11-28",
         "sentences": 13,
-        "eojeol": 82,
+        "eojeol": 79,
         "questions": 3,
         "translationPairs": 13,
         "sourceFamily": 8,
         "legacyPreserved": true,
-        "sourceSha256": "87078302db8c49a91e41720fa98385e92163252b7d132cd0c2d96a25aba43b14"
+        "sourceSha256": "77c6855b5379f86b38d910acfeff2dabe705585b5c7e5c394e068538a3ccb462"
       },
       {
         "id": "11-29",
         "sentences": 13,
-        "eojeol": 86,
+        "eojeol": 83,
         "questions": 3,
         "translationPairs": 13,
         "sourceFamily": 9,
         "legacyPreserved": true,
-        "sourceSha256": "d043bc2c0cb92e072c62ca8550975fb1b12ca4dee2edec96f94970b353dc1099"
+        "sourceSha256": "f93c7b6933dcbb080a44d1562b863b95ef43d3c2bf45a755992cb3be1ee823ad"
       },
       {
         "id": "11-30",
         "sentences": 13,
-        "eojeol": 84,
+        "eojeol": 82,
         "questions": 3,
         "translationPairs": 13,
         "sourceFamily": 10,
         "legacyPreserved": true,
-        "sourceSha256": "2c5a1959a50a797410ec47765702248fd980393d5e21b296d3ed7f80cea4e857"
+        "sourceSha256": "4de5a3de12c1c3045f1acbf86185d4ee2432dece3889ce0a783d7e7b0eccbce3"
       },
       {
         "id": "11-31",
         "sentences": 13,
-        "eojeol": 87,
+        "eojeol": 84,
         "questions": 3,
         "translationPairs": 13,
         "sourceFamily": 11,
         "legacyPreserved": true,
-        "sourceSha256": "31566086fbb312f4bf695e24fcdc1eeecedefc7734ab22f5e483167e7c75fae4"
+        "sourceSha256": "2b87352e2343a6842150b33fcdf8c3604405118e6665af0c767f778d33f9bb33"
       },
       {
         "id": "11-32",
         "sentences": 13,
-        "eojeol": 90,
+        "eojeol": 87,
         "questions": 3,
         "translationPairs": 13,
         "sourceFamily": 12,
         "legacyPreserved": true,
-        "sourceSha256": "8f27ed7ec6ed4e63e61d4406b4f5514f3bee0ecd1c7d90b07244f2642b6e1f3b"
+        "sourceSha256": "8def23b89bc3c48a2b59f14da89504ede2de74b89069050dd4931d95331ee515"
       },
       {
         "id": "11-33",
         "sentences": 13,
-        "eojeol": 79,
+        "eojeol": 77,
         "questions": 3,
         "translationPairs": 13,
         "sourceFamily": 13,
         "legacyPreserved": true,
-        "sourceSha256": "f3e7359e5c4bcefb330779ebf0bcd9e2bc31803b8835a197c09e215d480343e9"
+        "sourceSha256": "18d620f45eb4b8a70c8a3f08b37704158e2311f2cbfe796df170ec92b918b5f0"
       },
       {
         "id": "11-34",
         "sentences": 13,
-        "eojeol": 81,
+        "eojeol": 77,
         "questions": 3,
         "translationPairs": 13,
         "sourceFamily": 14,
         "legacyPreserved": true,
-        "sourceSha256": "ef47f245f638cf280750d2330f94b899159320a6d54b09b6b88c46e5e2e39eb5"
+        "sourceSha256": "160516a97513da1abdfcd8425b9473900c2352e8bad16a3946eac79a5006703e"
       },
       {
         "id": "11-35",
@@ -5248,7 +5248,7 @@
         "translationPairs": 13,
         "sourceFamily": 15,
         "legacyPreserved": true,
-        "sourceSha256": "c6ce6ac2038c378cf32bb2c34b513e8bb92a518669e6bd7838cfb255d20c696b"
+        "sourceSha256": "c3b5bacefda17d0af065872d6ffb7aa4f7893f178c13e5e26d2f3810f0258bc4"
       },
       {
         "id": "11-36",
@@ -5258,17 +5258,17 @@
         "translationPairs": 13,
         "sourceFamily": 16,
         "legacyPreserved": true,
-        "sourceSha256": "18a0e05f7419e737327f610484d65229cb4f2a912e91d09b0715ba4bdc50efb8"
+        "sourceSha256": "6cd069b6d82417620c0a2e2162a061f07b4709b85ec884cd18291e32541f003e"
       },
       {
         "id": "11-37",
         "sentences": 13,
-        "eojeol": 83,
+        "eojeol": 80,
         "questions": 3,
         "translationPairs": 13,
         "sourceFamily": 17,
         "legacyPreserved": true,
-        "sourceSha256": "3d06794bf68b70c2ce9eae3805a27da8645b4a70ac75585f4fa44d81f9f55c7c"
+        "sourceSha256": "6ed7b2eadc1203ab0bd0ef9ea288523f529ce02fa56f495ae7230f13e6af6439"
       },
       {
         "id": "11-38",
@@ -5278,27 +5278,27 @@
         "translationPairs": 13,
         "sourceFamily": 18,
         "legacyPreserved": true,
-        "sourceSha256": "fb081950b57b00e323cdca1bada8af5ca35628c7a1f4cf2a7c2f617b1084724c"
+        "sourceSha256": "1626151422cc0f46ead02636ebc8af61ea3dee0101f5721a7d8b888ebee4b7b4"
       },
       {
         "id": "11-39",
         "sentences": 13,
-        "eojeol": 91,
+        "eojeol": 88,
         "questions": 3,
         "translationPairs": 13,
         "sourceFamily": 19,
         "legacyPreserved": true,
-        "sourceSha256": "39f56d35f9476762a7b4e8104272514256a07f9ada28ab4c2b0e06930070bd32"
+        "sourceSha256": "8acb9f7225aebd68e94564e538fb060dabf02259413407ef3fb5de25a05beb8e"
       },
       {
         "id": "11-40",
         "sentences": 13,
-        "eojeol": 94,
+        "eojeol": 95,
         "questions": 3,
         "translationPairs": 13,
         "sourceFamily": 20,
         "legacyPreserved": true,
-        "sourceSha256": "1d9a38f4f26c8a15918e042741efa380b028f2cd0d1f80d7c593686613856848"
+        "sourceSha256": "debe58077690bab3f3e7e2240659b898eb28244a50d36f222ddb8473d9f01446"
       },
       {
         "id": "12-1",
@@ -5503,52 +5503,52 @@
       {
         "id": "12-21",
         "sentences": 14,
-        "eojeol": 91,
+        "eojeol": 89,
         "questions": 3,
         "translationPairs": 14,
         "sourceFamily": 1,
         "legacyPreserved": true,
-        "sourceSha256": "bc649e4873eb70bf1266bf83b66bac30e1e4e6da942cc894b8d1be84f5ae3590"
+        "sourceSha256": "9be4bba1042b0464d3e5007bd915968662e3206308d5142c818ce207ad73e2db"
       },
       {
         "id": "12-22",
         "sentences": 14,
-        "eojeol": 101,
+        "eojeol": 98,
         "questions": 3,
         "translationPairs": 14,
         "sourceFamily": 2,
         "legacyPreserved": true,
-        "sourceSha256": "472455e131aad16e27cdb8d073963b605dbcb6796f6708c9b22afd9138c084ae"
+        "sourceSha256": "d1345c7dd44161791d14a1a6273dd15459745eca514445f302702768443eb1e8"
       },
       {
         "id": "12-23",
         "sentences": 14,
-        "eojeol": 90,
+        "eojeol": 87,
         "questions": 3,
         "translationPairs": 14,
         "sourceFamily": 3,
         "legacyPreserved": true,
-        "sourceSha256": "a5f8dcd03a090bf5011c17b74f9ddf1b3e0fb400e77c876466e9c609a509cb92"
+        "sourceSha256": "75549835f958b0efa405559eebcda9df82df3d9bc65ee31c6b15a6d25a1d329e"
       },
       {
         "id": "12-24",
         "sentences": 14,
-        "eojeol": 91,
+        "eojeol": 90,
         "questions": 3,
         "translationPairs": 14,
         "sourceFamily": 4,
         "legacyPreserved": true,
-        "sourceSha256": "51dbe66540681720246b3dcc114b6827bd37014e081cc0de20334c722cfb0252"
+        "sourceSha256": "fc0edcaf860e05fa63e4baf8345c2bfdec1780004fb347c5b3e3bb0adc7a5ce4"
       },
       {
         "id": "12-25",
         "sentences": 14,
-        "eojeol": 93,
+        "eojeol": 91,
         "questions": 3,
         "translationPairs": 14,
         "sourceFamily": 5,
         "legacyPreserved": true,
-        "sourceSha256": "dc0058102fc965b03d1efc261f90ccc7f04061c04005328ee1545bfef0a57c5d"
+        "sourceSha256": "be8e5ceacd5fdb61bea6bc5bfd08cb32a22087aac0488249ee18e80e09bd4eee"
       },
       {
         "id": "12-26",
@@ -5558,87 +5558,87 @@
         "translationPairs": 14,
         "sourceFamily": 6,
         "legacyPreserved": true,
-        "sourceSha256": "69323c698c62b6ac8e007b6af08ec634341e4618e38a45a650b5054c9ea85192"
+        "sourceSha256": "dd7155970c5b1352929e02c5e8b7bf4717845e3175f3856562fe616d69e8a760"
       },
       {
         "id": "12-27",
         "sentences": 14,
-        "eojeol": 92,
+        "eojeol": 90,
         "questions": 3,
         "translationPairs": 14,
         "sourceFamily": 7,
         "legacyPreserved": true,
-        "sourceSha256": "f5774d2a559129ee755bf97dfc1b18a2101e0e1ff42b980955facfb723096bec"
+        "sourceSha256": "eda3bd18236bfca21fd0020b2923efb034093d2a428b9a9db4810d09e6d04cf9"
       },
       {
         "id": "12-28",
         "sentences": 14,
-        "eojeol": 92,
+        "eojeol": 89,
         "questions": 3,
         "translationPairs": 14,
         "sourceFamily": 8,
         "legacyPreserved": true,
-        "sourceSha256": "3585f58ed21510dc1dc47cd030bda94212c5356cfe7d8f0b3943942063706848"
+        "sourceSha256": "72c0b31b6a75f22a4c7011df26ba4fcf15554a86f091d2f31398b243c8b10c26"
       },
       {
         "id": "12-29",
         "sentences": 14,
-        "eojeol": 99,
+        "eojeol": 96,
         "questions": 3,
         "translationPairs": 14,
         "sourceFamily": 9,
         "legacyPreserved": true,
-        "sourceSha256": "d0dbff6602df96786d96874e914d45bc5efb866eff9ecb2215adb16c7d159986"
+        "sourceSha256": "d71a8e16bc44022a1004ebcd7a214b3cd5a3c2bed0a067266c75721a83cf9971"
       },
       {
         "id": "12-30",
         "sentences": 14,
-        "eojeol": 93,
+        "eojeol": 91,
         "questions": 3,
         "translationPairs": 14,
         "sourceFamily": 10,
         "legacyPreserved": true,
-        "sourceSha256": "aea73e984e5cff30dde41d5f5007cebf1cf4ec844cbb0f5eafc107b626c124db"
+        "sourceSha256": "6f35fb64f1205258e75bbd0d9643dac8f1ff753fab6070c59e5d477e5b8e03fe"
       },
       {
         "id": "12-31",
         "sentences": 14,
-        "eojeol": 98,
+        "eojeol": 95,
         "questions": 3,
         "translationPairs": 14,
         "sourceFamily": 11,
         "legacyPreserved": true,
-        "sourceSha256": "d5c744ae1b97a02360e16f0f2dae8fc9434f309a7b7ee7acb82fdc98cf02668f"
+        "sourceSha256": "c47d6654b2629f14e739cfb8d23c87e26ebccb33ab4c8bd4830f9427a9b37da2"
       },
       {
         "id": "12-32",
         "sentences": 14,
-        "eojeol": 99,
+        "eojeol": 96,
         "questions": 3,
         "translationPairs": 14,
         "sourceFamily": 12,
         "legacyPreserved": true,
-        "sourceSha256": "aa6ca6d8daa8cc57d27cdfc21bc30da5cd63d732f6ff1079440ac054880bf53f"
+        "sourceSha256": "a1e585cbb0b106bb34f70341ab11601e25c0265926723398d84499ffe28f4d9b"
       },
       {
         "id": "12-33",
         "sentences": 14,
-        "eojeol": 88,
+        "eojeol": 86,
         "questions": 3,
         "translationPairs": 14,
         "sourceFamily": 13,
         "legacyPreserved": true,
-        "sourceSha256": "90f29fad2dc5a87730b3988bde7c2bc941f32c73c6c0ec2ff57cf009988dc359"
+        "sourceSha256": "e80ed645c4fde91db476dfd65a60c2e2293ffc1cc986521c5da51f08950414f6"
       },
       {
         "id": "12-34",
         "sentences": 14,
-        "eojeol": 91,
+        "eojeol": 87,
         "questions": 3,
         "translationPairs": 14,
         "sourceFamily": 14,
         "legacyPreserved": true,
-        "sourceSha256": "5b801ec1bfc9f0fde513331dc1d5b3e029c12ce9cf86aec31eccb946128a23fe"
+        "sourceSha256": "6aa4a193e09b2e6e3fe0ead42246b8875a177a95c006c4f2750415de83ff8cc2"
       },
       {
         "id": "12-35",
@@ -5648,7 +5648,7 @@
         "translationPairs": 14,
         "sourceFamily": 15,
         "legacyPreserved": true,
-        "sourceSha256": "dcfe99df5ccdbd080f266ca89c04932261995d8efa04ef2fbae960939b9f0e4d"
+        "sourceSha256": "9b5727daebe91486cacdb12c295d13e7417fd648ddb9dfd1fb2dbfda570087d8"
       },
       {
         "id": "12-36",
@@ -5658,17 +5658,17 @@
         "translationPairs": 14,
         "sourceFamily": 16,
         "legacyPreserved": true,
-        "sourceSha256": "6ae7b4601824fc7b04254a45191742566f3c11acc95abb8a894ceef1ca2d03f3"
+        "sourceSha256": "1c1fecbf762ea1dc035336a54e25a89f1185b36f4f3b45ab4d2165b54673a4a2"
       },
       {
         "id": "12-37",
         "sentences": 14,
-        "eojeol": 93,
+        "eojeol": 90,
         "questions": 3,
         "translationPairs": 14,
         "sourceFamily": 17,
         "legacyPreserved": true,
-        "sourceSha256": "0751ca1ac074b52d5032204c0ccc1a492e3af68cbfc02359937f686aebc00f8b"
+        "sourceSha256": "b1e287f468713056973ac4427b1db66fdf450fd0bd9b0cc1b6cb454f76325dfd"
       },
       {
         "id": "12-38",
@@ -5678,27 +5678,27 @@
         "translationPairs": 14,
         "sourceFamily": 18,
         "legacyPreserved": true,
-        "sourceSha256": "96bf4ac3cc0261767b58de84af619eb1583eb55ebd41f9f366be3b181a62c395"
+        "sourceSha256": "195b9eb185debe4c27f4a09b88001af6e51243b73f64c362f890462f76f94fb5"
       },
       {
         "id": "12-39",
         "sentences": 14,
-        "eojeol": 101,
+        "eojeol": 98,
         "questions": 3,
         "translationPairs": 14,
         "sourceFamily": 19,
         "legacyPreserved": true,
-        "sourceSha256": "80d094099b2842b0907b722b0e503388a25e0e072a62680ff64c48560ec1b67e"
+        "sourceSha256": "74550b21a69d39277d8dfa8de5863b821b87b5464d50f8d1ef25bca96dd520ca"
       },
       {
         "id": "12-40",
         "sentences": 14,
-        "eojeol": 105,
+        "eojeol": 106,
         "questions": 3,
         "translationPairs": 14,
         "sourceFamily": 20,
         "legacyPreserved": true,
-        "sourceSha256": "3b7a7252e6b872b42d01c4dbbbb6dc37636f0e55ed413ceef7258b17428041ba"
+        "sourceSha256": "a2e7229788dc9d6c4841a270d4428eec23eaaeb5d57657c027a0c4d5c51db101"
       },
       {
         "id": "13-1",
@@ -5903,52 +5903,52 @@
       {
         "id": "13-21",
         "sentences": 15,
-        "eojeol": 100,
+        "eojeol": 98,
         "questions": 3,
         "translationPairs": 15,
         "sourceFamily": 1,
         "legacyPreserved": true,
-        "sourceSha256": "82fbfc69f45971b075e10d1b6f38550881ed5c5a4f67ff2bb31c622ac563fc84"
+        "sourceSha256": "7e854f660306bd406bc4af0fe6b86f309c174573198191cb4c8fb2b924de3f2c"
       },
       {
         "id": "13-22",
         "sentences": 15,
-        "eojeol": 112,
+        "eojeol": 109,
         "questions": 3,
         "translationPairs": 15,
         "sourceFamily": 2,
         "legacyPreserved": true,
-        "sourceSha256": "45334e6a862fb902ec7ca4989827dba9a4af18357014ff72089323aeb206a68a"
+        "sourceSha256": "0cf2b809ece24ecafc40354c369e456d36ba569f27a713a9957bc7af5cdc35e7"
       },
       {
         "id": "13-23",
         "sentences": 15,
-        "eojeol": 100,
+        "eojeol": 97,
         "questions": 3,
         "translationPairs": 15,
         "sourceFamily": 3,
         "legacyPreserved": true,
-        "sourceSha256": "ff7c94c3b5828d6572f99400b8020e130a042fce14541abbb4f3218f0dfd1d5f"
+        "sourceSha256": "cc21089a505b9faba169c9d367569556c90f211bb42ef7b6d2988e333d239b34"
       },
       {
         "id": "13-24",
         "sentences": 15,
-        "eojeol": 102,
+        "eojeol": 101,
         "questions": 3,
         "translationPairs": 15,
         "sourceFamily": 4,
         "legacyPreserved": true,
-        "sourceSha256": "6b336a17b37d614003f326ce483c56b4bba02edf056f71effd64b6b51ccdbc85"
+        "sourceSha256": "9b5ac13000aab93dfaba692fc65456b91140e068a5162bd3c65c31a2611dd3da"
       },
       {
         "id": "13-25",
         "sentences": 15,
-        "eojeol": 102,
+        "eojeol": 100,
         "questions": 3,
         "translationPairs": 15,
         "sourceFamily": 5,
         "legacyPreserved": true,
-        "sourceSha256": "f4b80f79c7ae2c1f6c6a6a44b7d44017c2f9bed88617b1836abb1cca240f73b8"
+        "sourceSha256": "df46e941cf3f8b3d6ce1676ac3e3253c94fe6053f5304edf8bd24496b4918df9"
       },
       {
         "id": "13-26",
@@ -5958,87 +5958,87 @@
         "translationPairs": 15,
         "sourceFamily": 6,
         "legacyPreserved": true,
-        "sourceSha256": "a8df6b310de77e97f78dd0389c195b6b0926d8b90824c209aa3a84d62e9b5719"
+        "sourceSha256": "08c2a6a7d05b401ea687bdd928ec7dc064b3b7298272e6e03ce988c83722dcd6"
       },
       {
         "id": "13-27",
         "sentences": 15,
-        "eojeol": 103,
+        "eojeol": 101,
         "questions": 3,
         "translationPairs": 15,
         "sourceFamily": 7,
         "legacyPreserved": true,
-        "sourceSha256": "4a17561096a9e2ce7d3d2983f3b282f3d202c162fc2abea525dca19f30fd8f25"
+        "sourceSha256": "43a67bf7fcf1c55c1e340b89d654887fc9dc7f20930b36de4464c873b012d82c"
       },
       {
         "id": "13-28",
         "sentences": 15,
-        "eojeol": 102,
+        "eojeol": 99,
         "questions": 3,
         "translationPairs": 15,
         "sourceFamily": 8,
         "legacyPreserved": true,
-        "sourceSha256": "e02c678cd97127b571742e3217ef6c22c0843bd32e35ce7ea97cba4cd562327a"
+        "sourceSha256": "d85b5c6e6fa30ed6ddc1547eafce29781e3ce80a66f7ceefbca8e89b7d8a3850"
       },
       {
         "id": "13-29",
         "sentences": 15,
-        "eojeol": 110,
+        "eojeol": 107,
         "questions": 3,
         "translationPairs": 15,
         "sourceFamily": 9,
         "legacyPreserved": true,
-        "sourceSha256": "63171a7def0e6802bd55d0899545dc30a5d88d0e9147da256b5a199a9d09ffcc"
+        "sourceSha256": "5448498f2f87162deea1d2d1c70bdf2cffd9b8539de6223b7b371d34989e078e"
       },
       {
         "id": "13-30",
         "sentences": 15,
-        "eojeol": 102,
+        "eojeol": 100,
         "questions": 3,
         "translationPairs": 15,
         "sourceFamily": 10,
         "legacyPreserved": true,
-        "sourceSha256": "c8439b4d322de65398a2db1de0db5a25e4aed3f57dbe880da95c290560aa5035"
+        "sourceSha256": "fcedd3ac528a426d31f8dd53966575d168eccec0bcd9b340042168f554f95723"
       },
       {
         "id": "13-31",
         "sentences": 15,
-        "eojeol": 108,
+        "eojeol": 105,
         "questions": 3,
         "translationPairs": 15,
         "sourceFamily": 11,
         "legacyPreserved": true,
-        "sourceSha256": "8b171805f9481c98dfa308560ce849de58cc1643feb120f7ec5c330b28a73f3a"
+        "sourceSha256": "ce80ba3e92ca255e0c3e3e94a0489633139cb26405e55b8b4a881371fa6516a4"
       },
       {
         "id": "13-32",
         "sentences": 15,
-        "eojeol": 109,
+        "eojeol": 106,
         "questions": 3,
         "translationPairs": 15,
         "sourceFamily": 12,
         "legacyPreserved": true,
-        "sourceSha256": "2e610ee96bb8c5d73389a4fbdb7c30dec65a047518dacffaf5eec69c66842f3f"
+        "sourceSha256": "6f48516392b62bf410d65e20c06044d474950e743a4806bd9e8afa2bc614e415"
       },
       {
         "id": "13-33",
         "sentences": 15,
-        "eojeol": 99,
+        "eojeol": 97,
         "questions": 3,
         "translationPairs": 15,
         "sourceFamily": 13,
         "legacyPreserved": true,
-        "sourceSha256": "76569b3185774c880a381832a7a294c2ccf8dd3967356bcc5086d905b4cadc44"
+        "sourceSha256": "d5e5d93e851b78efc3c32fa353518e87802463506878526f16292db689db17f0"
       },
       {
         "id": "13-34",
         "sentences": 15,
-        "eojeol": 101,
+        "eojeol": 97,
         "questions": 3,
         "translationPairs": 15,
         "sourceFamily": 14,
         "legacyPreserved": true,
-        "sourceSha256": "e726f7aaa9d692d75aaa7fa72dfedacb312ef24c209765103c79d08c07924e57"
+        "sourceSha256": "add81b23fbfa221391e64969aeee2b89d84b10205e642765b1603729ea3dd2f7"
       },
       {
         "id": "13-35",
@@ -6048,7 +6048,7 @@
         "translationPairs": 15,
         "sourceFamily": 15,
         "legacyPreserved": true,
-        "sourceSha256": "0a25130603324354d13a2ba388243b84923e4ec4fe4b56307fa17e10ba9ba88a"
+        "sourceSha256": "b88c62cc5912ae1c9b76216f88bfa3f305e1c2757600aec467bbba3e26d372c9"
       },
       {
         "id": "13-36",
@@ -6058,17 +6058,17 @@
         "translationPairs": 15,
         "sourceFamily": 16,
         "legacyPreserved": true,
-        "sourceSha256": "3d86e715a5396f9e05ea1c5b9b767b7910b82aac08828f4c6ec2d8b0ef9ab9e7"
+        "sourceSha256": "143e8ee4ece94b20276a6fc6b4ca273cf4cb9ff9b9a9ae8115ec77fb13c7389d"
       },
       {
         "id": "13-37",
         "sentences": 15,
-        "eojeol": 103,
+        "eojeol": 100,
         "questions": 3,
         "translationPairs": 15,
         "sourceFamily": 17,
         "legacyPreserved": true,
-        "sourceSha256": "87fe62e635760cd20e3e567410fb2b54d02429296430213580605da977c2fc90"
+        "sourceSha256": "6b67220de9be9a08eb51de6d41eb8b43274f0e0a2b4395f5a4ce140e1fe71b92"
       },
       {
         "id": "13-38",
@@ -6078,27 +6078,27 @@
         "translationPairs": 15,
         "sourceFamily": 18,
         "legacyPreserved": true,
-        "sourceSha256": "23bdaf3752eac95a39a8692ee69884e4c5f737c26ebfa7a26e2518393cc0fb13"
+        "sourceSha256": "58a94fa59925af0d3e6a3b6a4af942030ced14ac430a15762bbc2d39c2ee2a3c"
       },
       {
         "id": "13-39",
         "sentences": 15,
-        "eojeol": 109,
+        "eojeol": 106,
         "questions": 3,
         "translationPairs": 15,
         "sourceFamily": 19,
         "legacyPreserved": true,
-        "sourceSha256": "3ec16c864f25cbb4e1bf962603f41e0097530462ecf8b23c1e6870d08b79f74a"
+        "sourceSha256": "3d738e1b592ceded37161bb315dfc507fb13fca6fa0593c734cd1d5073c23660"
       },
       {
         "id": "13-40",
         "sentences": 15,
-        "eojeol": 116,
+        "eojeol": 117,
         "questions": 3,
         "translationPairs": 15,
         "sourceFamily": 20,
         "legacyPreserved": true,
-        "sourceSha256": "a2cbe710d197771e3bf17806aa1b56ef9a69ea2ee88b3fb0df91da27cff80cbe"
+        "sourceSha256": "182179f73e1a89ac2e22c2394acb1889370eb499ccf242f41f66d33187fa975d"
       },
       {
         "id": "14-1",
@@ -6303,52 +6303,52 @@
       {
         "id": "14-21",
         "sentences": 16,
-        "eojeol": 110,
+        "eojeol": 108,
         "questions": 3,
         "translationPairs": 16,
         "sourceFamily": 1,
         "legacyPreserved": true,
-        "sourceSha256": "cf08571dcd796c80963bf85e21fff26b8834b98089a6c76b059db191f534eb00"
+        "sourceSha256": "5c0c74a7951c6b8d91b0ce61105df314039268e93caba65bc32f07521472dcc3"
       },
       {
         "id": "14-22",
         "sentences": 16,
-        "eojeol": 123,
+        "eojeol": 120,
         "questions": 3,
         "translationPairs": 16,
         "sourceFamily": 2,
         "legacyPreserved": true,
-        "sourceSha256": "27fc0fc192aa15b37a990c6f934d706f17a74fe2fd12a80d958f2799b8fe639b"
+        "sourceSha256": "60fdff7c0eab7fd03879043ae829513a559866be159e74e1beeff6442f7c783d"
       },
       {
         "id": "14-23",
         "sentences": 16,
-        "eojeol": 111,
+        "eojeol": 108,
         "questions": 3,
         "translationPairs": 16,
         "sourceFamily": 3,
         "legacyPreserved": true,
-        "sourceSha256": "864f124976ea7779e1e7eb3677cc64015181387fe1172cc613c0f48ecc0deb9a"
+        "sourceSha256": "42eb436f3dcd386b8f33134992e999db857fea3455b9620a6133ae7d47b5a21f"
       },
       {
         "id": "14-24",
         "sentences": 16,
-        "eojeol": 113,
+        "eojeol": 112,
         "questions": 3,
         "translationPairs": 16,
         "sourceFamily": 4,
         "legacyPreserved": true,
-        "sourceSha256": "ba605421a1575733061e75675833180a56b533013813776ee80f4ecf275b05e1"
+        "sourceSha256": "01adf93e324d2c6d504e9dcbbe8d773ee4033015e17551a4990fd5dc36a0fc4a"
       },
       {
         "id": "14-25",
         "sentences": 16,
-        "eojeol": 113,
+        "eojeol": 111,
         "questions": 3,
         "translationPairs": 16,
         "sourceFamily": 5,
         "legacyPreserved": true,
-        "sourceSha256": "81285b7a26f4a370b974e867a0d663fc43671e88e9235986ca3612c3cdf55ee1"
+        "sourceSha256": "0703e68a3d825e345d56bb6e24679bc610903f3d63d783ca1b574d735c5ea39e"
       },
       {
         "id": "14-26",
@@ -6358,87 +6358,87 @@
         "translationPairs": 16,
         "sourceFamily": 6,
         "legacyPreserved": true,
-        "sourceSha256": "f735d04b31e9bafd7856ec5aa8d76940ee5788522534db0793d5a1877a8e7478"
+        "sourceSha256": "d81e29cdd12f8ea8db8f719951f3bf196639537f3f7c13383db25f66707c14d6"
       },
       {
         "id": "14-27",
         "sentences": 16,
-        "eojeol": 113,
+        "eojeol": 111,
         "questions": 3,
         "translationPairs": 16,
         "sourceFamily": 7,
         "legacyPreserved": true,
-        "sourceSha256": "fc05394ee20893308f56a64835684484d1470870d6453ae7dd0e9f7c05b85ff9"
+        "sourceSha256": "5752252ace1bf24128418bf8affea8b8b187038119ba7619bc8c59949162da94"
       },
       {
         "id": "14-28",
         "sentences": 16,
-        "eojeol": 112,
+        "eojeol": 109,
         "questions": 3,
         "translationPairs": 16,
         "sourceFamily": 8,
         "legacyPreserved": true,
-        "sourceSha256": "ac2b181e6a36794adbe603f79d1042c9648e7a33028080b277f50a6ba1eb57e3"
+        "sourceSha256": "ef5a6e713e8597ff8d693935be30097ab705400c51fd1832d7d4024946dc6015"
       },
       {
         "id": "14-29",
         "sentences": 16,
-        "eojeol": 119,
+        "eojeol": 116,
         "questions": 3,
         "translationPairs": 16,
         "sourceFamily": 9,
         "legacyPreserved": true,
-        "sourceSha256": "cbac47fee795732d3e25f738d58b2bb16070e5cdbd0fb3dcf23348ebb6600e12"
+        "sourceSha256": "5b840f927820218867858d6114d018e3180f7e61a091f18547a1d423f0d89bd0"
       },
       {
         "id": "14-30",
         "sentences": 16,
-        "eojeol": 110,
+        "eojeol": 108,
         "questions": 3,
         "translationPairs": 16,
         "sourceFamily": 10,
         "legacyPreserved": true,
-        "sourceSha256": "57dfb765e8bf328c4fc02ed03261705a31f175f04956977d8c7e2616857cd9a2"
+        "sourceSha256": "61c6bd892e409f1396bc7ea3b3869100c26eea2dbb23cca14f813585912cee46"
       },
       {
         "id": "14-31",
         "sentences": 16,
-        "eojeol": 119,
+        "eojeol": 116,
         "questions": 3,
         "translationPairs": 16,
         "sourceFamily": 11,
         "legacyPreserved": true,
-        "sourceSha256": "f088b5e20d174de61e1c10133c04e5824a48b223aa85dc01f7fd6966cb3ff60a"
+        "sourceSha256": "04b14521aef2979e294b262ef9eb7be58c2e67dab9e2dcecea6766c7d9dbdc7a"
       },
       {
         "id": "14-32",
         "sentences": 16,
-        "eojeol": 118,
+        "eojeol": 115,
         "questions": 3,
         "translationPairs": 16,
         "sourceFamily": 12,
         "legacyPreserved": true,
-        "sourceSha256": "d330778be8839ca541144349664f41fc89d8558c804d58cf0c608a6e1c3d3656"
+        "sourceSha256": "db0510c72f7c0d57c19bfd60c7e4747f4a60d3f2fa3d63d07b44bfee4ff67b21"
       },
       {
         "id": "14-33",
         "sentences": 16,
-        "eojeol": 111,
+        "eojeol": 109,
         "questions": 3,
         "translationPairs": 16,
         "sourceFamily": 13,
         "legacyPreserved": true,
-        "sourceSha256": "b1af9da4049a9d42697fe841f8105f204d107e5913a58dc04d6c33afab008de8"
+        "sourceSha256": "1c3631ddb3528f0dc69256d63cf4b3d1c221ab6b4cad63c7091f7ebfd92a9b33"
       },
       {
         "id": "14-34",
         "sentences": 16,
-        "eojeol": 110,
+        "eojeol": 106,
         "questions": 3,
         "translationPairs": 16,
         "sourceFamily": 14,
         "legacyPreserved": true,
-        "sourceSha256": "d0ebb26984da602d7926a9b4b0b9cbcad5ec8a217aab80b807b66d742e3b763d"
+        "sourceSha256": "a4e6d098679fba5e52da86d9b462a6e872ebd0d38471146964a92006aacd33b7"
       },
       {
         "id": "14-35",
@@ -6448,7 +6448,7 @@
         "translationPairs": 16,
         "sourceFamily": 15,
         "legacyPreserved": true,
-        "sourceSha256": "50a6a2346ce5aceb11f5fe819cf991b2101f7df3f8143ce4196fe4b9d73a5263"
+        "sourceSha256": "cf216091de03a90ccbff02f2aa8c4204c818daada1e78a23e5dc49052110d3fd"
       },
       {
         "id": "14-36",
@@ -6458,17 +6458,17 @@
         "translationPairs": 16,
         "sourceFamily": 16,
         "legacyPreserved": true,
-        "sourceSha256": "ef0fd14d4b135ef9b1a277c9775989c2867a83fd32e9c1e1feccb7e7c8e0f89a"
+        "sourceSha256": "f53ef9c94fbae33cd13d106af966e89d122076e77aa4fd352de959fc7ae3af7a"
       },
       {
         "id": "14-37",
         "sentences": 16,
-        "eojeol": 112,
+        "eojeol": 109,
         "questions": 3,
         "translationPairs": 16,
         "sourceFamily": 17,
         "legacyPreserved": true,
-        "sourceSha256": "6455bb86064b35e30a38cd6edc851e2083f4d376dc2833a3fb79f0e422a5b111"
+        "sourceSha256": "70ec91bb60d1235e8c3076d9f2531bf657b9301e9bcef27fd2e2177ad1fc7b6a"
       },
       {
         "id": "14-38",
@@ -6478,27 +6478,27 @@
         "translationPairs": 16,
         "sourceFamily": 18,
         "legacyPreserved": true,
-        "sourceSha256": "d67d2eab530638d23567af389f8c435da00e86a81d5a5bc6527c4ccd5b051964"
+        "sourceSha256": "71033d87a5cc09f1afd3c04b4b97393f3571a78f95ee91330c676c4629ef14af"
       },
       {
         "id": "14-39",
         "sentences": 16,
-        "eojeol": 122,
+        "eojeol": 119,
         "questions": 3,
         "translationPairs": 16,
         "sourceFamily": 19,
         "legacyPreserved": true,
-        "sourceSha256": "0407774f5d0a1cb107d828f119651b9ca0fb07dc8ef58dc83ac082b087c44667"
+        "sourceSha256": "65b867c6fa46511aaa901e869ad608d4cc8f14198cb72e75d7db57c06f992409"
       },
       {
         "id": "14-40",
         "sentences": 16,
-        "eojeol": 126,
+        "eojeol": 127,
         "questions": 3,
         "translationPairs": 16,
         "sourceFamily": 20,
         "legacyPreserved": true,
-        "sourceSha256": "a4342787f27bdb6432346a9a99fd76e1e3e925eab57bdb051e967a7733b4aaf1"
+        "sourceSha256": "db4a6f1fb6bdc8c0c3c2baef6cb8593fe7f481935f583c12e43ea6bffba458d6"
       },
       {
         "id": "15-1",
@@ -6703,52 +6703,52 @@
       {
         "id": "15-21",
         "sentences": 17,
-        "eojeol": 120,
+        "eojeol": 118,
         "questions": 3,
         "translationPairs": 17,
         "sourceFamily": 1,
         "legacyPreserved": true,
-        "sourceSha256": "18afbcdf44ae676e4466e3582efb349535ae1bc732ac4e1ff32e585246a467a0"
+        "sourceSha256": "768eb22ecb4e2825ea6e848bcb567859ce35d32927bde6769fa1afb1a528db46"
       },
       {
         "id": "15-22",
         "sentences": 17,
-        "eojeol": 135,
+        "eojeol": 132,
         "questions": 3,
         "translationPairs": 17,
         "sourceFamily": 2,
         "legacyPreserved": true,
-        "sourceSha256": "278165ebe0825d6b434a10c3a7658c31751633cc19741fa19aebe555211f610a"
+        "sourceSha256": "a765c084b8f3669ec276b6af0eccd05424cbef6b93c3ffe62d00a084aaadbe11"
       },
       {
         "id": "15-23",
         "sentences": 17,
-        "eojeol": 121,
+        "eojeol": 118,
         "questions": 3,
         "translationPairs": 17,
         "sourceFamily": 3,
         "legacyPreserved": true,
-        "sourceSha256": "243e741ee8067a9e7848dfa951f4fd3dcb6ad69dd75bbc4d55cd1e683f60d908"
+        "sourceSha256": "e35051ecfd0cbd257b143a817a2c94c87585b06f73c9470ebaf9e6b9d83ee64d"
       },
       {
         "id": "15-24",
         "sentences": 17,
-        "eojeol": 124,
+        "eojeol": 123,
         "questions": 3,
         "translationPairs": 17,
         "sourceFamily": 4,
         "legacyPreserved": true,
-        "sourceSha256": "38b1d5b252ab98dec03b7a93490a4f46d13e91eecbc5c118386b44c6093025eb"
+        "sourceSha256": "56bbdfde6d9cc4b189817f3d9ae313097030d637c5fe44a205f438f43f77bf30"
       },
       {
         "id": "15-25",
         "sentences": 17,
-        "eojeol": 123,
+        "eojeol": 121,
         "questions": 3,
         "translationPairs": 17,
         "sourceFamily": 5,
         "legacyPreserved": true,
-        "sourceSha256": "ce960cd2f87a3a2e508ff6ffaf137ee0e3e28b1e32134765019294b355522f29"
+        "sourceSha256": "22376e6f2a27286c23fe2e287f67e01223bddaeed9adf4582c8e652ae4408eb9"
       },
       {
         "id": "15-26",
@@ -6758,87 +6758,87 @@
         "translationPairs": 17,
         "sourceFamily": 6,
         "legacyPreserved": true,
-        "sourceSha256": "fd1b76b5dc61db9f7f52cf7bbd611fab04a0f097094ec133b721221025216533"
+        "sourceSha256": "13e153d50a3bd31439ec8120576767c3e29a0117e03de3721073c8ecbfd8407d"
       },
       {
         "id": "15-27",
         "sentences": 17,
-        "eojeol": 127,
+        "eojeol": 125,
         "questions": 3,
         "translationPairs": 17,
         "sourceFamily": 7,
         "legacyPreserved": true,
-        "sourceSha256": "473758572778aa84f6f2a2c1d8b391bb404959cf0787bd827f16cdf94543ba51"
+        "sourceSha256": "e10da86beb4aff3d960d8fa8990fd9a1726bff95dfae7e3e5633567afe6c3d08"
       },
       {
         "id": "15-28",
         "sentences": 17,
-        "eojeol": 120,
+        "eojeol": 117,
         "questions": 3,
         "translationPairs": 17,
         "sourceFamily": 8,
         "legacyPreserved": true,
-        "sourceSha256": "faab73b1e01e75d77b6331fc49df540d351bfa14e72db10d0c39637d8ffddfc4"
+        "sourceSha256": "ed40d921d1b1c553b6357c1c57cfa086de58a069821abd8225773f555ed973b3"
       },
       {
         "id": "15-29",
         "sentences": 17,
-        "eojeol": 128,
+        "eojeol": 125,
         "questions": 3,
         "translationPairs": 17,
         "sourceFamily": 9,
         "legacyPreserved": true,
-        "sourceSha256": "2b3504aa9fe0db7611d87c727d67b66359ca2b455a6821a0c78b32f520c98eff"
+        "sourceSha256": "b128bd7d69e02a9da811b5fd04ef43dd5b88aa676102d4cab3fe65eb638a4a21"
       },
       {
         "id": "15-30",
         "sentences": 17,
-        "eojeol": 121,
+        "eojeol": 119,
         "questions": 3,
         "translationPairs": 17,
         "sourceFamily": 10,
         "legacyPreserved": true,
-        "sourceSha256": "cfc2a21a6053e5fc9a0651019625a6d525f6545b9e50e40c5dfcf37c62bc0862"
+        "sourceSha256": "9119b68047ee47549e453367e282e99040c01b0435244345adf5ed2b1a8c65f4"
       },
       {
         "id": "15-31",
         "sentences": 17,
-        "eojeol": 128,
+        "eojeol": 125,
         "questions": 3,
         "translationPairs": 17,
         "sourceFamily": 11,
         "legacyPreserved": true,
-        "sourceSha256": "61bf307f71b7d127e0ce540a1b32a9edada1f073554269dac1bb96381f4d78a8"
+        "sourceSha256": "92bc41152e7842b4d3b293db8c10a2dcc948ab68faa9cc57bc5381f603d3da2a"
       },
       {
         "id": "15-32",
         "sentences": 17,
-        "eojeol": 130,
+        "eojeol": 127,
         "questions": 3,
         "translationPairs": 17,
         "sourceFamily": 12,
         "legacyPreserved": true,
-        "sourceSha256": "abc8747fe75bc9fe7dbb776a290132f6225f860c7d51d8177237620ab7f3d588"
+        "sourceSha256": "3ae8996b6da4de8a67ba629c5dc42247a75455a115ffcf75071fae68a4a6a0c4"
       },
       {
         "id": "15-33",
         "sentences": 17,
-        "eojeol": 120,
+        "eojeol": 118,
         "questions": 3,
         "translationPairs": 17,
         "sourceFamily": 13,
         "legacyPreserved": true,
-        "sourceSha256": "bbf411074fb536101007f5b31005d0e025b7c74b55357f27a2e1ce4268b743b6"
+        "sourceSha256": "96cafff2f9bba696bbd69fcb8d135f71bacbe4781a9cdf65eb2baef3ac00b2f8"
       },
       {
         "id": "15-34",
         "sentences": 17,
-        "eojeol": 120,
+        "eojeol": 116,
         "questions": 3,
         "translationPairs": 17,
         "sourceFamily": 14,
         "legacyPreserved": true,
-        "sourceSha256": "7dcb5d729e002a7ac67e33dd09584b0ecf8464c392c1f824e48eb6ee66a67d46"
+        "sourceSha256": "7e25b562b48aaa2f8ee84c9a5a45b53ce5513af4e3b09a51c6be59f3eaf89e5e"
       },
       {
         "id": "15-35",
@@ -6848,7 +6848,7 @@
         "translationPairs": 17,
         "sourceFamily": 15,
         "legacyPreserved": true,
-        "sourceSha256": "813e1e9552de43376b8bcf2014e4395d5e7c5795fba55b2c8531d961e4fa5b3e"
+        "sourceSha256": "f5cabcb1bd5c2e94a5fd815408ffabf7ee08df2eee26d53bab49d39b20f67913"
       },
       {
         "id": "15-36",
@@ -6858,17 +6858,17 @@
         "translationPairs": 17,
         "sourceFamily": 16,
         "legacyPreserved": true,
-        "sourceSha256": "c5bf1bfdd26535c8426888638488c293e10358ab679ad9984e767ea83dd5e06a"
+        "sourceSha256": "2a5e691bcb2b3f4d3225adb4e15575867ad3e10785ef8d09cd6ade9fc31518dd"
       },
       {
         "id": "15-37",
         "sentences": 17,
-        "eojeol": 123,
+        "eojeol": 120,
         "questions": 3,
         "translationPairs": 17,
         "sourceFamily": 17,
         "legacyPreserved": true,
-        "sourceSha256": "6a9c838ae146042a1f55f8d53721d474cc0f88828a4b16edea3271a704751cc7"
+        "sourceSha256": "410c2389f0c9b5866d94bfc1c7b5ddc000284f6f65bebf5f836e37e9ca11e7bb"
       },
       {
         "id": "15-38",
@@ -6878,27 +6878,27 @@
         "translationPairs": 17,
         "sourceFamily": 18,
         "legacyPreserved": true,
-        "sourceSha256": "dd95cd7c92a0aa9621bc527e58f51624a435e814c7de3c9d3d50eeabfa9e926d"
+        "sourceSha256": "621a6dde5054626f3989c95c762b15e01617fda6448628434923448b10f19548"
       },
       {
         "id": "15-39",
         "sentences": 17,
-        "eojeol": 135,
+        "eojeol": 132,
         "questions": 3,
         "translationPairs": 17,
         "sourceFamily": 19,
         "legacyPreserved": true,
-        "sourceSha256": "8cdae3e4ae92c16e2eedf8d7c7801dc4e1975fe1638d6891ccd235de8820eeec"
+        "sourceSha256": "135347a212392f1134b759b1e7eed3f65740cf6433910a6b0bf25343640b234a"
       },
       {
         "id": "15-40",
         "sentences": 17,
-        "eojeol": 136,
+        "eojeol": 137,
         "questions": 3,
         "translationPairs": 17,
         "sourceFamily": 20,
         "legacyPreserved": true,
-        "sourceSha256": "63d6e3cde85904c9c84e28f53e122172db2853245ebedce4a8c6b7d896bdca41"
+        "sourceSha256": "940dc04bacf37b10f42910cb3fbdc9f37ea9fc2fc382ceab9006e4b248430161"
       }
     ]
   },
@@ -6936,9 +6936,29 @@
         "missing": 370,
         "listeningApproved": 0
       }
+    },
+    "requiredHangul": {
+      "uniqueTargets": 418,
+      "filePresent": 43,
+      "missing": 375,
+      "playbackAvailable": 19,
+      "listeningApproved": 0
     }
   },
   "preservation": {
+    "readingLegacyEntriesChecked": 600,
     "homepageUnchanged": true
+  },
+  "completion": {
+    "sourceChecksPassed": true,
+    "complete": false,
+    "blockers": [
+      "Required Hangul human recordings missing: 375",
+      "All actual pronunciation listening approvals remain pending."
+    ],
+    "limits": [
+      "AI source review does not establish learning effectiveness.",
+      "Browser mobile emulation does not establish iPhone/Android physical-device compatibility."
+    ]
   }
 }

@@ -10,6 +10,6 @@ function reading(language='ko'){
  vm.createContext(ctx);
  const extra=html.includes('reading-curriculum.js')?fs.readFileSync(path.join(root,'reading-curriculum.js'),'utf8'):'';
  vm.runInContext(extra+'\n'+src+'\nlang='+JSON.stringify(language)+';globalThis.getReading=content;globalThis.getLegacyReading=typeof legacyContent!=="undefined"?legacyContent:content;',ctx);
- return {get:ctx.getReading,legacy:ctx.getLegacyReading};
+ return {get:ctx.getReading,legacy:ctx.getLegacyReading,curriculum:ctx.window.HSReadingCurriculum};
 }
 module.exports={root,courses,lessons,reading};
