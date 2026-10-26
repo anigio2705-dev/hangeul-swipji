@@ -59,14 +59,18 @@ h1 em{color:#9b713c}.btn-main{background:#173b78}.btn-main:hover{background:#0e2
 .heritage-item strong{font-size:15px;display:block}.heritage-item small{font-size:12px;color:#6b6c6d}
 @media(max-width:720px){.heritage-strip{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.heritage-item{padding:12px;gap:9px}.heritage-item .symbol{font-size:24px}.heritage-item strong{font-size:13px}.heritage-item small{font-size:11px}.hero:before{height:290px}}
 </style>
-</head>
+<style id="home-rich-language-v2">
+.header-tools{display:flex;align-items:center;gap:10px}.language-toggle{border:1px solid #c9d5e4;border-radius:11px;background:white;color:#18385e;font:800 14px inherit;font-family:inherit;font-size:14px;font-weight:800;padding:10px 13px;white-space:nowrap;cursor:pointer}.language-toggle:hover{border-color:#244d88;background:#f3f7ff}
+.explore-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}.explore-tile{display:flex;flex-direction:column;gap:8px;background:white;border:1px solid #e7dfd3;border-radius:18px;padding:23px;min-height:166px;transition:transform .2s,box-shadow .2s}.explore-tile:hover{transform:translateY(-3px);box-shadow:0 12px 26px #253b5817}.explore-emoji{font-size:31px}.explore-tile strong{font-size:18px}.explore-tile small{font-size:14px;color:#56687c}
+@media(max-width:920px){.explore-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:720px){.header-tools{margin-left:auto}.language-toggle{font-size:12px;padding:8px}.explore-grid{gap:10px}.explore-tile{padding:16px;min-height:146px}.explore-tile strong{font-size:15px}.explore-tile small{font-size:12px}}
+</style></head>
 <body>
 <header><div class="wrap header-row">
 <a class="logo" href="./index.html" aria-label="한글쉽지 홈"><span class="logo-mark">ㅎ</span>한글쉽지</a>
 <nav aria-label="주요 메뉴">
 <a href="./learn.html">한국어 배우기</a><a href="./culture.html">한국 문화</a><a href="./speaking-platform.html">한국인과 대화</a><a href="./dashboard.html">나의 학습</a>
 </nav>
-<a class="header-cta" href="./placement.html">레벨 진단</a>
+<div class="header-tools"><button class="language-toggle" type="button" id="openLanguages" aria-controls="hs-global-language" aria-expanded="false">🌐 언어 변경 <span aria-hidden="true">⌄</span></button><a class="header-cta" href="./placement.html">레벨 진단</a></div>
 </div></header>
 <main class="wrap">
 <section class="hero" aria-labelledby="main-title">
@@ -97,11 +101,23 @@ h1 em{color:#9b713c}.btn-main{background:#173b78}.btn-main:hover{background:#0e2
 <section class="section" aria-labelledby="path-title"><div class="path"><div class="section-head"><h2 id="path-title">처음 오셨나요? 이렇게 시작하세요.</h2><p>복잡하게 고르지 않아도 됩니다. 세 단계면 충분합니다.</p></div>
 <div class="path-items"><div class="step"><span>STEP 01</span><h3>내 수준 알아보기</h3><p>레벨 진단으로 학습 시작점을 찾아요.</p></div><div class="step"><span>STEP 02</span><h3>한국어 공부하기</h3><p>단원을 배우고 듣고 말하며 복습해요.</p></div><div class="step"><span>STEP 03</span><h3>실제로 이야기하기</h3><p>한국인과 대화하며 배운 표현을 써봐요.</p></div></div>
 </div></section>
-<section class="section" aria-labelledby="more-title"><div class="section-head"><h2 id="more-title">더 많은 학습 자료</h2><p>필요할 때 골라서 이용하세요.</p></div>
+<section class="section" aria-labelledby="explore-title"><div class="section-head"><h2 id="explore-title">한국어 너머, 더 넓은 한국을 만나세요</h2><p>학습 · 문화 · 사람을 연결하는 한글쉽지의 다양한 공간입니다.</p></div>
+<div class="explore-grid">
+<a class="explore-tile" href="./hangul-basics.html"><span class="explore-emoji">🔤</span><strong>한글 읽기 입문</strong><small>자음·모음부터 가나다까지</small></a>
+<a class="explore-tile" href="./reading.html"><span class="explore-emoji">📚</span><strong>15단계 리딩</strong><small>읽기·이해·연습 문제</small></a>
+<a class="explore-tile" href="./drama.html"><span class="explore-emoji">🎬</span><strong>K-드라마</strong><small>장면 속 살아 있는 한국어</small></a>
+<a class="explore-tile" href="./kpop.html"><span class="explore-emoji">🎵</span><strong>K-POP</strong><small>음악과 함께 만나는 한국</small></a>
+<a class="explore-tile" href="./daily.html"><span class="explore-emoji">☕</span><strong>한국의 일상</strong><small>식당·카페·교통·생활 표현</small></a>
+<a class="explore-tile" href="./students.html"><span class="explore-emoji">🎒</span><strong>학생 이야기</strong><small>학교생활과 창작 스토리</small></a>
+<a class="explore-tile" href="./dashboard.html"><span class="explore-emoji">📊</span><strong>나의 학습 기록</strong><small>진도·복습·학습 관리</small></a>
+<a class="explore-tile" href="./guide.html"><span class="explore-emoji">✨</span><strong>강사·크리에이터 참여</strong><small>한국어와 문화를 함께 나누기</small></a>
+</div></section><section class="section" aria-labelledby="more-title"><div class="section-head"><h2 id="more-title">더 많은 학습 자료</h2><p>필요할 때 골라서 이용하세요.</p></div>
 <div class="links"><a href="./hangul-basics.html">🔤 입문 0단계 · 한글 읽기 →</a><a href="./reading.html">📖 리딩 라이브러리 →</a><a href="./drama.html">🎞️ K-드라마 →</a><a href="./kpop.html">🎵 K-POP →</a><a href="./daily.html">☕ 한국의 일상 →</a><a href="./students.html">🎒 학생 이야기 →</a><a href="./experience.html">🌸 한국어 체험 →</a><a href="./market.html">🛍️ 크리에이터 마켓 →</a><a href="./guide.html">❔ 이용 안내 →</a></div>
 </section>
 <section class="final-cta"><div><h2>오늘, 한국어 한 문장부터 시작해 보세요.</h2><p>내 언어로 배우고, 나만의 속도로 성장하세요.</p></div><a class="btn" href="./learn.html">무료 학습 시작하기 →</a></section>
 </main>
 <footer><div class="wrap footer-row"><div><strong>한글쉽지 · Hangeul Swipji</strong><div>Learn Korean. Connect with Korea.</div></div><div class="footer-links"><a href="./guide.html">이용 안내</a><a href="./global-language.html">언어 지원</a><a href="./dashboard.html">나의 학습</a><a href="./speaking-platform.html">한국인 대화</a></div></div></footer>
-<script defer src="./global-language.js"></script>
+<script defer src="./global-language.js"></script><script>
+(function(){const btn=document.getElementById('openLanguages');if(!btn)return;btn.addEventListener('click',()=>{const box=document.getElementById('hs-global-language');if(!box){window.location.href='./global-language.html';return}const show=box.style.display==='none'||getComputedStyle(box).display==='none';box.style.display=show?'block':'none';btn.setAttribute('aria-expanded',String(show));if(show){const sel=document.getElementById('hs-world-lang');if(sel)sel.focus()}})})();
+</script>
 </body></html>
