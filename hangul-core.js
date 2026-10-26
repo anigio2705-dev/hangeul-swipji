@@ -19,10 +19,10 @@
     if(a<0||b<0)throw new Error('Invalid Hangul letters');
     return String.fromCharCode(0xac00+(a*21+b)*28);
   }
-  const records={};let current=null,run=0,release=null;
-  const ready=fetch('./hangul-audio-manifest.json?v=20261026-foundations')
+  const records={},holds={};let current=null,run=0,release=null;
+  const ready=fetch('./hangul-audio-manifest.json?v=20261026-audio-audit')
     .then(r=>{if(!r.ok)throw Error('audio manifest');return r.json()})
-    .then(m=>{Object.assign(records,m.recordings);document.dispatchEvent(new Event('hs-audio-ready'))})
+    .then(m=>{Object.assign(records,Object.fromEntries(Object.entries(m.recordings).filter(([,a])=>!a.disabled)));Object.assign(holds,Object.fromEntries(Object.entries(m.recordings).filter(([,a])=>a.disabled)));document.dispatchEvent(new Event('hs-audio-ready'))})
     .catch(()=>{document.dispatchEvent(new Event('hs-audio-ready'))});
   function status(message){
     document.querySelectorAll('[data-audio-status]').forEach(x=>x.textContent=message);
@@ -62,6 +62,7 @@
     const words=Array.isArray(value)?value:[value];
     const allowDevice=!!document.querySelector('#device-fallback:checked');
     const missing=words.filter(word=>!records[word]);
+    if(missing.some(w=>holds[w])&&!allowDevice){status('재생 보류: '+missing.filter(w=>holds[w]).map(w=>w+' · '+holds[w].holdReason).join(' / '));return}
     if(missing.length&&!allowDevice){status('녹음 준비 중: '+missing.join(' · ')+'. 선생님과 함께 읽어 주세요. 기기 음성은 직접 선택할 때만 사용합니다.');return}
     try{
       for(const word of words){if(token!==run)return;await (records[word]?recording(word,token):deviceVoice(word,token))}
@@ -76,8 +77,8 @@
   function refreshBadges(){
     document.querySelectorAll('[data-sound]').forEach(b=>{
       const native=!!records[b.dataset.sound];b.classList.toggle('has-recording',native);
-      b.title=native?'녹음 음성 · Recorded voice':'녹음 준비 중 · Recording pending';
-      b.setAttribute('aria-label',b.dataset.sound+' · '+(native?'녹음 듣기':'녹음 준비 중'));
+      const held=holds[b.dataset.sound];b.classList.toggle('is-held',!!held);b.title=held?held.holdReason:native?'녹음 음성 · Recorded voice':'녹음 준비 중 · Recording pending';
+      b.setAttribute('aria-label',b.dataset.sound+' · '+(held?'재생 보류':native?'녹음 듣기':'녹음 준비 중'));
     });
     const n=document.querySelector('[data-recording-count]');if(n)n.textContent=Object.keys(records).length;
   }

@@ -1,29 +1,29 @@
 {
-  "version": "20261026-foundations",
+  "version": "20261026-audio-audit",
   "recordings": {
     "가": {
-      "src": "./assets/hangul-audio/ac00.mp3",
+      "src": "./assets/hangul-audio/ac00-r2.mp3",
       "sourceTitle": "File:Ko-가.ogg",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EA%B0%80.ogg",
       "author": "HappyMidnight",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "change": "Converted to mono MP3; loudness normalized.",
-      "duration": 1.776,
-      "sha256": "85945ebc19131192c13f6c0b369ed1875bed591f160d235b0835613c94ab73e2",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "change": "Converted to mono MP3; loudness normalized. Leading silence shortened by 0.45s; retained onset margin.",
+      "duration": 1.332245,
+      "sha256": "965da2ae69b5d91ded4f3586e1ddb66aa4b2795338ad1b05cdc04c25e980da5f",
+      "review": "signal-and-label-checked; teacher listening review pending"
     },
     "나": {
-      "src": "./assets/hangul-audio/b098.mp3",
+      "src": "./assets/hangul-audio/b098-r2.mp3",
       "sourceTitle": "File:Ko-나.ogg",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EB%82%98.ogg",
       "author": "HappyMidnight",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "change": "Converted to mono MP3; loudness normalized.",
-      "duration": 1.306,
-      "sha256": "ec9b8498e25cd8522dad9b8f2d2f1c5b81cb705a695ddc130ae3cf03d80a8b87",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "change": "Converted to mono MP3; loudness normalized. Leading silence shortened by 0.28s; retained onset margin.",
+      "duration": 1.018776,
+      "sha256": "5db86fc855f8aaf41a72de0bdf651527c2ee83c8c9b763d2d8a187a5da954a43",
+      "review": "signal-and-label-checked; teacher listening review pending"
     },
     "사": {
       "src": "./assets/hangul-audio/c0ac.mp3",
@@ -107,7 +107,9 @@
       "change": "Converted to mono MP3; loudness normalized.",
       "duration": 1.071,
       "sha256": "79321098cb1076bb072fde6456901b740019e5ea655d08f8a3c742ceb987e545",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "review": "source-transcription-checked; teacher listening review pending",
+      "disabled": true,
+      "holdReason": "파일 끝 여백 부족: 잘림 여부를 청취 확인할 때까지 재생 보류"
     },
     "에": {
       "src": "./assets/hangul-audio/c5d0.mp3",
