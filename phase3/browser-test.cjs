@@ -1,0 +1,67 @@
+'use strict';
+// Actual Chromium UI against a disposable localhost test DB. No external call or real payment.
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+const {spawn,spawnSync}=require('node:child_process');
+const fs=require('node:fs'), os=require('node:os'), path=require('node:path'), assert=require('node:assert/strict');
+const root=__dirname, temp=fs.mkdtempSync(path.join(os.tmpdir(),'hs3-browser-'));
+const port=19000+Math.floor(Math.random()*10000), base=`http://127.0.0.1:${port}`;
+const env={...process.env,HS_PHASE3_DB:path.join(temp,'browser.sqlite3'),HS_PHASE3_ADMIN_PASSWORD:'Browser-Admin-Test-12345!'};
+const clockFile=path.join(temp,'clock');fs.writeFileSync(clockFile,String(Date.now()/1000));function advance(n){fs.writeFileSync(clockFile+'.new',String(n));fs.renameSync(clockFile+'.new',clockFile);}
+const checks=[],errors=[];let child,browser;
+function check(name,condition=true){assert.ok(condition,name);checks.push(name);console.log('PASS',name);}
+async function auth(page,role,name){await page.goto(base);await page.getByRole('button',{name:'시작하기',exact:true}).click();await page.locator('#auth-form [name=email]').fill(name+'@example.test');await page.locator('#auth-form [name=password]').fill('Browser-Password-12345!');await page.locator('#auth-form [name=nickname]').fill(name);await page.locator('#auth-form [name=role]').selectOption(role);await page.locator('#auth-form [name=adultConsent]').check();await page.getByRole('button',{name:'테스트 계정 만들기',exact:true}).click();await page.locator('#auth-dialog').waitFor({state:'hidden'});check(role+' UI signup');}
+async function request(context,url,body,method='POST'){const r=await context.request.fetch(base+url,{method,data:body});const result=await r.json();assert.equal(r.status(),200,JSON.stringify(result));return result;}
+async function close(page){await page.locator('#close-detail').click();}
+async function fillReason(page,text){await page.locator('#detail textarea').fill(text);await page.locator('#detail').getByRole('button',{name:'저장',exact:true}).click();await page.locator('#detail-dialog').waitFor({state:'hidden'});}
+(async()=>{
+ const created=spawnSync(process.env.PYTHON||'python3',[path.join(root,'server.py'),'--create-admin','admin@example.test'],{env,encoding:'utf8'});assert.equal(created.status,0,created.stderr);
+ child=spawn(process.env.PYTHON||'python3',[path.join(root,'browser_server.py'),'--port',String(port),'--clock-file',clockFile],{env,stdio:['ignore','pipe','pipe']});await new Promise((resolve,reject)=>{child.stdout.once('data',resolve);child.once('error',reject);child.once('exit',c=>reject(Error('server exit '+c)));});
+ browser=await chromium.launch({headless:true});
+ const contexts=await Promise.all([0,1,2,3].map(()=>browser.newContext({viewport:{width:1440,height:1000}})));const [tc,lc,ac,pc]=contexts;
+ const [teacher,learner,admin,partner]=await Promise.all(contexts.map(c=>c.newPage()));for(const p of [teacher,learner,admin,partner])p.on('pageerror',e=>errors.push(e.message));
+ await auth(teacher,'teacher','TeacherBrowser');await teacher.getByRole('button',{name:'내 프로필',exact:true}).click();await teacher.locator('#content [name=languages]').fill('한국어,English');await teacher.locator('#content [name=specialty]').fill('초급 회화');await teacher.locator('#content [name=level]').fill('A0,A1');await teacher.getByRole('button',{name:'프로필 저장',exact:true}).click();await teacher.getByText('미승인 프로필',{exact:false}).waitFor();
+ // Begin at the real merged homepage and traverse the free learning/placement bridge.
+ await learner.goto(base+'/free/index.html');await learner.locator('.study-tools a[href*="teaching-platform.html"]').waitFor();
+ await learner.goto(base+'/free/learn.html');await learner.getByRole('link',{name:'무료 수준 확인 →',exact:true}).click();
+ await learner.locator('#start').click();for(let i=0;i<20;i++){await learner.locator('#choices button').first().click();await learner.locator('#next').click();}
+ await learner.locator('#teacher').click();await learner.locator('#studio-link').click();await learner.locator('#placement-context').filter({hasText:'무료 간이 진단 권장 단계'}).waitFor();
+ check('free learning to20-question placement to studio advisory context');
+ await auth(learner,'learner','LearnerBrowser');await auth(partner,'partner','PartnerBrowser');
+ await admin.goto(base);await admin.getByRole('button',{name:'로그인',exact:true}).first().click();await admin.locator('#auth-form [name=email]').fill('admin@example.test');await admin.locator('#auth-form [name=password]').fill(env.HS_PHASE3_ADMIN_PASSWORD);await admin.locator('#auth-submit').click();await admin.locator('#auth-dialog').waitFor({state:'hidden'});await admin.getByRole('button',{name:'운영 관리',exact:true}).click();
+ const teacherRow=admin.getByRole('row').filter({hasText:'TeacherBrowser'});await teacherRow.getByRole('button',{name:'테스트 검토',exact:true}).click();await fillReason(admin,'Browser local test provider review evidence only');check('admin UI approval');
+ await teacher.reload();await teacher.getByRole('button',{name:'내 프로필',exact:true}).click();const start=new Date(Date.now()+120000);start.setSeconds(0,0);const end=new Date(start.getTime()+40*60000);const local=d=>new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);await teacher.locator('#content [name=start]').fill(local(start));await teacher.locator('#content [name=end]').fill(local(end));await teacher.getByRole('button',{name:'가능 시간 저장',exact:true}).click();await teacher.getByText('가능 시간을 저장했습니다.',{exact:true}).waitFor();check('teacher availability UI');
+ await learner.getByRole('button',{name:'선생님 찾기',exact:true}).click();await learner.getByRole('button',{name:'시간 · 단원 선택',exact:true}).click();await learner.locator('#detail [name=unitId]').selectOption({index:0});await learner.getByRole('button',{name:/예약 저장/}).click();await learner.getByRole('button',{name:'모의 결제 · 실제 청구 없음',exact:true}).click();await learner.getByRole('button',{name:'테스트 화상방 · 출석 시작',exact:true}).waitFor();check('learner UI search booking and test payment');
+ const bids=await request(lc,'/api/bookings',undefined,'GET');const bid=bids.bookings[0].id;
+ const lu=await request(lc,`/api/bookings/${bid}/unit`,undefined,'GET'),tu=await request(tc,`/api/bookings/${bid}/unit`,undefined,'GET');check('same immutable content hash',lu.sha256===tu.sha256);check('teacher guide role separation',!lu.unit.teacherGuide&&!!tu.unit.teacherGuide);
+ await learner.getByRole('button',{name:'같은 단원 열기',exact:true}).click();await learner.getByRole('heading',{name:'독립 읽기',exact:true}).waitFor();check('booked lesson UI');await close(learner);
+ async function room(page){await page.getByRole('button',{name:'내 수업',exact:true}).click();await page.getByRole('button',{name:'테스트 화상방 · 출석 시작',exact:true}).click();await page.getByRole('button',{name:'안내 확인 · 출석 시작',exact:true}).click();const link=page.getByRole('link',{name:'Jitsi 테스트 방을 새 창에서 열기',exact:true});await link.waitFor();const href=await link.getAttribute('href');await close(page);return href;}
+ const lr=await room(learner),tr=await room(teacher);check('both users same Jitsi test room URL',lr===tr&&lr.startsWith('https://meet.jit.si/')); // Does not test external media.
+ await learner.getByRole('button',{name:'내 수업',exact:true}).click();await learner.getByRole('button',{name:'과제 제출 · 수정',exact:true}).click();await fillReason(learner,'안녕하세요. 저는 한국어를 배우는 학생입니다.');await learner.getByText('학습자 과제:',{exact:false}).waitFor();
+ await teacher.getByRole('button',{name:'내 수업',exact:true}).click();await teacher.getByRole('button',{name:'평가 · 피드백',exact:true}).click();await teacher.locator('#detail [name=score]').fill('85');await fillReason(teacher,'인사와 자기소개가 자연스럽습니다. 받침을 조금 더 연습하세요.');check('homework and feedback UI persisted');
+ await learner.getByRole('button',{name:'수업 완료 확인 요청',exact:true}).click();await learner.getByText('서버 확인 수업시간이 부족합니다',{exact:true}).waitFor();check('UI premature completion blocked');
+ advance(start.getTime()/1000);for(const ctx of [lc,tc])await request(ctx,`/api/bookings/${bid}/attendance`,{});
+ for(let minute=1;minute<=30;minute++){advance(start.getTime()/1000+minute*60);for(const ctx of [lc,tc])await request(ctx,`/api/bookings/${bid}/attendance`,{});}
+ await admin.getByRole('button',{name:'운영 관리',exact:true}).click();await admin.getByRole('button',{name:'증빙 검토',exact:true}).click();await fillReason(admin,'Simulated-clock browser evidence only, not actual Jitsi attendance');
+ for(const page of [learner,teacher]){await page.getByRole('button',{name:'내 수업',exact:true}).click();await page.getByRole('button',{name:'수업 완료 확인 요청',exact:true}).click();}
+ await learner.getByRole('button',{name:'내 수업',exact:true}).click();await learner.getByText('완료 확인됨',{exact:true}).waitFor();check('full booking to completion with shared30m simulated server clock');
+ await learner.getByRole('button',{name:'후기 작성',exact:true}).click();await fillReason(learner,'예약한 교재와 같은 단원으로 대화 연습을 했습니다.');
+ await admin.getByRole('button',{name:'운영 관리',exact:true}).click();await admin.getByRole('button',{name:'모의 정산 기록',exact:true}).click();await admin.getByText('모의 정산 기록됨',{exact:true}).waitFor();check('completed lesson review and admin test settlement UI');
+ await teacher.getByRole('button',{name:'내 프로필',exact:true}).click();await teacher.getByText('강사 몫',{exact:false}).waitFor();check('provider private earnings UI after settlement');
+ await learner.getByRole('button',{name:'내 수업',exact:true}).click();
+
+ await learner.getByRole('button',{name:'문제 신고',exact:true}).click();await learner.locator('#detail [name=category]').selectOption('connection');await fillReason(learner,'연결 장애로 수업을 진행하지 못했습니다. 테스트 증빙입니다.');await admin.getByRole('button',{name:'운영 관리',exact:true}).click();await admin.getByRole('button',{name:'모의 환불',exact:true}).click();await fillReason(admin,'연결 장애 신고와 테스트 거래 증빙을 검토하여 모의 환불합니다.');
+ await learner.getByRole('button',{name:'내 수업',exact:true}).click();await learner.getByText('모의 환불됨',{exact:true}).waitFor();await learner.getByRole('button',{name:'처리 결과 이의신청',exact:true}).click();await fillReason(learner,'추가 연결 로그를 제출하고 처리 결과의 재검토를 요청합니다.');check('dispute refund appeal UI');
+ await learner.getByRole('button',{name:'수익성 비교',exact:true}).click();await learner.locator('#content tbody tr').nth(8).waitFor();check('9 profitability scenarios rendered',await learner.locator('#content tbody tr').count()===9);
+ // Recheck the new public entry at both viewports; only local preview enables studio.
+ for(const width of [1440,390]){await learner.setViewportSize({width,height:1000});for(const file of ['index.html','learn.html','teaching-platform.html?stage=2']){await learner.goto(base+'/free/'+file);const d=await learner.evaluate(()=>({v:innerWidth,s:document.documentElement.scrollWidth}));assert.ok(d.s<=d.v+1,file+' overflow');}await learner.locator('#studio-link').click();await learner.locator('#placement-context').filter({hasText:'초급 2'}).waitFor();}
+ check('free bridge desktop and mobile layout and stage retained');
+ await learner.goto(base+'/free/teaching-platform.html?stage=%3Cscript%3E');assert.equal(await learner.locator('#placement-note').textContent(),'');await learner.locator('#studio-link').click();assert.equal(new URL(learner.url()).searchParams.has('stage'),false);check('untrusted placement value ignored');
+ fs.mkdirSync(path.join(root,'browser-artifacts'),{recursive:true});
+ await learner.goto(base+'/free/index.html');await learner.screenshot({path:path.join(root,'browser-artifacts','integrated-home-mobile.png'),fullPage:true});
+ await learner.goto(base+'/free/teaching-platform.html?stage=2');await learner.screenshot({path:path.join(root,'browser-artifacts','integrated-entry-mobile.png'),fullPage:true});
+
+ await learner.goto(base);await learner.locator('#content h2').waitFor();
+ const widths=[];fs.mkdirSync(path.join(root,'browser-artifacts'),{recursive:true});for(const width of [1440,390]){await learner.setViewportSize({width,height:1000});for(const view of ['선생님 찾기','수업 교재','내 수업','내 프로필','수익성 비교']){await learner.getByRole('button',{name:view,exact:true}).click();await learner.locator('#content h2').waitFor();const dim=await learner.evaluate(()=>({viewport:innerWidth,scroll:document.documentElement.scrollWidth}));assert.ok(dim.scroll<=dim.viewport+1,view+' overflow '+JSON.stringify(dim));}widths.push(width);await learner.screenshot({path:path.join(root,'browser-artifacts',`scenario-${width}.png`),fullPage:true});}check('desktop1440 mobile390 no page horizontal overflow');check('no JavaScript page errors',errors.length===0);
+ for(const doc of ['POLICIES-DRAFT.md','LEGAL-REVIEW.md','README.md']){const r=await lc.request.get(base+'/'+doc);assert.equal(r.status(),200);}check('policy and runbook links resolve');
+ const report={mode:'local-test-only',checkedAt:new Date().toISOString(),browser:'Chromium134 / Playwright1.51.1',checks,viewportWidths:widths,errors,externalVideoMediaTested:false,physicalMobileTested:false,realPaymentsTested:false,serverClockSimulated:true,hostedSupabaseTested:false,providerSandboxTested:false};fs.writeFileSync(path.join(root,'browser-results.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));
+})().catch(e=>{console.error(e);process.exitCode=1;}).finally(async()=>{if(browser)await browser.close();if(child)child.kill();fs.rmSync(temp,{recursive:true,force:true});});

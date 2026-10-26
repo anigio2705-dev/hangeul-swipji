@@ -96,7 +96,11 @@ for(const [label,group,total] of [['consonantNames','자음 이름',19],['vowels
 report.warnings.push('Audio: missing human recordings and listening approval remain; no synthetic substitution.');
 report.warnings.push('Exact supported-option uniqueness is an automated property, not a proof of every possible semantic interpretation.');
 report.warnings.push('Level metrics describe this graded curriculum; no CEFR/TOPIK calibration or learner trial was performed.');
-report.preservation.homepageUnchanged=fs.readFileSync(path.join(root,'index.html'),'utf8')===cp.execFileSync('git',['show',baseline+':index.html'],{cwd:root,encoding:'utf8'});check(report.preservation.homepageUnchanged,'Homepage modified');
+const homepage=fs.readFileSync(path.join(root,'index.html'),'utf8'),oldHomepage=cp.execFileSync('git',['show',baseline+':index.html'],{cwd:root,encoding:'utf8'});
+const integrationLink='<a href="./teaching-platform.html">강사 수업 · 테스트</a>';
+report.preservation.homepageUnchanged=homepage===oldHomepage;
+report.preservation.homepageOnlyApprovedIntegrationLink=homepage.replace(integrationLink,'')===oldHomepage&&homepage.split(integrationLink).length===2;
+check(report.preservation.homepageUnchanged||report.preservation.homepageOnlyApprovedIntegrationLink,'Homepage changed beyond approved integration link');
 report.completion={sourceChecksPassed:report.errors.length===0,complete:report.errors.length===0&&report.audio.requiredHangul.missing===0&&report.audio.requiredHangul.listeningApproved===report.audio.requiredHangul.uniqueTargets,blockers:[report.audio.requiredHangul.missing?'Required Hangul human recordings missing: '+report.audio.requiredHangul.missing:null,report.audio.requiredHangul.listeningApproved<report.audio.requiredHangul.uniqueTargets?'Actual pronunciation listening approvals incomplete.':null].filter(Boolean),limits:['AI source review does not establish learning effectiveness.','Browser mobile emulation does not establish iPhone/Android physical-device compatibility.']};
 fs.mkdirSync(path.join(root,'audit'),{recursive:true});fs.writeFileSync(path.join(root,'audit/phase2-content.json'),JSON.stringify(report,null,2)+'\n');
 const csvValue=v=>'"'+String(v??'').replace(/"/g,'""')+'"';

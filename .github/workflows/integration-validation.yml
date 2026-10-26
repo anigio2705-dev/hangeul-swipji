@@ -1,0 +1,45 @@
+name: Free education and teaching integration checks
+on:
+  push:
+    branches: ['integration/**']
+  pull_request:
+    paths: ['phase3/**', '*teaching*', 'index.html', 'learn.html', 'placement.html', 'scripts/**', '.github/workflows/integration-validation.yml']
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --prefix phase3 --ignore-scripts
+      - run: ./phase3/node_modules/.bin/playwright install --with-deps chromium
+      - run: sudo apt-get install -y fonts-noto-cjk
+      - run: python -m unittest discover -s phase3 -p 'test_*.py' -v
+      - run: node phase3/postgres-test.cjs
+      - run: node scripts/audit-350-lessons.cjs
+      - run: node scripts/audit-phase2-content.cjs
+      - run: node scripts/check-audio-runtime.cjs
+      - run: node scripts/audit-reading-similarity.cjs
+      - run: node scripts/check-foundations.cjs
+      - run: node scripts/check-phase2-pages.cjs
+      - run: node phase3/browser-test.cjs
+      - run: node scripts/browser-smoke-phase2.cjs
+        env:
+          NODE_PATH: ./phase3/node_modules
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: integration-evidence
+          path: |
+            phase3/browser-results.json
+            phase3/postgres-results.json
+            phase3/browser-artifacts/*.png
+            audit/phase2-content.json
