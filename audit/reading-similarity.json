@@ -1,5 +1,173 @@
 {
   "baseline": "3eaec8576d15866a2a78051c082cdee9093281ba",
+  "grammarProfiles": [
+    {
+      "level": 1,
+      "features": {
+        "conditional": 0,
+        "contrast": 0,
+        "reportedSpeech": 1,
+        "embeddedQuestion": 0,
+        "concession": 0,
+        "evidenceAndLimits": 0
+      }
+    },
+    {
+      "level": 2,
+      "features": {
+        "conditional": 0,
+        "contrast": 0,
+        "reportedSpeech": 3,
+        "embeddedQuestion": 0,
+        "concession": 0,
+        "evidenceAndLimits": 0
+      }
+    },
+    {
+      "level": 3,
+      "features": {
+        "conditional": 0,
+        "contrast": 2,
+        "reportedSpeech": 5,
+        "embeddedQuestion": 3,
+        "concession": 0,
+        "evidenceAndLimits": 0
+      }
+    },
+    {
+      "level": 4,
+      "features": {
+        "conditional": 1,
+        "contrast": 5,
+        "reportedSpeech": 6,
+        "embeddedQuestion": 3,
+        "concession": 0,
+        "evidenceAndLimits": 0
+      }
+    },
+    {
+      "level": 5,
+      "features": {
+        "conditional": 1,
+        "contrast": 10,
+        "reportedSpeech": 10,
+        "embeddedQuestion": 4,
+        "concession": 0,
+        "evidenceAndLimits": 0
+      }
+    },
+    {
+      "level": 6,
+      "features": {
+        "conditional": 1,
+        "contrast": 14,
+        "reportedSpeech": 11,
+        "embeddedQuestion": 5,
+        "concession": 0,
+        "evidenceAndLimits": 1
+      }
+    },
+    {
+      "level": 7,
+      "features": {
+        "conditional": 1,
+        "contrast": 16,
+        "reportedSpeech": 14,
+        "embeddedQuestion": 5,
+        "concession": 1,
+        "evidenceAndLimits": 2
+      }
+    },
+    {
+      "level": 8,
+      "features": {
+        "conditional": 1,
+        "contrast": 17,
+        "reportedSpeech": 15,
+        "embeddedQuestion": 7,
+        "concession": 2,
+        "evidenceAndLimits": 2
+      }
+    },
+    {
+      "level": 9,
+      "features": {
+        "conditional": 2,
+        "contrast": 17,
+        "reportedSpeech": 16,
+        "embeddedQuestion": 7,
+        "concession": 3,
+        "evidenceAndLimits": 5
+      }
+    },
+    {
+      "level": 10,
+      "features": {
+        "conditional": 7,
+        "contrast": 19,
+        "reportedSpeech": 20,
+        "embeddedQuestion": 7,
+        "concession": 4,
+        "evidenceAndLimits": 7
+      }
+    },
+    {
+      "level": 11,
+      "features": {
+        "conditional": 9,
+        "contrast": 19,
+        "reportedSpeech": 21,
+        "embeddedQuestion": 12,
+        "concession": 7,
+        "evidenceAndLimits": 11
+      }
+    },
+    {
+      "level": 12,
+      "features": {
+        "conditional": 15,
+        "contrast": 20,
+        "reportedSpeech": 21,
+        "embeddedQuestion": 18,
+        "concession": 8,
+        "evidenceAndLimits": 14
+      }
+    },
+    {
+      "level": 13,
+      "features": {
+        "conditional": 16,
+        "contrast": 21,
+        "reportedSpeech": 27,
+        "embeddedQuestion": 20,
+        "concession": 9,
+        "evidenceAndLimits": 15
+      }
+    },
+    {
+      "level": 14,
+      "features": {
+        "conditional": 20,
+        "contrast": 21,
+        "reportedSpeech": 29,
+        "embeddedQuestion": 23,
+        "concession": 9,
+        "evidenceAndLimits": 19
+      }
+    },
+    {
+      "level": 15,
+      "features": {
+        "conditional": 23,
+        "contrast": 22,
+        "reportedSpeech": 31,
+        "embeddedQuestion": 25,
+        "concession": 9,
+        "evidenceAndLimits": 23
+      }
+    }
+  ],
+  "grammarProfileLimit": "Surface-form heuristics with possible false matches; no grammar mastery certification",
   "scope": "All 600 current entries; all 11700 same-level pairs; 560 neighboring-level comparisons",
   "method": "Jaccard of exact Korean sentences and space-delimited eojeol trigrams; threshold .65 is diagnostic, not semantic proof",
   "before": {

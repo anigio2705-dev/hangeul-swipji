@@ -1492,6 +1492,120 @@
       "listeningReview": {
         "status": "pending"
       }
+    },
+    "시": {
+      "kind": "human",
+      "src": "./assets/hangul-audio/c2dc-20261027.mp3",
+      "sourceTitle": "File:Ko-시.ogg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EC%8B%9C.ogg",
+      "author": "HappyMidnight",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "duration": 0.626939,
+      "sha256": "c390850c1e2a5f2c2ce34c86e7ef798081499021b646870efbed84a2c57cf45c",
+      "change": "Converted complete source recording to mono MP3; no clipping, splicing, synthesis or listening approval.",
+      "labelStatus": "source-title-matched; listening-pending",
+      "review": "source metadata and decoding checked; teacher listening pending",
+      "disabled": true,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "listeningReview": {
+        "status": "pending"
+      }
+    },
+    "채": {
+      "kind": "human",
+      "src": "./assets/hangul-audio/cc44-20261027.mp3",
+      "sourceTitle": "File:Ko-채.ogg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EC%B1%84.ogg",
+      "author": "HappyMidnight",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "duration": 0.783673,
+      "sha256": "50d01ec8256cd3b7a822283ecf0219430ae707ce8ee3dabb1bfdecaa4c32bb86",
+      "change": "Converted complete source recording to mono MP3; no clipping, splicing, synthesis or listening approval.",
+      "labelStatus": "source-title-matched; listening-pending",
+      "review": "source metadata and decoding checked; teacher listening pending",
+      "disabled": true,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "listeningReview": {
+        "status": "pending"
+      }
+    },
+    "후": {
+      "kind": "human",
+      "src": "./assets/hangul-audio/d6c4-20261027.mp3",
+      "sourceTitle": "File:Ko-후.ogg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%ED%9B%84.ogg",
+      "author": "HappyMidnight",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "duration": 1.149388,
+      "sha256": "33ae2021a256b1b62ee417bb7a5b443894bf95b6961bbbd4550617eb13c7b988",
+      "change": "Converted complete source recording to mono MP3; no clipping, splicing, synthesis or listening approval.",
+      "labelStatus": "source-title-matched; listening-pending",
+      "review": "source metadata and decoding checked; teacher listening pending",
+      "disabled": true,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "listeningReview": {
+        "status": "pending"
+      }
+    },
+    "또": {
+      "kind": "human",
+      "src": "./assets/hangul-audio/b610-20261027.mp3",
+      "sourceTitle": "File:Ko-또.ogg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EB%98%90.ogg",
+      "author": "HappyMidnight",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "duration": 0.470204,
+      "sha256": "104aea132421d607aa34b9a22d8679ecf181e2dbdc39b40d443f134595aa99dc",
+      "change": "Converted complete source recording to mono MP3; no clipping, splicing, synthesis or listening approval.",
+      "labelStatus": "source-title-matched; listening-pending",
+      "review": "source metadata and decoding checked; teacher listening pending",
+      "disabled": true,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "listeningReview": {
+        "status": "pending"
+      }
+    },
+    "때": {
+      "kind": "human",
+      "src": "./assets/hangul-audio/b54c-20261027.mp3",
+      "sourceTitle": "File:Ko-때.ogg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EB%95%8C.ogg",
+      "author": "HappyMidnight",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "duration": 0.705306,
+      "sha256": "65875194764cb4435476f624cce6b3ac7ac0247470bc0ac4c7aed86c46e01a0b",
+      "change": "Converted complete source recording to mono MP3; no clipping, splicing, synthesis or listening approval.",
+      "labelStatus": "source-title-matched; listening-pending",
+      "review": "source metadata and decoding checked; teacher listening pending",
+      "disabled": true,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "listeningReview": {
+        "status": "pending"
+      }
+    },
+    "씨": {
+      "kind": "human",
+      "src": "./assets/hangul-audio/c528-20261027.mp3",
+      "sourceTitle": "File:Ko-씨.ogg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EC%94%A8.ogg",
+      "author": "HappyMidnight",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "duration": 0.862041,
+      "sha256": "646e4a8d5aa8d66b4e335c9881b7d0b3c9aa64894af59683d9290bc7c3dcb5ed",
+      "change": "Converted complete source recording to mono MP3; no clipping, splicing, synthesis or listening approval.",
+      "labelStatus": "source-title-matched; listening-pending",
+      "review": "source metadata and decoding checked; teacher listening pending",
+      "disabled": true,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "listeningReview": {
+        "status": "pending"
+      }
     }
   },
   "retiredSynthetic": {

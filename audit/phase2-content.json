@@ -1,7 +1,7 @@
 {
   "baseline": "46745d28b17554f7d0f67e3e5515778b7ccb35e3",
   "scope": "automated source checks; AI teaching review is recorded separately",
-  "generatedAt": "2026-10-26T21:14:37.040Z",
+  "generatedAt": "2026-10-26T21:17:13.648Z",
   "errors": [],
   "warnings": [
     "Audio: missing human recordings and listening approval remain; no synthetic substitution.",
@@ -6904,16 +6904,16 @@
   },
   "audio": {
     "targets": 463,
-    "available": 72,
-    "missing": 391,
-    "decodedFiles": 72,
+    "available": 78,
+    "missing": 385,
+    "decodedFiles": 78,
     "playbackAvailable": 21,
-    "humanFiles": 72,
+    "humanFiles": 78,
     "syntheticFiles": 0,
     "excludedSynthetic": 26,
-    "held": 51,
+    "held": 57,
     "listeningApproved": 0,
-    "signalWarnings": 4,
+    "signalWarnings": 6,
     "groups": {
       "consonantNames": {
         "targets": 19,
@@ -6931,16 +6931,16 @@
       },
       "syllables": {
         "targets": 399,
-        "filePresent": 39,
+        "filePresent": 45,
         "playbackAvailable": 19,
-        "missing": 360,
+        "missing": 354,
         "listeningApproved": 0
       }
     },
     "requiredHangul": {
       "uniqueTargets": 418,
-      "filePresent": 53,
-      "missing": 365,
+      "filePresent": 59,
+      "missing": 359,
       "playbackAvailable": 19,
       "listeningApproved": 0
     }
@@ -6953,7 +6953,7 @@
     "sourceChecksPassed": true,
     "complete": false,
     "blockers": [
-      "Required Hangul human recordings missing: 365",
+      "Required Hangul human recordings missing: 359",
       "Actual pronunciation listening approvals incomplete."
     ],
     "limits": [

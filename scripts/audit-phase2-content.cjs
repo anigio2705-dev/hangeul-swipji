@@ -62,7 +62,7 @@ for(let l=1;l<=15;l++){
    const expected=[...ko.curriculum.alternatives[(b-1)%20],...ko.alternates.passages[(b-1)%20]].slice(0,l+2);
    check(JSON.stringify(x.paragraphs)===JSON.stringify(expected.map(p=>p[0])),id+' alternate story order changed');
   }
-  check(Array.isArray(x.vocab)&&x.vocab.length===(l>=9?4:3)&&x.vocab.every(p=>p.length===2&&p.every(Boolean)&&!/[.!?]/.test(p[0])),id+' invalid word glossary');
+  check(Array.isArray(x.vocab)&&x.vocab.length===((l>=9||b>20&&l>=2)?4:3)&&x.vocab.every(p=>p.length===2&&p.every(Boolean)&&!/[.!?]/.test(p[0])),id+' invalid word glossary');
   check(x.paragraphs.length===x.translations.length&&x.translations.every(t=>typeof t==='string'&&t.trim()),id+' translation alignment');
   check(JSON.stringify(x.paragraphs)===JSON.stringify(y.paragraphs)&&JSON.stringify(x.translations)===JSON.stringify(y.translations),id+' language toggling changes source');
   if(seen.has(text)){report.reading.exactDuplicates++;report.errors.push('Duplicate passage '+id+' and '+seen.get(text))}seen.set(text,id);
