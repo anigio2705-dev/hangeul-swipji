@@ -32,7 +32,7 @@ function content(l,b){
  const ko=base[2].split(/(?<=[.!?])\s+/),en=base[3].split(/(?<=[.!?])\s+/);
  const paired=b>20?[...basic,...window.HSReadingAlternates.passages[index]]:[...basic,...ko.map((v,i)=>[v,en[i]]),...source.slice(3)];
  const selected=paired.slice(0,l+2),language=lang==="ko"?0:1;
- const raw=[{q:["이 글의 주제로 알맞은 것은?","Which topic fits this passage?"],options:[0,1,2,3].map(n=>seeds[(index+n*3)%20][language]),correct:0,evidence:selected[0][0],type:"topic"}];
+ const raw=[{q:["글의 첫 세 문장과 가장 밀접한 주제는?","Which topic best fits the first three sentences?"],options:[0,1,2,3].map(n=>seeds[(index+n*3)%20][language]),correct:0,evidence:selected[0][0],type:"topic"}];
  const sentenceAt=(family,position)=>position<3?(b<=20?data.sources[family]:data.alternatives[family])[position][language]:b>20?window.HSReadingAlternates.passages[family][position-3][language]:position<6?seeds[family][language+2].split(/(?<=[.!?])\s+/)[position-3]:data.sources[family][position-3][language];
  const detailIndex=l<=3?1:Math.floor(selected.length*.6),own=selected[detailIndex][language];
  const wrong=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19].map(n=>sentenceAt((index+n)%20,detailIndex)).filter((v,i,a)=>v!==own&&a.indexOf(v)===i&&!selected.some(p=>p[language]===v)).slice(0,3);

@@ -225,6 +225,9 @@ def main():
             # Existing items were literal duplicates; replace just their slot with a transfer check.
             if course=='beginner2' and i==3:u['quiz'][3]=['어제 여행이 재미있___. 과거형으로 완성하세요.','Complete the past-tense sentence.', ['어요','었어요','을 거예요','으세요'],1]
             if course=='beginner2' and i==4:u['quiz'][3]=['물건을 바꾸기 전에 가능 여부를 묻는 말은?','Which asks whether an exchange is possible?', ['바꿨어요.','바꿀 수 있어요?','바꿀 거예요.','바꾸지 마세요.'],1]
+            # Context-free particle blanks also allowed the topic particle 는. State the grammatical role.
+            if course=='beginner1' and i==2:u['quiz'][1][:2]=["'책___ 있어요.'에서 '책'에 붙일 주격 조사는?", "Which subject particle attaches to 책 in '책___ 있어요.'?"]
+            if course=='beginner1' and i==3:u['quiz'][1][:2]=["'저는 밥___ 먹어요.'에서 '밥'에 붙일 목적격 조사는?", "Which object particle attaches to 밥 in '저는 밥___ 먹어요.'?"]
             # Sort by content-derived hashes so repeated runs are stable and keys move with answers.
             for qi,q in enumerate(u['quiz']):
                 answer=q[2][q[3]]

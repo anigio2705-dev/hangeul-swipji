@@ -1,0 +1,2138 @@
+{
+  "baseline": "2e5bb3283944bf737189abe120526499d6454dba",
+  "scope": "350 source units rechecked by automated pair/mechanics invariants; prior 350-unit AI teaching review retained. 67 non-pair question cases additionally read in this pass; two ambiguous particle prompts corrected. No human teacher review.",
+  "units": 350,
+  "courseQuestions": 1758,
+  "changes": [
+    {
+      "course": "beginner1",
+      "unit": 3,
+      "fields": [
+        "quiz"
+      ],
+      "reason": "Question must specify subject or object particle: topic particle 는 also formed a natural sentence."
+    },
+    {
+      "course": "beginner1",
+      "unit": 4,
+      "fields": [
+        "quiz"
+      ],
+      "reason": "Question must specify subject or object particle: topic particle 는 also formed a natural sentence."
+    }
+  ],
+  "readingReview": {
+    "newStoryFamilies": 20,
+    "newSentencePairs": 280,
+    "inferenceTemplates": 10,
+    "inferenceEntries": 60,
+    "topicScopeCorrection": "600 question stems now explicitly refer to the opening three sentences; prevents later bus episode making Bus Stop a second defensible topic in the morning story."
+  },
+  "humanApproval": false,
+  "details": [
+    {
+      "course": "intro",
+      "unit": 1,
+      "sourceSha256": "a96f800ee936eeabbfcef29604c7a7119026deef2812012c37194996d6a1453b",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 2,
+      "sourceSha256": "1eaf027a43508fda92dcfb0b895bc212098fd1b81a23eb39af2f358c767948b1",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 3,
+      "sourceSha256": "abf892e50863ba61af8839100ce732dd8d6ac14d8a9db3e8bf073480aca317bf",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 4,
+      "sourceSha256": "90be380528cbeb1018c76b9621929626374651f5f83f996ed81e88fac4cf56be",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 5,
+      "sourceSha256": "8f9fc545ec82397e69ecd52b51a2fdfa228b5b436ac87210c1a2986b0eb4c2dc",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 6,
+      "sourceSha256": "98ae99d5074857109cb4b20bd8c36fe4fd7ee7ca57d4699a9a1233d8314a1a1d",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 7,
+      "sourceSha256": "7abc395e81760961691dd8a2f7316d033eb1f0092c457eb3c7dc7918b5625552",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 8,
+      "sourceSha256": "4fd2e5594786f7bdcb778b9ac2dd99dc562119385fe2f747bb9f06156881aea3",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 9,
+      "sourceSha256": "0caf7cd3bdbcc2ab852539a7e406794aaf5dafb8de6b56c872e07918f598ed76",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 10,
+      "sourceSha256": "57bdd678b36c3119fef06a3aaa61cb3988803e7a4292d56e7c4d10d83625954b",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 11,
+      "sourceSha256": "24880ec52f2105347ace04335bcea8a9362985d24cd056f85e7db88e75cbfd7d",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 12,
+      "sourceSha256": "04dca31a8d86b60518f353be5324f4ee56032ba1078a3450a449fe6a168b4d07",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 13,
+      "sourceSha256": "d0cabd27c3091fdc71987b1e2ba97b1c83575decc0c1fdf11b536a57b85bcfcb",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 14,
+      "sourceSha256": "306d4296ecdd64e11bbfb5e4b268dbae4964c34ba45466dcfb39b48147806a5e",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 15,
+      "sourceSha256": "55d9fef62ac327d20d4fb71f47223a779a7e59b61abf5b84425e89934fab1c44",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 16,
+      "sourceSha256": "0fbe1123fc688a0dd5cf686527e7d422ff16e87f845b873a617f04ff08d79fc4",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 17,
+      "sourceSha256": "cecc61eb8d2be46d555a11ce37e3a5468470176819adb4f1aef4754849132a26",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 18,
+      "sourceSha256": "2b524b828cf68ccf22ea0004b769a2e7dc78a4f2bcb4c103bf7f3b91b82ba37a",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 19,
+      "sourceSha256": "b551ee787613754cdcf6f33551fbf2d3dc6239e1870ee88abf0998a12f7456d3",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 20,
+      "sourceSha256": "a8d3b1f66dff91b71a4e5e2c36ed53a4b13451f71371d319a6d0d80e10783f29",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 21,
+      "sourceSha256": "f90f4982b84ad64a6c02e61c9e0d53d59f2194b4037a9fb5b69050a16d982f14",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 22,
+      "sourceSha256": "fe7ed38d5b750c983a500cc486b21762c8a2bfafa514524a72b76846833e17bc",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 23,
+      "sourceSha256": "6baf79e69713763cdc9c7ba543966a0ee8b01891be72006f93b1a486279e3987",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 24,
+      "sourceSha256": "0b10e451635498ea8fd67c730bc367f3faeb0f3f8d0c159ae464c1bb352c1da3",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 25,
+      "sourceSha256": "b41e11ab02e2191ea7f26a07132b11200fdfb2cbf1d8999c9c2e9dd34e5ac3d1",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 26,
+      "sourceSha256": "cf03e6087ec92483ba5fea4a993ead394505305df76214973d06b0e45f16c513",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 27,
+      "sourceSha256": "bf7e3fe1db6ce146ae01523139d3d0e8d5d167445cc14b6cfdad002608b20515",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 28,
+      "sourceSha256": "3d55ac45f20bd4373bc795b5c85edf90ba3207f5a819b8554d04f2e3e0d6e798",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 29,
+      "sourceSha256": "53eb02530dd8a5b9a01d0b5c7546a8c447b8e8261ebc05086955bd3eb54c9688",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 30,
+      "sourceSha256": "fd7b104d74e049e5dae73ea829a8c7655d659bcef66980f9a620ba31551baad6",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 31,
+      "sourceSha256": "a80a204d35be733844f93c69313719d45e14e9385a8afd770a39a3349048c687",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 32,
+      "sourceSha256": "220dcbc25dedd60264b5a394976eaf34a093eee14c9345e1eabd5e4ab72039f6",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 33,
+      "sourceSha256": "f3bedefbe7b97bb9e18b0351fe369a47fbf4d337e4d3d67e5f982175eb8f3b1a",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 34,
+      "sourceSha256": "392f6040acb5dfff7f932b9dd095b254fadd831bdf87414e5a86c180213ffbf3",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 35,
+      "sourceSha256": "4bfe87ee7b57f3192949cf1802be4a6a1db2baab8b4a59985a939c00d95341f9",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 36,
+      "sourceSha256": "4fff52edee870a621c453ca72385f43e71d8abfe49e3281a627f273ef3d21bf1",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 37,
+      "sourceSha256": "59fd45bd1ac3cef123ac84317fc03e01a5d8a09693670d81f6249c9b6d608094",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 38,
+      "sourceSha256": "35192a60014f706d452841bdc1bd768b4748d5da5afc97dedde50c820583e8eb",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 39,
+      "sourceSha256": "94b23b4b536e410d2713ac317cc7cd163cb18cae619e833c405db36b6b4deb1a",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 40,
+      "sourceSha256": "293c1206d9ce7e5024e57e3b9e5a9065fb25f69a40868355067efd1f6fe9d958",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 41,
+      "sourceSha256": "1aa7c01b39b41068d8625543734263d411d52152bf17ea5e6f3a013609a1b9bc",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 42,
+      "sourceSha256": "348df171e46ec1af28ed1eb10ef9019173b20e6d89ab7047ae45b16e26502544",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 43,
+      "sourceSha256": "4c4ce1e7834bbe4286b05bf89e87b94b2b234ff6305b22627ca597e966b424f8",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 44,
+      "sourceSha256": "691390601727d56895f96e04351b4feb1c3736168b9009e6085c029fd62ed7ee",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 45,
+      "sourceSha256": "084d29f4b05157e3fad488c0fcd390edc6c10fd259fa9a70a2ff14dba0d73a04",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 46,
+      "sourceSha256": "5afb0ba985f21d9313a3a3e389b4e4bfc6bc0c4f5cbcc2af1506a96689714005",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 47,
+      "sourceSha256": "cc8bfd1c2bdb1a59586733a1607ed2bbab77f89076cb68159f9f80d947d11cc2",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 48,
+      "sourceSha256": "0c69b44da0b25363ef83db292589cf2fbddc0e7256f104c6bb121e0570dc01b6",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 49,
+      "sourceSha256": "a37e39a7fa68b777b3cb90b0bb168b230f7dee3272d27b30610adfad90541d87",
+      "changedFields": []
+    },
+    {
+      "course": "intro",
+      "unit": 50,
+      "sourceSha256": "6b25cf8abbc14b0380d9e77ba1bbd8454d7d4f2ce30f6302f0a4f3b939376014",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 1,
+      "sourceSha256": "b4dfad36c3acdc0ad6da1ea1ccd46010d3454d04fbe72f6c987f26d54f62092d",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 2,
+      "sourceSha256": "eedb4e1932d1b44fbebf5c606521e9c98be2ea3f1775d794f8dfae083a396075",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 3,
+      "sourceSha256": "06756ca42cf2e566d395389ae73317530328692b3d76ae7f44cf80d328387797",
+      "changedFields": [
+        "quiz"
+      ]
+    },
+    {
+      "course": "beginner1",
+      "unit": 4,
+      "sourceSha256": "94dcbd35cd9af678852ae28ee4d86d83d16331b0de8f9d66b0b2dce526a0560d",
+      "changedFields": [
+        "quiz"
+      ]
+    },
+    {
+      "course": "beginner1",
+      "unit": 5,
+      "sourceSha256": "dc49cfd3213928b56ac2f6c521123f894e609390e6f0cd10e26ab4f7d615f967",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 6,
+      "sourceSha256": "e0a7fab32c88cdb06362e42be01c64a1bbcd5272e2ecf37b8114e7e7a507b392",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 7,
+      "sourceSha256": "05adace6c86aae165623a368291c2212434c5bca454e8e82dfa6e59ff9cd3bc5",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 8,
+      "sourceSha256": "6e38c8d878a202e5e3e89af52c1cbf88d37577ebb8b04cd41289d6624179f69d",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 9,
+      "sourceSha256": "866f52bdbe452e59492397c9c86072fe44e8b4fada0a00d026997b5313d9cb1f",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 10,
+      "sourceSha256": "453f086dd8ce97f17bbf7b084b25b6b439dfd3fa00c5a3966e264125efe1e58e",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 11,
+      "sourceSha256": "b66e616047402a061a3b9ac1f6a30cf2d2b3ade2bb8aa2865bf05cf093b71075",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 12,
+      "sourceSha256": "adb38d2f4e031af44115e28a0b50bc4dcd5904131e8964cee4158b9e548ddbc6",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 13,
+      "sourceSha256": "c011324903faeda6fa9a0e73eda0fe429cd79e5fec23bee3b8be45145aff15a3",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 14,
+      "sourceSha256": "4a63f39d3bcbb1057546f3c3d91e9c6e0940b5d6578697fb6777de5b061946f2",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 15,
+      "sourceSha256": "f3049736f7c2bff36b7da3c3facb6bd11d47258665266b1d78823deaec1129d3",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 16,
+      "sourceSha256": "a29e60a86c67b4c5cec697e385c615d21bd0703ff069a67ca4d58c53098b53ee",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 17,
+      "sourceSha256": "93c077beb15ceb5885ee5517632ba057133da6a50bdf7e4ab8eec1c70460e0ff",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 18,
+      "sourceSha256": "e53fb70a9abbbda587682ac33ca2acea61cfb51e828dc7af3a724db2a0380dbc",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 19,
+      "sourceSha256": "18dafa24ab8d030071d03cc97133da5719d15afc8721480be3bbaf15d68d2b09",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 20,
+      "sourceSha256": "ad27880aeebb3e77f6558323649e0cb2931debceec119a24cb7d16dbd9a24cc6",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 21,
+      "sourceSha256": "94878e44d1e99f9621405d55bc5bdcc5b2e8ac4be4a554404a3e7d98a1214fea",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 22,
+      "sourceSha256": "506e2dc6df81e43fa9c03c146131c032ef639b4a3dcc2309f35cfc70558086bd",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 23,
+      "sourceSha256": "ca0eba9028f5ce91180eb1cc5a5f6d245057364141bf1c9225fb79c95f9de83f",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 24,
+      "sourceSha256": "50127f3d0ebba7eeeeab6da391c0b411bc2c111e9f297ad48539b5b220fbbe2a",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 25,
+      "sourceSha256": "1f768513cdaf10a330fa9446b1bd9afe6726a7c08f54b1f9e751a7eeab8d0dba",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 26,
+      "sourceSha256": "8606a89cc3261b925d11f354a02fda208538bc712136c170ce6f7ff199a0f692",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 27,
+      "sourceSha256": "ca94a53d86231c7c74eb74779899f9c8ee2ca011d5f8f839aa8638b477306dc1",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 28,
+      "sourceSha256": "735b7af03022c1ed98a325fdbd5982dc70ab84c8876b3fae8ba9fd1f9732e0df",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 29,
+      "sourceSha256": "4a0b1f1e10aa0b405b88541b49748339559d9e271bc74da17ce98ea3dca6e3f6",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 30,
+      "sourceSha256": "6f14c14762e8d4217e930251b48b33c8c03a5600aa148693e4d87445b458146c",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 31,
+      "sourceSha256": "5bc67146a15d89edf37eee1f435d52465c9b1f59fcf75bebea23d7aef855d0e6",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 32,
+      "sourceSha256": "4c67104d25834226d3479b0308f458ec64ef2e72f3132a4d9ddb3eb1a21e2bfb",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 33,
+      "sourceSha256": "dba2f877500d2ecdbe5153a4043b6f400d81b0de816172db8654e86d9f83fe59",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 34,
+      "sourceSha256": "3e6cfcad3bac2639f2f9e659e6b5cc85bab4ac6702a70bc71db74640193083b6",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 35,
+      "sourceSha256": "ec4c45b7dae2299e0e4420440c730b18b65f6fcd3c2d6c8dd94cf6fcd12ff5e4",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 36,
+      "sourceSha256": "780a158289cc935d4c90370437e14060c7008fb4c262c749b722d020a765210e",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 37,
+      "sourceSha256": "c9501a7da57078649ed2832f4694c3f9b6e82f9755daafde1db282e812f44fe8",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 38,
+      "sourceSha256": "29c3d190ab7fcde9f4bf35b22d6722c829efd89f63a74c5e8deacad706de3d11",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 39,
+      "sourceSha256": "3a14b73afb0381a0c5568921f2d851e1d5a53aaef319548d10068d40bb788bbf",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 40,
+      "sourceSha256": "b4ff25f6a30c2dc54752f2ee5c1d020c16dae33bf4aaee19818089150589213a",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 41,
+      "sourceSha256": "1e26e43e3ff95f7429b3f7835e150a55f3e3f2ca594808274f195966076dd49f",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 42,
+      "sourceSha256": "ef66ba965a5ad2647a5529d2bb9feac53547aa504000a4076f6bfe3ee5fda6e3",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 43,
+      "sourceSha256": "cbd2558245e72fad05c1bd978e978b67a0832de236f8e53061137e412d002d46",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 44,
+      "sourceSha256": "8de6ead1fa755d23896723f685e4d0b9fe005def8108ace36259ed1d36c78f4c",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 45,
+      "sourceSha256": "f82db74b18208cabff92b0721d491724920278277f611b4bd5d7437f4a029454",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 46,
+      "sourceSha256": "fd9da8d41c81338dd7483aab8be2dd4f6dcdf9c6a1484f4fa3a1810f3fb82484",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 47,
+      "sourceSha256": "ba3fa1fb7d47908a867bdabf88493be0d8339c52177d6b908714bd370e21e0e7",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 48,
+      "sourceSha256": "15966756bc85360c9ec54e3e9bae230c75a5ab5a38c1b3698b8628e3b67ed592",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 49,
+      "sourceSha256": "92265b403ae60bb36ae2f4208d7f5677258184372b1b11ce57febc8361411d9f",
+      "changedFields": []
+    },
+    {
+      "course": "beginner1",
+      "unit": 50,
+      "sourceSha256": "fc16a6fd14fca0b963bbeeb53b7bc395d1ba7c593418fbdb1c4f67c07c960029",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 1,
+      "sourceSha256": "fc120c47e9430558be37e9e49d340efc75da3025720e8c4b6241335a395f18f4",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 2,
+      "sourceSha256": "41d6fcc4e859d309968921fcbb91a6f71be42cf880a0ba364bb9c2996935b24a",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 3,
+      "sourceSha256": "04fd5c6d68a62b1703f422b5c6b6fda23c88a1b6c8f76da806bb7873a04147ca",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 4,
+      "sourceSha256": "3aa03019fd1b864933dd28d1409b563d0be95b13422976efd01b08ce629392e6",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 5,
+      "sourceSha256": "e57277b47888a61ad7e6fb20116c94d8ff66fe6adba5a60f90a2facff63892b9",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 6,
+      "sourceSha256": "f90693485987442b2723d6389131dcb84e777674743a2e80d868c2d4ddd0e354",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 7,
+      "sourceSha256": "35ebc3e4ea45622b4872695c822b8da4cbfcfea69d5f062e07bff9e3c6b32cbc",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 8,
+      "sourceSha256": "b6027904b7b6e91f5c1492723785445cf182e88e144663e963e0d4d5ceabbca9",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 9,
+      "sourceSha256": "a32be7b2155eca8a8169260b661ac42eb4433d745227fe6d8ae0b139f5683a4d",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 10,
+      "sourceSha256": "a67d779351b4cfae3e0e9ca5dfb130587dfd45317cddeb6d39f3f7e869148c59",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 11,
+      "sourceSha256": "5839f0872db41ff60e3f9d4c988ae4d460ad78641c2b807b1859703b435eb182",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 12,
+      "sourceSha256": "337a90a948bcf3e705cc94a22f6d12b4d0b1e0ad8bd81176a48c0a5f14bd1780",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 13,
+      "sourceSha256": "019674431bdd1b688d8c81a67592fe075485c7cf009c55eaf89b3d7d00dc0798",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 14,
+      "sourceSha256": "5eb517764dacc2e496104efc21328bcc7ee58a3a750fe08c99b3d72e9752d527",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 15,
+      "sourceSha256": "a5376a61cb9b37b5dee406573a891419ea4b953c346f6aad51da3fa9bf22a274",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 16,
+      "sourceSha256": "b24b8df27fadb18d1635b5d2357713d587d4de32b993b52d6d85672a3f787811",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 17,
+      "sourceSha256": "91234444f94253d80f73143d636b4261c5ea86dc9ca238f17609a4e963f59215",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 18,
+      "sourceSha256": "f111598e23f568321d5801d56f4a0667020831256234d3942574dffbf02dc363",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 19,
+      "sourceSha256": "4f3c4b37d40a2b70c8b55e862c285f5fecbeaff5b7498b8b20aa302b4904888f",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 20,
+      "sourceSha256": "37a45b2d74137de2c05b21ba78eda3f73560337f1185a7cba1aa6cc9a78e1f5f",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 21,
+      "sourceSha256": "1f772a67f1d2837986e50b65c59ec249d4e92423ca37bb4777ba783da2d9d920",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 22,
+      "sourceSha256": "7e1f56070770e4952243f5dab9e8de115640be06580e0587e6f3bc87d4b82951",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 23,
+      "sourceSha256": "c0e4273c18e3440afe206dcf84cc33c7c7e9b7873c0ad21d8c6766b0ef2ccf85",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 24,
+      "sourceSha256": "332a30604ee64fd12217f431eaa3984a9ecbd4140af408771cfef00af82b2625",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 25,
+      "sourceSha256": "d2592dd120da0821a50403a2c59c46b59bb9ca397268428e554f72703ba67fa8",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 26,
+      "sourceSha256": "8c2c2f0e985a563e5b10a17e40b305bd2ec6215045ab273af380c88415e79a25",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 27,
+      "sourceSha256": "f50042b9f125127f3b4dbe7b7139056e463c0a3764908adb3fc7eaead1dab244",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 28,
+      "sourceSha256": "bda44d2c0c18a6449ff0bb4e18e0ccb9a4634903ddc844eef24f4f360933f4cc",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 29,
+      "sourceSha256": "ee048fca1564bf63ac736e9e90e67febdd42c899b826a16b0fd575edb7cadde4",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 30,
+      "sourceSha256": "eebf1aff24bb96b1810dcf40612e9864aab5144eebee0e40b19d669ddf2468e0",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 31,
+      "sourceSha256": "b2246fd078bc05fd28a965694e5cf0126c96498c0187381fc640537581bb9431",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 32,
+      "sourceSha256": "3f9023bcfdb215359379da818bfd092ec2cf5d1144dcd17dd461d1ff9ed5dd7f",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 33,
+      "sourceSha256": "e755d555823e90379373efa740c0949a68be4dc0892f8c03a26546ac2a13df64",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 34,
+      "sourceSha256": "d04695364533e4fd017c975d1660b15bcc0d2f3a36ca72507ffbd9b067af9eb3",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 35,
+      "sourceSha256": "669865dc9a99241b31db12b5813914ac89c0e21fe8898bb742903f6b1beb4585",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 36,
+      "sourceSha256": "45913304518f61f95ff8c7d0a560ca566f6bf5f92697cd4ba8c0cc7b635ae4e8",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 37,
+      "sourceSha256": "99c914ebeba9c520d51ed6fdf0c81f90809dd3c61de5c8e0ca12d1d7b0c704ea",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 38,
+      "sourceSha256": "eda2f4ae50b76b5ca11b363e15a05590dbeb5effe8a736dbc99a7a20c5d5f10a",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 39,
+      "sourceSha256": "bb5cb21de745d7b12f25221132bec0e75c66ffa0a90e57ca7287ec8fd848a6dc",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 40,
+      "sourceSha256": "43900c3a46cc5a772b161ec3154b723556678ce717c4b5de40a24999740c1016",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 41,
+      "sourceSha256": "815ee9f62ed79ae4d5f583e9cb2e3ad035156f62ba697ce1aba682c9311f1a08",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 42,
+      "sourceSha256": "b30dd10a8859773792c79213c96d881224183c94e7d5a3feaca4a88fe54d4af5",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 43,
+      "sourceSha256": "5a414ef8b2c6fcf3e8b5a0d69d2ed2bf5160c695e7a5675d10ec7aeef9789767",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 44,
+      "sourceSha256": "5cabdde423eb437f95c1a3442bd2f0f78bf4f08cf3982ce6d8cdb97c8ef0b5d2",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 45,
+      "sourceSha256": "9b9389c00be116af7cff749928a719662164868bc9cfcaeba2bce7577fd8cbfa",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 46,
+      "sourceSha256": "7bcf3e0b966aebfeb9081b5837f26bfb0a6e20e8049fa22e136bcb78944c1ddf",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 47,
+      "sourceSha256": "0c10e09c06eb055a68971208821efe00073c4966cbd48e4ce7b3d1f886c2af48",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 48,
+      "sourceSha256": "f11badf39dabe2b6955c0a0397508e87ae83b3c6b39f74c011ac9311ef68c03a",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 49,
+      "sourceSha256": "457051e483ab486dd8a95af043fb4c0c4b974bd6642206b9f01220bd38142f91",
+      "changedFields": []
+    },
+    {
+      "course": "beginner2",
+      "unit": 50,
+      "sourceSha256": "b7dd1844b043594bb304fa0966a300be011e6518a814d1cdd397f91733b27882",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 1,
+      "sourceSha256": "b882c7d0e880b690ee4a17de6106a3e155c7dec71030bab45a790e55089d5b3f",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 2,
+      "sourceSha256": "1d5328ca7085a242a49148204ca3cf100e39e21c93acebc8bc66f98de0f441a7",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 3,
+      "sourceSha256": "2dd1545551f41d4ef3b3e9ec089ad13a7e39de8beac232f4549fa6039b22c3a0",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 4,
+      "sourceSha256": "53461fe36d95fed5fb48df6d0257b8c8f4a293cc8f593f27be73c56f0902d360",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 5,
+      "sourceSha256": "c9b5a435748cd4e3b616516f27fb144158359f276276e696c166b7f3272983d3",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 6,
+      "sourceSha256": "9e93072deebf0d3e090966623cc97c851292db7c8025a4c15d63f424b09411bc",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 7,
+      "sourceSha256": "f04f8dca8ed2523c134e3713bb36f0b3c65d22deffb8783ec34035cbee8a4faa",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 8,
+      "sourceSha256": "1116ba5652fc6126250efdffd7e9a9e858afe66ebd681f98877aa1e0bcbe6050",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 9,
+      "sourceSha256": "f2d65ef7058238c08cca8bebb47864225a335cd6711d3592df4854aa052f5ffb",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 10,
+      "sourceSha256": "2e6bfb90264753e2c6e2c76e365317d1f85b46114e40e4f3963f2c1431707ff7",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 11,
+      "sourceSha256": "1dc02f85ad46e978ba368f7171a6bf44e70f061746963c32732600bb9fbb54ca",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 12,
+      "sourceSha256": "5e9b45a703028216010cec2b66ddbf88801cc41c3f73422966c7c19c785f4eee",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 13,
+      "sourceSha256": "34594f78c47d1224252881bdf6bb5a0d1005f2a5769075ad46efb91518545e93",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 14,
+      "sourceSha256": "a9a7334369712950f014b080d3baf29d625b338fdedca4fbf9d4e40d8b127a00",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 15,
+      "sourceSha256": "46824fc97dacdaa583a438f8985d6565d4cc3ad8ff26611fea47d1c6319a7244",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 16,
+      "sourceSha256": "f852589b4fb6aeadd5e11c7679a358124b5f14feadbbaa2a246dec99dfef5bdb",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 17,
+      "sourceSha256": "30e0a9d45a326dcdd0d7a86270b1d6ba8c0b88b32dc0e719315ce58566869ba2",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 18,
+      "sourceSha256": "3a210654474116e5486feb81a912a720acda7fe099c04075806bac73dcdaace6",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 19,
+      "sourceSha256": "8b67967f6df66043942c787c75c38489b0ea796ce85f04094d6479881b151329",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 20,
+      "sourceSha256": "4dfd9a3f71e665565814e860a95c3baa343ddd20d31879c81805b476c4bc5ccb",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 21,
+      "sourceSha256": "43e8948a7131ad5cb3d0c654abfc3a1f2e52ec375f0d9ca9ba5a7e32b76c23c9",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 22,
+      "sourceSha256": "b22273f0379c9017ba8011c4bb8b4cba3fc265d7a614de9955d5eb2ac7633749",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 23,
+      "sourceSha256": "6d179fd146e9e2b7e0a311df7e62675301cd0d9a08a218d7e39f1ba72840475e",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 24,
+      "sourceSha256": "1bb3fa08caa1df9a9955867bb933ae3c9e26a5809d1f8cac366d24698fd7cb7d",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 25,
+      "sourceSha256": "518e977d9edfd06f835cb4235115e68290ac0721c622a74a815e195b3fade5e6",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 26,
+      "sourceSha256": "e91894bdc2e2c0fa268b1269d2f502c723356792dbd000be22de5cf8bbf525fa",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 27,
+      "sourceSha256": "594db65672477075bffef7b5dc195d3c6e40b925a9dae280843a674c451f5554",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 28,
+      "sourceSha256": "b28170c30ee169ae28c4073861954eec182dee07c32e18c30465310b47e67be3",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 29,
+      "sourceSha256": "7d2d2d0fc5b30ce6a04236ab0ee32e32f6e583d2c4796ef654728c6ccacdb7c5",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 30,
+      "sourceSha256": "486b2501a596840d09434de70d93d1738b8b671998cc1e3b7d6231a9a22f7da8",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 31,
+      "sourceSha256": "d5b0b7b7696758397e1eb7275835e88cfeedc4adfb077b8bebbcb45cffb6a29d",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 32,
+      "sourceSha256": "a1595c072d21895f8fc144e24f73e4f0a5c545c6c49491749e9ff77d605c30f8",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 33,
+      "sourceSha256": "5d4837425a47b8f8d2976b9dc2bcf7837f7caaa489dea72f0d4fbaddbd637be8",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 34,
+      "sourceSha256": "9fb53e941a0db57d2ede87e0b2257d01ab84b4a512800be984c4e4834137d03e",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 35,
+      "sourceSha256": "69040eefc728ccb7a4069eb9f4e488ed35341e9a0054e97268e2360d3391d9b4",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 36,
+      "sourceSha256": "7491fe0f8caf1d8c9abc35542a4e9e8866c68373a082b370d2561e443d5f319c",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 37,
+      "sourceSha256": "23180d643ae404f016a039c10f252ee55b3197fd800278041738b6590d2af871",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 38,
+      "sourceSha256": "3a9d3c576934aa6bd1af893e569ba9f669c1e0bad2adf4f1aa6831f8e7d60a49",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 39,
+      "sourceSha256": "7e4be90d841e86b92ebfc1c370d363b449f7a902db1efa82484495f3941a85b3",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 40,
+      "sourceSha256": "fb13f465bcce356e2c989c45b10e757683e9a783ca1ed384ff651af3176f1678",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 41,
+      "sourceSha256": "81b0dc215bbf4dced9690221d54c12b192b2666ffdddb7bccd119f82c972b144",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 42,
+      "sourceSha256": "ec04c9c1b5d9c53eadc54b3c635e69448c307a985c87cb62e3ed6740cbf0408f",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 43,
+      "sourceSha256": "536f31e9cb09d341edffa2ac9766392f419434396f5f2f9dbb1d7c2942df064c",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 44,
+      "sourceSha256": "4aecd4cecc1c681fe71085e424f2318c4282a9a0c30eca984a020c48cfbe9fc0",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 45,
+      "sourceSha256": "396b906c3bd2180da1ecbbdfe35f0f83865df0fc6fc3dbd3f154fe657c3efe5c",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 46,
+      "sourceSha256": "a0318cabf3ed73d3aef10c1127e0e043648f304ba23de70919b450510bc1a2e1",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 47,
+      "sourceSha256": "6940ae09101c1075033ddcab3aa7854c96f1bf51257d363f67d1e75c8ab03545",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 48,
+      "sourceSha256": "bfb24bb1c5080ea26cca99e306c0af87a6611509ad1856e5408c5520aced2d88",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 49,
+      "sourceSha256": "8907e25f4df3504b46d6954fdcfb8a905cc7c1ce964d07e8a61d157069a536a8",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate1",
+      "unit": 50,
+      "sourceSha256": "601ba1f67c58c48d30f5171548e7717f7bc9fc2c22b0fa9761bcffa25a8c9204",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 1,
+      "sourceSha256": "6739bae28aad2ae4475dbf29035512ba2a880c2506f321044992fdf2c8a4bcb3",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 2,
+      "sourceSha256": "793f0cca276ae2e2d5239838209cba14c7cf74c3f10f4af207a3c8ede87e8b47",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 3,
+      "sourceSha256": "b3d146111ef3e797e10a99e4d1f9fd64028c590739f72e9df4b184cc857234b8",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 4,
+      "sourceSha256": "befc678129ba737d899452d49145b388a5987a983a262f4c4349002c4475fb37",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 5,
+      "sourceSha256": "f95fa00a852f8921e44121b9519c3f27d06acd89609177375973cdd59fbdf798",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 6,
+      "sourceSha256": "efdf16929a060743cd49c6aa25eb95bd1a6691903f36b1b9081fced46df37b65",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 7,
+      "sourceSha256": "57868d87802883cec89da43337c531ac7219bd652073f57cd85eddf0a011ad70",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 8,
+      "sourceSha256": "fd6475e3d57a5ce0cce3e1ee7913e659fbfd10688de55a3767dba3840ad07f22",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 9,
+      "sourceSha256": "d40bcd5888eadc9df664883e7d8ec3ba7507fc1c2e30bde1950494818d2f6b7d",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 10,
+      "sourceSha256": "76751830429719387d86fc683dfc9bb25d2d5b7c03f275b95a112ddad6d66f41",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 11,
+      "sourceSha256": "b8cc4616fde81e4c30ff40b3309dd8ecbce376dd51752e5f958686f794f8987d",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 12,
+      "sourceSha256": "957e151bafb371581976109d3b699f873399c5344974f19050f214298e4bccc0",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 13,
+      "sourceSha256": "927329f5be4adc296995cc30c7d9b8b3cecda162a03651a666cadb863a6270e3",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 14,
+      "sourceSha256": "de7abf5f8f84b20916e3bb1eb85ad37e9d4e901ffb115cf73e511a7cdb72da78",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 15,
+      "sourceSha256": "e21362d6896ed69826e7d05273d9d3f3094020e66b7f2cd17b971fcaa168c349",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 16,
+      "sourceSha256": "90c8f0be4a5ceabf06ce10530ed6dc4ffc4fcae63980b9ac1e2d9c9e7e8d6fb7",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 17,
+      "sourceSha256": "4303de3637ffadeb346376a6bfa9b42cd31a1d26cd4070ca28451cb17cfea7f9",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 18,
+      "sourceSha256": "29da36f8e6cd5bdd3fabe545a219cde0b58d1c73c697757d0e6705033d0c64b2",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 19,
+      "sourceSha256": "6731b168a1eec34ab76cd5f08792f396e76aeae4f435e288706681a91615988a",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 20,
+      "sourceSha256": "5d2913992f9336e4b088be88838bc90d8a412f85c6eff15e74812d5ec0ab2f1e",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 21,
+      "sourceSha256": "07bf7263b2b1843d3dbb5ff42da722dd29b7494e120904c0ac2f33484761d6e0",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 22,
+      "sourceSha256": "6eb152f7fea15366fb8b1ffc83e2e3f1fdaf34b011f3b03ff1b221ac34477b72",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 23,
+      "sourceSha256": "bbd7ef078b1e0eb338efad7c7989f98038a001f847773ee2dea1afb35c37d288",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 24,
+      "sourceSha256": "3a66ac0d631cf24cd94136251d2db13606479735724577ecaea569c29dd1921e",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 25,
+      "sourceSha256": "1d8ae8e79c6e9721846abc0e2e529a878a359bb96afff3f46287ad1e7ee9add1",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 26,
+      "sourceSha256": "45bf632318ff80888a41e9d144fd212783bb6e3f4a425072efebdfbf77477571",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 27,
+      "sourceSha256": "a9f2077cd0baf82813d282639a138146f0e31a59f15b8cbb0dd511f29bc08a84",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 28,
+      "sourceSha256": "2cfdfd49e7280107dbbc895c33cd49b3c765b963dd1dd601326fafc299338f5a",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 29,
+      "sourceSha256": "d34ff6e5d5e929822187967ec9c71489c80bfef8a193f67b52e7e0746223c197",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 30,
+      "sourceSha256": "48f30269c3247429afb61639b399aff391ee8614ee49a49f2178c14e9a006e6e",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 31,
+      "sourceSha256": "7d4d0284e13cbcfbf61948821643e8af3cb6e7ad8b3e77a65da5bd68c6a943cd",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 32,
+      "sourceSha256": "9f5d64f49e00588f10aadd6e2ba935d11f1e3cf032df99ff2b3597ba9323e1cf",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 33,
+      "sourceSha256": "175b59c1b763cf5581894859b2dc849a957081f187c385d2978c4c2a04266e19",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 34,
+      "sourceSha256": "1957ec9a648c42795c466cd2c318b0701738bd8e4af64d3207998f8ccb93c841",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 35,
+      "sourceSha256": "63aa4b7affefa1de970ca70a672c638be13542c04f96708fc9cb3e469ff7c480",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 36,
+      "sourceSha256": "5ffaf5ad3ce6012ee269c30ee425e359c430348362829e381dcb5b28d2efcf88",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 37,
+      "sourceSha256": "8033f5fbd7adb75bffdab213c47966ed58be7755f935b7cad8aa11c20ddb4367",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 38,
+      "sourceSha256": "2f0482b51587d28ac40a33ce3e5d94d723924d0e1615c712d5c2f5b0c20caaf7",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 39,
+      "sourceSha256": "626203a9636f4e2c9ecdda4adc9148951244092385c32405b4abd481ad1c8f92",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 40,
+      "sourceSha256": "136999c69710f748c45c4faf7d9a510f1f5da050fb436b9e006436def8a89df8",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 41,
+      "sourceSha256": "c6a71d683f0c137da29d95e57b60524d7dc1fcd7f8f92febba4a5fafecc23002",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 42,
+      "sourceSha256": "c935c66e4e3b42cadae5f8d8e3b809fbd45042687fd3032dcf98d61153ebe817",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 43,
+      "sourceSha256": "324bd75d7235986a0d6f6e53f8f87263b22bba1053a52d121aabcf2d1c4e7a80",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 44,
+      "sourceSha256": "afba735b325589bd319c09f3b3921c0001727014af6a9692846b687e174eadfb",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 45,
+      "sourceSha256": "060f8389961671c207ec7c18f5f65fb7efd9413ab93737ed9077e2fede075f68",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 46,
+      "sourceSha256": "ee704f9dfdae748d9af6348fb46ac83816d3491a459916a61f75853e191b1e48",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 47,
+      "sourceSha256": "c043008b5d77c4333378ba755f1d6019d439a7398aa332f582eb7c862f6115e6",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 48,
+      "sourceSha256": "0bf59ed96c854e063fe54097c851bf386ab03587118f60ff7fc690c58ee368e7",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 49,
+      "sourceSha256": "3aa7308873e676659ba8fadb0625e30f9bfd05b3ac3f02aa45d32c479aa8ec92",
+      "changedFields": []
+    },
+    {
+      "course": "intermediate2",
+      "unit": 50,
+      "sourceSha256": "a9bf534884ddbcaa3b1141e1d08324ddd67c03fdedb06d83fcb482ba88a0ce62",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 1,
+      "sourceSha256": "0b0f94c8c2f40a23010b0af4c1518b520fcf27b1651c710a8d0a962c75f53360",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 2,
+      "sourceSha256": "eddd5335802d385f18db57dfce3d4171754891f32b56128c49a4514b9807d8b2",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 3,
+      "sourceSha256": "26b30b76d51c329d8335c5a8917d3e0fb3668e506c17fbd536ad1a38ea6dd28a",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 4,
+      "sourceSha256": "5b6753c2d48993837ea02da06d8dab0365273557497d9bd4f8e514c7cb462863",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 5,
+      "sourceSha256": "f7bfa90c382d0f03d5f9b43c673c3d53a00f5671a683a311719dc936b4ce8a1e",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 6,
+      "sourceSha256": "55daaff89e66bebfeaa97a5303d00b03dbd05da11b442850cefc3b8e3d43fac4",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 7,
+      "sourceSha256": "354d5f8a8423324de4cbbc8b65bd56f1d87a83d1109fc6e884e38b0502592b52",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 8,
+      "sourceSha256": "210328bbdc1d7aa8610d9a6a460233bb0fef22c27a73f91d470f6d1660cb47d5",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 9,
+      "sourceSha256": "cb4afc6c143930f7da846212e99bae3451ab506056307b48217fa67bb746077d",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 10,
+      "sourceSha256": "a8f21e07476d44f055656ece5ca7ce39edc9b9a3c30af34961e4e27ed9dc0113",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 11,
+      "sourceSha256": "622594cf2cb010515ffaf6595b79f08274869d5797c017ad3b7af27aef169f2d",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 12,
+      "sourceSha256": "37d913b01dbbd2e5c8f4118c75f7359cb95dff21d596655b0337b60087443e95",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 13,
+      "sourceSha256": "0602f3643c2a746bf4cd78e140e3836e5984d51c96e3aec064130a11961cd6da",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 14,
+      "sourceSha256": "6113d01a40d751a7a3e53e200f339897962b6aede3290fa3d664520b195f0297",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 15,
+      "sourceSha256": "8de381213c20472dc899e0a6cfb171e9ceda5ccc43e435cfa7229051f5a82cb1",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 16,
+      "sourceSha256": "554bbe4d411afa50f22b07b1d039025cda04088c8c3333d3fe0cf35ac8a1721d",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 17,
+      "sourceSha256": "bd13b74042eae45a5d2884ab2558da94195ce1a83e8d3877969103b494c73bec",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 18,
+      "sourceSha256": "0591dada43f6226ddc933dccd1b4cefd2f7b522970b8e575c0017046a7615e94",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 19,
+      "sourceSha256": "cbb184f6fb2f0d729652be47cf568b8b6a12053d98e726cab9f212baa2cb3061",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 20,
+      "sourceSha256": "785c4195bd99374bd28d8201698ecf7e6d35537c84435225adc5be4c60c4396c",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 21,
+      "sourceSha256": "bdafe034055ed57dd912283b85df7a12578c078b30951b0cd5ea39a43e602102",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 22,
+      "sourceSha256": "88e037070a153a3626585546fde954cdb70fbedaf4af723713e04b1873d844da",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 23,
+      "sourceSha256": "ef01da07a204599be2bc44265eac0c59c959941f33ab3918805191d12c472d92",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 24,
+      "sourceSha256": "71497dece2f2e53aa529c86f515bbbea610b2e0275560eb75483ce6175f97a23",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 25,
+      "sourceSha256": "c16c446bc3bdae5550007d0a36483db6dcc32e1852dbb8ac54502eba7a88d4b3",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 26,
+      "sourceSha256": "c3edda5fcb9976a47b8a9eac2233c3f86c9515797563cd2fa7cfb85797af67f9",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 27,
+      "sourceSha256": "40654291be5fc3ab16a91c7f617f67b326a87e81fbfc450fe85c171fe87c3e5e",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 28,
+      "sourceSha256": "e57f4db8b12a93f143500ba4b36ff9464452e12f2c4cdfcf82ed300c3a68aad3",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 29,
+      "sourceSha256": "46df424c7ed186f8cf3586224095bca93a0bb84f645b2babf7b1205fe3b44ed7",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 30,
+      "sourceSha256": "70617388bfbc0c9a90e192ba22e0e3312f06efd089630ee8cb797d42cb411dca",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 31,
+      "sourceSha256": "b0ee521879015baa434720d0c04e4728942d18ded4282ebab0e32dbcc661ddea",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 32,
+      "sourceSha256": "e20d4421399c9066dc959a2fc96fb5e61a90439027ec15438ccbb445c32c2c80",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 33,
+      "sourceSha256": "2c8b7a9744c29b52c9db559c9f365668a35c85af4a34f425afa7c6e333c04dc4",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 34,
+      "sourceSha256": "fe77addb151be394973150014076679c5f46a12f95e3ff0ec354cdec6575f09d",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 35,
+      "sourceSha256": "09c6cf0d497503971cccfc7dc623e9182cf93391c3aec3a938cad13dacd5f63f",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 36,
+      "sourceSha256": "b03f608f6d0c3bf163b89b33dc0a5b237701705c3fa947edac82ae9b7b3888b9",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 37,
+      "sourceSha256": "eb885b7add68b9253cfaf9ea7d3672d1263ab34aa5e25c6c7b729f7dd3f632c7",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 38,
+      "sourceSha256": "6475453cbb715c26b906bc4fb7ed391806ae99e543de68e69970cdcd2fa3fbd5",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 39,
+      "sourceSha256": "0186b698538d78406a41792fa64d983588d631865bc4a661fddbf96a1b744fc5",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 40,
+      "sourceSha256": "2443655d1c41bca63eae0e16e3ee99659dc81e82f56836261280deb081138edb",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 41,
+      "sourceSha256": "4516e9989887ef432e3ffd3e1b37e0c09dfc57948d4e37a09ad2f323d60c5b3b",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 42,
+      "sourceSha256": "a8882f4a3605c5ee91b0c77e3d5ee36f5c7cd2e3c51aa8d61b8a27da5b575b6e",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 43,
+      "sourceSha256": "72bd3f80734960d963f630605f35f33f39277841e5d9d45f8fa513fa18b7f856",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 44,
+      "sourceSha256": "6bf1c8446c293200174f541b855dfd48ee995430c7229b90bbbbb9d3c911df77",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 45,
+      "sourceSha256": "4f2e1be4b8ed36fb5a45b717dbf0bfdd3bdde85ef8fc5b05fcf5630483a70e5c",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 46,
+      "sourceSha256": "be9116071b5c8843bff51832b2cf92310b93ec7a408646c76b219495dab582ea",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 47,
+      "sourceSha256": "9842a2c4d8decf7f6de1a6914d15a362ad83aecd55a1ac5381c4be5a1d7dd828",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 48,
+      "sourceSha256": "265d3f62c880d323b62c723e83f0d62ee195a0f8d15a93cc379a603618e2b0fa",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 49,
+      "sourceSha256": "482ef4a661c6ca217a7392ec8b7e44e37ca5b1be7fee09dd3d444cd9d523ffd6",
+      "changedFields": []
+    },
+    {
+      "course": "advanced1",
+      "unit": 50,
+      "sourceSha256": "ddb5e46e84567902c758fcf506ae7e6e78f4794d3b0eeeb10649f8320acf9ebb",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 1,
+      "sourceSha256": "80ddae8c02541c795b168f07e84cb7d5559c21b696ce6120ba9e5a9cd559b9cc",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 2,
+      "sourceSha256": "5af66dd35413e9025f6c117b9bbe9bf5f6e3c2f3e6159dd63d4bcc6440a7df5d",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 3,
+      "sourceSha256": "b4108728f43d17c22581d766ae0728e0637097823e9de8f2bbe031b4f985885b",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 4,
+      "sourceSha256": "e70478accd8ae44a8fe1b1f11615b85f8c7b0d29198030b8ecf983c13a2d69f7",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 5,
+      "sourceSha256": "7439947b44cf827aac322310a21155a38b4d50ee25fd434ebe080ab355edb195",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 6,
+      "sourceSha256": "2e3935b1be0a1d9470b05d822d060cee494bf6e969e2aea53169065e5cf3b93e",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 7,
+      "sourceSha256": "0d39b81845903cf845c1ede5d6487fe3f7806b0097e287c5c5ebbf7eda25064d",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 8,
+      "sourceSha256": "b006b4501f1337b187334750ba0288a6876f9128ec1585886df3d7f4fc699024",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 9,
+      "sourceSha256": "16d387bb59a5fad31fab346d56c72ec7701a39c421dc1f6f5628a56bd871ed26",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 10,
+      "sourceSha256": "61664cb696eee3deaaa7fd551dfef99eeeb7046b3c3804e64221966698d700c2",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 11,
+      "sourceSha256": "a033dfd8012b5a53802178194e7ae4d99e0a6d36a63e8358be864d6d69e3588d",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 12,
+      "sourceSha256": "0765d3409a5d91f0e8a4314f3d2341c28cec873c9579e81e83484f3ecf2ecdf0",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 13,
+      "sourceSha256": "366cfc9979ca3ec583902a8115e0fce23b1380d7dff578bffa628e8b09e3b219",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 14,
+      "sourceSha256": "4e8d5638032692d8695de839b6a17b6238d3aca2f47ad5048f2f005c0ba4a1bd",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 15,
+      "sourceSha256": "ebbf488a5250cdb36b933bce45b5927b66656aa1142360e2c0148ae333049ada",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 16,
+      "sourceSha256": "005802921ca7b6fc682133a7953aa5c0a84b7114f1f72f06d48f0baa5d214ef2",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 17,
+      "sourceSha256": "43f0619e17df3588e705d22e2da0da91a996201424c932e8f902611f33bfdcf9",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 18,
+      "sourceSha256": "b60961757d42cdafa36e77d4bc9bcb7a58f79310b27e3cc07d27f24603387549",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 19,
+      "sourceSha256": "e8edbbf9dc6091d307602f3d04bd8f6e9b939e914561f6eee4bfccc7f8a1c817",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 20,
+      "sourceSha256": "8cc5c9d6fce0f666ba21f102f04016ea22ea1c029511edab1952cbeac613af6a",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 21,
+      "sourceSha256": "f68b89cdae8d4abe4b242507c867d8979a1d5a15d9eb6afd536cc2dafeb49125",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 22,
+      "sourceSha256": "f1af1d4c8923d9f938ccb3dd867d7d9bae3359a648e67f4feb345332a98eca12",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 23,
+      "sourceSha256": "efce321b2a5e2b8258e1d574a2f199a14d3584879dfdc67fb0437edbc60370ad",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 24,
+      "sourceSha256": "d7a0b04a2625861e47fbe76dc05603603602ed95b754852afb3367e87515414a",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 25,
+      "sourceSha256": "0726db47e02409cf0ee5948be8d3a06e0b50bc58bb80523a19f01d96184ad9e1",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 26,
+      "sourceSha256": "88cfc7dad285d5a3e5f14112883871c3c20f9655d7a39ba51e4d2d4161a83e7d",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 27,
+      "sourceSha256": "26c29d97a3b9606bf77d7dbb6c3e04f8989ff26121411aec26ead759f780ba13",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 28,
+      "sourceSha256": "9a0c360edbbcb6ef532ae553999de55771f3792d8db13cefad360bf2ea58ed76",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 29,
+      "sourceSha256": "3e6765b991589dae0d0d303a45ef5c1726930a4b3e24c90d23763d9c7a7b2589",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 30,
+      "sourceSha256": "df122927c56cad11284b1cb0f5458afd5b636a1182da4608cc1c4c36060ac0da",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 31,
+      "sourceSha256": "fd1c6bb6b15808a5e84651bce36b932685d9c7b934b77a3508930f1af0af3049",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 32,
+      "sourceSha256": "255ffbf53f6ecfadebccc2a373edae23ac470d3251260d09540872a998527eb8",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 33,
+      "sourceSha256": "180c4bb93dd9ac92c61581f67f1af70649ff6770f1deb67df85cc4eec30cd401",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 34,
+      "sourceSha256": "ba987f0741a7e979de6414937454543c1b1eb7c9f216037b6691c24f719794e2",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 35,
+      "sourceSha256": "7c526964b957b0b7c78102c2b26a90e842f779cb0aaea77feb249818d2c029e3",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 36,
+      "sourceSha256": "58d4875bbbe56879746b44a44c5923aa836d5ec441826d0884389b46b2321aaa",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 37,
+      "sourceSha256": "83ba62ff328664d8cc801d95769c7ca9d0063d4bcc26540cc3c1352a077d5dc0",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 38,
+      "sourceSha256": "79bdf59573ea3771f05ebba8edea20f52c7026db445426ac2186698660b9c2f7",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 39,
+      "sourceSha256": "207e1bac9865194ef681255926d6218427811b31ccdd95590c2bd6945e4ad04a",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 40,
+      "sourceSha256": "ed2d1224523035a7a2fc291da909f5e440cc8d79375b524b8e0416a409b1898b",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 41,
+      "sourceSha256": "ae79a400288be0a70a60b6e99251a57869ac3ed1d53c0f874b56800bde1cf03d",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 42,
+      "sourceSha256": "cd5f9788b547d62c5cfb92d31dca9a679a24f8fca5b9fceeb9521fc05b567ebf",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 43,
+      "sourceSha256": "abf3e5fda742b3ad06531e58bc4234dd82e1acb1fe59b4c9ca3d5813fc7a5e82",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 44,
+      "sourceSha256": "55f388e35ccc760c9353435e925bf2399ecdec77e141f83b4951434660ee177d",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 45,
+      "sourceSha256": "58b264322911f4c6ef1c434e24f7ca4811aa65845805fffd3ed361b9729f4498",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 46,
+      "sourceSha256": "3fa53f6677d7ff605fd60b9594d3b6bf347fac037cb2e7ad80065b5dd76f1d04",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 47,
+      "sourceSha256": "99bdf90d8a9c56fe6b1c23e242c4a9cace17c6b93df72152e960b62edb60b119",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 48,
+      "sourceSha256": "6dfe4ad9bca038a3b5a93f13a36f58c3c4b50a77b0b4931408b6ccb8467d1518",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 49,
+      "sourceSha256": "e451eff422fbdf0b5f2b6e056bd3bb70689df2bf101538fef0c6acb2e189d450",
+      "changedFields": []
+    },
+    {
+      "course": "advanced2",
+      "unit": 50,
+      "sourceSha256": "3a3d11654fe4080bb42310e3a569fd2ec0df60e0796d3bd3f35aaaba46ecc278",
+      "changedFields": []
+    }
+  ]
+}

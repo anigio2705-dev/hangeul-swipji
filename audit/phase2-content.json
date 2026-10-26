@@ -1,7 +1,7 @@
 {
   "baseline": "46745d28b17554f7d0f67e3e5515778b7ccb35e3",
   "scope": "automated source checks; AI teaching review is recorded separately",
-  "generatedAt": "2026-10-26T21:17:13.648Z",
+  "generatedAt": "2026-10-26T21:23:15.931Z",
   "errors": [],
   "warnings": [
     "Audio: missing human recordings and listening approval remain; no synthetic substitution.",
@@ -361,7 +361,7 @@
       },
       {
         "id": "beginner1/3/Q2",
-        "prompt": "'책___ 있어요.' 알맞은 조사는?",
+        "prompt": "'책___ 있어요.'에서 '책'에 붙일 주격 조사는?",
         "answer": "이",
         "options": [
           "를",
@@ -383,7 +383,7 @@
       },
       {
         "id": "beginner1/4/Q2",
-        "prompt": "'저는 밥___ 먹어요.' 알맞은 조사는?",
+        "prompt": "'저는 밥___ 먹어요.'에서 '밥'에 붙일 목적격 조사는?",
         "answer": "을",
         "options": [
           "는",
