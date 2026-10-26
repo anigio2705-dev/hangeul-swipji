@@ -10,6 +10,10 @@ on:
       - 'learn.html'
       - 'reading.html'
       - 'reading-curriculum.js'
+      - 'reading-alternates.js'
+      - 'site-language.js'
+      - 'scripts/browser-functional-phase2.cjs'
+      - 'scripts/audit-reading-similarity.cjs'
       - 'hangul-core.js'
       - 'hangul-audio-manifest.json'
       - 'assets/hangul-audio/**'
@@ -42,6 +46,8 @@ jobs:
         run: node scripts/check-audio-runtime.cjs
       - name: Check source pairs, all reading entries and preservation
         run: node scripts/audit-phase2-content.cjs
+      - name: Check all reading similarity pairs
+        run: node scripts/audit-reading-similarity.cjs
       - name: Check page structures and navigation shells
         run: node scripts/check-phase2-pages.cjs
       - name: Verify original curriculum and 7-day materials
@@ -52,6 +58,8 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Desktop and mobile Chromium smoke test
         run: node scripts/browser-smoke-phase2.cjs
+      - name: Exercise progression, languages, quizzes and actual media on desktop and mobile
+        run: node scripts/browser-functional-phase2.cjs
       - name: Audit all 600 reading entries and quizzes in Chromium
         run: node scripts/browser-audit-reading-600.cjs
       - name: Render every course unit in Korean and English

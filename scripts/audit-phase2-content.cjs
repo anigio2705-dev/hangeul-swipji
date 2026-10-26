@@ -58,20 +58,20 @@ for(let l=1;l<=15;l++){
  for(let b=1;b<=40;b++){
   const id=l+'-'+b,x=ko.get(l,b),y=en.get(l,b),text=x.paragraphs.join(' ');report.reading.items++;report.reading.questions+=x.q.length;
   check(x.paragraphs.length===l+2,id+' unexpected graded sentence count');
-  if(b>20&&l>=9){
-   const family=(b-1)%20,developmentEnd=ko.curriculum.sources[family][6][0],followup=ko.curriculum.branches[family][0];
-   check(x.paragraphs.indexOf(developmentEnd)>=0&&x.paragraphs.indexOf(followup)>x.paragraphs.indexOf(developmentEnd),id+' follow-up occurs before the initial decision/development ends');
+  if(b>20){
+   const expected=[...ko.curriculum.alternatives[(b-1)%20],...ko.alternates.passages[(b-1)%20]].slice(0,l+2);
+   check(JSON.stringify(x.paragraphs)===JSON.stringify(expected.map(p=>p[0])),id+' alternate story order changed');
   }
   check(Array.isArray(x.vocab)&&x.vocab.length===(l>=9?4:3)&&x.vocab.every(p=>p.length===2&&p.every(Boolean)&&!/[.!?]/.test(p[0])),id+' invalid word glossary');
   check(x.paragraphs.length===x.translations.length&&x.translations.every(t=>typeof t==='string'&&t.trim()),id+' translation alignment');
   check(JSON.stringify(x.paragraphs)===JSON.stringify(y.paragraphs)&&JSON.stringify(x.translations)===JSON.stringify(y.translations),id+' language toggling changes source');
   if(seen.has(text)){report.reading.exactDuplicates++;report.errors.push('Duplicate passage '+id+' and '+seen.get(text))}seen.set(text,id);
   for(const [k,q] of x.q.entries()){
-   check(q.evidence&&text.includes(q.evidence),id+' missing Q'+k+' evidence');
+   check(q.type==='inference'?q.evidenceSentences?.every(p=>x.paragraphs.includes(p)):q.evidence&&text.includes(q.evidence),id+' missing Q'+k+' evidence');
    check(q.options.length===4&&new Set(q.options).size===4,id+' duplicate options');
    check(q.correct>=0&&q.correct<4,id+' invalid key');
    const e=y.q[k];check(new Set(e.options).size===4&&e.options.every(Boolean),id+' English choices');
-   if(k>0){check(x.paragraphs.filter(p=>p===q.options[q.correct]).length===1,id+' nonunique Korean support');check(x.paragraphs.filter(p=>q.options.includes(p)).length===1,id+' distractor also occurs');check(y.translations.filter(p=>e.options.includes(p)).length===1,id+' English distractor also occurs')}
+   if(k>0&&q.type!=='inference'){check(x.paragraphs.filter(p=>p===q.options[q.correct]).length===1,id+' nonunique Korean support');check(x.paragraphs.filter(p=>q.options.includes(p)).length===1,id+' distractor also occurs');check(y.translations.filter(p=>e.options.includes(p)).length===1,id+' English distractor also occurs')}
   }
   check(x.legacy.paragraphs.length>0&&x.legacy.translations.length===x.legacy.paragraphs.length,id+' legacy source lost');
   const old=oldContext.oldContent(l,b);

@@ -8,8 +8,8 @@ function reading(language='ko'){
  const src=html.match(/<script>\s*([\s\S]*?)<\/script>/)[1].split('function icon(')[0];
  const ctx={document:{getElementById(){return {}}},localStorage:{getItem(){return null}},window:{}};
  vm.createContext(ctx);
- const extra=html.includes('reading-curriculum.js')?fs.readFileSync(path.join(root,'reading-curriculum.js'),'utf8'):'';
+ const extra=['reading-curriculum.js','reading-alternates.js'].filter(file=>html.includes(file)).map(file=>fs.readFileSync(path.join(root,file),'utf8')).join('\n');
  vm.runInContext(extra+'\n'+src+'\nlang='+JSON.stringify(language)+';globalThis.getReading=content;globalThis.getLegacyReading=typeof legacyContent!=="undefined"?legacyContent:content;',ctx);
- return {get:ctx.getReading,legacy:ctx.getLegacyReading,curriculum:ctx.window.HSReadingCurriculum};
+ return {get:ctx.getReading,legacy:ctx.getLegacyReading,curriculum:ctx.window.HSReadingCurriculum,alternates:ctx.window.HSReadingAlternates};
 }
 module.exports={root,courses,lessons,reading};

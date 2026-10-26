@@ -43,4 +43,5 @@ for page in r['candidates']:
     imported.append(word)
     checkpoint=manifest_path.with_suffix('.json.tmp');checkpoint.write_text(json.dumps(m,ensure_ascii=False,indent=2)+'\n');checkpoint.replace(manifest_path)
 manifest_path.write_text(json.dumps(m,ensure_ascii=False,indent=2)+'\n')
-report={'imported':imported,'pending':pending,'allHeld':True,'listeningApproved':0};(ROOT/'audit/audio-acquisition.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n');print(json.dumps(report,ensure_ascii=False))
+acquired=[p['title'].removeprefix('File:Ko-').rsplit('.',1)[0] for p in r['candidates'] if p['title'].removeprefix('File:Ko-').rsplit('.',1)[0] in m['recordings']]
+report={'imported':acquired,'pending':pending,'allHeld':True,'listeningApproved':0};(ROOT/'audit/audio-acquisition.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n');print(json.dumps(report,ensure_ascii=False))

@@ -1,0 +1,3248 @@
+{
+  "baseline": "3eaec8576d15866a2a78051c082cdee9093281ba",
+  "scope": "All 600 current entries; all 11700 same-level pairs; 560 neighboring-level comparisons",
+  "method": "Jaccard of exact Korean sentences and space-delimited eojeol trigrams; threshold .65 is diagnostic, not semantic proof",
+  "before": {
+    "levels": [
+      {
+        "level": 1,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.0714,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          }
+        ]
+      },
+      {
+        "level": 2,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.2,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0.14285714285714285,
+            "eojeolTrigramJaccard": 0.13333333333333333
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0.14285714285714285,
+            "eojeolTrigramJaccard": 0.16666666666666666
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0.14285714285714285,
+            "eojeolTrigramJaccard": 0.1
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0.14285714285714285,
+            "eojeolTrigramJaccard": 0.1111111111111111
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0.14285714285714285,
+            "eojeolTrigramJaccard": 0.1111111111111111
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0.14285714285714285,
+            "eojeolTrigramJaccard": 0.11764705882352941
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0.14285714285714285,
+            "eojeolTrigramJaccard": 0.15789473684210525
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0.14285714285714285,
+            "eojeolTrigramJaccard": 0.1111111111111111
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0.14285714285714285,
+            "eojeolTrigramJaccard": 0.2
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0.14285714285714285,
+            "eojeolTrigramJaccard": 0.16666666666666666
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0.14285714285714285,
+            "eojeolTrigramJaccard": 0.13636363636363635
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0.14285714285714285,
+            "eojeolTrigramJaccard": 0.19047619047619047
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0.14285714285714285,
+            "eojeolTrigramJaccard": 0.15
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0.14285714285714285,
+            "eojeolTrigramJaccard": 0.15
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0.14285714285714285,
+            "eojeolTrigramJaccard": 0.14285714285714285
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0.14285714285714285,
+            "eojeolTrigramJaccard": 0.14285714285714285
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0.14285714285714285,
+            "eojeolTrigramJaccard": 0.13636363636363635
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0.14285714285714285,
+            "eojeolTrigramJaccard": 0.1
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0.14285714285714285,
+            "eojeolTrigramJaccard": 0.16666666666666666
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0.14285714285714285,
+            "eojeolTrigramJaccard": 0.13043478260869565
+          }
+        ]
+      },
+      {
+        "level": 3,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.375,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0.25,
+            "eojeolTrigramJaccard": 0.3157894736842105
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0.25,
+            "eojeolTrigramJaccard": 0.375
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0.25,
+            "eojeolTrigramJaccard": 0.25
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0.25,
+            "eojeolTrigramJaccard": 0.30434782608695654
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0.25,
+            "eojeolTrigramJaccard": 0.2727272727272727
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0.25,
+            "eojeolTrigramJaccard": 0.3181818181818182
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0.25,
+            "eojeolTrigramJaccard": 0.30434782608695654
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0.25,
+            "eojeolTrigramJaccard": 0.2727272727272727
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0.25,
+            "eojeolTrigramJaccard": 0.3333333333333333
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0.25,
+            "eojeolTrigramJaccard": 0.34782608695652173
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0.25,
+            "eojeolTrigramJaccard": 0.24
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0.25,
+            "eojeolTrigramJaccard": 0.32
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0.25,
+            "eojeolTrigramJaccard": 0.2916666666666667
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0.25,
+            "eojeolTrigramJaccard": 0.2916666666666667
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0.25,
+            "eojeolTrigramJaccard": 0.28
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0.25,
+            "eojeolTrigramJaccard": 0.35714285714285715
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0.25,
+            "eojeolTrigramJaccard": 0.2692307692307692
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0.25,
+            "eojeolTrigramJaccard": 0.3076923076923077
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0.25,
+            "eojeolTrigramJaccard": 0.3103448275862069
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0.25,
+            "eojeolTrigramJaccard": 0.2857142857142857
+          }
+        ]
+      },
+      {
+        "level": 4,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.4688,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0.3333333333333333,
+            "eojeolTrigramJaccard": 0.4583333333333333
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0.3333333333333333,
+            "eojeolTrigramJaccard": 0.4642857142857143
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0.3333333333333333,
+            "eojeolTrigramJaccard": 0.41935483870967744
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0.3333333333333333,
+            "eojeolTrigramJaccard": 0.42857142857142855
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0.3333333333333333,
+            "eojeolTrigramJaccard": 0.4074074074074074
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0.3333333333333333,
+            "eojeolTrigramJaccard": 0.4230769230769231
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0.3333333333333333,
+            "eojeolTrigramJaccard": 0.4074074074074074
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0.3333333333333333,
+            "eojeolTrigramJaccard": 0.4074074074074074
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0.3333333333333333,
+            "eojeolTrigramJaccard": 0.4482758620689655
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0.3333333333333333,
+            "eojeolTrigramJaccard": 0.4642857142857143
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0.3333333333333333,
+            "eojeolTrigramJaccard": 0.42424242424242425
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0.3333333333333333,
+            "eojeolTrigramJaccard": 0.46875
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0.3333333333333333,
+            "eojeolTrigramJaccard": 0.41379310344827586
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0.3333333333333333,
+            "eojeolTrigramJaccard": 0.41379310344827586
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0.3333333333333333,
+            "eojeolTrigramJaccard": 0.41935483870967744
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0.3333333333333333,
+            "eojeolTrigramJaccard": 0.4375
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0.3333333333333333,
+            "eojeolTrigramJaccard": 0.3870967741935484
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0.3333333333333333,
+            "eojeolTrigramJaccard": 0.41935483870967744
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0.3333333333333333,
+            "eojeolTrigramJaccard": 0.4117647058823529
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0.3333333333333333,
+            "eojeolTrigramJaccard": 0.4117647058823529
+          }
+        ]
+      },
+      {
+        "level": 5,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.5946,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0.4,
+            "eojeolTrigramJaccard": 0.5806451612903226
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0.4,
+            "eojeolTrigramJaccard": 0.5945945945945946
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0.4,
+            "eojeolTrigramJaccard": 0.5135135135135135
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0.4,
+            "eojeolTrigramJaccard": 0.5428571428571428
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0.4,
+            "eojeolTrigramJaccard": 0.5428571428571428
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0.4,
+            "eojeolTrigramJaccard": 0.5161290322580645
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0.4,
+            "eojeolTrigramJaccard": 0.5428571428571428
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0.4,
+            "eojeolTrigramJaccard": 0.5151515151515151
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0.4,
+            "eojeolTrigramJaccard": 0.5555555555555556
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0.4,
+            "eojeolTrigramJaccard": 0.5833333333333334
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0.4,
+            "eojeolTrigramJaccard": 0.525
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0.4,
+            "eojeolTrigramJaccard": 0.5405405405405406
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0.4,
+            "eojeolTrigramJaccard": 0.5142857142857142
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0.4,
+            "eojeolTrigramJaccard": 0.5277777777777778
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0.4,
+            "eojeolTrigramJaccard": 0.5263157894736842
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0.4,
+            "eojeolTrigramJaccard": 0.55
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0.4,
+            "eojeolTrigramJaccard": 0.4722222222222222
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0.4,
+            "eojeolTrigramJaccard": 0.5263157894736842
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0.4,
+            "eojeolTrigramJaccard": 0.5121951219512195
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0.4,
+            "eojeolTrigramJaccard": 0.5121951219512195
+          }
+        ]
+      },
+      {
+        "level": 6,
+        "nearPairsAtTrigramThreshold065": 3,
+        "maxTrigramJaccard": 0.6667,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0.45454545454545453,
+            "eojeolTrigramJaccard": 0.6578947368421053
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0.45454545454545453,
+            "eojeolTrigramJaccard": 0.6666666666666666
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0.45454545454545453,
+            "eojeolTrigramJaccard": 0.5909090909090909
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0.45454545454545453,
+            "eojeolTrigramJaccard": 0.6363636363636364
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0.45454545454545453,
+            "eojeolTrigramJaccard": 0.627906976744186
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0.45454545454545453,
+            "eojeolTrigramJaccard": 0.5945945945945946
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0.45454545454545453,
+            "eojeolTrigramJaccard": 0.627906976744186
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0.45454545454545453,
+            "eojeolTrigramJaccard": 0.6
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0.45454545454545453,
+            "eojeolTrigramJaccard": 0.6363636363636364
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0.45454545454545453,
+            "eojeolTrigramJaccard": 0.6511627906976745
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0.45454545454545453,
+            "eojeolTrigramJaccard": 0.6041666666666666
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0.45454545454545453,
+            "eojeolTrigramJaccard": 0.6458333333333334
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0.45454545454545453,
+            "eojeolTrigramJaccard": 0.5853658536585366
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0.45454545454545453,
+            "eojeolTrigramJaccard": 0.5952380952380952
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0.45454545454545453,
+            "eojeolTrigramJaccard": 0.6086956521739131
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0.45454545454545453,
+            "eojeolTrigramJaccard": 0.6170212765957447
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0.45454545454545453,
+            "eojeolTrigramJaccard": 0.5681818181818182
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0.45454545454545453,
+            "eojeolTrigramJaccard": 0.5909090909090909
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0.45454545454545453,
+            "eojeolTrigramJaccard": 0.5833333333333334
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0.45454545454545453,
+            "eojeolTrigramJaccard": 0.5833333333333334
+          }
+        ]
+      },
+      {
+        "level": 7,
+        "nearPairsAtTrigramThreshold065": 16,
+        "maxTrigramJaccard": 0.7174,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.717391304347826
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.7169811320754716
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.6470588235294118
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.6862745098039216
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.6923076923076923
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.6739130434782609
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.68
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.6595744680851063
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.6981132075471698
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.6938775510204082
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.6481481481481481
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.6909090909090909
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.6530612244897959
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.66
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.6785714285714286
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.6727272727272727
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.6346153846153846
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.6666666666666666
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.6428571428571429
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.6610169491525424
+          }
+        ]
+      },
+      {
+        "level": 8,
+        "nearPairsAtTrigramThreshold065": 20,
+        "maxTrigramJaccard": 0.7581,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0.5384615384615384,
+            "eojeolTrigramJaccard": 0.7547169811320755
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0.5384615384615384,
+            "eojeolTrigramJaccard": 0.7580645161290323
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0.5384615384615384,
+            "eojeolTrigramJaccard": 0.6842105263157895
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0.5384615384615384,
+            "eojeolTrigramJaccard": 0.7192982456140351
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0.5384615384615384,
+            "eojeolTrigramJaccard": 0.7333333333333333
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0.5384615384615384,
+            "eojeolTrigramJaccard": 0.7169811320754716
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0.5384615384615384,
+            "eojeolTrigramJaccard": 0.7192982456140351
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0.5384615384615384,
+            "eojeolTrigramJaccard": 0.7037037037037037
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0.5384615384615384,
+            "eojeolTrigramJaccard": 0.7333333333333333
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0.5384615384615384,
+            "eojeolTrigramJaccard": 0.7368421052631579
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0.5384615384615384,
+            "eojeolTrigramJaccard": 0.6935483870967742
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0.5384615384615384,
+            "eojeolTrigramJaccard": 0.7258064516129032
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0.5384615384615384,
+            "eojeolTrigramJaccard": 0.6909090909090909
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0.5384615384615384,
+            "eojeolTrigramJaccard": 0.6964285714285714
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0.5384615384615384,
+            "eojeolTrigramJaccard": 0.7142857142857143
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0.5384615384615384,
+            "eojeolTrigramJaccard": 0.7096774193548387
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0.5384615384615384,
+            "eojeolTrigramJaccard": 0.6885245901639344
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0.5384615384615384,
+            "eojeolTrigramJaccard": 0.7049180327868853
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0.5384615384615384,
+            "eojeolTrigramJaccard": 0.696969696969697
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0.5384615384615384,
+            "eojeolTrigramJaccard": 0.7142857142857143
+          }
+        ]
+      },
+      {
+        "level": 9,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.5676,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0.4666666666666667,
+            "eojeolTrigramJaccard": 0.547945205479452
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0.4666666666666667,
+            "eojeolTrigramJaccard": 0.5662650602409639
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0.4666666666666667,
+            "eojeolTrigramJaccard": 0.5
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0.4666666666666667,
+            "eojeolTrigramJaccard": 0.5616438356164384
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0.4666666666666667,
+            "eojeolTrigramJaccard": 0.55
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0.4666666666666667,
+            "eojeolTrigramJaccard": 0.5277777777777778
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0.4666666666666667,
+            "eojeolTrigramJaccard": 0.5394736842105263
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0.4666666666666667,
+            "eojeolTrigramJaccard": 0.5205479452054794
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0.4666666666666667,
+            "eojeolTrigramJaccard": 0.55
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0.4666666666666667,
+            "eojeolTrigramJaccard": 0.5675675675675675
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0.4666666666666667,
+            "eojeolTrigramJaccard": 0.524390243902439
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0.4666666666666667,
+            "eojeolTrigramJaccard": 0.5357142857142857
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0.4666666666666667,
+            "eojeolTrigramJaccard": 0.5277777777777778
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0.4666666666666667,
+            "eojeolTrigramJaccard": 0.5064935064935064
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0.4666666666666667,
+            "eojeolTrigramJaccard": 0.5421686746987951
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0.4666666666666667,
+            "eojeolTrigramJaccard": 0.5432098765432098
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0.4666666666666667,
+            "eojeolTrigramJaccard": 0.5121951219512195
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0.4666666666666667,
+            "eojeolTrigramJaccard": 0.5308641975308642
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0.4666666666666667,
+            "eojeolTrigramJaccard": 0.5227272727272727
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0.4666666666666667,
+            "eojeolTrigramJaccard": 0.5555555555555556
+          }
+        ]
+      },
+      {
+        "level": 10,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.5814,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.5697674418604651
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.5789473684210527
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.5113636363636364
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.5764705882352941
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.5604395604395604
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.5421686746987951
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.5568181818181818
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.5517241379310345
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.5652173913043478
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.5813953488372093
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.532608695652174
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.5425531914893617
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.5529411764705883
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.5172413793103449
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.5625
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.5638297872340425
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.5268817204301075
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.5483870967741935
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.5306122448979592
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0.5,
+            "eojeolTrigramJaccard": 0.5728155339805825
+          }
+        ]
+      },
+      {
+        "level": 11,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.625,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0.5294117647058824,
+            "eojeolTrigramJaccard": 0.6105263157894737
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0.5294117647058824,
+            "eojeolTrigramJaccard": 0.6190476190476191
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0.5294117647058824,
+            "eojeolTrigramJaccard": 0.5567010309278351
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0.5294117647058824,
+            "eojeolTrigramJaccard": 0.625
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0.5294117647058824,
+            "eojeolTrigramJaccard": 0.6
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0.5294117647058824,
+            "eojeolTrigramJaccard": 0.5913978494623656
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0.5294117647058824,
+            "eojeolTrigramJaccard": 0.5979381443298969
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0.5294117647058824,
+            "eojeolTrigramJaccard": 0.59375
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0.5294117647058824,
+            "eojeolTrigramJaccard": 0.6039603960396039
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0.5294117647058824,
+            "eojeolTrigramJaccard": 0.625
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0.5294117647058824,
+            "eojeolTrigramJaccard": 0.5825242718446602
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0.5294117647058824,
+            "eojeolTrigramJaccard": 0.5904761904761905
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0.5294117647058824,
+            "eojeolTrigramJaccard": 0.6
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0.5294117647058824,
+            "eojeolTrigramJaccard": 0.5670103092783505
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0.5294117647058824,
+            "eojeolTrigramJaccard": 0.6111111111111112
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0.5294117647058824,
+            "eojeolTrigramJaccard": 0.5980392156862745
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0.5294117647058824,
+            "eojeolTrigramJaccard": 0.56
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0.5294117647058824,
+            "eojeolTrigramJaccard": 0.5882352941176471
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0.5294117647058824,
+            "eojeolTrigramJaccard": 0.5740740740740741
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0.5294117647058824,
+            "eojeolTrigramJaccard": 0.6140350877192983
+          }
+        ]
+      },
+      {
+        "level": 12,
+        "nearPairsAtTrigramThreshold065": 3,
+        "maxTrigramJaccard": 0.6571,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0.5555555555555556,
+            "eojeolTrigramJaccard": 0.6442307692307693
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0.5555555555555556,
+            "eojeolTrigramJaccard": 0.6551724137931034
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0.5555555555555556,
+            "eojeolTrigramJaccard": 0.5943396226415094
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0.5555555555555556,
+            "eojeolTrigramJaccard": 0.6571428571428571
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0.5555555555555556,
+            "eojeolTrigramJaccard": 0.6330275229357798
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0.5555555555555556,
+            "eojeolTrigramJaccard": 0.6237623762376238
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0.5555555555555556,
+            "eojeolTrigramJaccard": 0.6320754716981132
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0.5555555555555556,
+            "eojeolTrigramJaccard": 0.6320754716981132
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0.5555555555555556,
+            "eojeolTrigramJaccard": 0.6491228070175439
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0.5555555555555556,
+            "eojeolTrigramJaccard": 0.6571428571428571
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0.5555555555555556,
+            "eojeolTrigramJaccard": 0.6228070175438597
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0.5555555555555556,
+            "eojeolTrigramJaccard": 0.6228070175438597
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0.5555555555555556,
+            "eojeolTrigramJaccard": 0.6346153846153846
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0.5555555555555556,
+            "eojeolTrigramJaccard": 0.6074766355140186
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0.5555555555555556,
+            "eojeolTrigramJaccard": 0.6440677966101694
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0.5555555555555556,
+            "eojeolTrigramJaccard": 0.6306306306306306
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0.5555555555555556,
+            "eojeolTrigramJaccard": 0.6
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0.5555555555555556,
+            "eojeolTrigramJaccard": 0.6181818181818182
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0.5555555555555556,
+            "eojeolTrigramJaccard": 0.6101694915254238
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0.5555555555555556,
+            "eojeolTrigramJaccard": 0.648
+          }
+        ]
+      },
+      {
+        "level": 13,
+        "nearPairsAtTrigramThreshold065": 15,
+        "maxTrigramJaccard": 0.6897,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0.5789473684210527,
+            "eojeolTrigramJaccard": 0.672566371681416
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0.5789473684210527,
+            "eojeolTrigramJaccard": 0.6850393700787402
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0.5789473684210527,
+            "eojeolTrigramJaccard": 0.6293103448275862
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0.5789473684210527,
+            "eojeolTrigramJaccard": 0.6896551724137931
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0.5789473684210527,
+            "eojeolTrigramJaccard": 0.6610169491525424
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0.5789473684210527,
+            "eojeolTrigramJaccard": 0.6481481481481481
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0.5789473684210527,
+            "eojeolTrigramJaccard": 0.6666666666666666
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0.5789473684210527,
+            "eojeolTrigramJaccard": 0.6637931034482759
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0.5789473684210527,
+            "eojeolTrigramJaccard": 0.68
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0.5789473684210527,
+            "eojeolTrigramJaccard": 0.6842105263157895
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0.5789473684210527,
+            "eojeolTrigramJaccard": 0.6532258064516129
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0.5789473684210527,
+            "eojeolTrigramJaccard": 0.6532258064516129
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0.5789473684210527,
+            "eojeolTrigramJaccard": 0.6695652173913044
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0.5789473684210527,
+            "eojeolTrigramJaccard": 0.6410256410256411
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0.5789473684210527,
+            "eojeolTrigramJaccard": 0.6666666666666666
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0.5789473684210527,
+            "eojeolTrigramJaccard": 0.6639344262295082
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0.5789473684210527,
+            "eojeolTrigramJaccard": 0.6333333333333333
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0.5789473684210527,
+            "eojeolTrigramJaccard": 0.6557377049180327
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0.5789473684210527,
+            "eojeolTrigramJaccard": 0.6349206349206349
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0.5789473684210527,
+            "eojeolTrigramJaccard": 0.6764705882352942
+          }
+        ]
+      },
+      {
+        "level": 14,
+        "nearPairsAtTrigramThreshold065": 20,
+        "maxTrigramJaccard": 0.7165,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0.6,
+            "eojeolTrigramJaccard": 0.6991869918699187
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0.6,
+            "eojeolTrigramJaccard": 0.7101449275362319
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0.6,
+            "eojeolTrigramJaccard": 0.6614173228346457
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0.6,
+            "eojeolTrigramJaccard": 0.7165354330708661
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0.6,
+            "eojeolTrigramJaccard": 0.689922480620155
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0.6,
+            "eojeolTrigramJaccard": 0.6779661016949152
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0.6,
+            "eojeolTrigramJaccard": 0.6929133858267716
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0.6,
+            "eojeolTrigramJaccard": 0.6904761904761905
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0.6,
+            "eojeolTrigramJaccard": 0.7014925373134329
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0.6,
+            "eojeolTrigramJaccard": 0.7049180327868853
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0.6,
+            "eojeolTrigramJaccard": 0.6814814814814815
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0.6,
+            "eojeolTrigramJaccard": 0.6766917293233082
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0.6,
+            "eojeolTrigramJaccard": 0.7007874015748031
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0.6,
+            "eojeolTrigramJaccard": 0.6666666666666666
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0.6,
+            "eojeolTrigramJaccard": 0.6865671641791045
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0.6,
+            "eojeolTrigramJaccard": 0.6821705426356589
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0.6,
+            "eojeolTrigramJaccard": 0.6589147286821705
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0.6,
+            "eojeolTrigramJaccard": 0.6842105263157895
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0.6,
+            "eojeolTrigramJaccard": 0.6690647482014388
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0.6,
+            "eojeolTrigramJaccard": 0.6986301369863014
+          }
+        ]
+      },
+      {
+        "level": 15,
+        "nearPairsAtTrigramThreshold065": 20,
+        "maxTrigramJaccard": 0.7391,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0.6190476190476191,
+            "eojeolTrigramJaccard": 0.7218045112781954
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0.6190476190476191,
+            "eojeolTrigramJaccard": 0.7333333333333333
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0.6190476190476191,
+            "eojeolTrigramJaccard": 0.6861313868613139
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0.6190476190476191,
+            "eojeolTrigramJaccard": 0.7391304347826086
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0.6190476190476191,
+            "eojeolTrigramJaccard": 0.7122302158273381
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0.6190476190476191,
+            "eojeolTrigramJaccard": 0.696
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0.6190476190476191,
+            "eojeolTrigramJaccard": 0.723404255319149
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0.6190476190476191,
+            "eojeolTrigramJaccard": 0.7089552238805971
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0.6190476190476191,
+            "eojeolTrigramJaccard": 0.7202797202797203
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0.6190476190476191,
+            "eojeolTrigramJaccard": 0.7293233082706767
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0.6190476190476191,
+            "eojeolTrigramJaccard": 0.7013888888888888
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0.6190476190476191,
+            "eojeolTrigramJaccard": 0.7034482758620689
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0.6190476190476191,
+            "eojeolTrigramJaccard": 0.7205882352941176
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0.6190476190476191,
+            "eojeolTrigramJaccard": 0.6911764705882353
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0.6190476190476191,
+            "eojeolTrigramJaccard": 0.7083333333333334
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0.6190476190476191,
+            "eojeolTrigramJaccard": 0.7050359712230215
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0.6190476190476191,
+            "eojeolTrigramJaccard": 0.6857142857142857
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0.6190476190476191,
+            "eojeolTrigramJaccard": 0.7103448275862069
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0.6190476190476191,
+            "eojeolTrigramJaccard": 0.6973684210526315
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0.6190476190476191,
+            "eojeolTrigramJaccard": 0.717948717948718
+          }
+        ]
+      }
+    ],
+    "totalNearPairs": 97,
+    "progressivePrefixes": 560
+  },
+  "after": {
+    "levels": [
+      {
+        "level": 1,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.0714,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          }
+        ]
+      },
+      {
+        "level": 2,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.0417,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.041666666666666664
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          }
+        ]
+      },
+      {
+        "level": 3,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.0313,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.02857142857142857
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          }
+        ]
+      },
+      {
+        "level": 4,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.0238,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.023809523809523808
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.022727272727272728
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          }
+        ]
+      },
+      {
+        "level": 5,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.0182,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.017543859649122806
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.017543859649122806
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          }
+        ]
+      },
+      {
+        "level": 6,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.0303,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.013888888888888888
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.014084507042253521
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          }
+        ]
+      },
+      {
+        "level": 7,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.0253,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.011494252873563218
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.011764705882352941
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          }
+        ]
+      },
+      {
+        "level": 8,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.0215,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.01020408163265306
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.010416666666666666
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          }
+        ]
+      },
+      {
+        "level": 9,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.0183,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.008849557522123894
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.008547008547008548
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          }
+        ]
+      },
+      {
+        "level": 10,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.0156,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.007633587786259542
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.007462686567164179
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          }
+        ]
+      },
+      {
+        "level": 11,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.0137,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.006711409395973154
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.006622516556291391
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.005747126436781609
+          }
+        ]
+      },
+      {
+        "level": 12,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.0122,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.005988023952095809
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.005747126436781609
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.005154639175257732
+          }
+        ]
+      },
+      {
+        "level": 13,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.0165,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.0053475935828877
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.0051813471502590676
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.005050505050505051
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.004694835680751174
+          }
+        ]
+      },
+      {
+        "level": 14,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.0151,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.0048543689320388345
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.004784688995215311
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.0045871559633027525
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.009708737864077669
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.004347826086956522
+          }
+        ]
+      },
+      {
+        "level": 15,
+        "nearPairsAtTrigramThreshold065": 0,
+        "maxTrigramJaccard": 0.0136,
+        "pairedStories": [
+          {
+            "family": 1,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 2,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 3,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 4,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.0044444444444444444
+          },
+          {
+            "family": 5,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 6,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 7,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 8,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 9,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.0043859649122807015
+          },
+          {
+            "family": 10,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 11,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.00425531914893617
+          },
+          {
+            "family": 12,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 13,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 14,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 15,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 16,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.008968609865470852
+          },
+          {
+            "family": 17,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 18,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 19,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0
+          },
+          {
+            "family": 20,
+            "sentenceJaccard": 0,
+            "eojeolTrigramJaccard": 0.004016064257028112
+          }
+        ]
+      }
+    ],
+    "totalNearPairs": 0,
+    "progressivePrefixes": 560
+  },
+  "inferenceQuestions": 60,
+  "aiEditorialReview": {
+    "distinctAlternateStories": 20,
+    "newBilingualSentencePairs": 280,
+    "inferenceTemplates": 10,
+    "reusedAtLevels": [
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "review": "Checked chronology, Korean/English sentence alignment, explicit evidence and contradiction/overstatement in inference distractors. Literal option checks cannot prove semantic uniqueness; these ten templates were separately read against their full context."
+  },
+  "limitations": [
+    "All 40 stories intentionally grow through adjacent levels: prefix repetition remains.",
+    "600 entries are graded variants of 40 story families, not 600 independent stories.",
+    "Difficulty metrics do not establish CEFR/TOPIK calibration or beginner learning effectiveness.",
+    "No teacher approval or learner trial."
+  ]
+}

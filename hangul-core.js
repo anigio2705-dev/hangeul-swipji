@@ -22,9 +22,8 @@
   const records={},holds={};let current=null,run=0,release=null,manifestError=false;
   const schedule=typeof setTimeout==='function'?setTimeout:null,cancelTimer=typeof clearTimeout==='function'?clearTimeout:()=>{};
   let manifestTimer=null;
-  const request=fetch('./hangul-audio-manifest.json?v=20261027-audit');
+  const request=fetch('./hangul-audio-manifest.json?v=20261027-audit').then(r=>{if(!r.ok)throw Error('audio manifest');return r.json()});
   const ready=(schedule?Promise.race([request,new Promise((_,reject)=>{manifestTimer=schedule(()=>reject(Error('audio manifest timeout')),15000)})]):request)
-    .then(r=>{if(!r.ok)throw Error('audio manifest');return r.json()})
     .then(m=>{if(!m.recordings||typeof m.recordings!=='object')throw Error('invalid audio manifest');const human=Object.entries(m.recordings).filter(([,a])=>a.kind==='human'&&typeof a.src==='string'&&/^\.\/assets\/hangul-audio\/[\w-]+\.mp3$/.test(a.src)&&a.sourceUrl&&a.author&&a.license);Object.assign(records,Object.fromEntries(human.filter(([,a])=>!a.disabled)));Object.assign(holds,Object.fromEntries(human.filter(([,a])=>a.disabled)));document.dispatchEvent(new Event('hs-audio-ready'))})
     .catch(()=>{manifestError=true;document.dispatchEvent(new Event('hs-audio-ready'))})
     .finally(()=>{if(manifestTimer!==null)cancelTimer(manifestTimer)});
