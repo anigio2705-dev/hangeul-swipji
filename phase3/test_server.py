@@ -99,6 +99,14 @@ class PlatformTests(unittest.TestCase):
         with server.connect() as db:self.assertEqual(0,db.execute('SELECT seconds FROM attendance').fetchone()[0])
         self.clock+=60;self.action(self.learner,bid,'attendance')
         with server.connect() as db:self.assertEqual(60,db.execute('SELECT seconds FROM attendance').fetchone()[0])
+    def test_private_earnings_visible_only_to_beneficiary(self):
+        bid=self.booking();self.finish(bid)
+        self.admin.call('/api/admin/settle',{'bookingId':bid})
+        status,earned=self.teacher.call('/api/earnings');self.assertEqual(200,status);self.assertEqual(16000,earned['teacherAccrued']);self.assertFalse(earned['realPayout'])
+        outsider=self.outsider.call('/api/earnings')[1];self.assertEqual([],outsider['entries']);self.assertEqual(0,outsider['teacherAccrued'])
+        _,case=self.action(self.learner,bid,'dispute',{'category':'refund','reason':'Local test refund evidence and review'})
+        self.admin.call('/api/admin/disputes/'+case['disputeId'],{'decision':'refund','reason':'Local test reason with sufficient evidence'})
+        self.assertEqual(0,self.teacher.call('/api/earnings')[1]['teacherAccrued'])
     def test_full_30min_complete_settle_refund_and_review_exclusion(self):
         bid=self.booking();self.finish(bid)
         self.assertEqual(200,self.action(self.learner,bid,'review',{'rating':5,'text':'A test review'})[0])

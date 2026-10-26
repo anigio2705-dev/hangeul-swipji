@@ -193,6 +193,9 @@ class Handler(BaseHTTPRequestHandler):
             db.execute('DELETE FROM sessions WHERE token=?',(hashlib.sha256(cookie['hs3'].value.encode()).hexdigest(),))
             return {'ok':True},'hs3=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0'
         if method=='GET' and path=='/api/me': return {'user':public_user(u)},None
+        if method=='GET' and path=='/api/earnings':
+            entries=[dict(x) for x in db.execute("SELECT booking_id,kind,amount,created_at FROM ledger WHERE beneficiary=? AND (kind LIKE 'test_teacher_accrual%' OR kind LIKE 'test_referral_accrual%') ORDER BY id",(uid,))]
+            return {'currency':'KRW','realPayout':False,'teacherAccrued':sum(x['amount'] for x in entries if x['kind'].startswith('test_teacher_accrual')),'referralAccrued':sum(x['amount'] for x in entries if x['kind'].startswith('test_referral_accrual')),'entries':entries},None
         if method=='PUT' and path=='/api/profile':
             profile={k:text(d.get(k,u[k]),2000 if k=='qualifications' else 200) for k in ('nickname','languages','timezone','specialty','level','qualifications')}
             price=d.get('price',u['price'])

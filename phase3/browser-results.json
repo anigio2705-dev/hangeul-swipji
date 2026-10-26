@@ -1,0 +1,32 @@
+{
+  "mode": "local-test-only",
+  "checkedAt": "2026-10-26T17:49:46.770Z",
+  "browser": "Chromium134 / Playwright1.51.1",
+  "checks": [
+    "teacher UI signup",
+    "learner UI signup",
+    "partner UI signup",
+    "admin UI approval",
+    "teacher availability UI",
+    "learner UI search booking and test payment",
+    "same immutable content hash",
+    "teacher guide role separation",
+    "booked lesson UI",
+    "both users same Jitsi test room URL",
+    "homework and feedback UI persisted",
+    "UI premature completion blocked",
+    "dispute refund appeal UI",
+    "9 profitability scenarios rendered",
+    "desktop1440 mobile390 no page horizontal overflow",
+    "no JavaScript page errors",
+    "policy and runbook links resolve"
+  ],
+  "viewportWidths": [
+    1440,
+    390
+  ],
+  "errors": [],
+  "externalVideoMediaTested": false,
+  "physicalMobileTested": false,
+  "realPaymentsTested": false
+}

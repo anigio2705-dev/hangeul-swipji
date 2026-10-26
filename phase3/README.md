@@ -55,3 +55,25 @@ python phase3/server.py
 - [Supabase 운영 연동 과제](SUPABASE-INTEGRATION.md)
 
 정책 초안은 서비스 동의문이나 법률 자문으로 확정된 문서가 아닙니다. 테스트 데이터도 개인정보가 될 수 있으므로 로컬 테스트만 수행하고 필요가 끝나면 관리 절차에 따라 삭제합니다.
+
+
+## 관리자 생성과 브라우저 재검사
+
+```bash
+# 실제 개인 비밀번호 대신 이 로컬 시험 전용의 새 비밀번호를 사용합니다.
+read -s HS_PHASE3_ADMIN_PASSWORD
+export HS_PHASE3_ADMIN_PASSWORD
+python phase3/server.py --create-admin admin@example.test
+unset HS_PHASE3_ADMIN_PASSWORD
+python phase3/server.py --port 8765
+```
+
+브라우저 검사는 별도 임시 DB와 서버를 자동 생성하고, 종료 시 자기 임시 데이터만 정리합니다. 운영 DB에 접근하지 않습니다. 도구 의존성은 버전과 lockfile을 고정했습니다.
+
+```bash
+npm ci --prefix phase3 --ignore-scripts
+./phase3/node_modules/.bin/playwright install chromium
+node phase3/browser-test.cjs
+```
+
+CI에는 한글 표시 확인을 위한 Noto CJK 글꼴을 설치합니다. UI는 시스템 한글 글꼴을 사용하며 외부 폰트 CDN으로 개인정보를 전송하지 않습니다. 모바일 확인은 390px Chromium 에뮬레이션이며 실제 Android/iPhone 장치 검사와 다릅니다.
