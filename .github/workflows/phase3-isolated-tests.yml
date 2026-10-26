@@ -1,0 +1,19 @@
+name: Phase 3 isolated test platform
+on:
+  push:
+    branches: ['phase3/**']
+    paths: ['phase3/**', '.github/workflows/phase3-isolated-tests.yml']
+  pull_request:
+    paths: ['phase3/**', '.github/workflows/phase3-isolated-tests.yml']
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s phase3 -p 'test_*.py' -v
+      - run: node --check phase3/app.js
