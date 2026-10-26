@@ -1,0 +1,42 @@
+{
+  "imported": [
+    "개",
+    "게",
+    "계",
+    "과",
+    "괴",
+    "그",
+    "데",
+    "뒤",
+    "뭐",
+    "수"
+  ],
+  "pending": [
+    {
+      "text": "시",
+      "reason": "Download pending after HTTP 429; no network retry in local-only mode"
+    },
+    {
+      "text": "채",
+      "reason": "Download pending after HTTP 429; no network retry in local-only mode"
+    },
+    {
+      "text": "후",
+      "reason": "Download pending after HTTP 429; no network retry in local-only mode"
+    },
+    {
+      "text": "또",
+      "reason": "Download pending after HTTP 429; no network retry in local-only mode"
+    },
+    {
+      "text": "때",
+      "reason": "Download pending after HTTP 429; no network retry in local-only mode"
+    },
+    {
+      "text": "씨",
+      "reason": "Download pending after HTTP 429; no network retry in local-only mode"
+    }
+  ],
+  "allHeld": true,
+  "listeningApproved": 0
+}

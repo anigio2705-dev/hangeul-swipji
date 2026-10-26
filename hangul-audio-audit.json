@@ -4,16 +4,16 @@
   "note": "파일·문자 연결 검사는 실제 소리의 정확성이나 잘림 여부를 청취 승인한 것이 아닙니다. 기기 TTS는 음성이 달라 전수 품질 인증 대상이 될 수 없습니다.",
   "counts": {
     "targets": 463,
-    "available": 62,
-    "missing": 401,
-    "decodedFiles": 62,
+    "available": 72,
+    "missing": 391,
+    "decodedFiles": 72,
     "playbackAvailable": 21,
-    "humanFiles": 62,
+    "humanFiles": 72,
     "syntheticFiles": 0,
     "excludedSynthetic": 26,
-    "held": 41,
+    "held": 51,
     "listeningApproved": 0,
-    "signalWarnings": 1
+    "signalWarnings": 4
   },
   "week": {
     "targets": 63,
@@ -1325,6 +1325,223 @@
       "held": true,
       "technicalStatus": "decoded-and-hash-checked",
       "listeningStatus": "pending"
+    },
+    {
+      "text": "개",
+      "src": "./assets/hangul-audio/ac1c-20261027.mp3",
+      "duration": 2.098,
+      "peakDbfs": -7.1,
+      "rmsDbfs": -27.47,
+      "leadingSilence": 0.929,
+      "trailingSilence": 0.817,
+      "signalWarnings": [
+        "앞 무음 0.5초 초과",
+        "뒤 무음 0.8초 초과"
+      ],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched; listening-pending",
+      "stage1Candidate": false,
+      "stage2Candidate": false,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EA%B0%9C.ogg",
+      "license": "CC BY-SA 4.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "게",
+      "src": "./assets/hangul-audio/ac8c-20261027.mp3",
+      "duration": 1.815,
+      "peakDbfs": -6.86,
+      "rmsDbfs": -28.71,
+      "leadingSilence": 0.979,
+      "trailingSilence": 0.559,
+      "signalWarnings": [
+        "앞 무음 0.5초 초과"
+      ],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched; listening-pending",
+      "stage1Candidate": false,
+      "stage2Candidate": false,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EA%B2%8C.ogg",
+      "license": "CC BY-SA 4.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "계",
+      "src": "./assets/hangul-audio/acc4-20261027.mp3",
+      "duration": 1.015,
+      "peakDbfs": -8.4,
+      "rmsDbfs": -25.67,
+      "leadingSilence": 0.416,
+      "trailingSilence": 0.269,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched; listening-pending",
+      "stage1Candidate": false,
+      "stage2Candidate": false,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EA%B3%84.ogg",
+      "license": "CC BY-SA 4.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "과",
+      "src": "./assets/hangul-audio/acfc-20261027.mp3",
+      "duration": 1.434,
+      "peakDbfs": -4.44,
+      "rmsDbfs": -23.2,
+      "leadingSilence": 0.517,
+      "trailingSilence": 0.611,
+      "signalWarnings": [
+        "앞 무음 0.5초 초과"
+      ],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched; listening-pending",
+      "stage1Candidate": false,
+      "stage2Candidate": false,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EA%B3%BC.ogg",
+      "license": "CC BY-SA 4.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "괴",
+      "src": "./assets/hangul-audio/ad34-20261027.mp3",
+      "duration": 1.032,
+      "peakDbfs": -10.13,
+      "rmsDbfs": -26.95,
+      "leadingSilence": 0.372,
+      "trailingSilence": 0.343,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched; listening-pending",
+      "stage1Candidate": false,
+      "stage2Candidate": false,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EA%B4%B4.ogg",
+      "license": "CC BY-SA 4.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "그",
+      "src": "./assets/hangul-audio/adf8-20261027.mp3",
+      "duration": 1.312,
+      "peakDbfs": -12.06,
+      "rmsDbfs": -30.74,
+      "leadingSilence": 0.318,
+      "trailingSilence": 0.704,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched; listening-pending",
+      "stage1Candidate": false,
+      "stage2Candidate": false,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EA%B7%B8.ogg",
+      "license": "CC BY-SA 4.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "데",
+      "src": "./assets/hangul-audio/b370-20261027.mp3",
+      "duration": 0.959,
+      "peakDbfs": -10.42,
+      "rmsDbfs": -25.92,
+      "leadingSilence": 0.266,
+      "trailingSilence": 0.381,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched; listening-pending",
+      "stage1Candidate": false,
+      "stage2Candidate": false,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EB%8D%B0.ogg",
+      "license": "CC BY-SA 4.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "뒤",
+      "src": "./assets/hangul-audio/b4a4-20261027.mp3",
+      "duration": 1.36,
+      "peakDbfs": -12.2,
+      "rmsDbfs": -29.02,
+      "leadingSilence": 0.497,
+      "trailingSilence": 0.481,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched; listening-pending",
+      "stage1Candidate": false,
+      "stage2Candidate": false,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EB%92%A4.ogg",
+      "license": "CC BY-SA 4.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "뭐",
+      "src": "./assets/hangul-audio/bb50-20261027.mp3",
+      "duration": 1.386,
+      "peakDbfs": -4.69,
+      "rmsDbfs": -24.37,
+      "leadingSilence": 0.463,
+      "trailingSilence": 0.543,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched; listening-pending",
+      "stage1Candidate": false,
+      "stage2Candidate": false,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EB%AD%90.ogg",
+      "license": "CC BY-SA 4.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
+    },
+    {
+      "text": "수",
+      "src": "./assets/hangul-audio/c218-20261027.mp3",
+      "duration": 0.825,
+      "peakDbfs": -13.26,
+      "rmsDbfs": -28.91,
+      "leadingSilence": 0.192,
+      "trailingSilence": 0.335,
+      "signalWarnings": [],
+      "alignmentObserved": "",
+      "kind": "human",
+      "labelStatus": "source-title-matched; listening-pending",
+      "stage1Candidate": false,
+      "stage2Candidate": false,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EC%88%98.ogg",
+      "license": "CC BY-SA 4.0",
+      "held": true,
+      "technicalStatus": "decoded-and-hash-checked",
+      "listeningStatus": "pending"
     }
   ],
   "targets": [
@@ -2107,9 +2324,10 @@
       "labels": [
         "그"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/adf8-20261027.mp3"
     },
     {
       "text": "기",
@@ -2132,9 +2350,10 @@
       "labels": [
         "개"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/ac1c-20261027.mp3"
     },
     {
       "text": "걔",
@@ -2156,9 +2375,10 @@
       "labels": [
         "게"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/ac8c-20261027.mp3"
     },
     {
       "text": "계",
@@ -2168,9 +2388,10 @@
       "labels": [
         "계"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/acc4-20261027.mp3"
     },
     {
       "text": "과",
@@ -2181,9 +2402,10 @@
       "labels": [
         "과"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/acfc-20261027.mp3"
     },
     {
       "text": "괘",
@@ -2207,9 +2429,10 @@
       "labels": [
         "괴"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/ad34-20261027.mp3"
     },
     {
       "text": "궈",
@@ -2695,9 +2918,10 @@
       "labels": [
         "데"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b370-20261027.mp3"
     },
     {
       "text": "뎨",
@@ -2779,9 +3003,10 @@
       "labels": [
         "뒤"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b4a4-20261027.mp3"
     },
     {
       "text": "듸",
@@ -3267,9 +3492,10 @@
       "labels": [
         "뭐"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/bb50-20261027.mp3"
     },
     {
       "text": "뭬",
@@ -3647,9 +3873,10 @@
       "labels": [
         "수"
       ],
-      "recordingAvailable": false,
+      "recordingAvailable": true,
       "playbackAvailable": false,
-      "listeningStatus": "no-recording"
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c218-20261027.mp3"
     },
     {
       "text": "슈",

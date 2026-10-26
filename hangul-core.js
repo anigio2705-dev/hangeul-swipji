@@ -20,10 +20,14 @@
     return String.fromCharCode(0xac00+(a*21+b)*28);
   }
   const records={},holds={};let current=null,run=0,release=null,manifestError=false;
-  const ready=fetch('./hangul-audio-manifest.json?v=20261026-human-only')
+  const schedule=typeof setTimeout==='function'?setTimeout:null,cancelTimer=typeof clearTimeout==='function'?clearTimeout:()=>{};
+  let manifestTimer=null;
+  const request=fetch('./hangul-audio-manifest.json?v=20261027-audit');
+  const ready=(schedule?Promise.race([request,new Promise((_,reject)=>{manifestTimer=schedule(()=>reject(Error('audio manifest timeout')),15000)})]):request)
     .then(r=>{if(!r.ok)throw Error('audio manifest');return r.json()})
-    .then(m=>{Object.assign(records,Object.fromEntries(Object.entries(m.recordings).filter(([,a])=>!a.disabled&&a.kind!=='synthetic')));Object.assign(holds,Object.fromEntries(Object.entries(m.recordings).filter(([,a])=>a.disabled&&a.kind!=='synthetic')));document.dispatchEvent(new Event('hs-audio-ready'))})
-    .catch(()=>{manifestError=true;document.dispatchEvent(new Event('hs-audio-ready'))});
+    .then(m=>{if(!m.recordings||typeof m.recordings!=='object')throw Error('invalid audio manifest');const human=Object.entries(m.recordings).filter(([,a])=>a.kind==='human'&&typeof a.src==='string'&&/^\.\/assets\/hangul-audio\/[\w-]+\.mp3$/.test(a.src)&&a.sourceUrl&&a.author&&a.license);Object.assign(records,Object.fromEntries(human.filter(([,a])=>!a.disabled)));Object.assign(holds,Object.fromEntries(human.filter(([,a])=>a.disabled)));document.dispatchEvent(new Event('hs-audio-ready'))})
+    .catch(()=>{manifestError=true;document.dispatchEvent(new Event('hs-audio-ready'))})
+    .finally(()=>{if(manifestTimer!==null)cancelTimer(manifestTimer)});
   function status(message){
     document.querySelectorAll('[data-audio-status]').forEach(x=>x.textContent=message);
   }
@@ -37,25 +41,30 @@
     const sound=new Audio(records[word].src);current=sound;
     status('사람 녹음 재생: '+word+' · 청취 정확성 미검증 / Human recording; listening review pending');
     await new Promise((resolve,reject)=>{
-      release=resolve;
-      sound.onended=resolve;
-      sound.onerror=()=>reject(Error('녹음 파일을 재생하지 못했습니다. 다시 눌러 주세요.'));
-      sound.play().catch(()=>reject(Error('재생을 시작하지 못했습니다. 글자를 다시 눌러 주세요.')));
+      let timer=null,settled=false;
+      const finish=(error)=>{if(settled)return;settled=true;if(timer!==null)cancelTimer(timer);sound.onended=null;sound.onerror=null;if(error){sound.pause();reject(error)}else resolve()};
+      release=()=>finish();
+      if(schedule)timer=schedule(()=>finish(Error('음성 응답 시간이 초과됐습니다. 다시 눌러 주세요. / Audio timeout; try again.')),15000);
+      sound.onended=()=>finish();
+      sound.onerror=()=>finish(Error('녹음 파일을 재생하지 못했습니다. 다시 눌러 주세요.'));
+      try{Promise.resolve(sound.play()).catch(()=>finish(Error('재생을 시작하지 못했습니다. 글자를 다시 눌러 주세요.')))}catch(e){finish(Error('재생을 시작하지 못했습니다. 글자를 다시 눌러 주세요.'))}
     });
     if(token===run){current=null;release=null}
   }
   async function play(value){
     stop();const token=run;
-    await ready;if(token!==run)return;
-    if(manifestError){status('음성 목록을 불러오지 못했습니다. 연결을 확인하고 새로고침해 주세요. / Audio list unavailable; reload to retry.');return}
+    await ready;if(token!==run)return {status:'cancelled'};
+    if(manifestError){status('음성 목록을 불러오지 못했습니다. 연결을 확인하고 새로고침해 주세요. / Audio list unavailable; reload to retry.');return {status:'manifest-error'}}
     const words=Array.isArray(value)?value:[value];
+    if(!words.length||words.some(w=>typeof w!=='string'||!w.trim()))return {status:'invalid'};
     const missing=words.filter(word=>!records[word]);
-    if(missing.some(w=>holds[w])){status('재생 보류: '+missing.filter(w=>holds[w]).map(w=>w+' · '+holds[w].holdReason).join(' / '));return}
-    if(missing.length){status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요.');return}
+    if(missing.some(w=>holds[w])){status('재생 보류: '+missing.filter(w=>holds[w]).map(w=>w+' · '+holds[w].holdReason).join(' / '));return {status:'held',missing}}
+    if(missing.length){status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요.');return {status:'missing',missing}}
     try{
-      for(const word of words){if(token!==run)return;await recording(word,token)}
+      for(const word of words){if(token!==run)return {status:'cancelled'};await recording(word,token)}
       if(token===run)status('재생 완료 · 청취 정확성 미검증 / Playback ended; listening review pending.');
-    }catch(e){if(token===run){stop();status(e.message)}}
+      return {status:token===run?'played':'cancelled',words};
+    }catch(e){if(token===run){stop();status(e.message)}return {status:'error',message:e.message}}
   }
   const el=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!==undefined)x.textContent=text;return x};
   function soundButton(word,label=word){

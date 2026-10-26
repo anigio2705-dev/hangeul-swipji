@@ -11,6 +11,9 @@ on:
       - 'reading.html'
       - 'reading-curriculum.js'
       - 'hangul-core.js'
+      - 'hangul-audio-manifest.json'
+      - 'assets/hangul-audio/**'
+      - 'scripts/check-audio-runtime.cjs'
       - 'hangul-*.html'
       - 'scripts/audit-350-lessons.cjs'
       - 'scripts/check-phase2-pages.cjs'
@@ -35,6 +38,8 @@ jobs:
           node-version: '22'
       - name: Audit 350 lessons and 1758 questions
         run: node scripts/audit-350-lessons.cjs
+      - name: Verify audio failure and cancellation handling
+        run: node scripts/check-audio-runtime.cjs
       - name: Check source pairs, all reading entries and preservation
         run: node scripts/audit-phase2-content.cjs
       - name: Check page structures and navigation shells

@@ -11,7 +11,11 @@
       "change": "Converted to mono MP3; loudness normalized. Leading silence shortened by 0.45s; retained onset margin.",
       "duration": 1.332245,
       "sha256": "965da2ae69b5d91ded4f3586e1ddb66aa4b2795338ad1b05cdc04c25e980da5f",
-      "review": "signal-and-label-checked; teacher listening review pending"
+      "review": "signal-and-label-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "나": {
       "src": "./assets/hangul-audio/b098-r2.mp3",
@@ -23,7 +27,11 @@
       "change": "Converted to mono MP3; loudness normalized. Leading silence shortened by 0.28s; retained onset margin.",
       "duration": 1.018776,
       "sha256": "5db86fc855f8aaf41a72de0bdf651527c2ee83c8c9b763d2d8a187a5da954a43",
-      "review": "signal-and-label-checked; teacher listening review pending"
+      "review": "signal-and-label-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "사": {
       "src": "./assets/hangul-audio/c0ac.mp3",
@@ -35,7 +43,11 @@
       "change": "Converted to mono MP3; loudness normalized.",
       "duration": 0.705,
       "sha256": "25375405b69339344af94f72fa604a4f2b12d4c8b71b8e89ca054308110fb144",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "review": "source-transcription-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "차": {
       "src": "./assets/hangul-audio/cc28.mp3",
@@ -47,7 +59,11 @@
       "change": "Converted to mono MP3; loudness normalized.",
       "duration": 0.836,
       "sha256": "10eaf00d5ea14470b9fef93dd1bda5a2063b480b94932e628e0653f2514c8e63",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "review": "source-transcription-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "어": {
       "src": "./assets/hangul-audio/c5b4.mp3",
@@ -59,7 +75,11 @@
       "change": "Converted to mono MP3; loudness normalized.",
       "duration": 1.097,
       "sha256": "d010f659690ba8796ae211dc8157b3e8ed0f0c05c4596f5ce6c3228f4a56462f",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "review": "source-transcription-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "오": {
       "src": "./assets/hangul-audio/c624.mp3",
@@ -71,7 +91,11 @@
       "change": "Converted to mono MP3; loudness normalized.",
       "duration": 0.731,
       "sha256": "2a28207fd592601ead771fc318a801ef84cf429043ecb3c4119777e267ef828b",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "review": "source-transcription-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "거": {
       "src": "./assets/hangul-audio/ac70.mp3",
@@ -83,7 +107,11 @@
       "change": "Converted to mono MP3; loudness normalized.",
       "duration": 0.784,
       "sha256": "960ad545a2b8e3fb1af3c1510eb4ca39c99efa2f8841b17c3fd7288cdbfc6745",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "review": "source-transcription-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "너": {
       "src": "./assets/hangul-audio/b108.mp3",
@@ -95,7 +123,11 @@
       "change": "Converted to mono MP3; loudness normalized.",
       "duration": 0.705,
       "sha256": "2249653697e0d1ca975840ca2a5137c67d7f8fc4a81e10236281d793339e282b",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "review": "source-transcription-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "애": {
       "src": "./assets/hangul-audio/c560.mp3",
@@ -109,7 +141,11 @@
       "sha256": "79321098cb1076bb072fde6456901b740019e5ea655d08f8a3c742ceb987e545",
       "review": "source-transcription-checked; teacher listening review pending",
       "disabled": true,
-      "holdReason": "파일 끝 여백 부족: 잘림 여부를 청취 확인할 때까지 재생 보류"
+      "holdReason": "파일 끝 여백 부족: 잘림 여부를 청취 확인할 때까지 재생 보류",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "에": {
       "src": "./assets/hangul-audio/c5d0.mp3",
@@ -121,7 +157,11 @@
       "change": "Converted to mono MP3; loudness normalized.",
       "duration": 1.097,
       "sha256": "1155c0e3897a23643965ec636c1e49391ed6fae15bf40eaaeeb1f9ea71860dff",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "review": "source-transcription-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "왜": {
       "src": "./assets/hangul-audio/c65c.mp3",
@@ -133,7 +173,11 @@
       "change": "Converted to mono MP3; loudness normalized.",
       "duration": 0.914,
       "sha256": "3398661b0a3fd71865e17d5d8941fbbf459df966c77b0a39300e5b17d7e7f283",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "review": "source-transcription-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "외": {
       "src": "./assets/hangul-audio/c678.mp3",
@@ -145,7 +189,11 @@
       "change": "Converted to mono MP3; loudness normalized.",
       "duration": 1.358,
       "sha256": "361fc1647e53eacd8d7f677acce44289309104a65126f6765042b17a1e11bd0f",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "review": "source-transcription-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "위": {
       "src": "./assets/hangul-audio/c704.mp3",
@@ -157,7 +205,11 @@
       "change": "Converted to mono MP3; loudness normalized.",
       "duration": 1.097,
       "sha256": "668823ef795e184d0cdcd5e00790d68f68a3b7f2965390ab78a8b4dbf8a2a8c7",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "review": "source-transcription-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "이": {
       "src": "./assets/hangul-audio/c774.mp3",
@@ -169,7 +221,11 @@
       "change": "Converted to mono MP3; loudness normalized.",
       "duration": 0.679,
       "sha256": "2be3886b335bb2a1da0475779ef261630137456525a27b93f6dcc772fa6d4511",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "review": "source-transcription-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "예": {
       "src": "./assets/hangul-audio/c608.mp3",
@@ -181,7 +237,11 @@
       "change": "Converted to mono MP3; loudness normalized.",
       "duration": 0.731,
       "sha256": "0ec0e855481e9943c2fac3a6c899fb20be257b875957db6ae1a1d8e744d808eb",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "review": "source-transcription-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "와": {
       "src": "./assets/hangul-audio/c640.mp3",
@@ -193,7 +253,11 @@
       "change": "Converted to mono MP3; loudness normalized.",
       "duration": 0.758,
       "sha256": "c30f98328acdc182682edbe2f8345258e386bd664e7f6f26693a743820f9ea68",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "review": "source-transcription-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "더": {
       "src": "./assets/hangul-audio/b354.mp3",
@@ -205,7 +269,11 @@
       "change": "Converted to mono MP3; loudness normalized.",
       "duration": 0.653,
       "sha256": "59455179afa932300d3ac1adb2e341bb6c95e9b8bc09874df917abd267b2219b",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "review": "source-transcription-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "저": {
       "src": "./assets/hangul-audio/c800.mp3",
@@ -217,7 +285,11 @@
       "change": "Converted to mono MP3; loudness normalized.",
       "duration": 0.784,
       "sha256": "b5bf2bf6cca11c0f4adf140620f8c79e6d6dbc95f6e0c900fe7ea85ff9c9a1cb",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "review": "source-transcription-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "두": {
       "src": "./assets/hangul-audio/b450.mp3",
@@ -229,7 +301,11 @@
       "change": "Converted to mono MP3; loudness normalized.",
       "duration": 1.097,
       "sha256": "8cf3cd04bda4dbec3081c8e72084d10dbfdc35e29a4c7e1eb92e80926fad707c",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "review": "source-transcription-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "소": {
       "src": "./assets/hangul-audio/c18c.mp3",
@@ -241,7 +317,11 @@
       "change": "Converted to mono MP3; loudness normalized.",
       "duration": 0.705,
       "sha256": "8adbc2e3c1e60d8b7fcd64d8d32dd0a0bab34652769c2ba725c5e8212673707b",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "review": "source-transcription-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "집": {
       "src": "./assets/hangul-audio/c9d1.mp3",
@@ -253,7 +333,11 @@
       "change": "Converted to mono MP3; loudness normalized.",
       "duration": 1.019,
       "sha256": "c5360e4b83ce1ed9024a55865dd51ee5a0689ee9645a49098234bb0e97b1102b",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "review": "source-transcription-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "책": {
       "src": "./assets/hangul-audio/cc45.mp3",
@@ -265,7 +349,11 @@
       "change": "Converted to mono MP3; loudness normalized.",
       "duration": 1.28,
       "sha256": "9d139452979c4d4275b7c8dae7e0ff7696411472c07e2aa3b258b1dd7fcd4e9b",
-      "review": "source-transcription-checked; teacher listening review pending"
+      "review": "source-transcription-checked; teacher listening review pending",
+      "kind": "human",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "아": {
       "sourceTitle": "File:Ko-아.ogg",
@@ -282,7 +370,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "야": {
       "sourceTitle": "File:Korean vowels.ogg",
@@ -305,7 +396,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "여": {
       "sourceTitle": "File:Korean vowels.ogg",
@@ -328,7 +422,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "요": {
       "sourceTitle": "File:Korean vowels.ogg",
@@ -351,7 +448,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "우": {
       "sourceTitle": "File:Korean vowels.ogg",
@@ -374,7 +474,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "유": {
       "sourceTitle": "File:Korean vowels.ogg",
@@ -397,7 +500,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "으": {
       "sourceTitle": "File:Korean vowels.ogg",
@@ -420,7 +526,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "구": {
       "sourceTitle": "File:LL-Q9176 (kor)-호로조-구.wav",
@@ -437,7 +546,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "다": {
       "sourceTitle": "File:Ko-다.ogg",
@@ -454,7 +566,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "아이": {
       "sourceTitle": "File:Ko-아이.ogg",
@@ -471,7 +586,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "오이": {
       "sourceTitle": "File:LL-Q9176 (kor)-호로조-오이.wav",
@@ -488,7 +606,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "우유": {
       "sourceTitle": "File:LL-Q9176 (kor)-호로조-우유.wav",
@@ -505,7 +626,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "나무": {
       "sourceTitle": "File:LL-Q9176 (kor)-호로조-나무.wav",
@@ -522,7 +646,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "바다": {
       "sourceTitle": "File:LL-Q9176 (kor)-호로조-바다.wav",
@@ -539,7 +666,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "아기": {
       "sourceTitle": "File:LL-Q9176 (kor)-CHK2605-아기.wav",
@@ -556,7 +686,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "바나나": {
       "sourceTitle": "File:LL-Q9176 (kor)-호로조-바나나.wav",
@@ -573,7 +706,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "나비": {
       "sourceTitle": "File:LL-Q9176 (kor)-호로조-나비.wav",
@@ -590,7 +726,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "모자": {
       "sourceTitle": "File:LL-Q9176 (kor)-CHK2605-모자.wav",
@@ -607,7 +746,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "산": {
       "sourceTitle": "File:LL-Q9176 (kor)-Diahasy-산.wav",
@@ -624,7 +766,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "문": {
       "sourceTitle": "File:LL-Q9176 (kor)-호로조-문.wav",
@@ -641,7 +786,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "손": {
       "sourceTitle": "File:LL-Q9176 (kor)-호로조-손.wav",
@@ -658,7 +806,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "밤": {
       "sourceTitle": "File:LL-Q9176 (kor)-호로조-밤.wav",
@@ -675,7 +826,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "곰": {
       "sourceTitle": "File:LL-Q9176 (kor)-호로조-곰.wav",
@@ -692,7 +846,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "공": {
       "sourceTitle": "File:Ko-공.ogg",
@@ -709,7 +866,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "달": {
       "sourceTitle": "File:Ko-달.ogg",
@@ -726,7 +886,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "물": {
       "sourceTitle": "File:Ko-물.ogg",
@@ -743,7 +906,10 @@
       "review": "step1-file-prepared; step2-listening-review-pending",
       "disabled": true,
       "holdReason": "1단계 확보 · 2단계 청취 검수 전인 후보 음원",
-      "stage1Candidate": true
+      "stage1Candidate": true,
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "기역": {
       "src": "./assets/hangul-audio/ae30-c5ed-human-name.mp3",
@@ -768,7 +934,10 @@
       "disabled": true,
       "holdReason": "실제 사람의 연속 녹음에서 분리한 후보 · 자음 이름 대응과 잘림 청취 확인 필요",
       "stage2Candidate": true,
-      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice."
+      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice.",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "니은": {
       "src": "./assets/hangul-audio/b2c8-c740-human-name.mp3",
@@ -793,7 +962,10 @@
       "disabled": true,
       "holdReason": "실제 사람의 연속 녹음에서 분리한 후보 · 자음 이름 대응과 잘림 청취 확인 필요",
       "stage2Candidate": true,
-      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice."
+      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice.",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "디귿": {
       "src": "./assets/hangul-audio/b514-adff-human-name.mp3",
@@ -818,7 +990,10 @@
       "disabled": true,
       "holdReason": "실제 사람의 연속 녹음에서 분리한 후보 · 자음 이름 대응과 잘림 청취 확인 필요",
       "stage2Candidate": true,
-      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice."
+      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice.",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "리을": {
       "src": "./assets/hangul-audio/b9ac-c744-human-name.mp3",
@@ -843,7 +1018,10 @@
       "disabled": true,
       "holdReason": "실제 사람의 연속 녹음에서 분리한 후보 · 자음 이름 대응과 잘림 청취 확인 필요",
       "stage2Candidate": true,
-      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice."
+      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice.",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "미음": {
       "src": "./assets/hangul-audio/bbf8-c74c-human-name.mp3",
@@ -868,7 +1046,10 @@
       "disabled": true,
       "holdReason": "실제 사람의 연속 녹음에서 분리한 후보 · 자음 이름 대응과 잘림 청취 확인 필요",
       "stage2Candidate": true,
-      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice."
+      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice.",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "비읍": {
       "src": "./assets/hangul-audio/be44-c74d-human-name.mp3",
@@ -893,7 +1074,10 @@
       "disabled": true,
       "holdReason": "실제 사람의 연속 녹음에서 분리한 후보 · 자음 이름 대응과 잘림 청취 확인 필요",
       "stage2Candidate": true,
-      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice."
+      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice.",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "시옷": {
       "src": "./assets/hangul-audio/c2dc-c637-human-name.mp3",
@@ -918,7 +1102,10 @@
       "disabled": true,
       "holdReason": "실제 사람의 연속 녹음에서 분리한 후보 · 자음 이름 대응과 잘림 청취 확인 필요",
       "stage2Candidate": true,
-      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice."
+      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice.",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "이응": {
       "src": "./assets/hangul-audio/c774-c751-human-name.mp3",
@@ -943,7 +1130,10 @@
       "disabled": true,
       "holdReason": "실제 사람의 연속 녹음에서 분리한 후보 · 자음 이름 대응과 잘림 청취 확인 필요",
       "stage2Candidate": true,
-      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice."
+      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice.",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "지읒": {
       "src": "./assets/hangul-audio/c9c0-c752-human-name.mp3",
@@ -968,7 +1158,10 @@
       "disabled": true,
       "holdReason": "실제 사람의 연속 녹음에서 분리한 후보 · 자음 이름 대응과 잘림 청취 확인 필요",
       "stage2Candidate": true,
-      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice."
+      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice.",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "치읓": {
       "src": "./assets/hangul-audio/ce58-c753-human-name.mp3",
@@ -993,7 +1186,10 @@
       "disabled": true,
       "holdReason": "실제 사람의 연속 녹음에서 분리한 후보 · 자음 이름 대응과 잘림 청취 확인 필요",
       "stage2Candidate": true,
-      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice."
+      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice.",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "키읔": {
       "src": "./assets/hangul-audio/d0a4-c754-human-name.mp3",
@@ -1018,7 +1214,10 @@
       "disabled": true,
       "holdReason": "실제 사람의 연속 녹음에서 분리한 후보 · 자음 이름 대응과 잘림 청취 확인 필요",
       "stage2Candidate": true,
-      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice."
+      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice.",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "티읕": {
       "src": "./assets/hangul-audio/d2f0-c755-human-name.mp3",
@@ -1043,7 +1242,10 @@
       "disabled": true,
       "holdReason": "실제 사람의 연속 녹음에서 분리한 후보 · 자음 이름 대응과 잘림 청취 확인 필요",
       "stage2Candidate": true,
-      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice."
+      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice.",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "피읖": {
       "src": "./assets/hangul-audio/d53c-c756-human-name.mp3",
@@ -1068,7 +1270,10 @@
       "disabled": true,
       "holdReason": "실제 사람의 연속 녹음에서 분리한 후보 · 자음 이름 대응과 잘림 청취 확인 필요",
       "stage2Candidate": true,
-      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice."
+      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice.",
+      "listeningReview": {
+        "status": "pending"
+      }
     },
     "히읗": {
       "src": "./assets/hangul-audio/d788-c757-human-name.mp3",
@@ -1093,7 +1298,200 @@
       "disabled": true,
       "holdReason": "실제 사람의 연속 녹음에서 분리한 후보 · 자음 이름 대응과 잘림 청취 확인 필요",
       "stage2Candidate": true,
-      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice."
+      "change": "Extracted provisional ordered segment, 60Hz high-pass, loudness normalized, mono MP3, 120ms end padding. No synthesized voice.",
+      "listeningReview": {
+        "status": "pending"
+      }
+    },
+    "개": {
+      "kind": "human",
+      "src": "./assets/hangul-audio/ac1c-20261027.mp3",
+      "sourceTitle": "File:Ko-개.ogg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EA%B0%9C.ogg",
+      "author": "HappyMidnight",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "duration": 2.142041,
+      "sha256": "c10e85a84c69fe1eef1a179a07d358793b3ccf352b626c294e0300e212c9a818",
+      "change": "Converted complete source recording to mono MP3; no clipping, splicing, synthesis or listening approval.",
+      "labelStatus": "source-title-matched; listening-pending",
+      "review": "source metadata and decoding checked; teacher listening pending",
+      "disabled": true,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "listeningReview": {
+        "status": "pending"
+      }
+    },
+    "게": {
+      "kind": "human",
+      "src": "./assets/hangul-audio/ac8c-20261027.mp3",
+      "sourceTitle": "File:Ko-게.ogg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EA%B2%8C.ogg",
+      "author": "HappyMidnight",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "duration": 1.854694,
+      "sha256": "4fcd85786b7bb329ccf8b8eb5b845095a3e159eba797e0d7c739977491bff3cf",
+      "change": "Converted complete source recording to mono MP3; no clipping, splicing, synthesis or listening approval.",
+      "labelStatus": "source-title-matched; listening-pending",
+      "review": "source metadata and decoding checked; teacher listening pending",
+      "disabled": true,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "listeningReview": {
+        "status": "pending"
+      }
+    },
+    "계": {
+      "kind": "human",
+      "src": "./assets/hangul-audio/acc4-20261027.mp3",
+      "sourceTitle": "File:Ko-계.ogg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EA%B3%84.ogg",
+      "author": "HappyMidnight",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "duration": 1.044898,
+      "sha256": "946ed7301a5a39d486c783151fa9ad20f4c81d83a401c70da01bf15e66c410fa",
+      "change": "Converted complete source recording to mono MP3; no clipping, splicing, synthesis or listening approval.",
+      "labelStatus": "source-title-matched; listening-pending",
+      "review": "source metadata and decoding checked; teacher listening pending",
+      "disabled": true,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "listeningReview": {
+        "status": "pending"
+      }
+    },
+    "과": {
+      "kind": "human",
+      "src": "./assets/hangul-audio/acfc-20261027.mp3",
+      "sourceTitle": "File:Ko-과.ogg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EA%B3%BC.ogg",
+      "author": "HappyMidnight",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "duration": 1.462857,
+      "sha256": "b37dad2e446e47bc3226430c669ec4155d218147f9431585c6e07e02cc9dd1f6",
+      "change": "Converted complete source recording to mono MP3; no clipping, splicing, synthesis or listening approval.",
+      "labelStatus": "source-title-matched; listening-pending",
+      "review": "source metadata and decoding checked; teacher listening pending",
+      "disabled": true,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "listeningReview": {
+        "status": "pending"
+      }
+    },
+    "괴": {
+      "kind": "human",
+      "src": "./assets/hangul-audio/ad34-20261027.mp3",
+      "sourceTitle": "File:Ko-괴.ogg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EA%B4%B4.ogg",
+      "author": "HappyMidnight",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "duration": 1.07102,
+      "sha256": "c064a99e683c1e62c1718820f3a87265c90dad4b1e8c547c6eb61d21dddcf55b",
+      "change": "Converted complete source recording to mono MP3; no clipping, splicing, synthesis or listening approval.",
+      "labelStatus": "source-title-matched; listening-pending",
+      "review": "source metadata and decoding checked; teacher listening pending",
+      "disabled": true,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "listeningReview": {
+        "status": "pending"
+      }
+    },
+    "그": {
+      "kind": "human",
+      "src": "./assets/hangul-audio/adf8-20261027.mp3",
+      "sourceTitle": "File:Ko-그.ogg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EA%B7%B8.ogg",
+      "author": "HappyMidnight",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "duration": 1.358367,
+      "sha256": "93eee2d3292929300bca9c22a283f309c7d11cfe49285440617acfba788a7c86",
+      "change": "Converted complete source recording to mono MP3; no clipping, splicing, synthesis or listening approval.",
+      "labelStatus": "source-title-matched; listening-pending",
+      "review": "source metadata and decoding checked; teacher listening pending",
+      "disabled": true,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "listeningReview": {
+        "status": "pending"
+      }
+    },
+    "데": {
+      "kind": "human",
+      "src": "./assets/hangul-audio/b370-20261027.mp3",
+      "sourceTitle": "File:Ko-데.ogg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EB%8D%B0.ogg",
+      "author": "HappyMidnight",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "duration": 0.992653,
+      "sha256": "53f683ddfcde3d8a9787ed1b550c7388b72e600e781a73e7c2f7aa692c8cf162",
+      "change": "Converted complete source recording to mono MP3; no clipping, splicing, synthesis or listening approval.",
+      "labelStatus": "source-title-matched; listening-pending",
+      "review": "source metadata and decoding checked; teacher listening pending",
+      "disabled": true,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "listeningReview": {
+        "status": "pending"
+      }
+    },
+    "뒤": {
+      "kind": "human",
+      "src": "./assets/hangul-audio/b4a4-20261027.mp3",
+      "sourceTitle": "File:Ko-뒤.ogg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EB%92%A4.ogg",
+      "author": "HappyMidnight",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "duration": 1.410612,
+      "sha256": "01356a7f6c08c7665c1b9ecdaf730c9cc16654dfcdfd07c9a57c383872bf10a2",
+      "change": "Converted complete source recording to mono MP3; no clipping, splicing, synthesis or listening approval.",
+      "labelStatus": "source-title-matched; listening-pending",
+      "review": "source metadata and decoding checked; teacher listening pending",
+      "disabled": true,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "listeningReview": {
+        "status": "pending"
+      }
+    },
+    "뭐": {
+      "kind": "human",
+      "src": "./assets/hangul-audio/bb50-20261027.mp3",
+      "sourceTitle": "File:Ko-뭐.ogg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EB%AD%90.ogg",
+      "author": "HappyMidnight",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "duration": 1.436735,
+      "sha256": "8f7e9b6a97826ad3a9cb30fab8bb4415f9a578a8b2ca7e7a69424ef98b878ca1",
+      "change": "Converted complete source recording to mono MP3; no clipping, splicing, synthesis or listening approval.",
+      "labelStatus": "source-title-matched; listening-pending",
+      "review": "source metadata and decoding checked; teacher listening pending",
+      "disabled": true,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "listeningReview": {
+        "status": "pending"
+      }
+    },
+    "수": {
+      "kind": "human",
+      "src": "./assets/hangul-audio/c218-20261027.mp3",
+      "sourceTitle": "File:Ko-수.ogg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ko-%EC%88%98.ogg",
+      "author": "HappyMidnight",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "duration": 0.862041,
+      "sha256": "491b1e388a00df52ff8e52b34a8649b952039bcf487773da779428c4ac894b88",
+      "change": "Converted complete source recording to mono MP3; no clipping, splicing, synthesis or listening approval.",
+      "labelStatus": "source-title-matched; listening-pending",
+      "review": "source metadata and decoding checked; teacher listening pending",
+      "disabled": true,
+      "holdReason": "추가 확보한 사람 녹음 후보 · 교사 청취 검수 전",
+      "listeningReview": {
+        "status": "pending"
+      }
     }
   },
   "retiredSynthetic": {
