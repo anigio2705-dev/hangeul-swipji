@@ -423,6 +423,45 @@ main.shell{padding-top:10px!important}
 .card p,.creator p{font-size:12px!important;line-height:1.55!important}
 }
 @media(max-width:360px){header .shell{padding-left:10px!important;padding-right:10px!important}header .top{gap:7px!important}header .brand strong{font-size:17px!important}header .lang{max-width:118px!important;font-size:11px!important}header .search button{min-width:60px!important;padding:0 9px!important}}
+</style><style id="editorial-redesign-v2">
+/* Full structural redesign: editorial landing, not a reskin of the former hero */
+body{background:#f6f2e9!important;color:#202b2b}
+header{background:#f6f2e9!important;box-shadow:none!important;border-bottom:1px solid #d6d0c2!important}
+.notice{background:#183b35!important}
+.brandmark{background:#a73e42!important;border-radius:50%!important}
+.primary,.search button{background:#183b35!important}
+main.shell{max-width:100%!important;padding:0!important}
+main>.hero-rebuilt{display:none!important}
+.editorial-landing{position:relative;min-height:760px;display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);background:#172f2c;color:#fff;overflow:hidden}
+.editorial-image{position:relative;min-height:760px;background:#273e3b url('./assets/gyeongbokgung-hanbok-spring.jpg') center/cover no-repeat}
+.editorial-image:after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(16,38,36,.65),transparent 65%)}
+.editorial-image-label{position:absolute;bottom:44px;left:7%;z-index:1;font-size:12px;letter-spacing:.25em;color:#fff9}
+.editorial-content{padding:90px clamp(28px,5vw,100px) 65px;display:flex;flex-direction:column;justify-content:center;position:relative}
+.editorial-content:before{content:'한';position:absolute;right:-40px;top:-100px;font-family:serif;font-size:440px;opacity:.045;pointer-events:none}
+.editorial-kicker{color:#e8b87c;font-size:12px;letter-spacing:.27em;font-weight:800}
+.editorial-content h1{font-family:Georgia,'Noto Serif KR',serif;font-weight:600;font-size:clamp(54px,6vw,100px);letter-spacing:-.07em;line-height:1.12;margin:30px 0}
+.editorial-content h1 em{font-style:normal;color:#e8b87c}
+.editorial-content p{font-size:17px;line-height:1.9;color:#e5e9df;max-width:530px}
+.editorial-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:38px}
+.editorial-ctas a{padding:17px 26px;font-weight:800;border:1px solid #d4b789;color:white}
+.editorial-ctas a:first-child{background:#e8b87c;color:#17342e;border-color:#e8b87c}
+.editorial-steps{margin-top:65px;padding-top:24px;border-top:1px solid #ffffff40;display:flex;gap:28px;flex-wrap:wrap;color:#e9dfcf;font-size:13px}
+.editorial-steps strong{color:#e8b87c;margin-right:7px}
+.editorial-directory{padding:100px max(28px,calc((100vw - 1220px)/2));background:#f6f2e9}
+.editorial-directory .directory-head{display:flex;justify-content:space-between;gap:25px;align-items:end;margin-bottom:36px}
+.editorial-directory h2{font-family:Georgia,'Noto Serif KR',serif;font-size:clamp(32px,4vw,58px);font-weight:600;line-height:1.2;margin:10px 0;color:#203b35}
+.editorial-directory .overline{font-size:12px;color:#a04d44;letter-spacing:.2em;font-weight:900}
+.editorial-directory p{color:#6a7069;line-height:1.8}
+.directory-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.directory-grid a{min-height:285px;padding:29px;display:flex;flex-direction:column;justify-content:space-between;border:1px solid #d6d0c2;background:#fffdf8;transition:transform .2s,background .2s}
+.directory-grid a:hover{transform:translateY(-5px);background:#f2e5cf}
+.directory-grid a:nth-child(2){background:#dfe9e4}.directory-grid a:nth-child(3){background:#eee0d7}
+.directory-grid .num{font-size:13px;color:#a04d44;font-weight:800;letter-spacing:.15em}
+.directory-grid h3{font-family:Georgia,'Noto Serif KR',serif;font-size:31px;color:#203b35;margin:0 0 10px}
+.directory-grid p{margin:0;font-size:14px}.directory-grid .go{font-size:13px;font-weight:900;color:#203b35}
+main>.cinema-section,main>.speak-spotlight,main>.reallife-feature,main>.sectionhead,main>.portal-grid,main>.journey-banner,main>.reading-feature,main>.feature-grid,main>.placement-banner,main>.academy-section{max-width:1188px;margin-left:auto!important;margin-right:auto!important}
+main>.cinema-section{margin-top:25px!important}
+@media(max-width:850px){.editorial-landing{grid-template-columns:1fr}.editorial-image{min-height:330px;order:-1}.editorial-content{padding:55px 26px 65px}.editorial-content h1{font-size:56px}.editorial-steps{margin-top:38px}.editorial-directory{padding:60px 22px}.directory-grid{grid-template-columns:1fr}.directory-grid a{min-height:220px}.editorial-directory .directory-head{display:block}}
 </style></head>
 <body>
 <div class="notice" id="notice"></div>
@@ -432,7 +471,26 @@ main.shell{padding-top:10px!important}
 <a href="./guide.html" class="guide-toplink" id="guideTopLink">처음 오셨나요? 학습 안내 →</a><select class="lang" id="language" aria-label="Select language"><option value="ko">🇰🇷 한국어</option><option value="en">🇺🇸 English</option><option value="es">🇪🇸 Español</option><option value="fr">🇫🇷 Français</option><option value="zh-CN">🇨🇳 简体中文</option><option value="zh-TW">🇹🇼 繁體中文</option><option value="ja">🇯🇵 日本語</option><option value="mn">🇲🇳 Монгол</option><option value="vi">🇻🇳 Tiếng Việt</option></select>
 <button class="primary" id="topSeller"></button></div>
 <div class="nav" id="nav"></div><a class="academy-quick" id="academyQuick" href="./learn.html">📚 한국어 학습관 바로가기 →</a></div></header>
-<main class="shell">
+<main class="shell"><section class="editorial-landing" aria-label="한글쉽지 새 메인 화면">
+<div class="editorial-content">
+<div class="editorial-kicker">HANGEUL SWIPJI · YOUR KOREAN JOURNEY</div>
+<h1>한국어에서<br><em>한국의 삶</em>으로.</h1>
+<p>한글을 처음 배우는 순간부터 한국 사람과 나누는 진짜 대화까지. 배우고, 보고, 이야기하고, 한국을 경험하는 하나의 공간.</p>
+<div class="editorial-ctas"><a href="./learn.html">한국어 무료로 시작하기 ↗</a><a href="./live.html#partners">한국인과 대화하기 ↗</a></div>
+<div class="editorial-steps"><span><strong>01</strong> LEARN</span><span><strong>02</strong> WATCH</span><span><strong>03</strong> SPEAK</span><span><strong>04</strong> CREATE</span></div>
+</div>
+<div class="editorial-image"><span class="editorial-image-label">DISCOVER THE LANGUAGE · LIVE THE CULTURE</span></div>
+</section>
+<section class="editorial-directory" aria-label="학습과 콘텐츠 바로가기">
+<div class="directory-head"><div><span class="overline">CHOOSE YOUR PATH</span><h2>당신의 한국어 여행은<br>어디에서 시작되나요?</h2></div><p>기초 학습부터 한국 문화, 실제 대화까지<br>원하는 길을 선택해 보세요.</p></div>
+<div class="directory-grid">
+<a href="./learn.html"><span class="num">01 / LEARN</span><div><h3>한국어 배우기</h3><p>350개 학습 단원으로 기초부터 고급까지.</p></div><span class="go">학습관 바로가기 ↗</span></a>
+<a href="./reading.html"><span class="num">02 / READ</span><div><h3>읽으며 성장하기</h3><p>15단계 리딩으로 문장과 이야기를 익히세요.</p></div><span class="go">리딩 시작하기 ↗</span></a>
+<a href="./live.html#partners"><span class="num">03 / SPEAK</span><div><h3>한국인과 이야기하기</h3><p>실제 한국인과의 대화를 준비하고 연결해 보세요.</p></div><span class="go">대화 공간 살펴보기 ↗</span></a>
+<a href="./drama.html"><span class="num">04 / WATCH</span><div><h3>K-드라마</h3><p>드라마 속 표현과 한국어를 만나보세요.</p></div><span class="go">드라마 살펴보기 ↗</span></a>
+<a href="./culture.html"><span class="num">05 / CULTURE</span><div><h3>한국 문화</h3><p>음식, 여행, 생활과 한국의 매력을 탐험하세요.</p></div><span class="go">한국 문화 보기 ↗</span></a>
+<a href="./market.html"><span class="num">06 / CREATE</span><div><h3>크리에이터 마켓</h3><p>한국어와 한국 문화 콘텐츠를 소개하는 공간.</p></div><span class="go">마켓 살펴보기 ↗</span></a>
+</div></section>
 <section class="hero hero-rebuilt" aria-label="한글쉽지 첫 화면">
 <div class="hero-video-wall" aria-hidden="true" style="position:absolute;inset:0;overflow:hidden;z-index:-1;background:#243a42"><img src="./assets/gyeongbokgung-hanbok-spring.jpg?photo=9b630ce" alt="" decoding="async" fetchpriority="high" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 45%;display:block;max-width:none;filter:saturate(1.12) brightness(1.08)"><div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,22,38,.4),rgba(7,22,38,.02) 80%);pointer-events:none"></div></div>
 <div class="hero-rebuilt-inner">
