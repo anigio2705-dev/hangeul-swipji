@@ -9,11 +9,16 @@ on:
       - 'advanced*.html'
       - 'learn.html'
       - 'reading.html'
+      - 'reading-curriculum.js'
+      - 'hangul-core.js'
       - 'hangul-*.html'
       - 'scripts/audit-350-lessons.cjs'
       - 'scripts/check-phase2-pages.cjs'
       - 'scripts/browser-smoke-phase2.cjs'
       - 'scripts/browser-audit-reading-600.cjs'
+      - 'scripts/audit-phase2-content.cjs'
+      - 'scripts/curriculum-source.cjs'
+      - 'scripts/browser-audit-lessons.cjs'
       - '.github/workflows/phase2-validation.yml'
   workflow_dispatch:
 jobs:
@@ -23,11 +28,15 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - name: Audit 350 lessons and 1758 questions
         run: node scripts/audit-350-lessons.cjs
+      - name: Check source pairs, all reading entries and preservation
+        run: node scripts/audit-phase2-content.cjs
       - name: Check page structures and navigation shells
         run: node scripts/check-phase2-pages.cjs
       - name: Verify original curriculum and 7-day materials
@@ -40,10 +49,14 @@ jobs:
         run: node scripts/browser-smoke-phase2.cjs
       - name: Audit all 600 reading entries and quizzes in Chromium
         run: node scripts/browser-audit-reading-600.cjs
+      - name: Render every course unit in Korean and English
+        run: node scripts/browser-audit-lessons.cjs
       - name: Upload audit report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: phase2-lesson-audit
-          path: phase2-lesson-audit.json
+          path: |
+            phase2-lesson-audit.json
+            audit/*.json
           if-no-files-found: ignore
