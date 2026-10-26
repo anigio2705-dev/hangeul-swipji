@@ -1,0 +1,28 @@
+name: Phase 1 seven-day curriculum checks
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'hangul-week*'
+      - 'hangul-audio-manifest.json'
+      - 'assets/hangul-audio/**'
+      - 'scripts/check-week-*.cjs'
+      - 'scripts/check-foundations.cjs'
+      - '.github/workflows/phase1-validation.yml'
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify all foundations and preserve 350 lessons
+        run: node scripts/check-foundations.cjs
+      - name: Verify human-only audio mapping
+        run: node scripts/check-week-human-audio.cjs
+      - name: Verify all seven days and forty answer keys
+        run: node scripts/check-week-learning-simulation.cjs
