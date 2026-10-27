@@ -13,6 +13,7 @@ import time
 from urllib.parse import urlsplit
 
 import server
+import instant_matching
 
 GATE_COOKIE = 'hs_staging_gate'
 GATE_TTL = 8 * 60 * 60
@@ -175,6 +176,8 @@ class StagingHandler(server.Handler):
         super().static(path)
 
     def route(self, db, path, data, query):
+        if path.startswith('/api/instant/'):
+            return instant_matching.route(self, db, path, data)
         if path.startswith(('/api/auth/', '/api/payments/')):
             raise server.Error('이 테스트 서버는 외부 인증·결제를 연결하지 않습니다', 403)
         if path == '/api/register' and not re.fullmatch(r'[^\s@]+@[^\s@]+\.test', str(data.get('email', '')), re.I):
@@ -202,6 +205,8 @@ def prepare_database(settings):
     settings.db_path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
     server.DB_PATH = str(settings.db_path)
     server.init_db()
+    with server.connect() as db:
+        instant_matching.initialize(db)
     with server.connect() as db:
         admins = list(db.execute("SELECT email FROM users WHERE role='admin'"))
         if admins and [r['email'] for r in admins] != ['admin@example.test']:

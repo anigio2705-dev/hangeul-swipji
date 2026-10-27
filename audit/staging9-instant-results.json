@@ -1,13 +1,16 @@
 {
-  "checkedAt": "2026-10-27T14:14:51.462Z",
-  "mode": "local-https-instant-page-only",
+  "checkedAt": "2026-10-27T22:28:50.471Z",
+  "mode": "local-https-instant-auto-matching",
   "checks": [
-    "original homepage CTA opens instant page without booking or camera auto-start",
-    "explicit iframe start sends no gate credentials or referrer to mocked Jitsi",
-    "two independent browser contexts share one invitation room (not physical devices)",
+    "home CTA uses current account; no booking, signup or automatic camera",
+    "no partner shows waiting rather than a false connection",
+    "existing test account can sign in on the instant page",
+    "two opt-in users automatically matched without an invitation link",
+    "room withheld until both people confirm",
+    "both account contexts open identical mocked Jitsi room without gate credentials",
     "mobile390 has no horizontal overflow",
-    "end removes iframe; restart preserves invitation room",
-    "invalid room replaced by new random room",
+    "end removes both frames and does not silently requeue",
+    "unanswered offer and stale presence expire",
     "booked class remains separately reachable"
   ],
   "errors": [],

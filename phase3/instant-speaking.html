@@ -12,57 +12,64 @@
 <header><strong>한글쉽지 · LIVE</strong><a href="/index.html">홈페이지</a><a href="/index.html#teaching-platform">예약한 강사 수업</a></header>
 <main>
 <h1>한국인과 즉시 화상대화</h1>
-<p>예약 없이 화상 화면을 열고, 초대한 상대와 같은 방에서 대화하세요.</p>
-<p class="note">이 화면은 별도로 초대한 상대와의 테스트 대화용입니다. 대기 중인 한국인을 자동으로 연결하지 않습니다. 예약·결제·수업 출석 기록은 변경되지 않습니다.</p>
-<section class="card"><h2>① 화상 화면 열기</h2>
-<p>카메라·마이크 권한을 허용하세요. Jitsi에서 방을 시작하는 사람에게 별도 진행자 로그인을 요구할 수 있습니다.</p>
-<div class="actions"><button id="start">화상 화면 열기</button><button id="stop" class="secondary">화상대화 종료</button></div>
-<div id="video"></div>
-</section>
-<section class="card"><h2>② 상대 기기 초대</h2>
-<label for="invite">이 링크를 상대방이나 두 번째 기기에서 여세요</label>
-<input id="invite" readonly aria-label="같은 화상방 초대 링크">
-<button id="copy">초대 링크 복사</button>
-<p>내 얼굴만 보이면 기기 미리보기입니다. 두 기기가 서로의 영상과 소리를 받아야 통화가 확인됩니다.</p>
-</section>
+<p>대기를 시작하면 접속 중인 학습자와 한국인 파트너를 순서대로 연결합니다.</p>
+<p class="note">격리 테스트용 즉시 대화입니다. 예약·결제 없이 참여하며 기존 수업 예약 기록은 유지됩니다. 상대가 없으면 대기 상태를 표시합니다.</p>
+<section class="card" id="loginBox" hidden><h2>기존 수업 계정으로 로그인</h2>
+<form id="login"><label for="email">이메일</label><input id="email" type="email" autocomplete="username" required>
+<label for="password">비밀번호</label><input id="password" type="password" autocomplete="current-password" required>
+<button>로그인</button></form><p>이미 로그인한 계정은 그대로 사용합니다. <a href="/index.html#teaching-platform">계정·프로필 관리</a></p></section>
+<section class="card" id="matching" hidden><h2 id="who"></h2>
 <p id="status" role="status" aria-live="polite"></p>
+<div class="actions"><button id="queue">대화 상대 자동 찾기</button><button id="ready" hidden>이 상대와 대화하기</button><button id="start" hidden>화상방 입장</button><button id="stop" class="secondary" hidden>대기 취소 · 대화 종료</button></div>
+<p id="notice"></p><div id="video"></div>
+<p>방을 시작하는 사람에게 Jitsi 진행자 로그인이 필요할 수 있습니다. 화면이 열렸다는 것만으로 통화 성공을 의미하지 않습니다.</p>
+</section><p id="error" role="alert"></p>
 </main>
 <script>
 (()=>{
 'use strict';
 const $=id=>document.getElementById(id);
-let room;
-function loadRoom(){
-stop();
-room=new URLSearchParams(location.hash.slice(1)).get('room');
-if(!/^hs-instant-[a-f0-9]{48}$/.test(room||'')){
- const bytes=crypto.getRandomValues(new Uint8Array(24));
- room='hs-instant-'+Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('');
- history.replaceState(null,'',location.pathname+location.search+'#room='+room);
+let state=null,timer=null,pending=false,opened=null,inFlight=Promise.resolve();
+async function api(path,data){
+ const r=await fetch(path,{method:data===undefined?'GET':'POST',headers:data===undefined?{}:{'Content-Type':'application/json'},body:data===undefined?undefined:JSON.stringify(data)});
+ const v=await r.json();if(!r.ok){const e=new Error(v.error||'요청 실패');e.status=r.status;throw e;}return v;
 }
-$('invite').value=location.origin+location.pathname+'#room='+room;
+function closeVideo(){const f=$('video').querySelector('iframe');if(f){f.src='about:blank';f.remove();}opened=null;}
+function resetLogin(){clearInterval(timer);timer=null;state=null;closeVideo();$('loginBox').hidden=false;$('matching').hidden=true;}
+function render(v){
+ state=v;$('loginBox').hidden=true;$('matching').hidden=false;
+ $('who').textContent=v.user.nickname+' · '+(v.user.role==='learner'?'학습자':'한국인 파트너');
+ $('queue').hidden=!v.eligible||v.state!=='idle';$('ready').hidden=v.state!=='offered'||v.ready;
+ $('start').hidden=v.state!=='active';$('start').disabled=!!opened;$('stop').hidden=v.state==='idle';
+ $('status').textContent=v.state==='waiting'?'접속 중인 상대를 찾고 있습니다. 상대가 대기를 시작하면 자동으로 연결됩니다.':v.state==='offered'?v.partnerName+'님과 매칭되었습니다. '+(v.ready?'상대방의 입장 확인을 기다립니다.':'60초 안에 대화 여부를 확인하세요.'):v.state==='active'?v.partnerName+'님과 연결 준비가 끝났습니다. 화상방에 입장하세요.':v.eligible?'대기를 시작하면 상대를 자동으로 찾습니다.':'학생 또는 승인된 파트너 계정으로 참여하세요. 예약 수업 시간에는 즉시 대기를 할 수 없습니다.';
+ $('notice').textContent=(v.state==='waiting'||v.state==='offered')?'상대가 나가거나 응답하지 않으면 대기가 종료됩니다. 다시 찾기를 누를 수 있습니다.':'';
+ if(v.state!=='active'||(opened&&opened!==v.roomUrl))closeVideo();
 }
-function stop(){
- const frame=$('video').querySelector('iframe');
- if(frame){frame.src='about:blank';frame.remove();}
- $('start').disabled=false;
+function run(action,data={}){
+ if(pending&&(action==='status'||action==='heartbeat'))return Promise.resolve();
+ const operation=inFlight.then(async()=>{
+ pending=true;$('error').textContent='';
+ try{render(await api('/api/instant/'+action,action==='status'?undefined:data));}
+ catch(e){$('error').textContent=e.message;if(e.status===401)resetLogin();else if(action==='heartbeat'){closeVideo();$('status').textContent='연결 상태를 확인할 수 없습니다. 재확인 중입니다.';}}
+ finally{pending=false;}
+ });
+ inFlight=operation;return operation;
 }
+function poll(){if(!timer)timer=setInterval(()=>run(state&&state.state!=='idle'?'heartbeat':'status'),5000);}
+$('login').onsubmit=async e=>{e.preventDefault();$('error').textContent='';try{await api('/api/login',{email:$('email').value,password:$('password').value});$('password').value='';await run('status');poll();}catch(e){$('error').textContent=e.message;}};
+$('queue').onclick=()=>run('join');$('ready').onclick=()=>run('ready',{matchId:state.matchId});
+$('stop').onclick=()=>{closeVideo();run('leave');};
 $('start').onclick=()=>{
- if($('video').querySelector('iframe'))return;
- const frame=document.createElement('iframe');
- frame.title='Jitsi 즉시 화상대화';frame.src='https://meet.jit.si/'+room;
+ if(!state||state.state!=='active'||!/^https:\/\/meet\.jit\.si\/hs-match-[a-f0-9]{48}$/.test(state.roomUrl))return;
+ if(opened)return;const frame=document.createElement('iframe');frame.title='Jitsi 매칭 화상대화';frame.src=state.roomUrl;
  frame.allow='camera; microphone; fullscreen; display-capture';frame.referrerPolicy='no-referrer';
- $('video').replaceChildren(frame);$('start').disabled=true;
- $('status').textContent='화상 화면을 열었습니다. 상대 기기도 아래 초대 링크로 같은 방에 들어오세요.';
+ $('video').replaceChildren(frame);opened=state.roomUrl;$('start').disabled=true;
 };
-$('stop').onclick=()=>{stop();$('status').textContent='이 기기의 화상 화면을 종료했습니다. 상대 기기에서도 종료 버튼을 눌러주세요.';};
-$('copy').onclick=async()=>{
- try{await navigator.clipboard.writeText($('invite').value);$('status').textContent='초대 링크를 복사했습니다.';}
- catch{ $('invite').focus();$('invite').select();$('status').textContent='링크를 선택했습니다. 복사해서 상대 기기에 전달하세요.'; }
-};
-addEventListener('pagehide',stop);
-addEventListener('hashchange',loadRoom);
-loadRoom();
+// Do not send a leave on unload: stale tabs must not cancel another tab's new match.
+// Presence expires after 45 seconds without a heartbeat.
+addEventListener('pagehide',()=>{clearInterval(timer);closeVideo();});
+addEventListener('pageshow',()=>{run('status');poll();});
+run('status');poll();
 })();
 </script>
 </body></html>
