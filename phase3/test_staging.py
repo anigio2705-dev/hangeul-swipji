@@ -2,6 +2,7 @@
 import base64
 import hashlib
 import http.client
+import http.cookies
 import json
 from pathlib import Path
 import tempfile
@@ -50,7 +51,13 @@ class StagingTests(unittest.TestCase):
         conn.request('GET' if data is None else 'POST', path, None if data is None else json.dumps(data), h)
         response = conn.getresponse()
         result = response.status, dict(response.getheaders()), response.read()
-        if response.getheader('Set-Cookie'): self.cookie = response.getheader('Set-Cookie').split(';')[0]
+        jar = http.cookies.SimpleCookie(self.cookie)
+        for key, value in response.getheaders():
+            if key.lower() == 'set-cookie':
+                incoming = http.cookies.SimpleCookie(value)
+                for name, morsel in incoming.items():
+                    jar[name] = morsel.value
+        self.cookie = '; '.join(name + '=' + morsel.value for name, morsel in jar.items())
         conn.close()
         return result
 
@@ -76,6 +83,24 @@ class StagingTests(unittest.TestCase):
             self.assertNotIn(b'teacherGuide', body)
         self.assertEqual(401, self.request('/', headers={'Authorization':'Basic !!!'})[0])
 
+    def test_gate_cookie_preserves_admission_on_speaking_redirect(self):
+        status, headers, _ = self.request('/')
+        self.assertEqual(200, status)
+        cookie = headers['Set-Cookie'].split(';')[0]
+        for flag in ('Path=/', 'Secure', 'HttpOnly', 'SameSite=Strict'):
+            self.assertIn(flag, headers['Set-Cookie'])
+        self.cookie = cookie
+        status, headers, _ = self.request('/speaking-platform.html?lang=ko', authenticated=False)
+        self.assertEqual(302, status)
+        self.assertEqual('/index.html#teaching-platform', headers['Location'])
+        self.assertEqual(200, self.request('/index.html', authenticated=False)[0])
+        self.assertEqual(403, self.request('/api/me', authenticated=False,
+            headers={'Origin':'https://attacker.test'})[0])
+        self.cookie = cookie + 'tampered'
+        self.assertEqual(401, self.request('/', authenticated=False)[0])
+        self.cookie = cookie
+        self.assertEqual(401, self.request('/', headers={'Authorization':'Basic !!!'})[0])
+
     def test_exact_host_origin_and_forwarded_spoofing(self):
         self.assertEqual(403, self.request('/', headers={'Host':'attacker.test','X-Forwarded-Host':'review.example.test'})[0])
         self.assertEqual(403, self.register_with_origin('https://attacker.test'))
@@ -88,6 +113,7 @@ class StagingTests(unittest.TestCase):
         for path in ('/', '/index.html', '/learn.html', '/phase3/index.html'):
             with self.subTest(path=path):
                 self.assertIn(self.request(path, headers=navigation)[0], (200,302))
+        self.cookie = ''
         self.assertEqual(401, self.request('/', headers=navigation, authenticated=False)[0])
 
     def test_direct_navigation_and_same_origin_fetch_allowed(self):
