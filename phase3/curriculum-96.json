@@ -2972,7 +2972,7 @@
           "우산"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "유키는 친구를 무슨 요일에 만나요?",
@@ -2982,7 +2982,7 @@
           "금요일"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S1-09": [
@@ -3004,7 +3004,7 @@
           "요리"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "아미는 저녁에 누구와 산책해요?",
@@ -3014,7 +3014,7 @@
           "선생님"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S1-10": [
@@ -3036,7 +3036,7 @@
           "책을 팔아요."
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "두 사람의 일요일 목적지는?",
@@ -3046,7 +3046,7 @@
           "학교"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S1-11": [
@@ -3068,7 +3068,7 @@
           "수영복"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "오늘 비가 와요?",
@@ -3078,7 +3078,7 @@
           "아니요."
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S1-12": [
@@ -3100,7 +3100,7 @@
           "시장"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "제이가 내리는 곳은?",
@@ -3110,7 +3110,7 @@
           "학교 안"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S1-13": [
@@ -3132,7 +3132,7 @@
           "약국 안"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "사라가 가는 방향은?",
@@ -3142,7 +3142,7 @@
           "역 안쪽"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S1-14": [
@@ -3164,7 +3164,7 @@
           "토니"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "토니가 매운 음식을 먹기 어려움을 말한 표현은?",
@@ -3174,7 +3174,7 @@
           "잘 못 먹어요."
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S1-15": [
@@ -3196,7 +3196,7 @@
           "오후 두 시"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "니나는 누구와 영화를 봐요?",
@@ -3206,7 +3206,7 @@
           "동료"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S1-16": [
@@ -3228,7 +3228,7 @@
           "두 물병 모두"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "루나가 큰 물병을 고르지 않은 단서는?",
@@ -3238,7 +3238,7 @@
           "물병이 없어요."
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S1-17": [
@@ -3260,7 +3260,7 @@
           "건물 밖"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "아담이 친구를 만나는 곳은?",
@@ -3270,7 +3270,7 @@
           "교실 앞"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S1-18": [
@@ -3292,7 +3292,7 @@
           "문 밖"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "수지는 아홉 시에 어디에 책을 넣어요?",
@@ -3302,7 +3302,7 @@
           "카페"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S1-19": [
@@ -3324,7 +3324,7 @@
           "우산이 있어요."
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "모자를 쓴 사람은 어느 쪽에 있어요?",
@@ -3334,7 +3334,7 @@
           "가운데"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S1-20": [
@@ -3356,7 +3356,7 @@
           "오전 아홉 시"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "벤은 언제 편지를 보내요?",
@@ -3366,7 +3366,7 @@
           "화요일"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S1-21": [
@@ -3388,7 +3388,7 @@
           "번호를 잘 못 들어서"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "린의 적절한 재요청 표현은?",
@@ -3398,7 +3398,7 @@
           "문을 닫아 주세요."
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S1-22": [
@@ -3420,7 +3420,7 @@
           "세 시"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "아나의 답장은 어떤 뜻이에요?",
@@ -3430,7 +3430,7 @@
           "모임을 취소해요."
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S1-23": [
@@ -3452,7 +3452,7 @@
           "그림 보기"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "물을 마실 수 있는 곳은?",
@@ -3462,7 +3462,7 @@
           "휴게실"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S1-24": [
@@ -3484,7 +3484,7 @@
           "오후 세 시"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "두 사람이 우산을 쓰는 이유는?",
@@ -3494,7 +3494,7 @@
           "눈이 와서"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S2-06": [
@@ -3516,7 +3516,7 @@
           "치료가 끝나서"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "통화에서 확인하지 않은 것은?",
@@ -3526,7 +3526,7 @@
           "준비물"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S2-07": [
@@ -3548,7 +3548,7 @@
           "목요일 오후"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "사진에서 제외한 것은?",
@@ -3558,7 +3558,7 @@
           "집 안의 다른 모습"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S2-08": [
@@ -3580,7 +3580,7 @@
           "이번 달 사용량이 두 배라는 것"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "파라가 친구에게 보내지 않은 정보는?",
@@ -3590,7 +3590,7 @@
           "확인할 항목"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S2-09": [
@@ -3612,7 +3612,7 @@
           "목요일 수강 확정"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "디아가 재료를 미리 사지 않는 이유는?",
@@ -3622,7 +3622,7 @@
           "재료가 금지되어서"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S2-10": [
@@ -3644,7 +3644,7 @@
           "예약 없이 방문하기"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "유리가 공개하지 않은 것은?",
@@ -3654,7 +3654,7 @@
           "객실 비밀번호"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S2-11": [
@@ -3676,7 +3676,7 @@
           "한 자리"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "사나가 친구에게 한 행동은?",
@@ -3686,7 +3686,7 @@
           "공연을 취소했다."
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S2-12": [
@@ -3708,7 +3708,7 @@
           "매표소 휴무"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "본문 끝에서 확정되지 않은 정보는?",
@@ -3718,7 +3718,7 @@
           "지연 사유"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S2-13": [
@@ -3740,7 +3740,7 @@
           "모든 식기"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "미라가 아직 확인해야 했던 것은?",
@@ -3750,7 +3750,7 @@
           "새 상품 날짜와 회수 방법"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S2-14": [
@@ -3772,7 +3772,7 @@
           "조리가 불가능해서"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "장소를 확정해 알리는 때는?",
@@ -3782,7 +3782,7 @@
           "이미 모임이 끝난 뒤"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S2-15": [
@@ -3804,7 +3804,7 @@
           "버스표 판매"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "라힘의 다음 목표는?",
@@ -3814,7 +3814,7 @@
           "버스 운전"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S2-16": [
@@ -3836,7 +3836,7 @@
           "아침 공부 취소"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "방법을 돌아보기로 한 시점은?",
@@ -3846,7 +3846,7 @@
           "일주일 뒤"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S2-17": [
@@ -3868,7 +3868,7 @@
           "인사 안내"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "친구의 최종 대응은?",
@@ -3878,7 +3878,7 @@
           "행사를 반드시 취소"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S2-18": [
@@ -3900,7 +3900,7 @@
           "가격표만"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "대화 후 아직 정해지지 않은 것은?",
@@ -3910,7 +3910,7 @@
           "기록을 살필 계획"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S2-19": [
@@ -3932,7 +3932,7 @@
           "오전 아홉 시"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "복도에 관해 합의한 것은?",
@@ -3942,7 +3942,7 @@
           "통행 공간 남기기"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S2-20": [
@@ -3964,7 +3964,7 @@
           "친구가 이해한 내용 말하기"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "메이가 추가할 연습은?",
@@ -3974,7 +3974,7 @@
           "모든 발음 암기"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S2-21": [
@@ -3996,7 +3996,7 @@
           "공휴일 확정"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "나오가 정한 이용 계획은?",
@@ -4006,7 +4006,7 @@
           "화요일 자유 수영"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S2-22": [
@@ -4028,7 +4028,7 @@
           "오전 한 시"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "면접 전날 받는 것은?",
@@ -4038,7 +4038,7 @@
           "연결 시험 링크"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S2-23": [
@@ -4060,7 +4060,7 @@
           "재료비 포함 여부"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "본문이 보여 주는 선택 기준은?",
@@ -4070,7 +4070,7 @@
           "안내가 긴 곳 고르기"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S2-24": [
@@ -4092,7 +4092,7 @@
           "전시 취소"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "비가 올 때 대체 활동은?",
@@ -4102,7 +4102,7 @@
           "계획 전체 취소"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S3-08": [
@@ -4124,7 +4124,7 @@
           "분류 방식 제안"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "오스카가 팀의 역할을 설명한 방식은?",
@@ -4134,7 +4134,7 @@
           "제안과 공동 적용을 구분"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S3-09": [
@@ -4156,7 +4156,7 @@
           "권한 있는 저장 위치"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "동료가 마지막에 한 확인은?",
@@ -4166,7 +4166,7 @@
           "모든 답변이 왔다고 추정"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S3-10": [
@@ -4188,7 +4188,7 @@
           "안내 제작 목표"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "다음 달 비교의 목적은?",
@@ -4198,7 +4198,7 @@
           "성공을 미리 확정"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S3-11": [
@@ -4220,7 +4220,7 @@
           "벤치 구매 상표"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "주변 구역도 살피는 이유는?",
@@ -4230,7 +4230,7 @@
           "불편의 이동 가능성"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S3-12": [
@@ -4252,7 +4252,7 @@
           "비교 기준"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "답변 전 수아의 선택은?",
@@ -4262,7 +4262,7 @@
           "비교 없이 장기 등록"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S3-13": [
@@ -4284,7 +4284,7 @@
           "상대 이름 공개"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "새 안내가 중심에 둔 것은?",
@@ -4294,7 +4294,7 @@
           "당사자 실명 비난"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S3-14": [
@@ -4316,7 +4316,7 @@
           "냄비를 싱크대에 계속 두기"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "처음의 잘못된 추정은?",
@@ -4326,7 +4326,7 @@
           "상대가 청소를 싫어한다"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S3-15": [
@@ -4348,7 +4348,7 @@
           "공사 구역만 이용 제한"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "지아의 정정 방식은?",
@@ -4358,7 +4358,7 @@
           "사진만 재공유"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S3-16": [
@@ -4380,7 +4380,7 @@
           "초급 참여 금지"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "참가 인원 외의 확인 기준은?",
@@ -4390,7 +4390,7 @@
           "홍보 문구 길이"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S3-17": [
@@ -4412,7 +4412,7 @@
           "신청 버튼 제거"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "수정 후 확인 방법은?",
@@ -4422,7 +4422,7 @@
           "처음 읽는 사람의 행동 찾기"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S3-18": [
@@ -4444,7 +4444,7 @@
           "목요일 오전"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "이나의 최종 대응은?",
@@ -4454,7 +4454,7 @@
           "담당자 번호 공개"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S3-19": [
@@ -4476,7 +4476,7 @@
           "시의 최종 결론"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "수정 요약에서 제외한 것은?",
@@ -4486,7 +4486,7 @@
           "시의 발표 내용"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S3-20": [
@@ -4508,7 +4508,7 @@
           "문서 작성 금지"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "마틴의 최종 제안은?",
@@ -4518,7 +4518,7 @@
           "두 방식을 섞어 시험"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S3-21": [
@@ -4540,7 +4540,7 @@
           "판매 없이 안내 전시"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "본문 끝 협상 상태는?",
@@ -4550,7 +4550,7 @@
           "분쟁 판결 완료"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S3-22": [
@@ -4572,7 +4572,7 @@
           "질문자를 탓함"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "후속 전달에서 공개하지 않은 것은?",
@@ -4582,7 +4582,7 @@
           "답변 계획의 존재"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S3-23": [
@@ -4604,7 +4604,7 @@
           "직원 없는 밤샘 개방"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "의견서가 명확히 한 문서 성격은?",
@@ -4614,7 +4614,7 @@
           "검토를 바라는 요청"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S3-24": [
@@ -4636,7 +4636,7 @@
           "절차를 자기 말로 설명"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "행사 뒤 정리한 것은?",
@@ -4646,7 +4646,7 @@
           "모든 질문의 해결 완료 선언"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S4-06": [
@@ -4668,7 +4668,7 @@
           "자막 선택이 가능함"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "모임이 피하기로 한 홍보는?",
@@ -4678,7 +4678,7 @@
           "선택권을 남겨 두기"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S4-07": [
@@ -4700,7 +4700,7 @@
           "교통 확대의 즉시 완료 선언"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "아직 확인되지 않은 결과는?",
@@ -4710,7 +4710,7 @@
           "혼잡 감소 효과"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S4-08": [
@@ -4732,7 +4732,7 @@
           "개인의 장애나 사정"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "본문의 공정성 관점은?",
@@ -4742,7 +4742,7 @@
           "어떤 조정이든 특혜로 확정"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S4-09": [
@@ -4764,7 +4764,7 @@
           "모든 경로의 동일한 안전"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "책임 회피를 막기 위해 정한 것은?",
@@ -4774,7 +4774,7 @@
           "개인 연락처 공개"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S4-10": [
@@ -4796,7 +4796,7 @@
           "이익이 완전히 동일"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "전체 해결로 발표하지 않은 이유는?",
@@ -4806,7 +4806,7 @@
           "세부 구역 합의가 남아서"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S4-11": [
@@ -4828,7 +4828,7 @@
           "행동 관찰과 평가"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "문화적 설명을 쓰기로 한 방식은?",
@@ -4838,7 +4838,7 @@
           "불편을 금지하는 근거"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S4-12": [
@@ -4860,7 +4860,7 @@
           "보도문 글꼴"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "수정안에 맞는 결론은?",
@@ -4870,7 +4870,7 @@
           "모든 학습자 실력 상승 입증"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S4-13": [
@@ -4892,7 +4892,7 @@
           "자료 없이 개인 탓으로 돌리기"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "사과문 검토 기준으로 제시된 것은?",
@@ -4902,7 +4902,7 @@
           "책임·조치·후속 확인"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S4-14": [
@@ -4924,7 +4924,7 @@
           "발화 정확성"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "요약에 덧붙이지 않은 효과는?",
@@ -4934,7 +4934,7 @@
           "참여자 선택 방식"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S4-15": [
@@ -4956,7 +4956,7 @@
           "필자 직함과 나이만"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "입장 제시 전에 한 활동은?",
@@ -4966,7 +4966,7 @@
           "자극적 문구 복제"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S4-16": [
@@ -4988,7 +4988,7 @@
           "지원 전면 중단"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "최종 지침에 구체화한 것은?",
@@ -4998,7 +4998,7 @@
           "결정 범위·질문 상황·확인 시점"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S4-17": [
@@ -5020,7 +5020,7 @@
           "쓴 의견 읽기나 뒤에 응답"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "종료 때 남긴 것은?",
@@ -5030,7 +5030,7 @@
           "발언자 성격 평가"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S4-18": [
@@ -5052,7 +5052,7 @@
           "아무 표시 없이 공개"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "최종 평가에 포함한 것은?",
@@ -5062,7 +5062,7 @@
           "연락처 수집량"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S4-19": [
@@ -5084,7 +5084,7 @@
           "비판 금지"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "최종 문안의 적절한 표현은?",
@@ -5094,7 +5094,7 @@
           "확인 범위와 불확실성 명시"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S4-20": [
@@ -5116,7 +5116,7 @@
           "원래 이름과 기능·맥락 설명"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "정확성 검토에 포함한 것은?",
@@ -5126,7 +5126,7 @@
           "관람객의 국적 순위"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S4-21": [
@@ -5148,7 +5148,7 @@
           "도구 미사용자의 선택권"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "합의 발표에 맞는 표현은?",
@@ -5158,7 +5158,7 @@
           "모든 번역 금지 확정"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S4-22": [
@@ -5180,7 +5180,7 @@
           "예외 조건 전부 삭제"
         ],
         "answerIndex": 1,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "두 번째 시험에 새 사례를 쓴 목적에 맞는 것은?",
@@ -5190,7 +5190,7 @@
           "외운 답 외의 적용 확인"
         ],
         "answerIndex": 2,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S4-23": [
@@ -5212,7 +5212,7 @@
           "지민"
         ],
         "answerIndex": 2,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "다음 목표에 맞는 수행은?",
@@ -5222,7 +5222,7 @@
           "최고 점수 활동만 반복"
         ],
         "answerIndex": 0,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ],
     "HS4-S4-24": [
@@ -5244,7 +5244,7 @@
           "주민 개인 사정 전체"
         ],
         "answerIndex": 0,
-        "skill": "interaction"
+        "skill": "reading"
       },
       {
         "question": "시험만으로 확인했다고 주장하지 않은 것은?",
@@ -5254,7 +5254,7 @@
           "혼동한 지점의 존재"
         ],
         "answerIndex": 1,
-        "skill": "grammar"
+        "skill": "reading"
       }
     ]
   },
@@ -5284,6 +5284,7 @@
   "limits": [
     "Automated text checks do not assess pronunciation or live interaction.",
     "Pre/post short quizzes are different tasks; scores alone do not prove learning gains.",
+    "96 source lessons are authored; teacher content review, learner trials and real audio approval remain separate.",
     "96 source lessons are authored; teacher content review, learner trials and real audio approval remain separate."
   ]
 }
