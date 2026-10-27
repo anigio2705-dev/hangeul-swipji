@@ -2,6 +2,18 @@
 
 갱신일: 2026-10-27 KST. [전체 마스터 문서](GLOBAL_MASTER_PLAN.md)를 먼저 읽는다.
 
+## 한글쉽지8 — 화상 링크 입장 인증 유지 보완 (2026-10-27)
+
+시작 원격 기준 cabb2fe. 사용자의 실제 크롬 화면에서 홈 진입 후 `/speaking-platform.html?lang=ko`로 이동할 때 Basic Auth 창이 다시 표시됨을 확인했다. 실제 비밀번호나 HTTP 헤더는 확보하지 않았으므로 비밀번호 오류/브라우저 자격증명 범위 등 단일 원인을 확정하지 않는다.
+
+`phase3/staging_server.py`에 올바른 Basic Auth로 입장한 경우에만 발급하는 HMAC 서명 쿠키를 추가했다. origin/사용자/현재 게이트 비밀값에 묶이고 8시간 만료, Secure/HttpOnly/SameSite=Strict/Path=/다. Authorization이 누락된 후속 요청만 유효 쿠키로 인증하며 명시적인 잘못된 자격증명은 여전히 거부한다. Host/Origin/Referer 경계와 내부 플랫폼 로그인은 유지한다. 비밀번호 변경 시 기존 게이트 쿠키도 무효화된다. 비밀값을 기록하지 않는다.
+
+회귀 검사는 홈 입장 → Basic 헤더 없는 화상 경로 → 기존 수업 공간 리디렉션 → 홈 진입, 쿠키 변조 거부, 외부 출처 거부, 잘못된 Basic 거부를 추가했다. 테스트 HTTP 클라이언트도 여러 Set-Cookie를 각각 보존해 플랫폼 세션과 입장 인증이 충돌하지 않도록 수정했다.
+
+중요: 기존 staging 설정은 화상 페이지를 `/index.html#teaching-platform`으로 의도적으로 돌리고 speaking-config.js의 운영 Supabase 설정을 비운다. 이번 작업에서 이를 새로 도입한 것이 아니다. 운영 DB 격리를 보존하므로 이 패치가 어제의 기존 실시간 화상 페이지나 실제 카메라/통화를 복구했다는 뜻이 아니다. 별도 테스트용 미디어/신호 연결이 필요하며 운영 설정을 임의 재사용하지 않는다.
+
+검사 결과: 관련 HTTP 16개 통과. `python3 -m unittest discover -s phase3 -p 'test_*.py' -q` 전체 77개 통과(43.939초). `git diff --check` 통과. 공개 서버 재배포·인증 후 브라우저 검사·실제 카메라/두 기기 통화는 미실행이다. 이 창에 Render 관리 도구가 없으며 클라우드 수동 인계도 반복 실패하여 완료로 보고하지 않는다. 다른 Work가 동시 작업 중이므로 최신 원격 변경과 충돌 확인 후 반영한다. 기존 홈/무료 교재/운영 DB/main은 변경하지 않았다.
+
 ## 한글쉽지99 — 실제 HTTPS 출처 검사11개 통과 (2026-10-27 16:34 KST)
 
 중단 후 작업을 이어 실제 공개 서버의 수정 반영을 확인했다. 기존 서비스 `srv-dbg2fet9fdbs73cj08c0`와 https://hangeul-swipji99-test.onrender.com 을 그대로 사용한다. Render 활성 배포는 `dep-dbg34g4ipgvc73ec33f0`, 코드 `bf199f6a1b6d8c48bb3ede86fdf04e55b487c6f7`, Free/Python3이며 배포55.1초 성공이다. 새 서버·카드·유료 전환·main·운영DB 변경은 없다.
