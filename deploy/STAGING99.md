@@ -1,5 +1,13 @@
 # 한글쉽지99 통합 테스트 호스팅 준비
 
+## 후속 실제 생성 결과 — 2026-10-27 13:27 KST
+
+무료 테스트 서비스1개를 생성했고 Render에서 Live를 확인했다. 실제 주소는 https://hangeul-swipji99-test.onrender.com 이다. 배포 코드 `ad5757d`, Python3.12.14/Singapore/Free/자동배포Off. 카드·유료전환·영구디스크는 사용하지 않았다. 브라우저의 실제 `/healthz` 응답은 `mode=test, ok=true, scope=isolated-staging`이었다.
+
+접속 사용자명은 `review`, 비밀번호는 Render의 `HS_STAGING_PASSWORD` 비밀값이다. 홈페이지의 Basic Auth 때문에 인증 후 실서버 핵심 흐름 검사는 아직 실행하지 못했다. 사용자 보안 브라우저 인증 후 이어간다. 비밀번호를 채팅이나 GitHub에 붙이지 않는다. 관리자 계정 `admin@example.test`는 별도 `HS_STAGING_ADMIN_PASSWORD`를 사용한다.
+
+세부 근거는 [배포 기록](../audit/staging99-deployment.json)과 [개발 현황](../DEVELOPMENT_STATUS.md)에 있다. 아래는 생성 전 준비 시점의 기록이며, 주소 미발급·계정 미연결이라는 당시 상태는 이 후속 기록으로 갱신한다.
+
 기준일: 2026-10-27 KST. 시작 HEAD `1928a342ff401ed18232bfa4d025b33547b7e0f9`.
 **배포 설정과 로컬 검사를 준비한 상태이며 외부 테스트 주소는 아직 발급하지 않았다.**
 

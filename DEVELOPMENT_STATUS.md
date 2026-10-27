@@ -2,6 +2,25 @@
 
 갱신일: 2026-10-27 KST. [전체 마스터 문서](GLOBAL_MASTER_PLAN.md)를 먼저 읽는다.
 
+## 한글쉽지99 — Render 무료 테스트 서버 실제 생성 (2026-10-27 13:27 KST)
+
+사용자가 Render 브라우저 생성·무료 서버1개를 승인했다. Render 전용 도구는 재조회 시에도 미제공/미설치였으므로 승인된 브라우저 경로를 사용했다. 보안 로그인 후 Hangeul Swipji 작업공간에서 공개 Git 저장소를 연결하여 새 서비스1개만 만들었다. GitHub 추가 OAuth 권한은 부여하지 않았다.
+
+- 실제 URL: https://hangeul-swipji99-test.onrender.com
+- Render 서비스: `srv-dbg2fet9fdbs73cj08c0`, 배포: `dep-dbg2ffl9fdbs73cj09ig`.
+- 배포 코드: 통합 브랜치 `ad5757d9327a6871b70649da081d5cefb8a1a74b`. Render UI에서 Free·Python3·해당 브랜치·Live와54.3초 배포 완료를 확인했다.
+- 기준은 `deploy/render-staging.yaml`. UI에 Python3.12.14, Singapore, build/start 명령, /healthz, 자동배포Off 및5개 환경변수를 동일하게 설정했다. 공개 저장소 수동 연결 방식이며 Blueprint를 적용했다는 뜻은 아니다. 새 서비스 외에 기존 서비스를 수정하지 않았다.
+- 무료0.1CPU/512MB를 선택했다. 카드 등록·유료 전환·영구 디스크·유료 DB를 생성하지 않았다. 게이트와 관리자 비밀번호는 Render Generate로 각각 생성하고 공개 문서에 저장하지 않는다.
+- 실제 브라우저 GET `/healthz`: `{"mode":"test","ok":true,"scope":"isolated-staging"}`. Python 서버와 격리 SQLite 상태 점검이 실제 외부 주소에서 성공했다.
+- 홈페이지 무인증 접속 시 브라우저가 `net::ERR_INVALID_AUTH_CREDENTIALS`를 반환했다. Basic Auth가 필요한 상태이며, 홈페이지/예약/과제의 인증 후 실서버 검사는 **미실행**이다. 이를 기존 로컬31흐름 통과와 혼동하지 않는다. 게이트 비밀번호는 `HS_STAGING_PASSWORD`, 접속 사용자명은 `review`다. 사용자가 보안 브라우저에서 직접 접속 인증하면 후속 검사를 이어간다. 비밀번호를 채팅/GitHub에 붙이지 않는다.
+- 관리자 계정은 `admin@example.test`, 별도 Render 비밀값 `HS_STAGING_ADMIN_PASSWORD`다. 테스트 계정/예약은 무료 인스턴스 중지·재시작 때 초기화될 수 있다.
+- Render가 새로 만든 기본 프로젝트/환경 표시는 My project/Production이다. 이는 Render의 기본 이름이며 기존 운영 홈페이지나 운영 DB를 연결한 것이 아니다. 실서비스 출시로 보고하지 않는다.
+- main·운영 홈페이지·운영 DB·3차 원본은 변경하지 않았다. 실제 결제/정산은 비활성이다. 코드 변경 없이 배포 현황 문서와 `audit/staging99-deployment.json`만 추가 갱신한다.
+
+다음 작업: 브라우저에서 테스트 게이트 직접 인증 → 기존 홈/무료·진단·96교재/강사·학생/예약·모의 결제·과제·평가·재예약의 실제 HTTPS 흐름 확인 → 검증 결과를 별도로 기록한다. 실물 휴대폰/두 기기 미디어·교사 검수·운영Auth/RLS·전문 전체8언어·사람 녹음/청취·운영배포는 여전히 미완료다.
+
+아래는 서버 생성 전 준비 기록이다. 외부 주소 미발급/Render 미연결이라는 과거 상태는 위 실제 생성 기록으로 갱신한다.
+
 ## 한글쉽지99 — 통합 테스트 호스팅 준비 (2026-10-27)
 
 **현재 상태: 배포 준비·로컬 검사 완료, 외부 테스트 주소 미발급.** 호스팅 계정 연결/선택이 필요하며 전체 플랫폼이 외부에서 이미 작동한다고 보고하지 않는다. 상세 구성·비용·계정·실행 절차는 [deploy/STAGING99.md](deploy/STAGING99.md), 실제 로컬 검사 요약은 [audit/staging99-verification.json](audit/staging99-verification.json)에 기록했다.
