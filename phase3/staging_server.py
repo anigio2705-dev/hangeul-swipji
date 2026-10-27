@@ -5,6 +5,8 @@ import binascii
 import hashlib
 from dataclasses import dataclass
 import hmac
+import http.cookies
+import time
 import os
 from pathlib import Path
 import re
@@ -80,6 +82,24 @@ class StagingHandler(server.Handler):
                 valid_referer = False
             if not valid_referer:
                 raise server.Error('다른 출처 Referer 요청 거부', 403)
+        # A signed, short-lived gate cookie preserves admission across document
+        # redirects when a browser does not resend cached Basic credentials.
+        self.gate_denied = False
+        self.gate_admitted = False
+        cookie_valid = False
+        try:
+            cookies = http.cookies.SimpleCookie(self.headers.get('Cookie', ''))
+            token = cookies['hs_staging_gate'].value
+            expiry, signature = token.split('.', 1)
+            expires = int(expiry)
+            expected_signature = hmac.new(settings.gate_password.encode(),
+                (settings.origin + ':' + settings.gate_user + ':' + expiry).encode(), hashlib.sha256).hexdigest()
+            cookie_valid = (time.time() < expires <= time.time() + 28800
+                and hmac.compare_digest(signature, expected_signature))
+        except (KeyError, ValueError, http.cookies.CookieError):
+            pass
+        if cookie_valid and not self.headers.get('Authorization'):
+            return
         try:
             scheme, encoded = self.headers.get('Authorization', '').split(' ', 1)
             if scheme.lower() != 'basic': raise ValueError()
@@ -90,6 +110,7 @@ class StagingHandler(server.Handler):
         if not hmac.compare_digest(supplied, expected):
             self.gate_denied = True
             raise server.Error('비공개 테스트 접속 비밀번호가 필요합니다', 401)
+        self.gate_admitted = True
 
     def send(self, status, value, cookie=None):
         # Only the outer gate's 401 triggers the browser's Basic Auth prompt.
@@ -98,6 +119,12 @@ class StagingHandler(server.Handler):
         super().send(status, value, cookie)
 
     def end_headers(self):
+        if getattr(self, 'gate_admitted', False):
+            settings = self.server.staging
+            expiry = str(int(time.time()) + 28800)
+            signature = hmac.new(settings.gate_password.encode(),
+                (settings.origin + ':' + settings.gate_user + ':' + expiry).encode(), hashlib.sha256).hexdigest()
+            self.send_header('Set-Cookie', f'hs_staging_gate={expiry}.{signature}; Path=/; Max-Age=28800; Secure; HttpOnly; SameSite=Strict')
         if getattr(self, 'gate_denied', False):
             self.send_header('WWW-Authenticate', 'Basic realm="Hangeul Swipji TEST", charset="UTF-8"')
         self.send_header('Cache-Control', 'no-store')
