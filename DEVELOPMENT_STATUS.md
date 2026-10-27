@@ -2,6 +2,18 @@
 
 갱신일: 2026-10-27 KST. [전체 마스터 문서](GLOBAL_MASTER_PLAN.md)를 먼저 읽는다.
 
+## 한글쉽지9 — 기존 무료 서버 0aa0092 실제 반영 확인 (2026-10-27 KST)
+
+사용자가 개인 크롬에서 기존 Render 서비스 `hangeul-swipji99-test`의 Manual Deploy → Deploy a specific commit → `0aa0092`를 선택해 배포했다. 서비스 `srv-dbg2fet9fdbs73cj08c0`와 주소 https://hangeul-swipji99-test.onrender.com/ 을 유지했다. 제공된 화면에서 해당 커밋의 빌드 시작을 확인했고, 실제 공개 HTTPS 응답으로 반영을 검증했다. 새 서비스/카드/유료 전환/운영 배포는 없다.
+
+실제 배포 코드: `0aa00926f08fb3d53b45db5b7859630bdadf6c1e`. [이 코드의 CI40485171083](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40485171083)는 completed/success를 직접 재확인했다. 후속 보고 문서 커밋과 실제 서버 코드 커밋을 혼동하지 않는다.
+
+검증 시각: 2026-10-27T21:34:19.900263+09:00. `/healthz`의 sourceSHA256 `e9d1368308005470c4e6cbf04e1d237eeb61ff1d0abc0f01c14558a90ee8b755`와 appSHA256 `2e7e9531014ca2ecfb27866721b1e53640b1f6cef79938a2a1c4ffbcd90f102e`가 해당 커밋 소스와 각각 일치했다. gateSessionVersion=`signed-cookie-v1`, videoUIVersion=`embedded-preview-v1`, configuredOrigin=`https://hangeul-swipji99-test.onrender.com`도 일치했다. Render의 Live 표시만으로 판단하지 않았다.
+
+공개 HTTPS 경계 **10/10 통과**: health200, 직접 홈/원본 화상 경로의 미인증 문서401+Basic challenge, 미인증 API/스크립트401에는 challenge 없음, 외부API/외부Origin 로그인/Origin없는로그인/외부Referer403, 같은Origin 로그인은 게이트401까지 도달했다. 근거: `audit/staging9-hosted-deployment.json`. 비밀번호·쿠키를 읽거나 인증을 없애지 않았다. 이 검사는 익명 요청이며 인증된 홈 HTML/수업 계정 로그인/예약·과제·평가·재예약 성공을 의미하지 않는다.
+
+현재 상태: **코드/CI 완료, 기존 테스트 서버 반영 확인, 인증된 공개 전체 흐름 미완료, 실제 두 기기 통화 미완료.** 다음은 사용자 개인 크롬에서 테스트 홈을 열어 입장 인증 반복 여부를 확인하고 무료 학습·진단→수업 로그인→강사 검색→예약/모의 결제→화상→과제/평가→재예약을 진행하는 것이다. 클라우드 로그인 복구를 반복시키지 않는다. 실제 Jitsi 진행자 인증·카메라/마이크·상대 양방향 송수신은 여전히 별도 확인이 필요하다. main은 `fe9759fd0f60f20e784fae1d3d95625b63db1d93`이며 운영 DB·홈페이지·실제 금전은 변경하지 않았다. 아래 배포 대기 기록은 당시 이력으로 보존한다.
+
 ## 한글쉽지9 — 예약 수업의 기기 점검·화상 화면 보완, 배포 인증 대기 (2026-10-27 KST)
 
 개발·테스트 배포 담당을 한글쉽지9로 통일한다. 시작·재확인 통합 HEAD는 `f72b97477d8608d3b1c8373e808074beb02c9d92`이며 작업 트리는 깨끗했다. 339b418→f47cf3e→17da26f를 다시 합치지 않았다. 기존 Python79개/HTTPS브라우저33개/192교재 검사 근거와 [f72b974 CI40482217805 성공](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40482217805)을 보존한다.

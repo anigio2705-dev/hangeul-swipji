@@ -1,0 +1,119 @@
+{
+  "checkedAt": "2026-10-27T21:34:19.900263+09:00",
+  "service": "srv-dbg2fet9fdbs73cj08c0",
+  "url": "https://hangeul-swipji99-test.onrender.com/",
+  "codeCommit": "0aa00926f08fb3d53b45db5b7859630bdadf6c1e",
+  "deploymentOperator": "user via existing Render service Manual Deploy specific commit, observed in screenshots",
+  "newServiceCreated": false,
+  "paidUpgrade": false,
+  "publicHealth": {
+    "mode": "test",
+    "ok": true,
+    "scope": "isolated-staging",
+    "requestGuardVersion": "document-navigation-v2",
+    "gateSessionVersion": "signed-cookie-v1",
+    "videoUIVersion": "embedded-preview-v1",
+    "appSHA256": "2e7e9531014ca2ecfb27866721b1e53640b1f6cef79938a2a1c4ffbcd90f102e",
+    "configuredOrigin": "https://hangeul-swipji99-test.onrender.com",
+    "sourceSHA256": "e9d1368308005470c4e6cbf04e1d237eeb61ff1d0abc0f01c14558a90ee8b755"
+  },
+  "sourceMatches": {
+    "sourceSHA256": true,
+    "appSHA256": true,
+    "gateSessionVersion": true,
+    "videoUIVersion": true
+  },
+  "checks": [
+    {
+      "name": "health",
+      "status": 200,
+      "expectedStatus": 200,
+      "basicChallenge": false,
+      "expectedChallenge": false,
+      "passed": true
+    },
+    {
+      "name": "direct home",
+      "status": 401,
+      "expectedStatus": 401,
+      "basicChallenge": true,
+      "expectedChallenge": true,
+      "passed": true
+    },
+    {
+      "name": "legacy video entry",
+      "status": 401,
+      "expectedStatus": 401,
+      "basicChallenge": true,
+      "expectedChallenge": true,
+      "passed": true
+    },
+    {
+      "name": "background API without gate",
+      "status": 401,
+      "expectedStatus": 401,
+      "basicChallenge": false,
+      "expectedChallenge": false,
+      "passed": true
+    },
+    {
+      "name": "background script without gate",
+      "status": 401,
+      "expectedStatus": 401,
+      "basicChallenge": false,
+      "expectedChallenge": false,
+      "passed": true
+    },
+    {
+      "name": "foreign API",
+      "status": 403,
+      "expectedStatus": 403,
+      "basicChallenge": false,
+      "expectedChallenge": false,
+      "passed": true
+    },
+    {
+      "name": "foreign login origin",
+      "status": 403,
+      "expectedStatus": 403,
+      "basicChallenge": false,
+      "expectedChallenge": false,
+      "passed": true
+    },
+    {
+      "name": "missing login origin",
+      "status": 403,
+      "expectedStatus": 403,
+      "basicChallenge": false,
+      "expectedChallenge": false,
+      "passed": true
+    },
+    {
+      "name": "foreign referer",
+      "status": 403,
+      "expectedStatus": 403,
+      "basicChallenge": false,
+      "expectedChallenge": false,
+      "passed": true
+    },
+    {
+      "name": "same-origin login without gate",
+      "status": 401,
+      "expectedStatus": 401,
+      "basicChallenge": false,
+      "expectedChallenge": false,
+      "passed": true
+    }
+  ],
+  "passed": 10,
+  "total": 10,
+  "ci": {
+    "id": 40485171083,
+    "head": "0aa00926f08fb3d53b45db5b7859630bdadf6c1e",
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "authenticatedHomeAndBookingVerified": false,
+  "actualTwoDeviceMediaVerified": false,
+  "limit": "Anonymous HTTPS checks prove deployed source and auth/origin boundaries only; do not prove signed-in UI or media success."
+}
