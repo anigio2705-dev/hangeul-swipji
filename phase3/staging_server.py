@@ -2,6 +2,7 @@
 """Password-protected TEST host behind a provider's HTTPS proxy, never production."""
 import base64
 import binascii
+import hashlib
 from dataclasses import dataclass
 import hmac
 import os
@@ -135,7 +136,10 @@ class StagingHandler(server.Handler):
         if self.path == '/healthz':
             try:
                 with server.connect() as db: db.execute('SELECT 1 FROM users LIMIT 1')
-                return self.send(200, {'ok': True, 'scope': 'isolated-staging'})
+                return self.send(200, {'ok': True, 'scope': 'isolated-staging',
+                    'requestGuardVersion': 'document-navigation-v2',
+                    'configuredOrigin': self.server.staging.origin,
+                    'sourceSHA256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()})
             except Exception:
                 return self.send(503, {'ok': False})
         super().do_GET()

@@ -1,5 +1,6 @@
 """Real HTTP staging-boundary regression, using only a disposable SQLite DB."""
 import base64
+import hashlib
 import http.client
 import json
 from pathlib import Path
@@ -215,7 +216,13 @@ class StagingTests(unittest.TestCase):
     def test_health_only_without_gate_and_db_failure(self):
         status, _, body = self.request('/healthz', authenticated=False)
         self.assertEqual(200, status)
-        self.assertEqual({'mode':'test','ok':True,'scope':'isolated-staging'}, json.loads(body))
+        health = json.loads(body)
+        self.assertTrue(health['ok'])
+        self.assertEqual('test',health['mode'])
+        self.assertEqual('isolated-staging',health['scope'])
+        self.assertEqual('document-navigation-v2',health['requestGuardVersion'])
+        self.assertEqual(self.settings.origin,health['configuredOrigin'])
+        self.assertEqual(hashlib.sha256(Path(staging.__file__).read_bytes()).hexdigest(),health['sourceSHA256'])
         with patch.object(server, 'connect', side_effect=RuntimeError('private failure')):
             status, _, body = self.request('/healthz', authenticated=False)
         self.assertEqual(503, status)

@@ -9,8 +9,9 @@ services:
     region: singapore
     plan: free
     autoDeployTrigger: 'off'
-    buildCommand: python3 -m compileall -q phase3
-    startCommand: python3 phase3/staging_server.py
+    buildCommand: >-
+      python3 -m compileall -q phase3 && python3 -c "from pathlib import Path; import hashlib; print('STAGING_SOURCE_SHA256='+hashlib.sha256(Path('phase3/staging_server.py').read_bytes()).hexdigest())"
+    startCommand: python3 -B phase3/staging_server.py
     healthCheckPath: /healthz
     envVars:
       - key: PYTHON_VERSION
