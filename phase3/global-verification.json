@@ -1,11 +1,11 @@
 {
-  "pythonTests": 56,
-  "browserChecks": 28,
+  "pythonTests": 61,
+  "browserChecks": 31,
   "staticScreens": 26,
   "postgresChecks": 12,
-  "authoredLessons": 24,
-  "newLessons": 12,
-  "plannedLessons": 72,
+  "authoredLessons": 96,
+  "newLessons": 72,
+  "plannedLessons": 0,
   "originalLessons": 350,
   "originalQuizzes": 1758,
   "readingItems": 600,
@@ -25,5 +25,13 @@
   "physicalMobileTested": false,
   "productionDeployed": false,
   "sourceTestsPassed": true,
-  "educationComplete": false
+  "educationComplete": false,
+  "newLessonsThisCommit": 72,
+  "previousAuthoredLessons": 24,
+  "professionalAssessmentItems": 288,
+  "allLessonDialogViews": 192,
+  "educationStandardsDocuments": 5,
+  "humanTeacherValidationPerformed": false,
+  "missingRequiredHumanRecordings": 359,
+  "actualListeningApproved": 0
 }

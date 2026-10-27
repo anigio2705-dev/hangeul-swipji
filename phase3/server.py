@@ -55,7 +55,7 @@ def units():
     path = ROOT / 'content.json'
     data = json.loads(path.read_text()) if path.exists() else []
     original=data.get('units', []) if isinstance(data,dict) else data
-    extra=json.loads((ROOT/'content-expansion.json').read_text())['units']
+    extra=json.loads((ROOT/'content-expansion.json').read_text())['units']+json.loads((ROOT/'content-remaining72.json').read_text())['units']
     return [learning.decorate(u) for u in original+extra]
 def get_unit(uid):
     found = next((u for u in units() if str(u['id']) == str(uid)), None)
@@ -261,7 +261,7 @@ class Handler(BaseHTTPRequestHandler):
             attempts.clear(); audit(db,u['id'],'login',u['id'])
             return {'user':public_user(u)},self.session(db,u['id'])
         if method=='GET' and path=='/api/curriculum': return learning.catalog(),None
-        if method=='GET' and path=='/api/units': return {'units':[learning.public_unit(x) for x in units()]},None
+        if method=='GET' and path=='/api/units': return {'units':[{k:v for k,v in x.items() if k in ('id','title','level','durationMinutes','objectives','learningPath')} for x in units()]},None
         if method=='GET' and path.startswith('/api/units/'):
             unit=dict(get_unit(path.split('/')[-1])); u=self.user(db)
             unit=learning.public_unit(unit,u['role']=='admin' or (u['role'] in ('teacher','partner') and bool(u['approved'])))
@@ -322,6 +322,7 @@ class Handler(BaseHTTPRequestHandler):
             return {'user':public_user(db.execute('SELECT * FROM users WHERE id=?',(uid,)).fetchone())},None
         if method=='GET' and path=='/api/teachers':
             clauses=["u.approved=1", "u.role IN ('teacher','partner')"];params=[]
+            if q.get('id'):clauses.append('u.id=?');params.append(text(q['id'][0],64))
             for field,param in [('role','role'),('languages','language'),('level','level'),('specialty','purpose')]:
                 if q.get(param):clauses.append('instr(lower(u.'+field+'),lower(?))>0');params.append(text(q[param][0],200))
             if q.get('maxPrice'):

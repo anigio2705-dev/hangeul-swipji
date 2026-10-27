@@ -21,11 +21,11 @@ class GlobalLearningTests(unittest.TestCase):
         units=self.real_units();unit=units[4]
         s,x=self.learner.call('/api/bookings',{'teacherId':self.t['id'],'slotId':self.slot,'unitId':unit['id']})
         self.assertEqual(200,s,x);return x['bookingId'],unit
-    def test_96_slots_and_24_authored_with_original_12_untouched(self):
-        units=self.real_units();self.assertEqual(24,len(units));p=learning.catalog()
+    def test_96_authored_slots_with_original_24_untouched(self):
+        units=self.real_units();self.assertEqual(96,len(units));p=learning.catalog()
         self.assertEqual(4,len(p['stages']));slots=[x for st in p['stages'] for x in st['lessons']]
-        self.assertEqual(96,len(slots));self.assertEqual(24,sum(x['status']=='authored' for x in slots));self.assertEqual(72,sum(x['status']=='planned' for x in slots))
-        self.assertEqual(24,len({u['reading'] for u in units}));self.assertEqual(72,sum(len(u['assessment']) for u in units))
+        self.assertEqual(96,len(slots));self.assertEqual(96,sum(x['status']=='authored' for x in slots));self.assertEqual(0,sum(x['status']=='planned' for x in slots))
+        self.assertEqual(96,len({u['reading'] for u in units}));self.assertEqual(288,sum(len(u['assessment']) for u in units))
         for u in units:
             self.assertTrue(u['teacherNotes']);self.assertTrue(u['performanceRubric'])
             for phase in ('pre','post'):
@@ -45,7 +45,7 @@ class GlobalLearningTests(unittest.TestCase):
         self.assertEqual([],self.learner.call('/api/availability?teacherId='+own)[1]['slots'])
         self.assertNotIn(own,[u['id'] for u in self.learner.call('/api/teachers')[1]['teachers']])
         s,x=self.teacher.call('/api/units/'+units[0]['id']);self.assertIn('teacherGuide',x['unit']);self.assertNotIn('_diagnostics',x['unit'])
-        self.assertEqual(404,self.learner.call('/api/units/S1-24')[0])
+        self.assertEqual(200,self.learner.call('/api/units/HS4-S1-24')[0])
     def test_placement_validation_and_account_isolation(self):
         self.assertEqual(200,self.learner.call('/api/learning/placement',{'groups':[2,3,1,0],'userId':self.o['id']})[0])
         s,x=self.learner.call('/api/learning');self.assertEqual(1,x['placement']['stage']);self.assertEqual(0,x['placement']['stage']<0)
@@ -87,6 +87,6 @@ class GlobalLearningTests(unittest.TestCase):
         seen=set()
         for offset in (0,10,20):
             s,x=self.learner.call('/api/teachers?limit=10&offset='+str(offset));self.assertEqual(200,s);self.assertEqual(25,x['total']);seen.update(t['id'] for t in x['teachers'])
-        self.assertEqual(25,len(seen));s,x=self.learner.call('/api/teachers?purpose=%EC%A7%81%EC%9E%A5&from='+dt.datetime.fromtimestamp(self.clock+7000,dt.timezone.utc).isoformat().replace('+','%2B')+'&to='+dt.datetime.fromtimestamp(self.clock+11000,dt.timezone.utc).isoformat().replace('+','%2B'))
+        self.assertEqual(25,len(seen));self.assertEqual(self.t['id'],self.learner.call('/api/teachers?id='+self.t['id'])[1]['teachers'][0]['id']);s,x=self.learner.call('/api/teachers?purpose=%EC%A7%81%EC%9E%A5&from='+dt.datetime.fromtimestamp(self.clock+7000,dt.timezone.utc).isoformat().replace('+','%2B')+'&to='+dt.datetime.fromtimestamp(self.clock+11000,dt.timezone.utc).isoformat().replace('+','%2B'))
         self.assertEqual(200,s,x);self.assertEqual(24,x['total']);self.assertTrue(x['hasMore'])
         self.assertEqual(400,self.learner.call('/api/teachers?limit=0')[0]);self.assertEqual(400,self.learner.call('/api/teachers?from=1')[0])

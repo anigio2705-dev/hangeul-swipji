@@ -1,6 +1,6 @@
 {
   "mode": "local-test-only",
-  "checkedAt": "2026-10-26T22:44:33.272Z",
+  "checkedAt": "2026-10-26T23:40:31.054Z",
   "browser": "Chromium134 / Playwright1.51.1",
   "checks": [
     "teacher UI signup",
@@ -30,7 +30,10 @@
     "no JavaScript page errors",
     "policy and runbook links resolve",
     "eight supported core UI languages on unified mobile homepage",
-    "same UTC booking rendered in New York local time"
+    "same UTC booking rendered in New York local time",
+    "rebooking opens next lesson and persists a new72-unit reservation",
+    "all96 student lessons at desktop and mobile:192 dialogs,288 answers each viewport",
+    "new final lesson teacher flow prompts errors and four-skill guidance UI"
   ],
   "viewportWidths": [
     1440,

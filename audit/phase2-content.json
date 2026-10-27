@@ -1,7 +1,7 @@
 {
   "baseline": "46745d28b17554f7d0f67e3e5515778b7ccb35e3",
   "scope": "automated source checks; AI teaching review is recorded separately",
-  "generatedAt": "2026-10-26T22:43:27.880Z",
+  "generatedAt": "2026-10-26T23:38:53.635Z",
   "errors": [],
   "warnings": [
     "Audio: missing human recordings and listening approval remain; no synthetic substitution.",

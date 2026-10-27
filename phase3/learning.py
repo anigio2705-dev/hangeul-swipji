@@ -1,5 +1,6 @@
 """Isolated educational records and published curriculum; no hosted DB or external calls."""
 import json
+import education_standards
 from functools import lru_cache
 from pathlib import Path
 import time
@@ -12,9 +13,10 @@ def _plan_version(stamp):return json.loads((ROOT/'curriculum-96.json').read_text
 def plan():return _plan_version((ROOT/'curriculum-96.json').stat().st_mtime_ns)
 def decorate(unit):
     p=plan();meta=p['unitMapping'].get(unit['id'],{})
-    return dict(unit,_diagnostics={phase:diagnostic(unit['id'],phase) for phase in ('pre','post')},learningPath={k:v for k,v in meta.items() if k!='teacherNotes'},teacherNotes=meta.get('teacherNotes',{}),performanceRubric=p['rubric'])
+    student,methods=education_standards.apply(unit,meta.get('stage',1))
+    return dict(unit,performanceAreas=student,teacherStandards=methods,_diagnostics={phase:diagnostic(unit['id'],phase) for phase in ('pre','post')},learningPath={k:v for k,v in meta.items() if k!='teacherNotes'},teacherNotes=meta.get('teacherNotes',{}),performanceRubric=dict(p['rubric'],**education_standards.RUBRIC))
 def public_unit(unit,teacher=False):
-    return {k:v for k,v in unit.items() if k!='_diagnostics' and (teacher or k not in ('teacherGuide','teacherNotes'))}
+    return {k:v for k,v in unit.items() if k!='_diagnostics' and (teacher or k not in ('teacherGuide','teacherNotes','teacherStandards'))}
 def catalog():
     p=plan();return {k:p[k] for k in ('version','basis','scope','stages','limits')}
 def diagnostic(uid,phase):
@@ -41,11 +43,11 @@ def save_placement(db,uid,groups):
     db.execute('INSERT INTO learning_placements VALUES(?,?,?,?,?) ON CONFLICT(user_id) DO UPDATE SET stage=excluded.stage,groups_json=excluded.groups_json,source=excluded.source,created_at=excluded.created_at',(uid,stage,json.dumps(groups),'voluntary-browser-summary-unverified',time.time()))
     return dict(stage=stage,score=score,verified=False)
 def teacher_rating(db,booking,actor,phase,ratings,note):
-    if phase not in ('pre','post') or not isinstance(ratings,dict) or set(ratings)!= {'pronunciation','grammar','interaction'}:raise ValueError('수행 평가 구분과 세 영역이 필요합니다')
+    if phase not in ('pre','post') or not isinstance(ratings,dict) or (not {'pronunciation','grammar','interaction'}.issubset(ratings) or set(ratings)-{'pronunciation','grammar','interaction','listening','speaking','reading','writing'}):raise ValueError('수행 평가 구분과 세 영역이 필요합니다')
     if any(isinstance(n,bool) or not isinstance(n,int) or not 0<=n<=4 for n in ratings.values()) or not isinstance(note,str) or not 10<=len(note.strip())<=5000:raise ValueError('각 영역 0~4점과 10자 이상 관찰 근거가 필요합니다')
     scores={k:dict(earned=v,possible=4) for k,v in ratings.items()};rid=secrets.token_hex(16)
-    db.execute('INSERT INTO learning_checks VALUES(?,?,?,?,?,?,?,?,?,?,?,?)',(rid,booking['learner_id'],booking['unit_id'],booking['id'],phase,'teacher-observation',sum(ratings.values()),12,json.dumps(scores),note.strip(),time.time(),actor))
-    return dict(id=rid,score=sum(ratings.values()),maxScore=12,kind='teacher-observation',certified=False)
+    db.execute('INSERT INTO learning_checks VALUES(?,?,?,?,?,?,?,?,?,?,?,?)',(rid,booking['learner_id'],booking['unit_id'],booking['id'],phase,'teacher-observation',sum(ratings.values()),4*len(ratings),json.dumps(scores),note.strip(),time.time(),actor))
+    return dict(id=rid,score=sum(ratings.values()),maxScore=4*len(ratings),kind='teacher-observation',observedAreas=list(ratings),fourSkillsObserved={'listening','speaking','reading','writing'}.issubset(ratings),certified=False)
 def summary(db,uid):
     p=plan();row=db.execute('SELECT * FROM learning_placements WHERE user_id=?',(uid,)).fetchone()
     placement=dict(row) if row else None
@@ -53,11 +55,14 @@ def summary(db,uid):
     records=[]
     for x in db.execute('SELECT * FROM learning_checks WHERE user_id=? ORDER BY created_at DESC,rowid DESC LIMIT 50',(uid,)):
         v=dict(x);v['skills']=json.loads(v.pop('skills_json'));records.append(v)
-    latest={}
+    latest={};observed={};text_checks={}
     for record in records:
         for skill,value in record['skills'].items():
-            if skill not in latest:latest[skill]=dict(value,kind=record['kind'],createdAt=record['created_at'])
-    weak=[s for s,v in latest.items() if v['earned']/v['possible']<.67]
+            item=dict(value,kind=record['kind'],createdAt=record['created_at'])
+            if skill not in latest:latest[skill]=item
+            bucket=observed if record['kind']=='teacher-observation' else text_checks
+            if skill not in bucket:bucket[skill]=item
+    weak=sorted({s for bucket in (observed,text_checks) for s,v in bucket.items() if v['earned']/v['possible']<.67})
     last=records[0]['unit_id'] if records else None
     stage=p['unitMapping'].get(last,{}).get('stage') or ([1,1,2,3,3,4,4][placement['stage']] if placement else 1)
     candidates=[m for m in p['stages'] if m['id']==stage][0]['lessons']
@@ -66,4 +71,4 @@ def summary(db,uid):
     if last and weak:ready.sort(key=lambda v:v['unitId']!=last)
     elif last:
         next_id=p['unitMapping'].get(last,{}).get('nextUnitId');ready.sort(key=lambda v:v['unitId']!=next_id)
-    return dict(placement=placement,records=records,latestSkillChecks=latest,weakSkills=weak,recommendations=ready[:3],recommendationBasis='Internal advisory: latest task and available authored lessons; not certified placement.',productionDatabaseUsed=False)
+    return dict(placement=placement,records=records,latestSkillChecks=latest,observedSkillChecks=observed,textCheckSkillChecks=text_checks,weakSkills=weak,recommendations=ready[:3],recommendationBasis='Internal advisory: latest task and available authored lessons; not certified placement.',productionDatabaseUsed=False)
