@@ -57,10 +57,28 @@ class StagingHandler(server.Handler):
         # Do not trust arbitrary Forwarded/X-Forwarded-* headers for host or origin.
         if self.headers.get_all('Host', []) != [urlsplit(settings.origin).netloc]:
             raise server.Error('허용되지 않은 테스트 호스트', 403)
-        if self.command != 'GET' and self.headers.get('Origin') != settings.origin:
+        origins = self.headers.get_all('Origin', [])
+        if (origins and origins != [settings.origin]) or (self.command != 'GET' and origins != [settings.origin]):
             raise server.Error('테스트 주소에서만 요청할 수 있습니다', 403)
-        if self.headers.get('Sec-Fetch-Site') == 'cross-site':
+        # Clicking a link from Render/another site is a legitimate document navigation.
+        # It still needs Basic Auth. Never extend this exception to API reads or writes.
+        path = urlsplit(self.path).path
+        document_navigation = (self.command == 'GET'
+            and self.headers.get('Sec-Fetch-Mode') == 'navigate'
+            and self.headers.get('Sec-Fetch-Dest') == 'document'
+            and not server.unquote(path).startswith('/api/'))
+        if self.headers.get('Sec-Fetch-Site') in ('cross-site', 'same-site') and not document_navigation:
             raise server.Error('다른 사이트 요청 거부', 403)
+        referers = self.headers.get_all('Referer', [])
+        if referers and not document_navigation:
+            try:
+                ref = urlsplit(referers[0])
+                valid_referer = (len(referers) == 1 and not ref.username and not ref.password
+                    and f'{ref.scheme}://{ref.netloc}' == settings.origin)
+            except ValueError:
+                valid_referer = False
+            if not valid_referer:
+                raise server.Error('다른 출처 Referer 요청 거부', 403)
         try:
             scheme, encoded = self.headers.get('Authorization', '').split(' ', 1)
             if scheme.lower() != 'basic': raise ValueError()
@@ -152,6 +170,7 @@ def main():
     http.secure_cookies = True
     http.failures = {}
     print('ISOLATED STAGING: existing homepage + Python API; mock money only', flush=True)
+    print(f'STAGING HTTPS ORIGIN: {settings.origin}', flush=True)
     try: http.serve_forever()
     finally: http.server_close()
 

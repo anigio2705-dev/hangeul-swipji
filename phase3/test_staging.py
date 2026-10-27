@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import tempfile
 import threading
+import time
 import unittest
 from unittest.mock import patch
 
@@ -43,6 +44,7 @@ class StagingTests(unittest.TestCase):
         if authenticated:
             h['Authorization'] = 'Basic '+base64.b64encode(('review:'+self.settings.gate_password).encode()).decode()
         h.update(headers or {})
+        h = {key:value for key,value in h.items() if value is not None}
         conn = http.client.HTTPConnection('127.0.0.1', self.http.server_port, timeout=10)
         conn.request('GET' if data is None else 'POST', path, None if data is None else json.dumps(data), h)
         response = conn.getresponse()
@@ -78,6 +80,85 @@ class StagingTests(unittest.TestCase):
         self.assertEqual(403, self.register_with_origin('https://attacker.test'))
         self.assertEqual(403, self.register_with_origin(''))
         self.assertEqual(403, self.request('/', headers={'Sec-Fetch-Site':'cross-site'})[0])
+
+    def test_external_link_document_navigation_allowed_with_gate(self):
+        navigation = {'Sec-Fetch-Site':'cross-site', 'Sec-Fetch-Mode':'navigate',
+                      'Sec-Fetch-Dest':'document', 'Referer':'https://dashboard.render.com/', 'Origin':None}
+        for path in ('/', '/index.html', '/learn.html', '/phase3/index.html'):
+            with self.subTest(path=path):
+                self.assertIn(self.request(path, headers=navigation)[0], (200,302))
+        self.assertEqual(401, self.request('/', headers=navigation, authenticated=False)[0])
+
+    def test_direct_navigation_and_same_origin_fetch_allowed(self):
+        direct = {'Origin':None, 'Sec-Fetch-Site':'none', 'Sec-Fetch-Mode':'navigate', 'Sec-Fetch-Dest':'document'}
+        self.assertEqual(200, self.request('/', headers=direct)[0])
+        self.assertEqual(200, self.request('/phase3/app.js', headers={'Origin':None,
+            'Referer':self.settings.origin+'/', 'Sec-Fetch-Site':'same-origin',
+            'Sec-Fetch-Mode':'no-cors','Sec-Fetch-Dest':'script'})[0])
+        self.assertEqual(200, self.request('/api/integrations', headers={'Origin':None,
+            'Referer':self.settings.origin+'/?lang=ko', 'Sec-Fetch-Site':'same-origin',
+            'Sec-Fetch-Mode':'cors','Sec-Fetch-Dest':'empty'})[0])
+
+    def test_external_api_frames_and_mutations_still_denied(self):
+        for path in ('/', '/api/integrations', '/api/me'):
+            for mode,dest in (('cors','empty'),('no-cors','script'),('navigate','iframe')):
+                self.assertEqual(403, self.request(path,headers={'Origin':None,'Sec-Fetch-Site':'cross-site',
+                    'Sec-Fetch-Mode':mode,'Sec-Fetch-Dest':dest})[0])
+        self.assertEqual(403, self.request('/api/integrations',headers={'Origin':None,
+            'Sec-Fetch-Site':'cross-site','Sec-Fetch-Mode':'navigate','Sec-Fetch-Dest':'document'})[0])
+        self.assertEqual(403, self.request('/api/integrations',headers={'Origin':None,
+            'Sec-Fetch-Site':'same-site','Sec-Fetch-Mode':'cors','Sec-Fetch-Dest':'empty'})[0])
+        self.assertEqual(403, self.request('/api/login',{},headers={'Origin':'https://attacker.test',
+            'Sec-Fetch-Site':'cross-site','Sec-Fetch-Mode':'navigate','Sec-Fetch-Dest':'document'})[0])
+        self.assertEqual(403, self.request('/api/login',{},headers={'Origin':None,
+            'Sec-Fetch-Site':'none'})[0])
+
+    def test_referer_validation_does_not_use_prefix_matching(self):
+        for referer in ('https://attacker.test/',self.settings.origin+'.attacker.test/',
+                        'https://review.example.test@attacker.test/', 'not-a-url', 'https://['):
+            self.assertEqual(403, self.request('/api/login',{},headers={'Referer':referer})[0])
+        self.assertEqual(200, self.request('/api/login',dict(email='admin@example.test',password=self.settings.admin_password),
+            headers={'Referer':self.settings.origin+'/?lang=ko','Sec-Fetch-Site':'same-origin'})[0])
+
+    def test_render_origin_fallback_matches_explicit_configuration(self):
+        env = dict(self.env)
+        env['RENDER_EXTERNAL_URL'] = env.pop('HS_STAGING_ORIGIN')
+        self.assertEqual(self.settings, staging.Settings.from_env(env))
+
+    def test_same_origin_login_booking_homework_feedback_and_second_booking(self):
+        context = {'Origin':self.settings.origin,'Referer':self.settings.origin+'/',
+                   'Sec-Fetch-Site':'same-origin','Sec-Fetch-Mode':'cors','Sec-Fetch-Dest':'empty'}
+        def call(path, data=None):
+            status, _, body = self.request(path,data,headers=context)
+            self.assertEqual(200,status,body)
+            return json.loads(body)
+        password = 'Disposable-Origin-Test-12345!'
+        def login(email, secret=password): return call('/api/login',dict(email=email,password=secret))
+        teacher = call('/api/register',dict(email='teacher@example.test',password=password,
+            nickname='테스트 강사',role='teacher',adultConsent=True))['user']
+        call('/api/register',dict(email='student@example.test',password=password,
+            nickname='테스트 학생',role='learner',adultConsent=True))
+        login('admin@example.test',self.settings.admin_password)
+        call('/api/admin/verify',dict(userId=teacher['id'],approved=True,reason='Disposable local test approval only'))
+        login('teacher@example.test')
+        start=time.time()+120
+        slot1=call('/api/availability',dict(start=start,end=start+2400))['slotId']
+        slot2=call('/api/availability',dict(start=start+3600,end=start+6000))['slotId']
+        login('student@example.test')
+        units=call('/api/units')['units']
+        bid=call('/api/bookings',dict(teacherId=teacher['id'],slotId=slot1,unitId=units[0]['id']))['bookingId']
+        self.assertFalse(call('/api/bookings/'+bid+'/pay-test',{})['chargedRealMoney'])
+        call('/api/bookings/'+bid+'/homework',dict(text='테스트 과제입니다.'))
+        login('teacher@example.test')
+        call('/api/bookings/'+bid+'/join',{})
+        call('/api/bookings/'+bid+'/feedback',dict(text='테스트 피드백입니다.',score=85))
+        login('student@example.test')
+        call('/api/bookings',dict(teacherId=teacher['id'],slotId=slot2,unitId=units[1]['id']))
+        bookings=call('/api/bookings')['bookings']
+        self.assertEqual(2,len(bookings))
+        first=next(b for b in bookings if b['id']==bid)
+        self.assertEqual('테스트 과제입니다.',first['homework'])
+        self.assertEqual(85,first['score'])
 
     def register_with_origin(self, origin):
         return self.request('/api/login', {}, headers={'Origin':origin, 'X-Forwarded-Proto':'https'})[0]

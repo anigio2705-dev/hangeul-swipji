@@ -2,6 +2,20 @@
 
 갱신일: 2026-10-27 KST. [전체 마스터 문서](GLOBAL_MASTER_PLAN.md)를 먼저 읽는다.
 
+## 한글쉽지99 — 외부 링크 접속의 잘못된403 수정 (2026-10-27)
+
+사용자가 공개 테스트 주소에서 ‘다른 사이트 요청 거부’ JSON을 보고하여 `staging_server.py`의 요청 경계를 점검했다. 현재 시작 HEAD는 `56461d0be35cbc72dafa4f7dab0e77283fe7f812`이며 원래 배포 코드는ad5757d다. 기존 서비스 `srv-dbg2fet9fdbs73cj08c0`/주소 https://hangeul-swipji99-test.onrender.com 을 유지한다.
+
+원인: Host/Origin 불일치가 아니라 `Sec-Fetch-Site: cross-site`의 무조건 차단이다. Render 페이지에서 테스트 링크를 누르는 정상 최상위 GET도 cross-site이므로 Basic Auth 전에403이 발생했다. 기존 코드에는 Referer 검사가 없었다.
+
+수정: GET + navigate + document + 비API 경로인 최상위 문서 이동만 외부 링크 예외로 허용한다. API 읽기, iframe/script/fetch, 외부POST/PUT에는 예외를 주지 않는다. Host는 여전히 정확한 설정 authority만 허용하며 X-Forwarded-*로 우회하지 않는다. Origin이 있으면 정확히 같아야 하고 쓰기 요청은 같은 Origin이 필수다. 문서 이동 이외 요청은 Referer가 있을 때 URL origin을 파싱해 정확히 비교한다. Referer 누락만으로 정상 같은Origin 요청을 거절하지 않는다. Basic Auth와 Secure 쿠키는 유지한다.
+
+Render 주소는 제공업체 화면의 실제URL과 일치한다. `HS_STAGING_ORIGIN`이 없으면 `RENDER_EXTERNAL_URL`을 읽는 기존 설정을 유지했고 동일한 결과를 회귀 검사했다. 시작 로그에 비밀값 없이 HTTPS origin만 추가하여 실제 제공업체 실행 설정을 확인할 수 있게 했다. 환경 비밀번호는 읽거나 기록하지 않는다.
+
+검사: 새 경계 검사15개 통과. 외부 링크의 홈/무료/호환 경로·주소창 직접접속·같은Origin 자산/API/로그인 허용, 비밀번호 없는 문서401, 외부API/iframe/script/POST·Origin누락·악성Referer 거부를 확인했다. 동일Origin HTTP 흐름으로 강사/학생가입→관리자승인→가능시간→로그인→예약→모의결제→과제→피드백/점수→다음 단원 예약·재조회도 통과했다. 일회성 SQLite의 로컬 검사이며 공개 서버 검사로 표시하지 않는다. 실제30분 수업 완료/미디어 검증은 하지 않았다. 전체 Python 회귀76개도 통과했다(41.562초). 실제 재배포 후 검증은 후속 항목에 기록한다.
+
+이번 변경은 staging_server.py·test_staging.py와 현황 문서다. 홈/교육 원본·main·운영DB는 변경하지 않는다. 새 서버·카드·유료 서비스를 만들지 않는다. 기존 서비스에 수정 커밋을 수동 배포하며 자동배포Off를 유지한다.
+
 ## 한글쉽지99 — Render 무료 테스트 서버 실제 생성 (2026-10-27 13:27 KST)
 
 사용자가 Render 브라우저 생성·무료 서버1개를 승인했다. Render 전용 도구는 재조회 시에도 미제공/미설치였으므로 승인된 브라우저 경로를 사용했다. 보안 로그인 후 Hangeul Swipji 작업공간에서 공개 Git 저장소를 연결하여 새 서비스1개만 만들었다. GitHub 추가 OAuth 권한은 부여하지 않았다.
