@@ -2,6 +2,18 @@
 
 갱신일: 2026-10-27 KST. [전체 마스터 문서](GLOBAL_MASTER_PLAN.md)를 먼저 읽는다.
 
+## 한글쉽지99 — 실제 HTTPS 출처 검사11개 통과 (2026-10-27 16:34 KST)
+
+중단 후 작업을 이어 실제 공개 서버의 수정 반영을 확인했다. 기존 서비스 `srv-dbg2fet9fdbs73cj08c0`와 https://hangeul-swipji99-test.onrender.com 을 그대로 사용한다. Render 활성 배포는 `dep-dbg34g4ipgvc73ec33f0`, 코드 `bf199f6a1b6d8c48bb3ede86fdf04e55b487c6f7`, Free/Python3이며 배포55.1초 성공이다. 새 서버·카드·유료 전환·main·운영DB 변경은 없다.
+
+실제 /healthz에서 requestGuardVersion=document-navigation-v2, configuredOrigin=https://hangeul-swipji99-test.onrender.com 및 원본SHA-256 c5e3f132fce724f4f4f069ba8039371e369243583a247d827c736d73d64dd228 을 확인했다. 이 해시는 로컬 원본 및 Render 빌드 로그와 일치한다. 실제 시작 로그도 `python3 -B phase3/staging_server.py`와 같은 HTTPS origin을 표시한다. 따라서 앞선 Live 표시만 확인했던 시점과 달리 실제 응답의 버전까지 대조했다.
+
+공개 HTTPS 검사 결과는 [audit/staging99-origin-hosted.json](audit/staging99-origin-hosted.json)에 기록했다.11/11 통과: 상태 점검200, 직접 홈/Render 외부링크 홈은 잘못된403 대신 Basic Auth401 challenge, 외부API·외부iframe·same-site API·잘못된Origin GET/POST·잘못된Referer POST·Origin 없는POST는403, 같은Origin 로그인 요청은 접속게이트401로 정상 도달했다. 게이트 비밀번호 없는 홈 HTML 열람이나 실제 사용자 로그인 성공을 뜻하지 않는다.
+
+로컬 Python76개 통과 및 [해당 코드 CI40453712144](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40453712144) completed/success도 확인했다. CI에는 통합 브라우저·PC/모바일 교재·홈/무료·격리PGlite 검사가 포함된다. 실제 공개 서버 인증 후 홈/로그인/예약/과제/평가/재예약 검사는 아직 미완료다. 클라우드 브라우저가 초기화되어 Render 로그인은 보안 입력으로 다시 완료했지만, 별도 테스트 사이트 Basic Auth는 사용자 직접 인증이 필요하다. 비밀번호는 읽거나 문서에 출력하지 않는다.
+
+다음 작업: 연결된 보안 브라우저에서 review / HS_STAGING_PASSWORD로 테스트 접속 인증 → 공개 서버의 홈·학습자/강사 로그인·예약·모의 결제·과제·평가·재예약 검증 → 결과만 추가 기록. 실제 교사 검수·실물 기기·실제 화상 미디어·운영배포는 별도다. 아래 불일치 기록은 해당 시점의 이력으로 보존하며 현재 요청 경계의 실제 반영 여부는 위11개 검사로 갱신한다.
+
 ## 한글쉽지99 — 실제 응답과 배포 표시 불일치 추가 검증 (2026-10-27)
 
 수정3247644는 Python76개 및 CI40452033999 전체 성공이다. Render의 커밋 지정 배포가 새 프로세스 실행 없이6분59초 대기하여 취소하고, 같은 서비스에서 최신 커밋 배포를1회 재시도했다. 재시도 배포 `dep-dbg2v6d9el5s73bo3teg`는3분55초 후 Live/활성3247644로 표시되었다.
