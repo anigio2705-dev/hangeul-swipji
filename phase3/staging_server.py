@@ -154,10 +154,15 @@ class StagingHandler(server.Handler):
     def static(self, path):
         name = server.unquote(path.lstrip('/'))
         if name == 'speaking-platform.html':
-            self.send_response(302)
-            self.send_header('Location', '/index.html#teaching-platform')
-            self.send_header('Content-Length', '0')
+            # Keep instant conversation separate from paid/booked lessons, without
+            # reconnecting the original page's hosted production database.
+            body = (server.ROOT / 'instant-speaking.html').read_bytes()
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.send_header('Content-Length', str(len(body)))
+            self.send_header('Referrer-Policy', 'no-referrer')
             self.end_headers()
+            self.wfile.write(body)
             return
         if name == 'speaking-config.js':
             body = b'window.HS_CONFIG = {}; // Isolated staging: external DB disabled.\n'

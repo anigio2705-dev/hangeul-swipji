@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-10-27T14:14:51.462Z",
+  "mode": "local-https-instant-page-only",
+  "checks": [
+    "original homepage CTA opens instant page without booking or camera auto-start",
+    "explicit iframe start sends no gate credentials or referrer to mocked Jitsi",
+    "two independent browser contexts share one invitation room (not physical devices)",
+    "mobile390 has no horizontal overflow",
+    "end removes iframe; restart preserves invitation room",
+    "invalid room replaced by new random room",
+    "booked class remains separately reachable"
+  ],
+  "errors": [],
+  "providerFrameMocked": true,
+  "actualTwoDeviceCallVerified": false,
+  "publicServerDeployed": false
+}

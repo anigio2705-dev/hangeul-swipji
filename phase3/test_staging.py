@@ -84,7 +84,7 @@ class StagingTests(unittest.TestCase):
 
     def test_gate_cookie_keeps_navigation_and_app_login_without_basic(self):
         status, headers, _ = self.request('/speaking-platform.html')
-        self.assertEqual(302,status)
+        self.assertEqual(200,status)
         cookie=headers['Set-Cookie']
         for flag in ('hs_staging_gate=', 'Path=/', 'HttpOnly', 'Secure', 'SameSite=Strict'):
             self.assertIn(flag,cookie)
@@ -119,7 +119,7 @@ class StagingTests(unittest.TestCase):
             self.assertNotIn('WWW-Authenticate',headers)
             self.assertEqual('STAGING_GATE_REQUIRED',json.loads(body)['code'])
 
-    def test_gate_cookie_preserves_admission_on_speaking_redirect(self):
+    def test_gate_cookie_preserves_admission_on_instant_speaking(self):
         status, headers, _ = self.request('/')
         self.assertEqual(200, status)
         cookie = headers['Set-Cookie'].split(';')[0]
@@ -127,8 +127,8 @@ class StagingTests(unittest.TestCase):
             self.assertIn(flag, headers['Set-Cookie'])
         self.cookie = cookie
         status, headers, _ = self.request('/speaking-platform.html?lang=ko', authenticated=False)
-        self.assertEqual(302, status)
-        self.assertEqual('/index.html#teaching-platform', headers['Location'])
+        self.assertEqual(200, status)
+        self.assertNotIn('Location', headers)
         self.assertEqual(200, self.request('/index.html', authenticated=False)[0])
         self.assertEqual(403, self.request('/api/me', authenticated=False,
             headers={'Origin':'https://attacker.test'})[0])
@@ -239,7 +239,13 @@ class StagingTests(unittest.TestCase):
 
     def test_legacy_links_cannot_reach_existing_hosted_database(self):
         for path in ('/speaking-platform.html', '/speaking%2dplatform.html'):
-            self.assertEqual('/index.html#teaching-platform', self.request(path)[1]['Location'])
+            status, headers, body = self.request(path)
+            self.assertEqual(200, status)
+            self.assertEqual((server.ROOT/'instant-speaking.html').read_bytes(), body)
+            self.assertNotIn('Location', headers)
+            self.assertNotIn(b'supabase', body)
+            self.assertIn('즉시 화상대화'.encode(), body)
+            self.assertIn('예약한 강사 수업'.encode(), body)
         status, _, body = self.request('/speaking-config.js')
         self.assertEqual(200, status)
         self.assertNotIn(b'supabase.co', body)

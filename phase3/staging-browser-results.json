@@ -1,6 +1,6 @@
 {
   "mode": "local-https-staging-cookie-test-only",
-  "checkedAt": "2026-10-27T09:36:58.854Z",
+  "checkedAt": "2026-10-27T13:45:44.310Z",
   "browser": "Chromium134 / Playwright1.51.1",
   "checks": [
     "HTTPS gate authenticated once per browser; all later steps use cookies without Basic header",
