@@ -2,7 +2,7 @@
 import base64
 import hashlib
 import http.client
-import http.cookies
+from http.cookies import SimpleCookie
 import json
 from pathlib import Path
 import tempfile
@@ -51,13 +51,11 @@ class StagingTests(unittest.TestCase):
         conn.request('GET' if data is None else 'POST', path, None if data is None else json.dumps(data), h)
         response = conn.getresponse()
         result = response.status, dict(response.getheaders()), response.read()
-        jar = http.cookies.SimpleCookie(self.cookie)
+        jar = SimpleCookie(self.cookie)
         for key, value in response.getheaders():
             if key.lower() == 'set-cookie':
-                incoming = http.cookies.SimpleCookie(value)
-                for name, morsel in incoming.items():
-                    jar[name] = morsel.value
-        self.cookie = '; '.join(name + '=' + morsel.value for name, morsel in jar.items())
+                jar.load(value)
+        self.cookie = '; '.join(f'{k}={v.value}' for k,v in jar.items())
         conn.close()
         return result
 
@@ -79,9 +77,47 @@ class StagingTests(unittest.TestCase):
         for path in ('/', '/phase3/app.js', '/api/units'):
             status, headers, body = self.request(path, authenticated=False)
             self.assertEqual(401, status)
-            self.assertIn('Basic realm=', headers['WWW-Authenticate'])
+            if path == '/': self.assertIn('Basic realm=', headers['WWW-Authenticate'])
+            else: self.assertNotIn('WWW-Authenticate', headers)
             self.assertNotIn(b'teacherGuide', body)
         self.assertEqual(401, self.request('/', headers={'Authorization':'Basic !!!'})[0])
+
+    def test_gate_cookie_keeps_navigation_and_app_login_without_basic(self):
+        status, headers, _ = self.request('/speaking-platform.html')
+        self.assertEqual(302,status)
+        cookie=headers['Set-Cookie']
+        for flag in ('hs_staging_gate=', 'Path=/', 'HttpOnly', 'Secure', 'SameSite=Strict'):
+            self.assertIn(flag,cookie)
+        self.assertNotIn(self.settings.gate_password,cookie)
+        self.assertNotIn('Domain=',cookie)
+        self.assertEqual(200,self.request('/index.html',authenticated=False)[0])
+        self.assertEqual(200,self.request('/api/units',authenticated=False)[0])
+        status,headers,_=self.request('/api/login',dict(email='admin@example.test',password='wrong'),authenticated=False)
+        self.assertEqual(401,status)
+        self.assertNotIn('WWW-Authenticate',headers)
+        status,_,_=self.request('/api/login',dict(email='admin@example.test',password=self.settings.admin_password),authenticated=False)
+        self.assertEqual(200,status)
+        self.assertEqual(200,self.request('/api/me',authenticated=False)[0])
+        self.assertEqual(200,self.request('/api/logout',{},authenticated=False)[0])
+        self.assertEqual(200,self.request('/index.html',authenticated=False)[0])
+        self.assertEqual(403,self.request('/api/units',headers={'Origin':'https://foreign.test'},authenticated=False)[0])
+
+    def test_gate_cookie_expiry_tampering_and_no_background_challenges(self):
+        with patch.object(staging.time,'time',return_value=1000): token=staging.gate_token(self.settings)
+        with patch.object(staging.time,'time',return_value=1001):
+            self.assertTrue(staging.valid_gate_cookie(self.settings,f'{staging.GATE_COOKIE}={token}'))
+            self.assertFalse(staging.valid_gate_cookie(self.settings,f'{staging.GATE_COOKIE}={token[:-1]}z'))
+        for now in (999,1000+staging.GATE_TTL):
+            with patch.object(staging.time,'time',return_value=now):
+                self.assertFalse(staging.valid_gate_cookie(self.settings,f'{staging.GATE_COOKIE}={token}'))
+        other=staging.Settings.from_env(dict(self.env,HS_STAGING_PASSWORD='New-Gate-Password-123456789!'))
+        self.assertFalse(staging.valid_gate_cookie(other,f'{staging.GATE_COOKIE}={staging.gate_token(self.settings)}'))
+        self.cookie=f'{staging.GATE_COOKIE}=invalid'
+        for path,dest in (('/api/me','empty'),('/phase3/app.js','script')):
+            status,headers,body=self.request(path,headers={'Sec-Fetch-Mode':'cors','Sec-Fetch-Dest':dest},authenticated=False)
+            self.assertEqual(401,status)
+            self.assertNotIn('WWW-Authenticate',headers)
+            self.assertEqual('STAGING_GATE_REQUIRED',json.loads(body)['code'])
 
     def test_gate_cookie_preserves_admission_on_speaking_redirect(self):
         status, headers, _ = self.request('/')
@@ -153,10 +189,11 @@ class StagingTests(unittest.TestCase):
         self.assertEqual(self.settings, staging.Settings.from_env(env))
 
     def test_same_origin_login_booking_homework_feedback_and_second_booking(self):
+        self.assertEqual(200,self.request('/')[0])  # Gate sign-in happens once.
         context = {'Origin':self.settings.origin,'Referer':self.settings.origin+'/',
                    'Sec-Fetch-Site':'same-origin','Sec-Fetch-Mode':'cors','Sec-Fetch-Dest':'empty'}
         def call(path, data=None):
-            status, _, body = self.request(path,data,headers=context)
+            status, _, body = self.request(path,data,headers=context,authenticated=False)
             self.assertEqual(200,status,body)
             return json.loads(body)
         password = 'Disposable-Origin-Test-12345!'

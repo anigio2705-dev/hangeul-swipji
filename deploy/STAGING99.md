@@ -1,3 +1,5 @@
+> 2026-10-27 인증 반복 방지 수정: 최초 게이트 인증 뒤 Secure/HttpOnly 서명 쿠키로8시간 접속을 유지하고 API/자산에는 기본 인증 challenge를 보내지 않는다. 앱 계정과 Jitsi 진행자 인증은 별개다. 이 변경은 현재 GitHub 검사용이며 Render 재배포는 미실행이다. 관리 세션이 로그아웃되어 있고 같은 로그인을 다시 요청하지 않았다. 최신 근거는 DEVELOPMENT_STATUS.md 및 audit/staging99-auth-regression.json을 우선한다. 아래 배포 기록은 당시 상태다.
+
 # 한글쉽지99 통합 테스트 호스팅 준비
 
 ## 후속 실제 생성 결과 — 2026-10-27 13:27 KST

@@ -5,14 +5,40 @@ import binascii
 import hashlib
 from dataclasses import dataclass
 import hmac
-import http.cookies
-import time
+from http.cookies import SimpleCookie, CookieError
 import os
 from pathlib import Path
 import re
+import time
 from urllib.parse import urlsplit
 
 import server
+
+GATE_COOKIE = 'hs_staging_gate'
+GATE_TTL = 8 * 60 * 60
+
+
+def gate_signature(settings, expiry):
+    # Preserve the cookie format introduced by concurrent integration commit339b418.
+    message = settings.origin + ':' + settings.gate_user + ':' + expiry
+    return hmac.new(settings.gate_password.encode(), message.encode(), hashlib.sha256).hexdigest()
+
+
+def gate_token(settings):
+    expiry = str(int(time.time()) + GATE_TTL)
+    return expiry + '.' + gate_signature(settings, expiry)
+
+
+def valid_gate_cookie(settings, header):
+    try:
+        cookies = SimpleCookie(header)
+        token = cookies[GATE_COOKIE].value
+        if not re.fullmatch(r'[0-9]{1,12}\.[a-f0-9]{64}', token): return False
+        expiry, signature = token.split('.')
+        if not time.time() < int(expiry) <= time.time() + GATE_TTL: return False
+        return hmac.compare_digest(signature, gate_signature(settings, expiry))
+    except (KeyError, ValueError, CookieError):
+        return False
 
 
 @dataclass(frozen=True)
@@ -82,23 +108,11 @@ class StagingHandler(server.Handler):
                 valid_referer = False
             if not valid_referer:
                 raise server.Error('다른 출처 Referer 요청 거부', 403)
-        # A signed, short-lived gate cookie preserves admission across document
-        # redirects when a browser does not resend cached Basic credentials.
+        # A successful gate sign-in survives navigation/API requests without relying
+        # on the browser's path-scoped HTTP-auth cache. Never contains a password.
         self.gate_denied = False
-        self.gate_admitted = False
-        cookie_valid = False
-        try:
-            cookies = http.cookies.SimpleCookie(self.headers.get('Cookie', ''))
-            token = cookies['hs_staging_gate'].value
-            expiry, signature = token.split('.', 1)
-            expires = int(expiry)
-            expected_signature = hmac.new(settings.gate_password.encode(),
-                (settings.origin + ':' + settings.gate_user + ':' + expiry).encode(), hashlib.sha256).hexdigest()
-            cookie_valid = (time.time() < expires <= time.time() + 28800
-                and hmac.compare_digest(signature, expected_signature))
-        except (KeyError, ValueError, http.cookies.CookieError):
-            pass
-        if cookie_valid and not self.headers.get('Authorization'):
+        self.new_gate_token = None
+        if not self.headers.get('Authorization') and valid_gate_cookie(settings, self.headers.get('Cookie', '')):
             return
         try:
             scheme, encoded = self.headers.get('Authorization', '').split(' ', 1)
@@ -110,23 +124,27 @@ class StagingHandler(server.Handler):
         if not hmac.compare_digest(supplied, expected):
             self.gate_denied = True
             raise server.Error('비공개 테스트 접속 비밀번호가 필요합니다', 401)
-        self.gate_admitted = True
+        self.new_gate_token = gate_token(settings)
 
     def send(self, status, value, cookie=None):
         # Only the outer gate's 401 triggers the browser's Basic Auth prompt.
         if getattr(self, 'gate_denied', False):
-            value = dict(error='Private test access required')
+            value = dict(error='테스트 서버 접속 인증이 필요합니다. 수업 계정 또는 Jitsi 로그인과는 별개입니다.',
+                         code='STAGING_GATE_REQUIRED')
         super().send(status, value, cookie)
 
     def end_headers(self):
-        if getattr(self, 'gate_admitted', False):
-            settings = self.server.staging
-            expiry = str(int(time.time()) + 28800)
-            signature = hmac.new(settings.gate_password.encode(),
-                (settings.origin + ':' + settings.gate_user + ':' + expiry).encode(), hashlib.sha256).hexdigest()
-            self.send_header('Set-Cookie', f'hs_staging_gate={expiry}.{signature}; Path=/; Max-Age=28800; Secure; HttpOnly; SameSite=Strict')
-        if getattr(self, 'gate_denied', False):
+        # A background fetch/asset must never trigger a native password dialog loop.
+        # Retain the normal Basic challenge only for top-level document navigation.
+        path = server.unquote(urlsplit(self.path).path)
+        document_request = (self.command == 'GET' and (path == '/' or path.endswith('.html')
+            or path.startswith('/free/') or path == '/phase3/') and not path.startswith('/api/')
+            and self.headers.get('Sec-Fetch-Mode') in (None, 'navigate')
+            and self.headers.get('Sec-Fetch-Dest') in (None, 'document'))
+        if getattr(self, 'gate_denied', False) and document_request:
             self.send_header('WWW-Authenticate', 'Basic realm="Hangeul Swipji TEST", charset="UTF-8"')
+        if getattr(self, 'new_gate_token', None):
+            self.send_header('Set-Cookie', f'{GATE_COOKIE}={self.new_gate_token}; Path=/; Max-Age={GATE_TTL}; Secure; HttpOnly; SameSite=Strict')
         self.send_header('Cache-Control', 'no-store')
         self.send_header('X-Robots-Tag', 'noindex, nofollow, noarchive')
         # Legacy static pages must not contact the existing hosted database either.
@@ -165,6 +183,7 @@ class StagingHandler(server.Handler):
                 with server.connect() as db: db.execute('SELECT 1 FROM users LIMIT 1')
                 return self.send(200, {'ok': True, 'scope': 'isolated-staging',
                     'requestGuardVersion': 'document-navigation-v2',
+                    'gateSessionVersion': 'signed-cookie-v1',
                     'configuredOrigin': self.server.staging.origin,
                     'sourceSHA256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()})
             except Exception:

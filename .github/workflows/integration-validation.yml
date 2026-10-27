@@ -33,6 +33,7 @@ jobs:
       - run: node scripts/check-phase2-pages.cjs
       - run: node --check phase3/app.js
       - run: node phase3/browser-test.cjs
+      - run: node phase3/browser-test.cjs --staging
       - run: node scripts/browser-smoke-phase2.cjs
         env:
           NODE_PATH: ./phase3/node_modules
@@ -45,6 +46,7 @@ jobs:
           name: integration-evidence
           path: |
             phase3/browser-results.json
+            phase3/staging-browser-results.json
             phase3/postgres-results.json
             phase3/browser-artifacts/*.png
             audit/phase2-content.json
