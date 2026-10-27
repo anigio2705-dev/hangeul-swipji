@@ -1,6 +1,6 @@
 {
   "mode": "local-test-only",
-  "checkedAt": "2026-10-26T23:40:31.054Z",
+  "checkedAt": "2026-10-27T03:52:48.104Z",
   "browser": "Chromium134 / Playwright1.51.1",
   "checks": [
     "teacher UI signup",

@@ -2,6 +2,36 @@
 
 갱신일: 2026-10-27 KST. [전체 마스터 문서](GLOBAL_MASTER_PLAN.md)를 먼저 읽는다.
 
+## 한글쉽지99 — 통합 테스트 호스팅 준비 (2026-10-27)
+
+**현재 상태: 배포 준비·로컬 검사 완료, 외부 테스트 주소 미발급.** 호스팅 계정 연결/선택이 필요하며 전체 플랫폼이 외부에서 이미 작동한다고 보고하지 않는다. 상세 구성·비용·계정·실행 절차는 [deploy/STAGING99.md](deploy/STAGING99.md), 실제 로컬 검사 요약은 [audit/staging99-verification.json](audit/staging99-verification.json)에 기록했다.
+
+- 시작 전 필수4문서와 교육 기준5문서를 통합 브랜치에서 읽었다. GitHub 최신4개 브랜치가 인수인계 값과 일치했다. 통합 시작 HEAD는 `1928a342ff401ed18232bfa4d025b33547b7e0f9`, main/3차/교육 기준 HEAD는 아래 표와 같았다. 당시 진행 중이던 [1928a34 CI 40440214531](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40440214531)는 completed/success, integration-evidence12705133726은 미만료임을 API로 재확인했다.
+- 실제 변경: `server.py`의 요청 출처 검사 분리·호스팅 전용 Secure 쿠키 옵션, 신규 `staging_server.py`/`test_staging.py`, 선택 전 제안용 `deploy/render-staging.yaml`/설명서, 이 현황과 검사 JSON. 기본 로컬 서버는127.0.0.1 제한을 유지한다. 호스팅 설정은 별도 테스트 서비스·통합 브랜치·자동배포 off·무료 플랜 제안이며 저장만으로 배포하지 않는다.
+- 테스트 호스트는 HTTPS origin/Host·게이트 비밀번호·외부 출처 차단·전용 SQLite·.test 가입만 허용한다. 운영/외부DB·Supabase/Stripe 환경변수를 거부하고 실제 외부 인증/결제 API를 차단한다. 관리자 비밀번호는 게이트와 독립이며 환경 비밀값에서만 읽는다.
+- Kill Critic에서 기존 `speaking-platform.html`이 기존 호스팅 Supabase 설정을 읽는 경로를 발견했다. 원본 두 파일을 보존하고 **테스트 서버 응답에서만** 통합 수업으로 이동/빈 설정 제공/CSP 외부DB 통신 차단을 적용했다. 운영DB 연결·쓰기·SQL 실행은 하지 않았다.
+- 보존: 홈·무료 교육·읽기·발음 목록·전문24+72 원본·96수업 연결 및 기존 화상 페이지/설정18개 파일을 시작 HEAD와 바이트 비교하여 동일함을 확인했다. main·3차 원본·운영 홈페이지·운영DB·실제 금전은 변경하지 않았다.
+
+이번에 새로 수행한 검사:
+
+|검사|결과·적용 범위|
+|---|---|
+|`python3 -m unittest discover -s phase3 -p 'test_*.py' -q`|70개 통과(기존61+신규 호스팅 경계9). 임시 SQLite/실제 로컬 HTTP. 외부 HTTPS 프록시 검증 아님|
+|`node phase3/browser-test.cjs`|31흐름 통과·96교재 PC/모바일192대화상자·강사 지도서 권한/표시·핵심8언어·재예약. 로컬 기본 서버|
+|`NODE_PATH=./phase3/node_modules node scripts/browser-smoke-phase2.cjs`|홈/무료13×2=26화면 통과|
+|`NODE_PATH=./phase3/node_modules node scripts/browser-functional-phase2.cjs`|PC/모바일 퀴즈·진도·읽기·음성 실패/보류·등록78개 미디어 종료 각각 통과. 실제 청취 승인 아님|
+|`node phase3/postgres-test.cjs`|격리 PGlite12항목 통과. 호스팅 Supabase 검증 아님|
+|`python3 scripts/audit-professional-96.py`·`node scripts/audit-phase2-content.cjs`|무료350/1758/읽기600 및 전문96/288·원본/구조 검사 오류0. 녹음359 누락/청취 승인0 보존|
+|Blueprint YAML·`git diff --check`|로컬 구문/자동배포 off 설정·공백 검사 통과. Render API 배포 검증 전|
+
+Self-Refine: YAML의 off가 파서에 따라 bool로 읽히는 문제를 따옴표로 수정했고, 기본 로컬 요청 제한 보존·게이트/관리자 분리·반복 시작·변조 Host/Origin·쿠키·비공개 파일 차단을 검사했다. Kill Critic: 기존 정적 페이지의 운영DB 경로를 차단하고 홈페이지/콘텐츠 바이트 동일성과 과장된 완료 표현을 재점검했다.
+
+호스팅 조사 결과: Render·Railway 플러그인은 검색되었으나 미연결, 실제 계정 보유/청구 설정은 미확인이다. 현재 Sites는 Workers 환경으로 Python 서버를 그대로 실행하지 못한다. Render Free는 무료 할당 내$0이나15분 중지/재시작 때 테스트 기록이 소실된다. 기록 보존용 유료 서버+1GB 디스크는 공개 요금 기준 월약$7.25(세금/초과분 별도), Railway Hobby는 최소$5/월+포함량 초과분이다. 공식 근거와 제약은 설명서에 있다. 무료 서버 생성/플러그인 연결을 먼저 검토하되, 유료 선택은 사용자 승인 전 실행하지 않는다.
+
+다음 작업: 원장님의 호스팅 선택·Render 계정 연결 → 해당 계정의 무료/청구·생성 권한 확인 → 새 테스트 서비스에 검사한 통합 커밋만 배포 → **실제 반환된 URL**로 PC/모바일 접속·게이트/로그인·검색/예약/모의 결제/교재/과제/평가/재예약 확인 → 주소·접속조건·배포 커밋과 검사 한계를 갱신한다. 이번 변경 커밋의 CI는 해당 Git 이력/Actions에서 별도 확인한다. 로컬 주소를 원장님 휴대폰용 외부 주소로 제시하지 않는다.
+
+실제 교사96수업 검수·학습 효과, 녹음359개·실청취 승인, 두 기기 화상·신뢰 출석, 실물 Android/iPhone, 운영Auth/RLS·부하·백업/복구, 전문 전체8언어 번역, 실제 결제/정산, 통합본 운영배포는 계속 미완료다. 한글쉽지1~7 전문은 **대화 원본 확인 필요**다. 아래는 기존1928a34 문서 당시의 기록으로 보존한다.
+
 ## 확인한 브랜치와 기준 커밋
 
 이번 작업에서 GitHub branches API를 직접 조회했다. 총4개 브랜치다. 별도2차 브랜치는 없고2차는main 이력이다. 아래 통합 SHA는 이번 문서 커밋 직전의 코드 기준이며 문서 커밋 후 HEAD는 Git 이력에서 확인한다.

@@ -1,0 +1,27 @@
+# Proposal only. Applying this creates a NEW TEST service, never the live homepage.
+# Select this Blueprint path explicitly; no root render.yaml or automatic deploy.
+services:
+  - type: web
+    name: hangeul-swipji99-test
+    runtime: python
+    repo: https://github.com/anigio2705-dev/hangeul-swipji
+    branch: integration/phase2-phase3-20261027
+    region: singapore
+    plan: free
+    autoDeployTrigger: 'off'
+    buildCommand: python3 -m compileall -q phase3
+    startCommand: python3 phase3/staging_server.py
+    healthCheckPath: /healthz
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.14
+      - key: HS_STAGING_USER
+        value: review
+      - key: HS_STAGING_PASSWORD
+        generateValue: true
+      - key: HS_STAGING_ADMIN_PASSWORD
+        generateValue: true
+      - key: HS_STAGING_DB
+        value: /tmp/hangeul-swipji-staging/platform.sqlite3
+# Free has NO persistent disk: restart/spin-down/redeploy discards test records.
+# RENDER_EXTERNAL_URL supplies the exact HTTPS origin. Do not add live credentials.

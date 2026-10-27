@@ -106,25 +106,31 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header('Content-Type','application/json; charset=utf-8')
         self.send_header('Cache-Control','no-store')
         self.send_header('X-Content-Type-Options','nosniff')
-        if cookie: self.send_header('Set-Cookie',cookie)
+        if cookie:
+            if getattr(self.server,'secure_cookies',False): cookie += '; Secure'
+            self.send_header('Set-Cookie',cookie)
         self.send_header('Content-Length',str(len(body)))
         self.end_headers(); self.wfile.write(body)
     def do_GET(self): self.handle_request()
     def do_POST(self): self.handle_request()
     def do_PUT(self): self.handle_request()
+    def check_request_context(self):
+        # Default remains loopback-only. The separate staging launcher overrides this.
+        host = self.headers.get('Host','')
+        if host not in (f'127.0.0.1:{self.server.server_port}',f'localhost:{self.server.server_port}'):
+            raise Error('허용되지 않은 호스트',403)
+        if self.command!='GET':
+            origin=self.headers.get('Origin')
+            if origin and origin != f'http://{host}': raise Error('다른 출처 요청 거부',403)
     def handle_request(self):
         db=None
         try:
-            host = self.headers.get('Host','')
-            if host not in (f'127.0.0.1:{self.server.server_port}',f'localhost:{self.server.server_port}'):
-                raise Error('허용되지 않은 호스트',403)
+            self.check_request_context()
             path = urlsplit(self.path).path
             if not path.startswith('/api/'):
                 if self.command!='GET': raise Error('지원하지 않는 요청',405)
                 return self.static(path)
             if self.command!='GET':
-                origin=self.headers.get('Origin')
-                if origin and origin != f'http://{host}': raise Error('다른 출처 요청 거부',403)
                 if self.headers.get('Content-Type','').split(';')[0] != 'application/json': raise Error('JSON 요청이 필요합니다',415)
                 size=int(self.headers.get('Content-Length','0'))
                 if size<0 or size>MAX_BODY: raise Error('요청이 너무 큽니다',413)
