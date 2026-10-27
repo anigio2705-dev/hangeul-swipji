@@ -284,6 +284,9 @@ class StagingTests(unittest.TestCase):
         self.assertEqual('test',health['mode'])
         self.assertEqual('isolated-staging',health['scope'])
         self.assertEqual('document-navigation-v2',health['requestGuardVersion'])
+        self.assertEqual('signed-cookie-v1',health['gateSessionVersion'])
+        self.assertEqual('embedded-preview-v1',health['videoUIVersion'])
+        self.assertEqual(hashlib.sha256((server.ROOT/'app.js').read_bytes()).hexdigest(),health['appSHA256'])
         self.assertEqual(self.settings.origin,health['configuredOrigin'])
         self.assertEqual(hashlib.sha256(Path(staging.__file__).read_bytes()).hexdigest(),health['sourceSHA256'])
         with patch.object(server, 'connect', side_effect=RuntimeError('private failure')):

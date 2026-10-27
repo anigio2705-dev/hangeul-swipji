@@ -4,7 +4,7 @@ const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const {spawn,spawnSync}=require('node:child_process');
 const fs=require('node:fs'), os=require('node:os'), path=require('node:path'), assert=require('node:assert/strict');
 const root=__dirname, temp=fs.mkdtempSync(path.join(os.tmpdir(),'hs3-browser-'));
-const staging=process.argv.includes('--staging');
+const staging=process.argv.includes('--staging'),videoOnly=process.argv.includes('--video-only');
 const port=19000+Math.floor(Math.random()*10000), base=`${staging?'https':'http'}://127.0.0.1:${port}`;
 const env={...process.env,HS_PHASE3_DB:path.join(temp,'browser.sqlite3'),HS_PHASE3_ADMIN_PASSWORD:'Browser-Admin-Test-12345!'};
 const clockFile=path.join(temp,'clock');fs.writeFileSync(clockFile,String(Date.now()/1000));function advance(n){fs.writeFileSync(clockFile+'.new',String(n));fs.renameSync(clockFile+'.new',clockFile);}
@@ -15,12 +15,41 @@ async function auth(page,role,name){await page.goto(base);await page.getByRole('
 async function request(context,url,body,method='POST'){const r=await context.request.fetch(base+url,{method,data:body,headers:staging?{Origin:base}:{}});const result=await r.json();assert.equal(r.status(),200,JSON.stringify(result));return result;}
 async function close(page){await page.locator('#close-detail').click();}
 async function fillReason(page,text){await page.locator('#detail textarea').fill(text);await page.locator('#detail').getByRole('button',{name:'저장',exact:true}).click();await page.locator('#detail-dialog').waitFor({state:'hidden'});}
+async function mediaChecks(page,href,role){
+ const video=page.locator('.video-panel video');
+ await page.getByRole('button',{name:'카메라·마이크 미리보기',exact:true}).click();
+ await page.waitForFunction(()=>document.querySelector('#studio-root').shadowRoot.querySelector('.video-panel video')?.srcObject?.getTracks().length===2);
+ assert.equal(await video.evaluate(n=>n.muted&&n.playsInline),true);
+ for(const [off,on,kind] of [['마이크 끄기','마이크 켜기','audio'],['카메라 끄기','카메라 켜기','video']]){
+  await page.getByRole('button',{name:off,exact:true}).click();assert.equal(await video.evaluate((n,k)=>n.srcObject.getTracks().find(t=>t.kind===k).enabled,kind),false);
+  await page.getByRole('button',{name:on,exact:true}).click();assert.equal(await video.evaluate((n,k)=>n.srcObject.getTracks().find(t=>t.kind===k).enabled,kind),true);
+ }
+ await page.getByRole('button',{name:'카메라 전환',exact:true}).click();await page.getByText(/전환 가능한 두 번째 카메라가 없습니다.|미리보기 카메라를 전환했습니다./).waitFor();
+ await page.setViewportSize({width:390,height:900});const size=await page.locator('#detail-dialog').evaluate(n=>({w:n.clientWidth,s:n.scrollWidth}));assert.ok(size.s<=size.w+1);await page.setViewportSize({width:1440,height:1000});
+ await video.evaluate(n=>window.testVideoTracks=n.srcObject.getTracks());
+ await page.route('https://meet.jit.si/**',async route=>{const h=await route.request().allHeaders();assert.equal(h.authorization,undefined);assert.equal(h.cookie,undefined);assert.equal(h.referer,undefined);return route.fulfill({contentType:'text/html',body:'<!doctype html><p>Mock provider frame; no real media or login verified</p>'});});
+ await page.getByRole('button',{name:'이 화면에서 화상방 열기',exact:true}).click();
+ const frame=page.locator('iframe[title="Jitsi 수업 화상방"]');await frame.waitFor();assert.equal(await frame.getAttribute('src'),href);assert.match(await frame.getAttribute('allow'),/camera; microphone/);
+ await page.frameLocator('iframe[title="Jitsi 수업 화상방"]').getByText('Mock provider frame; no real media or login verified').waitFor();
+ assert.equal(await page.evaluate(()=>window.testVideoTracks.every(t=>t.readyState==='ended')),true);
+ await page.getByRole('button',{name:'기기·화상방 종료',exact:true}).click();assert.equal(await frame.count(),0);
+ await page.evaluate(()=>{window.testOriginalGum=navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);navigator.mediaDevices.getUserMedia=c=>new Promise(resolve=>{window.testReleaseGum=()=>window.testOriginalGum(c).then(s=>{window.testLateTracks=s.getTracks();resolve(s);});});});
+ await page.getByRole('button',{name:'카메라·마이크 미리보기',exact:true}).click();
+ await page.getByRole('button',{name:'이 화면에서 화상방 열기',exact:true}).click();await frame.waitFor();assert.equal(await frame.getAttribute('src'),href);assert.equal(await frame.count(),1);
+ await page.evaluate(()=>window.testReleaseGum());await page.waitForFunction(()=>window.testLateTracks?.every(t=>t.readyState==='ended'));await page.evaluate(()=>{navigator.mediaDevices.getUserMedia=window.testOriginalGum;});
+ await page.getByRole('button',{name:'기기·화상방 종료',exact:true}).click();
+ await page.evaluate(()=>{navigator.mediaDevices.getUserMedia=()=>Promise.reject(new DOMException('Test denied','NotAllowedError'));});await page.getByRole('button',{name:'카메라·마이크 미리보기',exact:true}).click();await page.getByText('카메라·마이크 권한이 허용되지 않았습니다. 수업 계정 로그인으로 해결되는 문제가 아닙니다.',{exact:true}).waitFor();await page.evaluate(()=>{navigator.mediaDevices.getUserMedia=window.testOriginalGum;});
+ await page.getByRole('button',{name:'카메라·마이크 미리보기',exact:true}).click();await video.waitFor({state:'visible'});await video.evaluate(n=>window.testVideoTracks=n.srcObject.getTracks());
+ await page.getByRole('button',{name:'공유 교재 열기',exact:true}).click();await page.getByRole('heading',{name:'독립 읽기',exact:true}).waitFor();
+ assert.equal(await page.evaluate(()=>window.testVideoTracks.every(t=>t.readyState==='ended')),true);
+ check(role+': synthetic camera/mic controls, mobile layout, absent second camera, permission failure, late-stream cleanup, isolated frame and reconnect');
+}
 (async()=>{
  const created=staging?{status:0}:spawnSync(process.env.PYTHON||'python3',[path.join(root,'server.py'),'--create-admin','admin@example.test'],{env,encoding:'utf8'});assert.equal(created.status,0,created.stderr);
  const tlsArgs=[];if(staging){const cert=path.join(temp,'cert.pem'),key=path.join(temp,'key.pem');const tls=spawnSync('openssl',['req','-x509','-newkey','rsa:2048','-nodes','-keyout',key,'-out',cert,'-days','1','-subj','/CN=localhost'],{encoding:'utf8'});assert.equal(tls.status,0,tls.stderr);tlsArgs.push('--tls-cert',cert,'--tls-key',key);}
  child=spawn(process.env.PYTHON||'python3',[path.join(root,'browser_server.py'),'--port',String(port),'--clock-file',clockFile,...tlsArgs],{env,stdio:['ignore','pipe','pipe']});await new Promise((resolve,reject)=>{child.stdout.once('data',resolve);child.once('error',reject);child.once('exit',c=>reject(Error('server exit '+c)));});
- browser=await chromium.launch({headless:true});
- const contexts=await Promise.all([0,1,2,3].map(()=>browser.newContext({viewport:{width:1440,height:1000},ignoreHTTPSErrors:staging})));const [tc,lc,ac,pc]=contexts;
+ browser=await chromium.launch({headless:true,args:videoOnly?['--use-fake-device-for-media-stream','--use-fake-ui-for-media-stream']:[]});
+ const contexts=await Promise.all([0,1,2,3].map(()=>browser.newContext({viewport:{width:1440,height:1000},ignoreHTTPSErrors:staging,permissions:videoOnly?['camera','microphone']:[]})));const [tc,lc,ac,pc]=contexts;
  if(staging){for(const c of contexts){const r=await c.request.get(base+'/',{headers:{Authorization:'Basic '+Buffer.from('review:'+env.HS_STAGING_PASSWORD).toString('base64')}});assert.equal(r.status(),200);assert((await c.cookies()).some(x=>x.name==='hs_staging_gate'&&x.secure&&x.httpOnly));}check('HTTPS gate authenticated once per browser; all later steps use cookies without Basic header');}
  const [teacher,learner,admin,partner]=await Promise.all(contexts.map(c=>c.newPage()));for(const p of [teacher,learner,admin,partner])p.on('pageerror',e=>errors.push(e.message));
  await auth(teacher,'teacher','TeacherBrowser');await teacher.getByRole('button',{name:'내 프로필',exact:true}).click();await teacher.locator('#content [name=languages]').fill('한국어,English');await teacher.locator('#content [name=specialty]').fill('초급 회화');await teacher.locator('#content [name=level]').fill('A0,A1');await teacher.getByRole('button',{name:'프로필 저장',exact:true}).click();await teacher.getByText('미승인 프로필',{exact:false}).waitFor();
@@ -41,8 +70,8 @@ await auth(partner,'partner','PartnerBrowser');
  const bids=await request(lc,'/api/bookings',undefined,'GET');const bid=bids.bookings[0].id;
  const lu=await request(lc,`/api/bookings/${bid}/unit`,undefined,'GET'),tu=await request(tc,`/api/bookings/${bid}/unit`,undefined,'GET');check('same immutable content hash',lu.sha256===tu.sha256);check('teacher guide role separation',!lu.unit.teacherGuide&&!!tu.unit.teacherGuide);
  await learner.getByRole('button',{name:'같은 단원 열기',exact:true}).click();await learner.getByRole('heading',{name:'독립 읽기',exact:true}).waitFor();check('booked lesson UI');await close(learner);
- async function room(page){await page.getByRole('button',{name:'내 수업',exact:true}).click();await page.getByRole('button',{name:'테스트 화상방 · 출석 시작',exact:true}).click();await page.getByRole('button',{name:'안내 확인 · 출석 시작',exact:true}).click();const link=page.getByRole('link',{name:'Jitsi 테스트 방을 새 창에서 열기',exact:true});await link.waitFor();assert.equal(await page.getByRole('button',{name:'안내 확인 · 출석 시작',exact:true}).isVisible(),false);assert.equal(await link.count(),1);await page.getByText('인증 구분:',{exact:false}).waitFor();const href=await link.getAttribute('href');await close(page);return href;}
- const lr=await room(learner),tr=await room(teacher);check('both users same Jitsi test room URL',lr===tr&&lr.startsWith('https://meet.jit.si/')); // Does not test external media.
+ async function room(page){await page.getByRole('button',{name:'내 수업',exact:true}).click();await page.getByRole('button',{name:'테스트 화상방 · 출석 시작',exact:true}).click();await page.getByRole('button',{name:'안내 확인 · 출석 시작',exact:true}).click();const link=page.getByRole('link',{name:'Jitsi 테스트 방을 새 창에서 열기',exact:true});await link.waitFor();assert.equal(await page.getByRole('button',{name:'안내 확인 · 출석 시작',exact:true}).isVisible(),false);assert.equal(await link.count(),1);await page.getByText('인증 구분:',{exact:false}).waitFor();const href=await link.getAttribute('href');if(videoOnly)await mediaChecks(page,href,page===learner?'learner':'teacher');await close(page);return href;}
+ const lr=await room(learner),tr=await room(teacher);check('both users same Jitsi test room URL',lr===tr&&lr.startsWith('https://meet.jit.si/'));if(videoOnly){const report={mode:'local-https-video-development-only',checkedAt:new Date().toISOString(),checks,errors,syntheticDevices:true,providerFrameMocked:true,externalJitsiAuthenticationVerified:false,actualTwoDeviceCallVerified:false,physicalMobileTested:false,realPaymentsTested:false};assert.equal(errors.length,0,errors.join('\n'));fs.writeFileSync(path.join(root,'video-browser-results.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));return;} // Does not test external media.
  await learner.getByRole('button',{name:'내 수업',exact:true}).click();await learner.getByRole('button',{name:'과제 제출 · 수정',exact:true}).click();await fillReason(learner,'안녕하세요. 저는 한국어를 배우는 학생입니다.');await learner.getByText('학습자 과제:',{exact:false}).waitFor();
  await teacher.getByRole('button',{name:'내 수업',exact:true}).click();await teacher.getByRole('button',{name:'평가 · 피드백',exact:true}).click();await teacher.locator('#detail [name=score]').fill('85');await fillReason(teacher,'인사와 자기소개가 자연스럽습니다. 받침을 조금 더 연습하세요.');check('homework and feedback UI persisted');
  await teacher.getByRole('button',{name:'수행 평가 기록',exact:true}).click();await teacher.locator('#detail [name=phase]').selectOption('post');for(const key of ['pronunciation','grammar','interaction','listening','speaking','reading','writing'])await teacher.locator('#detail [name=rating-'+key+']').fill('2');await teacher.locator('#detail [name=note]').fill('핵심 표현을 사용했으나 받침 연결과 확인 질문을 더 연습해야 합니다.');await teacher.getByRole('button',{name:'수행 평가 저장',exact:true}).click();await teacher.locator('#detail-dialog').waitFor({state:'hidden'});

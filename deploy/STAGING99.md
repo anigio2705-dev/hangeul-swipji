@@ -1,3 +1,5 @@
+> 한글쉽지9 후속: 수업 예약의 화상 안내에 기기 미리보기와 Jitsi iframe을 보완했다. 운영 Supabase 설정은 재사용하지 않는다. 배포 뒤 /healthz의 sourceSHA256·appSHA256·gateSessionVersion·videoUIVersion을 대조한다. 진행자용 Jitsi 인증과 실제 두 기기 미디어 검증은 별도다. 현재 Render 관리 인증이 없어 이번 변경의 배포는 미실행이며 개인 크롬에서 기존 서비스 화면에 맞춰 안내한다. 최신 결과: DEVELOPMENT_STATUS.md, audit/staging9-video-readiness.json.
+
 > 2026-10-27 인증 반복 방지 수정: 최초 게이트 인증 뒤 Secure/HttpOnly 서명 쿠키로8시간 접속을 유지하고 API/자산에는 기본 인증 challenge를 보내지 않는다. 앱 계정과 Jitsi 진행자 인증은 별개다. 이 변경은 현재 GitHub 검사용이며 Render 재배포는 미실행이다. 관리 세션이 로그아웃되어 있고 같은 로그인을 다시 요청하지 않았다. 최신 근거는 DEVELOPMENT_STATUS.md 및 audit/staging99-auth-regression.json을 우선한다. 아래 배포 기록은 당시 상태다.
 
 # 한글쉽지99 통합 테스트 호스팅 준비

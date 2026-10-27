@@ -184,6 +184,8 @@ class StagingHandler(server.Handler):
                 return self.send(200, {'ok': True, 'scope': 'isolated-staging',
                     'requestGuardVersion': 'document-navigation-v2',
                     'gateSessionVersion': 'signed-cookie-v1',
+                    'videoUIVersion': 'embedded-preview-v1',
+                    'appSHA256': hashlib.sha256((server.ROOT/'app.js').read_bytes()).hexdigest(),
                     'configuredOrigin': self.server.staging.origin,
                     'sourceSHA256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()})
             except Exception:

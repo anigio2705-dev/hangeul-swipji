@@ -3,3 +3,4 @@
 .table-scroll td.nowrap{white-space:nowrap;overflow-wrap:normal}.table-scroll{max-width:100%}.table-scroll table.wide-table{min-width:600px}h1,h2{word-break:keep-all}@media(max-width:620px){.table-scroll:has(.wide-table)::after{content:"표를 좌우로 밀어 전체 항목을 확인하세요.";display:block;color:var(--muted);font-size:.72rem;padding-top:8px}}
 
 :host{display:block;font:16px/1.6 system-ui,sans-serif;color:var(--navy)}.account-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:20px 0}
+.video-panel{margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}.video-panel video{width:100%;max-height:340px;background:#142731;border-radius:10px;object-fit:contain}.video-panel iframe{width:100%;height:min(65vh,600px);min-height:350px;border:0;border-radius:10px;margin-top:16px}.video-panel [role=status]{overflow-wrap:anywhere}
