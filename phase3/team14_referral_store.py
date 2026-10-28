@@ -60,7 +60,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
 
   # Validate input types and basic format for all string IDs
   for val, name in [(student_id, 'student_id'), (event_id, 'event_id'), (lesson_id, 'lesson_id')]:
-   if not isinstance(val, str) or not val.strip():
+   if not isinstance(val, str) or not val:
     raise SimError('INVALID_INPUT', f'{name} must be a non-empty string')
    # Defensive: reject any leading or trailing whitespace immediately
    if val != val.strip():
@@ -122,11 +122,13 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
     if ord(c) > 126:
      raise SimError('INVALID_INPUT', f'{name} contains characters beyond ASCII 126')
 
-  # New Defensive check: reject empty student_id or lesson_id post stripping (already checked whitespace but check empty again for safety)
+  # Defensive check: must be non-empty post stripping (already no whitespace allowed, but check empty string explicitly)
   if not student_id:
    raise SimError('INVALID_INPUT', 'student_id must not be empty')
   if not lesson_id:
    raise SimError('INVALID_INPUT', 'lesson_id must not be empty')
+  if not event_id:
+   raise SimError('INVALID_INPUT', 'event_id must not be empty')
 
   signature = json.dumps([student_id, lesson_id, gross_krw, list(depth_rates_bps), commission_bps], separators=(',', ':'))
   self.db.execute('BEGIN IMMEDIATE')
