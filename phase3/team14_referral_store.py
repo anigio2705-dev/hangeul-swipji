@@ -90,9 +90,6 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
     raise SimError('INVALID_INPUT', f'{name} contains invalid characters')
 
   # Defensive check: refuse to award an event ID that is empty (already checked), also no control chars allowed
-  if not event_id or len(event_id) == 0:
-    raise SimError('INVALID_INPUT', 'event_id must be a non-empty string')
-
   # New stricter check for event_id: reject if contains any control chars or non-printable ASCII
   for c in event_id:
    if ord(c) < 33 or ord(c) > 126:
