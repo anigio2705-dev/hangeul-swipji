@@ -133,6 +133,11 @@ jobs:
             --depth "$HQ_DEPTH" \
             --repairs "$HQ_REPAIR" \
             --output "$RUNNER_TEMP/hq-six-cycle-verdict.json"
+      - name: Evaluate HQ traffic lights across all 160 tasks
+        if: always()
+        run: |
+          python automation/hq_traffic_lights.py --output "$RUNNER_TEMP/hq-traffic-lights.json"
+          cat "$RUNNER_TEMP/hq-traffic-lights.json" >> "$GITHUB_STEP_SUMMARY"
       - name: Publish timestamped numbered verdicts in GitHub Actions summary
         if: always()
         run: |
