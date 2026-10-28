@@ -125,6 +125,24 @@ class InstantSettlementJourney(unittest.TestCase):
                     refund_verified_instant_settlement(db,self.store,booking_id,'too_much',price,learner_id)
                 self.assertEqual(5000,lesson_statement(self.store,'simmonth','simlesson')['refunded_krw'])
         finally:self.dispose_settlement()
+    def test_full_refund_reverses_allocations_and_persists(self):
+        self.prepare_settlement()
+        try:
+            learner_id,_,_,booking_id,event_id,price=self.journey()
+            self.store.create_month('simmonth',[('simlesson',booking_id,price)])
+            with server.connect() as db:
+                settle_verified_instant_event(db,self.store,self.referrals,event_id)
+                refund_verified_instant_settlement(db,self.store,booking_id,'full_refund',price,learner_id)
+                self.assertEqual('refunded',lesson_statement(self.store,'simmonth','simlesson')['state'])
+                self.assertEqual(0,lesson_statement(self.store,'simmonth','simlesson')['teacher_krw'])
+                self.assertEqual(0,lesson_statement(self.store,'simmonth','simlesson')['referral_krw'])
+                self.assertEqual(0,lesson_statement(self.store,'simmonth','simlesson')['platform_krw'])
+                with self.assertRaises(SimError):
+                    refund_verified_instant_settlement(db,self.store,booking_id,'extra',100,learner_id)
+            self.store.close();self.referrals.close()
+            self.store=MonthlyStore(self.sp);self.referrals=ReferralStore(self.rp)
+            self.assertEqual(price,lesson_statement(self.store,'simmonth','simlesson')['refunded_krw'])
+        finally:self.dispose_settlement()
     def test_no_completion_evidence_means_no_payout(self):
         self.prepare_settlement()
         try:
