@@ -26,12 +26,12 @@ jobs:
           path: team12
       - uses: actions/checkout@v4
         with:
-          ref: 89e6ee0feec58b7fd1ca0f9da817447218eb94b2
+          ref: 6cec6c5063b29ed288d8fe97c1befd0c9906e094
           fetch-depth: 0 # test_standards96.py uses git show 7418e32:<file>
           path: team13
       - uses: actions/checkout@v4
         with:
-          ref: 5ca151c4abeafcc934209ae6f0d48764170acd82
+          ref: 32f4fd13c0863ffa7e5940418711d9e2b5d91118
           path: team14
       - uses: actions/checkout@v4
         with:
@@ -57,5 +57,9 @@ jobs:
         env:
           PYTHONPATH: team14/phase3:team13/phase3
         run: python3 -m unittest discover -s team14/phase3 -p 'test_team14_instant_http_settlement.py' -v
+      - name: Team14 restart and fault injection at settlement referral refund boundaries
+        env:
+          PYTHONPATH: team14/phase3:team13/phase3
+        run: python3 -m unittest discover -s team14/phase3 -p 'test_team14_crash_recovery.py' -v
       - name: Team11-Team14 real verified-event mock ledger and restart
         run: python3 prior-qa/scripts/test_team15_real_bridge.py
