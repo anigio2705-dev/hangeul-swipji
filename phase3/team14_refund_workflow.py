@@ -41,6 +41,11 @@ def request_refund(server_db, store, booking_id, request_id, actor_id, amount_kr
             if (previous['booking_id'], previous['actor_id'], previous['amount_krw']) != (booking_id, actor_id, amount_krw):
                 raise SimError('CONFLICT', 'refund request reused')
             return dict(previous)
+
+        # Additional validation to prevent requesting refund with empty reason
+        if reason_clean == '':
+            raise SimError('VALIDATION_ERROR', 'refund reason required')
+
         store.db.execute(
             "INSERT INTO refund_requests(request_id,booking_id,actor_id,amount_krw,state,reason) VALUES(?,?,?,?,?,?)",
             (request_id, booking_id, actor_id, amount_krw, 'requested', reason_clean))
