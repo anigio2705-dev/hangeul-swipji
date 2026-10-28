@@ -34,6 +34,6 @@ class RefundRequestBalanceTests(unittest.TestCase):
         with self.assertRaises(SimError) as e:
             request_refund(self.server,self.store,'booking','other','teacher',100)
         self.assertEqual('FORBIDDEN',e.exception.code)
-        self.assertEqual(0,self.store.db.execute('SELECT count(*) FROM refund_requests').fetchone()[0])
+        self.assertEqual(0,self.store.db.execute("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='refund_requests'").fetchone()[0])
 
 if __name__=='__main__':unittest.main()
