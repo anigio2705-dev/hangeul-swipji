@@ -10,7 +10,7 @@
 | 팀13·14 교차 HTTP/SQLite 계약 및 복구 검사 | [HQ pilot CI #40726234831](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40726234831) | **격리 검사 통과** |
 | AI가 시험용 코드 오류를 직접 수정·검증·커밋 | [AI sandbox CI #40727071471](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40727071471) | **시험용 범위 성공** |
 | 팀15 D2 통합 QA의 구형 팀14 고정 SHA 오류 수정 | [QA CI #40729412680](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40729412680), QA 브랜치 커밋 `4e0735a3d294a969c5fc76967f2321e49673ed4e` | **QA 검사 통과** |
-| QA D2 증거 문서에 팀 11~15의 `ci_pass` 코드 SHA·실제 실행 링크 기록 | QA 브랜치 커밋 `3720bc70ec5fa9e0ce243e37f17fbfdb09758694` | **CI 통과 증거 기록, 공개 검증 아님** |
+| QA D2 증거 문서에 팀 11~15의 `ci_pass` 코드 SHA·실제 실행 링크 기록 | QA 브랜치 커밋 `3720bc70ec5fa9e0ce243e37f17fbfdb09758694`, [재검증 CI #40729585401](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40729585401) | **증거 게이트 재검증 통과, 공개 검증 아님** |
 
 ## 마스터 백로그 진행 판정
 
