@@ -68,7 +68,7 @@ for t in audio.get('targets', []):
     if not recording_available:
         # exact suspicious labels as literals, no decoding
         suspicious_labels = ['\x7f\x7f\x7f', '\x7f\x7f', '\x7f\x7f\x7f\x7f \x7f\x7f\x7f']
-        korean_labels_decoded = ['\uc790\uc74c \uc774\ub984', '\ubaa8\uc74c', '\uae00\uc790\ud325 \uc74c\uc808']
+        korean_labels_utf8 = ['자음 이름', '모음', '글자팥 음절']
 
         # Defensive: reject if any group string matches suspicious labels or decoded Korean labels
         def to_lower_set(strings):
@@ -76,9 +76,9 @@ for t in audio.get('targets', []):
 
         groups_lower_set = to_lower_set(groups_str)
         suspicious_labels_lower = to_lower_set(suspicious_labels)
-        korean_labels_decoded_lower = to_lower_set(korean_labels_decoded)
+        korean_labels_lower = to_lower_set(korean_labels_utf8)
 
-        if groups_lower_set.intersection(suspicious_labels_lower) or groups_lower_set.intersection(korean_labels_decoded_lower):
+        if groups_lower_set.intersection(suspicious_labels_lower) or groups_lower_set.intersection(korean_labels_lower):
             missing.append(text)
             continue
 
