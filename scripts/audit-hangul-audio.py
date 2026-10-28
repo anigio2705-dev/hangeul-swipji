@@ -274,7 +274,7 @@ output_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', 
 
 print(json.dumps(report['counts'], ensure_ascii=False))
 for x in recordings:
-    if x.get('signalWarnings'):
+    if isinstance(x.get('signalWarnings'), list) and x['signalWarnings']:
         warnings_list = [w for w in x['signalWarnings'] if isinstance(w, str)]
         if warnings_list:
             print(x['text'], ', '.join(warnings_list))
