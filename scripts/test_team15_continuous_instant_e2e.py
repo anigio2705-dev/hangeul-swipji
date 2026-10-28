@@ -7,6 +7,7 @@ Three SQLite files are nonproduction. No video/audio or real money.
 import json
 import os
 import tempfile
+import threading
 import unittest
 import time
 import sqlite3
@@ -17,6 +18,7 @@ import sys
 # instant/staging adapters from their pinned checkout, not Team11 legacy copies.
 sys.path[:]=[p for p in sys.path if not p.rstrip('/').endswith('team11/phase3')]
 import instant_matching as matching
+import staging_server as staging
 from test_staging import StagingTests as StagingHarness
 from team14_persistent import MonthlyStore, SimError
 from team14_referral_store import ReferralStore
@@ -139,6 +141,24 @@ class Team15ContinuousJourney(unittest.TestCase):
                 final=lesson_statement(store,"team15month","team15lesson")
                 self.assertEqual(final["refunded_krw"],price)
                 self.assertEqual(final["teacher_krw"]+final["referral_krw"]+final["platform_krw"],0)
+                # Real staging HTTP server stop/restart. SQLite remains on disk.
+                self.http.shutdown()
+                self.http.server_close()
+                self.thread.join(timeout=10)
+                self.http=server.ThreadingHTTPServer(('127.0.0.1',0),staging.StagingHandler)
+                self.http.staging=self.settings
+                self.http.secure_cookies=True
+                self.http.failures={}
+                self.thread=threading.Thread(target=self.http.serve_forever,daemon=True)
+                self.thread.start()
+                self.assertEqual(self.api(student,"/api/free-progress")["count"],1)
+                self.assertEqual(self.api(student,"/api/free-progress/quiz")["count"],1)
+                self.assertEqual(self.api(student,"/api/free-progress/position")["position"]["lesson"],2)
+                with server.connect() as db:
+                    restored=db.execute("SELECT status,price FROM bookings WHERE id=?",(booking_id,)).fetchone()
+                    self.assertEqual(restored["status"],"completed")
+                    self.assertEqual(restored["price"],price)
+                    self.assertEqual(db.execute("SELECT count(*) FROM instant_lesson_events WHERE event_id=?",(event_id,)).fetchone()[0],1)
                 print("TEAM15 PASS one HTTP booking:",booking_id,"event:",event_id,"amount_krw:",price,"real_money: false",flush=True)
             finally:
                 store.close()
