@@ -29,6 +29,9 @@ jobs:
         with:
           ref: da8933691d27dc50586a8b76a09d93c54fc08754
           path: team14
+      - name: Independently rerun Team11 booking HTTP regression and full common suite
+        run: |
+          python3 -m unittest discover -s team11/phase3 -p 'test_common*.py' -v
       - name: Execute cross-team real functions and SQLite restart
         run: python3 qa/scripts/test_team15_real_bridge.py
       - name: Execute cross-team contract regression
