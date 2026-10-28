@@ -70,6 +70,9 @@ jobs:
         if: success() || failure()
         env:
           PYTHONPATH: team13/phase3:team14/phase3
-        run: |
-          python -m unittest discover -s team14/phase3 -p test_team14_d2_catalog_http.py -v
-          python -m unittest discover -s team14/phase3 -p test_team14_crash_recovery.py -v
+        run: python -m unittest discover -s team14/phase3 -p test_team14_d2_catalog_http.py -v
+      - name: Team14 crash recovery regression
+        if: success() || failure()
+        env:
+          PYTHONPATH: team13/phase3:team14/phase3
+        run: python -m unittest discover -s team14/phase3 -p test_team14_crash_recovery.py -v
