@@ -64,6 +64,11 @@ def inspect(root):
                 problems.append({"word": word, "issue": "source_path_missing_dot_slash", "path": src})
                 continue
 
+            # check for null bytes to avoid injection or truncation
+            if '\x00' in src:
+                problems.append({"word": word, "issue": "null_byte_in_path", "path": src})
+                continue
+
             # clean src removing leading './'
             cleaned_src = src[2:]
 
@@ -80,17 +85,10 @@ def inspect(root):
                 problems.append({"word": word, "issue": "path_is_absolute", "path": src})
                 continue
 
-            # Check for null bytes in entire src
-            if '\x00' in src:
-                problems.append({"word": word, "issue": "null_byte_in_path", "path": src})
+            # Reject any path components containing null bytes (double check)
+            if any('\x00' in comp for comp in parts):
+                problems.append({"word": word, "issue": "null_byte_in_path_component", "path": src})
                 continue
-
-            # Check for path normalization issues (e.g., symlinks or path traversal escaping root)
-            # Reject any path components with suspicious chars
-            for comp in parts:
-                if '\x00' in comp:
-                    problems.append({"word": word, "issue": "null_byte_in_path_component", "path": src})
-                    raise StopIteration
 
             src_path = (root / cleaned_src).resolve(strict=False)
 
@@ -118,6 +116,7 @@ def inspect(root):
                 for part in src_parts[len(root_parts):]:
                     current_path = current_path / part
                     try:
+                        # Protect against symlinks that could lead outside even if resolved path is inside
                         if current_path.is_symlink():
                             problems.append({"word": word, "issue": "path_component_is_symlink", "path": str(current_path)})
                             raise StopIteration
