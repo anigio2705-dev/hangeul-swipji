@@ -188,7 +188,8 @@ def inspect(root):
             probe = subprocess.run([
                 "ffmpeg", "-v", "error", "-i", str(path), "-f", "null", "-"
             ], capture_output=True, text=True, timeout=10)
-            if probe.returncode != 0 or probe.stderr.strip():
+            # Strictly check output and returncode
+            if probe.returncode != 0 or (probe.stderr and probe.stderr.strip()):
                 problems.append({"word": word, "issue": "decode_failed", "path": src, "detail": probe.stderr[:300]})
         except subprocess.SubprocessError as e:
             problems.append({"word": word, "issue": "ffmpeg_error", "path": src, "detail": str(e)})
