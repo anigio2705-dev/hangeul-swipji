@@ -19,8 +19,13 @@ for label, (team, candidates, tokens) in checks.items():
     for name in candidates:
         path = root / team / name
         try:
-            # Ensure path is within root directory to avoid unexpected issues
-            path.resolve(strict=False)
+            resolved_path = path.resolve(strict=False)
+            # Verify resolved_path is inside root to avoid path traversal
+            try:
+                resolved_path.relative_to(root)
+            except ValueError:
+                issues.append(f"{label}: invalid file path outside of root {resolved_path}")
+                continue
         except RuntimeError:
             issues.append(f"{label}: invalid file path {path}")
             continue
@@ -41,7 +46,14 @@ for label, team, terms in [
 ]:
     folder = root / team / "phase3"
     try:
-        folder.resolve(strict=True)
+        resolved_folder = folder.resolve(strict=True)
+        # Verify resolved_folder is inside root to avoid path traversal
+        try:
+            resolved_folder.relative_to(root)
+        except ValueError:
+            issues.append(f"{label}: invalid folder path outside of root {resolved_folder}")
+            py_files = []
+            continue
     except FileNotFoundError as e:
         issues.append(f"{label}: folder does not exist {folder}: {e}")
         py_files = []
@@ -57,6 +69,19 @@ for label, team, terms in [
     pieces = []
     for p in py_files:
         try:
+            resolved_file = p.resolve(strict=True)
+            try:
+                resolved_file.relative_to(root)
+            except ValueError:
+                issues.append(f"{label}: file path outside of root {resolved_file}")
+                continue
+        except FileNotFoundError:
+            # File disappeared between glob and now; skip
+            continue
+        except RuntimeError:
+            issues.append(f"{label}: invalid file path {p}")
+            continue
+        try:
             if p.stat().st_size < 2_000_000:
                 # Read text with strict UTF-8 decoding; fallback silently if error
                 try:
@@ -66,7 +91,7 @@ for label, team, terms in [
         except OSError as e:
             issues.append(f"{label}: error reading file {p}: {e}")
     source = "\n".join(pieces)
-    missing = [term for term in terms if not re.search(re.escape(term), source, re.I)]
+    missing = [term for term in terms if term and not re.search(re.escape(term), source, re.I)]
     evidence[label] = {"terms": terms, "missing": missing,
                        "status": "source_terms_present" if not missing else "missing"}
     if missing:
