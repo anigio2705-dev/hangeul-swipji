@@ -14,6 +14,8 @@ on:
       - 'scripts/team12_provider_links.js'
       - 'learn.html'
       - 'dashboard.html'
+      - 'scripts/team12_resume.js'
+      - 'scripts/team12_resume.test.js'
       - 'intro.html'
       - 'beginner1.html'
       - 'beginner2.html'
@@ -40,6 +42,8 @@ jobs:
         run: |
           node --check scripts/team12_learning_handoff.js
           node --check scripts/team12_provider_links.js
+          node --check scripts/team12_resume.js
+          node scripts/team12_resume.test.js
           node --check phase3/app.js
           node --check hangul-core.js
       - name: Verify educational content structure
