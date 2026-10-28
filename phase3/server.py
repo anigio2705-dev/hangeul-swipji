@@ -320,6 +320,45 @@ class Handler(BaseHTTPRequestHandler):
                            (uid,stage,lesson,time.time()))
             after=db.execute('SELECT count(*) FROM free_lesson_progress WHERE user_id=?',(uid,)).fetchone()[0]
             return {'ok':True,'imported':after-before,'count':after},None
+        if path=='/api/free-progress/quiz':
+            if u['role']!='learner': raise Error('학습자만 퀴즈 기록에 접근할 수 있습니다',403)
+            if method=='GET':
+                stage=q.get('stage',[None])[0]
+                lesson=q.get('lesson',[None])[0]
+                clauses=['user_id=?']; params=[uid]
+                for raw,name in ((stage,'stage'),(lesson,'lesson')):
+                    if raw is not None:
+                        if not raw.isdecimal() or not 1<=int(raw)<=(7 if name=='stage' else 50): raise Error('단계나 단원이 잘못되었습니다',400)
+                        clauses.append(name+'=?');params.append(int(raw))
+                records=[{'stage':r['stage'],'lesson':r['lesson'],'score':r['score'],'maxScore':r['max_score'],'requestId':r['request_id'],'recordedAt':r['recorded_at']}
+                    for r in db.execute('SELECT stage,lesson,score,max_score,request_id,recorded_at FROM free_quiz_results WHERE '+' AND '.join(clauses)+' ORDER BY recorded_at,id',params)]
+                return {'results':records,'count':len(records)},None
+            if method=='POST':
+                stage=d.get('stage');lesson=d.get('lesson');score=d.get('score');max_score=d.get('maxScore');request_id=d.get('requestId')
+                if (type(stage) is not int or not 1<=stage<=7 or type(lesson) is not int or not 1<=lesson<=50
+                    or type(score) is not int or type(max_score) is not int or not 1<=max_score<=100
+                    or not 0<=score<=max_score or not isinstance(request_id,str) or not 1<=len(request_id)<=100):
+                    raise Error('퀴즈 단계·단원·점수 또는 요청 ID가 잘못되었습니다',400)
+                existing=db.execute('SELECT stage,lesson,score,max_score FROM free_quiz_results WHERE user_id=? AND request_id=?',(uid,request_id)).fetchone()
+                if existing:
+                    if (existing['stage'],existing['lesson'],existing['score'],existing['max_score'])!=(stage,lesson,score,max_score):
+                        raise Error('같은 퀴즈 요청 ID에 서로 다른 결과가 있습니다',409)
+                    return {'ok':True,'duplicate':True,'stage':stage,'lesson':lesson,'score':score,'maxScore':max_score},None
+                db.execute('INSERT INTO free_quiz_results(user_id,stage,lesson,score,max_score,request_id,recorded_at) VALUES(?,?,?,?,?,?,?)',
+                    (uid,stage,lesson,score,max_score,request_id,time.time()))
+                return {'ok':True,'duplicate':False,'stage':stage,'lesson':lesson,'score':score,'maxScore':max_score},None
+        if path=='/api/free-progress/position':
+            if u['role']!='learner': raise Error('학습자만 이어 배우기 위치에 접근할 수 있습니다',403)
+            if method=='GET':
+                row=db.execute('SELECT stage,lesson,updated_at FROM free_resume_positions WHERE user_id=?',(uid,)).fetchone()
+                return {'position':{'stage':row['stage'],'lesson':row['lesson'],'updatedAt':row['updated_at']} if row else None},None
+            if method=='POST':
+                stage=d.get('stage');lesson=d.get('lesson')
+                if type(stage) is not int or not 1<=stage<=7 or type(lesson) is not int or not 1<=lesson<=50:
+                    raise Error('이어 배우기 단계 또는 단원이 잘못되었습니다',400)
+                db.execute('INSERT INTO free_resume_positions(user_id,stage,lesson,updated_at) VALUES(?,?,?,?) ON CONFLICT(user_id) DO UPDATE SET stage=excluded.stage,lesson=excluded.lesson,updated_at=excluded.updated_at',
+                    (uid,stage,lesson,time.time()))
+                return {'ok':True,'stage':stage,'lesson':lesson},None
         if method=='GET' and path=='/api/learning':return learning.summary(db,uid),None
         learning_booking=re.fullmatch('/api/learning/booking/([0-9a-f]+)',path)
         if method=='GET' and learning_booking:
