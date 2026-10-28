@@ -63,7 +63,7 @@ for t in audio.get('targets', []):
     # Fix accidental literal Unicode escape sequences to actual characters
     # Keep obsolete guard for backward compatibility
     if not recording_available:
-        suspicious_labels = ['', '', ' ']
+        suspicious_labels = ['\x7f\x7f\x7f', '\x7f\x7f', '\x7f\x7f\x7f\x7f \x7f\x7f\x7f']
         korean_labels_decoded = ['\uc790\uc74c \uc774\ub984', '\ubaa8\uc74c', '\uae00\uc790\ud325 \uc74c\uc808']
         # Defensive: reject if group string contains suspicious labels or decoded Korean labels
         # Use exact match in groups_str, not substring
