@@ -41,6 +41,10 @@ def inspect(root):
 
     root_resolved = root.resolve(strict=False)
 
+    # Sanity check for root_resolved to be absolute path
+    if not root_resolved.is_absolute():
+        raise ValueError(f"Provided root path must be absolute or resolvable to absolute: {root}")
+
     for word, entry in records.items():
         if not isinstance(word, str) or not isinstance(entry, dict):
             problems.append({"word": word, "issue": "invalid_record_entry"})
@@ -88,43 +92,38 @@ def inspect(root):
                 problems.append({"word": word, "issue": "null_byte_in_path_component", "path": src})
                 continue
 
-            # Protect symlink checks using current filesystem state but be tolerant if root missing
+            # Resolve final absolute path
             src_path = (root / cleaned_src).resolve(strict=False)
 
-            # root_resolved may not exist, check by parts prefix
-            try:
-                if not src_path.is_absolute():
-                    problems.append({"word": word, "issue": "path_not_absolute_after_resolve", "path": src})
-                    continue
-
-                root_parts = root_resolved.parts
-                src_parts = src_path.parts
-
-                if len(src_parts) < len(root_parts) or src_parts[:len(root_parts)] != root_parts:
-                    problems.append({"word": word, "issue": "invalid_path_outside_root", "path": src})
-                    continue
-
-                # Check for any '..' after resolve (should not happen, but extra safety)
-                if '..' in src_parts:
-                    problems.append({"word": word, "issue": "resolved_path_contains_parent", "path": src})
-                    continue
-
-                # Additional check to deny any symlink components on resolved path parts inside root
-                current_path = root_resolved
-                for part in src_parts[len(root_parts):]:
-                    current_path = current_path / part
-                    try:
-                        if current_path.exists():
-                            if current_path.is_symlink():
-                                problems.append({"word": word, "issue": "path_component_is_symlink", "path": str(current_path)})
-                                raise StopIteration
-                    except Exception:
-                        problems.append({"word": word, "issue": "cannot_stat_symlink_check", "path": str(current_path)})
-                        raise StopIteration
-            except StopIteration:
+            # root_resolved may not exist, but we ensure it's absolute above
+            if not src_path.is_absolute():
+                problems.append({"word": word, "issue": "path_not_absolute_after_resolve", "path": src})
                 continue
-            except Exception as ex:
-                problems.append({"word": word, "issue": "invalid_path_outside_root_check_failed", "path": src, "detail": str(ex)})
+
+            # Ensure src_path is under root_resolved
+            try:
+                src_path.relative_to(root_resolved)
+            except ValueError:
+                problems.append({"word": word, "issue": "invalid_path_outside_root", "path": src})
+                continue
+
+            # After normalization, reject any '..' in parts
+            normalized_parts = src_path.parts[len(root_resolved.parts):]
+            if '..' in normalized_parts:
+                problems.append({"word": word, "issue": "resolved_path_contains_parent", "path": src})
+                continue
+
+            # Additional check to deny any symlink components on resolved path parts inside root
+            current_path = root_resolved
+            try:
+                for part in normalized_parts:
+                    current_path = current_path / part
+                    # If the file does not exist, no further symlink checks possible
+                    if current_path.exists() and current_path.is_symlink():
+                        problems.append({"word": word, "issue": "path_component_is_symlink", "path": str(current_path)})
+                        break
+            except OSError:
+                problems.append({"word": word, "issue": "cannot_stat_symlink_check", "path": str(current_path)})
                 continue
 
             # Extra check, path must start with root/assets/hangul-audio
