@@ -1,0 +1,43 @@
+name: Issue4 11-15 assembled staging HTTP and SQLite quality gate
+on:
+  push:
+    branches:
+      - integration/issue4-staging-preview-20261028
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preview-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: phase3
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Compile actual assembled server and tests
+        run: python3 -m compileall -q phase3 scripts
+      - name: Real HTTPS-gated preview homepage and official progress HTTP SQLite
+        run: python3 scripts/test_issue4_staging_ui_http.py
+      - name: One SAME server and booking HTTP journey through matching settlement and refunds
+        run: python3 scripts/test_team15_continuous_instant_e2e.py
+      - name: Team12 browser progress and login isolation
+        run: |
+          node --check scripts/team12_server_progress.js
+          node scripts/team12_server_progress.test.js
+      - name: Team11 core HTTP and SQLite contract regression
+        run: python3 -m unittest discover -s phase3 -p 'test_common_*.py' -v
+      - name: Team13 real instant matching and outbox regression
+        run: python3 -m unittest discover -s phase3 -p 'test_instant_matching.py' -v
+      - name: Team14 simulated settlement and crash recovery regression
+        run: |
+          python3 -m unittest discover -s phase3 -p 'test_team14_crash_recovery.py' -v
+          python3 -m unittest discover -s phase3 -p 'test_team14_instant_http_settlement.py' -v

@@ -1,0 +1,41 @@
+{
+  "dateKST": "2026-10-27 13:27",
+  "provider": "Render",
+  "serviceId": "srv-dbg2fet9fdbs73cj08c0",
+  "deployId": "dep-dbg2ffl9fdbs73cj09ig",
+  "url": "https://hangeul-swipji99-test.onrender.com",
+  "plan": "free",
+  "region": "singapore",
+  "runtime": "Python 3.12.14",
+  "autoDeploy": "off",
+  "deployedCommit": "ad5757d9327a6871b70649da081d5cefb8a1a74b",
+  "statusObserved": "Live",
+  "deploymentDurationSeconds": 54.3,
+  "serviceCreatedCount": 1,
+  "cardRegistered": false,
+  "paidServiceCreated": false,
+  "healthObserved": {
+    "mode": "test",
+    "ok": true,
+    "scope": "isolated-staging"
+  },
+  "homepageWithoutAuth": "Browser navigation rejected with net::ERR_INVALID_AUTH_CREDENTIALS",
+  "authenticatedHostedCoreFlowsTested": false,
+  "physicalDevicesTested": false,
+  "realMediaTested": false,
+  "productionDatabaseUsed": false,
+  "operatingWebsiteChanged": false,
+  "mainChanged": false,
+  "realPaymentsEnabled": false,
+  "access": {
+    "gateUsername": "review",
+    "gatePasswordLocation": "Render environment variable HS_STAGING_PASSWORD; value intentionally omitted",
+    "adminUsername": "admin@example.test",
+    "adminPasswordLocation": "Render environment variable HS_STAGING_ADMIN_PASSWORD; value intentionally omitted"
+  },
+  "limits": [
+    "Free instance records may be lost on spin-down/restart/redeploy.",
+    "Local automated regression results are not authenticated hosted flow results.",
+    "User must authenticate the Basic Auth gate in the secure browser before hosted UI checks can proceed."
+  ]
+}

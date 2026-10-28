@@ -21,12 +21,25 @@
   }
   const records={},holds={};let current=null,run=0,release=null,manifestError=false;
   const schedule=typeof setTimeout==='function'?setTimeout:null,cancelTimer=typeof clearTimeout==='function'?clearTimeout:()=>{};
-  let manifestTimer=null;
-  const request=fetch('./hangul-audio-manifest.json?v=20261027-audit').then(r=>{if(!r.ok)throw Error('audio manifest');return r.json()});
-  const ready=(schedule?Promise.race([request,new Promise((_,reject)=>{manifestTimer=schedule(()=>reject(Error('audio manifest timeout')),15000)})]):request)
-    .then(m=>{if(!m.recordings||typeof m.recordings!=='object')throw Error('invalid audio manifest');const human=Object.entries(m.recordings).filter(([,a])=>a.kind==='human'&&typeof a.src==='string'&&/^\.\/assets\/hangul-audio\/[\w-]+\.mp3$/.test(a.src)&&a.sourceUrl&&a.author&&a.license);Object.assign(records,Object.fromEntries(human.filter(([,a])=>!a.disabled)));Object.assign(holds,Object.fromEntries(human.filter(([,a])=>a.disabled)));document.dispatchEvent(new Event('hs-audio-ready'))})
-    .catch(()=>{manifestError=true;document.dispatchEvent(new Event('hs-audio-ready'))})
-    .finally(()=>{if(manifestTimer!==null)cancelTimer(manifestTimer)});
+  let loading=null;
+  function loadManifest(){
+    if(loading)return loading;
+    let timer=null;
+    const request=fetch('./hangul-audio-manifest.json?v=20261027-audio-retry', {cache:'no-store'})
+      .then(r=>{if(!r.ok)throw Error('audio manifest');return r.json()});
+    loading=(schedule?Promise.race([request,new Promise((_,reject)=>{timer=schedule(()=>reject(Error('audio manifest timeout')),15000)})]):request)
+      .then(m=>{if(!m.recordings||typeof m.recordings!=='object')throw Error('invalid audio manifest');const human=Object.entries(m.recordings).filter(([,a])=>a.kind==='human'&&typeof a.src==='string'&&/^\.\/assets\/hangul-audio\/[\w-]+\.mp3$/.test(a.src)&&a.sourceUrl&&a.author&&a.license);Object.assign(records,Object.fromEntries(human.filter(([,a])=>!a.disabled)));Object.assign(holds,Object.fromEntries(human.filter(([,a])=>a.disabled)));manifestError=false;document.dispatchEvent(new Event('hs-audio-ready'))})
+      .catch(()=>{manifestError=true;document.dispatchEvent(new Event('hs-audio-ready'))})
+      .finally(()=>{if(timer!==null)cancelTimer(timer);loading=null});
+    return loading;
+  }
+  const ready=loadManifest();
+  function availability(word){
+    if(manifestError)return {state:'unavailable',label:'목록 연결 오류 · 다시 눌러 재시도'};
+    if(records[word])return {state:'ready',label:'♪ 사람 녹음 듣기 · 청취 검수 전'};
+    if(holds[word])return {state:'held',label:'검수 대기 · '+holds[word].holdReason};
+    return {state:'missing',label:'녹음 없음 · 실제 사람 녹음 필요'};
+  }
   function status(message){
     document.querySelectorAll('[data-audio-status]').forEach(x=>x.textContent=message);
   }
@@ -37,13 +50,14 @@
     if(release){release();release=null}
   }
   async function recording(word,token){
-    const sound=new Audio(records[word].src);current=sound;
-    status('사람 녹음 재생: '+word+' · 청취 정확성 미검증 / Human recording; listening review pending');
+    const sound=new Audio(new URL(records[word].src, document.baseURI).href);current=sound;
+    status('사람 녹음 로딩 중: '+word+' · 청취 정확성 미검증 / Loading human recording; listening review pending');
     await new Promise((resolve,reject)=>{
       let timer=null,settled=false;
-      const finish=(error)=>{if(settled)return;settled=true;if(timer!==null)cancelTimer(timer);sound.onended=null;sound.onerror=null;if(error){sound.pause();reject(error)}else resolve()};
+      const finish=(error)=>{if(settled)return;settled=true;if(timer!==null)cancelTimer(timer);sound.onended=null;sound.onerror=null;sound.onplaying=null;if(error){sound.pause();reject(error)}else resolve()};
       release=()=>finish();
       if(schedule)timer=schedule(()=>finish(Error('음성 응답 시간이 초과됐습니다. 다시 눌러 주세요. / Audio timeout; try again.')),15000);
+      sound.onplaying=()=>{if(token===run)status('사람 녹음 재생 중: '+word+' · 청취 정확성 미검증 / Playing human recording; listening review pending')};
       sound.onended=()=>finish();
       sound.onerror=()=>finish(Error('녹음 파일을 재생하지 못했습니다. 다시 눌러 주세요.'));
       try{Promise.resolve(sound.play()).catch(()=>finish(Error('재생을 시작하지 못했습니다. 글자를 다시 눌러 주세요.')))}catch(e){finish(Error('재생을 시작하지 못했습니다. 글자를 다시 눌러 주세요.'))}
@@ -52,8 +66,8 @@
   }
   async function play(value){
     stop();const token=run;
-    await ready;if(token!==run)return {status:'cancelled'};
-    if(manifestError){status('음성 목록을 불러오지 못했습니다. 연결을 확인하고 새로고침해 주세요. / Audio list unavailable; reload to retry.');return {status:'manifest-error'}}
+    await (manifestError?loadManifest():(loading||ready));if(token!==run)return {status:'cancelled'};
+    if(manifestError){status('음성 목록을 불러오지 못했습니다. 글자를 다시 누르면 재시도합니다. / Audio list unavailable; click again to retry.');return {status:'manifest-error'}}
     const words=Array.isArray(value)?value:[value];
     if(!words.length||words.some(w=>typeof w!=='string'||!w.trim()))return {status:'invalid'};
     const missing=words.filter(word=>!records[word]);
@@ -72,14 +86,16 @@
   }
   function refreshBadges(){
     document.querySelectorAll('[data-sound]').forEach(b=>{
+      const info=availability(b.dataset.sound);b.dataset.audioState=info.state;
       const native=!!records[b.dataset.sound];b.classList.toggle('has-recording',native);
       const held=holds[b.dataset.sound];b.classList.toggle('is-held',!!held);b.title=held?held.holdReason:native?'사람 녹음 · 청취 미검증 / Human recording; listening review pending':'녹음 준비 중 · Recording pending';
-      b.setAttribute('aria-label',b.dataset.sound+' · '+(held?'재생 보류':native?'사람 녹음 듣기 · 청취 미검증':'녹음 준비 중'));
+      b.setAttribute('aria-label',b.dataset.sound+' · '+info.label);
+      b.title=info.label;
     });
     const n=document.querySelector('[data-recording-count]');if(n)n.textContent=Object.keys(records).length;
   }
   document.addEventListener('hs-audio-ready',refreshBadges);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});
   window.addEventListener('pagehide',stop);
-  window.HSHangul={consonants,vowels,compose,records,ready,play,stop,status,el,soundButton,refreshBadges};
+  window.HSHangul={consonants,vowels,compose,records,ready,availability,play,stop,status,el,soundButton,refreshBadges};
 })();

@@ -1,0 +1,116 @@
+{
+  "humanListeningApproved": false,
+  "publicDeploymentTested": false,
+  "results": [
+    {
+      "playback": [
+        {
+          "word": "가",
+          "status": "played"
+        },
+        {
+          "word": "나",
+          "status": "played"
+        },
+        {
+          "word": "사",
+          "status": "played"
+        },
+        {
+          "word": "차",
+          "status": "played"
+        },
+        {
+          "word": "어",
+          "status": "played"
+        },
+        {
+          "word": "오",
+          "status": "played"
+        },
+        {
+          "word": "거",
+          "status": "played"
+        },
+        {
+          "word": "너",
+          "status": "played"
+        },
+        {
+          "word": "에",
+          "status": "played"
+        },
+        {
+          "word": "왜",
+          "status": "played"
+        },
+        {
+          "word": "외",
+          "status": "played"
+        },
+        {
+          "word": "위",
+          "status": "played"
+        },
+        {
+          "word": "이",
+          "status": "played"
+        },
+        {
+          "word": "예",
+          "status": "played"
+        },
+        {
+          "word": "와",
+          "status": "played"
+        },
+        {
+          "word": "더",
+          "status": "played"
+        },
+        {
+          "word": "저",
+          "status": "played"
+        },
+        {
+          "word": "두",
+          "status": "played"
+        },
+        {
+          "word": "소",
+          "status": "played"
+        },
+        {
+          "word": "집",
+          "status": "played"
+        },
+        {
+          "word": "책",
+          "status": "played"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "requests": 2,
+      "coverage": {
+        "ready": 19,
+        "missing": 354,
+        "held": 26
+      },
+      "errors": [],
+      "checks": "399 cells; failed manifest retry; real 거 playback ended; held 다; missing 겨"
+    },
+    {
+      "width": 390,
+      "requests": 2,
+      "coverage": {
+        "ready": 19,
+        "missing": 354,
+        "held": 26
+      },
+      "errors": [],
+      "checks": "399 cells; failed manifest retry; real 거 playback ended; held 다; missing 겨"
+    }
+  ]
+}

@@ -4,9 +4,10 @@
   function select(c,v,play=true){
     selected=H.compose(c,v);$('selected-syllable').textContent=selected;
     $('selected-formula').textContent=c+' + '+v+' = '+selected;
-    $('selected-help').textContent='자음과 모음을 합친 소리입니다.';
+    $('selected-help').textContent=H.availability(selected).label;
     document.querySelectorAll('.board [data-sound]').forEach(b=>b.classList.toggle('focus',b.dataset.sound===selected));
-    if(play)H.play(selected);
+    const requested=selected;
+    if(play)H.play(requested).then(result=>{if(selected!==requested)return;if(result.status==='played')$('selected-help').textContent=H.availability(selected).label;else if(result.status==='error')$('selected-help').textContent=result.message;else $('selected-help').textContent=H.availability(selected).label});
   }
   for(const [c,name,word] of H.consonants){
     const b=H.soundButton(name);b.replaceChildren(H.el('b','',c),H.el('small','',name));
@@ -33,5 +34,5 @@
   for(const word of ['국','산','옷','달','밤','밥','강'])$('finals').append(H.soundButton(word));
   for(const [, ,word] of H.consonants.slice(0,14))$('practice').append(H.soundButton(word));
   $('repeat-selected').onclick=()=>H.play(selected);$('stop-audio').onclick=()=>{H.stop();H.status('재생을 멈췄습니다.')};
-  H.ready.then(H.refreshBadges);select('ㄱ','ㅏ',false);
+  H.ready.then(()=>{H.refreshBadges();$('selected-help').textContent=H.availability(selected).label});select('ㄱ','ㅏ',false);
 })();
