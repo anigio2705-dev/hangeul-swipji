@@ -74,6 +74,14 @@ class Team12Regression(unittest.TestCase):
         self.assertIn("sessionStorage.getItem('hs-team12-provider-intent')", app)
         self.assertIn("field('참여 유형','role',state.team12ProviderRole||''", app)
 
+    def test_dashboard_to_provider_booking_discovery_contract(self):
+        dashboard = (ROOT / "dashboard.html").read_text(encoding="utf-8")
+        self.assertIn('href="./learn.html"', dashboard)
+        self.assertIn('data-team12-provider="partner"', dashboard)
+        self.assertIn('data-team12-provider="teacher"', dashboard)
+        self.assertIn('scripts/team12_provider_links.js', dashboard)
+        self.assertIn('href="./index.html#teaching-platform"', dashboard)
+
     def test_audio_ui_missing_and_playing_event_contract(self):
         core = (ROOT / "hangul-core.js").read_text(encoding="utf-8")
         self.assertIn("return {status:'missing',missing}", core)
