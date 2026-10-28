@@ -1,0 +1,4000 @@
+{
+  "description": "Planning inventory derived from manifest; not a physical audio or listening approval result",
+  "counts": {
+    "ready_unapproved": 19,
+    "held": 26,
+    "missing": 354
+  },
+  "cells": [
+    {
+      "syllable": "가",
+      "consonant": "ㄱ",
+      "vowel": "ㅏ",
+      "file": "ac00.mp3",
+      "manifestSrc": "./assets/hangul-audio/ac00-r2.mp3",
+      "status": "ready_unapproved",
+      "listeningApproval": "pending",
+      "recordingText": "가"
+    },
+    {
+      "syllable": "개",
+      "consonant": "ㄱ",
+      "vowel": "ㅐ",
+      "file": "ac1c.mp3",
+      "manifestSrc": "./assets/hangul-audio/ac1c-20261027.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "개"
+    },
+    {
+      "syllable": "갸",
+      "consonant": "ㄱ",
+      "vowel": "ㅑ",
+      "file": "ac38.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "갸"
+    },
+    {
+      "syllable": "걔",
+      "consonant": "ㄱ",
+      "vowel": "ㅒ",
+      "file": "ac54.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "걔"
+    },
+    {
+      "syllable": "거",
+      "consonant": "ㄱ",
+      "vowel": "ㅓ",
+      "file": "ac70.mp3",
+      "manifestSrc": "./assets/hangul-audio/ac70.mp3",
+      "status": "ready_unapproved",
+      "listeningApproval": "pending",
+      "recordingText": "거"
+    },
+    {
+      "syllable": "게",
+      "consonant": "ㄱ",
+      "vowel": "ㅔ",
+      "file": "ac8c.mp3",
+      "manifestSrc": "./assets/hangul-audio/ac8c-20261027.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "게"
+    },
+    {
+      "syllable": "겨",
+      "consonant": "ㄱ",
+      "vowel": "ㅕ",
+      "file": "aca8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "겨"
+    },
+    {
+      "syllable": "계",
+      "consonant": "ㄱ",
+      "vowel": "ㅖ",
+      "file": "acc4.mp3",
+      "manifestSrc": "./assets/hangul-audio/acc4-20261027.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "계"
+    },
+    {
+      "syllable": "고",
+      "consonant": "ㄱ",
+      "vowel": "ㅗ",
+      "file": "ace0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "고"
+    },
+    {
+      "syllable": "과",
+      "consonant": "ㄱ",
+      "vowel": "ㅘ",
+      "file": "acfc.mp3",
+      "manifestSrc": "./assets/hangul-audio/acfc-20261027.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "과"
+    },
+    {
+      "syllable": "괘",
+      "consonant": "ㄱ",
+      "vowel": "ㅙ",
+      "file": "ad18.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "괘"
+    },
+    {
+      "syllable": "괴",
+      "consonant": "ㄱ",
+      "vowel": "ㅚ",
+      "file": "ad34.mp3",
+      "manifestSrc": "./assets/hangul-audio/ad34-20261027.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "괴"
+    },
+    {
+      "syllable": "교",
+      "consonant": "ㄱ",
+      "vowel": "ㅛ",
+      "file": "ad50.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "교"
+    },
+    {
+      "syllable": "구",
+      "consonant": "ㄱ",
+      "vowel": "ㅜ",
+      "file": "ad6c.mp3",
+      "manifestSrc": "./assets/hangul-audio/ad6c-week1.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "구"
+    },
+    {
+      "syllable": "궈",
+      "consonant": "ㄱ",
+      "vowel": "ㅝ",
+      "file": "ad88.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "궈"
+    },
+    {
+      "syllable": "궤",
+      "consonant": "ㄱ",
+      "vowel": "ㅞ",
+      "file": "ada4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "궤"
+    },
+    {
+      "syllable": "귀",
+      "consonant": "ㄱ",
+      "vowel": "ㅟ",
+      "file": "adc0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "귀"
+    },
+    {
+      "syllable": "규",
+      "consonant": "ㄱ",
+      "vowel": "ㅠ",
+      "file": "addc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "규"
+    },
+    {
+      "syllable": "그",
+      "consonant": "ㄱ",
+      "vowel": "ㅡ",
+      "file": "adf8.mp3",
+      "manifestSrc": "./assets/hangul-audio/adf8-20261027.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "그"
+    },
+    {
+      "syllable": "긔",
+      "consonant": "ㄱ",
+      "vowel": "ㅢ",
+      "file": "ae14.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "긔"
+    },
+    {
+      "syllable": "기",
+      "consonant": "ㄱ",
+      "vowel": "ㅣ",
+      "file": "ae30.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "기"
+    },
+    {
+      "syllable": "까",
+      "consonant": "ㄲ",
+      "vowel": "ㅏ",
+      "file": "ae4c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "까"
+    },
+    {
+      "syllable": "깨",
+      "consonant": "ㄲ",
+      "vowel": "ㅐ",
+      "file": "ae68.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "깨"
+    },
+    {
+      "syllable": "꺄",
+      "consonant": "ㄲ",
+      "vowel": "ㅑ",
+      "file": "ae84.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "꺄"
+    },
+    {
+      "syllable": "꺠",
+      "consonant": "ㄲ",
+      "vowel": "ㅒ",
+      "file": "aea0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "꺠"
+    },
+    {
+      "syllable": "꺼",
+      "consonant": "ㄲ",
+      "vowel": "ㅓ",
+      "file": "aebc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "꺼"
+    },
+    {
+      "syllable": "께",
+      "consonant": "ㄲ",
+      "vowel": "ㅔ",
+      "file": "aed8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "께"
+    },
+    {
+      "syllable": "껴",
+      "consonant": "ㄲ",
+      "vowel": "ㅕ",
+      "file": "aef4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "껴"
+    },
+    {
+      "syllable": "꼐",
+      "consonant": "ㄲ",
+      "vowel": "ㅖ",
+      "file": "af10.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "꼐"
+    },
+    {
+      "syllable": "꼬",
+      "consonant": "ㄲ",
+      "vowel": "ㅗ",
+      "file": "af2c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "꼬"
+    },
+    {
+      "syllable": "꽈",
+      "consonant": "ㄲ",
+      "vowel": "ㅘ",
+      "file": "af48.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "꽈"
+    },
+    {
+      "syllable": "꽤",
+      "consonant": "ㄲ",
+      "vowel": "ㅙ",
+      "file": "af64.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "꽤"
+    },
+    {
+      "syllable": "꾀",
+      "consonant": "ㄲ",
+      "vowel": "ㅚ",
+      "file": "af80.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "꾀"
+    },
+    {
+      "syllable": "꾜",
+      "consonant": "ㄲ",
+      "vowel": "ㅛ",
+      "file": "af9c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "꾜"
+    },
+    {
+      "syllable": "꾸",
+      "consonant": "ㄲ",
+      "vowel": "ㅜ",
+      "file": "afb8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "꾸"
+    },
+    {
+      "syllable": "꿔",
+      "consonant": "ㄲ",
+      "vowel": "ㅝ",
+      "file": "afd4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "꿔"
+    },
+    {
+      "syllable": "꿰",
+      "consonant": "ㄲ",
+      "vowel": "ㅞ",
+      "file": "aff0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "꿰"
+    },
+    {
+      "syllable": "뀌",
+      "consonant": "ㄲ",
+      "vowel": "ㅟ",
+      "file": "b00c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뀌"
+    },
+    {
+      "syllable": "뀨",
+      "consonant": "ㄲ",
+      "vowel": "ㅠ",
+      "file": "b028.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뀨"
+    },
+    {
+      "syllable": "끄",
+      "consonant": "ㄲ",
+      "vowel": "ㅡ",
+      "file": "b044.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "끄"
+    },
+    {
+      "syllable": "끠",
+      "consonant": "ㄲ",
+      "vowel": "ㅢ",
+      "file": "b060.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "끠"
+    },
+    {
+      "syllable": "끼",
+      "consonant": "ㄲ",
+      "vowel": "ㅣ",
+      "file": "b07c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "끼"
+    },
+    {
+      "syllable": "나",
+      "consonant": "ㄴ",
+      "vowel": "ㅏ",
+      "file": "b098.mp3",
+      "manifestSrc": "./assets/hangul-audio/b098-r2.mp3",
+      "status": "ready_unapproved",
+      "listeningApproval": "pending",
+      "recordingText": "나"
+    },
+    {
+      "syllable": "내",
+      "consonant": "ㄴ",
+      "vowel": "ㅐ",
+      "file": "b0b4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "내"
+    },
+    {
+      "syllable": "냐",
+      "consonant": "ㄴ",
+      "vowel": "ㅑ",
+      "file": "b0d0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "냐"
+    },
+    {
+      "syllable": "냬",
+      "consonant": "ㄴ",
+      "vowel": "ㅒ",
+      "file": "b0ec.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "냬"
+    },
+    {
+      "syllable": "너",
+      "consonant": "ㄴ",
+      "vowel": "ㅓ",
+      "file": "b108.mp3",
+      "manifestSrc": "./assets/hangul-audio/b108.mp3",
+      "status": "ready_unapproved",
+      "listeningApproval": "pending",
+      "recordingText": "너"
+    },
+    {
+      "syllable": "네",
+      "consonant": "ㄴ",
+      "vowel": "ㅔ",
+      "file": "b124.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "네"
+    },
+    {
+      "syllable": "녀",
+      "consonant": "ㄴ",
+      "vowel": "ㅕ",
+      "file": "b140.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "녀"
+    },
+    {
+      "syllable": "녜",
+      "consonant": "ㄴ",
+      "vowel": "ㅖ",
+      "file": "b15c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "녜"
+    },
+    {
+      "syllable": "노",
+      "consonant": "ㄴ",
+      "vowel": "ㅗ",
+      "file": "b178.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "노"
+    },
+    {
+      "syllable": "놔",
+      "consonant": "ㄴ",
+      "vowel": "ㅘ",
+      "file": "b194.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "놔"
+    },
+    {
+      "syllable": "놰",
+      "consonant": "ㄴ",
+      "vowel": "ㅙ",
+      "file": "b1b0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "놰"
+    },
+    {
+      "syllable": "뇌",
+      "consonant": "ㄴ",
+      "vowel": "ㅚ",
+      "file": "b1cc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뇌"
+    },
+    {
+      "syllable": "뇨",
+      "consonant": "ㄴ",
+      "vowel": "ㅛ",
+      "file": "b1e8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뇨"
+    },
+    {
+      "syllable": "누",
+      "consonant": "ㄴ",
+      "vowel": "ㅜ",
+      "file": "b204.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "누"
+    },
+    {
+      "syllable": "눠",
+      "consonant": "ㄴ",
+      "vowel": "ㅝ",
+      "file": "b220.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "눠"
+    },
+    {
+      "syllable": "눼",
+      "consonant": "ㄴ",
+      "vowel": "ㅞ",
+      "file": "b23c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "눼"
+    },
+    {
+      "syllable": "뉘",
+      "consonant": "ㄴ",
+      "vowel": "ㅟ",
+      "file": "b258.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뉘"
+    },
+    {
+      "syllable": "뉴",
+      "consonant": "ㄴ",
+      "vowel": "ㅠ",
+      "file": "b274.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뉴"
+    },
+    {
+      "syllable": "느",
+      "consonant": "ㄴ",
+      "vowel": "ㅡ",
+      "file": "b290.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "느"
+    },
+    {
+      "syllable": "늬",
+      "consonant": "ㄴ",
+      "vowel": "ㅢ",
+      "file": "b2ac.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "늬"
+    },
+    {
+      "syllable": "니",
+      "consonant": "ㄴ",
+      "vowel": "ㅣ",
+      "file": "b2c8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "니"
+    },
+    {
+      "syllable": "다",
+      "consonant": "ㄷ",
+      "vowel": "ㅏ",
+      "file": "b2e4.mp3",
+      "manifestSrc": "./assets/hangul-audio/b2e4-week1.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "다"
+    },
+    {
+      "syllable": "대",
+      "consonant": "ㄷ",
+      "vowel": "ㅐ",
+      "file": "b300.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "대"
+    },
+    {
+      "syllable": "댜",
+      "consonant": "ㄷ",
+      "vowel": "ㅑ",
+      "file": "b31c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "댜"
+    },
+    {
+      "syllable": "댸",
+      "consonant": "ㄷ",
+      "vowel": "ㅒ",
+      "file": "b338.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "댸"
+    },
+    {
+      "syllable": "더",
+      "consonant": "ㄷ",
+      "vowel": "ㅓ",
+      "file": "b354.mp3",
+      "manifestSrc": "./assets/hangul-audio/b354.mp3",
+      "status": "ready_unapproved",
+      "listeningApproval": "pending",
+      "recordingText": "더"
+    },
+    {
+      "syllable": "데",
+      "consonant": "ㄷ",
+      "vowel": "ㅔ",
+      "file": "b370.mp3",
+      "manifestSrc": "./assets/hangul-audio/b370-20261027.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "데"
+    },
+    {
+      "syllable": "뎌",
+      "consonant": "ㄷ",
+      "vowel": "ㅕ",
+      "file": "b38c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뎌"
+    },
+    {
+      "syllable": "뎨",
+      "consonant": "ㄷ",
+      "vowel": "ㅖ",
+      "file": "b3a8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뎨"
+    },
+    {
+      "syllable": "도",
+      "consonant": "ㄷ",
+      "vowel": "ㅗ",
+      "file": "b3c4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "도"
+    },
+    {
+      "syllable": "돠",
+      "consonant": "ㄷ",
+      "vowel": "ㅘ",
+      "file": "b3e0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "돠"
+    },
+    {
+      "syllable": "돼",
+      "consonant": "ㄷ",
+      "vowel": "ㅙ",
+      "file": "b3fc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "돼"
+    },
+    {
+      "syllable": "되",
+      "consonant": "ㄷ",
+      "vowel": "ㅚ",
+      "file": "b418.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "되"
+    },
+    {
+      "syllable": "됴",
+      "consonant": "ㄷ",
+      "vowel": "ㅛ",
+      "file": "b434.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "됴"
+    },
+    {
+      "syllable": "두",
+      "consonant": "ㄷ",
+      "vowel": "ㅜ",
+      "file": "b450.mp3",
+      "manifestSrc": "./assets/hangul-audio/b450.mp3",
+      "status": "ready_unapproved",
+      "listeningApproval": "pending",
+      "recordingText": "두"
+    },
+    {
+      "syllable": "둬",
+      "consonant": "ㄷ",
+      "vowel": "ㅝ",
+      "file": "b46c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "둬"
+    },
+    {
+      "syllable": "뒈",
+      "consonant": "ㄷ",
+      "vowel": "ㅞ",
+      "file": "b488.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뒈"
+    },
+    {
+      "syllable": "뒤",
+      "consonant": "ㄷ",
+      "vowel": "ㅟ",
+      "file": "b4a4.mp3",
+      "manifestSrc": "./assets/hangul-audio/b4a4-20261027.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "뒤"
+    },
+    {
+      "syllable": "듀",
+      "consonant": "ㄷ",
+      "vowel": "ㅠ",
+      "file": "b4c0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "듀"
+    },
+    {
+      "syllable": "드",
+      "consonant": "ㄷ",
+      "vowel": "ㅡ",
+      "file": "b4dc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "드"
+    },
+    {
+      "syllable": "듸",
+      "consonant": "ㄷ",
+      "vowel": "ㅢ",
+      "file": "b4f8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "듸"
+    },
+    {
+      "syllable": "디",
+      "consonant": "ㄷ",
+      "vowel": "ㅣ",
+      "file": "b514.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "디"
+    },
+    {
+      "syllable": "따",
+      "consonant": "ㄸ",
+      "vowel": "ㅏ",
+      "file": "b530.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "따"
+    },
+    {
+      "syllable": "때",
+      "consonant": "ㄸ",
+      "vowel": "ㅐ",
+      "file": "b54c.mp3",
+      "manifestSrc": "./assets/hangul-audio/b54c-20261027.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "때"
+    },
+    {
+      "syllable": "땨",
+      "consonant": "ㄸ",
+      "vowel": "ㅑ",
+      "file": "b568.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "땨"
+    },
+    {
+      "syllable": "떄",
+      "consonant": "ㄸ",
+      "vowel": "ㅒ",
+      "file": "b584.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "떄"
+    },
+    {
+      "syllable": "떠",
+      "consonant": "ㄸ",
+      "vowel": "ㅓ",
+      "file": "b5a0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "떠"
+    },
+    {
+      "syllable": "떼",
+      "consonant": "ㄸ",
+      "vowel": "ㅔ",
+      "file": "b5bc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "떼"
+    },
+    {
+      "syllable": "뗘",
+      "consonant": "ㄸ",
+      "vowel": "ㅕ",
+      "file": "b5d8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뗘"
+    },
+    {
+      "syllable": "뗴",
+      "consonant": "ㄸ",
+      "vowel": "ㅖ",
+      "file": "b5f4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뗴"
+    },
+    {
+      "syllable": "또",
+      "consonant": "ㄸ",
+      "vowel": "ㅗ",
+      "file": "b610.mp3",
+      "manifestSrc": "./assets/hangul-audio/b610-20261027.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "또"
+    },
+    {
+      "syllable": "똬",
+      "consonant": "ㄸ",
+      "vowel": "ㅘ",
+      "file": "b62c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "똬"
+    },
+    {
+      "syllable": "뙈",
+      "consonant": "ㄸ",
+      "vowel": "ㅙ",
+      "file": "b648.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뙈"
+    },
+    {
+      "syllable": "뙤",
+      "consonant": "ㄸ",
+      "vowel": "ㅚ",
+      "file": "b664.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뙤"
+    },
+    {
+      "syllable": "뚀",
+      "consonant": "ㄸ",
+      "vowel": "ㅛ",
+      "file": "b680.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뚀"
+    },
+    {
+      "syllable": "뚜",
+      "consonant": "ㄸ",
+      "vowel": "ㅜ",
+      "file": "b69c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뚜"
+    },
+    {
+      "syllable": "뚸",
+      "consonant": "ㄸ",
+      "vowel": "ㅝ",
+      "file": "b6b8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뚸"
+    },
+    {
+      "syllable": "뛔",
+      "consonant": "ㄸ",
+      "vowel": "ㅞ",
+      "file": "b6d4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뛔"
+    },
+    {
+      "syllable": "뛰",
+      "consonant": "ㄸ",
+      "vowel": "ㅟ",
+      "file": "b6f0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뛰"
+    },
+    {
+      "syllable": "뜌",
+      "consonant": "ㄸ",
+      "vowel": "ㅠ",
+      "file": "b70c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뜌"
+    },
+    {
+      "syllable": "뜨",
+      "consonant": "ㄸ",
+      "vowel": "ㅡ",
+      "file": "b728.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뜨"
+    },
+    {
+      "syllable": "띄",
+      "consonant": "ㄸ",
+      "vowel": "ㅢ",
+      "file": "b744.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "띄"
+    },
+    {
+      "syllable": "띠",
+      "consonant": "ㄸ",
+      "vowel": "ㅣ",
+      "file": "b760.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "띠"
+    },
+    {
+      "syllable": "라",
+      "consonant": "ㄹ",
+      "vowel": "ㅏ",
+      "file": "b77c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "라"
+    },
+    {
+      "syllable": "래",
+      "consonant": "ㄹ",
+      "vowel": "ㅐ",
+      "file": "b798.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "래"
+    },
+    {
+      "syllable": "랴",
+      "consonant": "ㄹ",
+      "vowel": "ㅑ",
+      "file": "b7b4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "랴"
+    },
+    {
+      "syllable": "럐",
+      "consonant": "ㄹ",
+      "vowel": "ㅒ",
+      "file": "b7d0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "럐"
+    },
+    {
+      "syllable": "러",
+      "consonant": "ㄹ",
+      "vowel": "ㅓ",
+      "file": "b7ec.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "러"
+    },
+    {
+      "syllable": "레",
+      "consonant": "ㄹ",
+      "vowel": "ㅔ",
+      "file": "b808.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "레"
+    },
+    {
+      "syllable": "려",
+      "consonant": "ㄹ",
+      "vowel": "ㅕ",
+      "file": "b824.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "려"
+    },
+    {
+      "syllable": "례",
+      "consonant": "ㄹ",
+      "vowel": "ㅖ",
+      "file": "b840.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "례"
+    },
+    {
+      "syllable": "로",
+      "consonant": "ㄹ",
+      "vowel": "ㅗ",
+      "file": "b85c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "로"
+    },
+    {
+      "syllable": "롸",
+      "consonant": "ㄹ",
+      "vowel": "ㅘ",
+      "file": "b878.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "롸"
+    },
+    {
+      "syllable": "뢔",
+      "consonant": "ㄹ",
+      "vowel": "ㅙ",
+      "file": "b894.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뢔"
+    },
+    {
+      "syllable": "뢰",
+      "consonant": "ㄹ",
+      "vowel": "ㅚ",
+      "file": "b8b0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뢰"
+    },
+    {
+      "syllable": "료",
+      "consonant": "ㄹ",
+      "vowel": "ㅛ",
+      "file": "b8cc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "료"
+    },
+    {
+      "syllable": "루",
+      "consonant": "ㄹ",
+      "vowel": "ㅜ",
+      "file": "b8e8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "루"
+    },
+    {
+      "syllable": "뤄",
+      "consonant": "ㄹ",
+      "vowel": "ㅝ",
+      "file": "b904.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뤄"
+    },
+    {
+      "syllable": "뤠",
+      "consonant": "ㄹ",
+      "vowel": "ㅞ",
+      "file": "b920.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뤠"
+    },
+    {
+      "syllable": "뤼",
+      "consonant": "ㄹ",
+      "vowel": "ㅟ",
+      "file": "b93c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뤼"
+    },
+    {
+      "syllable": "류",
+      "consonant": "ㄹ",
+      "vowel": "ㅠ",
+      "file": "b958.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "류"
+    },
+    {
+      "syllable": "르",
+      "consonant": "ㄹ",
+      "vowel": "ㅡ",
+      "file": "b974.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "르"
+    },
+    {
+      "syllable": "릐",
+      "consonant": "ㄹ",
+      "vowel": "ㅢ",
+      "file": "b990.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "릐"
+    },
+    {
+      "syllable": "리",
+      "consonant": "ㄹ",
+      "vowel": "ㅣ",
+      "file": "b9ac.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "리"
+    },
+    {
+      "syllable": "마",
+      "consonant": "ㅁ",
+      "vowel": "ㅏ",
+      "file": "b9c8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "마"
+    },
+    {
+      "syllable": "매",
+      "consonant": "ㅁ",
+      "vowel": "ㅐ",
+      "file": "b9e4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "매"
+    },
+    {
+      "syllable": "먀",
+      "consonant": "ㅁ",
+      "vowel": "ㅑ",
+      "file": "ba00.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "먀"
+    },
+    {
+      "syllable": "먜",
+      "consonant": "ㅁ",
+      "vowel": "ㅒ",
+      "file": "ba1c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "먜"
+    },
+    {
+      "syllable": "머",
+      "consonant": "ㅁ",
+      "vowel": "ㅓ",
+      "file": "ba38.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "머"
+    },
+    {
+      "syllable": "메",
+      "consonant": "ㅁ",
+      "vowel": "ㅔ",
+      "file": "ba54.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "메"
+    },
+    {
+      "syllable": "며",
+      "consonant": "ㅁ",
+      "vowel": "ㅕ",
+      "file": "ba70.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "며"
+    },
+    {
+      "syllable": "몌",
+      "consonant": "ㅁ",
+      "vowel": "ㅖ",
+      "file": "ba8c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "몌"
+    },
+    {
+      "syllable": "모",
+      "consonant": "ㅁ",
+      "vowel": "ㅗ",
+      "file": "baa8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "모"
+    },
+    {
+      "syllable": "뫄",
+      "consonant": "ㅁ",
+      "vowel": "ㅘ",
+      "file": "bac4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뫄"
+    },
+    {
+      "syllable": "뫠",
+      "consonant": "ㅁ",
+      "vowel": "ㅙ",
+      "file": "bae0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뫠"
+    },
+    {
+      "syllable": "뫼",
+      "consonant": "ㅁ",
+      "vowel": "ㅚ",
+      "file": "bafc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뫼"
+    },
+    {
+      "syllable": "묘",
+      "consonant": "ㅁ",
+      "vowel": "ㅛ",
+      "file": "bb18.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "묘"
+    },
+    {
+      "syllable": "무",
+      "consonant": "ㅁ",
+      "vowel": "ㅜ",
+      "file": "bb34.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "무"
+    },
+    {
+      "syllable": "뭐",
+      "consonant": "ㅁ",
+      "vowel": "ㅝ",
+      "file": "bb50.mp3",
+      "manifestSrc": "./assets/hangul-audio/bb50-20261027.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "뭐"
+    },
+    {
+      "syllable": "뭬",
+      "consonant": "ㅁ",
+      "vowel": "ㅞ",
+      "file": "bb6c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뭬"
+    },
+    {
+      "syllable": "뮈",
+      "consonant": "ㅁ",
+      "vowel": "ㅟ",
+      "file": "bb88.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뮈"
+    },
+    {
+      "syllable": "뮤",
+      "consonant": "ㅁ",
+      "vowel": "ㅠ",
+      "file": "bba4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뮤"
+    },
+    {
+      "syllable": "므",
+      "consonant": "ㅁ",
+      "vowel": "ㅡ",
+      "file": "bbc0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "므"
+    },
+    {
+      "syllable": "믜",
+      "consonant": "ㅁ",
+      "vowel": "ㅢ",
+      "file": "bbdc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "믜"
+    },
+    {
+      "syllable": "미",
+      "consonant": "ㅁ",
+      "vowel": "ㅣ",
+      "file": "bbf8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "미"
+    },
+    {
+      "syllable": "바",
+      "consonant": "ㅂ",
+      "vowel": "ㅏ",
+      "file": "bc14.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "바"
+    },
+    {
+      "syllable": "배",
+      "consonant": "ㅂ",
+      "vowel": "ㅐ",
+      "file": "bc30.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "배"
+    },
+    {
+      "syllable": "뱌",
+      "consonant": "ㅂ",
+      "vowel": "ㅑ",
+      "file": "bc4c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뱌"
+    },
+    {
+      "syllable": "뱨",
+      "consonant": "ㅂ",
+      "vowel": "ㅒ",
+      "file": "bc68.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뱨"
+    },
+    {
+      "syllable": "버",
+      "consonant": "ㅂ",
+      "vowel": "ㅓ",
+      "file": "bc84.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "버"
+    },
+    {
+      "syllable": "베",
+      "consonant": "ㅂ",
+      "vowel": "ㅔ",
+      "file": "bca0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "베"
+    },
+    {
+      "syllable": "벼",
+      "consonant": "ㅂ",
+      "vowel": "ㅕ",
+      "file": "bcbc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "벼"
+    },
+    {
+      "syllable": "볘",
+      "consonant": "ㅂ",
+      "vowel": "ㅖ",
+      "file": "bcd8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "볘"
+    },
+    {
+      "syllable": "보",
+      "consonant": "ㅂ",
+      "vowel": "ㅗ",
+      "file": "bcf4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "보"
+    },
+    {
+      "syllable": "봐",
+      "consonant": "ㅂ",
+      "vowel": "ㅘ",
+      "file": "bd10.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "봐"
+    },
+    {
+      "syllable": "봬",
+      "consonant": "ㅂ",
+      "vowel": "ㅙ",
+      "file": "bd2c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "봬"
+    },
+    {
+      "syllable": "뵈",
+      "consonant": "ㅂ",
+      "vowel": "ㅚ",
+      "file": "bd48.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뵈"
+    },
+    {
+      "syllable": "뵤",
+      "consonant": "ㅂ",
+      "vowel": "ㅛ",
+      "file": "bd64.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뵤"
+    },
+    {
+      "syllable": "부",
+      "consonant": "ㅂ",
+      "vowel": "ㅜ",
+      "file": "bd80.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "부"
+    },
+    {
+      "syllable": "붜",
+      "consonant": "ㅂ",
+      "vowel": "ㅝ",
+      "file": "bd9c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "붜"
+    },
+    {
+      "syllable": "붸",
+      "consonant": "ㅂ",
+      "vowel": "ㅞ",
+      "file": "bdb8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "붸"
+    },
+    {
+      "syllable": "뷔",
+      "consonant": "ㅂ",
+      "vowel": "ㅟ",
+      "file": "bdd4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뷔"
+    },
+    {
+      "syllable": "뷰",
+      "consonant": "ㅂ",
+      "vowel": "ㅠ",
+      "file": "bdf0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뷰"
+    },
+    {
+      "syllable": "브",
+      "consonant": "ㅂ",
+      "vowel": "ㅡ",
+      "file": "be0c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "브"
+    },
+    {
+      "syllable": "븨",
+      "consonant": "ㅂ",
+      "vowel": "ㅢ",
+      "file": "be28.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "븨"
+    },
+    {
+      "syllable": "비",
+      "consonant": "ㅂ",
+      "vowel": "ㅣ",
+      "file": "be44.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "비"
+    },
+    {
+      "syllable": "빠",
+      "consonant": "ㅃ",
+      "vowel": "ㅏ",
+      "file": "be60.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "빠"
+    },
+    {
+      "syllable": "빼",
+      "consonant": "ㅃ",
+      "vowel": "ㅐ",
+      "file": "be7c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "빼"
+    },
+    {
+      "syllable": "뺘",
+      "consonant": "ㅃ",
+      "vowel": "ㅑ",
+      "file": "be98.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뺘"
+    },
+    {
+      "syllable": "뺴",
+      "consonant": "ㅃ",
+      "vowel": "ㅒ",
+      "file": "beb4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뺴"
+    },
+    {
+      "syllable": "뻐",
+      "consonant": "ㅃ",
+      "vowel": "ㅓ",
+      "file": "bed0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뻐"
+    },
+    {
+      "syllable": "뻬",
+      "consonant": "ㅃ",
+      "vowel": "ㅔ",
+      "file": "beec.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뻬"
+    },
+    {
+      "syllable": "뼈",
+      "consonant": "ㅃ",
+      "vowel": "ㅕ",
+      "file": "bf08.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뼈"
+    },
+    {
+      "syllable": "뼤",
+      "consonant": "ㅃ",
+      "vowel": "ㅖ",
+      "file": "bf24.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뼤"
+    },
+    {
+      "syllable": "뽀",
+      "consonant": "ㅃ",
+      "vowel": "ㅗ",
+      "file": "bf40.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뽀"
+    },
+    {
+      "syllable": "뽜",
+      "consonant": "ㅃ",
+      "vowel": "ㅘ",
+      "file": "bf5c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뽜"
+    },
+    {
+      "syllable": "뽸",
+      "consonant": "ㅃ",
+      "vowel": "ㅙ",
+      "file": "bf78.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뽸"
+    },
+    {
+      "syllable": "뾔",
+      "consonant": "ㅃ",
+      "vowel": "ㅚ",
+      "file": "bf94.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뾔"
+    },
+    {
+      "syllable": "뾰",
+      "consonant": "ㅃ",
+      "vowel": "ㅛ",
+      "file": "bfb0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뾰"
+    },
+    {
+      "syllable": "뿌",
+      "consonant": "ㅃ",
+      "vowel": "ㅜ",
+      "file": "bfcc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뿌"
+    },
+    {
+      "syllable": "뿨",
+      "consonant": "ㅃ",
+      "vowel": "ㅝ",
+      "file": "bfe8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "뿨"
+    },
+    {
+      "syllable": "쀄",
+      "consonant": "ㅃ",
+      "vowel": "ㅞ",
+      "file": "c004.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쀄"
+    },
+    {
+      "syllable": "쀠",
+      "consonant": "ㅃ",
+      "vowel": "ㅟ",
+      "file": "c020.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쀠"
+    },
+    {
+      "syllable": "쀼",
+      "consonant": "ㅃ",
+      "vowel": "ㅠ",
+      "file": "c03c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쀼"
+    },
+    {
+      "syllable": "쁘",
+      "consonant": "ㅃ",
+      "vowel": "ㅡ",
+      "file": "c058.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쁘"
+    },
+    {
+      "syllable": "쁴",
+      "consonant": "ㅃ",
+      "vowel": "ㅢ",
+      "file": "c074.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쁴"
+    },
+    {
+      "syllable": "삐",
+      "consonant": "ㅃ",
+      "vowel": "ㅣ",
+      "file": "c090.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "삐"
+    },
+    {
+      "syllable": "사",
+      "consonant": "ㅅ",
+      "vowel": "ㅏ",
+      "file": "c0ac.mp3",
+      "manifestSrc": "./assets/hangul-audio/c0ac.mp3",
+      "status": "ready_unapproved",
+      "listeningApproval": "pending",
+      "recordingText": "사"
+    },
+    {
+      "syllable": "새",
+      "consonant": "ㅅ",
+      "vowel": "ㅐ",
+      "file": "c0c8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "새"
+    },
+    {
+      "syllable": "샤",
+      "consonant": "ㅅ",
+      "vowel": "ㅑ",
+      "file": "c0e4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "샤"
+    },
+    {
+      "syllable": "섀",
+      "consonant": "ㅅ",
+      "vowel": "ㅒ",
+      "file": "c100.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "섀"
+    },
+    {
+      "syllable": "서",
+      "consonant": "ㅅ",
+      "vowel": "ㅓ",
+      "file": "c11c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "서"
+    },
+    {
+      "syllable": "세",
+      "consonant": "ㅅ",
+      "vowel": "ㅔ",
+      "file": "c138.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "세"
+    },
+    {
+      "syllable": "셔",
+      "consonant": "ㅅ",
+      "vowel": "ㅕ",
+      "file": "c154.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "셔"
+    },
+    {
+      "syllable": "셰",
+      "consonant": "ㅅ",
+      "vowel": "ㅖ",
+      "file": "c170.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "셰"
+    },
+    {
+      "syllable": "소",
+      "consonant": "ㅅ",
+      "vowel": "ㅗ",
+      "file": "c18c.mp3",
+      "manifestSrc": "./assets/hangul-audio/c18c.mp3",
+      "status": "ready_unapproved",
+      "listeningApproval": "pending",
+      "recordingText": "소"
+    },
+    {
+      "syllable": "솨",
+      "consonant": "ㅅ",
+      "vowel": "ㅘ",
+      "file": "c1a8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "솨"
+    },
+    {
+      "syllable": "쇄",
+      "consonant": "ㅅ",
+      "vowel": "ㅙ",
+      "file": "c1c4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쇄"
+    },
+    {
+      "syllable": "쇠",
+      "consonant": "ㅅ",
+      "vowel": "ㅚ",
+      "file": "c1e0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쇠"
+    },
+    {
+      "syllable": "쇼",
+      "consonant": "ㅅ",
+      "vowel": "ㅛ",
+      "file": "c1fc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쇼"
+    },
+    {
+      "syllable": "수",
+      "consonant": "ㅅ",
+      "vowel": "ㅜ",
+      "file": "c218.mp3",
+      "manifestSrc": "./assets/hangul-audio/c218-20261027.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "수"
+    },
+    {
+      "syllable": "숴",
+      "consonant": "ㅅ",
+      "vowel": "ㅝ",
+      "file": "c234.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "숴"
+    },
+    {
+      "syllable": "쉐",
+      "consonant": "ㅅ",
+      "vowel": "ㅞ",
+      "file": "c250.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쉐"
+    },
+    {
+      "syllable": "쉬",
+      "consonant": "ㅅ",
+      "vowel": "ㅟ",
+      "file": "c26c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쉬"
+    },
+    {
+      "syllable": "슈",
+      "consonant": "ㅅ",
+      "vowel": "ㅠ",
+      "file": "c288.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "슈"
+    },
+    {
+      "syllable": "스",
+      "consonant": "ㅅ",
+      "vowel": "ㅡ",
+      "file": "c2a4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "스"
+    },
+    {
+      "syllable": "싀",
+      "consonant": "ㅅ",
+      "vowel": "ㅢ",
+      "file": "c2c0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "싀"
+    },
+    {
+      "syllable": "시",
+      "consonant": "ㅅ",
+      "vowel": "ㅣ",
+      "file": "c2dc.mp3",
+      "manifestSrc": "./assets/hangul-audio/c2dc-20261027.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "시"
+    },
+    {
+      "syllable": "싸",
+      "consonant": "ㅆ",
+      "vowel": "ㅏ",
+      "file": "c2f8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "싸"
+    },
+    {
+      "syllable": "쌔",
+      "consonant": "ㅆ",
+      "vowel": "ㅐ",
+      "file": "c314.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쌔"
+    },
+    {
+      "syllable": "쌰",
+      "consonant": "ㅆ",
+      "vowel": "ㅑ",
+      "file": "c330.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쌰"
+    },
+    {
+      "syllable": "썌",
+      "consonant": "ㅆ",
+      "vowel": "ㅒ",
+      "file": "c34c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "썌"
+    },
+    {
+      "syllable": "써",
+      "consonant": "ㅆ",
+      "vowel": "ㅓ",
+      "file": "c368.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "써"
+    },
+    {
+      "syllable": "쎄",
+      "consonant": "ㅆ",
+      "vowel": "ㅔ",
+      "file": "c384.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쎄"
+    },
+    {
+      "syllable": "쎠",
+      "consonant": "ㅆ",
+      "vowel": "ㅕ",
+      "file": "c3a0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쎠"
+    },
+    {
+      "syllable": "쎼",
+      "consonant": "ㅆ",
+      "vowel": "ㅖ",
+      "file": "c3bc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쎼"
+    },
+    {
+      "syllable": "쏘",
+      "consonant": "ㅆ",
+      "vowel": "ㅗ",
+      "file": "c3d8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쏘"
+    },
+    {
+      "syllable": "쏴",
+      "consonant": "ㅆ",
+      "vowel": "ㅘ",
+      "file": "c3f4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쏴"
+    },
+    {
+      "syllable": "쐐",
+      "consonant": "ㅆ",
+      "vowel": "ㅙ",
+      "file": "c410.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쐐"
+    },
+    {
+      "syllable": "쐬",
+      "consonant": "ㅆ",
+      "vowel": "ㅚ",
+      "file": "c42c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쐬"
+    },
+    {
+      "syllable": "쑈",
+      "consonant": "ㅆ",
+      "vowel": "ㅛ",
+      "file": "c448.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쑈"
+    },
+    {
+      "syllable": "쑤",
+      "consonant": "ㅆ",
+      "vowel": "ㅜ",
+      "file": "c464.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쑤"
+    },
+    {
+      "syllable": "쒀",
+      "consonant": "ㅆ",
+      "vowel": "ㅝ",
+      "file": "c480.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쒀"
+    },
+    {
+      "syllable": "쒜",
+      "consonant": "ㅆ",
+      "vowel": "ㅞ",
+      "file": "c49c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쒜"
+    },
+    {
+      "syllable": "쒸",
+      "consonant": "ㅆ",
+      "vowel": "ㅟ",
+      "file": "c4b8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쒸"
+    },
+    {
+      "syllable": "쓔",
+      "consonant": "ㅆ",
+      "vowel": "ㅠ",
+      "file": "c4d4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쓔"
+    },
+    {
+      "syllable": "쓰",
+      "consonant": "ㅆ",
+      "vowel": "ㅡ",
+      "file": "c4f0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쓰"
+    },
+    {
+      "syllable": "씌",
+      "consonant": "ㅆ",
+      "vowel": "ㅢ",
+      "file": "c50c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "씌"
+    },
+    {
+      "syllable": "씨",
+      "consonant": "ㅆ",
+      "vowel": "ㅣ",
+      "file": "c528.mp3",
+      "manifestSrc": "./assets/hangul-audio/c528-20261027.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "씨"
+    },
+    {
+      "syllable": "아",
+      "consonant": "ㅇ",
+      "vowel": "ㅏ",
+      "file": "c544.mp3",
+      "manifestSrc": "./assets/hangul-audio/c544-week1.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "아"
+    },
+    {
+      "syllable": "애",
+      "consonant": "ㅇ",
+      "vowel": "ㅐ",
+      "file": "c560.mp3",
+      "manifestSrc": "./assets/hangul-audio/c560.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "애"
+    },
+    {
+      "syllable": "야",
+      "consonant": "ㅇ",
+      "vowel": "ㅑ",
+      "file": "c57c.mp3",
+      "manifestSrc": "./assets/hangul-audio/c57c-week1.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "야"
+    },
+    {
+      "syllable": "얘",
+      "consonant": "ㅇ",
+      "vowel": "ㅒ",
+      "file": "c598.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "얘"
+    },
+    {
+      "syllable": "어",
+      "consonant": "ㅇ",
+      "vowel": "ㅓ",
+      "file": "c5b4.mp3",
+      "manifestSrc": "./assets/hangul-audio/c5b4.mp3",
+      "status": "ready_unapproved",
+      "listeningApproval": "pending",
+      "recordingText": "어"
+    },
+    {
+      "syllable": "에",
+      "consonant": "ㅇ",
+      "vowel": "ㅔ",
+      "file": "c5d0.mp3",
+      "manifestSrc": "./assets/hangul-audio/c5d0.mp3",
+      "status": "ready_unapproved",
+      "listeningApproval": "pending",
+      "recordingText": "에"
+    },
+    {
+      "syllable": "여",
+      "consonant": "ㅇ",
+      "vowel": "ㅕ",
+      "file": "c5ec.mp3",
+      "manifestSrc": "./assets/hangul-audio/c5ec-week1.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "여"
+    },
+    {
+      "syllable": "예",
+      "consonant": "ㅇ",
+      "vowel": "ㅖ",
+      "file": "c608.mp3",
+      "manifestSrc": "./assets/hangul-audio/c608.mp3",
+      "status": "ready_unapproved",
+      "listeningApproval": "pending",
+      "recordingText": "예"
+    },
+    {
+      "syllable": "오",
+      "consonant": "ㅇ",
+      "vowel": "ㅗ",
+      "file": "c624.mp3",
+      "manifestSrc": "./assets/hangul-audio/c624.mp3",
+      "status": "ready_unapproved",
+      "listeningApproval": "pending",
+      "recordingText": "오"
+    },
+    {
+      "syllable": "와",
+      "consonant": "ㅇ",
+      "vowel": "ㅘ",
+      "file": "c640.mp3",
+      "manifestSrc": "./assets/hangul-audio/c640.mp3",
+      "status": "ready_unapproved",
+      "listeningApproval": "pending",
+      "recordingText": "와"
+    },
+    {
+      "syllable": "왜",
+      "consonant": "ㅇ",
+      "vowel": "ㅙ",
+      "file": "c65c.mp3",
+      "manifestSrc": "./assets/hangul-audio/c65c.mp3",
+      "status": "ready_unapproved",
+      "listeningApproval": "pending",
+      "recordingText": "왜"
+    },
+    {
+      "syllable": "외",
+      "consonant": "ㅇ",
+      "vowel": "ㅚ",
+      "file": "c678.mp3",
+      "manifestSrc": "./assets/hangul-audio/c678.mp3",
+      "status": "ready_unapproved",
+      "listeningApproval": "pending",
+      "recordingText": "외"
+    },
+    {
+      "syllable": "요",
+      "consonant": "ㅇ",
+      "vowel": "ㅛ",
+      "file": "c694.mp3",
+      "manifestSrc": "./assets/hangul-audio/c694-week1.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "요"
+    },
+    {
+      "syllable": "우",
+      "consonant": "ㅇ",
+      "vowel": "ㅜ",
+      "file": "c6b0.mp3",
+      "manifestSrc": "./assets/hangul-audio/c6b0-week1.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "우"
+    },
+    {
+      "syllable": "워",
+      "consonant": "ㅇ",
+      "vowel": "ㅝ",
+      "file": "c6cc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "워"
+    },
+    {
+      "syllable": "웨",
+      "consonant": "ㅇ",
+      "vowel": "ㅞ",
+      "file": "c6e8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "웨"
+    },
+    {
+      "syllable": "위",
+      "consonant": "ㅇ",
+      "vowel": "ㅟ",
+      "file": "c704.mp3",
+      "manifestSrc": "./assets/hangul-audio/c704.mp3",
+      "status": "ready_unapproved",
+      "listeningApproval": "pending",
+      "recordingText": "위"
+    },
+    {
+      "syllable": "유",
+      "consonant": "ㅇ",
+      "vowel": "ㅠ",
+      "file": "c720.mp3",
+      "manifestSrc": "./assets/hangul-audio/c720-week1.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "유"
+    },
+    {
+      "syllable": "으",
+      "consonant": "ㅇ",
+      "vowel": "ㅡ",
+      "file": "c73c.mp3",
+      "manifestSrc": "./assets/hangul-audio/c73c-week1.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "으"
+    },
+    {
+      "syllable": "의",
+      "consonant": "ㅇ",
+      "vowel": "ㅢ",
+      "file": "c758.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "의"
+    },
+    {
+      "syllable": "이",
+      "consonant": "ㅇ",
+      "vowel": "ㅣ",
+      "file": "c774.mp3",
+      "manifestSrc": "./assets/hangul-audio/c774.mp3",
+      "status": "ready_unapproved",
+      "listeningApproval": "pending",
+      "recordingText": "이"
+    },
+    {
+      "syllable": "자",
+      "consonant": "ㅈ",
+      "vowel": "ㅏ",
+      "file": "c790.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "자"
+    },
+    {
+      "syllable": "재",
+      "consonant": "ㅈ",
+      "vowel": "ㅐ",
+      "file": "c7ac.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "재"
+    },
+    {
+      "syllable": "쟈",
+      "consonant": "ㅈ",
+      "vowel": "ㅑ",
+      "file": "c7c8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쟈"
+    },
+    {
+      "syllable": "쟤",
+      "consonant": "ㅈ",
+      "vowel": "ㅒ",
+      "file": "c7e4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쟤"
+    },
+    {
+      "syllable": "저",
+      "consonant": "ㅈ",
+      "vowel": "ㅓ",
+      "file": "c800.mp3",
+      "manifestSrc": "./assets/hangul-audio/c800.mp3",
+      "status": "ready_unapproved",
+      "listeningApproval": "pending",
+      "recordingText": "저"
+    },
+    {
+      "syllable": "제",
+      "consonant": "ㅈ",
+      "vowel": "ㅔ",
+      "file": "c81c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "제"
+    },
+    {
+      "syllable": "져",
+      "consonant": "ㅈ",
+      "vowel": "ㅕ",
+      "file": "c838.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "져"
+    },
+    {
+      "syllable": "졔",
+      "consonant": "ㅈ",
+      "vowel": "ㅖ",
+      "file": "c854.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "졔"
+    },
+    {
+      "syllable": "조",
+      "consonant": "ㅈ",
+      "vowel": "ㅗ",
+      "file": "c870.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "조"
+    },
+    {
+      "syllable": "좌",
+      "consonant": "ㅈ",
+      "vowel": "ㅘ",
+      "file": "c88c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "좌"
+    },
+    {
+      "syllable": "좨",
+      "consonant": "ㅈ",
+      "vowel": "ㅙ",
+      "file": "c8a8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "좨"
+    },
+    {
+      "syllable": "죄",
+      "consonant": "ㅈ",
+      "vowel": "ㅚ",
+      "file": "c8c4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "죄"
+    },
+    {
+      "syllable": "죠",
+      "consonant": "ㅈ",
+      "vowel": "ㅛ",
+      "file": "c8e0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "죠"
+    },
+    {
+      "syllable": "주",
+      "consonant": "ㅈ",
+      "vowel": "ㅜ",
+      "file": "c8fc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "주"
+    },
+    {
+      "syllable": "줘",
+      "consonant": "ㅈ",
+      "vowel": "ㅝ",
+      "file": "c918.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "줘"
+    },
+    {
+      "syllable": "줴",
+      "consonant": "ㅈ",
+      "vowel": "ㅞ",
+      "file": "c934.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "줴"
+    },
+    {
+      "syllable": "쥐",
+      "consonant": "ㅈ",
+      "vowel": "ㅟ",
+      "file": "c950.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쥐"
+    },
+    {
+      "syllable": "쥬",
+      "consonant": "ㅈ",
+      "vowel": "ㅠ",
+      "file": "c96c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쥬"
+    },
+    {
+      "syllable": "즈",
+      "consonant": "ㅈ",
+      "vowel": "ㅡ",
+      "file": "c988.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "즈"
+    },
+    {
+      "syllable": "즤",
+      "consonant": "ㅈ",
+      "vowel": "ㅢ",
+      "file": "c9a4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "즤"
+    },
+    {
+      "syllable": "지",
+      "consonant": "ㅈ",
+      "vowel": "ㅣ",
+      "file": "c9c0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "지"
+    },
+    {
+      "syllable": "짜",
+      "consonant": "ㅉ",
+      "vowel": "ㅏ",
+      "file": "c9dc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "짜"
+    },
+    {
+      "syllable": "째",
+      "consonant": "ㅉ",
+      "vowel": "ㅐ",
+      "file": "c9f8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "째"
+    },
+    {
+      "syllable": "쨔",
+      "consonant": "ㅉ",
+      "vowel": "ㅑ",
+      "file": "ca14.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쨔"
+    },
+    {
+      "syllable": "쨰",
+      "consonant": "ㅉ",
+      "vowel": "ㅒ",
+      "file": "ca30.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쨰"
+    },
+    {
+      "syllable": "쩌",
+      "consonant": "ㅉ",
+      "vowel": "ㅓ",
+      "file": "ca4c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쩌"
+    },
+    {
+      "syllable": "쩨",
+      "consonant": "ㅉ",
+      "vowel": "ㅔ",
+      "file": "ca68.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쩨"
+    },
+    {
+      "syllable": "쪄",
+      "consonant": "ㅉ",
+      "vowel": "ㅕ",
+      "file": "ca84.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쪄"
+    },
+    {
+      "syllable": "쪠",
+      "consonant": "ㅉ",
+      "vowel": "ㅖ",
+      "file": "caa0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쪠"
+    },
+    {
+      "syllable": "쪼",
+      "consonant": "ㅉ",
+      "vowel": "ㅗ",
+      "file": "cabc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쪼"
+    },
+    {
+      "syllable": "쫘",
+      "consonant": "ㅉ",
+      "vowel": "ㅘ",
+      "file": "cad8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쫘"
+    },
+    {
+      "syllable": "쫴",
+      "consonant": "ㅉ",
+      "vowel": "ㅙ",
+      "file": "caf4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쫴"
+    },
+    {
+      "syllable": "쬐",
+      "consonant": "ㅉ",
+      "vowel": "ㅚ",
+      "file": "cb10.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쬐"
+    },
+    {
+      "syllable": "쬬",
+      "consonant": "ㅉ",
+      "vowel": "ㅛ",
+      "file": "cb2c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쬬"
+    },
+    {
+      "syllable": "쭈",
+      "consonant": "ㅉ",
+      "vowel": "ㅜ",
+      "file": "cb48.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쭈"
+    },
+    {
+      "syllable": "쭤",
+      "consonant": "ㅉ",
+      "vowel": "ㅝ",
+      "file": "cb64.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쭤"
+    },
+    {
+      "syllable": "쮀",
+      "consonant": "ㅉ",
+      "vowel": "ㅞ",
+      "file": "cb80.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쮀"
+    },
+    {
+      "syllable": "쮜",
+      "consonant": "ㅉ",
+      "vowel": "ㅟ",
+      "file": "cb9c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쮜"
+    },
+    {
+      "syllable": "쮸",
+      "consonant": "ㅉ",
+      "vowel": "ㅠ",
+      "file": "cbb8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쮸"
+    },
+    {
+      "syllable": "쯔",
+      "consonant": "ㅉ",
+      "vowel": "ㅡ",
+      "file": "cbd4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쯔"
+    },
+    {
+      "syllable": "쯰",
+      "consonant": "ㅉ",
+      "vowel": "ㅢ",
+      "file": "cbf0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쯰"
+    },
+    {
+      "syllable": "찌",
+      "consonant": "ㅉ",
+      "vowel": "ㅣ",
+      "file": "cc0c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "찌"
+    },
+    {
+      "syllable": "차",
+      "consonant": "ㅊ",
+      "vowel": "ㅏ",
+      "file": "cc28.mp3",
+      "manifestSrc": "./assets/hangul-audio/cc28.mp3",
+      "status": "ready_unapproved",
+      "listeningApproval": "pending",
+      "recordingText": "차"
+    },
+    {
+      "syllable": "채",
+      "consonant": "ㅊ",
+      "vowel": "ㅐ",
+      "file": "cc44.mp3",
+      "manifestSrc": "./assets/hangul-audio/cc44-20261027.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "채"
+    },
+    {
+      "syllable": "챠",
+      "consonant": "ㅊ",
+      "vowel": "ㅑ",
+      "file": "cc60.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "챠"
+    },
+    {
+      "syllable": "챼",
+      "consonant": "ㅊ",
+      "vowel": "ㅒ",
+      "file": "cc7c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "챼"
+    },
+    {
+      "syllable": "처",
+      "consonant": "ㅊ",
+      "vowel": "ㅓ",
+      "file": "cc98.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "처"
+    },
+    {
+      "syllable": "체",
+      "consonant": "ㅊ",
+      "vowel": "ㅔ",
+      "file": "ccb4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "체"
+    },
+    {
+      "syllable": "쳐",
+      "consonant": "ㅊ",
+      "vowel": "ㅕ",
+      "file": "ccd0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쳐"
+    },
+    {
+      "syllable": "쳬",
+      "consonant": "ㅊ",
+      "vowel": "ㅖ",
+      "file": "ccec.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쳬"
+    },
+    {
+      "syllable": "초",
+      "consonant": "ㅊ",
+      "vowel": "ㅗ",
+      "file": "cd08.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "초"
+    },
+    {
+      "syllable": "촤",
+      "consonant": "ㅊ",
+      "vowel": "ㅘ",
+      "file": "cd24.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "촤"
+    },
+    {
+      "syllable": "쵀",
+      "consonant": "ㅊ",
+      "vowel": "ㅙ",
+      "file": "cd40.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쵀"
+    },
+    {
+      "syllable": "최",
+      "consonant": "ㅊ",
+      "vowel": "ㅚ",
+      "file": "cd5c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "최"
+    },
+    {
+      "syllable": "쵸",
+      "consonant": "ㅊ",
+      "vowel": "ㅛ",
+      "file": "cd78.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쵸"
+    },
+    {
+      "syllable": "추",
+      "consonant": "ㅊ",
+      "vowel": "ㅜ",
+      "file": "cd94.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "추"
+    },
+    {
+      "syllable": "춰",
+      "consonant": "ㅊ",
+      "vowel": "ㅝ",
+      "file": "cdb0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "춰"
+    },
+    {
+      "syllable": "췌",
+      "consonant": "ㅊ",
+      "vowel": "ㅞ",
+      "file": "cdcc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "췌"
+    },
+    {
+      "syllable": "취",
+      "consonant": "ㅊ",
+      "vowel": "ㅟ",
+      "file": "cde8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "취"
+    },
+    {
+      "syllable": "츄",
+      "consonant": "ㅊ",
+      "vowel": "ㅠ",
+      "file": "ce04.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "츄"
+    },
+    {
+      "syllable": "츠",
+      "consonant": "ㅊ",
+      "vowel": "ㅡ",
+      "file": "ce20.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "츠"
+    },
+    {
+      "syllable": "츼",
+      "consonant": "ㅊ",
+      "vowel": "ㅢ",
+      "file": "ce3c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "츼"
+    },
+    {
+      "syllable": "치",
+      "consonant": "ㅊ",
+      "vowel": "ㅣ",
+      "file": "ce58.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "치"
+    },
+    {
+      "syllable": "카",
+      "consonant": "ㅋ",
+      "vowel": "ㅏ",
+      "file": "ce74.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "카"
+    },
+    {
+      "syllable": "캐",
+      "consonant": "ㅋ",
+      "vowel": "ㅐ",
+      "file": "ce90.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "캐"
+    },
+    {
+      "syllable": "캬",
+      "consonant": "ㅋ",
+      "vowel": "ㅑ",
+      "file": "ceac.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "캬"
+    },
+    {
+      "syllable": "컈",
+      "consonant": "ㅋ",
+      "vowel": "ㅒ",
+      "file": "cec8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "컈"
+    },
+    {
+      "syllable": "커",
+      "consonant": "ㅋ",
+      "vowel": "ㅓ",
+      "file": "cee4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "커"
+    },
+    {
+      "syllable": "케",
+      "consonant": "ㅋ",
+      "vowel": "ㅔ",
+      "file": "cf00.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "케"
+    },
+    {
+      "syllable": "켜",
+      "consonant": "ㅋ",
+      "vowel": "ㅕ",
+      "file": "cf1c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "켜"
+    },
+    {
+      "syllable": "켸",
+      "consonant": "ㅋ",
+      "vowel": "ㅖ",
+      "file": "cf38.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "켸"
+    },
+    {
+      "syllable": "코",
+      "consonant": "ㅋ",
+      "vowel": "ㅗ",
+      "file": "cf54.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "코"
+    },
+    {
+      "syllable": "콰",
+      "consonant": "ㅋ",
+      "vowel": "ㅘ",
+      "file": "cf70.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "콰"
+    },
+    {
+      "syllable": "쾌",
+      "consonant": "ㅋ",
+      "vowel": "ㅙ",
+      "file": "cf8c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쾌"
+    },
+    {
+      "syllable": "쾨",
+      "consonant": "ㅋ",
+      "vowel": "ㅚ",
+      "file": "cfa8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쾨"
+    },
+    {
+      "syllable": "쿄",
+      "consonant": "ㅋ",
+      "vowel": "ㅛ",
+      "file": "cfc4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쿄"
+    },
+    {
+      "syllable": "쿠",
+      "consonant": "ㅋ",
+      "vowel": "ㅜ",
+      "file": "cfe0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쿠"
+    },
+    {
+      "syllable": "쿼",
+      "consonant": "ㅋ",
+      "vowel": "ㅝ",
+      "file": "cffc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "쿼"
+    },
+    {
+      "syllable": "퀘",
+      "consonant": "ㅋ",
+      "vowel": "ㅞ",
+      "file": "d018.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "퀘"
+    },
+    {
+      "syllable": "퀴",
+      "consonant": "ㅋ",
+      "vowel": "ㅟ",
+      "file": "d034.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "퀴"
+    },
+    {
+      "syllable": "큐",
+      "consonant": "ㅋ",
+      "vowel": "ㅠ",
+      "file": "d050.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "큐"
+    },
+    {
+      "syllable": "크",
+      "consonant": "ㅋ",
+      "vowel": "ㅡ",
+      "file": "d06c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "크"
+    },
+    {
+      "syllable": "킈",
+      "consonant": "ㅋ",
+      "vowel": "ㅢ",
+      "file": "d088.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "킈"
+    },
+    {
+      "syllable": "키",
+      "consonant": "ㅋ",
+      "vowel": "ㅣ",
+      "file": "d0a4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "키"
+    },
+    {
+      "syllable": "타",
+      "consonant": "ㅌ",
+      "vowel": "ㅏ",
+      "file": "d0c0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "타"
+    },
+    {
+      "syllable": "태",
+      "consonant": "ㅌ",
+      "vowel": "ㅐ",
+      "file": "d0dc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "태"
+    },
+    {
+      "syllable": "탸",
+      "consonant": "ㅌ",
+      "vowel": "ㅑ",
+      "file": "d0f8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "탸"
+    },
+    {
+      "syllable": "턔",
+      "consonant": "ㅌ",
+      "vowel": "ㅒ",
+      "file": "d114.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "턔"
+    },
+    {
+      "syllable": "터",
+      "consonant": "ㅌ",
+      "vowel": "ㅓ",
+      "file": "d130.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "터"
+    },
+    {
+      "syllable": "테",
+      "consonant": "ㅌ",
+      "vowel": "ㅔ",
+      "file": "d14c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "테"
+    },
+    {
+      "syllable": "텨",
+      "consonant": "ㅌ",
+      "vowel": "ㅕ",
+      "file": "d168.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "텨"
+    },
+    {
+      "syllable": "톄",
+      "consonant": "ㅌ",
+      "vowel": "ㅖ",
+      "file": "d184.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "톄"
+    },
+    {
+      "syllable": "토",
+      "consonant": "ㅌ",
+      "vowel": "ㅗ",
+      "file": "d1a0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "토"
+    },
+    {
+      "syllable": "톼",
+      "consonant": "ㅌ",
+      "vowel": "ㅘ",
+      "file": "d1bc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "톼"
+    },
+    {
+      "syllable": "퇘",
+      "consonant": "ㅌ",
+      "vowel": "ㅙ",
+      "file": "d1d8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "퇘"
+    },
+    {
+      "syllable": "퇴",
+      "consonant": "ㅌ",
+      "vowel": "ㅚ",
+      "file": "d1f4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "퇴"
+    },
+    {
+      "syllable": "툐",
+      "consonant": "ㅌ",
+      "vowel": "ㅛ",
+      "file": "d210.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "툐"
+    },
+    {
+      "syllable": "투",
+      "consonant": "ㅌ",
+      "vowel": "ㅜ",
+      "file": "d22c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "투"
+    },
+    {
+      "syllable": "퉈",
+      "consonant": "ㅌ",
+      "vowel": "ㅝ",
+      "file": "d248.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "퉈"
+    },
+    {
+      "syllable": "퉤",
+      "consonant": "ㅌ",
+      "vowel": "ㅞ",
+      "file": "d264.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "퉤"
+    },
+    {
+      "syllable": "튀",
+      "consonant": "ㅌ",
+      "vowel": "ㅟ",
+      "file": "d280.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "튀"
+    },
+    {
+      "syllable": "튜",
+      "consonant": "ㅌ",
+      "vowel": "ㅠ",
+      "file": "d29c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "튜"
+    },
+    {
+      "syllable": "트",
+      "consonant": "ㅌ",
+      "vowel": "ㅡ",
+      "file": "d2b8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "트"
+    },
+    {
+      "syllable": "틔",
+      "consonant": "ㅌ",
+      "vowel": "ㅢ",
+      "file": "d2d4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "틔"
+    },
+    {
+      "syllable": "티",
+      "consonant": "ㅌ",
+      "vowel": "ㅣ",
+      "file": "d2f0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "티"
+    },
+    {
+      "syllable": "파",
+      "consonant": "ㅍ",
+      "vowel": "ㅏ",
+      "file": "d30c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "파"
+    },
+    {
+      "syllable": "패",
+      "consonant": "ㅍ",
+      "vowel": "ㅐ",
+      "file": "d328.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "패"
+    },
+    {
+      "syllable": "퍄",
+      "consonant": "ㅍ",
+      "vowel": "ㅑ",
+      "file": "d344.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "퍄"
+    },
+    {
+      "syllable": "퍠",
+      "consonant": "ㅍ",
+      "vowel": "ㅒ",
+      "file": "d360.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "퍠"
+    },
+    {
+      "syllable": "퍼",
+      "consonant": "ㅍ",
+      "vowel": "ㅓ",
+      "file": "d37c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "퍼"
+    },
+    {
+      "syllable": "페",
+      "consonant": "ㅍ",
+      "vowel": "ㅔ",
+      "file": "d398.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "페"
+    },
+    {
+      "syllable": "펴",
+      "consonant": "ㅍ",
+      "vowel": "ㅕ",
+      "file": "d3b4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "펴"
+    },
+    {
+      "syllable": "폐",
+      "consonant": "ㅍ",
+      "vowel": "ㅖ",
+      "file": "d3d0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "폐"
+    },
+    {
+      "syllable": "포",
+      "consonant": "ㅍ",
+      "vowel": "ㅗ",
+      "file": "d3ec.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "포"
+    },
+    {
+      "syllable": "퐈",
+      "consonant": "ㅍ",
+      "vowel": "ㅘ",
+      "file": "d408.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "퐈"
+    },
+    {
+      "syllable": "퐤",
+      "consonant": "ㅍ",
+      "vowel": "ㅙ",
+      "file": "d424.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "퐤"
+    },
+    {
+      "syllable": "푀",
+      "consonant": "ㅍ",
+      "vowel": "ㅚ",
+      "file": "d440.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "푀"
+    },
+    {
+      "syllable": "표",
+      "consonant": "ㅍ",
+      "vowel": "ㅛ",
+      "file": "d45c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "표"
+    },
+    {
+      "syllable": "푸",
+      "consonant": "ㅍ",
+      "vowel": "ㅜ",
+      "file": "d478.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "푸"
+    },
+    {
+      "syllable": "풔",
+      "consonant": "ㅍ",
+      "vowel": "ㅝ",
+      "file": "d494.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "풔"
+    },
+    {
+      "syllable": "풰",
+      "consonant": "ㅍ",
+      "vowel": "ㅞ",
+      "file": "d4b0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "풰"
+    },
+    {
+      "syllable": "퓌",
+      "consonant": "ㅍ",
+      "vowel": "ㅟ",
+      "file": "d4cc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "퓌"
+    },
+    {
+      "syllable": "퓨",
+      "consonant": "ㅍ",
+      "vowel": "ㅠ",
+      "file": "d4e8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "퓨"
+    },
+    {
+      "syllable": "프",
+      "consonant": "ㅍ",
+      "vowel": "ㅡ",
+      "file": "d504.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "프"
+    },
+    {
+      "syllable": "픠",
+      "consonant": "ㅍ",
+      "vowel": "ㅢ",
+      "file": "d520.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "픠"
+    },
+    {
+      "syllable": "피",
+      "consonant": "ㅍ",
+      "vowel": "ㅣ",
+      "file": "d53c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "피"
+    },
+    {
+      "syllable": "하",
+      "consonant": "ㅎ",
+      "vowel": "ㅏ",
+      "file": "d558.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "하"
+    },
+    {
+      "syllable": "해",
+      "consonant": "ㅎ",
+      "vowel": "ㅐ",
+      "file": "d574.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "해"
+    },
+    {
+      "syllable": "햐",
+      "consonant": "ㅎ",
+      "vowel": "ㅑ",
+      "file": "d590.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "햐"
+    },
+    {
+      "syllable": "햬",
+      "consonant": "ㅎ",
+      "vowel": "ㅒ",
+      "file": "d5ac.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "햬"
+    },
+    {
+      "syllable": "허",
+      "consonant": "ㅎ",
+      "vowel": "ㅓ",
+      "file": "d5c8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "허"
+    },
+    {
+      "syllable": "헤",
+      "consonant": "ㅎ",
+      "vowel": "ㅔ",
+      "file": "d5e4.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "헤"
+    },
+    {
+      "syllable": "혀",
+      "consonant": "ㅎ",
+      "vowel": "ㅕ",
+      "file": "d600.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "혀"
+    },
+    {
+      "syllable": "혜",
+      "consonant": "ㅎ",
+      "vowel": "ㅖ",
+      "file": "d61c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "혜"
+    },
+    {
+      "syllable": "호",
+      "consonant": "ㅎ",
+      "vowel": "ㅗ",
+      "file": "d638.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "호"
+    },
+    {
+      "syllable": "화",
+      "consonant": "ㅎ",
+      "vowel": "ㅘ",
+      "file": "d654.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "화"
+    },
+    {
+      "syllable": "홰",
+      "consonant": "ㅎ",
+      "vowel": "ㅙ",
+      "file": "d670.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "홰"
+    },
+    {
+      "syllable": "회",
+      "consonant": "ㅎ",
+      "vowel": "ㅚ",
+      "file": "d68c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "회"
+    },
+    {
+      "syllable": "효",
+      "consonant": "ㅎ",
+      "vowel": "ㅛ",
+      "file": "d6a8.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "효"
+    },
+    {
+      "syllable": "후",
+      "consonant": "ㅎ",
+      "vowel": "ㅜ",
+      "file": "d6c4.mp3",
+      "manifestSrc": "./assets/hangul-audio/d6c4-20261027.mp3",
+      "status": "held",
+      "listeningApproval": "pending",
+      "recordingText": "후"
+    },
+    {
+      "syllable": "훠",
+      "consonant": "ㅎ",
+      "vowel": "ㅝ",
+      "file": "d6e0.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "훠"
+    },
+    {
+      "syllable": "훼",
+      "consonant": "ㅎ",
+      "vowel": "ㅞ",
+      "file": "d6fc.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "훼"
+    },
+    {
+      "syllable": "휘",
+      "consonant": "ㅎ",
+      "vowel": "ㅟ",
+      "file": "d718.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "휘"
+    },
+    {
+      "syllable": "휴",
+      "consonant": "ㅎ",
+      "vowel": "ㅠ",
+      "file": "d734.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "휴"
+    },
+    {
+      "syllable": "흐",
+      "consonant": "ㅎ",
+      "vowel": "ㅡ",
+      "file": "d750.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "흐"
+    },
+    {
+      "syllable": "희",
+      "consonant": "ㅎ",
+      "vowel": "ㅢ",
+      "file": "d76c.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "희"
+    },
+    {
+      "syllable": "히",
+      "consonant": "ㅎ",
+      "vowel": "ㅣ",
+      "file": "d788.mp3",
+      "manifestSrc": null,
+      "status": "missing",
+      "listeningApproval": "pending",
+      "recordingText": "히"
+    }
+  ]
+}
