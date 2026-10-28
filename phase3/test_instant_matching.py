@@ -290,6 +290,14 @@ class InstantMatchingTests(unittest.TestCase):
         self.call(teacher,'booking-room',request,expected=409)
 
 
+    def seed_verified_standard_completion(self, db, booking_id, learner_id, teacher_id, now):
+        # Test fixtures must meet the same server-owned evidence contract as real reservations.
+        db.execute("UPDATE bookings SET evidence='teacher submitted test evidence' WHERE id=?",(booking_id,))
+        for uid in (learner_id,teacher_id):
+            db.execute("""INSERT INTO attendance
+              (booking_id,user_id,joined,last_seen,seconds,confirmed)
+              VALUES(?,?,?,?,?,1)""",(booking_id,uid,now-1800,now,1800))
+
     def test_lesson_event_http_outbox_idempotency_authorization_and_persistence(self):
         learner,learner_id=self.account('event-learner@example.test')
         teacher,teacher_id=self.account('event-teacher@example.test','teacher',True)
@@ -301,6 +309,7 @@ class InstantMatchingTests(unittest.TestCase):
               (id,learner_id,teacher_id,slot_id,unit_id,status,price,room,created_at)
               VALUES(?,?,?,?,?,?,?,?,?)""",
               ('event-booking',learner_id,teacher_id,'event-slot','unit','completed',20000,'event-room',now))
+            self.seed_verified_standard_completion(db,'event-booking',learner_id,teacher_id,now)
         req={'bookingId':'event-booking','eventId':'event-once','type':'lesson.completed'}
         self.call(outsider,'lesson-event',req,expected=403)
         first=self.call(teacher,'lesson-event',req)['event']
@@ -353,6 +362,7 @@ class InstantMatchingTests(unittest.TestCase):
               (id,learner_id,teacher_id,slot_id,unit_id,status,price,room,created_at)
               VALUES(?,?,?,?,?,?,?,?,?)""",
               ('ack-booking',learner_id,teacher_id,'ack-slot','unit','completed',20000,'ack-room',now))
+            self.seed_verified_standard_completion(db,'ack-booking',learner_id,teacher_id,now)
         req={'bookingId':'ack-booking','eventId':'ack-event','type':'lesson.completed'}
         self.call(teacher,'lesson-event',req)
         with server.connect() as db:
@@ -379,6 +389,7 @@ class InstantMatchingTests(unittest.TestCase):
               (id,learner_id,teacher_id,slot_id,unit_id,status,price,room,created_at)
               VALUES(?,?,?,?,?,?,?,?,?)""",
               ('deliver-booking',learner_id,teacher_id,'deliver-slot','unit','completed',20000,'deliver-room',now))
+            self.seed_verified_standard_completion(db,'deliver-booking',learner_id,teacher_id,now)
         self.call(teacher,'lesson-event',{'bookingId':'deliver-booking','eventId':'deliver-event','type':'lesson.completed'})
         def failing(db,event):
             db.execute('CREATE TABLE IF NOT EXISTS fake_receipts(id TEXT PRIMARY KEY)')
