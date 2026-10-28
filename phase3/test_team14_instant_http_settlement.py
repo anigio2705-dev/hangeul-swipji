@@ -111,6 +111,20 @@ class InstantSettlementJourney(unittest.TestCase):
                 with self.assertRaises(SimError):settle_verified_instant_event(db,self.store,self.referrals,event_id)
                 self.assertEqual(0,self.store.db.execute('SELECT COUNT(*) FROM ledger').fetchone()[0])
         finally:self.dispose_settlement()
+    def test_second_partial_refund_and_excess_refund_blocked(self):
+        self.prepare_settlement()
+        try:
+            learner_id,_,_,booking_id,event_id,price=self.journey()
+            self.store.create_month('simmonth',[('simlesson',booking_id,price)])
+            with server.connect() as db:
+                settle_verified_instant_event(db,self.store,self.referrals,event_id)
+                refund_verified_instant_settlement(db,self.store,booking_id,'partial_one',3000,learner_id)
+                refund_verified_instant_settlement(db,self.store,booking_id,'partial_two',2000,learner_id)
+                self.assertEqual(5000,lesson_statement(self.store,'simmonth','simlesson')['refunded_krw'])
+                with self.assertRaises(SimError):
+                    refund_verified_instant_settlement(db,self.store,booking_id,'too_much',price,learner_id)
+                self.assertEqual(5000,lesson_statement(self.store,'simmonth','simlesson')['refunded_krw'])
+        finally:self.dispose_settlement()
     def test_no_completion_evidence_means_no_payout(self):
         self.prepare_settlement()
         try:
