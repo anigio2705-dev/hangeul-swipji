@@ -1,0 +1,39 @@
+name: HQ six-team parallel dispatcher (isolated)
+on:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - 'automation/hq_team_dispatch.py'
+      - '.github/workflows/hq-six-team-dispatch.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: hq-six-team-dispatch
+  cancel-in-progress: false
+jobs:
+  dispatch:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    strategy:
+      fail-fast: false
+      matrix:
+        team: ['11','12','13','14','15','16']
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify independent team branch and scope
+        env:
+          HQ_TEAM: ${{ matrix.team }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: python automation/hq_team_dispatch.py
+      - name: Save team evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: team-${{ matrix.team }}-dispatch
+          path: team-dispatch-result.json
+          if-no-files-found: ignore
