@@ -7,6 +7,22 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 class Team12Regression(unittest.TestCase):
+    def test_audio_418_scope_reconciliation(self):
+        """399 composed cells + 19 consonant signs = 418 only if HQ confirms scope."""
+        plan = json.loads((ROOT / "docs/team12/recording-plan-399.json").read_text(encoding="utf-8"))
+        cells = plan["cells"]
+        self.assertEqual(len(cells), 399)
+        self.assertEqual(len({c["syllable"] for c in cells}), 399)
+        consonants = {c["consonant"] for c in cells}
+        vowels = {c["vowel"] for c in cells}
+        self.assertEqual(len(consonants), 19)
+        self.assertEqual(len(vowels), 21)
+        self.assertEqual(len(cells) + len(consonants), 418)
+        self.assertEqual(sum(c["status"] == "missing" for c in cells), 354)
+        self.assertEqual(sum(c["status"] == "held" for c in cells), 26)
+        self.assertEqual(sum(c["status"] == "ready_unapproved" for c in cells), 19)
+        self.assertEqual(len(cells), sum(plan["counts"].values()))
+
     def test_professional_96_unique_and_linked(self):
         data = json.loads((ROOT / "phase3/curriculum-96.json").read_text(encoding="utf-8"))
         stages = data["stages"]
