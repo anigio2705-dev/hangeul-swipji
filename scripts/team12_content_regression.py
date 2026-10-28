@@ -148,6 +148,7 @@ class Team12Regression(unittest.TestCase):
                     if isinstance(unit_id, (str, int)):
                         if isinstance(unit_id, str):
                             self.assertTrue(unit_id.strip() != '', f"unitId string must not be empty or whitespace at stage {stage_idx} lesson {lesson_idx}")
+                            unit_id = unit_id.strip()
                         ids.add(unit_id)
                     else:
                         self.fail(f"unitId must be string or int at stage {stage_idx} lesson {lesson_idx}")
