@@ -43,7 +43,10 @@
   async function reloadManifest(){
     stop();
     status('사람 녹음 목록을 다시 확인하고 있습니다. / Checking recordings…');
-    await (loading||loadManifest());
+    // A manual refresh must fetch fresh data even if the initial request is still
+    // pending. Reusing that initial promise would leave a just-uploaded file unseen.
+    if(loading)await loading;
+    await loadManifest();
     if(manifestError){
       status('음원 목록 연결에 실패했습니다. 다시 확인을 눌러 주세요. / Recording list unavailable; retry.');
       return {status:'manifest-error'};
