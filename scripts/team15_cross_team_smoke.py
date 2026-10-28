@@ -17,7 +17,12 @@ checks = {
 for label, (team, candidates, tokens) in checks.items():
     found = []
     for name in candidates:
-        path = root / team / name
+        # input validation: name must be a relative path, no absolute or upwards traversal
+        path_obj = Path(name)
+        if path_obj.is_absolute() or '..' in path_obj.parts:
+            issues.append(f"{label}: invalid candidate filename (absolute or parent traversal): {name}")
+            continue
+        path = root / team / path_obj
         # Ensure the file path is normalized and within root
         try:
             resolved_path = path.resolve(strict=False)
@@ -30,7 +35,7 @@ for label, (team, candidates, tokens) in checks.items():
             issues.append(f"{label}: invalid file path outside of root {resolved_path}")
             continue
         try:
-            if path.is_file():
+            if resolved_path.is_file():
                 found.append(name)
         except (OSError, RuntimeError) as e:
             issues.append(f"{label}: error accessing file {path}: {e}")
