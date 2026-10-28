@@ -63,8 +63,17 @@ class Team12Regression(unittest.TestCase):
         self.assertEqual(len(consonants), 19)
         self.assertEqual(len(vowels), 21)
         self.assertEqual(len(cells) + len(consonants), 418)
-        statuses = [c.get("status") for c in cells if isinstance(c, dict)]
-        # Additional validation: all status values must be in expected set
+        statuses = []
+        for c in cells:
+            if not isinstance(c, dict):
+                self.fail(f"Expected dict in cells but got {type(c)}")
+            status = c.get("status")
+            # Validate that status is string and in allowed set
+            if status is None:
+                self.fail("Missing 'status' in a cell")
+            if not isinstance(status, str):
+                self.fail(f"Status must be a string in cells, got {type(status)}")
+            statuses.append(status)
         allowed_statuses = {"missing", "held", "ready_unapproved"}
         for s in statuses:
             self.assertIn(s, allowed_statuses, f"Unexpected status '{s}' in cells")
