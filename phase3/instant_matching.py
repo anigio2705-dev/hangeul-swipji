@@ -293,6 +293,11 @@ def verified_event_for_team14(db, event_id):
     if not row: raise server.Error('이벤트가 없습니다',404)
     if row['role'] not in ('teacher','partner') or not row['approved']:
         raise server.Error('강사 승인이 유효하지 않습니다',403)
+    allowed={'lesson.completed':('completed','test_settled'),
+             'booking.cancelled':('cancelled','refunded','expired'),
+             'lesson.started':('test_paid','in_class')}
+    if row['event_type'] not in allowed or row['status'] not in allowed[row['event_type']]:
+        raise server.Error('현재 예약 상태에서 유효하지 않은 수업 이벤트입니다',409)
     payload=json.loads(row['payload'])
     if (payload.get('eventId')!=event_id or payload.get('bookingId')!=row['booking_id']
         or payload.get('learnerId')!=row['learner_id']
