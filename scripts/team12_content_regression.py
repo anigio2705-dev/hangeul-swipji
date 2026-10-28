@@ -107,7 +107,13 @@ class Team12Regression(unittest.TestCase):
         except json.JSONDecodeError as e:
             self.fail(f"Invalid JSON in {pilot_file}: {e}")
         ids = {lesson["unitId"] for stage in curriculum.get("stages", []) for lesson in stage.get("lessons", []) if isinstance(lesson, dict) and isinstance(lesson.get("unitId"), (str, int))}
-        self.assertTrue(all(isinstance(unit, dict) and "id" in unit and unit["id"] is not None and (isinstance(unit["id"], (str, int)) and (not isinstance(unit["id"], str) or unit["id"].strip() != '')) for unit in pilot.get("units", [])), "All units must be dicts with non-empty id")
+        self.assertTrue(all(
+            isinstance(unit, dict) and
+            "id" in unit and
+            unit["id"] is not None and
+            (isinstance(unit["id"], (str, int)) and (not isinstance(unit["id"], str) or unit["id"].strip() != ''))
+            for unit in pilot.get("units", [])
+        ), "All units must be dicts with non-empty id")
         units = pilot.get("units", [])
         self.assertIsInstance(units, list, "units should be list")
         self.assertEqual(len(units), 12)
@@ -134,7 +140,9 @@ class Team12Regression(unittest.TestCase):
         for i, _ in enumerate(consonants):
             for j, _ in enumerate(vowels):
                 word = chr(0xAC00 + (i * 21 + j) * 28)
-                entry = records.get(word) if isinstance(records, dict) else None
+                entry = None
+                if isinstance(records, dict):
+                    entry = records.get(word)
                 if entry is not None and not isinstance(entry, dict):
                     self.fail(f"Entry for {word} must be dict or None")
                 state = "missing" if entry is None else ("held" if entry.get("disabled") else "ready_unapproved")
@@ -142,7 +150,7 @@ class Team12Regression(unittest.TestCase):
                 if entry:
                     listening_review = entry.get("listeningReview", {})
                     # Defensive check: if listeningReview key present, it must be dict
-                    self.assertTrue(isinstance(listening_review, dict), f"listeningReview must be dict for {word}")
+                    self.assertIsInstance(listening_review, dict, f"listeningReview must be dict for {word}")
                     # Only assert status pending if status key present
                     status = listening_review.get("status")
                     if status is not None:
