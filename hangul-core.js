@@ -69,7 +69,12 @@
     if(release){release();release=null}
   }
   async function recording(word,token){
-    const sound=new Audio(new URL(records[word].src, document.baseURI).href);current=sound;
+    const asset=new URL(records[word].src, document.baseURI);
+    // Version the URL by the reviewed file digest: a replacement at the same path
+    // must not replay a stale browser/CDN-cached recording after manifest refresh.
+    const digest=records[word].sha256;
+    if(typeof digest==='string'&&/^[0-9a-f]{64}$/i.test(digest))asset.searchParams.set('v',digest.slice(0,16));
+    const sound=new Audio(asset.href);current=sound;
     status('사람 녹음 로딩 중: '+word+' · 청취 정확성 미검증 / Loading human recording; listening review pending');
     await new Promise((resolve,reject)=>{
       let timer=null,settled=false;
