@@ -47,7 +47,8 @@ def eligible(db, u, now):
     if u['role'] != 'learner' and not u['approved']:
         return False
     return not db.execute("""SELECT 1 FROM bookings b JOIN slots s ON s.id=b.slot_id
-      WHERE (b.learner_id=? OR b.teacher_id=?) AND
+      LEFT JOIN instant_booking_links l ON l.booking_id=b.id
+      WHERE l.booking_id IS NULL AND (b.learner_id=? OR b.teacher_id=?) AND
       (b.status='in_class' OR (b.status='test_paid' AND s.start<=? AND s.end>=?)) LIMIT 1""",
       (u['id'], u['id'], now+300, now-300)).fetchone()
 
