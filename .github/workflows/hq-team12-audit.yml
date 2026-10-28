@@ -1,0 +1,65 @@
+name: HQ Team12 education and audio audit (isolated)
+on:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - '.github/workflows/hq-team12-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  team12-audit:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fetch latest Team12 source read-only
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p team12
+          git fetch --depth=1 origin team12/education-audit-20261028
+          git archive FETCH_HEAD | tar -x -C team12
+          git rev-parse FETCH_HEAD > "$RUNNER_TEMP/team12-sha.txt"
+      - name: Check Team12 learning and curriculum regressions
+        shell: bash
+        working-directory: team12
+        run: python -m unittest discover -s scripts -p 'team12_content_regression.py' -v
+      - name: Inventory real audio files and provenance (non-production)
+        shell: bash
+        run: |
+          set +e
+          python team12/scripts/team12_audio_inventory.py --root team12 --output "$RUNNER_TEMP/team12-audio-inventory.json"
+          code=$?
+          echo "audio_inventory_exit=$code" >> "$GITHUB_ENV"
+          exit 0
+      - name: Write evidence summary
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          root = Path(os.environ["RUNNER_TEMP"])
+          inventory = json.loads((root / "team12-audio-inventory.json").read_text())
+          counts = inventory["counts"]
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
+              f.write("## Team12 read-only education audit\n\n")
+              f.write("Source commit: `%s`\n\n" % (root / "team12-sha.txt").read_text().strip())
+              f.write("399 syllable cells: %s ready/unapproved, %s held, %s missing.\n\n" % (
+                  counts["ready_unapproved"], counts["held"], counts["missing"]))
+              f.write("File issues: %s. Audio inventory exit: %s.\n\n" % (
+                  len(inventory["file_issues"]), os.environ["audio_inventory_exit"]))
+              f.write("Human listening and browser playback remain unverified. No audio files were generated.\n")
+          PY
+      - name: Save audio evidence artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hq-team12-audio-evidence
+          path: |
+            ${{ runner.temp }}/team12-audio-inventory.json
+            ${{ runner.temp }}/team12-sha.txt
+          retention-days: 14
