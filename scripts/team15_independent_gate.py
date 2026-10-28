@@ -57,6 +57,21 @@ for team, paths in EXPECT.items():
         if not sha:
             failures.append(f"{team}: empty git rev-parse output")
             continue
+
+        # Check if HEAD of team branch matches tracked commit
+        # by comparing to the remote origin HEAD (assuming origin remote is set)
+        try:
+            remote_sha = subprocess.check_output([
+                "git", "-C", str(directory), "rev-parse", "origin/HEAD"
+            ], text=True, stderr=subprocess.PIPE).strip()
+            if sha != remote_sha:
+                failures.append(f"{team}: current HEAD does not match origin/HEAD, team branch is not at current isolated branch HEAD")
+        except subprocess.CalledProcessError:
+            # If origin remote or origin/HEAD does not exist, best effort skip
+            pass
+        except Exception as e:
+            failures.append(f"{team}: unexpected error checking origin HEAD: {e}")
+            continue
     except subprocess.CalledProcessError as e:
         failures.append(f"{team}: git rev-parse failed: {e}")
         continue
