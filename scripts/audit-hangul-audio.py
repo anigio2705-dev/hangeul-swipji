@@ -35,6 +35,8 @@ def add(word, group, label=None):
         # Skip non-string words
         return
     sound = names.get(word, vowels.get(word, word))
+    if not isinstance(sound, str):  # Defensive check
+        sound = word
     item = targets.setdefault(sound, {'text': sound, 'groups': [], 'labels': []})
     if group not in item['groups']:
         item['groups'].append(group)
@@ -45,12 +47,12 @@ def add(word, group, label=None):
 for c, name, _ in data['consonants']:
     if not isinstance(c, str):
         continue
-    add(c, '\uc790\uc74c \uc774\ub984', c + ' \u00b7 ' + name)
+    add(c, '\uc790\uc74c \uc774\ub984', c + ' \u00b7 ' + name if isinstance(name, str) else c)
 
 for v, sound in data['vowels']:
     if not isinstance(v, str):
         continue
-    add(v, '\ubaa8\uc74c', v + ' \u00b7 ' + sound)
+    add(v, '\ubaa8\uc74c', v + ' \u00b7 ' + sound if isinstance(sound, str) else v)
 
 for word in data['blocks']:
     if not isinstance(word, str):
