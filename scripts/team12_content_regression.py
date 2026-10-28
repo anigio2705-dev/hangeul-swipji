@@ -131,6 +131,9 @@ class Team12Regression(unittest.TestCase):
             for j, _ in enumerate(vowels):
                 word = chr(0xAC00 + (i * 21 + j) * 28)
                 entry = records.get(word)
+                # Validate entry if it exists and is dict
+                if entry is not None and not isinstance(entry, dict):
+                    self.fail(f"Entry for {word} must be dict or None")
                 state = "missing" if entry is None else ("held" if entry.get("disabled") else "ready_unapproved")
                 counts[state] += 1
                 if entry:
