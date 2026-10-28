@@ -80,11 +80,11 @@
     {
       "number": 47,
       "feature": "진도·오답·즐겨찾기·이어 배우기의 저장과 재접속 동작을 검사한다.",
-      "implemented": "7개 과정의 로컬 완료 기록을 dashboard.html에서 확인하고 미완료 첫 단원으로 직접 이동하는 ?unit= 딥링크 구현. 기존 백업/복원 유지; scripts/team12_resume.js에서 완료값 true만 인정하는 재개 로직 분리, Node 행동 테스트 추가; 대시보드의 타 탭 학습 기록 저장(storage) 및 화면 복귀(visibilitychange) 시 진도 재계산",
-      "missing": "11번 서버에 7개 과정 진도 저장 API가 아직 확인되지 않아 계정별 복원·다른 가상 계정 격리 검증 불가",
-      "evidence": "dashboard.html; intro.html; beginner1.html; beginner2.html; intermediate1.html; intermediate2.html; advanced1.html; advanced2.html; scripts/team12_content_regression.py; scripts/team12_resume.js; scripts/team12_resume.test.js; dashboard.html; scripts/team12_content_regression.py",
+      "implemented": "7개 과정의 로컬 완료 기록을 dashboard.html에서 확인하고 미완료 첫 단원으로 직접 이동하는 ?unit= 딥링크 구현. 기존 백업/복원 유지; scripts/team12_resume.js에서 완료값 true만 인정하는 재개 로직 분리, Node 행동 테스트 추가; 대시보드의 타 탭 학습 기록 저장(storage) 및 화면 복귀(visibilitychange) 시 진도 재계산; 18차 대시보드 inline render 이전 resume helper 로드 순서 오류 수정",
+      "missing": "11번 서버 학습 진도 전용 API 연결·가상 재로그인 및 실제 브라우저 E2E 미완료",
+      "evidence": "dashboard.html; intro.html; beginner1.html; beginner2.html; intermediate1.html; intermediate2.html; advanced1.html; advanced2.html; scripts/team12_content_regression.py; scripts/team12_resume.js; scripts/team12_resume.test.js; dashboard.html; scripts/team12_content_regression.py; scripts/team12_resume.test.js (script order assertion)",
       "progress": 40,
-      "reason": "브라우저 동기화 개선은 완료했으나 계정별 서버 저장과 통합 검증 미완료로 점수 유지",
+      "reason": "실제 실행 오류 수정과 회귀 테스트 추가, 서버 연결 미완료로 기존 점수 유지",
       "next": "11번의 명시적 인증 학습진도 API가 마련되면 연결하고 재로그인 HTTP 테스트",
       "integration": "타 브랜치 통합 미검증",
       "status": "미착수"
@@ -366,5 +366,5 @@
       "status": "외부 확인 대기"
     }
   ],
-  "version": "17차 갱신"
+  "version": "18차 갱신"
 }
