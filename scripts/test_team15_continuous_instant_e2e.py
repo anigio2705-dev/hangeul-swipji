@@ -21,40 +21,8 @@ from team14_instant_verified_bridge import settle_verified_instant_event, refund
 
 
 class Team15ContinuousJourney(unittest.TestCase):
-    def setUp(self):
-        StagingHarness.setUp(self)
-        # 11→13 integration gap: Team13 server snapshot predates the Team11 free-progress route.
-        # Install the identical account-keyed SQLite schema and a test-only authenticated route.
-        with server.connect() as db:
-            db.executescript("""CREATE TABLE IF NOT EXISTS free_lesson_progress (
-              user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-              stage INTEGER NOT NULL CHECK(stage BETWEEN 1 AND 7),
-              lesson INTEGER NOT NULL CHECK(lesson BETWEEN 1 AND 50),
-              completed_at REAL NOT NULL,
-              PRIMARY KEY(user_id,stage,lesson));
-              CREATE INDEX IF NOT EXISTS free_lesson_progress_user
-              ON free_lesson_progress(user_id,stage,lesson);""")
-        self.old_route=server.Handler.route
-        def integrated_route(handler,db,path,data,query):
-            if path!="/api/free-progress":
-                return self.old_route(handler,db,path,data,query)
-            user=handler.user(db)
-            if user["role"]!="learner":raise server.Error("learner account required",403)
-            uid=user["id"]
-            if handler.command=="GET":
-                rows=db.execute("SELECT stage,lesson,completed_at FROM free_lesson_progress WHERE user_id=? ORDER BY stage,lesson",(uid,)).fetchall()
-                return {"completed":[{"stage":r["stage"],"lesson":r["lesson"],"completedAt":r["completed_at"]} for r in rows],"count":len(rows)},None
-            if handler.command=="POST":
-                stage=data.get("stage");lesson=data.get("lesson")
-                if type(stage) is not int or type(lesson) is not int or not 1<=stage<=7 or not 1<=lesson<=50:
-                    raise server.Error("invalid stage or lesson",400)
-                db.execute("INSERT OR IGNORE INTO free_lesson_progress(user_id,stage,lesson,completed_at) VALUES(?,?,?,?)",(uid,stage,lesson,time.time()))
-                return {"ok":True,"stage":stage,"lesson":lesson},None
-            raise server.Error("unsupported progress method",405)
-        server.Handler.route=integrated_route
-    def tearDown(self):
-        server.Handler.route=self.old_route
-        StagingHarness.tearDown(self)
+    setUp=StagingHarness.setUp
+    tearDown=StagingHarness.tearDown
     request=StagingHarness.request
 
     def account(self,name,role="learner",referral_code=None,approved=False):
@@ -91,11 +59,17 @@ class Team15ContinuousJourney(unittest.TestCase):
                 outsider,outsider_id=self.account("outsider")
                 self.api("", "/api/instant/join",{},401)
                 self.api(student,"/api/free-progress",{"stage":1,"lesson":1})
+                self.api(student,"/api/free-progress/quiz",{"stage":1,"lesson":1,"score":4,"maxScore":5,"requestId":"quiz-1"})
+                self.api(student,"/api/free-progress/position",{"stage":1,"lesson":2})
                 self.assertEqual(self.api(outsider,"/api/free-progress")["count"],0)
                 self.api(student,"/api/logout",{})
                 self.api(student,"/api/login",{"email":"student@example.test","password":"Disposable-Password-12345!"})
                 student=self.cookie
                 self.assertEqual(self.api(student,"/api/free-progress")["count"],1)
+                self.assertEqual(self.api(student,"/api/free-progress/quiz")["count"],1)
+                self.assertEqual(self.api(student,"/api/free-progress/position")["position"]["lesson"],2)
+                self.assertEqual(self.api(outsider,"/api/free-progress/quiz")["count"],0)
+                self.assertIsNone(self.api(outsider,"/api/free-progress/position")["position"])
                 self.assertEqual("waiting",self.api(student,"/api/instant/join",{})["state"])
                 offer=self.api(teacher,"/api/instant/join",{})
                 self.assertEqual("offered",offer["state"])
