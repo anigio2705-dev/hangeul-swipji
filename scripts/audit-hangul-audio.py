@@ -307,4 +307,4 @@ for x in recordings:
     if isinstance(x.get('signalWarnings'), list) and x['signalWarnings']:
         warnings_list = [w for w in x['signalWarnings'] if isinstance(w, str)]
         if warnings_list:
-            print(x['text'], ', '.join(warnings_list))
+            print(x.get('text', ''), ', '.join(warnings_list))
