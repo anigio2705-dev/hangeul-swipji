@@ -116,7 +116,7 @@ for team, paths in EXPECT.items():
                 changed_files.add(p)
                 continue
 
-            if not is_within_directory(ROOT / team, resolved_team_file):
+            if not is_within_directory(directory, resolved_team_file):
                 failures.append(f"{team}: tracked file {p} escapes team directory")
                 changed_files.add(p)
                 continue
