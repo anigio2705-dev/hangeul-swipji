@@ -238,14 +238,20 @@ if __name__ == "__main__":
     try:
         result = inspect(args.root)
     except Exception as e:
-        print(json.dumps({"error": str(e)}))
+        # Ensure only string error message is dumped
+        err_msg = str(e) if e else "Unknown error"
+        print(json.dumps({"error": err_msg}))
         raise SystemExit(1)
 
     data = json.dumps(result, ensure_ascii=False, indent=2)
 
     if args.output:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(data + "\n", encoding="utf-8")
+        try:
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            args.output.write_text(data + "\n", encoding="utf-8")
+        except Exception as e:
+            print(json.dumps({"error": f"Failed writing output file: {e}"}))
+            raise SystemExit(1)
 
     print(json.dumps({
         "counts": result["counts"],
