@@ -19,6 +19,12 @@ for label, (team, candidates, tokens) in checks.items():
     for name in candidates:
         path = root / team / name
         try:
+            # Ensure path is within root directory to avoid unexpected issues
+            path.resolve(strict=False)
+        except RuntimeError:
+            issues.append(f"{label}: invalid file path {path}")
+            continue
+        try:
             if path.is_file():
                 found.append(name)
         except OSError as e:
@@ -34,17 +40,29 @@ for label, team, terms in [
     ("13_to_14", "team14", ["refund", "booking"]),
 ]:
     folder = root / team / "phase3"
-    source = ""
     try:
-        py_files = list(folder.glob("*.py"))
-    except OSError as e:
-        issues.append(f"{label}: error accessing folder {folder}: {e}")
+        folder.resolve(strict=True)
+    except FileNotFoundError as e:
+        issues.append(f"{label}: folder does not exist {folder}: {e}")
         py_files = []
+    except RuntimeError:
+        issues.append(f"{label}: invalid folder path {folder}")
+        py_files = []
+    else:
+        try:
+            py_files = list(folder.glob("*.py"))
+        except OSError as e:
+            issues.append(f"{label}: error accessing folder {folder}: {e}")
+            py_files = []
     pieces = []
     for p in py_files:
         try:
             if p.stat().st_size < 2_000_000:
-                pieces.append(p.read_text(encoding="utf-8", errors="replace"))
+                # Read text with strict UTF-8 decoding; fallback silently if error
+                try:
+                    pieces.append(p.read_text(encoding="utf-8"))
+                except UnicodeDecodeError:
+                    pieces.append(p.read_text(encoding="utf-8", errors="replace"))
         except OSError as e:
             issues.append(f"{label}: error reading file {p}: {e}")
     source = "\n".join(pieces)
