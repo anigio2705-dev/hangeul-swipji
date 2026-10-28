@@ -62,10 +62,14 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
   for val, name in [(student_id, 'student_id'), (event_id, 'event_id'), (lesson_id, 'lesson_id')]:
    if not isinstance(val, str) or not val.strip():
     raise SimError('INVALID_INPUT', f'{name} must be a non-empty string')
+   # Defensive: reject any leading or trailing whitespace immediately
+   if val != val.strip():
+    raise SimError('INVALID_INPUT', f'{name} must not have leading or trailing whitespace')
+   # Defensive: reject any internal whitespace characters
    if any(c.isspace() for c in val):
     raise SimError('INVALID_INPUT', f'{name} must not contain whitespace characters')
 
-  # Use external validators for further checks
+  # Use external validators for further checks (e.g. ident for allowed chars)
   ident(event_id); ident(student_id); ident(lesson_id)
   amount(gross_krw, True)
 
@@ -77,15 +81,13 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
   if not isinstance(commission_bps, int) or commission_bps < 0:
    raise SimError('INVALID_INPUT', 'commission_bps must be a non-negative integer')
 
-  # Defensive check: refuse to award if string IDs contain suspicious, whitespace, non-ASCII or control chars
+  # Defensive check: refuse to award if string IDs contain suspicious characters or non-ASCII or control chars
   suspicious_chars = '\\"\'%;'
   for val, name in [(student_id, 'student_id'), (lesson_id, 'lesson_id'), (event_id, 'event_id')]:
    if any(c in val for c in suspicious_chars):
     raise SimError('INVALID_INPUT', f'{name} contains invalid characters')
    if not all(32 <= ord(c) <= 126 for c in val):
     raise SimError('INVALID_INPUT', f'{name} contains invalid characters')
-   if any(c.isspace() for c in val):
-    raise SimError('INVALID_INPUT', f'{name} must not contain whitespace characters')
 
   # Defensive check: refuse to award an event ID that already exists but with empty or inconsistent essential fields
   if not event_id or len(event_id) == 0:
@@ -96,10 +98,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
    if ord(c) < 33 or ord(c) > 126:
     raise SimError('INVALID_INPUT', 'event_id contains control or non-printable characters')
 
-  # New stricter check for student_id and lesson_id: disallow leading or trailing whitespace
-  for val, name in [(student_id, 'student_id'), (lesson_id, 'lesson_id')]:
-   if val != val.strip():
-    raise SimError('INVALID_INPUT', f'{name} must not have leading or trailing whitespace')
+  # Defensive check: ensure gross_krw > 0
+  if gross_krw <= 0:
+   raise SimError('INVALID_INPUT', 'gross_krw must be positive')
 
   signature = json.dumps([student_id, lesson_id, gross_krw, list(depth_rates_bps), commission_bps], separators=(',', ':'))
   self.db.execute('BEGIN IMMEDIATE')
@@ -115,10 +116,6 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
    # Strict check that this lesson has no prior award
    if self.db.execute('SELECT 1 FROM referral_awards WHERE lesson_id=?', (lesson_id,)).fetchone():
     raise SimError('CONFLICT', 'lesson already awarded')
-
-   # Defensive check: ensure gross_krw > 0
-   if gross_krw <= 0:
-    raise SimError('INVALID_INPUT', 'gross_krw must be positive')
 
    edges = [(r['student_id'], r['parent_id']) for r in self.db.execute('SELECT student_id, parent_id FROM referral_links')]
    result = eligible_referral(gross_krw, student_id, edges, depth_rates_bps, commission_bps)
