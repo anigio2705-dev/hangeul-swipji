@@ -41,7 +41,9 @@ def main():
     parser.add_argument("--ledger", default="automation/task-evidence.json")
     parser.add_argument("--output", default="automation/hq-traffic-lights.json")
     args = parser.parse_args()
-    report = evaluate(load_catalog(args.catalog), json.loads(Path(args.ledger).read_text()))
+    ledger = json.loads(Path(args.ledger).read_text())
+    report = evaluate(load_catalog(args.catalog), ledger)
+    assert report["final_complete"] <= report["code_verified"] <= 160
     Path(args.output).write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
     print(json.dumps({"final_complete": report["final_complete"],
                       "code_verified": report["code_verified"],
