@@ -86,14 +86,41 @@ def snapshot(db, u):
     return value
 
 
+
+# Read-only bridge: existing one-off bookings and future monthly-session bookings
+# share booking ownership/status without creating a second match or charging money.
+def reservation_snapshot(db, user_id):
+    rows = db.execute("""SELECT b.id,b.status,b.learner_id,b.teacher_id,s.start,s.end
+      FROM bookings b JOIN slots s ON s.id=b.slot_id
+      WHERE b.learner_id=? OR b.teacher_id=? ORDER BY s.start,b.id""",
+      (user_id,user_id)).fetchall()
+    return [{'bookingId':b['id'], 'status':b['status'],
+             'participantRole':'learner' if b['learner_id']==user_id else 'teacher',
+             'start':b['start'], 'end':b['end'],
+             'instantEligible':b['status'] not in ('test_paid','in_class')}
+            for b in rows]
+
+
+def transaction_event_contract(booking_id, event_id, event_type):
+    """Contract only: consumer may persist after authorization; never emit money."""
+    if event_type not in ('booking.created','booking.cancelled',
+                          'lesson.started','lesson.completed'):
+        raise server.Error('지원하지 않는 거래 이벤트',400)
+    if not isinstance(booking_id,str) or not booking_id or not isinstance(event_id,str) or not event_id:
+        raise server.Error('거래 이벤트 식별자 필요',400)
+    return {'version':1,'bookingId':booking_id,'eventId':event_id,
+            'type':event_type,'paymentExecuted':False}
+
 def route(handler, db, path, data):
     u=handler.user(db)
     action=path.removeprefix('/api/instant/')
-    allowed={'status':'GET','join':'POST','heartbeat':'POST','ready':'POST','leave':'POST'}
+    allowed={'reservations':'GET','status':'GET','join':'POST','heartbeat':'POST','ready':'POST','leave':'POST'}
     if action not in allowed: raise server.Error('페이지 없음',404)
     if handler.command!=allowed[action]: raise server.Error('지원하지 않는 요청',405)
     now=time.time()
     cleanup(db,now)
+    if action=='reservations':
+        return {'reservations':reservation_snapshot(db,u['id'])},None
     if action=='join':
         if not eligible(db,u,now):
             raise server.Error('학생 또는 승인된 대화 파트너로 참여하세요. 예약 수업 중에는 대기할 수 없습니다.',403)
