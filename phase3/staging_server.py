@@ -195,10 +195,17 @@ class StagingHandler(server.Handler):
                     'videoUIVersion': 'embedded-preview-v1',
                     'appSHA256': hashlib.sha256((server.ROOT/'app.js').read_bytes()).hexdigest(),
                     'configuredOrigin': self.server.staging.origin,
+                    'deploymentCommit': deployment_commit(os.environ),
                     'sourceSHA256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()})
             except Exception:
                 return self.send(503, {'ok': False})
         super().do_GET()
+
+
+def deployment_commit(env):
+    """Identify deployed Git source only when the provider supplied a full SHA."""
+    value = env.get('RENDER_GIT_COMMIT') or env.get('HS_STAGING_BUILD_SHA') or ''
+    return value.lower() if re.fullmatch(r'[a-fA-F0-9]{40}', value) else None
 
 
 def prepare_database(settings):
