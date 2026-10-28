@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Syntax check first (fail fast)
         run: |
-          python -m compileall -q phase3/team14_monthly_sim.py phase3/test_team14_monthly_sim.py phase3/test_team14_monthly_boundaries.py phase3/team14_persistent.py phase3/test_team14_persistent.py phase3/team14_booking_events.py phase3/test_team14_booking_events.py phase3/team14_referral_scenarios.py phase3/test_team14_referral_scenarios.py phase3/test_team14_ninth_pass.py
+          python -m compileall -q phase3/team14_monthly_sim.py phase3/test_team14_monthly_sim.py phase3/test_team14_monthly_boundaries.py phase3/team14_persistent.py phase3/test_team14_persistent.py phase3/team14_booking_events.py phase3/test_team14_booking_events.py phase3/team14_referral_scenarios.py phase3/test_team14_referral_scenarios.py phase3/test_team14_ninth_pass.py phase3/team14_verified_bridge.py phase3/test_team14_verified_bridge.py
       - name: Run all original and new Team14 tests
         run: |
           git rev-parse HEAD
@@ -20,3 +20,4 @@ jobs:
           python -m unittest discover -s phase3 -p 'test_team14_booking_events.py' -v
           python -m unittest discover -s phase3 -p 'test_team14_referral_scenarios.py' -v
           python -m unittest discover -s phase3 -p 'test_team14_ninth_pass.py' -v
+          python -m unittest discover -s phase3 -p 'test_team14_verified_bridge.py' -v
