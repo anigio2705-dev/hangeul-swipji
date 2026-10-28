@@ -37,6 +37,8 @@ jobs:
         run: for d in integration team11 team12 team13 team14; do echo "$d $(git -C "$d" rev-parse HEAD)"; done
       - name: Run independent source gate
         run: python3 qa/scripts/team15_independent_gate.py
+      - name: Run cross-team interface smoke gate
+        run: python3 qa/scripts/team15_cross_team_smoke.py
   team11-contract:
     runs-on: ubuntu-latest
     steps:
