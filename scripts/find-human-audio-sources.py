@@ -9,7 +9,7 @@ import urllib.parse
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
-audio = json.loads((ROOT / 'hangul-audio-audit.json').read_text())
+audio = json.loads((ROOT / 'hangul-audio-audit.json').read_text(encoding='utf-8'))
 
 # Validate entries in audio['targets'] before use
 missing = []
@@ -26,11 +26,22 @@ for t in audio.get('targets', []):
         # Defensive: discard groups with non-str elements, filter only str
         groups_str = [g for g in groups if isinstance(g, str)]
         # Validate groups_str elements contents for safety
-        if not all(g and isinstance(g, str) and len(g) < 100 for g in groups_str):
+        if not all(g and isinstance(g, str) and 0 < len(g) < 100 for g in groups_str):
             continue
-        if (not recording_available and any(g in ['\u007f\u007f\u007f', '\u007f\u007f', '\u007f\u007f\u007f\u007f \u007f\u007f\u007f'] for g in groups_str)):
-            # Original had specific Korean strings, corrected here:
-            if any(g in ['\uc790\uc74c \uc774\ub984','\ubaa8\uc74c','\uae00\uc790\ud310 \uc74c\uc808'] for g in groups_str):
+        # Fix accidental literal Unicode escape sequences to actual characters
+        # Original check: if not recording_available and any(g in ['\u007f\u007f\u007f', '\u007f\u007f', '\u007f\u007f\u007f\u007f \u007f\u007f\u007f'] for g in groups_str):
+        # Possibly obsolete guard; keep for backward compatibility but also check meaningful Korean strings
+        if not recording_available:
+            # Check certain known problematic group labels
+            suspicious_labels = ['', '', ' ']
+            korean_labels = ['', '\uc790\uc74c \uc774\ub984', '\ubaa8\uc74c', '\uae00\uc790\ud310 \uc74c\uc808']
+            # Correct Korean labels are actual Unicode strings, decode them properly
+            # The original strings are actually Unicode escaped literals; fix:
+            # '' is two DEL chars; suspicious_labels
+            # A common miswrite: '\uc790\uc74c \uc774\ub984' is the literal string of those six chars
+            # Let's decode them
+            korean_labels_decoded = ['자음 이름', '모음', '글자판 음절']
+            if any(g in suspicious_labels for g in groups_str) or any(g in korean_labels_decoded for g in groups_str):
                 missing.append(text)
 
 # Using safe filtering to ensure titles are safe strings
@@ -130,7 +141,7 @@ report = {
 
 audit_dir = ROOT / 'audit'
 audit_dir.mkdir(parents=True, exist_ok=True)
-(audit_dir / 'audio-source-search.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
+(audit_dir / 'audio-source-search.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
 print(json.dumps({
     'targets': len(missing),
