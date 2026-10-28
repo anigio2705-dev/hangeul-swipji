@@ -6,6 +6,13 @@
     "ci_result": "success",
     "scope": "HQ queue keeps stable 1-160 IDs and prevents re-implementing code-verified tasks; final master review remains open"
   },
+  "52": {
+    "status": "code_verified",
+    "commit": "5038a7fd41df1f6c3fa97d5534c19c17ea821b3d",
+    "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40746321354",
+    "ci_result": "success",
+    "scope": "Classify missing, held/unreviewed and playback failures separately; reject invalid human audio sources and duplicate 7-day mappings. Actual pronunciation listening and browser/mobile playback remain unverified."
+  },
   "59": {
     "status": "code_verified",
     "commit": "f5afd95a2c1b2c2205f6f195ef68e7af2c3641a0",
