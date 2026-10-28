@@ -1,0 +1,43 @@
+name: Team15 Issue2 nineteenth-pass nonproduction integration
+on:
+  push:
+    branches:
+      - integration/team15-issue2-19th-20261028
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  issue2-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: qa
+      - uses: actions/checkout@v4
+        with:
+          ref: a55e5cab337b3fd7f59588f1a2a37f0cfb7b2eaf
+          path: team11
+      - uses: actions/checkout@v4
+        with:
+          ref: a2f27be00192e6be34764a3e2c95136576179af7
+          path: team12
+      - uses: actions/checkout@v4
+        with:
+          ref: 33e36a6ee32fa6355bdba21d3a8db5e93081fe24
+          path: team13
+      - uses: actions/checkout@v4
+        with:
+          ref: 65ec159071223f7a782f1157932ffd1b633d6ef1
+          path: team14
+      - name: Team11 real loopback HTTP booking API
+        run: |
+          cd team11/phase3
+          python3 -m unittest -v test_common_http_booking_integration
+      - name: Team11 authenticated free progress API regression
+        run: |
+          cd team11/phase3
+          python3 -m unittest discover -p '*progress*.py' -v
+      - name: Cross-team real function and persistent mock settlement
+        run: python3 qa/scripts/test_team15_real_bridge.py
+      - name: Team11 full common regression
+        run: python3 -m unittest discover -s team11/phase3 -p 'test_common_*.py' -v
