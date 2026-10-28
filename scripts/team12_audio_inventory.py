@@ -22,7 +22,7 @@ def inspect(root):
             problems.append({"word": word, "issue": "invalid_recording_entry"})
             continue
         src = entry.get("src", "")
-        if not isinstance(src, str) or not re.fullmatch(r"\\./assets/hangul-audio/[A-Za-z0-9_-]+\\.mp3", src):
+        if not isinstance(src, str) or not re.fullmatch(r"\./assets/hangul-audio/[A-Za-z0-9_-]+\.mp3", src):
             problems.append({"word": word, "issue": "invalid_source_path", "path": src})
             continue
         if src in seen_sources:
@@ -62,7 +62,7 @@ def inspect(root):
         for j, v in enumerate(VOWELS):
             word = chr(0xAC00 + (i * 21 + j) * 28)
             entry = records.get(word)
-            state = ("missing" if entry is None else
+            state = ("missing" if word not in records else
                      "held" if word in invalid_words or (isinstance(entry, dict) and entry.get("disabled")) else
                      "ready_unapproved")
             inventory.append({"character": word, "consonant": c, "vowel": v,
