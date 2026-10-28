@@ -128,12 +128,12 @@
     {
       "number": 51,
       "feature": "필수 발음418개 목록을 실제 화면의 글자·음절·단어와 대조해 작업 대상을 확정한다.",
-      "implemented": "hangul-audio-manifest.json 399 조합과 원본 418 범위 차이 미해소",
-      "missing": "자동·실제 환경 검증 및 원본 완료 조건 중 미충족 사항은 증거란에 기재",
-      "evidence": "hangul-audio-manifest.json 399 조합과 원본 418 범위 차이 미해소",
+      "implemented": "399 음절+19 독립 자음=418이라는 후보 범위를 자동 검사로 확인. 원본 418 항목과 동일 여부는 미확정",
+      "missing": "원본 418개 실제 명세와 일대일 대조, 실제 음원 파일 확보·재생 검증 미완료",
+      "evidence": "hangul-audio-manifest.json 399 조합과 원본 418 범위 차이 미해소; scripts/team12_content_regression.py; docs/team12/audio-418-scope-candidate.json",
       "progress": 50,
-      "reason": "코드·데이터 존재와 미검증 범위를 반영한 보수적 추정; CI 성공·실사용 성공을 가정하지 않음",
-      "next": "관련 기능 E2E 및 실제 데이터 전수 검증",
+      "reason": "후보 범위와 감사 체계를 구현했으나 실제 음원·원본 명세 확인이 없어 기존 점수 유지",
+      "next": "원본 418 목록 확보 후 후보 19개 일치 여부 자동 대조",
       "integration": "타 브랜치 통합 미검증",
       "status": "수정 필요"
     },
@@ -164,12 +164,12 @@
     {
       "number": 54,
       "feature": "필수 누락359개 등 기존 수치를 재확인하고 대상별 녹음 대본을 완성한다.",
-      "implemented": "docs/team12/recording-plan-399.json 누락354·보류26·대기19; 원본 418 목록 미대조",
-      "missing": "자동·실제 환경 검증 및 원본 완료 조건 중 미충족 사항은 증거란에 기재",
-      "evidence": "docs/team12/recording-plan-399.json 누락354·보류26·대기19; 원본 418 목록 미대조",
+      "implemented": "399개 녹음 계획과 19개 독립 자음 후보를 별도 관리; 원본 418과의 일대일 대조 미완료",
+      "missing": "원본 418개 실제 명세와 일대일 대조, 실제 음원 파일 확보·재생 검증 미완료",
+      "evidence": "docs/team12/recording-plan-399.json 누락354·보류26·대기19; 원본 418 목록 미대조; scripts/team12_content_regression.py; docs/team12/audio-418-scope-candidate.json",
       "progress": 40,
-      "reason": "코드·데이터 존재와 미검증 범위를 반영한 보수적 추정; CI 성공·실사용 성공을 가정하지 않음",
-      "next": "관련 기능 E2E 및 실제 데이터 전수 검증",
+      "reason": "후보 범위와 감사 체계를 구현했으나 실제 음원·원본 명세 확인이 없어 기존 점수 유지",
+      "next": "원본 418 목록 확보 후 후보 19개 일치 여부 자동 대조",
       "integration": "타 브랜치 통합 미검증",
       "status": "수정 필요"
     },
@@ -366,5 +366,5 @@
       "status": "외부 확인 대기"
     }
   ],
-  "version": "12차 갱신"
+  "version": "13차 갱신"
 }
