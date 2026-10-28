@@ -38,26 +38,26 @@ class Team12Regression(unittest.TestCase):
         self.assertIsInstance(cells, list)
         self.assertEqual(len(cells), 399)
         syllables = set()
-        for c in cells:
-            self.assertIsInstance(c, dict, "Each cell must be a dict")
-            self.assertIn("syllable", c)
+        for idx, c in enumerate(cells):
+            self.assertIsInstance(c, dict, f"Each cell must be a dict at index {idx}")
+            self.assertIn("syllable", c, f"Missing 'syllable' key in cell at index {idx}")
             syllable_value = c["syllable"]
-            self.assertIsInstance(syllable_value, str, "syllable must be string")
-            self.assertTrue(syllable_value.strip() != '', "syllable must be non-empty string")
+            self.assertIsInstance(syllable_value, str, f"syllable must be string at index {idx}")
+            self.assertTrue(syllable_value.strip() != '', f"syllable must be non-empty string at index {idx}")
             syllables.add(syllable_value)
         self.assertEqual(len(syllables), 399)
         consonants = set()
         vowels = set()
-        for c in cells:
-            self.assertIsInstance(c, dict, "Each cell must be a dict")
-            self.assertIn("consonant", c)
-            self.assertIn("vowel", c)
+        for idx, c in enumerate(cells):
+            self.assertIsInstance(c, dict, f"Each cell must be a dict at index {idx}")
+            self.assertIn("consonant", c, f"Missing 'consonant' key in cell at index {idx}")
+            self.assertIn("vowel", c, f"Missing 'vowel' key in cell at index {idx}")
             consonant_value = c["consonant"]
             vowel_value = c["vowel"]
-            self.assertIsInstance(consonant_value, str, "consonant must be string")
-            self.assertTrue(consonant_value.strip() != '', "consonant must be non-empty string")
-            self.assertIsInstance(vowel_value, str, "vowel must be string")
-            self.assertTrue(vowel_value.strip() != '', "vowel must be non-empty string")
+            self.assertIsInstance(consonant_value, str, f"consonant must be string at index {idx}")
+            self.assertTrue(consonant_value.strip() != '', f"consonant must be non-empty string at index {idx}")
+            self.assertIsInstance(vowel_value, str, f"vowel must be string at index {idx}")
+            self.assertTrue(vowel_value.strip() != '', f"vowel must be non-empty string at index {idx}")
             consonants.add(consonant_value)
             vowels.add(vowel_value)
         self.assertEqual(len(consonants), 19)
@@ -71,11 +71,12 @@ class Team12Regression(unittest.TestCase):
         counts = plan["counts"]
         self.assertIsInstance(counts, dict, "counts should be a dict")
         total_counts = 0
-        for v in counts.values():
-            if isinstance(v, int) and v >= 0:
-                total_counts += v
-            else:
-                self.fail(f"Invalid count value in counts dict: {v}")
+        for k, v in counts.items():
+            if not isinstance(k, str):
+                self.fail(f"Invalid key type in counts dict: {k} (type {type(k)})")
+            if not isinstance(v, int) or v < 0:
+                self.fail(f"Invalid count value in counts dict: {v} for key {k}")
+            total_counts += v
         self.assertEqual(len(cells), total_counts)
 
     def test_professional_96_unique_and_linked(self):
@@ -98,8 +99,8 @@ class Team12Regression(unittest.TestCase):
             self.assertTrue(all(
                 value is not None and
                 (not isinstance(value, str) or value.strip() != '')
-                for value in values), field)
-            self.assertEqual(len(values), len(set(values)), field)
+                for value in values), f"Field validation failed for '{field}'")
+            self.assertEqual(len(values), len(set(values)), f"Duplicate values found in '{field}'")
         self.assertTrue(all(lesson.get("status") == "authored" for lesson in lessons))
 
     def test_pilot_units_reference_professional_curriculum(self):
@@ -118,15 +119,15 @@ class Team12Regression(unittest.TestCase):
         except json.JSONDecodeError as e:
             self.fail(f"Invalid JSON in {pilot_file}: {e}")
         ids = set()
-        for stage in curriculum.get("stages", []):
+        for stage_idx, stage in enumerate(curriculum.get("stages", [])):
             lessons = stage.get("lessons", [])
-            self.assertIsInstance(lessons, list, "lessons should be list")
-            for lesson in lessons:
+            self.assertIsInstance(lessons, list, f"lessons should be list for stage index {stage_idx}")
+            for lesson_idx, lesson in enumerate(lessons):
                 if isinstance(lesson, dict):
                     unit_id = lesson.get("unitId")
                     if isinstance(unit_id, (str, int)):
                         if isinstance(unit_id, str):
-                            self.assertTrue(unit_id.strip() != '', "unitId string must not be empty or whitespace")
+                            self.assertTrue(unit_id.strip() != '', f"unitId string must not be empty or whitespace at stage {stage_idx} lesson {lesson_idx}")
                         ids.add(unit_id)
         self.assertTrue(all(
             isinstance(unit, dict) and
@@ -139,19 +140,19 @@ class Team12Regression(unittest.TestCase):
         self.assertIsInstance(units, list, "units should be list")
         self.assertEqual(len(units), 12)
         unit_ids = set()
-        for unit in units:
+        for idx, unit in enumerate(units):
             if not isinstance(unit, dict):
-                self.fail(f"Unit is not a dict: {unit}")
+                self.fail(f"Unit is not a dict at index {idx}: {unit}")
             uid = unit.get("id")
-            self.assertIsNotNone(uid, "unit id must not be None")
+            self.assertIsNotNone(uid, f"unit id must not be None at index {idx}")
             if isinstance(uid, str):
-                self.assertTrue(uid.strip() != '', "unit id string must not be empty or whitespace")
+                self.assertTrue(uid.strip() != '', f"unit id string must not be empty or whitespace at index {idx}")
             # Defensive: ensure no duplicates while adding
             if uid in unit_ids:
                 self.fail(f"Duplicate unit id found: {uid}")
             unit_ids.add(uid)
         self.assertEqual(len(unit_ids), len(units))
-        self.assertTrue(all(unit_id in ids for unit_id in unit_ids))
+        self.assertTrue(all(unit_id in ids for unit_id in unit_ids), "All pilot unit ids must reference curriculum unitIds")
 
     def test_399_board_cells_have_explicit_missing_and_held_states(self):
         manifest_file = ROOT / "hangul-audio-manifest.json"
