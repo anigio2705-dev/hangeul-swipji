@@ -36,7 +36,7 @@ class D2CatalogHttpTests(unittest.TestCase):
                                  (7500,300,2200))
                 self.assertFalse(first['payment_executed'])
                 request_refund(db,self.store,booking,'d2-refund',learner,4000)
-                decide_refund(self.store,'d2-refund','approve','admin-d2')
+                decide_refund(self.store,'d2-refund','approved','test_reviewer')
                 applied=apply_approved_refund(db,self.store,'d2-refund')
                 self.assertEqual(applied,apply_approved_refund(db,self.store,'d2-refund'))
                 after=self.store.totals('d2month')
