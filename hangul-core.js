@@ -119,7 +119,7 @@
       b.setAttribute('aria-label',b.dataset.sound+' · '+info.label);
       b.title=info.label;
     });
-    const n=document.querySelector('[data-recording-count]');if(n)n.textContent=Object.keys(records).length;
+    const n=document.querySelector('[data-recording-count]');if(n)n.textContent=manifestError?'확인 불가':Object.keys(records).length;
     const summary=document.querySelector('[data-board-audio-counts]');
     if(summary){
       const cells=[...document.querySelectorAll('.board [data-sound]')];
