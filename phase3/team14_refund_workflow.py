@@ -49,6 +49,10 @@ def request_refund(server_db, store, booking_id, request_id, actor_id, amount_kr
         if reason_clean == '':
             raise SimError('VALIDATION_ERROR', 'refund reason required')
 
+        # Validate amount_krw against booking price (cannot exceed booking price)
+        if amount_krw > booking['price']:
+            raise SimError('VALIDATION_ERROR', 'refund amount cannot exceed booking price')
+
         store.db.execute(
             "INSERT INTO refund_requests(request_id,booking_id,actor_id,amount_krw,state,reason) VALUES(?,?,?,?,?,?)",
             (request_id, booking_id, actor_id, amount_krw, 'requested', reason_clean))
@@ -105,6 +109,10 @@ def decide_refund(store, request_id, decision, reviewer):
             lesson = store.db.execute('SELECT amount FROM lessons WHERE booking_id=?', (row['booking_id'],)).fetchone()
             if lesson is None or lesson['amount'] != booking['price']:
                 raise SimError('CONFLICT', 'booking price mismatch')
+
+            # Validate refund amount does not exceed booking price
+            if row['amount_krw'] > booking['price']:
+                raise SimError('VALIDATION_ERROR', 'refund amount cannot exceed booking price')
 
         store.db.execute('UPDATE refund_requests SET state=?, updated_at=CURRENT_TIMESTAMP WHERE request_id=?',
                          (decision, request_id))
