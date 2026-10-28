@@ -63,7 +63,7 @@ class AccountSecurityAuditTests(unittest.TestCase):
             self.db.execute(
                 "INSERT INTO users(id,email,password,nickname,role,referral_code,created_at)"
                 " VALUES(?,?,?,?,?,?,?)",
-                ("second", "first@example.test", "x", "test", "different", "ref-second", 0.0),
+                ("second", "first@example.test", "x", "test", "learner", "ref-second", 0.0),
             )
 
     def test_sessions_and_audit_are_persisted_in_schema(self):
