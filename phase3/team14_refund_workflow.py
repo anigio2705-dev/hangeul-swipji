@@ -29,6 +29,12 @@ def request_refund(server_db, store, booking_id, request_id, actor_id, amount_kr
     lesson = store.db.execute('SELECT amount FROM lessons WHERE booking_id=?', (booking_id,)).fetchone()
     if lesson is None or lesson['amount'] != booking['price']:
         raise SimError('CONFLICT', 'booking price mismatch')
+    # Validate reason length and strip here to fail early and store clean data
+    if not isinstance(reason, str):
+        raise SimError('VALIDATION_ERROR', 'reason must be a string')
+    reason_clean = reason.strip()
+    if reason != '' and not reason_clean:
+        raise SimError('VALIDATION_ERROR', 'reason must not be only whitespace')
     _init(store)
     with store.atomic():
         previous = store.db.execute('SELECT * FROM refund_requests WHERE request_id=?', (request_id,)).fetchone()
@@ -38,7 +44,7 @@ def request_refund(server_db, store, booking_id, request_id, actor_id, amount_kr
             return dict(previous)
         store.db.execute(
             "INSERT INTO refund_requests(request_id,booking_id,actor_id,amount_krw,state,reason) VALUES(?,?,?,?,?,?)",
-            (request_id, booking_id, actor_id, amount_krw, 'requested', '' if reason == '' else reason))
+            (request_id, booking_id, actor_id, amount_krw, 'requested', reason_clean))
     return dict(store.db.execute('SELECT * FROM refund_requests WHERE request_id=?', (request_id,)).fetchone())
 
 
