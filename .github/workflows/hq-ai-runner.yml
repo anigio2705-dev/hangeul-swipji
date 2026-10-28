@@ -1,0 +1,55 @@
+name: HQ AI proposal runner (manual, cost gated)
+on:
+  workflow_dispatch:
+    inputs:
+      task_id:
+        description: Approved pilot task
+        required: true
+        type: choice
+        options: [d2-contract-fixture]
+      budget_usd:
+        description: Operator-approved budget envelope (not a billing hard cap)
+        required: true
+        default: '1'
+permissions:
+  contents: read
+jobs:
+  propose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    environment: hq-ai-pilot
+    env:
+      HQ_TASK_ID: ${{ inputs.task_id }}
+      HQ_DAILY_BUDGET_USD: ${{ inputs.budget_usd }}
+      HQ_MAX_CALLS: '1'
+      HQ_MODEL: gpt-4.1-mini
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fetch latest Team14 source (read-only)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p team14
+          git fetch --depth=1 origin team14/business-systems-audit-20261028
+          git archive FETCH_HEAD | tar -x -C team14
+      - name: Validate budget envelope
+        shell: bash
+        run: |
+          python - <<'PY'
+          import os
+          budget=float(os.environ['HQ_DAILY_BUDGET_USD'])
+          if not (0 < budget <= 2): raise SystemExit('Pilot budget must be > 0 and <= $2')
+          PY
+      - name: Generate scoped AI proposal (no execution)
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python automation/ai_runner.py
+      - name: Save proposal for human review
+        uses: actions/upload-artifact@v4
+        with:
+          name: hq-ai-proposal
+          path: automation/proposals/d2-contract-fixture.json
+          retention-days: 3
