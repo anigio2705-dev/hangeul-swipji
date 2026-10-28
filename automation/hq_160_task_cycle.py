@@ -145,12 +145,25 @@ def verify_submission(assignment, submission, trusted):
 def make_report(backlog_text, evidence=None, failures=None):
     catalog = contracts(backlog_text)
     evidence, failures = evidence or {}, failures or {}
+    def is_final(number):
+        record = evidence.get(str(number), {})
+        task = catalog[number]
+        return (record.get("status") == "complete"
+                and task["master_checked"]
+                and isinstance(record.get("commit"), str)
+                and bool(re.fullmatch(r"[a-f0-9]{40}", record["commit"]))
+                and record.get("ci_conclusion") == "success"
+                and record.get("independent_review") == "pass"
+                and bool(re.fullmatch(
+                    r"https://github\\.com/anigio2705-dev/hangeul-swipji/actions/runs/[0-9]+",
+                    record.get("ci_url", "")))
+                and (not task["external_gate"] or bool(record.get("external_evidence")))
+                and (not task["approval_gate"] or bool(record.get("approval_evidence"))))
     return {
         "schema": 1,
         "backlog_sha256": hashlib.sha256(backlog_text.encode()).hexdigest(),
         "total": 160,
-        "final_complete": sum(evidence.get(str(n), {}).get("status") == "complete"
-                              and catalog[n]["master_checked"] for n in catalog),
+        "final_complete": sum(bool(is_final(n)) for n in catalog),
         "assignments": {team: next_assignment(team, catalog, evidence, failures)
                         for team in CURATED_TARGETS},
         "contracts": list(catalog.values()),
