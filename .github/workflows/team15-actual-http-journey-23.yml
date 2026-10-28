@@ -1,0 +1,40 @@
+name: Team15 23rd actual HTTP SQLite journey
+on:
+  push:
+    branches:
+      - integration/team15-nonproduction-23rd-20261028
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  actual-http-journey:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: qa
+      - uses: actions/checkout@v4
+        with:
+          ref: 3c84d96be301be53b9f3e60125a1aea5df30b78c
+          path: team11
+      - uses: actions/checkout@v4
+        with:
+          ref: 3cb240802659bc0f73f750154aaba3c3f6164205
+          path: team12
+      - uses: actions/checkout@v4
+        with:
+          ref: fb5eb3a546a052d4043cbf75316abdc7f490eeae
+          path: team13
+      - uses: actions/checkout@v4
+        with:
+          ref: d009b5635cc5fd71862b50a576fa192768724e64
+          path: team14
+      - name: Real HTTP register login progress isolation and restart
+        run: python3 qa/scripts/test_team15_http_progress_journey.py
+      - name: Team12 account isolation and JavaScript syntax
+        run: |
+          cd team12
+          node --check scripts/team12_server_progress.js
+          node scripts/team12_server_progress.test.js
+      - name: Team11-Team14 mock ledger persistent SQLite bridge
+        run: python3 qa/scripts/test_team15_real_bridge.py
