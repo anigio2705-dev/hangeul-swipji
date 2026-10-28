@@ -1,0 +1,63 @@
+{
+  "run_local_date": "2026-10-29",
+  "run_start_commit_utc": "2026-10-28T22:42:44Z",
+  "last_success_ci_utc": "2026-10-28T22:48:14Z",
+  "measured_elapsed_seconds": 330,
+  "branch": "automation/hq-pilot-13-14-15-20261029",
+  "baseline_commit": "0ec4095202f57cea01ff10b699f2af4abca4c1f7",
+  "last_feature_commit": "f46ea6bbbe3f24c1ddf33f4f4c9521ff465ebbd3",
+  "git_commits": 6,
+  "changed_files": 15,
+  "successful_ci_runs": [
+    40782053380,
+    40782148907,
+    40782295178,
+    40782436612,
+    40782618781,
+    40782711680
+  ],
+  "partial_features_verified": 4,
+  "partial_features_per_hour_extrapolated": 43.6,
+  "backlog_total": 160,
+  "backlog_final_complete": 0,
+  "backlog_verified_completion_per_hour": 0,
+  "claimed_50x": false,
+  "controlled_same_task_comparison": false,
+  "independent_ai_reviews": {
+    "run_id": 40782295178,
+    "model": "gpt-4.1-mini",
+    "calls": 4,
+    "total_prompt_tokens": 1430,
+    "total_completion_tokens": 790,
+    "total_tokens": 2220,
+    "actual_api_cost_usd": null,
+    "balance_verified": false,
+    "opinions": {
+      "development": "hybrid",
+      "quality": "hybrid",
+      "operations": "six_parallel",
+      "cost": "four_roles_one_task"
+    },
+    "provisional_decision": "hybrid; exclusive write owner, parallel independent tasks and separate QA",
+    "limitations": "No controlled same-task A/B, no verified per-mode API billing, no completed 160 backlog tasks"
+  },
+  "audio": {
+    "required_cells": 399,
+    "ready_unapproved": 19,
+    "held": 26,
+    "missing": 354,
+    "missing_resolved_this_run": 0,
+    "human_listening_approved": 0,
+    "commons_targets_searched": 12,
+    "commons_candidates": 0,
+    "commons_failed_queries": 0,
+    "recording_studio_code_verified": true,
+    "real_device_recording_tested": false
+  },
+  "safety": {
+    "main_modified": false,
+    "production_db_modified": false,
+    "real_payment_modified": false,
+    "deployed": false
+  }
+}
