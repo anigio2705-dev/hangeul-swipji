@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS ledger(id INTEGER PRIMARY KEY AUTOINCREMENT,transacti
     if state!='reserved': raise SimError('INVALID_STATE','cancel not permitted')
     entries=[('refund_reversal',-price)]
     next_state='cancelled';new_refunded=price
-   try: self.db.executemany('INSERT INTO ledger(transaction_id,lesson_id,kind,amount) VALUES(?,?,?,?)',((transaction_id,lesson_id,k,v) for k,v in entries))
+   # A transaction ID must identify one operation, even when ledger kinds differ.\n   if self.db.execute('SELECT 1 FROM ledger WHERE transaction_id=? LIMIT 1',(transaction_id,)).fetchone():\n    raise SimError('CONFLICT','transaction reused across operations')\n   try: self.db.executemany('INSERT INTO ledger(transaction_id,lesson_id,kind,amount) VALUES(?,?,?,?)',((transaction_id,lesson_id,k,v) for k,v in entries))
    except sqlite3.IntegrityError as exc: raise SimError('CONFLICT','transaction reused') from exc
    self.db.execute('UPDATE lessons SET state=?,refunded=? WHERE id=?',(next_state,new_refunded,lesson_id))
    return dict(transaction_id=transaction_id,state=next_state,real_money=False)
