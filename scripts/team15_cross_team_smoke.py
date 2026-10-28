@@ -107,6 +107,7 @@ for label, team, terms in [
     evidence[label] = {"terms": terms, "missing": missing,
                        "status": "source_terms_present" if not missing else "missing"}
     if missing:
+        # Improve failure reporting: include actual missing terms list in details
         issues.append(f"{label}: missing source terms {missing}")
 
 result = {
