@@ -20,6 +20,8 @@
     return String.fromCharCode(0xac00+(a*21+b)*28);
   }
   const records={},holds={};let current=null,run=0,release=null,manifestError=false;
+  // TTS is explicitly labelled as synthesized speech, never as a human recording.
+  let ttsEnabled=true;
   const schedule=typeof setTimeout==='function'?setTimeout:null,cancelTimer=typeof clearTimeout==='function'?clearTimeout:()=>{};
   let loading=null;
   function loadManifest(){
@@ -35,10 +37,10 @@
   }
   const ready=loadManifest();
   function availability(word){
-    if(manifestError)return {state:'unavailable',label:'목록 연결 오류 · 다시 눌러 재시도'};
+    if(manifestError)return {state:ttsEnabled?'tts':'unavailable',label:ttsEnabled?'합성 음성(TTS) · 음원 목록 연결 오류':'목록 연결 오류 · 다시 눌러 재시도'};
     if(records[word])return {state:'ready',label:'♪ 사람 녹음 듣기 · 청취 검수 전'};
-    if(holds[word])return {state:'held',label:'검수 대기 · '+holds[word].holdReason};
-    return {state:'missing',label:'녹음 없음 · 실제 사람 녹음 필요'};
+    if(holds[word])return {state:ttsEnabled?'tts-held':'held',label:'사람 녹음 검수 대기 · '+(ttsEnabled?'합성 음성(TTS) 사용':'재생 불가')};
+    return {state:ttsEnabled?'tts':'missing',label:ttsEnabled?'합성 음성(TTS) · 사람 녹음 없음':'녹음 없음 · 실제 사람 녹음 필요'};
   }
   function status(message){
     document.querySelectorAll('[data-audio-status]').forEach(x=>x.textContent=message);
@@ -64,19 +66,41 @@
     });
     if(token===run){current=null;release=null}
   }
+  async function synthesize(word,token){
+    const synth=window.speechSynthesis;
+    if(!ttsEnabled||!synth||typeof window.SpeechSynthesisUtterance!=='function'){
+      const message='이 기기에서는 한국어 합성 음성(TTS)을 사용할 수 없습니다. / Korean TTS unavailable.';
+      status(message);return {status:'tts-unavailable',message};
+    }
+    const voices=typeof synth.getVoices==='function'?synth.getVoices():[];
+    const korean=voices.find(v=>/^ko(?:-|$)/i.test(v.lang||''));
+    if(!korean){const message='한국어 음성(ko-KR)이 설치되지 않았습니다. 기기의 한국어 음성을 설치해 주세요. / No Korean voice installed.';status(message);return {status:'tts-unavailable',message}}
+    return new Promise(resolve=>{
+      let finished=false,timer=null;
+      const finish=(result)=>{if(finished)return;finished=true;if(timer!==null)cancelTimer(timer);if(release===cancel)release=null;resolve(result)};
+      const cancel=()=>finish({status:'cancelled'});
+      release=cancel;
+      const u=new window.SpeechSynthesisUtterance(word);
+      u.lang='ko-KR';u.voice=korean;u.rate=0.85;
+      u.onstart=()=>{if(token===run)status('합성 음성(TTS) 재생 중: '+word+' · 실제 사람 녹음이 아닙니다. / Synthesized Korean speech')};
+      u.onend=()=>finish({status:token===run?'tts-played':'cancelled',words:[word]});
+      u.onerror=()=>finish({status:'tts-error',message:'한국어 TTS 재생 오류 · 기기 음성 설정을 확인하세요.'});
+      if(schedule)timer=schedule(()=>{synth.cancel();finish({status:'tts-error',message:'TTS 응답 시간 초과'})},15000);
+      try{synth.speak(u)}catch(e){finish({status:'tts-error',message:'한국어 TTS 시작 실패'})}
+    });
+  }
   async function play(value){
     stop();const token=run;
     await (manifestError?loadManifest():(loading||ready));if(token!==run)return {status:'cancelled'};
-    if(manifestError){status('음성 목록을 불러오지 못했습니다. 글자를 다시 누르면 재시도합니다. / Audio list unavailable; click again to retry.');return {status:'manifest-error'}}
+    if(manifestError&&!ttsEnabled){status('음성 목록을 불러오지 못했습니다. 글자를 다시 누르면 재시도합니다. / Audio list unavailable; click again to retry.');return {status:'manifest-error'}}
     const words=Array.isArray(value)?value:[value];
     if(!words.length||words.some(w=>typeof w!=='string'||!w.trim()))return {status:'invalid'};
     const missing=words.filter(word=>!records[word]);
-    if(missing.some(w=>holds[w])){status('재생 보류: '+missing.filter(w=>holds[w]).map(w=>w+' · '+holds[w].holdReason).join(' / '));return {status:'held',missing}}
-    if(missing.length){status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요.');return {status:'missing',missing}}
+    if(missing.length&&!ttsEnabled){const held=missing.some(w=>holds[w]);status(held?'사람 녹음 검수 보류':'사람 녹음 준비 중');return {status:held?'held':'missing',missing}}
     try{
-      for(const word of words){if(token!==run)return {status:'cancelled'};await recording(word,token)}
-      if(token===run)status('재생 완료 · 청취 정확성 미검증 / Playback ended; listening review pending.');
-      return {status:token===run?'played':'cancelled',words};
+      for(const word of words){if(token!==run)return {status:'cancelled'};if(records[word]&&!manifestError){await recording(word,token)}else{const result=await synthesize(word,token);if(result.status!=='tts-played')return result}}
+      if(token===run)status('발음 재생 완료 · 사람 녹음은 청취 검수 전, TTS는 합성 음성입니다.');
+      return {status:token===run?(missing.length?'tts-played':'played'):'cancelled',words};
     }catch(e){if(token===run){stop();status(e.message)}return {status:'error',message:e.message}}
   }
   const el=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!==undefined)x.textContent=text;return x};
@@ -88,7 +112,7 @@
     document.querySelectorAll('[data-sound]').forEach(b=>{
       const info=availability(b.dataset.sound);b.dataset.audioState=info.state;
       const native=!!records[b.dataset.sound];b.classList.toggle('has-recording',native);
-      const held=holds[b.dataset.sound];b.classList.toggle('is-held',!!held);b.title=held?held.holdReason:native?'사람 녹음 · 청취 미검증 / Human recording; listening review pending':'녹음 준비 중 · Recording pending';
+      const held=holds[b.dataset.sound];b.classList.toggle('is-held',!!held);b.title=held?held.holdReason:native?'사람 녹음 · 청취 미검증 / Human recording; listening review pending':'합성 음성(TTS) 또는 음원 없음';
       b.setAttribute('aria-label',b.dataset.sound+' · '+info.label);
       b.title=info.label;
     });
@@ -97,5 +121,6 @@
   document.addEventListener('hs-audio-ready',refreshBadges);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});
   window.addEventListener('pagehide',stop);
-  window.HSHangul={consonants,vowels,compose,records,ready,availability,play,stop,status,el,soundButton,refreshBadges};
+  function setTtsEnabled(enabled){ttsEnabled=!!enabled;refreshBadges();return ttsEnabled}
+  window.HSHangul={consonants,vowels,compose,records,ready,availability,play,stop,status,el,soundButton,refreshBadges,setTtsEnabled};
 })();
