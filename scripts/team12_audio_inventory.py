@@ -75,18 +75,23 @@ def inspect(root):
 
             # Prevent absolute path use
             # Using Path.is_absolute on cleaned_src itself can be misleading due to lacking root,
-            # check explicitly for initial '/' to prevent absolute paths.
+            # check explicitly for initial '/' or '\\' to prevent absolute paths.
             if cleaned_src.startswith('/') or cleaned_src.startswith('\\'):
                 problems.append({"word": word, "issue": "path_is_absolute", "path": src})
                 continue
 
-            # Reject paths with symbolic links in components within root
+            # Check for path normalization issues (e.g., symlinks or path traversal escaping root)
+            # Reject any path components with suspicious chars
+            for comp in parts:
+                if '\x00' in comp:
+                    problems.append({"word": word, "issue": "null_byte_in_path_component", "path": src})
+                    raise StopIteration
+
             src_path = (root / cleaned_src).resolve(strict=False)
 
             # root_resolved may not exist, check by parts prefix
             # Ensure src_path is inside root directory
             try:
-                # Use parts comparison for robustness
                 if not src_path.is_absolute():
                     problems.append({"word": word, "issue": "path_not_absolute_after_resolve", "path": src})
                     continue
@@ -104,18 +109,14 @@ def inspect(root):
                     continue
 
                 # Additional check to deny any symlink components on resolved path parts inside root
-                # Slightly slower but more secure
                 current_path = root_resolved
-                # We check path components after root_parts
                 for part in src_parts[len(root_parts):]:
                     current_path = current_path / part
                     try:
-                        # is_symlink call can raise if broken symlink
                         if current_path.is_symlink():
                             problems.append({"word": word, "issue": "path_component_is_symlink", "path": str(current_path)})
-                            raise StopIteration  # break outer loops
+                            raise StopIteration
                     except Exception:
-                        # Stat failed or inaccessible
                         problems.append({"word": word, "issue": "cannot_stat_symlink_check", "path": str(current_path)})
                         raise StopIteration
             except StopIteration:
@@ -138,7 +139,6 @@ def inspect(root):
             # Validate the filename component strictly
             if src_path.is_file():
                 filename = src_path.name
-                # Validate that filename matches the pattern exactly
                 if not re.fullmatch(r"[a-zA-Z0-9\-_]+\.mp3", filename):
                     problems.append({"word": word, "issue": "invalid_filename", "filename": filename})
                     continue
@@ -153,7 +153,6 @@ def inspect(root):
         path = root / cleaned_src
 
         try:
-            # Prevent reading unexpectedly large files (> 100MB)
             filesize = path.stat().st_size
             if filesize > 100 * 1024 * 1024:
                 problems.append({"word": word, "issue": "file_too_large", "path": src, "size": filesize})
@@ -162,10 +161,8 @@ def inspect(root):
                 problems.append({"word": word, "issue": "file_empty", "path": src})
                 continue
 
-            # Limit read size to filesize (already known and safe)
             data_bytes = path.read_bytes()
 
-            # Safety check: Verify data_bytes is likely a valid mp3 header (not foolproof but better than nothing)
             if len(data_bytes) < 10 or not (data_bytes.startswith(b'ID3') or (data_bytes[0] & 0xFF) == 0xFF):
                 problems.append({"word": word, "issue": "invalid_file_content", "path": src})
                 continue
@@ -176,7 +173,8 @@ def inspect(root):
         digest = hashlib.sha256(data_bytes).hexdigest()
         if entry.get("sha256"):
             sha256_val = entry.get("sha256")
-            if not isinstance(sha256_val, str) or len(sha256_val) != 64 or not re.fullmatch(r"[a-fA-F0-9]{64}", sha256_val):
+            # Validate sha256 format strictly
+            if not (isinstance(sha256_val, str) and len(sha256_val) == 64 and re.fullmatch(r"[a-fA-F0-9]{64}", sha256_val)):
                 problems.append({"word": word, "issue": "invalid_sha256_format", "path": src})
             elif digest != sha256_val.lower():
                 problems.append({"word": word, "issue": "hash_mismatch", "path": src})
@@ -186,7 +184,6 @@ def inspect(root):
             probe = subprocess.run([
                 "ffmpeg", "-v", "error", "-i", str(path), "-f", "null", "-"
             ], capture_output=True, text=True, timeout=10)
-            # Treat non-zero exit code and stderr as decode failure
             if probe.returncode != 0 or probe.stderr.strip():
                 problems.append({"word": word, "issue": "decode_failed", "path": src, "detail": probe.stderr[:300]})
         except subprocess.SubprocessError as e:
@@ -204,9 +201,7 @@ def inspect(root):
     # Prepare inventory for 399 syllables
     for i, c in enumerate(CONSONANTS):
         for j, v in enumerate(VOWELS):
-            # Compose Hangul syllable code point
             cp = 0xAC00 + (i * 21 + j) * 28
-            # Validate cp is valid (within Unicode Hangul Syllables block)
             if cp > 0xD7A3:
                 continue
             word = chr(cp)
@@ -244,7 +239,6 @@ if __name__ == "__main__":
     try:
         result = inspect(args.root)
     except Exception as e:
-        # Ensure only string error message is dumped
         err_msg = str(e) if e else "Unknown error"
         print(json.dumps({"error": err_msg}))
         raise SystemExit(1)
