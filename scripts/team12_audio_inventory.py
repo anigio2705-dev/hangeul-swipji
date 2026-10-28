@@ -12,32 +12,58 @@ VOWELS = "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ"
 
 def inspect(root):
     manifest = json.loads((root / "hangul-audio-manifest.json").read_text(encoding="utf-8"))
-    records = manifest["recordings"]
+    records = manifest.get("recordings")
+    if not isinstance(records, dict):
+        raise ValueError("audio manifest recordings must be an object")
     problems, inventory = [], []
+    seen_sources, seen_digests = {}, {}
     for word, entry in records.items():
+        if not isinstance(entry, dict):
+            problems.append({"word": word, "issue": "invalid_recording_entry"})
+            continue
         src = entry.get("src", "")
-        if not re.fullmatch(r"\./assets/hangul-audio/[\w-]+\.mp3", src):
+        if not isinstance(src, str) or not re.fullmatch(r"\\./assets/hangul-audio/[A-Za-z0-9_-]+\\.mp3", src):
             problems.append({"word": word, "issue": "invalid_source_path", "path": src})
             continue
+        if src in seen_sources:
+            problems.append({"word": word, "issue": "duplicate_source_path",
+                             "other_word": seen_sources[src], "path": src})
+        else:
+            seen_sources[src] = word
         path = root / src[2:]
         if not path.is_file():
             problems.append({"word": word, "issue": "file_missing", "path": src})
             continue
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
-        if entry.get("sha256") and digest != entry["sha256"]:
+        declared = entry.get("sha256")
+        if not isinstance(declared, str) or not re.fullmatch(r"[0-9a-fA-F]{64}", declared):
+            problems.append({"word": word, "issue": "missing_or_invalid_sha256", "path": src})
+        elif digest != declared.lower():
             problems.append({"word": word, "issue": "hash_mismatch", "path": src})
-        probe = subprocess.run(["ffmpeg", "-v", "error", "-i", str(path), "-f", "null", "-"], capture_output=True, text=True)
+        if digest in seen_digests:
+            problems.append({"word": word, "issue": "duplicate_audio_bytes",
+                             "other_word": seen_digests[digest], "path": src})
+        else:
+            seen_digests[digest] = word
+        probe = subprocess.run(["ffmpeg", "-v", "error", "-i", str(path), "-f", "null", "-"],
+                               capture_output=True, text=True)
         if probe.returncode:
-            problems.append({"word": word, "issue": "decode_failed", "path": src, "detail": probe.stderr[:300]})
+            problems.append({"word": word, "issue": "decode_failed",
+                             "path": src, "detail": probe.stderr[:300]})
         if entry.get("kind") != "human":
             problems.append({"word": word, "issue": "not_verified_human", "path": src})
-        if not all(entry.get(k) for k in ("sourceUrl", "author", "license")):
+        if (not isinstance(entry.get("sourceUrl"), str)
+                or not entry["sourceUrl"].startswith("https://")
+                or not all(isinstance(entry.get(k), str) and entry[k].strip()
+                           for k in ("author", "license"))):
             problems.append({"word": word, "issue": "missing_provenance", "path": src})
     for i, c in enumerate(CONSONANTS):
         for j, v in enumerate(VOWELS):
             word = chr(0xAC00 + (i * 21 + j) * 28)
             entry = records.get(word)
-            state = "missing" if entry is None else ("held" if entry.get("disabled") else "ready_unapproved")
+            state = ("missing" if entry is None else
+                     "held" if isinstance(entry, dict) and entry.get("disabled") else
+                     "ready_unapproved")
             inventory.append({"character": word, "consonant": c, "vowel": v,
                               "recording_script": word, "required_filename": f"{ord(word):04x}.mp3",
                               "usage": "Hangul board composed syllable button",
