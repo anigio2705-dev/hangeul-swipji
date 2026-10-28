@@ -106,7 +106,17 @@ class Team12Regression(unittest.TestCase):
             pilot = json.loads(pilot_content)
         except json.JSONDecodeError as e:
             self.fail(f"Invalid JSON in {pilot_file}: {e}")
-        ids = {lesson["unitId"] for stage in curriculum.get("stages", []) for lesson in stage.get("lessons", []) if isinstance(lesson, dict) and isinstance(lesson.get("unitId"), (str, int))}
+        ids = set()
+        for stage in curriculum.get("stages", []):
+            lessons = stage.get("lessons", [])
+            self.assertIsInstance(lessons, list, "lessons should be list")
+            for lesson in lessons:
+                if isinstance(lesson, dict):
+                    unit_id = lesson.get("unitId")
+                    if isinstance(unit_id, (str, int)):
+                        if isinstance(unit_id, str):
+                            self.assertTrue(unit_id.strip() != '', "unitId string must not be empty or whitespace")
+                        ids.add(unit_id)
         self.assertTrue(all(
             isinstance(unit, dict) and
             "id" in unit and
@@ -117,9 +127,16 @@ class Team12Regression(unittest.TestCase):
         units = pilot.get("units", [])
         self.assertIsInstance(units, list, "units should be list")
         self.assertEqual(len(units), 12)
-        unit_ids = {unit.get("id") for unit in units if unit and unit.get("id") is not None}
+        unit_ids = set()
+        for unit in units:
+            if isinstance(unit, dict):
+                uid = unit.get("id")
+                self.assertIsNotNone(uid, "unit id must not be None")
+                if isinstance(uid, str):
+                    self.assertTrue(uid.strip() != '', "unit id string must not be empty or whitespace")
+                unit_ids.add(uid)
         self.assertEqual(len(unit_ids), len(units))
-        self.assertTrue(all(unit.get("id") in ids for unit in units if unit))
+        self.assertTrue(all(unit_id in ids for unit_id in unit_ids))
 
     def test_399_board_cells_have_explicit_missing_and_held_states(self):
         manifest_file = ROOT / "hangul-audio-manifest.json"
