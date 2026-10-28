@@ -242,6 +242,12 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     try:
+        # Validate root exists and is a directory
+        if not args.root.exists():
+            raise FileNotFoundError(f"Root path does not exist: {args.root}")
+        if not args.root.is_dir():
+            raise NotADirectoryError(f"Root path is not a directory: {args.root}")
+
         result = inspect(args.root)
     except Exception as e:
         err_msg = str(e) if e else "Unknown error"
@@ -252,6 +258,8 @@ if __name__ == "__main__":
 
     if args.output:
         try:
+            if args.output.exists() and not args.output.is_file():
+                raise IsADirectoryError(f"Output path exists and is not a file: {args.output}")
             args.output.parent.mkdir(parents=True, exist_ok=True)
             args.output.write_text(data + "\n", encoding="utf-8")
         except Exception as e:
