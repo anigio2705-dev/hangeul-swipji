@@ -12,6 +12,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 
+# Run node script to gather Hangul data
 node = r'''const fs=require('fs'),vm=require('vm');const c={window:{addEventListener(){}},document:{addEventListener(){},dispatchEvent(){}},Event:function(){},fetch:async()=>({ok:true,json:async()=>({recordings:{}})})};vm.createContext(c);for(const f of ['hangul-core.js','hangul-week-data.js'])vm.runInContext(fs.readFileSync(f,'utf8'),c);const h=c.window.HSHangul;console.log(JSON.stringify({consonants:h.consonants,vowels:h.vowels,blocks:h.consonants.flatMap(([a])=>h.vowels.map(([b])=>h.compose(a,b))),days:c.window.HSWeek}));'''
 data = json.loads(subprocess.check_output(['node', '-e', node], cwd=ROOT))
 
@@ -187,7 +188,8 @@ for word, meta in manifest.get('recordings', {}).items():
         modelRevision = meta.get('modelRevision')
         if not (isinstance(inputText, str) and isinstance(modelRevision, str)):
             raise ValueError(f"Missing or invalid 'inputText' or 'modelRevision' for synthetic audio {word}")
-        if inputText.rstrip('.') != word:
+        # Defensive normalization: allow inputText to differ by trailing dot or whitespace
+        if inputText.rstrip('. ') != word:
             raise ValueError(f"Input text does not match word for synthetic {word}")
         label_status = 'generation-input-matched; listening-pending'
 
@@ -214,7 +216,12 @@ for word, meta in manifest.get('recordings', {}).items():
             prefix_removed = sourceTitle
             if prefix_removed.startswith('File:'):
                 prefix_removed = prefix_removed[5:]
-        main_part = prefix_removed.rsplit('.', 1)[0] if '.' in prefix_removed else prefix_removed
+        if '.' in prefix_removed:
+            main_part = prefix_removed.rsplit('.', 1)[0]
+        else:
+            main_part = prefix_removed
+        if not isinstance(main_part, str):
+            raise ValueError(f"sourceTitle main part invalid for {word}")
         if not main_part.endswith(word):
             raise ValueError(f"sourceTitle does not end with word for {word}")
         label_status = 'source-title-matched'
