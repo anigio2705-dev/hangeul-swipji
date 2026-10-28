@@ -62,7 +62,7 @@ def inspect(root):
 
             # Prevent suspicious path components like .. or empty parts (including //)
             parts = cleaned_src.split('/')
-            if any(p == '..' for p in parts) or any(p == '' for p in parts):
+            if any(p == '..' or p == '' for p in parts):
                 problems.append({"word": word, "issue": "path_contains_invalid_components", "path": src})
                 continue
 
@@ -117,8 +117,12 @@ def inspect(root):
             continue
 
         digest = hashlib.sha256(data_bytes).hexdigest()
-        if entry.get("sha256") and digest != entry["sha256"]:
-            problems.append({"word": word, "issue": "hash_mismatch", "path": src})
+        if entry.get("sha256"):
+            sha256_val = entry.get("sha256")
+            if not isinstance(sha256_val, str) or len(sha256_val) != 64 or not re.fullmatch(r"[a-fA-F0-9]{64}", sha256_val):
+                problems.append({"word": word, "issue": "invalid_sha256_format", "path": src})
+            elif digest != sha256_val.lower():
+                problems.append({"word": word, "issue": "hash_mismatch", "path": src})
 
         # Run ffmpeg to check for decode errors
         try:
