@@ -104,14 +104,16 @@ def inspect(root):
                 # Additional check to deny any symlink components on resolved path parts inside root
                 # Slightly slower but more secure
                 current_path = root_resolved
+                # We check path components after root_parts
                 for part in src_parts[len(root_parts):]:
                     current_path = current_path / part
                     try:
+                        # is_symlink call can raise if broken symlink
                         if current_path.is_symlink():
                             problems.append({"word": word, "issue": "path_component_is_symlink", "path": str(current_path)})
                             raise StopIteration  # break outer loops
                     except Exception:
-                        # If stat fails, treat as problem
+                        # Stat failed or inaccessible
                         problems.append({"word": word, "issue": "cannot_stat_symlink_check", "path": str(current_path)})
                         raise StopIteration
             except StopIteration:
