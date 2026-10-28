@@ -68,7 +68,8 @@ for day in data['days']:
         word = pair[0]
         if not isinstance(word, str):
             continue
-        add(day.get('meaning') if day.get('id') == 'H01' else word, '7\uc77c \uacfc\uc815')
+        # Defensive: fallback to day.get('meaning') only when day['id'] == 'H01'
+        add(day.get('meaning') if day.get('id') == 'H01' and isinstance(day.get('meaning'), str) else word, '7\uc77c \uacfc\uc815')
 
 for word in ['\uad6d', '\uc0b0', '\uc637', '\ub2ec', '\ubc24', '\ubc25', '\uac15']:
     add(word, '\uae30\uc874 \ubc1b\uce68 \uc5f0\uc2b5')
@@ -129,7 +130,7 @@ for word, meta in manifest.get('recordings', {}).items():
         raw = subprocess.check_output([
             "ffmpeg", "-v", "error", "-i", str(file), "-f", "s16le", "-ac", "1", "-ar", "16000", "-"],
             stderr=subprocess.STDOUT)
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError:
         # Defensive: skip files that ffmpeg cannot decode
         continue
 
