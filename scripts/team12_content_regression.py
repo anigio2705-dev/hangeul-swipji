@@ -29,6 +29,23 @@ class Team12Regression(unittest.TestCase):
         self.assertEqual(len({unit["id"] for unit in units}), len(units))
         self.assertTrue(all(unit["id"] in ids for unit in units))
 
+    def test_399_board_cells_have_explicit_missing_and_held_states(self):
+        manifest = json.loads((ROOT / "hangul-audio-manifest.json").read_text(encoding="utf-8"))
+        records = manifest["recordings"]
+        consonants = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ"
+        vowels = "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ"
+        counts = {"ready_unapproved": 0, "held": 0, "missing": 0}
+        for i, _ in enumerate(consonants):
+            for j, _ in enumerate(vowels):
+                word = chr(0xAC00 + (i * 21 + j) * 28)
+                entry = records.get(word)
+                state = "missing" if entry is None else ("held" if entry.get("disabled") else "ready_unapproved")
+                counts[state] += 1
+                if entry:
+                    self.assertEqual(entry.get("listeningReview", {}).get("status"), "pending", word)
+        self.assertEqual(sum(counts.values()), 399)
+        self.assertEqual(counts, {"ready_unapproved": 19, "held": 26, "missing": 354})
+
     def test_hangul_manifest_no_synthetic_or_approved_without_review(self):
         manifest = json.loads((ROOT / "hangul-audio-manifest.json").read_text(encoding="utf-8"))
         for word, entry in manifest["recordings"].items():
