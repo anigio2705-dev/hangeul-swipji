@@ -78,10 +78,7 @@ for t in audio.get('targets', []):
         suspicious_labels_lower = to_lower_set(suspicious_labels)
         korean_labels_decoded_lower = to_lower_set(korean_labels_decoded)
 
-        if groups_lower_set.intersection(suspicious_labels_lower):
-            missing.append(text)
-            continue
-        if groups_lower_set.intersection(korean_labels_decoded_lower):
+        if groups_lower_set.intersection(suspicious_labels_lower) or groups_lower_set.intersection(korean_labels_decoded_lower):
             missing.append(text)
             continue
 
