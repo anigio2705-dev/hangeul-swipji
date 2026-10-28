@@ -227,6 +227,41 @@ class InstantMatchingTests(unittest.TestCase):
         self.assertEqual([],self.call(outsider,'reservations')['reservations'])
 
 
+    def test_booked_room_participant_state_and_approval(self):
+        learner,learner_id=self.account('room-learner@example.test')
+        teacher,teacher_id=self.account('room-teacher@example.test','teacher',True)
+        outsider,outsider_id=self.account('room-outsider@example.test')
+        now=time.time()
+        with server.connect() as db:
+            db.execute('INSERT INTO slots VALUES(?,?,?,?)',('room-slot',teacher_id,now-30,now+3600))
+            db.execute("""INSERT INTO bookings
+              (id,learner_id,teacher_id,slot_id,unit_id,status,price,room,created_at)
+              VALUES(?,?,?,?,?,?,?,?,?)""",
+              ('room-booking',learner_id,teacher_id,'room-slot','unit','reserved',20000,'room-secret',now))
+            def user(uid):
+                return db.execute('SELECT * FROM users WHERE id=?',(uid,)).fetchone()
+            with self.assertRaises(server.Error) as err:
+                matching.authorized_booking_room(db,'room-booking',user(learner_id))
+            self.assertEqual(409,err.exception.status)
+            db.execute("UPDATE bookings SET status='in_class' WHERE id='room-booking'")
+            for uid in (learner_id,teacher_id):
+                room=matching.authorized_booking_room(db,'room-booking',user(uid))
+                self.assertEqual('https://meet.jit.si/room-secret',room['roomUrl'])
+            with self.assertRaises(server.Error) as err:
+                matching.authorized_booking_room(db,'room-booking',user(outsider_id))
+            self.assertEqual(403,err.exception.status)
+            db.execute('UPDATE users SET approved=0 WHERE id=?',(teacher_id,))
+            with self.assertRaises(server.Error) as err:
+                matching.authorized_booking_room(db,'room-booking',user(learner_id))
+            self.assertEqual(403,err.exception.status)
+            db.execute('UPDATE users SET approved=1 WHERE id=?',(teacher_id,))
+            db.execute("UPDATE bookings SET status='completed' WHERE id='room-booking'")
+            with self.assertRaises(server.Error) as err:
+                matching.authorized_booking_room(db,'room-booking',user(learner_id))
+            self.assertEqual(409,err.exception.status)
+        self.assertEqual([],self.call(outsider,'reservations')['reservations'])
+
+
 del Harness
 
 if __name__=='__main__': unittest.main()
