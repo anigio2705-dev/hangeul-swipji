@@ -431,6 +431,13 @@ class Handler(BaseHTTPRequestHandler):
                 elif b['status'] not in ('test_paid','in_class','completed','test_settled'): raise Error('테스트 결제 불가 상태',409)
                 return {'ok':True,'payment':'simulated-test-only','chargedRealMoney':False},None
             if action in ('join','attendance'):
+                # Apply the same DB-owned participant/approval check used by
+                # booking reads immediately before any attendance mutation.
+                from team11_server_booking_adapter import authenticated_booking_access
+                decision=authenticated_booking_access(db,uid,bid,'join')
+                if not decision['allowed']:
+                    status=409 if decision['code'] in ('INVALID_STATE','CONFLICT') else 403
+                    raise Error('수업 입장 권한 또는 상태가 유효하지 않습니다',status)
                 if b['status'] not in ('test_paid','in_class'): raise Error('테스트 결제 후 입장할 수 있습니다',409)
                 slot=db.execute('SELECT * FROM slots WHERE id=?',(b['slot_id'],)).fetchone(); now=time.time()
                 if not slot['start']-300<=now<=slot['end']+300: raise Error('수업 시간에만 입장할 수 있습니다',409)
