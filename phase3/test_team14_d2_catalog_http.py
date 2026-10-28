@@ -35,14 +35,14 @@ class D2CatalogHttpTests(unittest.TestCase):
             self.assertEqual(price,TEST_CATALOG['partner_25'][1],
                              '13/14 contract conflict: partner default price is not 10000')
             with server.connect() as db:
-                # Team13 must eventually create this atomically with booking.
-                # Fixture models a server-committed snapshot, not client price.
-                db.execute('CREATE TABLE IF NOT EXISTS booking_product_snapshots ('
-                           'booking_id TEXT PRIMARY KEY, product_code TEXT NOT NULL, '
-                           'duration_minutes INTEGER NOT NULL, price_krw INTEGER NOT NULL, '
-                           'currency TEXT NOT NULL)')
-                db.execute('INSERT INTO booking_product_snapshots VALUES(?,?,?,?,?)',
-                           (booking,'partner_25',25,10000,'KRW'))
+                # Team13 now creates this snapshot atomically with booking.
+                # Verify the actual server record instead of inserting a fixture.
+                snapshot=db.execute(
+                    'SELECT product_code,duration_minutes,price_krw,currency '
+                    'FROM booking_product_snapshots WHERE booking_id=?',
+                    (booking,)).fetchone()
+                self.assertIsNotNone(snapshot, 'Team13 did not persist the booking product')
+                self.assertEqual(tuple(snapshot),('partner_25',25,10000,'KRW'))
                 p=bind_server_booking_product(db,self.store,'d2month',booking,
                                               'partner_25',300)
                 self.assertFalse(p['payment_executed'])
