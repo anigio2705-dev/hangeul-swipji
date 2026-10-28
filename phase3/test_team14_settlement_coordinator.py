@@ -89,4 +89,16 @@ class CoordinatorTests(unittest.TestCase):
   self.run_event();self.run_event()
   self.assertEqual(self.s.totals('month1')['refunded'],10000)
   self.assertEqual(self.s.totals('month1')['teacher'],0)
+ def test_event_snapshot_is_not_reread_during_settlement(self):
+  reads=[]
+  def mutable_reader(event_id):
+   reads.append(event_id)
+   if len(reads)>1:
+    return dict(self.event,learner_id='forged',transaction_id='forged')
+   return dict(self.event)
+  result=settle_with_referral(self.s,self.r,'ev1',mutable_reader,
+      lambda booking_id:self.record,lambda learner:'referrer1')
+  self.assertEqual(result['settlement']['state'],'completed')
+  self.assertEqual(reads,['ev1'])
+  self.assertEqual(self.s.db.execute('SELECT COUNT(*) FROM ledger').fetchone()[0],3)
 if __name__=='__main__':unittest.main()
