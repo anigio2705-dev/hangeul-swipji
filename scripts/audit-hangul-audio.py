@@ -13,7 +13,10 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[1]
 node = r'''const fs=require('fs'),vm=require('vm');const c={window:{addEventListener(){}},document:{addEventListener(){},dispatchEvent(){}},Event:function(){},fetch:async()=>({ok:true,json:async()=>({recordings:{}})})};vm.createContext(c);for(const f of ['hangul-core.js','hangul-week-data.js'])vm.runInContext(fs.readFileSync(f,'utf8'),c);const h=c.window.HSHangul;console.log(JSON.stringify({consonants:h.consonants,vowels:h.vowels,blocks:h.consonants.flatMap(([a])=>h.vowels.map(([b])=>h.compose(a,b))),days:c.window.HSWeek}));'''
 data = json.loads(subprocess.check_output(['node', '-e', node], cwd=ROOT))
-manifest = json.loads((ROOT / 'hangul-audio-manifest.json').read_text())
+manifest_path = ROOT / 'hangul-audio-manifest.json'
+if not manifest_path.is_file():
+    raise FileNotFoundError(f"Manifest file not found: {manifest_path}")
+manifest = json.loads(manifest_path.read_text())
 names = {c: n for c, n, _ in data['consonants']}
 vowels = dict(data['vowels'])
 targets = {}
@@ -23,30 +26,59 @@ def add(word, group, label=None):
     item = targets.setdefault(sound, {'text': sound, 'groups': [], 'labels': []})
     if group not in item['groups']:
         item['groups'].append(group)
-    if (label or word) not in item['labels']:
-        item['labels'].append(label or word)
+    label_to_add = label or word
+    if label_to_add not in item['labels']:
+        item['labels'].append(label_to_add)
 
 for c, name, _ in data['consonants']:
-    add(c, '자음 이름', c + ' · ' + name)
+    add(c, '\uc790\uc74c \uc774\ub984', c + ' \u00b7 ' + name)
 for v, sound in data['vowels']:
-    add(v, '모음', v + ' · ' + sound)
+    add(v, '\ubaa8\uc74c', v + ' \u00b7 ' + sound)
 for word in data['blocks']:
-    add(word, '글자판 음절')
+    add(word, '\uae00\uc790\ud310 \uc74c\uc808')
 for day in data['days']:
-    for word, meaning in day['practice']:
-        add(meaning if day['id'] == 'H01' else word, '7일 과정')
-for word in ['국', '산', '옷', '달', '밤', '밥', '강']:
-    add(word, '기존 받침 연습')
-intro = json.loads(re.search(r'const units=(\[.*?\]);', (ROOT / 'intro.html').read_text(), re.S)[1])
+    for word, meaning in day.get('practice', []):
+        add(meaning if day.get('id') == 'H01' else word, '7\uc77c \uacfc\uc815')
+for word in ['\uad6d', '\uc0b0', '\uc637', '\ub2ec', '\ubc24', '\ubc25', '\uac15']:
+    add(word, '\uae30\uc874 \ubc1b\uce68 \uc5f0\uc2b5')
+intro_path = ROOT / 'intro.html'
+if not intro_path.is_file():
+    raise FileNotFoundError(f"Intro file not found: {intro_path}")
+intro_match = re.search(r'const units=(\[.*?\]);', intro_path.read_text(encoding='utf-8'), re.S)
+if not intro_match or len(intro_match.groups()) < 1:
+    raise ValueError("Failed to extract units from intro.html")
+intro = json.loads(intro_match[1])
 for unit in intro:
-    for word, _ in unit['v'] + unit['sent']:
-        add(word, '입문 50단원')
+    v_list = unit.get('v', [])
+    sent_list = unit.get('sent', [])
+    for pair in v_list + sent_list:
+        if not (isinstance(pair, (list, tuple)) and len(pair) >= 1):
+            continue
+        word = pair[0]
+        add(word, '\uc785\ubb38 50\ub2e8\uc6d0')
 
 recordings = []
-for word, meta in manifest['recordings'].items():
-    file = ROOT / meta['src']
-    raw = subprocess.check_output(['ffmpeg', '-v', 'error', '-i', str(file), '-f', 's16le', '-ac', '1', '-ar', '16000', '-'])
-    samples = array.array('h', raw)
+
+for word, meta in manifest.get('recordings', {}).items():
+    src = meta.get('src')
+    if not src:
+        raise ValueError(f"Missing 'src' for word: {word}")
+    file = ROOT / src
+    if not file.is_file():
+        raise FileNotFoundError(f"Audio file not found: {file}")
+
+    # run ffmpeg and decode output with error handling
+    try:
+        raw = subprocess.check_output(['ffmpeg', '-v', 'error', '-i', str(file), '-f', 's16le', '-ac', '1', '-ar', '16000', '-'], stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(f"ffmpeg failed on file {file} with error: {e.output.decode(errors='replace')}") from e
+
+    samples = array.array('h')
+    try:
+        samples.frombytes(raw)
+    except Exception as e:
+        raise ValueError(f"Failed to decode audio raw data for {file}") from e
+
     peak = max((abs(x) for x in samples), default=0)
     rms = math.sqrt(sum(x * x for x in samples) / max(1, len(samples)))
     active = [i for i, x in enumerate(samples) if abs(x) > 184]  # approx -45 dBFS
@@ -55,56 +87,90 @@ for word, meta in manifest['recordings'].items():
     duration = len(samples) / 16000
     warnings = []
     if not active:
-        warnings.append('무음')
+        warnings.append('\ubb34\uc74c')
     if lead > .5:
-        warnings.append('앞 무음 0.5초 초과')
+        warnings.append('\uc55e \ubb34\uc74c 0.5\ucd08 \ucd08\uacfc')
     if tail > .8:
-        warnings.append('뒤 무음 0.8초 초과')
+        warnings.append('\ub4a4 \ubb34\uc74c 0.8\ucd08 \ucd08\uacfc')
     if peak >= 32760:
-        warnings.append('최대 진폭 확인 필요')
+        warnings.append('\ucd5c\ub300 \uc9c4\ud3ed \ud655\uc778 \ud544\uc694')
     if tail < .02:
-        warnings.append('끝 여백 부족: 잘림 청취 확인 필요')
+        warnings.append('\ub05d \uc5ec\ubc31 \ubd80\uc871: \uc798\ub9bc \uccad\ucde8 \ud655\uc778 \ud544\uc694')
     if duration < .25:
-        warnings.append('짧은 파일: 잘림 청취 확인 필요')
+        warnings.append('\uc9e7\uc740 \ud30c\uc77c: \uc798\ub9bc \uccad\ucde8 \ud655\uc778 \ud544\uc694')
     if rms < 184:
-        warnings.append('작은 평균 음량')
-    assert hashlib.sha256(file.read_bytes()).hexdigest() == meta['sha256'], word
+        warnings.append('\uc791\uc740 \ud3c9\uade0 \uc74c\ub7c9')
+
+    try:
+        file_hash = hashlib.sha256(file.read_bytes()).hexdigest()
+    except Exception as e:
+        raise IOError(f"Failed to read or hash file {file}") from e
+
+    if file_hash != meta.get('sha256'):
+        raise ValueError(f"SHA256 hash mismatch for {word}")
+
     kind = meta.get('kind', 'human')
     if kind == 'synthetic':
-        assert meta['inputText'].rstrip('.') == word and meta['modelRevision'], word
+        inputText = meta.get('inputText')
+        modelRevision = meta.get('modelRevision')
+        if not inputText or not modelRevision:
+            raise ValueError(f"Missing 'inputText' or 'modelRevision' for synthetic audio {word}")
+        if inputText.rstrip('.') != word:
+            raise ValueError(f"Input text does not match word for synthetic {word}")
         label_status = 'generation-input-matched; listening-pending'
     elif 'segment' in meta:
-        assert meta['segment']['text'] == word and 0 <= meta['segment']['start'] < meta['segment']['end'], word
+        segment = meta.get('segment', {})
+        if segment.get('text') != word:
+            raise ValueError(f"Segment text does not match word for {word}")
+        start = segment.get('start')
+        end = segment.get('end')
+        if not (isinstance(start, (int, float)) and isinstance(end, (int, float)) and 0 <= start < end):
+            raise ValueError(f"Invalid segment start/end for {word}")
         label_status = 'segment-alignment-provisional; listening-pending'
     else:
-        assert meta['sourceTitle'].removeprefix('File:').rsplit('.', 1)[0].endswith(word), word
+        sourceTitle = meta.get('sourceTitle')
+        if not isinstance(sourceTitle, str):
+            raise ValueError(f"Invalid or missing sourceTitle for {word}")
+        prefix_removed = sourceTitle.removeprefix('File:')
+        main_part = prefix_removed.rsplit('.', 1)[0]
+        if not main_part.endswith(word):
+            raise ValueError(f"sourceTitle does not end with word for {word}")
         label_status = 'source-title-matched'
-    assert meta['author'] and meta['licenseUrl'] and meta['sourceUrl'], word
-    recordings.append({'text': word, 'src': meta['src'], 'duration': round(duration, 3),
+
+    if not (meta.get('author') and meta.get('licenseUrl') and meta.get('sourceUrl')):
+        raise ValueError(f"Missing required metadata for {word} (author/licenseUrl/sourceUrl)")
+
+    recordings.append({'text': word, 'src': src, 'duration': round(duration, 3),
         'peakDbfs': round(20 * math.log10(max(1, peak) / 32768), 2),
         'rmsDbfs': round(20 * math.log10(max(1, rms) / 32768), 2),
         'leadingSilence': round(lead, 3), 'trailingSilence': round(tail, 3),
         'signalWarnings': warnings, 'alignmentObserved': meta.get('segment',{}).get('observedText',''), 'kind': kind, 'labelStatus': meta.get('labelStatus', label_status), 'stage1Candidate': bool(meta.get('stage1Candidate')), 'stage2Candidate': bool(meta.get('stage2Candidate')), 'holdReason': meta.get('holdReason', ''),
         'sourceUrl': meta['sourceUrl'], 'license': meta['license'],
         'held': bool(meta.get('disabled')), 'technicalStatus': 'decoded-and-hash-checked', 'listeningStatus': 'pending'})
+
 for word, item in targets.items():
-    item['recordingAvailable'] = word in manifest['recordings']
-    item['playbackAvailable'] = item['recordingAvailable'] and not manifest['recordings'][word].get('disabled', False)
+    recs = manifest.get('recordings', {})
+    item['recordingAvailable'] = word in recs
+    item['playbackAvailable'] = item['recordingAvailable'] and not recs.get(word, {}).get('disabled', False)
     item['listeningStatus'] = 'pending' if item['recordingAvailable'] else 'no-recording'
     if item['recordingAvailable']:
-        item['src'] = manifest['recordings'][word]['src']
-report = {'version': '20261026-human-only', 'scope': '글자판·7일 과정·입문 50단원의 재생 대상',
-    'note': '파일·문자 연결 검사는 실제 소리의 정확성이나 잘림 여부를 청취 승인한 것이 아닙니다. 기기 TTS는 음성이 달라 전수 품질 인증 대상이 될 수 없습니다.',
+        item['src'] = recs[word]['src']
+
+report = {'version': '20261026-human-only', 'scope': '\uae00\uc790\ud310\u00b77\uc77c \uacfc\uc815\u00b7\uc785\ubb38 50\ub2e8\uc6d0\uc758 \uc7ac\uc0dd \ub300\uc0c1',
+    'note': '\ud30c\uc77c\u00b7\ubb38\uc790 \uc5f0\ucb60 \uac80\uc0ac\ub294 \uc2e4\uc81c \uc18c\ub9ac\uc758 \uc815\ud655\uc131\uc774\ub098 \uc798\ub9bc \uc5ec\ubd80\ub97c \uccad\ucde8 \uc2b9\uc778\ud55c \uac83\uc774 \uc544\ub2d9\ub2c8\ub2e4. \uae30\uae30 TTS\ub294 \uc74c\uc131\uc774 \ub2ec\ub77c \uc804\uc218 \ud488\uc9c8 \uc778\uc99d \ub300\uc0c1\uc774 \ub420 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.',
     'counts': {'targets': len(targets), 'available': sum(x['recordingAvailable'] for x in targets.values()),
         'missing': sum(not x['recordingAvailable'] for x in targets.values()), 'decodedFiles': len(recordings),
         'playbackAvailable': sum(x['playbackAvailable'] for x in targets.values()),
-        'humanFiles': sum(x.get('kind','human') == 'human' for x in manifest['recordings'].values()),
-        'syntheticFiles': sum(x.get('kind') == 'synthetic' for x in manifest['recordings'].values()),
+        'humanFiles': sum(x.get('kind','human') == 'human' for x in manifest.get('recordings', {}).values()),
+        'syntheticFiles': sum(x.get('kind') == 'synthetic' for x in manifest.get('recordings', {}).values()),
         'excludedSynthetic': len(manifest.get('retiredSynthetic',{})),
-        'held': sum(bool(x.get('disabled')) for x in manifest['recordings'].values()), 'listeningApproved': 0, 'signalWarnings': sum(bool(x['signalWarnings']) for x in recordings)},
-    'week': {'targets': sum('7일 과정' in x['groups'] for x in targets.values()), 'available': sum('7일 과정' in x['groups'] and x['recordingAvailable'] for x in targets.values()), 'missing': sum('7일 과정' in x['groups'] and not x['recordingAvailable'] for x in targets.values()), 'listeningApproved': 0},
+        'held': sum(bool(x.get('disabled')) for x in manifest.get('recordings', {}).values()), 'listeningApproved': 0, 'signalWarnings': sum(bool(x['signalWarnings']) for x in recordings)},
+    'week': {'targets': sum('7\uc77c \uacfc\uc815' in x['groups'] for x in targets.values()), 'available': sum('7\uc77c \uacfc\uc815' in x['groups'] and x['recordingAvailable'] for x in targets.values()), 'missing': sum('7\uc77c \uacfc\uc815' in x['groups'] and not x['recordingAvailable'] for x in targets.values()), 'listeningApproved': 0},
     'recordings': recordings, 'targets': list(targets.values())}
-(ROOT / 'hangul-audio-audit.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
+
+output_path = ROOT / 'hangul-audio-audit.json'
+output_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
 print(json.dumps(report['counts'], ensure_ascii=False))
 for x in recordings:
     if x['signalWarnings']:
