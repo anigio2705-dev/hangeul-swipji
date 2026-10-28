@@ -42,8 +42,9 @@ jobs:
         run: python scripts/test_team15_continuous_instant_e2e.py
       - name: Team12 education progress HTTP regression
         env:
-          PYTHONPATH: team11/phase3:team12/phase3
-        run: python team12/phase3/test_team12_progress_http.py
+          PYTHONPATH: team11/phase3
+        run: |
+          python -m unittest discover -s team12/phase3 -p test_team12_progress_http.py -v
       - name: Team12 audio behavior and recording/TTS regression
         env:
           PYTHONPATH: team12/phase3
