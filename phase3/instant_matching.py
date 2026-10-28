@@ -28,6 +28,13 @@ def initialize(db):
     CREATE TABLE IF NOT EXISTS instant_event_deliveries(
       event_id TEXT PRIMARY KEY REFERENCES instant_lesson_events(event_id),
       consumer TEXT NOT NULL, acknowledged_at REAL NOT NULL, receipt_id TEXT NOT NULL UNIQUE);
+    CREATE TABLE IF NOT EXISTS instant_booking_links(
+      match_id TEXT PRIMARY KEY REFERENCES instant_matches(id),
+      booking_id TEXT NOT NULL UNIQUE REFERENCES bookings(id));
+    CREATE TABLE IF NOT EXISTS instant_session_evidence(
+      match_id TEXT NOT NULL REFERENCES instant_matches(id),
+      user_id TEXT NOT NULL REFERENCES users(id),
+      observed REAL NOT NULL, PRIMARY KEY(match_id,user_id));
     CREATE TABLE IF NOT EXISTS instant_event_attempts(
       event_id TEXT PRIMARY KEY REFERENCES instant_lesson_events(event_id),
       attempts INTEGER NOT NULL DEFAULT 0, last_attempt REAL, last_error TEXT);
@@ -147,6 +154,47 @@ def authorized_booking_room(db, booking_id, user):
         raise server.Error('화상방이 준비되지 않았습니다',409)
     return {'bookingId':b['id'],'roomUrl':'https://meet.jit.si/'+b['room'],
             'participantRole':'learner' if user['id']==b['learner_id'] else 'teacher'}
+
+
+
+def linked_booking(db, match_id):
+    return db.execute("""SELECT b.* FROM instant_booking_links l
+      JOIN bookings b ON b.id=l.booking_id WHERE l.match_id=?""",(match_id,)).fetchone()
+
+
+def create_instant_booking(db, m, now):
+    """Server-owned test booking once both matched parties have consented.
+
+    This is a simulated session, not a charge; no payment provider is invoked.
+    """
+    existing=linked_booking(db,m['id'])
+    if existing: return existing
+    learner=db.execute('SELECT * FROM users WHERE id=?',(m['learner_id'],)).fetchone()
+    partner=db.execute('SELECT * FROM users WHERE id=?',(m['partner_id'],)).fetchone()
+    if (not learner or learner['role']!='learner' or not partner
+        or partner['role'] not in ('teacher','partner') or not partner['approved']):
+        raise server.Error('매칭 당사자 또는 강사 승인이 유효하지 않습니다',403)
+    slot_id=server.ident()
+    booking_id=server.ident()
+    db.execute('INSERT INTO slots VALUES(?,?,?,?)',
+               (slot_id,m['partner_id'],now-1,now+3600))
+    db.execute("""INSERT INTO bookings
+      (id,learner_id,teacher_id,slot_id,unit_id,status,price,room,created_at)
+      VALUES(?,?,?,?,?,?,?,?,?)""",
+      (booking_id,m['learner_id'],m['partner_id'],slot_id,
+       'instant-simulated-session','in_class',partner['price'],m['room'],now))
+    db.execute('INSERT INTO instant_booking_links VALUES(?,?)',(m['id'],booking_id))
+    return linked_booking(db,m['id'])
+
+
+def instant_session(db, u, match_id):
+    m=current(db,u['id'])
+    if not m or m['id']!=match_id or m['state']!='active':
+        raise server.Error('현재 진행 중인 본인 매칭이 아닙니다',409)
+    b=linked_booking(db,m['id'])
+    if not b or b['status']!='in_class':
+        raise server.Error('수업이 진행 중인 예약이 아닙니다',409)
+    return m,b
 
 
 def transaction_event_contract(booking_id, event_id, event_type, *, lesson_index=None, month_id=None):
@@ -315,7 +363,7 @@ def verified_event_for_team14(db, event_id):
 def route(handler, db, path, data):
     u=handler.user(db)
     action=path.removeprefix('/api/instant/')
-    allowed={'reservations':'GET','booking-room':'POST','lesson-event':'POST','status':'GET','join':'POST','heartbeat':'POST','ready':'POST','leave':'POST'}
+    allowed={'reservations':'GET','booking-room':'POST','lesson-event':'POST','session':'GET','session-observe':'POST','session-finish':'POST','status':'GET','join':'POST','heartbeat':'POST','ready':'POST','leave':'POST'}
     if action not in allowed: raise server.Error('페이지 없음',404)
     if handler.command!=allowed[action]: raise server.Error('지원하지 않는 요청',405)
     now=time.time()
@@ -326,6 +374,30 @@ def route(handler, db, path, data):
         return authorized_booking_room(db,data.get('bookingId'),u),None
     if action=='lesson-event':
         return {'event':record_lesson_event(db,u,data.get('bookingId'),data.get('eventId'),data.get('type'))},None
+    if action=='session':
+        m=current(db,u['id'])
+        if not m or m['state']!='active':
+            return {'state':snapshot(db,u)['state'],'bookingId':None},None
+        m,b=instant_session(db,u,m['id'])
+        return {'state':'active','bookingId':b['id'],'matchId':m['id'],
+                'roomUrl':'https://meet.jit.si/'+m['room']},None
+    if action=='session-observe':
+        m,b=instant_session(db,u,data.get('matchId'))
+        db.execute("""INSERT INTO instant_session_evidence VALUES(?,?,?)
+          ON CONFLICT(match_id,user_id) DO UPDATE SET observed=excluded.observed""",
+          (m['id'],u['id'],now))
+        return {'state':'active','bookingId':b['id'],
+                'observedParticipants':db.execute('SELECT count(*) FROM instant_session_evidence WHERE match_id=?',(m['id'],)).fetchone()[0]},None
+    if action=='session-finish':
+        m,b=instant_session(db,u,data.get('matchId'))
+        evidence=db.execute('SELECT count(*) FROM instant_session_evidence WHERE match_id=?',(m['id'],)).fetchone()[0]
+        if evidence!=2:
+            raise server.Error('양측의 서버 수업 연결 기록이 필요합니다',409)
+        # Session observation is a test-only criterion; commercial duration policy is unapproved.
+        db.execute("UPDATE bookings SET status='completed' WHERE id=? AND status='in_class'",(b['id'],))
+        event_id='instant-complete-'+m['id']
+        event=record_lesson_event(db,u,b['id'],event_id,'lesson.completed')
+        return {'event':event,'bookingId':b['id'],'verification':'both-participants-observed-test-only'},None
     if action=='join':
         if not eligible(db,u,now):
             raise server.Error('학생 또는 승인된 대화 파트너로 참여하세요. 예약 수업 중에는 대기할 수 없습니다.',403)
@@ -343,6 +415,9 @@ def route(handler, db, path, data):
         field='learner_ready' if u['id']==m['learner_id'] else 'partner_ready'
         db.execute('UPDATE instant_matches SET '+field+'=1 WHERE id=?',(m['id'],))
         db.execute("UPDATE instant_matches SET state='active' WHERE id=? AND learner_ready=1 AND partner_ready=1",(m['id'],))
+        active=current(db,u['id'])
+        if active and active['state']=='active':
+            create_instant_booking(db,active,now)
     elif action=='leave':
         m=current(db,u['id'])
         if m: end(db,m)
