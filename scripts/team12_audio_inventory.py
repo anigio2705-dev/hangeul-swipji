@@ -36,6 +36,7 @@ def inspect(root):
 
     problems, inventory = [], []
     # Path regex must match exactly relative path starting with './assets/hangul-audio/'
+    # Strict pattern: ./assets/hangul-audio/<filename>.mp3 with filename [a-zA-Z0-9_-]+ only
     path_regex = re.compile(r"\./assets/hangul-audio/[a-zA-Z0-9\-_]+\.mp3$")
 
     root_resolved = root.resolve(strict=False)
@@ -159,13 +160,13 @@ def inspect(root):
 
             # Limit read size to filesize (already known and safe)
             data_bytes = path.read_bytes()
+
+            # Safety check: Verify data_bytes is likely a valid mp3 header (not foolproof but better than nothing)
+            if len(data_bytes) < 10 or not (data_bytes.startswith(b'ID3') or (data_bytes[0] & 0xFF) == 0xFF):
+                problems.append({"word": word, "issue": "invalid_file_content", "path": src})
+                continue
         except Exception as e:
             problems.append({"word": word, "issue": "file_read_error", "path": src, "detail": str(e)})
-            continue
-
-        # Safety check: Verify data_bytes is likely a valid mp3 header (not foolproof but better than nothing)
-        if len(data_bytes) < 10 or not (data_bytes.startswith(b'ID3') or (data_bytes[0] & 0xFF) == 0xFF):
-            problems.append({"word": word, "issue": "invalid_file_content", "path": src})
             continue
 
         digest = hashlib.sha256(data_bytes).hexdigest()
@@ -181,7 +182,8 @@ def inspect(root):
             probe = subprocess.run([
                 "ffmpeg", "-v", "error", "-i", str(path), "-f", "null", "-"
             ], capture_output=True, text=True, timeout=10)
-            if probe.returncode != 0:
+            # Treat non-zero exit code and stderr as decode failure
+            if probe.returncode != 0 or probe.stderr.strip():
                 problems.append({"word": word, "issue": "decode_failed", "path": src, "detail": probe.stderr[:300]})
         except subprocess.SubprocessError as e:
             problems.append({"word": word, "issue": "ffmpeg_error", "path": src, "detail": str(e)})
