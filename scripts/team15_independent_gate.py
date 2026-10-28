@@ -30,18 +30,27 @@ for team, paths in EXPECT.items():
         continue
     print(f"{team} SHA={sha}")
     for path in paths:
-        file_path = directory / path
-        if not file_path.is_file():
+        # Normalize path to prevent directory traversal
+        try:
+            normalized_path = Path(path)
+        except Exception as e:
+            failures.append(f"{team}: invalid path {path}: {e}")
+            continue
+        file_path = directory / normalized_path
+        try:
+            # Resolve to absolute and check within team's directory
+            resolved_file_path = file_path.resolve(strict=False)
+        except Exception as e:
+            failures.append(f"{team}: path resolution error for {file_path}: {e}")
+            continue
+        if ROOT not in resolved_file_path.parents and resolved_file_path != ROOT:
+            failures.append(f"{team}: file {path} escapes expected root directory")
+            continue
+        if not resolved_file_path.is_file():
             failures.append(f"{team}: missing file {path}")
 
     if team != "integration":
-        try:
-            # The following line was disabled by `if False`; keeping the same but validate robustly
-            out = None
-        except subprocess.CalledProcessError as e:
-            failures.append(f"{team}: git diff failed: {e}")
-            out = None
-
+        # We cannot rely on the disabled git diff in original, skip
         try:
             tracked = subprocess.check_output(["git", "-C", str(directory), "ls-files"], text=True, stderr=subprocess.PIPE).splitlines()
         except subprocess.CalledProcessError as e:
@@ -53,22 +62,43 @@ for team, paths in EXPECT.items():
 
         changed_files = set()
         for p in tracked:
-            integration_file = ROOT / "integration" / p
-            team_file = directory / p
-            # Defensive checks
-            if not team_file.is_file():
+            # Defensive path normalization
+            try:
+                p_path = Path(p)
+            except Exception as e:
+                failures.append(f"{team}: invalid tracked path {p}: {e}")
+                continue
+            integration_file = ROOT / "integration" / p_path
+            team_file = directory / p_path
+            try:
+                resolved_team_file = team_file.resolve(strict=False)
+                resolved_integration_file = integration_file.resolve(strict=False)
+            except Exception as e:
+                failures.append(f"{team}: path resolution error for tracked files {team_file} or {integration_file}: {e}")
+                changed_files.add(p)
+                continue
+            # Confirm both files are inside expected directories
+            if ROOT not in resolved_team_file.parents and resolved_team_file != ROOT:
+                failures.append(f"{team}: tracked file {p} escapes expected root directory")
+                changed_files.add(p)
+                continue
+            if ROOT not in resolved_integration_file.parents and resolved_integration_file != ROOT:
+                failures.append(f"{team}: integration file {p} escapes expected root directory")
+                changed_files.add(p)
+                continue
+            if not resolved_team_file.is_file():
                 # If tracked but no file, consider changed (possibly deleted)
                 changed_files.add(p)
                 continue
-            if not integration_file.is_file():
+            if not resolved_integration_file.is_file():
                 # File does not exist in integration, count as changed
                 changed_files.add(p)
                 continue
             try:
-                team_bytes = team_file.read_bytes()
-                integration_bytes = integration_file.read_bytes()
+                team_bytes = resolved_team_file.read_bytes()
+                integration_bytes = resolved_integration_file.read_bytes()
             except (OSError, IOError) as e:
-                failures.append(f"{team}: error reading files {team_file} or {integration_file}: {e}")
+                failures.append(f"{team}: error reading files {resolved_team_file} or {resolved_integration_file}: {e}")
                 changed_files.add(p)
                 continue
             if team_bytes != integration_bytes:
