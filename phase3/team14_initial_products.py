@@ -96,6 +96,9 @@ def bind_server_booking_product(server_db, store, month_id, booking_id, product_
         raise SimError('FORBIDDEN', 'partner product requires partner role')
     if row['status'] not in ('test_paid', 'in_class', 'completed', 'test_settled'):
         raise SimError('INVALID_STATE', 'booking not eligible')
+    contract = verify_server_product_contract(server_db, booking_id)
+    if contract['product_code'] != product_code:
+        raise SimError('CONFLICT', 'requested product differs from server snapshot')
     result = create_simulated_package(store, month_id, [booking_id], duration,
                                       price, referral_bps)
     return dict(result, product_code=product_code, test_price_krw=price,
