@@ -1,5 +1,11 @@
 name: HQ autonomous isolated worker
 on:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - '.github/workflows/hq-autonomous-worker.yml'
+      - 'automation/hq_sandbox_worker.py'
+      - 'automation/worker_sandbox/**'
   workflow_dispatch:
     inputs:
       repair_fixture:
