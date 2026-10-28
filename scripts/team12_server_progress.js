@@ -10,7 +10,6 @@ function client(fetcher,storage,notify){const pending=new Set();let authenticate
  function changed(key,raw){const stage=keys.indexOf(key)+1;if(!stage)return;if(!storage.getItem('hs-team12-progress-owner'))return;for(const lesson of completed(raw))pending.add(stage+':'+(lesson+1));if(authenticated)void flush()}
  let flushing=false;
  async function flush(){if(flushing||!authenticated)return;flushing=true;try{for(const id of [...pending]){const [stage,lesson]=id.split(':').map(Number);try{await request('/api/free-progress',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({stage,lesson})});pending.delete(id)}catch(_){authenticated=false;break}}}finally{flushing=false}}
- }
  function enqueueAll(){for(const key of keys)changed(key,storage.getItem(key))}
  return {pull,changed,enqueueAll,flush,pending};}
 root.HSTeam12ServerProgress={keys,completed,merge,client};
