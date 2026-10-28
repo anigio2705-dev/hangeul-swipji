@@ -1,0 +1,42 @@
+name: HQ four independent workstyle reviews (isolated, bounded)
+on:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - 'automation/hq_workstyle_review.py'
+      - 'automation/test_hq_workstyle_review.py'
+      - '.github/workflows/hq-four-role-review.yml'
+permissions:
+  contents: read
+jobs:
+  independent-review:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        role: [development, quality, operations, cost]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment: hq-ai-pilot
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check read-only prompt boundaries
+        run: python -m unittest discover -s automation -p 'test_hq_workstyle_review.py' -v
+      - name: One bounded independent API call per reviewer (no writes)
+        env:
+          HQ_REVIEW_ROLE: ${{ matrix.role }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python automation/hq_workstyle_review.py
+      - name: Preserve separate opinions and actual token usage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hq-independent-review-${{ matrix.role }}
+          path: /tmp/hq-review-${{ matrix.role }}.json
+          if-no-files-found: ignore
+          retention-days: 14
