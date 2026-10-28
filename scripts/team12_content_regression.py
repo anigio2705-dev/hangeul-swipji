@@ -134,7 +134,7 @@ class Team12Regression(unittest.TestCase):
         for i, _ in enumerate(consonants):
             for j, _ in enumerate(vowels):
                 word = chr(0xAC00 + (i * 21 + j) * 28)
-                entry = records.get(word)
+                entry = records.get(word) if isinstance(records, dict) else None
                 # Validate entry if it exists and is dict
                 if entry is not None and not isinstance(entry, dict):
                     self.fail(f"Entry for {word} must be dict or None")
