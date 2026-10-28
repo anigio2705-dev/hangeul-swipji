@@ -15,6 +15,23 @@ EXPECT = {
 failures = []
 changes = {}
 
+
+def is_within_directory(base: Path, target: Path) -> bool:
+    try:
+        base = base.resolve(strict=True)
+        target = target.resolve(strict=True)
+    except FileNotFoundError:
+        # If the file doesn't exist, resolve(strict=True) fails; fallback to strict=False
+        base = base.resolve(strict=False)
+        target = target.resolve(strict=False)
+    except Exception:
+        return False
+    try:
+        target.relative_to(base)
+        return True
+    except ValueError:
+        return False
+
 for team, paths in EXPECT.items():
     directory = ROOT / team
     if not directory.is_dir():
@@ -30,27 +47,33 @@ for team, paths in EXPECT.items():
         continue
     print(f"{team} SHA={sha}")
     for path in paths:
-        # Normalize path to prevent directory traversal
+        # Defensive path normalization: ensure path is relative and does not escape team directory
         try:
             normalized_path = Path(path)
         except Exception as e:
             failures.append(f"{team}: invalid path {path}: {e}")
             continue
+        if normalized_path.is_absolute():
+            failures.append(f"{team}: absolute path not allowed: {path}")
+            continue
+        # Prevent any '..' elements in path parts
+        if any(part == '..' for part in normalized_path.parts):
+            failures.append(f"{team}: path traversal detected in {path}")
+            continue
+
         file_path = directory / normalized_path
         try:
-            # Resolve to absolute and check within team's directory
             resolved_file_path = file_path.resolve(strict=False)
         except Exception as e:
             failures.append(f"{team}: path resolution error for {file_path}: {e}")
             continue
-        if ROOT not in resolved_file_path.parents and resolved_file_path != ROOT:
-            failures.append(f"{team}: file {path} escapes expected root directory")
+        if not is_within_directory(directory, resolved_file_path):
+            failures.append(f"{team}: file {path} escapes team directory")
             continue
         if not resolved_file_path.is_file():
             failures.append(f"{team}: missing file {path}")
 
     if team != "integration":
-        # We cannot rely on the disabled git diff in original, skip
         try:
             tracked = subprocess.check_output(["git", "-C", str(directory), "ls-files"], text=True, stderr=subprocess.PIPE).splitlines()
         except subprocess.CalledProcessError as e:
@@ -62,12 +85,16 @@ for team, paths in EXPECT.items():
 
         changed_files = set()
         for p in tracked:
-            # Defensive path normalization
             try:
                 p_path = Path(p)
             except Exception as e:
                 failures.append(f"{team}: invalid tracked path {p}: {e}")
                 continue
+            if p_path.is_absolute() or any(part == '..' for part in p_path.parts):
+                failures.append(f"{team}: tracked path traversal detected: {p}")
+                changed_files.add(p)
+                continue
+
             integration_file = ROOT / "integration" / p_path
             team_file = directory / p_path
             try:
@@ -77,23 +104,23 @@ for team, paths in EXPECT.items():
                 failures.append(f"{team}: path resolution error for tracked files {team_file} or {integration_file}: {e}")
                 changed_files.add(p)
                 continue
-            # Confirm both files are inside expected directories
-            if ROOT not in resolved_team_file.parents and resolved_team_file != ROOT:
-                failures.append(f"{team}: tracked file {p} escapes expected root directory")
+
+            if not is_within_directory(ROOT / team, resolved_team_file):
+                failures.append(f"{team}: tracked file {p} escapes team directory")
                 changed_files.add(p)
                 continue
-            if ROOT not in resolved_integration_file.parents and resolved_integration_file != ROOT:
-                failures.append(f"{team}: integration file {p} escapes expected root directory")
+            if not is_within_directory(ROOT / "integration", resolved_integration_file):
+                failures.append(f"{team}: integration file {p} escapes integration directory")
                 changed_files.add(p)
                 continue
+
             if not resolved_team_file.is_file():
-                # If tracked but no file, consider changed (possibly deleted)
                 changed_files.add(p)
                 continue
             if not resolved_integration_file.is_file():
-                # File does not exist in integration, count as changed
                 changed_files.add(p)
                 continue
+
             try:
                 team_bytes = resolved_team_file.read_bytes()
                 integration_bytes = resolved_integration_file.read_bytes()
@@ -106,7 +133,6 @@ for team, paths in EXPECT.items():
 
         changes[team] = changed_files
 
-# Check for overlaps across teams
 for left in changes:
     for right in changes:
         if left >= right:
