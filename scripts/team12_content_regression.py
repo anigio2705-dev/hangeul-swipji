@@ -107,6 +107,7 @@ class Team12Regression(unittest.TestCase):
         except json.JSONDecodeError as e:
             self.fail(f"Invalid JSON in {pilot_file}: {e}")
         ids = {lesson["unitId"] for stage in curriculum.get("stages", []) for lesson in stage.get("lessons", []) if isinstance(lesson, dict) and isinstance(lesson.get("unitId"), (str, int))}
+        self.assertTrue(all((isinstance(unit, dict) and "id" in unit and unit["id"] is not None) for unit in pilot.get("units", [])), "All units must be dicts with id")
         units = pilot.get("units", [])
         self.assertIsInstance(units, list, "units should be list")
         self.assertEqual(len(units), 12)
@@ -127,6 +128,9 @@ class Team12Regression(unittest.TestCase):
         consonants = "\u3131\u3132\u3134\u3137\u3138\u3139\u3141\u3142\u3143\u3145\u3146\u3147\u3148\u3149\u314a\u314b\u314c\u314d\u314e"
         vowels = "\u314f\u3150\u3151\u3152\u3153\u3154\u3155\u3156\u3157\u3158\u3159\u315a\u315b\u315c\u315d\u315e\u315f\u3160\u3161\u3162\u3163"
         counts = {"ready_unapproved": 0, "held": 0, "missing": 0}
+        total_expected = len(consonants) * len(vowels)
+        self.assertEqual(total_expected, 399, "Expected 399 total syllables")
+
         for i, _ in enumerate(consonants):
             for j, _ in enumerate(vowels):
                 word = chr(0xAC00 + (i * 21 + j) * 28)
