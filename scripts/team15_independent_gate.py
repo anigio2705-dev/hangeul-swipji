@@ -31,6 +31,20 @@ def is_within_directory(base: Path, target: Path) -> bool:
     except ValueError:
         return False
 
+
+def assert_valid_relative_path(team: str, path_str: str) -> Path:
+    if not isinstance(path_str, str):
+        raise ValueError(f"path is not a string: {path_str}")
+    normalized_path = Path(path_str)
+    if normalized_path.is_absolute():
+        raise ValueError(f"absolute path not allowed: {path_str}")
+    if any(part == '..' for part in normalized_path.parts):
+        raise ValueError(f"path traversal detected in {path_str}")
+    if any(part == '' or part == '.' for part in normalized_path.parts):
+        raise ValueError(f"invalid path segment in {path_str}")
+    return normalized_path
+
+
 for team, paths in EXPECT.items():
     directory = ROOT / team
     if not directory.is_dir():
@@ -55,24 +69,10 @@ for team, paths in EXPECT.items():
 
     print(f"{team} SHA={sha}")
     for path in paths:
-        # Defensive path normalization: ensure path is relative and does not escape team directory
         try:
-            if not isinstance(path, str):
-                raise ValueError(f"path is not a string: {path}")
-            normalized_path = Path(path)
+            normalized_path = assert_valid_relative_path(team, path)
         except Exception as e:
             failures.append(f"{team}: invalid path {path}: {e}")
-            continue
-        if normalized_path.is_absolute():
-            failures.append(f"{team}: absolute path not allowed: {path}")
-            continue
-        # Reject any '..' elements in path parts
-        if any(part == '..' for part in normalized_path.parts):
-            failures.append(f"{team}: path traversal detected in {path}")
-            continue
-        # Reject empty parts or dot-only parts
-        if any(part == '' or part == '.' for part in normalized_path.parts):
-            failures.append(f"{team}: invalid path segment in {path}")
             continue
 
         file_path = directory / normalized_path
@@ -108,27 +108,14 @@ for team, paths in EXPECT.items():
         changed_files = set()
         for p in tracked:
             try:
-                if not isinstance(p, str):
-                    raise ValueError(f"tracked path is not a string: {p}")
-                p_path = Path(p)
+                normalized_p = assert_valid_relative_path(team, p)
             except Exception as e:
                 failures.append(f"{team}: invalid tracked path {p}: {e}")
-                continue
-            if p_path.is_absolute():
-                failures.append(f"{team}: absolute path not allowed in tracked paths: {p}")
-                changed_files.add(p)
-                continue
-            if any(part == '..' for part in p_path.parts):
-                failures.append(f"{team}: tracked path traversal detected: {p}")
-                changed_files.add(p)
-                continue
-            if any(part == '' or part == '.' for part in p_path.parts):
-                failures.append(f"{team}: invalid segment in tracked path: {p}")
-                changed_files.add(p)
+                changed_files.add(p)  # treat as changed
                 continue
 
-            integration_file = ROOT / "integration" / p_path
-            team_file = directory / p_path
+            integration_file = ROOT / "integration" / normalized_p
+            team_file = directory / normalized_p
             try:
                 resolved_team_file = team_file.resolve(strict=True)
             except FileNotFoundError:
