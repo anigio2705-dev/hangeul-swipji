@@ -91,6 +91,16 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
   if not event_id or len(event_id) == 0:
     raise SimError('INVALID_INPUT', 'event_id must be a non-empty string')
 
+  # New stricter check for event_id: reject if contains any control chars or non-printable ASCII
+  for c in event_id:
+   if ord(c) < 33 or ord(c) > 126:
+    raise SimError('INVALID_INPUT', 'event_id contains control or non-printable characters')
+
+  # New stricter check for student_id and lesson_id: disallow leading or trailing whitespace
+  for val, name in [(student_id, 'student_id'), (lesson_id, 'lesson_id')]:
+   if val != val.strip():
+    raise SimError('INVALID_INPUT', f'{name} must not have leading or trailing whitespace')
+
   signature = json.dumps([student_id, lesson_id, gross_krw, list(depth_rates_bps), commission_bps], separators=(',', ':'))
   self.db.execute('BEGIN IMMEDIATE')
   try:
