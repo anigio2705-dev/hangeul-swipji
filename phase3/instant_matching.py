@@ -1,5 +1,6 @@
 """Opt-in instant matching in the isolated review DB; no hosted DB or money."""
 import secrets
+import json
 import time
 import server
 
@@ -18,6 +19,12 @@ def initialize(db):
       created REAL NOT NULL, room TEXT NOT NULL UNIQUE, CHECK(learner_id<>partner_id));
     CREATE UNIQUE INDEX IF NOT EXISTS instant_learner_open ON instant_matches(learner_id) WHERE state<>'ended';
     CREATE UNIQUE INDEX IF NOT EXISTS instant_partner_open ON instant_matches(partner_id) WHERE state<>'ended';
+    CREATE TABLE IF NOT EXISTS instant_lesson_events(
+      event_id TEXT PRIMARY KEY, booking_id TEXT NOT NULL REFERENCES bookings(id),
+      actor_id TEXT NOT NULL REFERENCES users(id), event_type TEXT NOT NULL
+      CHECK(event_type IN ('lesson.started','lesson.completed','booking.cancelled')),
+      created REAL NOT NULL, payload TEXT NOT NULL);
+    CREATE INDEX IF NOT EXISTS instant_lesson_events_booking ON instant_lesson_events(booking_id);
     ''')
 
 
@@ -158,10 +165,45 @@ def transaction_event_contract(booking_id, event_id, event_type, *, lesson_index
         event.update(monthId=month_id,lessonIndex=lesson_index)
     return event
 
+
+def record_lesson_event(db, user, booking_id, event_id, event_type):
+    """Persist an authenticated, idempotent mock event for Team14 consumption.
+
+    Does not settle money or mutate the booking lifecycle owned by Team11.
+    """
+    if event_type not in ('lesson.started','lesson.completed','booking.cancelled'):
+        raise server.Error('지원하지 않는 수업 이벤트',400)
+    if not isinstance(booking_id,str) or not booking_id or not isinstance(event_id,str) or not event_id:
+        raise server.Error('예약 및 이벤트 식별자가 필요합니다',400)
+    b=db.execute('SELECT * FROM bookings WHERE id=?',(booking_id,)).fetchone()
+    if not b: raise server.Error('예약이 없습니다',404)
+    if user['id'] not in (b['learner_id'],b['teacher_id']):
+        raise server.Error('예약 참여자만 기록할 수 있습니다',403)
+    teacher=db.execute('SELECT role,approved FROM users WHERE id=?',(b['teacher_id'],)).fetchone()
+    if not teacher or teacher['role'] not in ('teacher','partner') or not teacher['approved']:
+        raise server.Error('강사 승인이 유효하지 않습니다',403)
+    existing=db.execute('SELECT * FROM instant_lesson_events WHERE event_id=?',(event_id,)).fetchone()
+    if existing:
+        if (existing['booking_id'],existing['actor_id'],existing['event_type']) != (booking_id,user['id'],event_type):
+            raise server.Error('다른 요청에 사용된 이벤트 식별자입니다',409)
+        return json.loads(existing['payload'])
+    allowed={'lesson.started':('test_paid','in_class'),
+             'lesson.completed':('completed','test_settled'),
+             'booking.cancelled':('cancelled','refunded','expired')}
+    if b['status'] not in allowed[event_type]:
+        raise server.Error('예약 상태와 이벤트가 일치하지 않습니다',409)
+    payload=transaction_event_contract(booking_id,event_id,event_type)
+    payload.update(actorId=user['id'],learnerId=b['learner_id'],teacherId=b['teacher_id'],
+                   amount=b['price'],bookingStatus=b['status'],deliveryStatus='pending')
+    db.execute('INSERT INTO instant_lesson_events VALUES(?,?,?,?,?,?)',
+               (event_id,booking_id,user['id'],event_type,time.time(),json.dumps(payload,ensure_ascii=False)))
+    return payload
+
+
 def route(handler, db, path, data):
     u=handler.user(db)
     action=path.removeprefix('/api/instant/')
-    allowed={'reservations':'GET','booking-room':'POST','status':'GET','join':'POST','heartbeat':'POST','ready':'POST','leave':'POST'}
+    allowed={'reservations':'GET','booking-room':'POST','lesson-event':'POST','status':'GET','join':'POST','heartbeat':'POST','ready':'POST','leave':'POST'}
     if action not in allowed: raise server.Error('페이지 없음',404)
     if handler.command!=allowed[action]: raise server.Error('지원하지 않는 요청',405)
     now=time.time()
@@ -170,6 +212,8 @@ def route(handler, db, path, data):
         return {'reservations':reservation_snapshot(db,u['id'])},None
     if action=='booking-room':
         return authorized_booking_room(db,data.get('bookingId'),u),None
+    if action=='lesson-event':
+        return {'event':record_lesson_event(db,u,data.get('bookingId'),data.get('eventId'),data.get('type'))},None
     if action=='join':
         if not eligible(db,u,now):
             raise server.Error('학생 또는 승인된 대화 파트너로 참여하세요. 예약 수업 중에는 대기할 수 없습니다.',403)
