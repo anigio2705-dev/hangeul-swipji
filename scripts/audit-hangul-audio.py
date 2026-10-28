@@ -304,7 +304,10 @@ except Exception as e:
 
 print(json.dumps(report['counts'], ensure_ascii=False))
 for x in recordings:
-    if isinstance(x.get('signalWarnings'), list) and x['signalWarnings']:
-        warnings_list = [w for w in x['signalWarnings'] if isinstance(w, str)]
-        if warnings_list:
-            print(x.get('text', ''), ', '.join(warnings_list))
+    warnings_list = []
+    if isinstance(x, dict):
+        sig_warns = x.get('signalWarnings')
+        if isinstance(sig_warns, list) and sig_warns:
+            warnings_list = [w for w in sig_warns if isinstance(w, str)]
+    if warnings_list:
+        print(x.get('text', ''), ', '.join(warnings_list))
