@@ -32,8 +32,7 @@ TASKS = {
         ("scripts/team15_independent_gate.py", "Harden evidence gate diagnostics without weakening verification"),
         ("scripts/team15_cross_team_smoke.py", "Improve cross-team smoke-test failure reporting")]),
     "16": ("team16/global-growth-marketing-20261028", [
-        ("scripts/audit-professional-96.py", "Harden multilingual course audit input validation"),
-        ("scripts/render-audio-credits.py", "Improve multilingual audio attribution error handling")]),
+        ("scripts/render-audio-credits.py", "Improve audio attribution and license display validation")]),
 }
 # Baseline and candidate both use same safe, read-only checks.
 CHECKS = {
@@ -42,7 +41,7 @@ CHECKS = {
     "13": [["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_instant_matching.py"]],
     "14": [["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_team14_referral_store.py"]],
     "15": [["python", "-m", "py_compile", "scripts/team15_independent_gate.py"]],
-    "16": [["python", "-m", "py_compile", "scripts/audit-professional-96.py"]],
+    "16": [["python", "-m", "py_compile", "scripts/render-audio-credits.py"]],
 }
 FORBIDDEN_CALLS = {"eval", "exec", "compile", "__import__"}
 FORBIDDEN_IMPORTS = {"requests", "urllib", "http", "socket", "subprocess", "ctypes"}
