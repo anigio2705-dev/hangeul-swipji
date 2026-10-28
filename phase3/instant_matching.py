@@ -271,6 +271,36 @@ def deliver_mock_events(db, consumer, limit=100):
     return results
 
 
+
+def verified_event_for_team14(db, event_id):
+    """Resolve Team14's trusted event and booking callbacks from server DB only.
+
+    A monthly settlement mapping is required; no invented month or lesson IDs.
+    This is an internal adapter, never a public HTTP endpoint.
+    """
+    if not isinstance(event_id,str) or not event_id:
+        raise server.Error('이벤트 식별자 필요',400)
+    row=db.execute("""SELECT e.*,b.learner_id,b.teacher_id,b.status,b.price,
+                      u.role,u.approved
+                      FROM instant_lesson_events e JOIN bookings b ON b.id=e.booking_id
+                      JOIN users u ON u.id=b.teacher_id WHERE e.event_id=?""",
+                   (event_id,)).fetchone()
+    if not row: raise server.Error('이벤트가 없습니다',404)
+    if row['role'] not in ('teacher','partner') or not row['approved']:
+        raise server.Error('강사 승인이 유효하지 않습니다',403)
+    payload=json.loads(row['payload'])
+    if (payload.get('eventId')!=event_id or payload.get('bookingId')!=row['booking_id']
+        or payload.get('learnerId')!=row['learner_id']
+        or payload.get('teacherId')!=row['teacher_id']
+        or payload.get('amount')!=row['price']
+        or payload.get('bookingStatus')!=row['status']):
+        raise server.Error('이벤트와 서버 예약 데이터가 일치하지 않습니다',409)
+    return {'eventId':event_id,'bookingId':row['booking_id'],
+            'learnerId':row['learner_id'],'teacherId':row['teacher_id'],
+            'amount':row['price'],'status':row['status'],
+            'type':row['event_type'],'verifiedByServer':True}
+
+
 def route(handler, db, path, data):
     u=handler.user(db)
     action=path.removeprefix('/api/instant/')
