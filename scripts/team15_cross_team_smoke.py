@@ -83,11 +83,18 @@ for label, team, terms in [
             # File disappeared or invalid path; skip
             continue
         try:
-            if p.stat().st_size < 2_000_000:
-                try:
-                    pieces.append(p.read_text(encoding="utf-8"))
-                except UnicodeDecodeError:
-                    pieces.append(p.read_text(encoding="utf-8", errors="replace"))
+            size = p.stat().st_size
+        except OSError as e:
+            issues.append(f"{label}: error accessing file size {p}: {e}")
+            continue
+        if size >= 2_000_000:
+            # Skip very large files silently
+            continue
+        try:
+            try:
+                pieces.append(p.read_text(encoding="utf-8"))
+            except UnicodeDecodeError:
+                pieces.append(p.read_text(encoding="utf-8", errors="replace"))
         except OSError as e:
             issues.append(f"{label}: error reading file {p}: {e}")
     source = "\n".join(pieces)
