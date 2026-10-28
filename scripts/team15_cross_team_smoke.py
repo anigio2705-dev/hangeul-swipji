@@ -19,7 +19,7 @@ for label, (team, candidates, tokens) in checks.items():
     found = []
     for name in candidates:
         # input validation: name must be a non-empty string and a relative path with no absolute or upwards traversal
-        if not isinstance(name, str) or name.strip() == '':
+        if not isinstance(name, str) or not name.strip():
             issues.append(f"{label}: invalid candidate filename (not a non-empty string): {repr(name)}")
             continue
         path_obj = Path(name)
