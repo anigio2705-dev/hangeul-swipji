@@ -61,7 +61,8 @@ def settle_verified_instant_event(server_db, settlement_store, referral_store, e
         row=server_db.execute('SELECT referred_by FROM users WHERE id=?',(uid,)).fetchone()
         if row is None:raise SimError('NOT_FOUND','learner missing')
         return row['referred_by']
-    result=settle_with_referral(settlement_store,referral_store,event_id,
+    from team14_recovery import settle_recoverably
+    result=settle_recoverably(settlement_store,referral_store,event_id,
                                 lambda eid:event if eid==event_id else None,
                                 resolve_booking,parent_of)
     return dict(event_id=event_id,booking_id=booking_id,month_id=month_id,
