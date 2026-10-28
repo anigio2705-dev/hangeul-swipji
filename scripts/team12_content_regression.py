@@ -67,7 +67,12 @@ class Team12Regression(unittest.TestCase):
         self.assertIn("counts", plan)
         counts = plan["counts"]
         self.assertIsInstance(counts, dict, "counts should be a dict")
-        total_counts = sum(v for v in counts.values() if isinstance(v, int))
+        total_counts = 0
+        for v in counts.values():
+            if isinstance(v, int) and v >= 0:
+                total_counts += v
+            else:
+                self.fail(f"Invalid count value in counts dict: {v}")
         self.assertEqual(len(cells), total_counts)
 
     def test_professional_96_unique_and_linked(self):
