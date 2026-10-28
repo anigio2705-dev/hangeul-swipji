@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       chain_depth:
-        description: 'Bounded autonomous continuation depth (0-2)'
+        description: 'Bounded autonomous continuation depth (0-23)'
         required: false
         default: '0'
 permissions:
@@ -49,7 +49,7 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           HQ_TEAM: ${{ matrix.team }}
-          HQ_MAX_CALLS: '4'
+          HQ_MAX_CALLS: '2'
           GITHUB_REF_NAME: ${{ github.ref_name }}
         run: python /tmp/hq_six_developers.py
       - name: Save team result
@@ -81,7 +81,7 @@ jobs:
           python - <<'PY'
           import json, os, pathlib, subprocess
           depth = int(os.environ["DEPTH"])
-          if depth < 0 or depth >= 2:
+          if depth < 0 or depth >= 23:
               print("Chain limit reached; no further API spending")
               raise SystemExit(0)
           reports = list(pathlib.Path("reports").rglob("team-result.json"))
