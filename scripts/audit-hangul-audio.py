@@ -266,7 +266,11 @@ for word, item in targets.items():
     item['playbackAvailable'] = item['recordingAvailable'] and not recs.get(word, {}).get('disabled', False)
     item['listeningStatus'] = 'pending' if item['recordingAvailable'] else 'no-recording'
     if item['recordingAvailable']:
-        item['src'] = recs[word].get('src', '')
+        src = recs[word].get('src')
+        if isinstance(src, str):
+            item['src'] = src
+        else:
+            item['src'] = ''
 
 report = {
     'version': '20261026-human-only',
