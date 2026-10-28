@@ -20,7 +20,7 @@ Legacy `users.role` stays singleton and `users.approved` remains the legacy gate
 Errors: unauthorized role -> FORBIDDEN, invalid lesson kind -> VALIDATION_ERROR; legacy HTTP 400/401/403/404/409 maps to VALIDATION_ERROR/UNAUTHENTICATED/FORBIDDEN/NOT_FOUND/CONFLICT. Unsupported statuses fail closed. Match idle/waiting are API states only; offered/active/ended persisted.
 
 ## Regression and evidence
-- Prior 31 methods (21 HQ-confirmed earlier, 10 added in fifth pass) retained; 11 new `test_common_shared_boundary.py` methods; expected **42** total.
+- Prior 31 methods (21 HQ-confirmed earlier, 10 added in fifth pass) retained; 12 new `test_common_shared_boundary.py` methods; expected **43** total.
 - GitHub Actions exact checkout workflow `.github/workflows/team11-contract-tests.yml` runs `python -m unittest discover -s phase3 -p 'test_common_*.py' -v` on team11 branch push. The sixth-pass push should trigger it **if Actions enabled**.
 - Actual Actions run URL, checkout SHA, exit code and pass/fail counts: **not obtained**. No assertion of PASS. Source execution remains HOLD until logs are reviewed.
 - The code was committed without executing GitHub-hosted CI through this connector; no Actions dispatch/list-runs action available here.
@@ -33,4 +33,6 @@ Errors: unauthorized role -> FORBIDDEN, invalid lesson kind -> VALIDATION_ERROR;
 
 ## Commit evidence
 - Shared boundary `5769765a7002967670de4e94d3ac15aa3a0c0059`
-- Eleven tests `1a323d574b85b16c7cfcd65f52012d61595e42e4`
+- Initial eleven tests `1a323d574b85b16c7cfcd65f52012d61595e42e4`
+- Legacy teacher conversation compatibility fix `40c39de91f626743be08071933f81b7bacb7649c`
+- Additional regression test `ecfd0c4a07f0e65e78a107bc5c5bfc1670e9cf3f`
