@@ -170,9 +170,9 @@ for word, meta in manifest.get('recordings', {}).items():
     warnings = []
     if not active:
         warnings.append('\ubb34\uc74c')
-    if lead >= 0.5:
+    if lead > 0.5:
         warnings.append('\uc55e \ubb34\uc74c 0.5\ucd08 \ucd08\uacfc')
-    if tail >= 0.8:
+    if tail > 0.8:
         warnings.append('\ub4a4 \ubb34\uc74c 0.8\ucd08 \ucd08\uacfc')
     if peak >= 32760:
         warnings.append('\ucd5c\ub300 \uc9c4\ud3ed \ud655\uc778 \ud544\uc694')
