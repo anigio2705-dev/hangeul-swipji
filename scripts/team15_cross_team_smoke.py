@@ -14,6 +14,7 @@ checks = {
     "13_room": ("team13", ["phase3/server.py"], ["booking", "room"]),
     "14_refund": ("team14", ["phase3/team14_monthly_sim.py"], ["refund", "event"]),
 }
+
 for label, (team, candidates, tokens) in checks.items():
     found = []
     for name in candidates:
@@ -22,8 +23,8 @@ for label, (team, candidates, tokens) in checks.items():
         if path_obj.is_absolute() or '..' in path_obj.parts or name.strip() == '':
             issues.append(f"{label}: invalid candidate filename (absolute, parent traversal, or empty): {repr(name)}")
             continue
+        # Compose full path and ensure it is normalized and within root
         path = root / team / path_obj
-        # Ensure the file path is normalized and within root
         try:
             resolved_path = path.resolve(strict=False)
         except RuntimeError:
@@ -50,26 +51,27 @@ for label, team, terms in [
     ("13_to_14", "team14", ["refund", "booking"]),
 ]:
     folder = root / team / "phase3"
+    py_files = []
     try:
         resolved_folder = folder.resolve(strict=True)
         try:
             resolved_folder.relative_to(root)
         except ValueError:
             issues.append(f"{label}: invalid folder path outside of root {resolved_folder}")
-            py_files = []
             continue
     except FileNotFoundError as e:
         issues.append(f"{label}: folder does not exist {folder}: {e}")
-        py_files = []
+        continue
     except RuntimeError:
         issues.append(f"{label}: invalid folder path {folder}")
+        continue
+
+    try:
+        py_files = list(folder.glob("*.py"))
+    except OSError as e:
+        issues.append(f"{label}: error accessing folder {folder}: {e}")
         py_files = []
-    else:
-        try:
-            py_files = list(folder.glob("*.py"))
-        except OSError as e:
-            issues.append(f"{label}: error accessing folder {folder}: {e}")
-            py_files = []
+
     pieces = []
     for p in py_files:
         try:
@@ -121,4 +123,5 @@ except Exception as err:
     sys.exit(1)
 else:
     print(output)
+    # Report failure with exit=1 if any issues found; else exit=0
     sys.exit(1 if issues else 0)
