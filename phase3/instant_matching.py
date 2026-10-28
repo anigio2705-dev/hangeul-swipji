@@ -258,7 +258,7 @@ def record_lesson_event(db, user, booking_id, event_id, event_type):
         ).fetchone()[0]!=2:
             raise server.Error('양측 수업 연결 확인이 완료되지 않았습니다',409)
     teacher=db.execute('SELECT role,approved FROM users WHERE id=?',(b['teacher_id'],)).fetchone()
-    if not teacher or teacher['role'] not in ('teacher','partner') or not teacher['approved']:
+    if event_type != 'booking.cancelled' and (not teacher or teacher['role'] not in ('teacher','partner') or not teacher['approved']):
         raise server.Error('강사 승인이 유효하지 않습니다',403)
     existing=db.execute('SELECT * FROM instant_lesson_events WHERE event_id=?',(event_id,)).fetchone()
     if existing:
