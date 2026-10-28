@@ -1,0 +1,176 @@
+"""Executable, evidence-gated contracts for the canonical 160-item backlog.
+
+One primary team owns each numbered item. Supporting teams can submit scoped
+work, but neither AI output nor a green CI alone grants final completion.
+"""
+import hashlib
+import json
+import re
+from pathlib import Path
+
+ITEM = re.compile(r"^(\d{1,3})\. \[([ xX])\] (.+)$", re.MULTILINE)
+TEAM_OWNERS = (
+    (1, 10, "15", ("11",)), (11, 20, "11", ("15",)),
+    (21, 30, "13", ("15",)), (31, 40, "11", ("13",)),
+    (41, 50, "12", ("13",)), (51, 60, "12", ("11", "15", "16")),
+    (61, 70, "12", ("16",)), (71, 80, "14", ("13",)),
+    (81, 90, "13", ("14",)), (91, 100, "13", ("14", "15")),
+    (101, 120, "14", ("15",)), (121, 130, "14", ("11", "15")),
+    (131, 140, "11", ("13", "15")), (141, 150, "16", ("13", "15")),
+    (151, 160, "15", ("11", "12", "13", "14", "16")),
+)
+# A gate is an actual external, browser, legal, or representative check; never
+# allow an AI to replace it with an assertion.
+EXTERNAL_GATES = frozenset({
+    13, 14, 15, 16, 17, 18, 20, 23, 24, 25, 26, 27, 29, 30,
+    55, 56, 57, 58, 60, 69, 70, 107, 121, 126, 130, 136,
+    146, 150, 151, 152, 154, 155,
+})
+APPROVAL_GATES = frozenset({6, 14, 15, 26, 60, 70, 91, 107, 130, 150, 152, 154, 155})
+# Explicit blocking dependencies, not a global serial barrier.
+DEPENDENCIES = {
+    15: (12, 13, 14), 16: (15,), 20: (16, 17, 18, 19),
+    26: (22, 23, 24, 25), 30: (25, 26, 27, 29),
+    57: (51, 52, 54, 55, 56), 58: (57,),
+    110: (101, 102, 103, 104), 115: (111, 112, 114),
+    130: (107, 121, 122, 124, 125, 126, 127, 128, 129),
+    154: (131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 151, 152, 153),
+}
+# Exclusive file ownership, with real backlog item numbers rather than generic
+# "hardening" requests. Team 11/16 support some education-owned items.
+CURATED_TARGETS = {
+    "11": ((51, "scripts/audit-hangul-audio.py"),
+           (56, "scripts/find-human-audio-sources.py")),
+    "12": ((41, "scripts/team12_content_regression.py"),
+           (52, "scripts/team12_audio_inventory.py")),
+    "13": ((22, "phase3/instant_matching.py"),
+           (47, "phase3/learning.py")),
+    "14": ((109, "phase3/team14_referral_store.py"),
+           (115, "phase3/team14_refund_workflow.py")),
+    "15": ((8, "scripts/team15_independent_gate.py"),
+           (9, "scripts/team15_cross_team_smoke.py")),
+    "16": ((61, "scripts/audit-professional-96.py"),
+           (55, "scripts/render-audio-credits.py")),
+}
+STATES = frozenset({"unverified", "in_progress", "blocked", "retry", "code_verified", "complete"})
+
+def contracts(backlog_text):
+    matches = [(int(n), flag.lower() == "x", title.strip())
+               for n, flag, title in ITEM.findall(backlog_text)]
+    if [number for number, _, _ in matches] != list(range(1, 161)):
+        raise ValueError("Master backlog must contain exactly 160 ordered, unique items")
+    result = {}
+    for number, checked, criterion in matches:
+        if not criterion:
+            raise ValueError("Empty acceptance criterion: " + str(number))
+        owner, helpers = next((owner, helpers) for lo, hi, owner, helpers
+                              in TEAM_OWNERS if lo <= number <= hi)
+        result[number] = {
+            "number": number, "criterion": criterion,
+            "owner": owner, "support": list(helpers),
+            "dependencies": list(DEPENDENCIES.get(number, ())),
+            "external_gate": number in EXTERNAL_GATES,
+            "approval_gate": number in APPROVAL_GATES,
+            "master_checked": checked,
+            "evidence_required": [
+                "actual_changed_file_and_commit", "independent_test_result",
+                "successful_relevant_CI", "backlog_specific_review",
+            ] + (["real_world_evidence"] if number in EXTERNAL_GATES else [])
+              + (["representative_approval"] if number in APPROVAL_GATES else []),
+        }
+    return result
+
+def load_catalog(backlog_path):
+    return contracts(Path(backlog_path).read_text(encoding="utf-8"))
+
+def next_assignment(team, catalog, evidence=None, failures=None):
+    """Skip already code-verified work and repeat failures; keep tasks isolated."""
+    if team not in CURATED_TARGETS:
+        raise ValueError("Unknown team")
+    evidence, failures = evidence or {}, failures or {}
+    for number, path in CURATED_TARGETS[team]:
+        task = catalog[number]
+        if team != task["owner"] and team not in task["support"]:
+            raise ValueError("Team has no authority for item " + str(number))
+        state = evidence.get(str(number), {}).get("status", "unverified")
+        if state not in STATES:
+            raise ValueError("Invalid task state")
+        if state in ("code_verified", "complete", "blocked"):
+            continue
+        if any(evidence.get(str(dep), {}).get("status") != "complete"
+               for dep in task["dependencies"]):
+            continue
+        retry = failures.get(str(number), {})
+        attempts = retry.get("attempts", 0)
+        if not isinstance(attempts, int) or attempts < 0:
+            raise ValueError("Invalid retry count")
+        if attempts >= 2:
+            continue
+        instruction = retry.get("repair_instruction", "")
+        if instruction and (not isinstance(instruction, str) or len(instruction) > 1200):
+            raise ValueError("Invalid repair instruction")
+        return {
+            "team": team, "task_number": number, "path": path,
+            "owner": task["owner"], "support": task["support"],
+            "acceptance_criterion": task["criterion"],
+            "required_evidence": task["evidence_required"],
+            "attempt": attempts + 1,
+            "repair_instruction": instruction,
+            "mode": "repair" if instruction else "develop",
+        }
+    return None
+
+def verify_submission(assignment, submission, trusted):
+    """Trusted evidence must come from independent CI/GitHub inspection.
+
+    The developer's own 'passed' flag is intentionally ignored.
+    """
+    number, path = assignment["task_number"], assignment["path"]
+    sha = submission.get("commit", "")
+    if not isinstance(sha, str) or not re.fullmatch(r"[a-f0-9]{40}", sha):
+        return {"number": number, "verdict": "RETRY", "repair_instruction": "Submit actual 40-character commit SHA."}
+    if trusted.get("branch_head") != sha:
+        return {"number": number, "verdict": "RETRY", "repair_instruction": "Commit is not verified at isolated branch HEAD; fetch and reconcile."}
+    if trusted.get("changed_files") != [path]:
+        return {"number": number, "verdict": "RETRY", "repair_instruction": "Limit change to assigned file; independently inspect git diff."}
+    if trusted.get("independent_test") != "success":
+        return {"number": number, "verdict": "RETRY", "repair_instruction": "Fix independent regression failure: " + str(trusted.get("test_error", "unknown"))[:400]}
+    if trusted.get("ci_conclusion") != "success":
+        return {"number": number, "verdict": "RETRY", "repair_instruction": "Obtain successful relevant CI for exact commit; do not reuse older green runs."}
+    if not trusted.get("ci_url", "").startswith("https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/"):
+        return {"number": number, "verdict": "RETRY", "repair_instruction": "Supply verified GitHub Actions run URL."}
+    return {"number": number, "verdict": "CODE_VERIFIED",
+            "note": "Requires separate backlog review and external/approval gates before final completion.",
+            "commit": sha, "ci_url": trusted["ci_url"]}
+
+def make_report(backlog_text, evidence=None, failures=None):
+    catalog = contracts(backlog_text)
+    evidence, failures = evidence or {}, failures or {}
+    return {
+        "schema": 1,
+        "backlog_sha256": hashlib.sha256(backlog_text.encode()).hexdigest(),
+        "total": 160,
+        "final_complete": sum(evidence.get(str(n), {}).get("status") == "complete"
+                              and catalog[n]["master_checked"] for n in catalog),
+        "assignments": {team: next_assignment(team, catalog, evidence, failures)
+                        for team in CURATED_TARGETS},
+        "contracts": list(catalog.values()),
+        "warning": "An assignment or successful code check is not a finished public feature.",
+    }
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--backlog", required=True)
+    parser.add_argument("--evidence")
+    parser.add_argument("--failures")
+    parser.add_argument("--output", required=True)
+    args = parser.parse_args()
+    evidence = json.loads(Path(args.evidence).read_text()) if args.evidence else {}
+    failures = json.loads(Path(args.failures).read_text()) if args.failures else {}
+    report = make_report(Path(args.backlog).read_text(encoding="utf-8"), evidence, failures)
+    Path(args.output).write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(json.dumps({"final_complete": report["final_complete"], "assignments": report["assignments"]}, ensure_ascii=False))
+
+if __name__ == "__main__":
+    main()
