@@ -70,11 +70,15 @@ def decide_refund(store, request_id, decision, reviewer):
             # Validate amount_krw is positive integer
             if not isinstance(row['amount_krw'], int) or row['amount_krw'] <= 0:
                 raise SimError('VALIDATION_ERROR', 'invalid refund amount')
-            # Verify 'reason' is a non-empty string (business rule enhancement)
-            if not isinstance(row['reason'], str) or not row['reason'].strip():
-                raise SimError('VALIDATION_ERROR', 'refund reason required')
-            # Also ensure reason field stored in DB is stripped of extra whitespace
+
+            # Verify 'reason' is a non-empty string trimmed of whitespace
+            if not isinstance(row['reason'], str):
+                raise SimError('VALIDATION_ERROR', 'refund reason must be a string')
             reason_clean = row['reason'].strip()
+            if not reason_clean:
+                raise SimError('VALIDATION_ERROR', 'refund reason required')
+
+            # Also ensure reason field stored in DB is stripped of extra whitespace
             if reason_clean != row['reason']:
                 store.db.execute('UPDATE refund_requests SET reason=? WHERE request_id=?', (reason_clean, request_id))
 
