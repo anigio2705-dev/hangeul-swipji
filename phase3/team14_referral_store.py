@@ -122,6 +122,12 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
     if ord(c) > 126:
      raise SimError('INVALID_INPUT', f'{name} contains characters beyond ASCII 126')
 
+  # New Defensive check: reject empty student_id or lesson_id post stripping (already checked whitespace but check empty again for safety)
+  if not student_id:
+   raise SimError('INVALID_INPUT', 'student_id must not be empty')
+  if not lesson_id:
+   raise SimError('INVALID_INPUT', 'lesson_id must not be empty')
+
   signature = json.dumps([student_id, lesson_id, gross_krw, list(depth_rates_bps), commission_bps], separators=(',', ':'))
   self.db.execute('BEGIN IMMEDIATE')
   try:
