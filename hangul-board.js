@@ -7,7 +7,7 @@
     $('selected-help').textContent=H.availability(selected).label;
     document.querySelectorAll('.board [data-sound]').forEach(b=>b.classList.toggle('focus',b.dataset.sound===selected));
     const requested=selected;
-    if(play)H.play(requested).then(result=>{if(selected!==requested)return;if(result.status==='played')$('selected-help').textContent=H.availability(selected).label;else if(result.status==='error')$('selected-help').textContent=result.message;else $('selected-help').textContent=H.availability(selected).label});
+    if(play)H.play(requested).then(result=>{if(selected!==requested)return;if(result.status==='played'||result.status==='tts-played')$('selected-help').textContent=H.availability(selected).label;else if(result.message)$('selected-help').textContent=result.message;else $('selected-help').textContent=H.availability(selected).label});
   }
   for(const [c,name,word] of H.consonants){
     const b=H.soundButton(name);b.replaceChildren(H.el('b','',c),H.el('small','',name));
