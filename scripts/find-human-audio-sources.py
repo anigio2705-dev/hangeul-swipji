@@ -50,6 +50,9 @@ for word in missing:
     # Safety check: only allow alnum and dash, underscore, dot
     if not all(c.isalnum() or c in '-_.' for c in word):
         continue
+    # Defensive: reject words that are too long or empty after cleaning
+    if len(word) > 255 or len(word) == 0:
+        continue
     for ext in ['ogg', 'oga']:
         title = f'File:Ko-{word}.{ext}'
         titles.append(title)
@@ -76,6 +79,9 @@ def query(batch):
             continue
         # Validate characters in word_part
         if not all(c.isalnum() or c in '-_.' for c in word_part):
+            continue
+        # Defensive length check
+        if len(word_part) > 255 or len(word_part) == 0:
             continue
         filtered_batch.append(t)
 
