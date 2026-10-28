@@ -28,6 +28,9 @@ def initialize(db):
     CREATE TABLE IF NOT EXISTS instant_event_deliveries(
       event_id TEXT PRIMARY KEY REFERENCES instant_lesson_events(event_id),
       consumer TEXT NOT NULL, acknowledged_at REAL NOT NULL, receipt_id TEXT NOT NULL UNIQUE);
+    CREATE TABLE IF NOT EXISTS instant_event_attempts(
+      event_id TEXT PRIMARY KEY REFERENCES instant_lesson_events(event_id),
+      attempts INTEGER NOT NULL DEFAULT 0, last_attempt REAL, last_error TEXT);
     ''')
 
 
@@ -241,6 +244,31 @@ def acknowledge_settlement_event(db, event_id, consumer, receipt_id):
     db.execute('INSERT INTO instant_event_deliveries VALUES(?,?,?,?)',
                (event_id,consumer,time.time(),receipt_id))
     return {'eventId':event_id,'receiptId':receipt_id,'acknowledged':True}
+
+
+
+def deliver_mock_events(db, consumer, limit=100):
+    """Team13 outbox adapter. Consumer runs within caller's SQLite transaction.
+
+    The callback must validate the booking and write its mock ledger before
+    returning a durable receipt ID. Exceptions roll back the entire transaction
+    when the caller uses its normal transaction context.
+    """
+    if not callable(consumer):
+        raise server.Error('모의 정산 소비자가 필요합니다',400)
+    results=[]
+    for event in pending_settlement_events(db,limit):
+        event_id=event['eventId']
+        db.execute("""INSERT INTO instant_event_attempts(event_id,attempts,last_attempt,last_error)
+                      VALUES(?,1,?,NULL)
+                      ON CONFLICT(event_id) DO UPDATE SET
+                        attempts=attempts+1,last_attempt=excluded.last_attempt,last_error=NULL""",
+                   (event_id,time.time()))
+        receipt=consumer(db,event)
+        if not isinstance(receipt,str) or not receipt.strip():
+            raise server.Error('모의 정산 처리 확인이 없습니다',409)
+        results.append(acknowledge_settlement_event(db,event_id,'team14',receipt))
+    return results
 
 
 def route(handler, db, path, data):
