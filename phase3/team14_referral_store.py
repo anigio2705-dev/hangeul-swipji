@@ -115,6 +115,13 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
    if any(c in suspicious_chars for c in val):
     raise SimError('INVALID_INPUT', f'{name} contains invalid characters')
 
+  # Extra strict rejection of Unicode characters beyond ASCII 126
+  # (double check for any Unicode codepoints beyond 126)
+  for val, name in [(student_id, 'student_id'), (lesson_id, 'lesson_id'), (event_id, 'event_id')]:
+   for c in val:
+    if ord(c) > 126:
+     raise SimError('INVALID_INPUT', f'{name} contains characters beyond ASCII 126')
+
   signature = json.dumps([student_id, lesson_id, gross_krw, list(depth_rates_bps), commission_bps], separators=(',', ':'))
   self.db.execute('BEGIN IMMEDIATE')
   try:
