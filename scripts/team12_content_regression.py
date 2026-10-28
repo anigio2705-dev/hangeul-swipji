@@ -40,15 +40,21 @@ class Team12Regression(unittest.TestCase):
         syllables = set()
         for c in cells:
             self.assertIn("syllable", c)
-            syllables.add(c["syllable"])
+            syllable_value = c["syllable"]
+            self.assertIsInstance(syllable_value, str, "syllable must be string")
+            syllables.add(syllable_value)
         self.assertEqual(len(syllables), 399)
         consonants = set()
         vowels = set()
         for c in cells:
             self.assertIn("consonant", c)
             self.assertIn("vowel", c)
-            consonants.add(c["consonant"])
-            vowels.add(c["vowel"])
+            consonant_value = c["consonant"]
+            vowel_value = c["vowel"]
+            self.assertIsInstance(consonant_value, str, "consonant must be string")
+            self.assertIsInstance(vowel_value, str, "vowel must be string")
+            consonants.add(consonant_value)
+            vowels.add(vowel_value)
         self.assertEqual(len(consonants), 19)
         self.assertEqual(len(vowels), 21)
         self.assertEqual(len(cells) + len(consonants), 418)
@@ -57,7 +63,9 @@ class Team12Regression(unittest.TestCase):
         self.assertEqual(statuses.count("held"), 26)
         self.assertEqual(statuses.count("ready_unapproved"), 19)
         self.assertIn("counts", plan)
-        total_counts = sum(plan["counts"].values())
+        counts = plan["counts"]
+        self.assertIsInstance(counts, dict, "counts should be a dict")
+        total_counts = sum(v for v in counts.values() if isinstance(v, int))
         self.assertEqual(len(cells), total_counts)
 
     def test_professional_96_unique_and_linked(self):
@@ -77,7 +85,7 @@ class Team12Regression(unittest.TestCase):
         self.assertEqual(len(lessons), 96)
         for field in ("slot", "unitId"):
             values = [lesson.get(field) for lesson in lessons]
-            self.assertTrue(all(values), field)
+            self.assertTrue(all(value is not None and value != '' for value in values), field)
             self.assertEqual(len(values), len(set(values)), field)
         self.assertTrue(all(lesson.get("status") == "authored" for lesson in lessons))
 
@@ -96,10 +104,11 @@ class Team12Regression(unittest.TestCase):
             pilot = json.loads(pilot_content)
         except json.JSONDecodeError as e:
             self.fail(f"Invalid JSON in {pilot_file}: {e}")
-        ids = {lesson["unitId"] for stage in curriculum.get("stages", []) for lesson in stage.get("lessons", [])}
+        ids = {lesson["unitId"] for stage in curriculum.get("stages", []) for lesson in stage.get("lessons", []) if isinstance(lesson.get("unitId"), (str, int))}
         units = pilot.get("units", [])
+        self.assertIsInstance(units, list, "units should be list")
         self.assertEqual(len(units), 12)
-        self.assertEqual(len({unit.get("id") for unit in units}), len(units))
+        self.assertEqual(len({unit.get("id") for unit in units if unit.get("id") is not None}), len(units))
         self.assertTrue(all(unit.get("id") in ids for unit in units))
 
     def test_399_board_cells_have_explicit_missing_and_held_states(self):
@@ -111,6 +120,7 @@ class Team12Regression(unittest.TestCase):
         except json.JSONDecodeError as e:
             self.fail(f"Invalid JSON in {manifest_file}: {e}")
         records = manifest.get("recordings", {})
+        self.assertIsInstance(records, dict, "recordings should be a dict")
         consonants = "\u3131\u3132\u3134\u3137\u3138\u3139\u3141\u3142\u3143\u3145\u3146\u3147\u3148\u3149\u314a\u314b\u314c\u314d\u314e"
         vowels = "\u314f\u3150\u3151\u3152\u3153\u3154\u3155\u3156\u3157\u3158\u3159\u315a\u315b\u315c\u315d\u315e\u315f\u3160\u3161\u3162\u3163"
         counts = {"ready_unapproved": 0, "held": 0, "missing": 0}
@@ -121,8 +131,10 @@ class Team12Regression(unittest.TestCase):
                 state = "missing" if entry is None else ("held" if entry.get("disabled") else "ready_unapproved")
                 counts[state] += 1
                 if entry:
+                    listening_review = entry.get("listeningReview", {})
+                    self.assertIsInstance(listening_review, dict, f"listeningReview must be dict for {word}")
                     self.assertEqual(
-                        entry.get("listeningReview", {}).get("status"), "pending", word
+                        listening_review.get("status"), "pending", word
                     )
         self.assertEqual(sum(counts.values()), 399)
         self.assertEqual(counts, {"ready_unapproved": 19, "held": 26, "missing": 354})
@@ -196,14 +208,17 @@ class Team12Regression(unittest.TestCase):
         except json.JSONDecodeError as e:
             self.fail(f"Invalid JSON in {manifest_file}: {e}")
         recordings = manifest.get("recordings", {})
+        self.assertIsInstance(recordings, dict)
         for word, entry in recordings.items():
             self.assertIsInstance(entry, dict)
             self.assertEqual(entry.get("kind"), "human", word)
             self.assertTrue(entry.get("sourceUrl"), word)
             self.assertTrue(entry.get("author"), word)
             self.assertTrue(entry.get("license"), word)
+            listening_review = entry.get("listeningReview", {})
+            self.assertIsInstance(listening_review, dict, f"listeningReview must be dict for {word}")
             self.assertNotEqual(
-                entry.get("listeningReview", {}).get("status"), "approved", word
+                listening_review.get("status"), "approved", word
             )
 
 if __name__ == "__main__":
