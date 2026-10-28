@@ -68,7 +68,6 @@ class Team12Regression(unittest.TestCase):
             if not isinstance(c, dict):
                 self.fail(f"Expected dict in cells but got {type(c)} at index {idx}")
             status = c.get("status")
-            # Validate that status is string and in allowed set
             if status is None:
                 self.fail(f"Missing 'status' in a cell at index {idx}")
             if not isinstance(status, str):
@@ -108,7 +107,6 @@ class Team12Regression(unittest.TestCase):
         self.assertEqual(len(lessons), 96)
         for field in ("slot", "unitId"):
             values = [lesson.get(field) for lesson in lessons]
-            # Validate that no value is None and if string, non-empty after strip
             for idx, value in enumerate(values):
                 self.assertIsNotNone(value, f"Field '{field}' is None at lesson index {idx}")
                 if isinstance(value, str):
@@ -138,7 +136,8 @@ class Team12Regression(unittest.TestCase):
             for lesson_idx, lesson in enumerate(lessons):
                 if isinstance(lesson, dict):
                     unit_id = lesson.get("unitId")
-                    # Validate that unitId is str or int and if str, non-empty
+                    if unit_id is None:
+                        self.fail(f"unitId is missing at stage {stage_idx} lesson {lesson_idx}")
                     if isinstance(unit_id, (str, int)):
                         if isinstance(unit_id, str):
                             self.assertTrue(unit_id.strip() != '', f"unitId string must not be empty or whitespace at stage {stage_idx} lesson {lesson_idx}")
@@ -209,7 +208,6 @@ class Team12Regression(unittest.TestCase):
 
                 if entry:
                     listening_review = entry.get("listeningReview")
-                    # Validate that when present, listeningReview is either dict or None
                     if listening_review is not None and not isinstance(listening_review, dict):
                         self.fail(f"ListeningReview must be dict or None for {word}")
                     if isinstance(listening_review, dict):
@@ -299,7 +297,6 @@ class Team12Regression(unittest.TestCase):
             self.assertTrue(entry.get("author"), word)
             self.assertTrue(entry.get("license"), word)
             listening_review = entry.get("listeningReview")
-            # Validate listeningReview is dict or None
             if listening_review is not None and not isinstance(listening_review, dict):
                 self.fail(f"ListeningReview must be dict or None for {word}")
             if isinstance(listening_review, dict):
