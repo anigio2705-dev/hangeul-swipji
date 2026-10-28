@@ -1,64 +1,122 @@
-name: Team15 independent regression (no deployment)
+name: Team15 independent pinned regression (no deployment)
 on:
-  workflow_dispatch:
   push:
     branches:
       - team15/quality-operations-20261028
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  verify:
+  source-gate:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
     steps:
-      - name: Checkout team15 QA
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           path: qa
-      - name: Checkout integration baseline
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          ref: integration/phase2-phase3-20261027
+          ref: 2ca95fa1aa8206ec8763443d8256ab54ac789017
           path: integration
-      - name: Checkout Team11
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          ref: team11/common-foundation-20261028
+          ref: 96672116b0c87e34478233d1cf08028413515ff8
           path: team11
-      - name: Checkout Team12
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          ref: team12/education-audit-20261028
+          ref: f14b3df68224b8508d0c4fe6d7e8ba84277cd6a6
           path: team12
-      - name: Checkout Team13
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          ref: team13/platform-bfcache-reconnect-20261028
+          ref: 5c464829dd93e70a8af534ea5e1d0d9ce9bd92f0
           path: team13
-      - name: Checkout Team14
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          ref: team14/business-systems-audit-20261028
+          ref: e4d912c0752aa1bda1e67831a20e4e5e310be9f5
           path: team14
-      - name: Print exact SHA evidence
-        run: |
-          for d in qa integration team11 team12 team13 team14; do echo "$d $(git -C "$d" rev-parse HEAD)"; done
+      - name: Print pinned checkout SHAs
+        run: for d in integration team11 team12 team13 team14; do echo "$d $(git -C "$d" rev-parse HEAD)"; done
       - name: Run independent source gate
         run: python3 qa/scripts/team15_independent_gate.py
-      - name: Team11 contract tests
-        run: cd team11 && python3 -m unittest discover -s phase3 -p 'test_common_*.py' -v
-      - name: Team12 inventory
-        run: cd team12 && python3 scripts/team12_audio_inventory.py --root . --output /tmp/team12-inventory.json
-      - name: Team13 matching tests
-        run: cd team13 && python3 -m unittest discover -s phase3 -p 'test_instant_matching.py' -v
-      - name: Team14 monthly mock tests
-        run: cd team14 && python3 -m unittest discover -s phase3 -p 'test_team14_monthly*.py' -v
-      - name: Integration baseline regressions
-        run: cd integration && python3 -m unittest discover -s phase3 -p 'test_*.py' -v
-      - name: Upload test inventory
-        if: always()
-        uses: actions/upload-artifact@v4
+  team11-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
         with:
-          name: team15-inventory
-          path: /tmp/team12-inventory.json
-          if-no-files-found: ignore
+          ref: 96672116b0c87e34478233d1cf08028413515ff8
+      - run: git rev-parse HEAD
+      - run: python3 -m unittest discover -s phase3 -p 'test_common_*.py' -v
+  team12-audio:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: f14b3df68224b8508d0c4fe6d7e8ba84277cd6a6
+      - run: git rev-parse HEAD
+      - run: python3 -m py_compile scripts/team12_audio_inventory.py
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - run: python3 scripts/team12_audio_inventory.py --root . --output audit/team12-recording-inventory.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: team15-team12-audio-inventory
+          path: audit/team12-recording-inventory.json
+          if-no-files-found: warn
+  team13-python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 5c464829dd93e70a8af534ea5e1d0d9ce9bd92f0
+          fetch-depth: 0
+      - run: git rev-parse HEAD && git cat-file -e 7418e32:phase3/content.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          set -o pipefail
+          python3 -m unittest discover -s phase3 -p 'test_*.py' -v 2>&1 | tee team13-python.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: team15-team13-python-log
+          path: team13-python.log
+  team13-browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 5c464829dd93e70a8af534ea5e1d0d9ce9bd92f0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+        working-directory: phase3
+      - run: npx playwright install --with-deps chromium
+        working-directory: phase3
+      - run: |
+          set -o pipefail
+          node phase3/instant-browser-test.cjs 2>&1 | tee team13-browser.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: team15-team13-browser-log
+          path: |
+            team13-browser.log
+            audit/staging9-instant-results.json
+  team14-monthly:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: e4d912c0752aa1bda1e67831a20e4e5e310be9f5
+      - run: git rev-parse HEAD
+      - run: python3 -m unittest discover -s phase3 -p 'test_team14_monthly*.py' -v
+  integration-baseline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 2ca95fa1aa8206ec8763443d8256ab54ac789017
+          fetch-depth: 0
+      - run: git rev-parse HEAD
+      - run: python3 -m unittest discover -s phase3 -p 'test_*.py' -v
