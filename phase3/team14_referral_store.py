@@ -131,10 +131,21 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
   # Defensive additional check: event_id must not contain any characters from a stricter disallowed set
   # Adding stricter rejection of suspicious Unicode direction chars and other invisible controls
   # Use actual Unicode character literals instead of string-escaped forms
-  disallowed_event_chars = set(chr(c) for c in range(0,32)) | {'\u200b', '\u200c', '\u200d', '\ufeff'}
+  disallowed_event_chars = set(chr(c) for c in range(0,32)) | {"\u200b", "\u200c", "\u200d", "\ufeff"}
   # Convert unicode escape strings to actual characters
-  disallowed_event_chars = {c if len(c) == 1 else c.encode('utf-8').decode('unicode_escape') for c in disallowed_event_chars}
-  if any(c in disallowed_event_chars for c in event_id):
+  final_disallowed_chars = set()
+  for c in disallowed_event_chars:
+   if len(c) == 1:
+    final_disallowed_chars.add(c)
+   else:
+    try:
+     # Decode unicode escape sequences to characters
+     decoded_char = c.encode('utf-8').decode('unicode_escape')
+     final_disallowed_chars.add(decoded_char)
+    except Exception:
+     # In case of decode error, skip
+     pass
+  if any(c in final_disallowed_chars for c in event_id):
    raise SimError('INVALID_INPUT', 'event_id contains invisible control characters')
 
   signature = json.dumps([student_id, lesson_id, gross_krw, list(depth_rates_bps), commission_bps], separators=(',', ':'))
