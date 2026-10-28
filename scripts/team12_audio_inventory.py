@@ -77,7 +77,7 @@ def inspect(root):
                 problems.append({"word": word, "issue": "path_is_absolute", "path": src})
                 continue
 
-            # Resolve src_path safely, allow that root_resolved might not exist yet
+            # Reject paths with symbolic links in components within root
             src_path = (root / cleaned_src).resolve(strict=False)
 
             # root_resolved may not exist, check by parts prefix
@@ -94,6 +94,12 @@ def inspect(root):
                 if len(src_parts) < len(root_parts) or src_parts[:len(root_parts)] != root_parts:
                     problems.append({"word": word, "issue": "invalid_path_outside_root", "path": src})
                     continue
+
+                # Check for any '..' after resolve (should not happen, but extra safety)
+                if '..' in src_parts:
+                    problems.append({"word": word, "issue": "resolved_path_contains_parent", "path": src})
+                    continue
+
             except Exception as ex:
                 problems.append({"word": word, "issue": "invalid_path_outside_root_check_failed", "path": src, "detail": str(ex)})
                 continue
