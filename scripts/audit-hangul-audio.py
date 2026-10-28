@@ -96,6 +96,14 @@ for unit in intro:
 
 recordings = []
 
+def mixinGetSegmentObservedText(meta_dict):
+    seg = meta_dict.get('segment')
+    if isinstance(seg, dict):
+        obs = seg.get('observedText')
+        if isinstance(obs, str):
+            return obs
+    return ''
+
 for word, meta in manifest.get('recordings', {}).items():
     if not isinstance(word, str):
         # skip invalid keys
@@ -189,7 +197,7 @@ for word, meta in manifest.get('recordings', {}).items():
         if not (isinstance(inputText, str) and isinstance(modelRevision, str)):
             raise ValueError(f"Missing or invalid 'inputText' or 'modelRevision' for synthetic audio {word}")
         # Defensive normalization: allow inputText to differ by trailing dot or whitespace
-        if inputText.rstrip('. ') != word:
+        if inputText.rstrip('. ').rstrip() != word:
             raise ValueError(f"Input text does not match word for synthetic {word}")
         label_status = 'generation-input-matched; listening-pending'
 
@@ -246,14 +254,6 @@ for word, meta in manifest.get('recordings', {}).items():
         'signalWarnings': clean_warnings, 'alignmentObserved': mixinGetSegmentObservedText(meta), 'kind': kind, 'labelStatus': meta.get('labelStatus', label_status), 'stage1Candidate': bool(meta.get('stage1Candidate')), 'stage2Candidate': bool(meta.get('stage2Candidate')), 'holdReason': meta.get('holdReason', ''),
         'sourceUrl': sourceUrl, 'license': meta.get('license', ''),
         'held': bool(meta.get('disabled')), 'technicalStatus': 'decoded-and-hash-checked', 'listeningStatus': 'pending'})
-
-def mixinGetSegmentObservedText(meta_dict):
-    seg = meta_dict.get('segment')
-    if isinstance(seg, dict):
-        obs = seg.get('observedText')
-        if isinstance(obs, str):
-            return obs
-    return ''
 
 for word, item in targets.items():
     recs = manifest.get('recordings', {})
