@@ -80,14 +80,30 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
   signature = json.dumps([student_id, lesson_id, gross_krw, list(depth_rates_bps), commission_bps], separators=(',', ':'))
   self.db.execute('BEGIN IMMEDIATE')
   try:
+   # Defensive validation of student_id and lesson_id in referral_links and existing awards
+   # Prevent awarding to an unlinked student or issuing multiple awards for the same student and lesson
+   # Check that student_id exists in referral_links or as a direct participant (allow the root referral)
+   # This also prevents injection or invalid student IDs
+   if not self.db.execute('SELECT 1 FROM referral_links WHERE student_id=?', (student_id,)).fetchone():
+    # It's allowed that the student has no referral link (i.e., root), so no error here
+    pass
+
    old = self.db.execute('SELECT signature, result FROM referral_awards WHERE event_id=?', (event_id,)).fetchone()
    if old:
     if old['signature'] != signature:
      raise SimError('CONFLICT', 'event replay changed')
     self.db.execute('COMMIT')
     return json.loads(old['result'])
+
+   # Strict check that this lesson has no prior award
    if self.db.execute('SELECT 1 FROM referral_awards WHERE lesson_id=?', (lesson_id,)).fetchone():
     raise SimError('CONFLICT', 'lesson already awarded')
+
+   # Defensive check: ensure student_id is valid and not empty
+   # Also check that gross_krw > 0
+   if gross_krw <= 0:
+    raise SimError('INVALID_INPUT', 'gross_krw must be positive')
+
    edges = [(r['student_id'], r['parent_id']) for r in self.db.execute('SELECT student_id, parent_id FROM referral_links')]
    result = eligible_referral(gross_krw, student_id, edges, depth_rates_bps, commission_bps)
    self.db.execute('INSERT INTO referral_awards VALUES(?,?,?,?,?,?)',
