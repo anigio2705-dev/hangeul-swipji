@@ -25,6 +25,9 @@ for t in audio.get('targets', []):
         any(isinstance(g, str) for g in groups)):
         # Defensive: discard groups with non-str elements, filter only str
         groups_str = [g for g in groups if isinstance(g, str)]
+        # Validate groups_str elements contents for safety
+        if not all(g and isinstance(g, str) and len(g) < 100 for g in groups_str):
+            continue
         if (not recording_available and any(g in ['\u007f\u007f\u007f', '\u007f\u007f', '\u007f\u007f\u007f\u007f \u007f\u007f\u007f'] for g in groups_str)):
             # Original had specific Korean strings, corrected here:
             if any(g in ['\uc790\uc74c \uc774\ub984','\ubaa8\uc74c','\uae00\uc790\ud310 \uc74c\uc808'] for g in groups_str):
@@ -40,6 +43,9 @@ def safe_str(s):
     s = s.replace('\n', '').replace('\r', '')
     # Remove any control characters
     s = ''.join(ch for ch in s if ch.isprintable())
+    # Defensive length limit
+    if len(s) > 255:
+        return ''
     return s
 
 titles = []
