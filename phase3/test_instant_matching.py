@@ -349,6 +349,40 @@ class InstantMatchingTests(unittest.TestCase):
             self.assertEqual(1,db.execute('SELECT count(*) FROM instant_event_deliveries').fetchone()[0])
 
 
+    def test_mock_delivery_callback_atomic_replay_and_restart(self):
+        learner,learner_id=self.account('deliver-learner@example.test')
+        teacher,teacher_id=self.account('deliver-teacher@example.test','teacher',True)
+        now=time.time()
+        with server.connect() as db:
+            db.execute('INSERT INTO slots VALUES(?,?,?,?)',('deliver-slot',teacher_id,now-100,now+3600))
+            db.execute("""INSERT INTO bookings
+              (id,learner_id,teacher_id,slot_id,unit_id,status,price,room,created_at)
+              VALUES(?,?,?,?,?,?,?,?,?)""",
+              ('deliver-booking',learner_id,teacher_id,'deliver-slot','unit','completed',20000,'deliver-room',now))
+        self.call(teacher,'lesson-event',{'bookingId':'deliver-booking','eventId':'deliver-event','type':'lesson.completed'})
+        def failing(db,event):
+            db.execute('CREATE TABLE IF NOT EXISTS fake_receipts(id TEXT PRIMARY KEY)')
+            db.execute('INSERT INTO fake_receipts VALUES(?)',(event['eventId'],))
+            raise RuntimeError('simulated ledger failure')
+        with self.assertRaises(RuntimeError):
+            with server.connect() as db:
+                matching.deliver_mock_events(db,failing)
+        with server.connect() as db:
+            self.assertEqual(1,len(matching.pending_settlement_events(db)))
+            self.assertEqual(0,db.execute('SELECT count(*) FROM instant_event_deliveries').fetchone()[0])
+            def consumer(db,event):
+                db.execute('CREATE TABLE IF NOT EXISTS fake_receipts(id TEXT PRIMARY KEY)')
+                db.execute('INSERT INTO fake_receipts VALUES(?)',(event['eventId'],))
+                return 'receipt-'+event['eventId']
+            receipts=matching.deliver_mock_events(db,consumer)
+            self.assertEqual(1,len(receipts))
+            self.assertEqual([],matching.deliver_mock_events(db,consumer))
+        with server.connect() as db:
+            self.assertEqual([],matching.pending_settlement_events(db))
+            self.assertEqual(1,db.execute('SELECT count(*) FROM fake_receipts').fetchone()[0])
+            self.assertEqual(1,db.execute('SELECT count(*) FROM instant_event_deliveries').fetchone()[0])
+
+
 del Harness
 
 if __name__=='__main__': unittest.main()
