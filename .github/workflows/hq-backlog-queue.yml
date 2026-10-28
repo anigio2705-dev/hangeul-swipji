@@ -7,6 +7,9 @@ on:
       - 'automation/backlog_queue.py'
       - 'automation/test_backlog_queue.py'
       - 'automation/task-evidence.json'
+      - 'automation/hq_160_task_cycle.py'
+      - 'automation/test_hq_160_task_cycle.py'
+      - 'automation/hq_backlog_160.md'
   workflow_dispatch:
 permissions:
   contents: read
@@ -86,6 +89,24 @@ jobs:
                   f.write("- #%s: %s (review, not reimplementation)\n" %
                           (task["number"], task["title"]))
           PY
+      - name: Generate actionable six-team assignments from 160 criteria
+        shell: bash
+        run: |
+          python automation/hq_160_task_cycle.py \
+            --backlog "$RUNNER_TEMP/hq-master-backlog.md" \
+            --evidence automation/task-evidence.json \
+            --output "$RUNNER_TEMP/hq-160-contracts.json"
+          python - <<'PY'
+          import json, os
+          report = json.load(open(os.path.join(os.environ["RUNNER_TEMP"], "hq-160-contracts.json")))
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
+              f.write("\\n## Next six-team scoped commands\\n\\n")
+              for team, assignment in report["assignments"].items():
+                  if assignment:
+                      f.write(f"- Team {team}: #{assignment['task_number']} — {assignment['acceptance_criterion']} ({assignment['path']})\\n")
+                  else:
+                      f.write(f"- Team {team}: no safe remaining curated assignment\\n")
+          PY
       - name: Upload auditable queue and team head snapshot
         uses: actions/upload-artifact@v4
         with:
@@ -93,4 +114,5 @@ jobs:
           path: |
             ${{ runner.temp }}/hq-backlog-report.json
             ${{ runner.temp }}/hq-team-heads.json
+            ${{ runner.temp }}/hq-160-contracts.json
           retention-days: 14
