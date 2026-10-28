@@ -79,8 +79,6 @@ def inspect(root):
                 continue
 
             # Prevent absolute path use
-            # Using Path.is_absolute on cleaned_src itself can be misleading due to lacking root,
-            # check explicitly for initial '/' or '\\' to prevent absolute paths.
             if cleaned_src.startswith('/') or cleaned_src.startswith('\\'):
                 problems.append({"word": word, "issue": "path_is_absolute", "path": src})
                 continue
@@ -90,10 +88,10 @@ def inspect(root):
                 problems.append({"word": word, "issue": "null_byte_in_path_component", "path": src})
                 continue
 
+            # Protect symlink checks using current filesystem state but be tolerant if root missing
             src_path = (root / cleaned_src).resolve(strict=False)
 
             # root_resolved may not exist, check by parts prefix
-            # Ensure src_path is inside root directory
             try:
                 if not src_path.is_absolute():
                     problems.append({"word": word, "issue": "path_not_absolute_after_resolve", "path": src})
@@ -116,10 +114,10 @@ def inspect(root):
                 for part in src_parts[len(root_parts):]:
                     current_path = current_path / part
                     try:
-                        # Protect against symlinks that could lead outside even if resolved path is inside
-                        if current_path.is_symlink():
-                            problems.append({"word": word, "issue": "path_component_is_symlink", "path": str(current_path)})
-                            raise StopIteration
+                        if current_path.exists():
+                            if current_path.is_symlink():
+                                problems.append({"word": word, "issue": "path_component_is_symlink", "path": str(current_path)})
+                                raise StopIteration
                     except Exception:
                         problems.append({"word": word, "issue": "cannot_stat_symlink_check", "path": str(current_path)})
                         raise StopIteration
