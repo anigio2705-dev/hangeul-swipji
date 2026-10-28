@@ -479,8 +479,8 @@ class InstantMatchingTests(unittest.TestCase):
         self.call(partner,'leave')
         self.call(learner,'session-finish',{'matchId':offer['matchId']},409)
         with server.connect() as db:
-            self.assertEqual('in_class',db.execute('SELECT status FROM bookings JOIN instant_booking_links ON bookings.id=instant_booking_links.booking_id WHERE match_id=?',(offer['matchId'],)).fetchone()[0])
-            self.assertEqual(0,db.execute('SELECT count(*) FROM instant_lesson_events').fetchone()[0])
+            self.assertEqual('cancelled',db.execute('SELECT status FROM bookings JOIN instant_booking_links ON bookings.id=instant_booking_links.booking_id WHERE match_id=?',(offer['matchId'],)).fetchone()[0])
+            self.assertEqual(1,db.execute("SELECT count(*) FROM instant_lesson_events WHERE event_type='booking.cancelled'").fetchone()[0])
 
 
     def test_outbox_restarts_crash_boundaries_and_durable_ack(self):
