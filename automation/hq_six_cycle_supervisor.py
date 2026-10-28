@@ -167,7 +167,7 @@ def save_ledger(token, ledger, blob_sha, changed):
                  payload={"branch": HQ_REF, "sha": blob_sha,
                           "message": "chore(hq): preserve independent numbered code verification evidence",
                           "content": base64.b64encode(
-                              (json.dumps(ledger, ensure_ascii=False, indent=2) + "\\n").encode()).decode()})
+                              (json.dumps(ledger, ensure_ascii=False, indent=2) + "\n").encode()).decode()})
     return result.get("commit", {}).get("sha")
 
 def promote_prior(ledger, token):
@@ -176,7 +176,7 @@ def promote_prior(ledger, token):
         if record.get("status") != "in_progress" or record.get("independent_review") != "pass":
             continue
         match = re.fullmatch(
-            r"https://github\\.com/anigio2705-dev/hangeul-swipji/actions/runs/([0-9]+)",
+            r"https://github\.com/anigio2705-dev/hangeul-swipji/actions/runs/([0-9]+)",
             record.get("ci_url", ""))
         if not match:
             continue
