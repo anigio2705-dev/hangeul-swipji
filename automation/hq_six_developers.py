@@ -164,7 +164,15 @@ def main():
         goal = contract["criterion"]
         last = shell("git", "log", "-1", "--format=%s", "--", path)
         if last.returncode == 0 and ("task #" + str(number)) in last.stdout and not instruction:
-            report.append({"task_number": number, "path": path, "status": "awaiting_independent_verification"})
+            committed = shell("git", "log", "-1", "--format=%H", "--", path).stdout.strip()
+            head = shell("git", "rev-parse", "HEAD").stdout.strip()
+            if committed == head and len(head) == 40:
+                report.append({"task_number": number, "path": path,
+                               "status": "verification_requested", "commit": head,
+                               "next_instruction": "Independently test existing commit; do not rewrite"})
+            else:
+                report.append({"task_number": number, "path": path,
+                               "status": "awaiting_independent_verification"})
             continue
         file = Path(path)
         if not file.is_file() or file.stat().st_size > 35000:
