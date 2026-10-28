@@ -35,6 +35,14 @@ class D2CatalogHttpTests(unittest.TestCase):
             self.assertEqual(price,TEST_CATALOG['partner_25'][1],
                              '13/14 contract conflict: partner default price is not 10000')
             with server.connect() as db:
+                # Team13 must eventually create this atomically with booking.
+                # Fixture models a server-committed snapshot, not client price.
+                db.execute('CREATE TABLE IF NOT EXISTS booking_product_snapshots ('
+                           'booking_id TEXT PRIMARY KEY, product_code TEXT NOT NULL, '
+                           'duration_minutes INTEGER NOT NULL, price_krw INTEGER NOT NULL, '
+                           'currency TEXT NOT NULL)')
+                db.execute('INSERT INTO booking_product_snapshots VALUES(?,?,?,?,?)',
+                           (booking,'partner_25',25,10000,'KRW'))
                 p=bind_server_booking_product(db,self.store,'d2month',booking,
                                               'partner_25',300)
                 self.assertFalse(p['payment_executed'])
@@ -70,6 +78,7 @@ class D2CatalogHttpTests(unittest.TestCase):
         try:
             _,_,_,booking,event,price=self.journey()
             with server.connect() as db:
+                # No trusted Team13 snapshot => both catalog binding paths fail closed.
                 with self.assertRaises(SimError):
                     bind_server_booking_product(db,self.store,'wrongprice',booking,'trial_15')
                 with self.assertRaises(SimError):
