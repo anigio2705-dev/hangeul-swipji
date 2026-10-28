@@ -1,0 +1,35 @@
+name: HQ traffic-light gate (isolated)
+on:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - 'automation/hq_traffic_lights.py'
+      - '.github/workflows/hq-traffic-light-gate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  traffic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate full 160-item contracts and traffic decisions
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+          python automation/hq_traffic_lights.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('automation/hq-traffic-lights.json').read_text())
+          assert x['total']==160 and set(x['teams'])=={'11','12','13','14','15','16'}
+          assert x['final_complete']<=x['code_verified']<=160
+          print('Traffic-light integrity verified:',x['final_complete'],x['code_verified'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hq-traffic-lights
+          path: automation/hq-traffic-lights.json
+          retention-days: 14
