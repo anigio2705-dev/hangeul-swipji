@@ -321,6 +321,16 @@ class InstantMatchingTests(unittest.TestCase):
             self.assertTrue(verified['verifiedByServer'])
             self.assertEqual(teacher_id,verified['teacherId'])
             self.assertEqual(20000,verified['amount'])
+            db.execute("UPDATE bookings SET status='cancelled' WHERE id=?",(verified['bookingId'],))
+            with self.assertRaises(server.Error) as stale:
+                matching.verified_event_for_team14(db,'event-once')
+            self.assertEqual(409,stale.exception.status)
+            db.execute("UPDATE bookings SET status='completed' WHERE id=?",(verified['bookingId'],))
+            db.execute('UPDATE users SET approved=0 WHERE id=?',(teacher_id,))
+            with self.assertRaises(server.Error) as revoked:
+                matching.verified_event_for_team14(db,'event-once')
+            self.assertEqual(403,revoked.exception.status)
+            db.execute('UPDATE users SET approved=1 WHERE id=?',(teacher_id,))
             self.assertEqual([first],matching.pending_settlement_events(db,1))
             with self.assertRaises(server.Error):
                 matching.pending_settlement_events(db,0)
