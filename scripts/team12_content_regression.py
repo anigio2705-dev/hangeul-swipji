@@ -64,6 +64,10 @@ class Team12Regression(unittest.TestCase):
         self.assertEqual(len(vowels), 21)
         self.assertEqual(len(cells) + len(consonants), 418)
         statuses = [c.get("status") for c in cells if isinstance(c, dict)]
+        # Additional validation: all status values must be in expected set
+        allowed_statuses = {"missing", "held", "ready_unapproved"}
+        for s in statuses:
+            self.assertIn(s, allowed_statuses, f"Unexpected status '{s}' in cells")
         self.assertEqual(statuses.count("missing"), 354)
         self.assertEqual(statuses.count("held"), 26)
         self.assertEqual(statuses.count("ready_unapproved"), 19)
@@ -72,10 +76,9 @@ class Team12Regression(unittest.TestCase):
         self.assertIsInstance(counts, dict, "counts should be a dict")
         total_counts = 0
         for k, v in counts.items():
-            if not isinstance(k, str):
-                self.fail(f"Invalid key type in counts dict: {k} (type {type(k)})")
-            if not isinstance(v, int) or v < 0:
-                self.fail(f"Invalid count value in counts dict: {v} for key {k}")
+            self.assertIsInstance(k, str, f"Invalid key type in counts dict: {k} (type {type(k)})")
+            self.assertIsInstance(v, int, f"Invalid count value type in counts dict: {v} for key {k}")
+            self.assertGreaterEqual(v, 0, f"Negative count value in counts dict: {v} for key {k}")
             total_counts += v
         self.assertEqual(len(cells), total_counts)
 
@@ -96,12 +99,13 @@ class Team12Regression(unittest.TestCase):
         self.assertEqual(len(lessons), 96)
         for field in ("slot", "unitId"):
             values = [lesson.get(field) for lesson in lessons]
-            self.assertTrue(all(
-                value is not None and
-                (not isinstance(value, str) or value.strip() != '')
-                for value in values), f"Field validation failed for '{field}'")
+            # Validate that no value is None and if string, non-empty after strip
+            for idx, value in enumerate(values):
+                self.assertIsNotNone(value, f"Field '{field}' is None at lesson index {idx}")
+                if isinstance(value, str):
+                    self.assertTrue(value.strip() != '', f"Field '{field}' is empty or whitespace at lesson index {idx}")
             self.assertEqual(len(values), len(set(values)), f"Duplicate values found in '{field}'")
-        self.assertTrue(all(lesson.get("status") == "authored" for lesson in lessons))
+        self.assertTrue(all(isinstance(lesson.get("status"), str) and lesson.get("status") == "authored" for lesson in lessons))
 
     def test_pilot_units_reference_professional_curriculum(self):
         curriculum_file = ROOT / "phase3/curriculum-96.json"
@@ -125,10 +129,15 @@ class Team12Regression(unittest.TestCase):
             for lesson_idx, lesson in enumerate(lessons):
                 if isinstance(lesson, dict):
                     unit_id = lesson.get("unitId")
+                    # Validate that unitId is str or int and if str, non-empty
                     if isinstance(unit_id, (str, int)):
                         if isinstance(unit_id, str):
                             self.assertTrue(unit_id.strip() != '', f"unitId string must not be empty or whitespace at stage {stage_idx} lesson {lesson_idx}")
                         ids.add(unit_id)
+                    else:
+                        self.fail(f"unitId must be string or int at stage {stage_idx} lesson {lesson_idx}")
+                else:
+                    self.fail(f"Lesson is not a dict at stage {stage_idx} lesson {lesson_idx}")
         self.assertTrue(all(
             isinstance(unit, dict) and
             "id" in unit and
@@ -161,8 +170,8 @@ class Team12Regression(unittest.TestCase):
             manifest = json.loads(manifest_content)
         except json.JSONDecodeError as e:
             self.fail(f"Invalid JSON in {manifest_file}: {e}")
-        records = manifest.get("recordings", {})
-        self.assertIsInstance(records, dict, "recordings should be a dict")
+        recordings = manifest.get("recordings", {})
+        self.assertIsInstance(recordings, dict, "recordings should be a dict")
         consonants = "\u3131\u3132\u3134\u3137\u3138\u3139\u3141\u3142\u3143\u3145\u3146\u3147\u3148\u3149\u314a\u314b\u314c\u314d\u314e"
         vowels = "\u314f\u3150\u3151\u3152\u3153\u3154\u3155\u3156\u3157\u3158\u3159\u315a\u315b\u315c\u315d\u315e\u315f\u3160\u3161\u3162\u3163"
         counts = {"ready_unapproved": 0, "held": 0, "missing": 0}
@@ -173,8 +182,8 @@ class Team12Regression(unittest.TestCase):
             for j in range(len(vowels)):
                 word = chr(0xAC00 + (i * 21 + j) * 28)
                 entry = None
-                if isinstance(records, dict):
-                    entry = records.get(word)
+                if isinstance(recordings, dict):
+                    entry = recordings.get(word)
                 if entry is not None and not isinstance(entry, dict):
                     self.fail(f"Entry for {word} must be dict or None")
                 if entry is None:
@@ -185,6 +194,8 @@ class Team12Regression(unittest.TestCase):
                         self.fail(f"Invalid 'disabled' flag type for {word}, expected bool or None")
                     state = "held" if disabled else "ready_unapproved"
 
+                if state not in counts:
+                    self.fail(f"Unexpected state '{state}' for syllable {word}")
                 counts[state] += 1
 
                 if entry:
