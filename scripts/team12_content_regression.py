@@ -129,12 +129,13 @@ class Team12Regression(unittest.TestCase):
         self.assertEqual(len(units), 12)
         unit_ids = set()
         for unit in units:
-            if isinstance(unit, dict):
-                uid = unit.get("id")
-                self.assertIsNotNone(uid, "unit id must not be None")
-                if isinstance(uid, str):
-                    self.assertTrue(uid.strip() != '', "unit id string must not be empty or whitespace")
-                unit_ids.add(uid)
+            if not isinstance(unit, dict):
+                self.fail(f"Unit is not a dict: {unit}")
+            uid = unit.get("id")
+            self.assertIsNotNone(uid, "unit id must not be None")
+            if isinstance(uid, str):
+                self.assertTrue(uid.strip() != '', "unit id string must not be empty or whitespace")
+            unit_ids.add(uid)
         self.assertEqual(len(unit_ids), len(units))
         self.assertTrue(all(unit_id in ids for unit_id in unit_ids))
 
@@ -154,8 +155,8 @@ class Team12Regression(unittest.TestCase):
         total_expected = len(consonants) * len(vowels)
         self.assertEqual(total_expected, 399, "Expected 399 total syllables")
 
-        for i, _ in enumerate(consonants):
-            for j, _ in enumerate(vowels):
+        for i in range(len(consonants)):
+            for j in range(len(vowels)):
                 word = chr(0xAC00 + (i * 21 + j) * 28)
                 entry = None
                 if isinstance(records, dict):
