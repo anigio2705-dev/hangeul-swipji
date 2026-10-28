@@ -10,6 +10,8 @@ class Team12Regression(unittest.TestCase):
     def test_seven_course_resume_deep_links(self):
         dashboard = (ROOT / "dashboard.html").read_text(encoding="utf-8")
         self.assertIn("window.HSTeam12Resume.nextLesson(state)", dashboard)
+        self.assertIn('window.addEventListener("storage"', dashboard)
+        self.assertIn('document.addEventListener("visibilitychange"', dashboard)
         self.assertIn('"?unit="+nextUnit', dashboard)
         for name in ("intro", "beginner1", "beginner2", "intermediate1",
                      "intermediate2", "advanced1", "advanced2"):
