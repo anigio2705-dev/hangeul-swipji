@@ -1,0 +1,42 @@
+name: HQ ten-cycle supervisor (isolated)
+on:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - 'automation/hq_controller.py'
+      - '.github/workflows/hq-ten-cycle-supervisor.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: write
+jobs:
+  supervise:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    concurrency:
+      group: hq-ten-cycle-supervisor
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate supervisor and audit
+        run: python -m py_compile automation/hq_controller.py automation/hq_six_team_audit.py
+      - name: Run ten bounded decision cycles
+        working-directory: automation
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          HQ_CYCLES: '10'
+          HQ_CYCLE_DELAY: '8'
+          HQ_ALLOW_DISPATCH: 'true'
+        run: python hq_controller.py
+      - name: Publish ten-cycle evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hq-ten-cycle-report
+          path: automation/hq-controller-report.json
+          retention-days: 14
+          if-no-files-found: warn
