@@ -80,11 +80,11 @@
     {
       "number": 47,
       "feature": "진도·오답·즐겨찾기·이어 배우기의 저장과 재접속 동작을 검사한다.",
-      "implemented": "7개 과정의 로컬 완료 기록을 dashboard.html에서 확인하고 미완료 첫 단원으로 직접 이동하는 ?unit= 딥링크 구현. 기존 백업/복원 유지; scripts/team12_resume.js에서 완료값 true만 인정하는 재개 로직 분리, Node 행동 테스트 추가; 대시보드의 타 탭 학습 기록 저장(storage) 및 화면 복귀(visibilitychange) 시 진도 재계산; 18차 대시보드 inline render 이전 resume helper 로드 순서 오류 수정; 19차 /api/free-progress GET/POST 브라우저 동기화 코드 및 7개 과정 연결, 계정 분리·오프라인 보존 모의 HTTP 테스트 추가",
-      "missing": "11번 서버 최신 코드를 동일 통합 브랜치에 병합 후 실제 SQLite HTTP E2E 실행·검증 필요",
-      "evidence": "dashboard.html; intro.html; beginner1.html; beginner2.html; intermediate1.html; intermediate2.html; advanced1.html; advanced2.html; scripts/team12_content_regression.py; scripts/team12_resume.js; scripts/team12_resume.test.js; dashboard.html; scripts/team12_content_regression.py; scripts/team12_resume.test.js (script order assertion); scripts/team12_server_progress.js; scripts/team12_server_progress.test.js; dashboard.html; 7개 과정 HTML",
+      "implemented": "7개 과정의 로컬 완료 기록을 dashboard.html에서 확인하고 미완료 첫 단원으로 직접 이동하는 ?unit= 딥링크 구현. 기존 백업/복원 유지; scripts/team12_resume.js에서 완료값 true만 인정하는 재개 로직 분리, Node 행동 테스트 추가; 대시보드의 타 탭 학습 기록 저장(storage) 및 화면 복귀(visibilitychange) 시 진도 재계산; 18차 대시보드 inline render 이전 resume helper 로드 순서 오류 수정; 19차 /api/free-progress GET/POST 브라우저 동기화 코드 및 7개 과정 연결, 계정 분리·오프라인 보존 모의 HTTP 테스트 추가; 21차 실제 GitHub 실패 로그의 계정 전환 시 빈 진도 생성 오류 수정",
+      "missing": "21차 수정 커밋의 CI 재실행 성공 및 실제 HTTP·SQLite 통합 E2E 미확인",
+      "evidence": "dashboard.html; intro.html; beginner1.html; beginner2.html; intermediate1.html; intermediate2.html; advanced1.html; advanced2.html; scripts/team12_content_regression.py; scripts/team12_resume.js; scripts/team12_resume.test.js; dashboard.html; scripts/team12_content_regression.py; scripts/team12_resume.test.js (script order assertion); scripts/team12_server_progress.js; scripts/team12_server_progress.test.js; dashboard.html; 7개 과정 HTML; GitHub Actions run 40622642018; scripts/team12_server_progress.js; scripts/team12_server_progress.test.js",
       "progress": 40,
-      "reason": "API 연동 코드 작성 완료, 실제 공통 서버에서 통합 실행 성공은 미확인",
+      "reason": "계정 전환 회귀 수정, 실제 CI 성공 미확인으로 점수 유지",
       "next": "11번의 명시적 인증 학습진도 API가 마련되면 연결하고 재로그인 HTTP 테스트",
       "integration": "타 브랜치 통합 미검증",
       "status": "미착수"
@@ -366,5 +366,5 @@
       "status": "외부 확인 대기"
     }
   ],
-  "version": "19차 갱신"
+  "version": "21차 갱신"
 }
