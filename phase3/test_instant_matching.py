@@ -108,6 +108,34 @@ class InstantMatchingTests(unittest.TestCase):
             self.assertEqual(before,dict(db.execute('SELECT * FROM bookings').fetchone()))
 
 
+    def test_unapproved_partner_cannot_join_or_obtain_room(self):
+        learner,_=self.account('learner@example.test')
+        unapproved,_=self.account('unapproved@example.test','partner')
+        approved,_=self.account('approved@example.test','partner',True)
+        self.assertEqual('waiting',self.call(learner,'join')['state'])
+        self.call(unapproved,'join',expected=403)
+        self.assertEqual('idle',self.call(unapproved,'status')['state'])
+        offer=self.call(approved,'join')
+        self.assertNotIn('roomUrl',offer)
+        self.call(learner,'ready',{'matchId':offer['matchId']})
+        active=self.call(approved,'ready',{'matchId':offer['matchId']})
+        self.assertIn('roomUrl',active)
+        self.assertNotIn('roomUrl',self.call(unapproved,'status'))
+        self.call(unapproved,'ready',{'matchId':offer['matchId']},expected=409)
+
+    def test_disconnect_expiry_and_rejoin_require_explicit_opt_in(self):
+        learner,_=self.account('learner@example.test')
+        partner,_=self.account('partner@example.test','partner',True)
+        self.call(learner,'join')
+        self.call(partner,'join')
+        with server.connect() as db:
+            db.execute('UPDATE instant_queue SET seen=seen-? WHERE user_id=(SELECT learner_id FROM instant_matches WHERE state=\'offered\')',(matching.TTL+1,))
+        self.assertEqual('idle',self.call(partner,'status')['state'])
+        self.assertEqual('idle',self.call(learner,'status')['state'])
+        self.assertEqual('waiting',self.call(learner,'join')['state'])
+        self.assertEqual('offered',self.call(partner,'join')['state'])
+
+
 del Harness
 
 if __name__=='__main__': unittest.main()
