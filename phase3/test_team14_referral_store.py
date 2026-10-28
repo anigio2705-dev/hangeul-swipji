@@ -69,6 +69,31 @@ class ReferralStoreTests(unittest.TestCase):
     self.assertEqual('CONFLICT',error.exception.code)
   self.s.db.execute('UPDATE referral_awards SET result=? WHERE event_id=?',(json.dumps(good),'event1'))
   self.assertEqual(good,self.s.award('event1','student','lesson1',10000))
+ def test_tampered_recipient_or_policy_is_rejected(self):
+  import json
+  self.s.link('student','alice');self.s.link('alice','bob')
+  good=self.s.award('event1','student','lesson1',10000,(300,100))
+  invalid=[
+   {**good,'recipients':[{'user_id':'alice','amount_krw':250},{'user_id':'bob','amount_krw':100}],'platform_krw':good['platform_krw']+50},
+   {**good,'recipients':[{'user_id':'mallory','amount_krw':300},{'user_id':'bob','amount_krw':100}]},
+   {**good,'teacher_krw':good['teacher_krw']+100,'platform_krw':good['platform_krw']-100},
+  ]
+  for item in invalid:
+   with self.subTest(item=item):
+    self.s.db.execute('UPDATE referral_awards SET result=? WHERE event_id=?',(json.dumps(item),'event1'))
+    with self.assertRaises(SimError) as ctx:self.s.awards_for_lesson('lesson1')
+    self.assertEqual(ctx.exception.code,'CONFLICT')
+    with self.assertRaises(SimError):self.s.award('event1','student','lesson1',10000,(300,100))
+  self.s.db.execute('UPDATE referral_awards SET result=? WHERE event_id=?',(json.dumps(good),'event1'))
+  self.s.db.execute('UPDATE referral_awards SET signature=? WHERE event_id=?',(json.dumps(['student','wrong',10000,[300,100],2000]),'event1'))
+  with self.assertRaises(SimError):self.s.awards_for_lesson('lesson1')
+  self.s.db.execute('UPDATE referral_awards SET signature=? WHERE event_id=?',(json.dumps(['student','lesson1',10000,[300,100],2000],separators=(',',':')),'event1'))
+  self.assertEqual(good,self.s.awards_for_lesson('lesson1'))
+ def test_new_ancestor_does_not_retroactively_change_previous_award(self):
+  self.s.link('student','alice')
+  good=self.s.award('event1','student','lesson1',10000,(300,100))
+  self.s.link('alice','bob')
+  self.assertEqual(good,self.s.award('event1','student','lesson1',10000,(300,100)))
  def test_second_lesson_is_distinct(self):
   self.s.link('student','alice')
   self.s.award('event1','student','lesson1',10000)

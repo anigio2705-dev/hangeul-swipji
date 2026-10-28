@@ -8,32 +8,45 @@ from team14_persistent import SimError,ident,amount
 from team14_referral_eligibility import eligible_referral
 import json
 
-def _verified_award(raw, student_id, gross_krw):
- """Fail closed on corrupt persisted mock awards, including idempotent replays."""
+def _verified_award(raw, student_id, gross_krw, signature, lesson_id, db):
+ """Validate mock award arithmetic, stored policy and immutable referral chain."""
  try:
   result=json.loads(raw)
+  policy=json.loads(signature)
+  if (not isinstance(policy,list) or len(policy)!=5
+      or policy[0]!=student_id or policy[1]!=lesson_id or type(policy[2]) is not int
+      or policy[2]!=gross_krw or not isinstance(policy[3],list)
+      or len(policy[3])>10 or type(policy[4]) is not int
+      or not 0<=policy[4]<=10000
+      or any(type(rate) is not int or not 0<=rate<=10000 for rate in policy[3])
+      or sum(policy[3])+policy[4]>10000):
+   raise ValueError('stored award policy invalid')
   if not isinstance(result,dict) or result.get('student_id')!=student_id or result.get('gross_krw')!=gross_krw:
    raise ValueError('award identity mismatch')
   recipients=result.get('recipients')
-  if not isinstance(recipients,list) or len(recipients)>10:
+  if not isinstance(recipients,list) or len(recipients)>len(policy[3]):
    raise ValueError('invalid recipients')
-  seen=set()
-  for row in recipients:
-   if not isinstance(row,dict) or type(row.get('amount_krw')) is not int or row['amount_krw']<0:
+  seen={student_id};cur=student_id
+  for depth,row in enumerate(recipients):
+   if not isinstance(row,dict) or type(row.get('amount_krw')) is not int:
     raise ValueError('invalid recipient amount')
    recipient=ident(row.get('user_id'))
-   if recipient==student_id or recipient in seen:
-    raise ValueError('duplicate or self recipient')
-   seen.add(recipient)
+   parent=db.execute('SELECT parent_id FROM referral_links WHERE student_id=?',(cur,)).fetchone()
+   if (not parent or parent['parent_id']!=recipient or recipient in seen
+       or row['amount_krw']!=gross_krw*policy[3][depth]//10000):
+    raise ValueError('recipient chain or award amount invalid')
+   seen.add(recipient);cur=recipient
   teacher=result.get('teacher_krw');platform=result.get('platform_krw')
-  if (type(teacher) is not int or type(platform) is not int or teacher<0 or platform<0
-      or teacher+platform+sum(row['amount_krw'] for row in recipients)!=gross_krw
+  expected_teacher=gross_krw*(10000-policy[4]-sum(policy[3]))//10000
+  expected_platform=gross_krw-expected_teacher-sum(row['amount_krw'] for row in recipients)
+  if (type(teacher) is not int or type(platform) is not int
+      or teacher!=expected_teacher or platform!=expected_platform
       or result.get('real_money') is not False
       or result.get('policy_approved') is not False
       or result.get('payment_enabled') is not False):
    raise ValueError('invalid award totals or safety flags')
   return result
- except (TypeError,ValueError,KeyError,SimError) as exc:
+ except (TypeError,ValueError,KeyError,SimError,sqlite3.Error) as exc:
   raise SimError('CONFLICT','stored referral award invalid') from exc
 
 class ReferralStore:
@@ -80,10 +93,10 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
   signature=json.dumps([student_id,lesson_id,gross_krw,list(depth_rates_bps),commission_bps],separators=(',',':'))
   self.db.execute('BEGIN IMMEDIATE')
   try:
-   old=self.db.execute('SELECT signature,result FROM referral_awards WHERE event_id=?',(event_id,)).fetchone()
+   old=self.db.execute('SELECT student_id,lesson_id,gross_krw,signature,result FROM referral_awards WHERE event_id=?',(event_id,)).fetchone()
    if old:
     if old['signature']!=signature:raise SimError('CONFLICT','event replay changed')
-    verified=_verified_award(old['result'],student_id,gross_krw)
+    verified=_verified_award(old['result'],old['student_id'],old['gross_krw'],old['signature'],old['lesson_id'],self.db)
     self.db.execute('COMMIT');return verified
    if self.db.execute('SELECT 1 FROM referral_awards WHERE lesson_id=?',(lesson_id,)).fetchone():
     raise SimError('CONFLICT','lesson already awarded')
@@ -97,6 +110,6 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
  def awards_for_lesson(self,lesson_id):
   import json
   ident(lesson_id)
-  r=self.db.execute('SELECT student_id,gross_krw,result FROM referral_awards WHERE lesson_id=?',(lesson_id,)).fetchone()
+  r=self.db.execute('SELECT student_id,gross_krw,signature,result FROM referral_awards WHERE lesson_id=?',(lesson_id,)).fetchone()
   if not r:raise SimError('NOT_FOUND','award not found')
-  return _verified_award(r['result'],r['student_id'],r['gross_krw'])
+  return _verified_award(r['result'],r['student_id'],r['gross_krw'],r['signature'],lesson_id,self.db)
