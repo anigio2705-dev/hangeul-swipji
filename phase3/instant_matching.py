@@ -40,9 +40,11 @@ def cleanup(db, now):
     for m in list(db.execute("SELECT * FROM instant_matches WHERE state<>'ended'")):
         live = db.execute('SELECT count(*) FROM instant_queue WHERE user_id IN (?,?)',
                           (m['learner_id'], m['partner_id'])).fetchone()[0]
-        learner=db.execute('SELECT role FROM users WHERE id=?',(m['learner_id'],)).fetchone()
-        partner=db.execute('SELECT role FROM users WHERE id=?',(m['partner_id'],)).fetchone()
-        roles_ok=learner and learner['role']=='learner' and partner and partner['role'] in ('partner','teacher')
+        learner=db.execute('SELECT * FROM users WHERE id=?',(m['learner_id'],)).fetchone()
+        partner=db.execute('SELECT * FROM users WHERE id=?',(m['partner_id'],)).fetchone()
+        roles_ok=(learner and learner['role']=='learner' and partner
+                  and partner['role'] in ('partner','teacher')
+                  and eligible(db,learner,now) and eligible(db,partner,now))
         if live != 2 or not roles_ok or (m['state']=='offered' and m['created']+OFFER_TTL<=now):
             end(db, m)
 
