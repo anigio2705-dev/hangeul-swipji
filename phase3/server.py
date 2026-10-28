@@ -300,6 +300,26 @@ class Handler(BaseHTTPRequestHandler):
                 db.execute('INSERT OR IGNORE INTO free_lesson_progress(user_id,stage,lesson,completed_at) VALUES(?,?,?,?)',
                            (uid,stage,lesson,time.time()))
                 return {'ok':True,'stage':stage,'lesson':lesson},None
+        if path=='/api/free-progress/import' and method=='POST':
+            # One-time or retryable legacy browser progress merge. Server data wins;
+            # client records never erase existing completions or select another user.
+            if u['role']!='learner': raise Error('학습자만 진도를 이전할 수 있습니다',403)
+            records=d.get('completed')
+            if not isinstance(records,list) or len(records)>350:
+                raise Error('학습 기록 배열이 잘못되었습니다',400)
+            normalized=set()
+            for record in records:
+                if not isinstance(record,dict): raise Error('학습 기록 형식이 잘못되었습니다',400)
+                stage=record.get('stage'); lesson=record.get('lesson')
+                if type(stage) is not int or type(lesson) is not int or not 1<=stage<=7 or not 1<=lesson<=50:
+                    raise Error('학습 단계 또는 단원 번호가 잘못되었습니다',400)
+                normalized.add((stage,lesson))
+            before=db.execute('SELECT count(*) FROM free_lesson_progress WHERE user_id=?',(uid,)).fetchone()[0]
+            for stage,lesson in sorted(normalized):
+                db.execute('INSERT OR IGNORE INTO free_lesson_progress(user_id,stage,lesson,completed_at) VALUES(?,?,?,?)',
+                           (uid,stage,lesson,time.time()))
+            after=db.execute('SELECT count(*) FROM free_lesson_progress WHERE user_id=?',(uid,)).fetchone()[0]
+            return {'ok':True,'imported':after-before,'count':after},None
         if method=='GET' and path=='/api/learning':return learning.summary(db,uid),None
         learning_booking=re.fullmatch('/api/learning/booking/([0-9a-f]+)',path)
         if method=='GET' and learning_booking:
