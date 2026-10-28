@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import re
+import subprocess
 from pathlib import Path
 
 CONSONANTS = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ"
@@ -25,7 +26,7 @@ def inspect(root):
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
         if entry.get("sha256") and digest != entry["sha256"]:
             problems.append({"word": word, "issue": "hash_mismatch", "path": src})
-        if entry.get("kind") != "human":
+        probe = subprocess.run(["ffmpeg", "-v", "error", "-i", str(path), "-f", "null", "-"], capture_output=True, text=True)\n        if probe.returncode:\n            problems.append({"word": word, "issue": "decode_failed", "path": src, "detail": probe.stderr[:300]})\n        if entry.get("kind") != "human":
             problems.append({"word": word, "issue": "not_verified_human", "path": src})
         if not all(entry.get(k) for k in ("sourceUrl", "author", "license")):
             problems.append({"word": word, "issue": "missing_provenance", "path": src})
