@@ -29,6 +29,17 @@ def settle_with_referral(settlement_store,referral_store,event_id,read_event,
         if not callable(read_referral_parent):
             raise SimError('FORBIDDEN','trusted referral parent lookup required')
         learner=ident(event.get('learner_id'))
+        # Validate the server-owned booking BEFORE mutating referral relationships.
+        booking=resolve_booking(ident(event.get('booking_id')))
+        if not isinstance(booking,dict):
+            raise SimError('NOT_FOUND','server booking unavailable')
+        if (booking.get('learner_id')!=learner or
+            booking.get('teacher_id')!=event.get('teacher_id') or
+            booking.get('teacher_approved') is not True or
+            booking.get('authenticated_event') is not True or
+            booking.get('booking_status')!=event.get('booking_status') or
+            any(booking.get(k)!=event.get(k) for k in ('booking_id','month_id','lesson_id'))):
+            raise SimError('FORBIDDEN','unverified booking or event')
         parent=read_referral_parent(learner)
         if parent is not None:
             referral_store.link(learner,ident(parent))
