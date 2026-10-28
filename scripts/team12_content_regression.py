@@ -178,8 +178,17 @@ class Team12Regression(unittest.TestCase):
                     entry = records.get(word)
                 if entry is not None and not isinstance(entry, dict):
                     self.fail(f"Entry for {word} must be dict or None")
-                state = "missing" if entry is None else ("held" if entry.get("disabled") else "ready_unapproved")
+                if entry is None:
+                    state = "missing"
+                else:
+                    disabled = entry.get("disabled")
+                    # Defensive: Only accept boolean or None, else fail
+                    if disabled is not None and not isinstance(disabled, bool):
+                        self.fail(f"Invalid 'disabled' flag type for {word}, expected bool or None")
+                    state = "held" if disabled else "ready_unapproved"
+
                 counts[state] += 1
+
                 if entry:
                     listening_review = entry.get("listeningReview", {})
                     # Defensive check: if listeningReview key present, it must be dict
