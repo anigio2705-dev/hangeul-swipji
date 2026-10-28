@@ -69,7 +69,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
    if any(c.isspace() for c in val):
     raise SimError('INVALID_INPUT', f'{name} must not contain whitespace characters')
 
-  # Use external validators for further checks (e.g. ident for allowed chars)
+  # Use external validators for allowed chars (e.g. ident does ASCII alphanum and selected punctuation)
   ident(event_id); ident(student_id); ident(lesson_id)
   amount(gross_krw, True)
 
@@ -89,8 +89,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
    if not all(32 <= ord(c) <= 126 for c in val):
     raise SimError('INVALID_INPUT', f'{name} contains invalid characters')
 
-  # Defensive check: refuse to award an event ID that is empty (already checked), also no control chars allowed
-  # New stricter check for event_id: reject if contains any control chars or non-printable ASCII
+  # Defensive check: reject any control characters (below 33) or non-printable characters in event_id
   for c in event_id:
    if ord(c) < 33 or ord(c) > 126:
     raise SimError('INVALID_INPUT', 'event_id contains control or non-printable characters')
@@ -99,15 +98,12 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
   if gross_krw <= 0:
    raise SimError('INVALID_INPUT', 'gross_krw must be positive')
 
-  # Defensive check: ensure lesson_id and student_id are non-empty strings without whitespace
-  # already checked above, re-check for any invisible chars as extra safety
+  # Defensive check: lesson_id and student_id already checked above, re-check no invisible chars as extra safety
   for val, name in [(student_id, 'student_id'), (lesson_id, 'lesson_id')]:
    if not val or not all(32 <= ord(c) <= 126 for c in val):
     raise SimError('INVALID_INPUT', f'{name} contains invalid or non-printable characters')
 
-  # Defensive check: reject any non-printable ASCII or control characters in the student_id and lesson_id again
-  # and reject any suspicious characters again
-  # This double checking is intentional for robustness
+  # Defensive check: reject control/non-printable and suspicious characters again for student_id and lesson_id
   for val, name in [(student_id, 'student_id'), (lesson_id, 'lesson_id')]:
    for c in val:
     if ord(c) < 33 or ord(c) > 126:
@@ -115,8 +111,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
    if any(c in suspicious_chars for c in val):
     raise SimError('INVALID_INPUT', f'{name} contains invalid characters')
 
-  # Extra strict rejection of Unicode characters beyond ASCII 126
-  # (double check for any Unicode codepoints beyond 126)
+  # Extra strict rejection of Unicode characters beyond ASCII 126 (double check for Unicode codepoints beyond 126)
   for val, name in [(student_id, 'student_id'), (lesson_id, 'lesson_id'), (event_id, 'event_id')]:
    for c in val:
     if ord(c) > 126:
@@ -129,6 +124,12 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
    raise SimError('INVALID_INPUT', 'lesson_id must not be empty')
   if not event_id:
    raise SimError('INVALID_INPUT', 'event_id must not be empty')
+
+  # Defensive additional check: event_id must not contain any characters from a stricter disallowed set
+  # Adding stricter rejection of suspicious Unicode direction chars and other invisible controls
+  disallowed_event_chars = set(chr(c) for c in range(0,32)) | set(['\u200b','\u200c','\u200d','\ufeff'])
+  if any(c in disallowed_event_chars for c in event_id):
+   raise SimError('INVALID_INPUT', 'event_id contains invisible control characters')
 
   signature = json.dumps([student_id, lesson_id, gross_krw, list(depth_rates_bps), commission_bps], separators=(',', ':'))
   self.db.execute('BEGIN IMMEDIATE')
