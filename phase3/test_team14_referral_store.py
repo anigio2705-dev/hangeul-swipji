@@ -47,6 +47,28 @@ class ReferralStoreTests(unittest.TestCase):
     self.s.award('bad-event','student','lesson1',10000,rates)
   self.assertEqual(self.s.db.execute('SELECT COUNT(*) FROM referral_awards').fetchone()[0],0)
   self.assertEqual(self.s.award('good-event','student','lesson1',10000)['gross_krw'],10000)
+ def test_corrupt_award_read_and_idempotent_replay_fail_closed(self):
+  import json
+  self.s.link('student','alice')
+  good=self.s.award('event1','student','lesson1',10000)
+  tampered=[
+   'not-json',
+   '{}',
+   json.dumps({**good,'teacher_krw':good['teacher_krw']+1}),
+   json.dumps({**good,'real_money':True}),
+   json.dumps({**good,'recipients':[{'user_id':'student','amount_krw':300}]}),
+   json.dumps({**good,'recipients':[{'user_id':'alice','amount_krw':300},
+                                    {'user_id':'alice','amount_krw':0}]}),
+  ]
+  for payload in tampered:
+   with self.subTest(payload=payload):
+    self.s.db.execute('UPDATE referral_awards SET result=? WHERE event_id=?',(payload,'event1'))
+    with self.assertRaises(SimError) as error:self.s.awards_for_lesson('lesson1')
+    self.assertEqual('CONFLICT',error.exception.code)
+    with self.assertRaises(SimError) as error:self.s.award('event1','student','lesson1',10000)
+    self.assertEqual('CONFLICT',error.exception.code)
+  self.s.db.execute('UPDATE referral_awards SET result=? WHERE event_id=?',(json.dumps(good),'event1'))
+  self.assertEqual(good,self.s.award('event1','student','lesson1',10000))
  def test_second_lesson_is_distinct(self):
   self.s.link('student','alice')
   self.s.award('event1','student','lesson1',10000)
