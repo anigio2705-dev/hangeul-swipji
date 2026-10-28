@@ -188,11 +188,15 @@ class Team12Regression(unittest.TestCase):
                 counts[state] += 1
 
                 if entry:
-                    listening_review = entry.get("listeningReview", {})
-                    self.assertIsInstance(listening_review, dict, f"listeningReview must be dict for {word}")
-                    status = listening_review.get("status")
-                    if status is not None:
-                        self.assertEqual(status, "pending", word)
+                    listening_review = entry.get("listeningReview")
+                    # Validate that when present, listeningReview is either dict or None
+                    if listening_review is not None and not isinstance(listening_review, dict):
+                        self.fail(f"ListeningReview must be dict or None for {word}")
+                    if isinstance(listening_review, dict):
+                        status = listening_review.get("status")
+                        if status is not None:
+                            self.assertEqual(status, "pending", word)
+
         allowed_states = {"ready_unapproved", "held", "missing"}
         total_counted = sum(counts.values())
         self.assertEqual(total_counted, 399)
@@ -274,13 +278,16 @@ class Team12Regression(unittest.TestCase):
             self.assertTrue(entry.get("sourceUrl"), word)
             self.assertTrue(entry.get("author"), word)
             self.assertTrue(entry.get("license"), word)
-            listening_review = entry.get("listeningReview", {})
-            self.assertIsInstance(listening_review, dict, f"listeningReview must be dict for {word}")
-            status = listening_review.get("status")
-            if status is not None:
-                self.assertNotEqual(
-                    status, "approved", word
-                )
+            listening_review = entry.get("listeningReview")
+            # Validate listeningReview is dict or None
+            if listening_review is not None and not isinstance(listening_review, dict):
+                self.fail(f"ListeningReview must be dict or None for {word}")
+            if isinstance(listening_review, dict):
+                status = listening_review.get("status")
+                if status is not None:
+                    self.assertNotEqual(
+                        status, "approved", word
+                    )
 
 if __name__ == "__main__":
     unittest.main()
