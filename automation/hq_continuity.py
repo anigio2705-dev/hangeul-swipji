@@ -11,6 +11,10 @@ TASKS = [
     ("queue", ["python", "-m", "unittest", "discover", "-s", "automation", "-p", "test_backlog_queue.py", "-v"]),
     ("hq", ["python", "-m", "unittest", "discover", "-s", "automation", "-p", "test_hq_pilot.py", "-v"]),
     ("sandbox", ["python", "-m", "unittest", "discover", "-s", "automation/worker_sandbox", "-p", "test_*.py", "-v"]),
+    ("audio-runtime", ["node", "scripts/check-audio-runtime.cjs"]),
+    ("audio-inventory", ["python", "-m", "unittest", "discover", "-s", "scripts", "-p", "test_team12_audio_inventory.py", "-v"]),
+    ("business-contract", ["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_hq_*.py", "-v"]),
+    ("curriculum", ["node", "scripts/check-foundations.cjs"]),
 ]
 def run_cycle(tasks=TASKS, runner=subprocess.run):
     results = []
