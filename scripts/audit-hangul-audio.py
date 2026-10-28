@@ -152,8 +152,13 @@ for word, meta in manifest.get('recordings', {}).items():
     except Exception:
         active = []
 
-    lead = active[0] / 16000 if active else len(samples) / 16000
-    tail = (len(samples) - 1 - active[-1]) / 16000 if active else lead
+    # Defensive check for active range validity
+    if active:
+        lead = active[0] / 16000
+        tail = (len(samples) - 1 - active[-1]) / 16000
+    else:
+        lead = len(samples) / 16000
+        tail = lead
     duration = len(samples) / 16000
 
     warnings = []
