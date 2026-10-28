@@ -7,6 +7,18 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 class Team12Regression(unittest.TestCase):
+    def test_seven_course_resume_deep_links(self):
+        dashboard = (ROOT / "dashboard.html").read_text(encoding="utf-8")
+        self.assertIn("const nextUnit=Array.from({length:50}", dashboard)
+        self.assertIn('"?unit="+(nextUnit===undefined?50:nextUnit+1)', dashboard)
+        for name in ("intro", "beginner1", "beginner2", "intermediate1",
+                     "intermediate2", "advanced1", "advanced2"):
+            page = (ROOT / (name + ".html")).read_text(encoding="utf-8")
+            self.assertIn('new URLSearchParams(location.search).get("unit")', page, name)
+            self.assertIn('/^[0-9]+$/.test(requested)', page, name)
+            self.assertIn('n>=1&&n<=units.length', page, name)
+            self.assertIn('unit=n-1;tab=0;reviewMode=false', page, name)
+
     def test_audio_418_scope_reconciliation(self):
         """399 composed cells + 19 consonant signs = 418 only if HQ confirms scope."""
         plan = json.loads((ROOT / "docs/team12/recording-plan-399.json").read_text(encoding="utf-8"))
