@@ -114,8 +114,10 @@ class Team12Regression(unittest.TestCase):
 
     def test_audio_ui_missing_and_playing_event_contract(self):
         core = (ROOT / "hangul-core.js").read_text(encoding="utf-8")
-        self.assertIn("return {status:'missing',missing}", core)
-        self.assertIn("return {status:'held',missing}", core)
+        self.assertIn("return {status:held?'held':'missing',missing}", core)
+        self.assertIn("synthesize(word,token)", core)
+        self.assertIn("return {status:'tts-unavailable',message}", core)
+        self.assertIn("records[word]&&!manifestError", core)
         self.assertIn("sound.onplaying=()=>", core)
         self.assertIn("sound.onerror=()=>", core)
         self.assertIn("new URL(records[word].src, document.baseURI)", core)
