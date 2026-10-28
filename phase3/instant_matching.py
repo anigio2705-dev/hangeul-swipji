@@ -25,6 +25,9 @@ def initialize(db):
       CHECK(event_type IN ('lesson.started','lesson.completed','booking.cancelled')),
       created REAL NOT NULL, payload TEXT NOT NULL);
     CREATE INDEX IF NOT EXISTS instant_lesson_events_booking ON instant_lesson_events(booking_id);
+    CREATE TABLE IF NOT EXISTS instant_event_deliveries(
+      event_id TEXT PRIMARY KEY REFERENCES instant_lesson_events(event_id),
+      consumer TEXT NOT NULL, acknowledged_at REAL NOT NULL, receipt_id TEXT NOT NULL UNIQUE);
     ''')
 
 
@@ -211,9 +214,33 @@ def pending_settlement_events(db, limit=100):
         raise server.Error('이벤트 조회 범위 오류',400)
     rows=db.execute("""SELECT e.payload FROM instant_lesson_events e
       JOIN bookings b ON b.id=e.booking_id
-      WHERE e.event_type IN ('lesson.completed','booking.cancelled')
+      LEFT JOIN instant_event_deliveries d ON d.event_id=e.event_id
+      WHERE e.event_type IN ('lesson.completed','booking.cancelled') AND d.event_id IS NULL
       ORDER BY e.created,e.event_id LIMIT ?""",(limit,)).fetchall()
     return [json.loads(row['payload']) for row in rows]
+
+
+
+def acknowledge_settlement_event(db, event_id, consumer, receipt_id):
+    """Trusted Team14 adapter: idempotent acknowledgement after mock ledger commit.
+
+    Must be called inside the SAME DB transaction as the downstream mock ledger
+    write. Acknowledgement alone does not imply that a settlement occurred.
+    """
+    if any(not isinstance(v,str) or not v.strip() or len(v)>128
+           for v in (event_id,consumer,receipt_id)):
+        raise server.Error('정산 수신 확인 식별자 오류',400)
+    event=db.execute('SELECT event_type FROM instant_lesson_events WHERE event_id=?',(event_id,)).fetchone()
+    if not event or event['event_type'] not in ('lesson.completed','booking.cancelled'):
+        raise server.Error('전달 가능한 이벤트가 아닙니다',404)
+    existing=db.execute('SELECT * FROM instant_event_deliveries WHERE event_id=?',(event_id,)).fetchone()
+    if existing:
+        if (existing['consumer'],existing['receipt_id'])!=(consumer,receipt_id):
+            raise server.Error('이벤트 수신 확인이 충돌합니다',409)
+        return {'eventId':event_id,'receiptId':receipt_id,'acknowledged':True}
+    db.execute('INSERT INTO instant_event_deliveries VALUES(?,?,?,?)',
+               (event_id,consumer,time.time(),receipt_id))
+    return {'eventId':event_id,'receiptId':receipt_id,'acknowledged':True}
 
 
 def route(handler, db, path, data):
