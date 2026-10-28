@@ -14,22 +14,69 @@ EXPECT = {
 }
 failures = []
 changes = {}
+
 for team, paths in EXPECT.items():
     directory = ROOT / team
     if not directory.is_dir():
-        failures.append(f"{team}: checkout missing")
+        failures.append(f"{team}: checkout missing or path not a directory")
         continue
-    sha = subprocess.check_output(["git", "-C", str(directory), "rev-parse", "HEAD"], text=True).strip()
+    try:
+        sha = subprocess.check_output(["git", "-C", str(directory), "rev-parse", "HEAD"], text=True, stderr=subprocess.PIPE).strip()
+    except subprocess.CalledProcessError as e:
+        failures.append(f"{team}: git rev-parse failed: {e}")
+        continue
+    except FileNotFoundError:
+        failures.append(f"{team}: git command not found")
+        continue
     print(f"{team} SHA={sha}")
     for path in paths:
-        if not (directory / path).is_file():
-            failures.append(f"{team}: missing {path}")
+        file_path = directory / path
+        if not file_path.is_file():
+            failures.append(f"{team}: missing file {path}")
+
     if team != "integration":
-        out = subprocess.check_output(["git", "-C", str(directory), "diff", "--name-only", "integration/phase2-phase3-20261027"], text=True, stderr=subprocess.DEVNULL) if False else None
-        # Compare branch contents against the separately checked-out integration tree,
-        # not local branch refs (which may be absent in shallow Actions checkouts).
-        tracked = subprocess.check_output(["git", "-C", str(directory), "ls-files"], text=True).splitlines()
-        changes[team] = {p for p in tracked if (ROOT / "integration" / p).is_file() and (directory / p).read_bytes() != (ROOT / "integration" / p).read_bytes()} | {p for p in tracked if not (ROOT / "integration" / p).exists()}
+        try:
+            # The following line was disabled by `if False`; keeping the same but validate robustly
+            out = None
+        except subprocess.CalledProcessError as e:
+            failures.append(f"{team}: git diff failed: {e}")
+            out = None
+
+        try:
+            tracked = subprocess.check_output(["git", "-C", str(directory), "ls-files"], text=True, stderr=subprocess.PIPE).splitlines()
+        except subprocess.CalledProcessError as e:
+            failures.append(f"{team}: git ls-files failed: {e}")
+            tracked = []
+        except FileNotFoundError:
+            failures.append(f"{team}: git command not found")
+            tracked = []
+
+        changed_files = set()
+        for p in tracked:
+            integration_file = ROOT / "integration" / p
+            team_file = directory / p
+            # Defensive checks
+            if not team_file.is_file():
+                # If tracked but no file, consider changed (possibly deleted)
+                changed_files.add(p)
+                continue
+            if not integration_file.is_file():
+                # File does not exist in integration, count as changed
+                changed_files.add(p)
+                continue
+            try:
+                team_bytes = team_file.read_bytes()
+                integration_bytes = integration_file.read_bytes()
+            except (OSError, IOError) as e:
+                failures.append(f"{team}: error reading files {team_file} or {integration_file}: {e}")
+                changed_files.add(p)
+                continue
+            if team_bytes != integration_bytes:
+                changed_files.add(p)
+
+        changes[team] = changed_files
+
+# Check for overlaps across teams
 for left in changes:
     for right in changes:
         if left >= right:
@@ -38,6 +85,7 @@ for left in changes:
         if common:
             print(f"POTENTIAL OVERLAP {left}/{right}: {common}")
             failures.append(f"overlap {left}/{right}: {len(common)}")
+
 if failures:
     print("FAIL:", *failures, sep="\n- ")
     sys.exit(1)
