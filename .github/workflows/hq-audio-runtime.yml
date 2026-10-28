@@ -43,6 +43,18 @@ jobs:
           node scripts/check-week-human-audio.cjs
       - name: Test physical recording integrity and quarantine classification
         run: python3 -m unittest discover -s scripts -p 'test_team12_audio_inventory.py' -v
+      - name: Ensure physical MP3 decoder is available
+        run: command -v ffmpeg || (sudo apt-get update -qq && sudo apt-get install -y ffmpeg)
+      - name: Audit real recording files, hashes and human provenance
+        run: python3 scripts/team12_audio_inventory.py --root . --output "$RUNNER_TEMP/hq-audio-inventory.json"
+      - name: Save physical recording inventory evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hq-audio-inventory
+          path: ${{ runner.temp }}/hq-audio-inventory.json
+          if-no-files-found: ignore
+          retention-days: 14
       - name: Test 350 lessons and seven-day curriculum regression
         run: node scripts/check-foundations.cjs
       - name: State validation limits
