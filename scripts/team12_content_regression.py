@@ -51,6 +51,8 @@ class Team12Regression(unittest.TestCase):
         home = (ROOT / "index.html").read_text(encoding="utf-8")
         handoff = (ROOT / "scripts/team12_learning_handoff.js").read_text(encoding="utf-8")
         self.assertIn("state.team12ProviderRole=role", app)
+        self.assertIn("sessionStorage.getItem('hs-team12-provider-intent')", app)
+        self.assertIn("sessionStorage.removeItem('hs-team12-provider-intent')", app)
         self.assertIn("field('참여 유형','role',state.team12ProviderRole||''", app)
         self.assertIn("state.view='discover'", app)
         self.assertIn("data-team12-handoff", home)
