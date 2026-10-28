@@ -17,6 +17,8 @@ on:
       - 'dashboard.html'
       - 'scripts/team12_resume.js'
       - 'scripts/team12_resume.test.js'
+      - 'scripts/team12_server_progress.js'
+      - 'scripts/team12_server_progress.test.js'
       - 'intro.html'
       - 'beginner1.html'
       - 'beginner2.html'
@@ -46,6 +48,8 @@ jobs:
           node scripts/team12_provider_links.test.js
           node --check scripts/team12_resume.js
           node scripts/team12_resume.test.js
+          node --check scripts/team12_server_progress.js
+          node scripts/team12_server_progress.test.js
           node --check phase3/app.js
           node --check hangul-core.js
       - name: Verify educational content structure
