@@ -55,13 +55,17 @@ for t in audio.get('targets', []):
         # Reject if whitespace-only after stripping
         if g.strip() == '':
             return False
+        # Also reject if contains suspicious sequence of backslash+escape, to avoid labels with literal \u or \x
+        # Prevent accidental acceptance of literal escape sequences
+        if '\\u' in g or '\\x' in g:
+            return False
         return True
 
     if not all(valid_group_label(g) for g in groups_str):
         continue
 
-    # Fix accidental literal Unicode escape sequences to actual characters
-    # Keep obsolete guard for backward compatibility
+    # Fix accidental literal Unicode escape sequences to actual characters (decode such literals)
+    # Remove this check as it can mask invalid labels, but keep detection
     if not recording_available:
         suspicious_labels = ['\x7f\x7f\x7f', '\x7f\x7f', '\x7f\x7f\x7f\x7f \x7f\x7f\x7f']
         korean_labels_decoded = ['\uc790\uc74c \uc774\ub984', '\ubaa8\uc74c', '\uae00\uc790\ud325 \uc74c\uc808']
@@ -85,8 +89,10 @@ for t in audio.get('targets', []):
 def safe_str(s):
     if not isinstance(s, str):
         return ''
-    # Strip whitespace
+    # Strip leading/trailing whitespace
     s = s.strip()
+    if not s:
+        return ''
     # Remove pipe and control characters
     s = s.replace('|', '')
     s = s.replace('\n', '').replace('\r', '')
@@ -94,6 +100,9 @@ def safe_str(s):
     s = ''.join(ch for ch in s if ch.isprintable())
     # Defensive length limit
     if len(s) > 255:
+        return ''
+    # Reject strings with suspicious sequences that might cause issues
+    if '\\' in s:  # any literal backslash
         return ''
     return s
 
