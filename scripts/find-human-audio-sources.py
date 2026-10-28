@@ -73,10 +73,10 @@ for t in audio.get('targets', []):
         suspicious_labels_lower = [lbl.lower() for lbl in suspicious_labels]
         korean_labels_decoded_lower = [lbl.lower() for lbl in korean_labels_decoded]
 
-        if any(lbl in (g.lower() for g in groups_str) for lbl in suspicious_labels_lower):
+        if any(lbl in groups_lower for lbl in suspicious_labels_lower):
             missing.append(text)
             continue
-        if any(lbl in (g.lower() for g in groups_str) for lbl in korean_labels_decoded_lower):
+        if any(lbl in groups_lower for lbl in korean_labels_decoded_lower):
             missing.append(text)
             continue
 
