@@ -57,12 +57,13 @@ def inspect(root):
                 or not all(isinstance(entry.get(k), str) and entry[k].strip()
                            for k in ("author", "license"))):
             problems.append({"word": word, "issue": "missing_provenance", "path": src})
+    invalid_words = {item["word"] for item in problems}
     for i, c in enumerate(CONSONANTS):
         for j, v in enumerate(VOWELS):
             word = chr(0xAC00 + (i * 21 + j) * 28)
             entry = records.get(word)
             state = ("missing" if entry is None else
-                     "held" if isinstance(entry, dict) and entry.get("disabled") else
+                     "held" if word in invalid_words or (isinstance(entry, dict) and entry.get("disabled")) else
                      "ready_unapproved")
             inventory.append({"character": word, "consonant": c, "vowel": v,
                               "recording_script": word, "required_filename": f"{ord(word):04x}.mp3",
