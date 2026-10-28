@@ -67,16 +67,18 @@ for t in audio.get('targets', []):
         korean_labels_decoded = ['\uc790\uc74c \uc774\ub984', '\ubaa8\uc74c', '\uae00\uc790\ud325 \uc74c\uc808']
         # Defensive: reject if group string contains suspicious labels or decoded Korean labels
         # Use exact match in groups_str, not substring
-        groups_lower = [g.lower() for g in groups_str]
+        def lowered_set(strings):
+            # Defensive: ensure strings are str
+            return set(s.lower() for s in strings if isinstance(s, str))
 
-        # Defensive: To handle groups with different cases, match ignoring case
-        suspicious_labels_lower = [lbl.lower() for lbl in suspicious_labels]
-        korean_labels_decoded_lower = [lbl.lower() for lbl in korean_labels_decoded]
+        groups_lower_set = lowered_set(groups_str)
+        suspicious_labels_lower = lowered_set(suspicious_labels)
+        korean_labels_decoded_lower = lowered_set(korean_labels_decoded)
 
-        if any(lbl in groups_lower for lbl in suspicious_labels_lower):
+        if groups_lower_set.intersection(suspicious_labels_lower):
             missing.append(text)
             continue
-        if any(lbl in groups_lower for lbl in korean_labels_decoded_lower):
+        if groups_lower_set.intersection(korean_labels_decoded_lower):
             missing.append(text)
             continue
 
