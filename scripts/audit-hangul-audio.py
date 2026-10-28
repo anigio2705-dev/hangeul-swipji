@@ -128,9 +128,21 @@ for word, meta in manifest.get('recordings', {}).items():
     if len(samples) == 0:
         raise ValueError(f"Decoded audio has zero length for {file}")
 
-    peak = max((abs(x) for x in samples), default=0)
-    rms = math.sqrt(sum(x * x for x in samples) / max(1, len(samples)))
-    active = [i for i, x in enumerate(samples) if abs(x) > 184]  # approx -45 dBFS
+    peak = 0
+    try:
+        peak = max((abs(x) for x in samples), default=0)
+    except Exception:
+        peak = 0
+    try:
+        rms = math.sqrt(sum(x * x for x in samples) / max(1, len(samples)))
+    except Exception:
+        rms = 0
+    active = []
+    try:
+        active = [i for i, x in enumerate(samples) if abs(x) > 184]  # approx -45 dBFS
+    except Exception:
+        active = []
+
     lead = active[0] / 16000 if active else len(samples) / 16000
     tail = (len(samples) - 1 - active[-1]) / 16000 if active else lead
     duration = len(samples) / 16000
