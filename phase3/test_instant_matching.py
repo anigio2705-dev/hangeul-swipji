@@ -262,6 +262,34 @@ class InstantMatchingTests(unittest.TestCase):
         self.assertEqual([],self.call(outsider,'reservations')['reservations'])
 
 
+    def test_booked_room_http_endpoint_enforces_auth_ownership_and_revocation(self):
+        learner,learner_id=self.account('http-room-learner@example.test')
+        teacher,teacher_id=self.account('http-room-teacher@example.test','teacher',True)
+        outsider,_=self.account('http-room-outsider@example.test')
+        now=time.time()
+        with server.connect() as db:
+            db.execute('INSERT INTO slots VALUES(?,?,?,?)',('http-room-slot',teacher_id,now-30,now+3600))
+            db.execute("""INSERT INTO bookings
+              (id,learner_id,teacher_id,slot_id,unit_id,status,price,room,created_at)
+              VALUES(?,?,?,?,?,?,?,?,?)""",
+              ('http-room-booking',learner_id,teacher_id,'http-room-slot','unit','in_class',20000,'http-room-secret',now))
+        request={'bookingId':'http-room-booking'}
+        for cookie in (learner,teacher):
+            reply=self.call(cookie,'booking-room',request)
+            self.assertEqual('http-room-booking',reply['bookingId'])
+            self.assertEqual('https://meet.jit.si/http-room-secret',reply['roomUrl'])
+        self.call(outsider,'booking-room',request,expected=403)
+        self.assertEqual(401,self.request('/api/instant/booking-room',request,headers={'Cookie':''})[0])
+        with server.connect() as db:
+            db.execute('UPDATE users SET approved=0 WHERE id=?',(teacher_id,))
+        self.call(learner,'booking-room',request,expected=403)
+        with server.connect() as db:
+            db.execute('UPDATE users SET approved=1 WHERE id=?',(teacher_id,))
+            db.execute("UPDATE bookings SET status='cancelled' WHERE id='http-room-booking'")
+        self.call(learner,'booking-room',request,expected=409)
+        self.call(teacher,'booking-room',request,expected=409)
+
+
 del Harness
 
 if __name__=='__main__': unittest.main()
