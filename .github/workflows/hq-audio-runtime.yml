@@ -18,6 +18,9 @@ on:
       - 'scripts/check-audio-runtime.cjs'
       - 'scripts/team12_audio_inventory.py'
       - 'scripts/team12_audio_source_discovery.py'
+      - 'scripts/team12_recording_queue.js'
+      - 'scripts/check-recording-studio.cjs'
+      - 'hangul-recording-studio.html'
       - 'scripts/test_team12_audio_source_discovery.py'
       - 'scripts/team12_server_progress.js'
       - 'scripts/team12_server_progress.test.js'
@@ -47,6 +50,7 @@ jobs:
           node scripts/check-audio-review.cjs
           node scripts/check-human-audio.cjs
           node scripts/check-week-human-audio.cjs
+          node scripts/check-recording-studio.cjs
       - name: Test seven-stage account-bound progress and lesson resume
         run: |
           node scripts/team12_server_progress.test.js

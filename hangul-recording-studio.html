@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>한글쉽지 · 사람 음성 녹음 준비실</title>
+<style>
+body{font-family:system-ui,-apple-system,sans-serif;max-width:760px;margin:auto;padding:20px;background:#f7fafc;color:#17283b;line-height:1.6}
+main{background:#fff;border:1px solid #dae3ee;border-radius:16px;padding:24px}h1{margin-top:0}
+button,select{font:inherit;padding:10px 14px;border:1px solid #657e9a;border-radius:9px;background:white}
+button{cursor:pointer}button:disabled{opacity:.55;cursor:not-allowed}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #2674cb;outline-offset:2px}
+#letter{font-size:5rem;font-weight:700;text-align:center;margin:12px}
+label{display:block;margin:14px 0}audio{display:block;width:100%;margin:16px 0}
+.actions{display:flex;flex-wrap:wrap;gap:10px}#status{min-height:3em;padding:12px;background:#eff5fc;border-radius:8px}
+small{display:block;color:#44576d;margin-top:8px}
+</style></head><body><main>
+<h1>사람 목소리 녹음 준비실 <small>Human voice recording studio · local only</small></h1>
+<p>없는 한글 발음을 실제 사람이 직접 녹음할 수 있도록 준비한 도구입니다. 녹음은 브라우저 안에서만 처리되며 서버에 업로드되지 않습니다. 이 화면은 음원 승인이나 공개 배포를 하지 않습니다.</p>
+<p id="inventory" role="status">음원 목록 확인 중…</p>
+<label for="syllable">녹음할 글자 / Missing syllable</label>
+<select id="syllable" disabled></select><div id="letter" aria-live="polite">—</div>
+<label><input type="checkbox" id="consent"> 저는 제 목소리를 녹음할 권리가 있고, 녹음·파일 저장에 동의합니다. / I consent to recording my own voice.</label>
+<div class="actions"><button id="start" disabled>● 녹음 시작 / Record</button><button id="stop" disabled>■ 녹음 종료 / Stop</button></div>
+<p id="status" role="status" aria-live="polite">HTTPS 연결과 마이크 권한이 필요합니다.</p>
+<audio id="preview" controls hidden></audio>
+<label><input type="checkbox" id="review" disabled> 방금 녹음을 직접 듣고 선택한 글자와 일치함을 확인했습니다. / I listened and checked the syllable.</label>
+<a id="download" hidden>후보 파일 저장 / Save candidate</a>
+<small>파일을 저장해도 학습 사이트에는 자동 반영되지 않습니다. 별도 MP3 변환, 출처·동의 기록, 교사 청취 승인, 재생 테스트가 필요합니다. 합성 음성은 사용하지 않습니다.</small>
+<p><a href="./hangul-audio-review.html">음원 검수 화면으로 돌아가기</a></p>
+</main><script src="./scripts/team12_recording_queue.js"></script>
+<script>
+(()=>{'use strict';
+ const $=id=>document.getElementById(id);
+ const fields=['syllable','consent','start','stop','review','preview','download','letter','inventory','status'];
+ if(fields.some(id=>!$(id)))return;
+ let recorder=null,stream=null,chunks=[],url=null,limit=null,blob=null;
+ const note=message=>{$('status').textContent=message};
+ function cleanup(){
+   if(limit){clearTimeout(limit);limit=null}
+   if(stream){for(const track of stream.getTracks())track.stop();stream=null}
+ }
+ function discard(){
+   $('review').checked=false;$('review').disabled=true;$('download').hidden=true;
+   $('preview').hidden=true;$('preview').removeAttribute('src');$('preview').load();
+   if(url){URL.revokeObjectURL(url);url=null}blob=null;
+ }
+ function selection(){
+   if(recorder&&recorder.state!=='inactive')return;
+   discard();$('letter').textContent=$('syllable').value||'—';
+   $('start').disabled=!$('syllable').value||!$('consent').checked;
+ }
+ $('syllable').addEventListener('change',selection);
+ $('consent').addEventListener('change',selection);
+ $('review').addEventListener('change',()=>{$('download').hidden=!$('review').checked||!blob});
+ $('start').addEventListener('click',async()=>{
+   if(!$('consent').checked||!$('syllable').value||recorder&&recorder.state!=='inactive')return;
+   discard();const character=$('syllable').value;
+   try{
+     if(!navigator.mediaDevices?.getUserMedia||typeof MediaRecorder==='undefined')throw Error('이 브라우저는 마이크 녹음을 지원하지 않습니다.');
+     stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}});
+     if(!$('consent').checked||$('syllable').value!==character){cleanup();return}
+     const type=['audio/webm;codecs=opus','audio/mp4','audio/webm'].find(t=>MediaRecorder.isTypeSupported(t));
+     recorder=type?new MediaRecorder(stream,{mimeType:type}):new MediaRecorder(stream);
+     chunks=[];$('start').disabled=true;$('syllable').disabled=true;$('stop').disabled=false;
+     recorder.ondataavailable=event=>{if(event.data?.size)chunks.push(event.data)};
+     recorder.onerror=()=>{cleanup();$('stop').disabled=true;$('syllable').disabled=false;note('녹음 오류가 발생했습니다. 다시 시도하세요.')};
+     recorder.onstop=()=>{
+       cleanup();$('stop').disabled=true;$('syllable').disabled=false;
+       if(!chunks.length){note('녹음 데이터가 없습니다. 다시 시도하세요.');selection();return}
+       blob=new Blob(chunks,{type:recorder.mimeType||'audio/webm'});
+       url=URL.createObjectURL(blob);$('preview').src=url;$('preview').hidden=false;
+       $('review').disabled=false;$('download').hidden=true;
+       const ext=blob.type.includes('mp4')?'m4a':'webm';
+       $('download').download='hangul-human-'+character.codePointAt(0).toString(16)+'.'+ext;
+       $('download').href=url;
+       note('녹음 완료. 직접 들어보고 글자가 맞으면 체크한 뒤 후보 파일을 저장하세요.');
+       $('start').disabled=!$('consent').checked;
+     };
+     recorder.start();note('녹음 중: '+character+' (최대 10초)');limit=setTimeout(()=>{if(recorder?.state==='recording')recorder.stop()},10000);
+   }catch(error){cleanup();$('stop').disabled=true;$('syllable').disabled=false;
+     $('start').disabled=!$('consent').checked;note('마이크 접근 실패: '+(error.name||'unsupported')+'. 브라우저 권한과 HTTPS를 확인하세요.')}
+ });
+ $('stop').addEventListener('click',()=>{if(recorder?.state==='recording')recorder.stop()});
+ window.addEventListener('pagehide',()=>{if(recorder?.state==='recording')recorder.stop();cleanup();if(url)URL.revokeObjectURL(url)});
+ fetch('./hangul-audio-manifest.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('manifest unavailable');return r.json()}).then(m=>{
+   const q=HSRecordingQueue.build(m);
+   $('inventory').textContent='399칸 · 후보 '+q.counts.ready_unapproved+' · 검수 보류 '+q.counts.held+' · 미녹음 '+q.counts.missing+' (청취 승인 전)';
+   for(const item of q.missing){const option=document.createElement('option');option.value=item.character;option.textContent=item.character;$('syllable').append(option)}
+   $('syllable').disabled=!q.missing.length;selection();
+ }).catch(()=>note('음원 목록을 불러오지 못했습니다. 새로고침 후 다시 시도하세요.'));
+})();
+</script></body></html>
