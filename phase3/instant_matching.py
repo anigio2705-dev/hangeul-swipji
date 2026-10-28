@@ -25,6 +25,7 @@ def initialize(db):
       CHECK(event_type IN ('lesson.started','lesson.completed','booking.cancelled')),
       created REAL NOT NULL, payload TEXT NOT NULL);
     CREATE INDEX IF NOT EXISTS instant_lesson_events_booking ON instant_lesson_events(booking_id);
+    CREATE UNIQUE INDEX IF NOT EXISTS instant_terminal_event_per_booking ON instant_lesson_events(booking_id) WHERE event_type IN ('lesson.completed','booking.cancelled');
     CREATE TABLE IF NOT EXISTS instant_event_deliveries(
       event_id TEXT PRIMARY KEY REFERENCES instant_lesson_events(event_id),
       consumer TEXT NOT NULL, acknowledged_at REAL NOT NULL, receipt_id TEXT NOT NULL UNIQUE);
@@ -275,6 +276,42 @@ def record_lesson_event(db, user, booking_id, event_id, event_type):
 
 
 
+
+def verified_outbox_envelope(db, event_id):
+    """Read-only versioned handoff built exclusively from trusted SQLite state.
+
+    A read is not an acknowledgement. Do not expose this internal API to browsers.
+    """
+    verified=verified_event_for_team14(db,event_id)
+    row=db.execute('SELECT created,payload FROM instant_lesson_events WHERE event_id=?',(event_id,)).fetchone()
+    delivery=db.execute('SELECT consumer,receipt_id FROM instant_event_deliveries WHERE event_id=?',(event_id,)).fetchone()
+    attempts=db.execute('SELECT attempts FROM instant_event_attempts WHERE event_id=?',(event_id,)).fetchone()
+    payload=json.loads(row['payload'])
+    if payload.get('version')!=1 or payload.get('paymentExecuted') is not False:
+        raise server.Error('지원하지 않는 이벤트 버전 또는 결제 상태',409)
+    return {'version':1,'eventId':event_id,'bookingId':verified['bookingId'],
+            'learnerId':verified['learnerId'],'teacherId':verified['teacherId'],
+            'amount':verified['amount'],'currency':'KRW',
+            'completedAt':row['created'],'type':verified['type'],
+            'bookingStatus':verified['status'],
+            'deliveryStatus':'acknowledged' if delivery else 'pending',
+            'attempts':attempts['attempts'] if attempts else 0,
+            'receiptId':delivery['receipt_id'] if delivery else None,
+            'paymentExecuted':False,'verifiedByServer':True}
+
+
+def confirm_settlement_receipt(db, event_id, consumer, receipt_id, settlement_confirmed=False):
+    """Only a trusted caller may acknowledge a durable downstream ledger receipt.
+
+    Explicit confirmation is mandatory; event delivery or a transport response alone
+    is insufficient. A separate Team14 database needs replay-safe event IDs.
+    """
+    if settlement_confirmed is not True:
+        raise server.Error('모의 정산 확정 증빙이 필요합니다',409)
+    verified_outbox_envelope(db,event_id)
+    return acknowledge_settlement_event(db,event_id,consumer,receipt_id)
+
+
 def pending_settlement_events(db, limit=100):
     """Internal-only Team14 handoff; never exposed as a user HTTP endpoint.
 
@@ -332,10 +369,14 @@ def deliver_mock_events(db, consumer, limit=100):
                       ON CONFLICT(event_id) DO UPDATE SET
                         attempts=attempts+1,last_attempt=excluded.last_attempt,last_error=NULL""",
                    (event_id,time.time()))
+        verified_outbox_envelope(db,event_id)
         receipt=consumer(db,event)
         if not isinstance(receipt,str) or not receipt.strip():
             raise server.Error('모의 정산 처리 확인이 없습니다',409)
-        results.append(acknowledge_settlement_event(db,event_id,'team14',receipt))
+        # Legacy same-SQLite adapter: consumer must have committed its ledger in
+        # this transaction. Separate DB consumers must replay with stable eventId.
+        results.append(confirm_settlement_receipt(db,event_id,'team14',receipt,
+                                                   settlement_confirmed=True))
     return results
 
 
