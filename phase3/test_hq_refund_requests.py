@@ -30,6 +30,28 @@ class RefundRequestBalanceTests(unittest.TestCase):
         self.request('refund-1',70)
         decide_refund(self.store,'refund-1','rejected','test_reviewer')
         self.assertEqual('requested',self.request('refund-2',100)['state'])
+    def test_refund_id_cannot_shadow_settlement_operation_or_ledger(self):
+        for rid in ('settle', 'settle-op'):
+            with self.subTest(request_id=rid), self.assertRaises(SimError) as error:
+                self.request(rid, 10)
+            self.assertEqual('CONFLICT', error.exception.code)
+        self.assertEqual(0, self.store.db.execute(
+            'SELECT count(*) FROM refund_requests').fetchone()[0])
+
+    def test_applied_replay_requires_matching_durable_operation(self):
+        self.request('refund-1', 10)
+        decide_refund(self.store, 'refund-1', 'approved', 'test_reviewer')
+        applied = apply_approved_refund(self.server, self.store, 'refund-1')
+        self.assertEqual(applied, apply_approved_refund(self.server, self.store, 'refund-1'))
+        self.store.db.execute("UPDATE operations SET result='{}' WHERE id='refund-1'")
+        with self.assertRaises(SimError) as error:
+            apply_approved_refund(self.server, self.store, 'refund-1')
+        self.assertEqual('CONFLICT', error.exception.code)
+        self.store.db.execute("DELETE FROM operations WHERE id='refund-1'")
+        with self.assertRaises(SimError) as error:
+            apply_approved_refund(self.server, self.store, 'refund-1')
+        self.assertEqual('CONFLICT', error.exception.code)
+
     def test_wrong_learner_cannot_reserve(self):
         with self.assertRaises(SimError) as e:
             request_refund(self.server,self.store,'booking','other','teacher',100)
