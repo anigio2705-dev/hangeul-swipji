@@ -19,6 +19,9 @@ on:
       - 'scripts/team12_resume.test.js'
       - 'scripts/team12_server_progress.js'
       - 'scripts/team12_server_progress.test.js'
+      - 'phase3/test_team12_progress_http.py'
+      - 'phase3/server.py'
+      - 'phase3/test_server.py'
       - 'intro.html'
       - 'beginner1.html'
       - 'beginner2.html'
@@ -52,6 +55,8 @@ jobs:
           node scripts/team12_server_progress.test.js
           node --check phase3/app.js
           node --check hangul-core.js
+      - name: Verify real HTTP and SQLite learner progress
+        run: cd phase3 && python3 -m unittest test_team12_progress_http -v
       - name: Verify educational content structure
         run: python3 -m unittest discover -s scripts -p 'team12_content_regression.py' -v
       - name: Run physical audio audit
