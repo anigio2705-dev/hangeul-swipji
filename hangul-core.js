@@ -28,7 +28,15 @@
     const request=fetch('./hangul-audio-manifest.json?v=20261027-audio-retry', {cache:'no-store'})
       .then(r=>{if(!r.ok)throw Error('audio manifest');return r.json()});
     loading=(schedule?Promise.race([request,new Promise((_,reject)=>{timer=schedule(()=>reject(Error('audio manifest timeout')),15000)})]):request)
-      .then(m=>{if(!m.recordings||typeof m.recordings!=='object'||Array.isArray(m.recordings))throw Error('invalid audio manifest');const human=Object.entries(m.recordings).filter(([,a])=>a&&a.kind==='human'&&typeof a.src==='string'&&/^\.\/assets\/hangul-audio\/[\w-]+\.mp3$/.test(a.src)&&a.sourceUrl&&a.author&&a.license);
+      .then(m=>{if(!m.recordings||typeof m.recordings!=='object'||Array.isArray(m.recordings))throw Error('invalid audio manifest');const seenSources=new Set();
+        const human=Object.entries(m.recordings).filter(([,a])=>{
+          if(!a||a.kind!=='human'||typeof a.src!=='string'||!/^\.\/assets\/hangul-audio\/[\w-]+\.mp3$/.test(a.src)||
+             !/^[a-f0-9]{64}$/i.test(a.sha256||'')||typeof a.sourceUrl!=='string'||!/^https:\/\/[^\s]+$/.test(a.sourceUrl)||
+             typeof a.author!=='string'||!a.author.trim()||typeof a.license!=='string'||!a.license.trim())return false;
+          // Never allow one recording file to impersonate multiple distinct letters.
+          if(seenSources.has(a.src))return false;
+          seenSources.add(a.src);return true;
+        });
         // Replace stale inventory on refresh; removed/held files must not remain playable.
         for(const key of Object.keys(records))delete records[key];
         for(const key of Object.keys(holds))delete holds[key];
@@ -114,9 +122,8 @@
   function refreshBadges(){
     document.querySelectorAll('[data-sound]').forEach(b=>{
       const info=availability(b.dataset.sound);b.dataset.audioState=info.state;
-      const native=!!records[b.dataset.sound];b.classList.toggle('has-recording',native);
-      const held=holds[b.dataset.sound];b.classList.toggle('is-held',!!held);b.title=held?held.holdReason:native?'사람 녹음 · 청취 미검증 / Human recording; listening review pending':'녹음 준비 중 · Recording pending';
-      b.setAttribute('aria-label',b.dataset.sound+' · '+info.label);
+      const native=info.state==='ready';b.classList.toggle('has-recording',native);
+      const held=info.state==='held'?holds[b.dataset.sound]:null;b.classList.toggle('is-held',!!held);b.setAttribute('aria-label',b.dataset.sound+' · '+info.label);
       b.title=info.label;
     });
     const n=document.querySelector('[data-recording-count]');if(n)n.textContent=manifestError?'확인 불가':Object.keys(records).length;
