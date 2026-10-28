@@ -22,10 +22,10 @@ jobs:
         run: |
           mkdir -p team11 team12 team13 team14
           for spec in \
-            "team11 a2abc3c08ec0c4d245ae0be0670a1b47148f2e00" \
-            "team12 edbf1d614e58f391ce2d63e3b3f0229370047c17" \
-            "team13 2cf0cf1ed9bb33a2f22d3487dde33ba5c86091b2" \
-            "team14 f40a925d6711b725cc0bc20e1ca3c7a68b3fa2c9"; do
+            "team11 0edcdb0db15662c1cb0220c7ef0c50fce307bceb" \
+            "team12 ac888b55c6737c929ae007b549f6a7a42ac8822a" \
+            "team13 3ee5996ff4b0748c90f530c755775b7fac56d042" \
+            "team14 ffc81b87bc44074ac71b15739e18f48c881ed828"; do
             read -r dir sha <<< "$spec"
             git fetch origin "$sha"
             git archive "$sha" | tar -x -C "$dir"
