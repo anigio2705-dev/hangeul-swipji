@@ -115,7 +115,11 @@ for team, paths in EXPECT.items():
             except Exception as e:
                 failures.append(f"{team}: invalid tracked path {p}: {e}")
                 continue
-            if p_path.is_absolute() or any(part == '..' for part in p_path.parts):
+            if p_path.is_absolute():
+                failures.append(f"{team}: absolute path not allowed in tracked paths: {p}")
+                changed_files.add(p)
+                continue
+            if any(part == '..' for part in p_path.parts):
                 failures.append(f"{team}: tracked path traversal detected: {p}")
                 changed_files.add(p)
                 continue
