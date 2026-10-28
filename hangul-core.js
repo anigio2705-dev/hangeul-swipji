@@ -28,7 +28,7 @@
     const request=fetch('./hangul-audio-manifest.json?v=20261027-audio-retry', {cache:'no-store'})
       .then(r=>{if(!r.ok)throw Error('audio manifest');return r.json()});
     loading=(schedule?Promise.race([request,new Promise((_,reject)=>{timer=schedule(()=>reject(Error('audio manifest timeout')),15000)})]):request)
-      .then(m=>{if(!m.recordings||typeof m.recordings!=='object'||Array.isArray(m.recordings))throw Error('invalid audio manifest');const human=Object.entries(m.recordings).filter(([,a])=>a&&a.kind==='human'&&typeof a.src==='string'&&/^\\.\\/assets\\/hangul-audio\\/[\\w-]+\\.mp3$/.test(a.src)&&a.sourceUrl&&a.author&&a.license);
+      .then(m=>{if(!m.recordings||typeof m.recordings!=='object'||Array.isArray(m.recordings))throw Error('invalid audio manifest');const human=Object.entries(m.recordings).filter(([,a])=>a&&a.kind==='human'&&typeof a.src==='string'&&/^\.\/assets\/hangul-audio\/[\w-]+\.mp3$/.test(a.src)&&a.sourceUrl&&a.author&&a.license);
         // Replace stale inventory on refresh; removed/held files must not remain playable.
         for(const key of Object.keys(records))delete records[key];
         for(const key of Object.keys(holds))delete holds[key];
