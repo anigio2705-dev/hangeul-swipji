@@ -7,11 +7,11 @@ class RealServerDbAdapterTests(unittest.TestCase):
   self.path=os.path.join(self.tmp.name,'server.sqlite')
   with sqlite3.connect(self.path) as db:
    db.executescript("""CREATE TABLE users(id TEXT PRIMARY KEY,role TEXT,approved INTEGER,referred_by TEXT);
-   CREATE TABLE bookings(id TEXT PRIMARY KEY,learner_id TEXT,teacher_id TEXT,status TEXT);""")
+   CREATE TABLE bookings(id TEXT PRIMARY KEY,learner_id TEXT,teacher_id TEXT,status TEXT,price INTEGER);""")
    db.executemany('INSERT INTO users VALUES(?,?,?,?)',[
     ('student','learner',0,'referrer'),('referrer','learner',0,None),
     ('teacher','teacher',1,None),('badteacher','teacher',0,None)])
-   db.execute("INSERT INTO bookings VALUES('booking','student','teacher','completed')")
+   db.execute("INSERT INTO bookings VALUES('booking','student','teacher','completed',10000)")
  def tearDown(self):self.tmp.cleanup()
  def test_reads_actual_booking_and_roles(self):
   r=read_server_booking(self.path,'booking','month','lesson',True)
