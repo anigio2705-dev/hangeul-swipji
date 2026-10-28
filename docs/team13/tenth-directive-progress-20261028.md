@@ -3,7 +3,7 @@
 Original numbering: 21–30 (collaboration with Team11) and 71–100 (Team13 primary); 40 entries. Source: docs/platform-execution-backlog-20261027/docs/PLATFORM_EXECUTION_BACKLOG.md. Progress is a conservative **development estimate**, NOT verified completion. Do not add Team13's ten shared items twice to the 160-item HQ mean.
 
 Baseline verified before latest changes: https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40613496099 — 88 Python tests PASS, 13 browser PASS (mocked video only).
-New implementation commits: d7c93f007d4df20bfa5e31cd162da213344fe807 (booking lifecycle read model); 3a26efb508e83ad303a64b2514f6eae039037a0d (regression tests). New run must be checked separately; until then no extra item is claimed complete.
+New implementation commits: d7c93f007d4df20bfa5e31cd162da213344fe807 (booking lifecycle read model); 3a26efb508e83ad303a64b2514f6eae039037a0d (regression tests). New run verified: https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40616132674 — Python 90/90 OK, browser 13/13 PASS, no failures. This remains isolated automated validation; no item claimed fully complete.
 
 Scoring: 0 not implemented; 20 design/partial scaffolding; 40 partial working implementation; 60 core feature implemented but integration/exceptions missing; 80 connected and validation pending; 90 automated pass but real-world checks pending; 100 only after full original acceptance. Scores can use intermediate 10-point increments. A code file or test alone does not justify 100.
 
