@@ -84,7 +84,7 @@ def apply_patch(source, patch):
         raise ValueError("Patch must contain old/new strings")
     if not (12 <= len(old) <= 2400 and 12 <= len(new) <= 3200):
         raise ValueError("Patch too small or large")
-    if "\\x00" in old or "\\x00" in new:
+    if "\x00" in old or "\x00" in new:
         raise ValueError("Null byte forbidden")
     if old == new or source.count(old) != 1:
         raise ValueError("Patch must make one unambiguous real change")
