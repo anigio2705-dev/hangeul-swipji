@@ -111,6 +111,11 @@ def inspect(root):
             problems.append({"word": word, "issue": "file_read_error", "path": src, "detail": str(e)})
             continue
 
+        # Safety check: Verify data_bytes is likely a valid mp3 header (not foolproof but better than nothing)
+        if len(data_bytes) < 10 or not (data_bytes.startswith(b'ID3') or (data_bytes[0] & 0xFF) == 0xFF):
+            problems.append({"word": word, "issue": "invalid_file_content", "path": src})
+            continue
+
         digest = hashlib.sha256(data_bytes).hexdigest()
         if entry.get("sha256") and digest != entry["sha256"]:
             problems.append({"word": word, "issue": "hash_mismatch", "path": src})
