@@ -17,7 +17,10 @@ def inspect(root):
     if not manifest_path.is_file():
         raise FileNotFoundError(f"Manifest file not found: {manifest_path}")
 
-    manifest_text = manifest_path.read_text(encoding="utf-8")
+    try:
+        manifest_text = manifest_path.read_text(encoding="utf-8")
+    except Exception as e:
+        raise IOError(f"Failed to read manifest file: {manifest_path}, error: {e}")
 
     try:
         manifest = json.loads(manifest_text)
@@ -35,8 +38,20 @@ def inspect(root):
             continue
 
         src = entry.get("src", "")
-        if not isinstance(src, str) or not re.fullmatch(r"\./assets/hangul-audio/[\w-]+\.mp3", src):
+        # Use safe regex matching for valid path
+        if not isinstance(src, str) or not re.fullmatch(r"\./assets/hangul-audio/[\w\-]+\.mp3", src):
             problems.append({"word": word, "issue": "invalid_source_path", "path": src})
+            continue
+
+        # Normalize and validate src path to prevent path traversal
+        try:
+            src_path = Path(src[2:]).resolve()
+            root_resolved = root.resolve()
+            if root_resolved not in src_path.parents and src_path != root_resolved:
+                problems.append({"word": word, "issue": "invalid_path_outside_root", "path": src})
+                continue
+        except Exception as e:
+            problems.append({"word": word, "issue": "invalid_path", "path": src, "detail": str(e)})
             continue
 
         path = root / src[2:]
@@ -54,18 +69,26 @@ def inspect(root):
         if entry.get("sha256") and digest != entry["sha256"]:
             problems.append({"word": word, "issue": "hash_mismatch", "path": src})
 
-        probe = subprocess.run([
-            "ffmpeg", "-v", "error", "-i", str(path), "-f", "null", "-"
-        ], capture_output=True, text=True)
-        if probe.returncode:
-            problems.append({"word": word, "issue": "decode_failed", "path": src, "detail": probe.stderr[:300]})
+        # Run ffmpeg to check for decode errors
+        try:
+            probe = subprocess.run([
+                "ffmpeg", "-v", "error", "-i", str(path), "-f", "null", "-"
+            ], capture_output=True, text=True, timeout=10)
+            if probe.returncode != 0:
+                problems.append({"word": word, "issue": "decode_failed", "path": src, "detail": probe.stderr[:300]})
+        except subprocess.SubprocessError as e:
+            problems.append({"word": word, "issue": "ffmpeg_error", "path": src, "detail": str(e)})
 
         if entry.get("kind") != "human":
             problems.append({"word": word, "issue": "not_verified_human", "path": src})
 
-        if not all(isinstance(entry.get(k), str) and entry.get(k).strip() for k in ("sourceUrl", "author", "license")):
-            problems.append({"word": word, "issue": "missing_provenance", "path": src})
+        for key in ("sourceUrl", "author", "license"):
+            val = entry.get(key)
+            if not isinstance(val, str) or not val.strip():
+                problems.append({"word": word, "issue": "missing_provenance", "path": src})
+                break
 
+    # Prepare inventory for 399 syllables
     for i, c in enumerate(CONSONANTS):
         for j, v in enumerate(VOWELS):
             word = chr(0xAC00 + (i * 21 + j) * 28)
