@@ -46,3 +46,24 @@ CREATE TABLE IF NOT EXISTS free_lesson_progress (
  PRIMARY KEY(user_id,stage,lesson)
 );
 CREATE INDEX IF NOT EXISTS free_lesson_progress_user ON free_lesson_progress(user_id,stage,lesson);
+
+-- Authenticated free-course quiz attempts and last resume location; additive migration.
+CREATE TABLE IF NOT EXISTS free_quiz_results (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+ stage INTEGER NOT NULL CHECK(stage BETWEEN 1 AND 7),
+ lesson INTEGER NOT NULL CHECK(lesson BETWEEN 1 AND 50),
+ score INTEGER NOT NULL CHECK(score BETWEEN 0 AND 100),
+ max_score INTEGER NOT NULL CHECK(max_score BETWEEN 1 AND 100),
+ request_id TEXT NOT NULL CHECK(length(request_id) BETWEEN 1 AND 100),
+ recorded_at REAL NOT NULL,
+ UNIQUE(user_id,request_id),
+ CHECK(score<=max_score)
+);
+CREATE INDEX IF NOT EXISTS free_quiz_results_owner ON free_quiz_results(user_id,stage,lesson,recorded_at DESC);
+CREATE TABLE IF NOT EXISTS free_resume_positions (
+ user_id TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+ stage INTEGER NOT NULL CHECK(stage BETWEEN 1 AND 7),
+ lesson INTEGER NOT NULL CHECK(lesson BETWEEN 1 AND 50),
+ updated_at REAL NOT NULL
+);
