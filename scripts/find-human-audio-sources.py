@@ -34,13 +34,8 @@ for t in audio.get('targets', []):
         if not recording_available:
             # Check certain known problematic group labels
             suspicious_labels = ['', '', ' ']
-            korean_labels = ['', '\uc790\uc74c \uc774\ub984', '\ubaa8\uc74c', '\uae00\uc790\ud310 \uc74c\uc808']
-            # Correct Korean labels are actual Unicode strings, decode them properly
-            # The original strings are actually Unicode escaped literals; fix:
-            # '' is two DEL chars; suspicious_labels
-            # A common miswrite: '\uc790\uc74c \uc774\ub984' is the literal string of those six chars
-            # Let's decode them
-            korean_labels_decoded = ['자음 이름', '모음', '글자판 음절']
+            # Properly decoded Korean labels
+            korean_labels_decoded = ['자음 이름', '모음', '글자팥 음절']
             if any(g in suspicious_labels for g in groups_str) or any(g in korean_labels_decoded for g in groups_str):
                 missing.append(text)
 
