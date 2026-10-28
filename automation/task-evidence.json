@@ -1,0 +1,16 @@
+{
+  "10": {
+    "status": "code_verified",
+    "commit": "5678614bfb8021028c8e38b12e9f931ece815d9c",
+    "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40737363361",
+    "ci_result": "success",
+    "scope": "HQ queue keeps stable 1-160 IDs and prevents re-implementing code-verified tasks; final master review remains open"
+  },
+  "59": {
+    "status": "code_verified",
+    "commit": "f5afd95a2c1b2c2205f6f195ef68e7af2c3641a0",
+    "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40737701879",
+    "ci_result": "success",
+    "scope": "Human-only missing/held/error status and retry refresh; teacher-assisted practice guidance. Browser/mobile playback still unverified"
+  }
+}

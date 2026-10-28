@@ -1,4 +1,6 @@
 import unittest
+import json
+from pathlib import Path
 from backlog_queue import (
     build_report, parse_backlog, validate_evidence, owner_for, EXTERNAL_GATES
 )
@@ -19,6 +21,14 @@ def verified(status="code_verified", **extra):
     }
 
 class BacklogQueueTests(unittest.TestCase):
+    def test_checked_in_evidence_is_code_only_not_final_completion(self):
+        ledger = json.loads((Path(__file__).parent / "task-evidence.json").read_text(encoding="utf-8"))
+        report = build_report(sample(), ledger)
+        self.assertEqual(report["counts"]["complete"], 0)
+        self.assertEqual(report["counts"]["code_verified"], len(ledger))
+        self.assertEqual({x["number"] for x in report["review_queue"]}, {10, 59})
+        self.assertFalse({10, 59} & {x["number"] for x in report["next_queue"]})
+
     def test_exactly_160_and_unique(self):
         self.assertEqual(len(parse_backlog(sample())), 160)
         with self.assertRaises(ValueError):

@@ -6,6 +6,7 @@ on:
       - '.github/workflows/hq-backlog-queue.yml'
       - 'automation/backlog_queue.py'
       - 'automation/test_backlog_queue.py'
+      - 'automation/task-evidence.json'
   workflow_dispatch:
 permissions:
   contents: read
@@ -64,6 +65,7 @@ jobs:
           python automation/backlog_queue.py \
             --backlog "$RUNNER_TEMP/hq-master-backlog.md" \
             --branch-heads "$RUNNER_TEMP/hq-team-heads.json" \
+            --evidence automation/task-evidence.json \
             --output "$RUNNER_TEMP/hq-backlog-report.json"
           python - <<'PY'
           import json, os
