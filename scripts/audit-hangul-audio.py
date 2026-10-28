@@ -214,9 +214,10 @@ for word, meta in manifest.get('recordings', {}).items():
 
     # Defensive sanitation of warnings list elements and types
     clean_warnings = []
-    for w in warnings:
-        if isinstance(w, str):
-            clean_warnings.append(w)
+    if isinstance(warnings, list):
+        for w in warnings:
+            if isinstance(w, str):
+                clean_warnings.append(w)
 
     recordings.append({'text': word, 'src': src, 'duration': round(duration, 3),
         'peakDbfs': round(20 * math.log10(max(1, peak) / 32768), 2),
