@@ -19,19 +19,19 @@ jobs:
           path: integration
       - uses: actions/checkout@v4
         with:
-          ref: 223a28d40e8fa8382602e2cceb587cb4a269cc03
+          ref: 6c273e57f17db7baef265896b0019a2a3beaf338
           path: team11
       - uses: actions/checkout@v4
         with:
-          ref: f1d3cfad9446077b8e315a16e05b9885ca07ee98
+          ref: 3aed30eb9611f3e65a923c808605c6642f4d518e
           path: team12
       - uses: actions/checkout@v4
         with:
-          ref: b7b5ba56ab496d54cbd9513f80717acbfd03992e
+          ref: b0f39ef7a49dd34c7293a454980d79277a92c6e0
           path: team13
       - uses: actions/checkout@v4
         with:
-          ref: 5e4ac47a43b0fc1610b31de1cfbb98151369321a
+          ref: b6a1b14638afb13d4fb1cf4863b8f93e2334fa43
           path: team14
       - name: Print pinned checkout SHAs
         run: for d in integration team11 team12 team13 team14; do echo "$d $(git -C "$d" rev-parse HEAD)"; done
@@ -41,12 +41,14 @@ jobs:
         run: python3 qa/scripts/team15_cross_team_smoke.py
       - name: Run refund and team boundary contract checks
         run: python3 qa/scripts/test_team15_boundaries.py
+      - name: Execute real Team11-Team14 mock ledger integration with SQLite persistence
+        run: python3 qa/scripts/test_team15_real_bridge.py
   team11-contract:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: 223a28d40e8fa8382602e2cceb587cb4a269cc03
+          ref: 6c273e57f17db7baef265896b0019a2a3beaf338
       - run: git rev-parse HEAD
       - run: python3 -m unittest discover -s phase3 -p 'test_common_*.py' -v
   team12-audio:
@@ -54,7 +56,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: f1d3cfad9446077b8e315a16e05b9885ca07ee98
+          ref: 3aed30eb9611f3e65a923c808605c6642f4d518e
       - run: git rev-parse HEAD
       - run: python3 -m py_compile scripts/team12_audio_inventory.py
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg
@@ -70,7 +72,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: b7b5ba56ab496d54cbd9513f80717acbfd03992e
+          ref: b0f39ef7a49dd34c7293a454980d79277a92c6e0
           fetch-depth: 0
       - run: git rev-parse HEAD && git cat-file -e 7418e32:phase3/content.json
       - uses: actions/setup-python@v5
@@ -89,7 +91,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: b7b5ba56ab496d54cbd9513f80717acbfd03992e
+          ref: b0f39ef7a49dd34c7293a454980d79277a92c6e0
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -112,7 +114,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: 5e4ac47a43b0fc1610b31de1cfbb98151369321a
+          ref: b6a1b14638afb13d4fb1cf4863b8f93e2334fa43
       - run: git rev-parse HEAD
       - run: python3 -m unittest discover -s phase3 -p 'test_team14*.py' -v
   integration-baseline:
