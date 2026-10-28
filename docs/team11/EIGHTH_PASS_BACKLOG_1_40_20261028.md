@@ -46,7 +46,7 @@ Source of numbering: `docs/PLATFORM_EXECUTION_BACKLOG.md` on `docs/platform-exec
 | 39 | 수정 필요 | privacy deletion and legal retention lifecycle unverified |
 | 40 | 외부 확인 대기 | **no actual backup/restore drill**, schema-only evidence |
 
-**Count (40):** 개발 검사 통과 후보 5 (3,10,31,33,36,37 = actually 6); 수정 필요 6 (8,9,29,34,35,39); 외부 확인 대기 28; 완료 0; 미착수 0. Correct count: **6 + 6 + 28 = 40**. Candidate statuses are *not* verified test PASS.
+**Count (40):** 개발 검사 통과 **후보** 6 (3,10,31,33,36,37); 수정 필요 6 (8,9,29,34,35,39); 외부 확인 대기 28; 완료 0; 미착수 0. **6 + 6 + 28 = 40**. Candidates are provisional and **not** verified test PASS.
 
 ## Actual checked source evidence
 - `phase3/schema.sql`: users.role single CHECK learner/partner/teacher/admin; approved boolean; UNIQUE email/referral code; sessions, bookings, ledger, audit, external_identities tables.
