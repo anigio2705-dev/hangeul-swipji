@@ -51,7 +51,35 @@ jobs:
           HQ_TEAM: ${{ matrix.team }}
           HQ_MAX_CALLS: '2'
           GITHUB_REF_NAME: ${{ github.ref_name }}
-        run: python /tmp/hq_six_developers.py
+        run: |
+          python - <<'PY'
+          import json, pathlib, subprocess, time
+          deadline = time.monotonic() + 45 * 60
+          history = []
+          for round_no in range(1, 13):
+              if time.monotonic() >= deadline:
+                  break
+              run = subprocess.run(["python", "/tmp/hq_six_developers.py"])
+              result_file = pathlib.Path("/tmp/team-result.json")
+              if run.returncode or not result_file.exists():
+                  print("Runner failed; stop instead of spending more API", flush=True)
+                  break
+              result = json.loads(result_file.read_text())
+              result["round"] = round_no
+              history.append(result)
+              committed = sum(t.get("status") == "committed" for t in result.get("tasks", []))
+              print(f"Round {round_no}: committed={committed}, calls={result.get('calls')}", flush=True)
+              if committed == 0:
+                  print("No verified progress; stop this team to prevent repeated spending", flush=True)
+                  break
+          pathlib.Path("/tmp/team-result.json").write_text(json.dumps({
+              "team": history[0]["team"] if history else "unknown",
+              "rounds": history,
+              "tasks": [t for x in history for t in x.get("tasks", [])],
+              "calls": sum(x.get("calls", 0) for x in history),
+              "committed": sum(t.get("status") == "committed" for x in history for t in x.get("tasks", []))
+          }, indent=2))
+          PY
       - name: Save team result
         if: always()
         uses: actions/upload-artifact@v4
@@ -60,44 +88,3 @@ jobs:
           path: /tmp/team-result.json
           if-no-files-found: ignore
           retention-days: 7
-  continue_if_progress:
-    needs: develop
-    if: ${{ always() && needs.develop.result == 'success' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Retrieve six independent team reports
-        uses: actions/download-artifact@v4
-        with:
-          pattern: team-*-development
-          path: reports
-      - name: Continue automatically only after real progress
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-          DEPTH: ${{ inputs.chain_depth || '0' }}
-          REF: ${{ github.ref_name }}
-        run: |
-          python - <<'PY'
-          import json, os, pathlib, subprocess
-          depth = int(os.environ["DEPTH"])
-          if depth < 0 or depth >= 23:
-              print("Chain limit reached; no further API spending")
-              raise SystemExit(0)
-          reports = list(pathlib.Path("reports").rglob("team-result.json"))
-          if len(reports) != 6:
-              print("Incomplete evidence; refusing automatic continuation")
-              raise SystemExit(0)
-          completed = sum(sum(t.get("status") == "committed" for t in json.loads(p.read_text()).get("tasks", [])) for p in reports)
-          print(f"Verified committed tasks: {completed}; chain depth: {depth}")
-          if completed == 0:
-              print("No progress; stop to avoid waste")
-              raise SystemExit(0)
-          if os.environ["REF"] != "automation/hq-pilot-13-14-15-20261029":
-              raise SystemExit("Unauthorized ref")
-          payload = json.dumps({"ref": os.environ["REF"], "inputs": {"chain_depth": str(depth+1)}})
-          subprocess.run(["gh", "api", "--method", "POST",
-              f"repos/{os.environ['GH_REPO']}/actions/workflows/hq-six-developers.yml/dispatches",
-              "--input", "-"], input=payload, text=True, check=True)
-          print("Next six-team development round dispatched automatically")
-          PY
