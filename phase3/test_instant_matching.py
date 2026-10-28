@@ -311,6 +311,7 @@ class InstantMatchingTests(unittest.TestCase):
         self.call(learner,'lesson-event',req,expected=409)
         self.call(teacher,'lesson-event',{**req,'type':'booking.cancelled'},expected=409)
         self.call(teacher,'lesson-event',{**req,'eventId':'event-bad','type':'lesson.started'},expected=409)
+        self.call(teacher,'lesson-event',{**req,'eventId':'event-second'},expected=409)
         with server.connect() as db:
             events=list(db.execute('SELECT * FROM instant_lesson_events'))
             self.assertEqual(1,len(events))
