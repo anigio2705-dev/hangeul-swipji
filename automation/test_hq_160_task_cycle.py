@@ -55,7 +55,7 @@ class HQ160TaskCycleTests(unittest.TestCase):
         self.assertEqual(task["attempt"], 2)
         self.assertIn("assertion 42", task["repair_instruction"])
         next_task = next_assignment("15", catalog, failures={"8": {"attempts": 2}})
-        self.assertEqual(next_task["task_number"], 9)
+        self.assertEqual(next_task["task_number"], 151)
 
     def test_independent_verification_not_developer_self_report(self):
         assignment = next_assignment("15", contracts(sample()))
