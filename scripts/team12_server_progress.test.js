@@ -12,6 +12,8 @@ let release;let blocked=false;const slowFetch=async(path,opt={})=>{if(path==='/a
 fail=false;const late=api.client(slowFetch,storage);assert.equal(await late.pull(),true);const k2=api.keys[1];late.changed(k2,JSON.stringify({done:{4:true}}));for(let i=0;i<20&&!release;i++)await Promise.resolve();assert.equal(typeof release,'function');late.changed(k2,JSON.stringify({done:{4:true,5:true}}));release();for(let i=0;i<30;i++)await Promise.resolve();assert.ok(records.get('student-B').some(x=>x.stage===2&&x.lesson===6),'completion added during pending HTTP request must be flushed');
 // Returning to an account must restore its own local-only records without
 // leaking the other account's completed lessons to the authenticated API.
+for(let i=0;i<100&&late.pending.size;i++)await new Promise(resolve=>setImmediate(resolve));
+assert.equal(late.pending.size,0,'all in-flight student B progress requests must settle before switching accounts');
 storage.setItem(k2,JSON.stringify({done:{3:true,4:true,5:true}}));
 const stale=api.client(fetcher,storage);
 assert.equal(await stale.pull(),true,'stale client begins on student B');
