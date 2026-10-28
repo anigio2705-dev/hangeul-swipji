@@ -15,6 +15,11 @@ function setup(mode='ended',fetchMode='ok'){
  for(const mode of ['throw','reject','error','hang']){const x=setup(mode);await x.h.ready;assert.equal((await x.h.play('가')).status,'error',mode)}
  for(const fetchMode of ['reject','hang','json-hang']){const x=setup('ended',fetchMode);assert.equal((await x.h.play('가')).status,'manifest-error',fetchMode)}
  const retry=setup('ended','retry');await retry.h.ready;assert.equal(retry.h.availability('가').state,'unavailable');assert.equal((await retry.h.play('가')).status,'played');assert.equal(retry.h.availability('가').state,'ready');assert.equal(retry.h.availability('아').state,'held');assert.equal(retry.h.availability('missing').state,'missing');
+ const early=setup('ended','rotate');
+ // User may press refresh while the first manifest request is still pending.
+ assert.equal((await early.h.reloadManifest()).status,'ready');
+ assert.equal(early.h.availability('가').state,'missing','manual refresh must not reuse stale initial response');
+ assert.equal(early.h.availability('나').state,'ready');
  const rotating=setup('ended','rotate');await rotating.h.ready;
  assert.equal(rotating.h.availability('가').state,'ready');
  assert.equal((await rotating.h.reloadManifest()).status,'ready');
@@ -31,5 +36,5 @@ function setup(mode='ended',fetchMode='ok'){
  assert(urls[1].includes('v=bbbbbbbbbbbbbbbb'));
  assert.notEqual(urls[0],urls[1],'replaced audio at same path must have a new URL');
  const x=setup('hang');await x.h.ready;const pending=x.h.play('가');await Promise.resolve();await Promise.resolve();x.h.stop();assert.equal((await pending).status,'cancelled');
- console.log('PASS audio runtime: ended, held, missing, source-type rejection, play rejection, file error, manifest failure, timeout, cancellation and atomic manifest refresh, versioned audio cache invalidation; no TTS substitution.');
+ console.log('PASS audio runtime: ended, held, missing, source-type rejection, play rejection, file error, manifest failure, timeout, cancellation and atomic manifest refresh (including initial-load overlap), versioned audio cache invalidation; no TTS substitution.');
 })().catch(e=>{console.error(e);process.exitCode=1});
