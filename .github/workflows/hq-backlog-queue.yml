@@ -44,6 +44,8 @@ jobs:
               "14": "team14/business-systems-audit-20261028",
               "15": "team15/quality-operations-20261028",
               "16": "team16/global-growth-marketing-20261028",
+              "15_d2_qa": "qa/team15-d2-evidence-gates-20261028",
+              "integration": "integration/phase2-phase3-20261027",
           }
           heads = {}
           for team, branch in branches.items():
