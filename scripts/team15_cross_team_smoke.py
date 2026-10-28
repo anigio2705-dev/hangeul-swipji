@@ -18,21 +18,21 @@ for label, (team, candidates, tokens) in checks.items():
     found = []
     for name in candidates:
         path = root / team / name
+        # Ensure the file path is normalized and within root
         try:
             resolved_path = path.resolve(strict=False)
-            # Verify resolved_path is inside root to avoid path traversal
-            try:
-                resolved_path.relative_to(root)
-            except ValueError:
-                issues.append(f"{label}: invalid file path outside of root {resolved_path}")
-                continue
         except RuntimeError:
             issues.append(f"{label}: invalid file path {path}")
             continue
         try:
+            resolved_path.relative_to(root)
+        except ValueError:
+            issues.append(f"{label}: invalid file path outside of root {resolved_path}")
+            continue
+        try:
             if path.is_file():
                 found.append(name)
-        except OSError as e:
+        except (OSError, RuntimeError) as e:
             issues.append(f"{label}: error accessing file {path}: {e}")
     if not found:
         issues.append(f"{label}: no candidate source found")
@@ -47,7 +47,6 @@ for label, team, terms in [
     folder = root / team / "phase3"
     try:
         resolved_folder = folder.resolve(strict=True)
-        # Verify resolved_folder is inside root to avoid path traversal
         try:
             resolved_folder.relative_to(root)
         except ValueError:
@@ -75,15 +74,11 @@ for label, team, terms in [
             except ValueError:
                 issues.append(f"{label}: file path outside of root {resolved_file}")
                 continue
-        except FileNotFoundError:
-            # File disappeared between glob and now; skip
-            continue
-        except RuntimeError:
-            issues.append(f"{label}: invalid file path {p}")
+        except (FileNotFoundError, RuntimeError):
+            # File disappeared or invalid path; skip
             continue
         try:
             if p.stat().st_size < 2_000_000:
-                # Read text with strict UTF-8 decoding; fallback silently if error
                 try:
                     pieces.append(p.read_text(encoding="utf-8"))
                 except UnicodeDecodeError:
