@@ -1,8 +1,6 @@
 name: HQ pilot 13-14-15 integration (isolated)
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '17 */6 * * *'
   push:
     branches: [automation/hq-pilot-13-14-15-20261029]
     paths:
