@@ -27,6 +27,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: fb5eb3a546a052d4043cbf75316abdc7f490eeae
+          fetch-depth: 0 # test_standards96.py uses git show 7418e32:<file>
           path: team13
       - uses: actions/checkout@v4
         with:
