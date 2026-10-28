@@ -6,6 +6,9 @@ on:
       - 'phase3/team14_referral_scenarios.py'
       - 'phase3/team14_referral_store.py'
       - 'phase3/team14_referral_eligibility.py'
+      - 'phase3/instant_matching.py'
+      - 'phase3/test_hq_matching_contract.py'
+      - 'phase3/test_hq_referral_eligibility.py'
       - 'phase3/team14_monthly_sim.py'
       - 'phase3/team11_booking_access.py'
       - 'phase3/test_team14_referral_scenarios.py'
@@ -34,7 +37,9 @@ jobs:
             test_team14_referral_scenarios \
             test_team14_referral_store \
             test_team14_monthly_boundaries \
-            test_common_booking_access
+            test_common_booking_access \
+            test_hq_matching_contract \
+            test_hq_referral_eligibility
       - name: Record validation boundary
         if: always()
         run: |
