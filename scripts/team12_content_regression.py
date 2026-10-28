@@ -147,7 +147,6 @@ class Team12Regression(unittest.TestCase):
             self.assertIsNotNone(uid, f"unit id must not be None at index {idx}")
             if isinstance(uid, str):
                 self.assertTrue(uid.strip() != '', f"unit id string must not be empty or whitespace at index {idx}")
-            # Defensive: ensure no duplicates while adding
             if uid in unit_ids:
                 self.fail(f"Duplicate unit id found: {uid}")
             unit_ids.add(uid)
@@ -182,7 +181,6 @@ class Team12Regression(unittest.TestCase):
                     state = "missing"
                 else:
                     disabled = entry.get("disabled")
-                    # Defensive: Only accept boolean or None, else fail
                     if disabled is not None and not isinstance(disabled, bool):
                         self.fail(f"Invalid 'disabled' flag type for {word}, expected bool or None")
                     state = "held" if disabled else "ready_unapproved"
@@ -191,13 +189,10 @@ class Team12Regression(unittest.TestCase):
 
                 if entry:
                     listening_review = entry.get("listeningReview", {})
-                    # Defensive check: if listeningReview key present, it must be dict
                     self.assertIsInstance(listening_review, dict, f"listeningReview must be dict for {word}")
-                    # Only assert status pending if status key present
                     status = listening_review.get("status")
                     if status is not None:
                         self.assertEqual(status, "pending", word)
-        # Defensive: ensure no unexpected statuses in manifest
         allowed_states = {"ready_unapproved", "held", "missing"}
         total_counted = sum(counts.values())
         self.assertEqual(total_counted, 399)
@@ -281,7 +276,6 @@ class Team12Regression(unittest.TestCase):
             self.assertTrue(entry.get("license"), word)
             listening_review = entry.get("listeningReview", {})
             self.assertIsInstance(listening_review, dict, f"listeningReview must be dict for {word}")
-            # Validate status only if present to avoid false failure when key missing
             status = listening_review.get("status")
             if status is not None:
                 self.assertNotEqual(
