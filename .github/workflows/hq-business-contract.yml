@@ -7,6 +7,8 @@ on:
       - 'phase3/team14_referral_store.py'
       - 'phase3/team14_referral_eligibility.py'
       - 'phase3/instant_matching.py'
+      - 'phase3/instant-speaking.html'
+      - 'scripts/check-instant-page.cjs'
       - 'phase3/test_hq_matching_contract.py'
       - 'phase3/test_hq_referral_eligibility.py'
       - 'phase3/team14_monthly_sim.py'
@@ -40,6 +42,8 @@ jobs:
             test_common_booking_access \
             test_hq_matching_contract \
             test_hq_referral_eligibility
+      - name: Test browser-side timeout recovery without media provider
+        run: node scripts/check-instant-page.cjs
       - name: Record validation boundary
         if: always()
         run: |
