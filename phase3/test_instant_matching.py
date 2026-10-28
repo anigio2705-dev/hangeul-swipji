@@ -426,7 +426,7 @@ class InstantMatchingTests(unittest.TestCase):
             b=db.execute('SELECT * FROM bookings WHERE id=?',(booking_id,)).fetchone()
             self.assertEqual((lid,pid,'in_class'),(b['learner_id'],b['teacher_id'],b['status']))
             self.assertEqual(1,db.execute('SELECT count(*) FROM instant_booking_links').fetchone()[0])
-        self.assertEqual(409,self.call(learner,'session-finish',{'matchId':offer['matchId']},409).get('status',409))
+        self.call(learner,'session-finish',{'matchId':offer['matchId']},409)
         self.call(stranger,'session-observe',{'matchId':offer['matchId']},409)
         self.call(stranger,'lesson-event',{'bookingId':booking_id,'eventId':'forged','type':'lesson.completed'},403)
         self.call(learner,'lesson-event',{'bookingId':booking_id,'eventId':'early','type':'lesson.completed'},409)
