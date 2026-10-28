@@ -62,6 +62,18 @@ class Team12Regression(unittest.TestCase):
         self.assertNotIn("/api/bookings", handoff)
         self.assertNotIn("/api/payments", handoff)
 
+    def test_free_learning_progress_to_booking_discovery_links(self):
+        learn = (ROOT / "learn.html").read_text(encoding="utf-8")
+        links = (ROOT / "scripts/team12_provider_links.js").read_text(encoding="utf-8")
+        app = (ROOT / "phase3/app.js").read_text(encoding="utf-8")
+        self.assertIn('href="./dashboard.html"', learn)
+        self.assertIn('data-team12-provider="partner"', learn)
+        self.assertIn('data-team12-provider="teacher"', learn)
+        self.assertIn('scripts/team12_provider_links.js', learn)
+        self.assertIn("sessionStorage.setItem('hs-team12-provider-intent', role)", links)
+        self.assertIn("sessionStorage.getItem('hs-team12-provider-intent')", app)
+        self.assertIn("field('참여 유형','role',state.team12ProviderRole||''", app)
+
     def test_audio_ui_missing_and_playing_event_contract(self):
         core = (ROOT / "hangul-core.js").read_text(encoding="utf-8")
         self.assertIn("return {status:'missing',missing}", core)
