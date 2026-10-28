@@ -65,7 +65,7 @@ def inspect(root):
                 continue
 
             # check for null bytes to avoid injection or truncation
-            if '\x00' in src:
+            if '\x00' in src or '\0' in src:
                 problems.append({"word": word, "issue": "null_byte_in_path", "path": src})
                 continue
 
@@ -86,7 +86,7 @@ def inspect(root):
                 continue
 
             # Reject any path components containing null bytes (double check)
-            if any('\x00' in comp for comp in parts):
+            if any('\x00' in comp or '\0' in comp for comp in parts):
                 problems.append({"word": word, "issue": "null_byte_in_path_component", "path": src})
                 continue
 
