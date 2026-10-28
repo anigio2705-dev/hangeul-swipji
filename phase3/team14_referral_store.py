@@ -89,7 +89,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
    if not all(32 <= ord(c) <= 126 for c in val):
     raise SimError('INVALID_INPUT', f'{name} contains invalid characters')
 
-  # Defensive check: refuse to award an event ID that already exists but with empty or inconsistent essential fields
+  # Defensive check: refuse to award an event ID that is empty (already checked), also no control chars allowed
   if not event_id or len(event_id) == 0:
     raise SimError('INVALID_INPUT', 'event_id must be a non-empty string')
 
@@ -101,6 +101,12 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
   # Defensive check: ensure gross_krw > 0
   if gross_krw <= 0:
    raise SimError('INVALID_INPUT', 'gross_krw must be positive')
+
+  # Defensive check: ensure lesson_id and student_id are non-empty strings without whitespace
+  # already checked above, re-check for any invisible chars as extra safety
+  for val, name in [(student_id, 'student_id'), (lesson_id, 'lesson_id')]:
+   if not val or not all(32 <= ord(c) <= 126 for c in val):
+    raise SimError('INVALID_INPUT', f'{name} contains invalid or non-printable characters')
 
   signature = json.dumps([student_id, lesson_id, gross_krw, list(depth_rates_bps), commission_bps], separators=(',', ':'))
   self.db.execute('BEGIN IMMEDIATE')
