@@ -44,6 +44,14 @@ class BookingHttpIntegrationTests(unittest.TestCase):
         phase3.DB_PATH=cls.old_path
         cls.tmp.cleanup()
 
+    def setUp(self):
+        # unittest runs methods alphabetically. Restore only the test fixtures
+        # mutated by prior cases; never relax HTTP status/security assertions.
+        with phase3.connect() as db:
+            db.execute("UPDATE sessions SET expires=? WHERE user_id IN ('student','teacher','outsider')", (time.time()+3600,))
+            db.execute("UPDATE users SET approved=1 WHERE id='teacher'")
+            db.execute("UPDATE users SET role='learner' WHERE id IN ('student','outsider')")
+
     def request(self,uid=None,path="/api/bookings"):
         connection=http.client.HTTPConnection("127.0.0.1",self.http.server_port,timeout=5)
         headers={"Host":"127.0.0.1:"+str(self.http.server_port)}
