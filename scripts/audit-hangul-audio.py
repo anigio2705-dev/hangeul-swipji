@@ -194,8 +194,8 @@ for word, meta in manifest.get('recordings', {}).items():
         sourceTitle = meta.get('sourceTitle')
         if not isinstance(sourceTitle, str):
             raise ValueError(f"Invalid or missing sourceTitle for {word}")
-        # Use removeprefix if available; fallback otherwise
-        if hasattr(sourceTitle, 'removeprefix'):
+        # Defensive check and fallback for removeprefix
+        if hasattr(sourceTitle, 'removeprefix') and callable(getattr(sourceTitle, 'removeprefix')):
             prefix_removed = sourceTitle.removeprefix('File:')
         else:
             prefix_removed = sourceTitle
