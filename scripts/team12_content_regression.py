@@ -39,6 +39,7 @@ class Team12Regression(unittest.TestCase):
         self.assertEqual(len(cells), 399)
         syllables = set()
         for c in cells:
+            self.assertIsInstance(c, dict, "Each cell must be a dict")
             self.assertIn("syllable", c)
             syllable_value = c["syllable"]
             self.assertIsInstance(syllable_value, str, "syllable must be string")
@@ -47,6 +48,7 @@ class Team12Regression(unittest.TestCase):
         consonants = set()
         vowels = set()
         for c in cells:
+            self.assertIsInstance(c, dict, "Each cell must be a dict")
             self.assertIn("consonant", c)
             self.assertIn("vowel", c)
             consonant_value = c["consonant"]
@@ -58,7 +60,7 @@ class Team12Regression(unittest.TestCase):
         self.assertEqual(len(consonants), 19)
         self.assertEqual(len(vowels), 21)
         self.assertEqual(len(cells) + len(consonants), 418)
-        statuses = [c.get("status") for c in cells]
+        statuses = [c.get("status") for c in cells if isinstance(c, dict)]
         self.assertEqual(statuses.count("missing"), 354)
         self.assertEqual(statuses.count("held"), 26)
         self.assertEqual(statuses.count("ready_unapproved"), 19)
@@ -80,7 +82,7 @@ class Team12Regression(unittest.TestCase):
         stages = data["stages"]
         self.assertIsInstance(stages, list)
         self.assertEqual(len(stages), 4)
-        lessons = [lesson for stage in stages for lesson in stage.get("lessons", [])]
+        lessons = [lesson for stage in stages for lesson in stage.get("lessons", []) if isinstance(lesson, dict)]
         self.assertEqual([len(stage.get("lessons", [])) for stage in stages], [24] * 4)
         self.assertEqual(len(lessons), 96)
         for field in ("slot", "unitId"):
@@ -104,12 +106,13 @@ class Team12Regression(unittest.TestCase):
             pilot = json.loads(pilot_content)
         except json.JSONDecodeError as e:
             self.fail(f"Invalid JSON in {pilot_file}: {e}")
-        ids = {lesson["unitId"] for stage in curriculum.get("stages", []) for lesson in stage.get("lessons", []) if isinstance(lesson.get("unitId"), (str, int))}
+        ids = {lesson["unitId"] for stage in curriculum.get("stages", []) for lesson in stage.get("lessons", []) if isinstance(lesson, dict) and isinstance(lesson.get("unitId"), (str, int))}
         units = pilot.get("units", [])
         self.assertIsInstance(units, list, "units should be list")
         self.assertEqual(len(units), 12)
-        self.assertEqual(len({unit.get("id") for unit in units if unit.get("id") is not None}), len(units))
-        self.assertTrue(all(unit.get("id") in ids for unit in units))
+        unit_ids = {unit.get("id") for unit in units if unit and unit.get("id") is not None}
+        self.assertEqual(len(unit_ids), len(units))
+        self.assertTrue(all(unit.get("id") in ids for unit in units if unit))
 
     def test_399_board_cells_have_explicit_missing_and_held_states(self):
         manifest_file = ROOT / "hangul-audio-manifest.json"
