@@ -1,0 +1,36 @@
+name: HQ Hangul human-audio runtime tests (isolated)
+on:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - 'hangul-core.js'
+      - 'hangul-board.js'
+      - 'hangul-week.js'
+      - 'hangul-basics.html'
+      - 'hangul-week.html'
+      - 'scripts/check-audio-runtime.cjs'
+      - 'scripts/check-human-audio.cjs'
+      - '.github/workflows/hq-audio-runtime.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audio-runtime:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test human-only audio playback, failures and manifest refresh
+        run: |
+          node scripts/check-audio-runtime.cjs
+          node scripts/check-human-audio.cjs
+      - name: Test 350 lessons and seven-day curriculum regression
+        run: node scripts/check-foundations.cjs
+      - name: State validation limits
+        run: |
+          echo 'Runtime and content tests only; no missing human recordings were generated.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'No browser audio listening approval, production deployment, or mobile test was performed.' >> "$GITHUB_STEP_SUMMARY"

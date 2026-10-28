@@ -28,12 +28,31 @@
     const request=fetch('./hangul-audio-manifest.json?v=20261027-audio-retry', {cache:'no-store'})
       .then(r=>{if(!r.ok)throw Error('audio manifest');return r.json()});
     loading=(schedule?Promise.race([request,new Promise((_,reject)=>{timer=schedule(()=>reject(Error('audio manifest timeout')),15000)})]):request)
-      .then(m=>{if(!m.recordings||typeof m.recordings!=='object')throw Error('invalid audio manifest');const human=Object.entries(m.recordings).filter(([,a])=>a.kind==='human'&&typeof a.src==='string'&&/^\.\/assets\/hangul-audio\/[\w-]+\.mp3$/.test(a.src)&&a.sourceUrl&&a.author&&a.license);Object.assign(records,Object.fromEntries(human.filter(([,a])=>!a.disabled)));Object.assign(holds,Object.fromEntries(human.filter(([,a])=>a.disabled)));manifestError=false;document.dispatchEvent(new Event('hs-audio-ready'))})
+      .then(m=>{if(!m.recordings||typeof m.recordings!=='object'||Array.isArray(m.recordings))throw Error('invalid audio manifest');const human=Object.entries(m.recordings).filter(([,a])=>a&&a.kind==='human'&&typeof a.src==='string'&&/^\\.\\/assets\\/hangul-audio\\/[\\w-]+\\.mp3$/.test(a.src)&&a.sourceUrl&&a.author&&a.license);
+        // Replace stale inventory on refresh; removed/held files must not remain playable.
+        for(const key of Object.keys(records))delete records[key];
+        for(const key of Object.keys(holds))delete holds[key];
+        Object.assign(records,Object.fromEntries(human.filter(([,a])=>!a.disabled)));
+        Object.assign(holds,Object.fromEntries(human.filter(([,a])=>a.disabled)));
+        manifestError=false;document.dispatchEvent(new Event('hs-audio-ready'))})
       .catch(()=>{manifestError=true;document.dispatchEvent(new Event('hs-audio-ready'))})
       .finally(()=>{if(timer!==null)cancelTimer(timer);loading=null});
     return loading;
   }
   const ready=loadManifest();
+  async function reloadManifest(){
+    stop();
+    status('사람 녹음 목록을 다시 확인하고 있습니다. / Checking recordings…');
+    await (loading||loadManifest());
+    if(manifestError){
+      status('음원 목록 연결에 실패했습니다. 다시 확인을 눌러 주세요. / Recording list unavailable; retry.');
+      return {status:'manifest-error'};
+    }
+    refreshBadges();
+    const count=Object.keys(records).length;
+    status('음원 목록 확인 완료 · 재생 가능 '+count+'개 · 검수 대기 '+Object.keys(holds).length+'개. 없는 녹음은 재생하지 않습니다.');
+    return {status:'ready',count};
+  }
   function availability(word){
     if(manifestError)return {state:'unavailable',label:'목록 연결 오류 · 다시 눌러 재시도'};
     if(records[word])return {state:'ready',label:'♪ 사람 녹음 듣기 · 청취 검수 전'};
@@ -93,9 +112,16 @@
       b.title=info.label;
     });
     const n=document.querySelector('[data-recording-count]');if(n)n.textContent=Object.keys(records).length;
+    const summary=document.querySelector('[data-board-audio-counts]');
+    if(summary){
+      const cells=[...document.querySelectorAll('.board [data-sound]')];
+      const counts={ready:0,held:0,missing:0,unavailable:0};
+      for(const cell of cells)counts[availability(cell.dataset.sound).state]++;
+      summary.textContent='글자판 '+cells.length+'칸 · 재생 가능 '+counts.ready+' · 검수 보류 '+counts.held+' · 녹음 없음 '+counts.missing+(counts.unavailable?' · 목록 오류 '+counts.unavailable:'')+' (청취 승인 전)';
+    }
   }
   document.addEventListener('hs-audio-ready',refreshBadges);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});
   window.addEventListener('pagehide',stop);
-  window.HSHangul={consonants,vowels,compose,records,ready,availability,play,stop,status,el,soundButton,refreshBadges};
+  window.HSHangul={consonants,vowels,compose,records,ready,reloadManifest,availability,play,stop,status,el,soundButton,refreshBadges};
 })();

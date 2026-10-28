@@ -33,6 +33,8 @@
   $('builder-play').onclick=()=>select($('builder-c').value,$('builder-v').value);
   for(const word of ['국','산','옷','달','밤','밥','강'])$('finals').append(H.soundButton(word));
   for(const [, ,word] of H.consonants.slice(0,14))$('practice').append(H.soundButton(word));
-  $('repeat-selected').onclick=()=>H.play(selected);$('stop-audio').onclick=()=>{H.stop();H.status('재생을 멈췄습니다.')};
+  $('repeat-selected').onclick=()=>H.play(selected);
+  $('refresh-audio').onclick=()=>H.reloadManifest().then(()=>$('selected-help').textContent=H.availability(selected).label);
+  $('stop-audio').onclick=()=>{H.stop();H.status('재생을 멈췄습니다.')};
   H.ready.then(()=>{H.refreshBadges();$('selected-help').textContent=H.availability(selected).label});select('ㄱ','ㅏ',false);
 })();

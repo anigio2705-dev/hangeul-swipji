@@ -78,10 +78,10 @@ jobs:
                   f.write("| %s | %s | %s | %s |\n" % (
                       task["number"], task["owner"], task["title"].replace("|", "/"),
                       "yes" if task["external_gate"] else "no"))
-              f.write("\\nCode-verified tasks awaiting independent review: **%s**.\\n" %
+              f.write("\nCode-verified tasks awaiting independent review: **%s**.\n" %
                       report["counts"]["code_verified"])
               for task in report["review_queue"]:
-                  f.write("- #%s: %s (review, not reimplementation)\\n" %
+                  f.write("- #%s: %s (review, not reimplementation)\n" %
                           (task["number"], task["title"]))
           PY
       - name: Upload auditable queue and team head snapshot
