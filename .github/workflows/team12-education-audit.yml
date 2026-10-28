@@ -19,6 +19,8 @@ jobs:
           persist-credentials: false
       - name: Install audio decoder
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Check Python syntax
+        run: python3 -m py_compile scripts/team12_audio_inventory.py
       - name: Run physical audio audit
         run: |
           python3 scripts/team12_audio_inventory.py --root . --output audit/team12-recording-inventory.json
