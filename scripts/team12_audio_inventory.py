@@ -32,6 +32,10 @@ def inspect(root):
         raise ValueError("Manifest 'recordings' entry missing or invalid")
 
     problems, inventory = [], []
+    path_regex = re.compile(r"\./assets/hangul-audio/[a-zA-Z0-9\-_]+\.mp3$")
+
+    root_resolved = root.resolve()
+
     for word, entry in records.items():
         if not isinstance(word, str) or not isinstance(entry, dict):
             problems.append({"word": word, "issue": "invalid_record_entry"})
@@ -39,22 +43,33 @@ def inspect(root):
 
         src = entry.get("src", "")
         # Use safe regex matching for valid path
-        if not isinstance(src, str) or not re.fullmatch(r"\./assets/hangul-audio/[\w\-]+\.mp3", src):
+        if not isinstance(src, str) or not path_regex.fullmatch(src):
             problems.append({"word": word, "issue": "invalid_source_path", "path": src})
             continue
 
         # Normalize and validate src path to prevent path traversal
         try:
-            src_path = Path(src[2:]).resolve()
-            root_resolved = root.resolve()
+            # clean src removing leading './'
+            cleaned_src = src[2:]
+            src_path = (root / cleaned_src).resolve()
+
+            # Ensure src_path is inside root directory
             if root_resolved not in src_path.parents and src_path != root_resolved:
                 problems.append({"word": word, "issue": "invalid_path_outside_root", "path": src})
                 continue
+
+            # Extra check, path must start with root/assets/hangul-audio
+            rel_path = src_path.relative_to(root_resolved)
+            if not str(rel_path).startswith("assets/hangul-audio/"):
+                problems.append({"word": word, "issue": "invalid_path_subdir", "path": src})
+                continue
+
         except Exception as e:
             problems.append({"word": word, "issue": "invalid_path", "path": src, "detail": str(e)})
             continue
 
-        path = root / src[2:]
+        path = root / cleaned_src
+
         if not path.is_file():
             problems.append({"word": word, "issue": "file_missing", "path": src})
             continue
