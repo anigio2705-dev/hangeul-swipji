@@ -4,12 +4,18 @@ on:
     branches: [automation/hq-pilot-13-14-15-20261029]
     paths:
       - 'hangul-core.js'
+      - 'hangul-audio-manifest.json'
+      - 'hangul-audio-human-only.json'
+      - 'hangul-week-data.js'
+      - 'assets/hangul-audio/**'
       - 'hangul-board.js'
       - 'hangul-week.js'
       - 'hangul-basics.html'
       - 'hangul-week.html'
       - 'scripts/check-audio-runtime.cjs'
       - 'scripts/check-human-audio.cjs'
+      - 'scripts/check-week-human-audio.cjs'
+      - 'scripts/check-foundations.cjs'
       - '.github/workflows/hq-audio-runtime.yml'
   workflow_dispatch:
 permissions:
@@ -28,6 +34,7 @@ jobs:
         run: |
           node scripts/check-audio-runtime.cjs
           node scripts/check-human-audio.cjs
+          node scripts/check-week-human-audio.cjs
       - name: Test 350 lessons and seven-day curriculum regression
         run: node scripts/check-foundations.cjs
       - name: State validation limits
