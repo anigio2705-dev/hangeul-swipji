@@ -26,6 +26,7 @@ for t in audio.get('targets', []):
     recording_available = t.get('recordingAvailable')
     groups = t.get('groups')
     text = t.get('text')
+
     # Validate types strictly
     if not (text is not None and isinstance(text, str)):
         continue
@@ -33,10 +34,12 @@ for t in audio.get('targets', []):
         continue
     if not (isinstance(groups, list) and groups):
         continue
+
     # Defensive: filter groups to str and check contents
     groups_str = [g for g in groups if isinstance(g, str)]
     if not groups_str:
         continue
+
     # Validate groups_str elements contents for safety
     # Nonempty, length limits, no control chars
     def valid_group_label(g):
@@ -49,21 +52,31 @@ for t in audio.get('targets', []):
         # Reject if contains control characters (code points < 32 or = 127)
         if any(ord(ch) < 32 or ord(ch) == 127 for ch in g):
             return False
+        # Reject if whitespace-only after stripping
+        if g.strip() == '':
+            return False
         return True
+
     if not all(valid_group_label(g) for g in groups_str):
         continue
+
     # Fix accidental literal Unicode escape sequences to actual characters
     # Keep obsolete guard for backward compatibility
     if not recording_available:
         suspicious_labels = ['', '', ' ']
         korean_labels_decoded = ['\uc790\uc74c \uc774\ub984', '\ubaa8\uc74c', '\uae00\uc790\ud325 \uc74c\uc808']
         # Defensive: reject if group string contains suspicious labels or decoded Korean labels
+        # Use exact match in groups_str, not substring
         groups_lower = [g.lower() for g in groups_str]
-        # Defensive: match must be exact string in groups_str, not substring
-        if any(lbl in groups_str for lbl in suspicious_labels):
+
+        # Defensive: To handle groups with different cases, match ignoring case
+        suspicious_labels_lower = [lbl.lower() for lbl in suspicious_labels]
+        korean_labels_decoded_lower = [lbl.lower() for lbl in korean_labels_decoded]
+
+        if any(lbl in (g.lower() for g in groups_str) for lbl in suspicious_labels_lower):
             missing.append(text)
             continue
-        if any(lbl in groups_str for lbl in korean_labels_decoded):
+        if any(lbl in (g.lower() for g in groups_str) for lbl in korean_labels_decoded_lower):
             missing.append(text)
             continue
 
