@@ -6,6 +6,8 @@ on:
       - 'automation/hq_six_developers.py'
       - 'automation/hq_160_task_cycle.py'
       - 'automation/hq_backlog_160.md'
+      - 'automation/hq_six_cycle_supervisor.py'
+      - 'automation/test_hq_six_cycle_supervisor.py'
       - 'automation/task-evidence.json'
       - '.github/workflows/hq-six-developers.yml'
   workflow_dispatch:
@@ -70,7 +72,7 @@ jobs:
           import json, pathlib, subprocess, time
           deadline = time.monotonic() + 45 * 60
           history = []
-          for round_no in range(1, 3):
+          for round_no in range(1, 2):
               if time.monotonic() >= deadline:
                   break
               run = subprocess.run(["python", "/tmp/hq_six_developers.py"])
@@ -102,3 +104,45 @@ jobs:
           path: /tmp/team-result.json
           if-no-files-found: ignore
           retention-days: 7
+
+  supervise:
+    needs: develop
+    if: always() && github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: hq-six-cycle-supervisor
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download all six submitted team results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: team-*-development
+          path: ${{ runner.temp }}/team-results
+          merge-multiple: false
+      - name: Test actual supervisor dispatch/repair gates
+        run: python -m unittest discover -s automation -p 'test_hq_six_cycle_supervisor.py' -v
+      - name: Independently verify actual commits and dispatch only on progress
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          HQ_DEPTH: ${{ inputs.chain_depth || '0' }}
+          HQ_REPAIR: ${{ inputs.repair_instructions_json || '{}' }}
+        run: |
+          python automation/hq_six_cycle_supervisor.py \
+            --root "$RUNNER_TEMP/team-results" \
+            --depth "$HQ_DEPTH" \
+            --repairs "$HQ_REPAIR" \
+            --output "$RUNNER_TEMP/hq-six-cycle-verdict.json"
+      - name: Save real six-team verification and next action
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hq-six-cycle-verdict
+          path: ${{ runner.temp }}/hq-six-cycle-verdict.json
+          if-no-files-found: warn
+          retention-days: 14
