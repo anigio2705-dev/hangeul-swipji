@@ -41,21 +41,33 @@ jobs:
           PYTHONPATH: team11/phase3:team13/phase3:team14/phase3
         run: python scripts/test_team15_continuous_instant_e2e.py
       - name: Team12 education progress HTTP regression
+        if: success() || failure()
         env:
           PYTHONPATH: team11/phase3
         run: |
-          python -m unittest discover -s team12/phase3 -p test_team12_progress_http.py -v
+          python - <<'PY'
+          import server
+          import sys, unittest
+          sys.path.append("team12/phase3")
+          suite = unittest.defaultTestLoader.loadTestsFromName("test_team12_progress_http.FreeProgressHTTPTests")
+          outcome = unittest.TextTestRunner(verbosity=2).run(suite)
+          if not outcome.wasSuccessful():
+              sys.exit(1)
+          PY
       - name: Team12 audio behavior and recording/TTS regression
+        if: success() || failure()
         env:
           PYTHONPATH: team12/phase3
         run: |
           python team12/scripts/team12_content_regression.py
           node team12/scripts/team12_resume.test.js
       - name: Team13 immediate matching regression
+        if: success() || failure()
         env:
           PYTHONPATH: team13/phase3
         run: python -m unittest discover -s team13/phase3 -p test_instant_matching.py -v
       - name: Team14 server product catalog and verified settlement contract
+        if: success() || failure()
         env:
           PYTHONPATH: team13/phase3:team14/phase3
         run: |
