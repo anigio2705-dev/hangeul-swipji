@@ -21,7 +21,7 @@ def read_server_booking(path,booking_id,month_id,lesson_id,authenticated_event=F
     """
     for x in (booking_id,month_id,lesson_id):ident(x)
     with _db(path) as con:
-        row=con.execute("""SELECT b.id,b.learner_id,b.teacher_id,b.status,
+        row=con.execute("""SELECT b.id,b.learner_id,b.teacher_id,b.status,b.price,
                             u.role,u.approved
                             FROM bookings b JOIN users u ON u.id=b.teacher_id
                             WHERE b.id=?""",(booking_id,)).fetchone()
@@ -31,7 +31,7 @@ def read_server_booking(path,booking_id,month_id,lesson_id,authenticated_event=F
         return dict(booking_id=row['id'],month_id=month_id,lesson_id=lesson_id,
                     learner_id=row['learner_id'],teacher_id=row['teacher_id'],
                     teacher_approved=bool(row['approved']),
-                    booking_status=row['status'],
+                    booking_status=row['status'],booking_price_krw=row['price'],
                     authenticated_event=authenticated_event)
 
 def read_server_referral_parent(path,learner_id):
