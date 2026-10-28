@@ -1,0 +1,86 @@
+import unittest
+from backlog_queue import (
+    build_report, parse_backlog, validate_evidence, owner_for, EXTERNAL_GATES
+)
+
+def sample(checked=()):
+    return "\n".join(
+        f"{n}. [{'x' if n in checked else ' '}] Task {n}"
+        for n in range(1, 161)
+    )
+
+def verified(status="code_verified", **extra):
+    return {
+        "status": status,
+        "commit": "a" * 40,
+        "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/12345",
+        "ci_result": "success",
+        **extra,
+    }
+
+class BacklogQueueTests(unittest.TestCase):
+    def test_exactly_160_and_unique(self):
+        self.assertEqual(len(parse_backlog(sample())), 160)
+        with self.assertRaises(ValueError):
+            parse_backlog(sample() + "\n160. [ ] Duplicate")
+        with self.assertRaises(ValueError):
+            parse_backlog(sample().replace("42. [ ]", "44. [ ]"))
+
+    def test_all_unverified_not_falsely_completed(self):
+        report = build_report(sample(), timestamp="2026-10-29T00:00:00Z")
+        self.assertEqual(report["counts"]["complete"], 0)
+        self.assertEqual(report["counts"]["unverified"], 160)
+        self.assertEqual(report["next_queue"][0]["number"], 11)
+        self.assertFalse(any(t["external_gate"] for t in report["next_queue"]))
+        self.assertEqual(report["safety"]["production_deploy"], False)
+
+    def test_unchecked_master_never_complete(self):
+        with self.assertRaisesRegex(ValueError, "master backlog"):
+            build_report(sample(), {"11": verified("complete")})
+
+    def test_ci_failure_or_missing_evidence_rejected(self):
+        for record in (
+            {"status": "code_verified"},
+            verified(ci_result="failure"),
+            verified(ci_url="https://evil.invalid/runs/1"),
+            verified(commit="bad"),
+        ):
+            with self.subTest(record=record):
+                with self.assertRaises(ValueError):
+                    build_report(sample(), {"11": record})
+
+    def test_checked_with_ci_can_complete_nonexternal(self):
+        report = build_report(sample({11}), {"11": verified("complete")})
+        self.assertEqual(report["counts"]["complete"], 1)
+        self.assertNotIn(11, [x["number"] for x in report["next_queue"]])
+
+    def test_external_and_approval_gate(self):
+        self.assertIn(154, EXTERNAL_GATES)
+        with self.assertRaisesRegex(ValueError, "real-world"):
+            build_report(sample({154}), {"154": verified("complete")})
+        with self.assertRaisesRegex(ValueError, "approval"):
+            build_report(sample({154}), {"154": verified("complete", external_evidence="staging report")})
+        report = build_report(sample({154}), {"154": verified(
+            "complete", external_evidence="staging report", approval_evidence="signed approval"
+        )})
+        self.assertEqual(report["counts"]["complete"], 1)
+
+    def test_owner_ranges_and_limit(self):
+        self.assertEqual(owner_for(51), "12+15")
+        self.assertEqual(owner_for(160), "15+16")
+        self.assertEqual(len(build_report(sample(), limit=3)["next_queue"]), 3)
+        with self.assertRaises(ValueError):
+            build_report(sample(), limit=0)
+
+    def test_blocked_excluded_and_code_verified_not_complete(self):
+        report = build_report(sample(), {
+            "11": {"status": "blocked"},
+            "12": verified("code_verified"),
+        })
+        self.assertEqual(report["counts"]["blocked"], 1)
+        self.assertEqual(report["counts"]["code_verified"], 1)
+        self.assertEqual(report["counts"]["complete"], 0)
+        self.assertNotIn(11, [x["number"] for x in report["next_queue"]])
+
+if __name__ == "__main__":
+    unittest.main()
