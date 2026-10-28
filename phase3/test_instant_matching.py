@@ -183,6 +183,26 @@ class InstantMatchingTests(unittest.TestCase):
             self.assertEqual(0,db.execute('SELECT count(*) FROM bookings').fetchone()[0])
 
 
+    def test_active_room_revoked_when_partner_approval_is_removed(self):
+        learner,_=self.account('revocation-learner@example.test')
+        partner,partner_id=self.account('revocation-partner@example.test','partner',True)
+        self.call(learner,'join')
+        offered=self.call(partner,'join')
+        self.call(learner,'ready',{'matchId':offered['matchId']})
+        active=self.call(partner,'ready',{'matchId':offered['matchId']})
+        self.assertEqual('active',active['state'])
+        self.assertIn('roomUrl',active)
+        with server.connect() as db:
+            db.execute('UPDATE users SET approved=0 WHERE id=?',(partner_id,))
+        for cookie in (learner,partner):
+            state=self.call(cookie,'status')
+            self.assertEqual('idle',state['state'])
+            self.assertNotIn('roomUrl',state)
+        self.call(partner,'join',expected=403)
+        with server.connect() as db:
+            self.assertEqual(0,db.execute("SELECT count(*) FROM instant_matches WHERE state<>'ended'").fetchone()[0])
+
+
 del Harness
 
 if __name__=='__main__': unittest.main()
