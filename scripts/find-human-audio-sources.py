@@ -64,9 +64,9 @@ for t in audio.get('targets', []):
     if not all(valid_group_label(g) for g in groups_str):
         continue
 
-    # Fix accidental literal Unicode escape sequences to actual characters (decode such literals)
-    # Remove this check as it can mask invalid labels, but keep detection
+    # Defensive: reject certain suspicious labels if recording not available
     if not recording_available:
+        # exact suspicious labels as literals, no decoding
         suspicious_labels = ['\x7f\x7f\x7f', '\x7f\x7f', '\x7f\x7f\x7f\x7f \x7f\x7f\x7f']
         korean_labels_decoded = ['\uc790\uc74c \uc774\ub984', '\ubaa8\uc74c', '\uae00\uc790\ud325 \uc74c\uc808']
 
