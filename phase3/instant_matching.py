@@ -101,15 +101,27 @@ def reservation_snapshot(db, user_id):
             for b in rows]
 
 
-def transaction_event_contract(booking_id, event_id, event_type):
-    """Contract only: consumer may persist after authorization; never emit money."""
+def transaction_event_contract(booking_id, event_id, event_type, *, lesson_index=None, month_id=None):
+    """Pure Team13 -> Team14 handoff. No ledger writes or payment calls.
+
+    eventId is the downstream idempotency key. Team14 must authenticate the
+    sender, validate completion evidence, and deduplicate before settlement.
+    """
     if event_type not in ('booking.created','booking.cancelled',
                           'lesson.started','lesson.completed'):
         raise server.Error('지원하지 않는 거래 이벤트',400)
     if not isinstance(booking_id,str) or not booking_id or not isinstance(event_id,str) or not event_id:
         raise server.Error('거래 이벤트 식별자 필요',400)
-    return {'version':1,'bookingId':booking_id,'eventId':event_id,
-            'type':event_type,'paymentExecuted':False}
+    if (month_id is None) != (lesson_index is None):
+        raise server.Error('월 과정과 회차는 함께 지정하세요',400)
+    if month_id is not None and (not isinstance(month_id,str) or not month_id
+                                or type(lesson_index) is not int or lesson_index<0):
+        raise server.Error('월 과정 회차 형식 오류',400)
+    event={'version':1,'bookingId':booking_id,'eventId':event_id,
+           'type':event_type,'paymentExecuted':False}
+    if month_id is not None:
+        event.update(monthId=month_id,lessonIndex=lesson_index)
+    return event
 
 def route(handler, db, path, data):
     u=handler.user(db)
