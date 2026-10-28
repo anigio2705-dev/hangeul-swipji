@@ -136,6 +136,34 @@ class InstantMatchingTests(unittest.TestCase):
         self.assertEqual('offered',self.call(partner,'join')['state'])
 
 
+    def test_reservation_bridge_only_returns_own_bookings_and_never_charges(self):
+        learner, learner_id = self.account('learner@example.test')
+        teacher, teacher_id = self.account('teacher@example.test','teacher',True)
+        stranger, _ = self.account('stranger@example.test')
+        now=time.time()
+        with server.connect() as db:
+            db.execute('INSERT INTO slots VALUES(?,?,?,?)',('bridge-slot',teacher_id,now+3600,now+7200))
+            db.execute("""INSERT INTO bookings
+              (id,learner_id,teacher_id,slot_id,unit_id,status,price,room,created_at)
+              VALUES(?,?,?,?,?,?,?,?,?)""",
+              ('bridge-booking',learner_id,teacher_id,'bridge-slot','unit','reserved',20000,'bridge-private-room',now))
+        for cookie,expected_role in ((learner,'learner'),(teacher,'teacher')):
+            response=self.call(cookie,'reservations')
+            self.assertEqual(1,len(response['reservations']))
+            item=response['reservations'][0]
+            self.assertEqual('bridge-booking',item['bookingId'])
+            self.assertEqual(expected_role,item['participantRole'])
+            self.assertNotIn('room',str(response))
+        self.assertEqual([],self.call(stranger,'reservations')['reservations'])
+        with server.connect() as db:
+            self.assertEqual(0,db.execute('SELECT count(*) FROM ledger').fetchone()[0])
+            self.assertEqual(0,db.execute('SELECT count(*) FROM instant_matches').fetchone()[0])
+        self.assertEqual('booking.created',
+                         matching.transaction_event_contract('bridge-booking','event-1','booking.created')['type'])
+        with self.assertRaises(server.Error):
+            matching.transaction_event_contract('bridge-booking','event-2','payment.charge')
+
+
 del Harness
 
 if __name__=='__main__': unittest.main()
