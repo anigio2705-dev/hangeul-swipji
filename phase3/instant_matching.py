@@ -99,7 +99,11 @@ def reservation_snapshot(db, user_id):
     return [{'bookingId':b['id'], 'status':b['status'],
              'participantRole':'learner' if b['learner_id']==user_id else 'teacher',
              'start':b['start'], 'end':b['end'],
-             'instantEligible':b['status'] not in ('test_paid','in_class')}
+             'instantEligible':b['status'] not in ('test_paid','in_class'),
+             'lessonState':('completed' if b['status'] in ('completed','test_settled')
+                            else 'cancelled' if b['status'] in ('cancelled','refunded','expired')
+                            else 'in_progress' if b['status']=='in_class'
+                            else 'not_started')}
             for b in rows]
 
 
