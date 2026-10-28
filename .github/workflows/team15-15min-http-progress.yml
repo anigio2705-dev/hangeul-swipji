@@ -1,0 +1,33 @@
+name: Team15 15min real HTTP SQLite progress
+on:
+  push:
+    branches:
+      - integration/team15-15min-http-progress-20261028
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  real-http-progress:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: qa
+      - uses: actions/checkout@v4
+        with:
+          ref: e39b9b0d205bf59bd1fe4fd430bd1732e05a5034
+          path: team11
+      - uses: actions/checkout@v4
+        with:
+          ref: edbf1d614e58f391ce2d63e3b3f0229370047c17
+          path: team12
+      - name: Actual HTTP SQLite signup login progress relogin restore
+        run: python3 qa/scripts/test_team15_minimal_http_progress.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Team12 authenticated progress client contract
+        run: |
+          cd team12
+          node --check scripts/team12_server_progress.js
+          node scripts/team12_server_progress.test.js
