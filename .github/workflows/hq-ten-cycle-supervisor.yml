@@ -30,7 +30,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           HQ_CYCLES: '10'
           HQ_CYCLE_DELAY: '8'
-          HQ_ALLOW_DISPATCH: 'true'
+          HQ_ALLOW_DISPATCH: 'false'
         run: python hq_controller.py
       - name: Publish ten-cycle evidence
         if: always()
