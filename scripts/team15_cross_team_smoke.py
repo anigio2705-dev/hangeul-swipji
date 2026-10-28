@@ -18,10 +18,13 @@ checks = {
 for label, (team, candidates, tokens) in checks.items():
     found = []
     for name in candidates:
-        # input validation: name must be a relative path, no absolute or upwards traversal
+        # input validation: name must be a non-empty string and a relative path with no absolute or upwards traversal
+        if not isinstance(name, str) or name.strip() == '':
+            issues.append(f"{label}: invalid candidate filename (not a non-empty string): {repr(name)}")
+            continue
         path_obj = Path(name)
-        if (not isinstance(name, str) or name.strip() == '' or path_obj.is_absolute() or '..' in path_obj.parts):
-            issues.append(f"{label}: invalid candidate filename (absolute, parent traversal, or empty): {repr(name)}")
+        if path_obj.is_absolute() or '..' in path_obj.parts:
+            issues.append(f"{label}: invalid candidate filename (absolute or parent traversal): {repr(name)}")
             continue
         # Compose full path and ensure it is normalized and within root
         path = root / team / path_obj
