@@ -49,6 +49,8 @@ for team, paths in EXPECT.items():
     for path in paths:
         # Defensive path normalization: ensure path is relative and does not escape team directory
         try:
+            if not isinstance(path, str):
+                raise ValueError(f"path is not a string: {path}")
             normalized_path = Path(path)
         except Exception as e:
             failures.append(f"{team}: invalid path {path}: {e}")
@@ -89,6 +91,8 @@ for team, paths in EXPECT.items():
         changed_files = set()
         for p in tracked:
             try:
+                if not isinstance(p, str):
+                    raise ValueError(f"tracked path is not a string: {p}")
                 p_path = Path(p)
             except Exception as e:
                 failures.append(f"{team}: invalid tracked path {p}: {e}")
