@@ -1,0 +1,62 @@
+name: HQ pilot 13-14-15 integration (isolated)
+on:
+  workflow_dispatch:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - '.github/workflows/hq-pilot-13-14-15.yml'
+      - 'automation/hq_pilot.py'
+      - 'automation/test_hq_pilot.py'
+permissions:
+  contents: read
+jobs:
+  contract-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test HQ decision logic (no AI, no write access)
+        run: python -m unittest discover -s automation -p 'test_hq_pilot.py' -v
+      - name: Checkout latest team 13 and 14 branches, plus QA team 15
+        shell: bash
+        run: |
+          set -euo pipefail
+          for spec in \
+            'team13 team13/platform-bfcache-reconnect-20261028' \
+            'team14 team14/business-systems-audit-20261028' \
+            'team15 qa/team15-d2-evidence-gates-20261028'; do
+            read -r folder ref <<< "$spec"
+            mkdir -p "$folder"
+            git fetch --depth=1 origin "$ref"
+            sha=$(git rev-parse FETCH_HEAD)
+            echo "$folder $sha" | tee -a "$GITHUB_STEP_SUMMARY"
+            git archive "$sha" | tar -x -C "$folder"
+          done
+      - name: Verify real team product contract and recovery modules
+        run: |
+          test -f team13/phase3/instant_matching.py
+          test -f team14/phase3/team14_initial_products.py
+          test -f team14/phase3/test_team14_d2_catalog_http.py
+          test -f team14/phase3/team14_recovery.py
+      - name: Team13 booking regression
+        env:
+          PYTHONPATH: team13/phase3
+        run: python -m unittest discover -s team13/phase3 -p test_instant_matching.py -v
+      - name: Team14 real HTTP SQLite product contract cross-test
+        if: success() || failure()
+        env:
+          PYTHONPATH: team13/phase3:team14/phase3
+        run: python -m unittest discover -s team14/phase3 -p test_team14_d2_catalog_http.py -v
+      - name: Team14 recovery cross-test
+        if: success() || failure()
+        env:
+          PYTHONPATH: team13/phase3:team14/phase3
+        run: python -m unittest discover -s team14/phase3 -p test_team14_crash_recovery.py -v
+      - name: Explain limits
+        if: always()
+        run: |
+          echo 'This job verifies isolated latest team branches only. No main merge, deployment, real payment or production DB modification.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'PASS is not proof of Render 99 deployment or physical browser/video verification.' >> "$GITHUB_STEP_SUMMARY"
