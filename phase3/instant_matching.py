@@ -200,6 +200,22 @@ def record_lesson_event(db, user, booking_id, event_id, event_type):
     return payload
 
 
+
+def pending_settlement_events(db, limit=100):
+    """Internal-only Team14 handoff; never exposed as a user HTTP endpoint.
+
+    Caller must run within a trusted server transaction and validate ownership
+    and settlement evidence before recording any simulated ledger entry.
+    """
+    if type(limit) is not int or not 1 <= limit <= 1000:
+        raise server.Error('이벤트 조회 범위 오류',400)
+    rows=db.execute("""SELECT e.payload FROM instant_lesson_events e
+      JOIN bookings b ON b.id=e.booking_id
+      WHERE e.event_type IN ('lesson.completed','booking.cancelled')
+      ORDER BY e.created,e.event_id LIMIT ?""",(limit,)).fetchall()
+    return [json.loads(row['payload']) for row in rows]
+
+
 def route(handler, db, path, data):
     u=handler.user(db)
     action=path.removeprefix('/api/instant/')
