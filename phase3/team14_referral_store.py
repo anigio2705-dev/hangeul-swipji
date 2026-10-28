@@ -77,13 +77,15 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
   if not isinstance(commission_bps, int) or commission_bps < 0:
    raise SimError('INVALID_INPUT', 'commission_bps must be a non-negative integer')
 
-  # Defensive check: refuse to award if string IDs contain suspicious or non-ASCII or control chars
+  # Defensive check: refuse to award if string IDs contain suspicious, whitespace, non-ASCII or control chars
   suspicious_chars = '\\"\'%;'
   for val, name in [(student_id, 'student_id'), (lesson_id, 'lesson_id'), (event_id, 'event_id')]:
    if any(c in val for c in suspicious_chars):
     raise SimError('INVALID_INPUT', f'{name} contains invalid characters')
    if not all(32 <= ord(c) <= 126 for c in val):
     raise SimError('INVALID_INPUT', f'{name} contains invalid characters')
+   if any(c.isspace() for c in val):
+    raise SimError('INVALID_INPUT', f'{name} must not contain whitespace characters')
 
   # Defensive check: refuse to award an event ID that already exists but with empty or inconsistent essential fields
   if not event_id or len(event_id) == 0:
