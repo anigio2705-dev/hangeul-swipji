@@ -39,6 +39,8 @@ jobs:
         run: python3 qa/scripts/team15_independent_gate.py
       - name: Run cross-team interface smoke gate
         run: python3 qa/scripts/team15_cross_team_smoke.py
+      - name: Run refund and team boundary contract checks
+        run: python3 qa/scripts/test_team15_boundaries.py
   team11-contract:
     runs-on: ubuntu-latest
     steps:
