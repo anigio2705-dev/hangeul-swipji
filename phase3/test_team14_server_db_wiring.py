@@ -10,11 +10,11 @@ class ServerDbWiringTests(unittest.TestCase):
   self.rp=os.path.join(self.tmp.name,'referral.sqlite')
   with sqlite3.connect(self.server) as db:
    db.executescript("""CREATE TABLE users(id TEXT PRIMARY KEY,role TEXT,approved INTEGER,referred_by TEXT);
-    CREATE TABLE bookings(id TEXT PRIMARY KEY,learner_id TEXT,teacher_id TEXT,status TEXT);""")
+    CREATE TABLE bookings(id TEXT PRIMARY KEY,learner_id TEXT,teacher_id TEXT,status TEXT,price INTEGER);""")
    db.executemany('INSERT INTO users VALUES(?,?,?,?)',[
     ('student','learner',0,'parent'),('parent','learner',0,None),
     ('teacher','teacher',1,None)])
-   db.execute("INSERT INTO bookings VALUES('booking','student','teacher','completed')")
+   db.execute("INSERT INTO bookings VALUES('booking','student','teacher','completed',10000)")
   self.s=MonthlyStore(self.sp);self.r=ReferralStore(self.rp)
   self.s.create_month('month',[('lesson','booking',10000)])
   self.events={'ev':dict(event_id='ev',month_id='month',lesson_id='lesson',
@@ -58,6 +58,11 @@ class ServerDbWiringTests(unittest.TestCase):
     action='refund_completed',booking_status='refunded',amount_krw=4000)
   self.run_event('refund')
   self.assertEqual(self.s.totals('month')['refunded'],4000)
+ def test_booking_price_mismatch_rejected(self):
+  with sqlite3.connect(self.server) as db:
+   db.execute("UPDATE bookings SET price=12000 WHERE id='booking'")
+  with self.assertRaises(SimError):self.run_event()
+  self.assertEqual(self.s.db.execute('SELECT COUNT(*) FROM ledger').fetchone()[0],0)
  def test_missing_authenticated_event(self):
   with self.assertRaises(SimError):
    settle_from_server_db(self.s,self.r,self.server,'ev',None)
