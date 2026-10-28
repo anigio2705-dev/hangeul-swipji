@@ -27,6 +27,9 @@ def inspect(root):
     except json.JSONDecodeError as e:
         raise ValueError(f"Invalid JSON in manifest file: {e}")
 
+    if not isinstance(manifest, dict):
+        raise ValueError("Manifest file root must be a JSON object")
+
     records = manifest.get("recordings")
     if not isinstance(records, dict):
         raise ValueError("Manifest 'recordings' entry missing or invalid")
@@ -57,7 +60,7 @@ def inspect(root):
             # clean src removing leading './'
             cleaned_src = src[2:]
 
-            # Prevent suspicious path components like .. or //
+            # Prevent suspicious path components like .. or empty parts (including //)
             parts = cleaned_src.split('/')
             if any(p == '..' for p in parts) or any(p == '' for p in parts):
                 problems.append({"word": word, "issue": "path_contains_invalid_components", "path": src})
@@ -81,6 +84,7 @@ def inspect(root):
             # Validate the filename component strictly
             if src_path.is_file():
                 filename = src_path.name
+                # Validate that filename matches the pattern exactly
                 if not re.fullmatch(r"[a-zA-Z0-9\-_]+\.mp3", filename):
                     problems.append({"word": word, "issue": "invalid_filename", "filename": filename})
                     continue
