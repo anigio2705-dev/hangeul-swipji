@@ -12,6 +12,7 @@ on:
       - 'index.html'
       - 'scripts/team12_learning_handoff.js'
       - 'scripts/team12_provider_links.js'
+      - 'scripts/team12_provider_links.test.js'
       - 'learn.html'
       - 'dashboard.html'
       - 'scripts/team12_resume.js'
@@ -42,6 +43,7 @@ jobs:
         run: |
           node --check scripts/team12_learning_handoff.js
           node --check scripts/team12_provider_links.js
+          node scripts/team12_provider_links.test.js
           node --check scripts/team12_resume.js
           node scripts/team12_resume.test.js
           node --check phase3/app.js
