@@ -19,19 +19,19 @@ jobs:
           path: integration
       - uses: actions/checkout@v4
         with:
-          ref: 1994f8f45a21d2f73269934cd7703f54be1b7ffe
+          ref: 6326b1dda7f8869b73a433a0bce35c75c87176bf
           path: team11
       - uses: actions/checkout@v4
         with:
-          ref: e67d7d42db2ad6694a1081cd03659282bea28df3
+          ref: 4b3f2caf2e8ff8a67131d2641d99136903004b25
           path: team12
       - uses: actions/checkout@v4
         with:
-          ref: 874890f35b4496fd9cba0b485556971fa7bb20c6
+          ref: 623c60f6eed674425820aa455a07a8ca48c4f7f5
           path: team13
       - uses: actions/checkout@v4
         with:
-          ref: a0fdc31ab4f1202770665d2735ab4bef69b2002b
+          ref: 11cdb1c71f4d896c9d5ca219aca2d3b2361fe32a
           path: team14
       - name: Print pinned checkout SHAs
         run: for d in integration team11 team12 team13 team14; do echo "$d $(git -C "$d" rev-parse HEAD)"; done
@@ -42,7 +42,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: 1994f8f45a21d2f73269934cd7703f54be1b7ffe
+          ref: 6326b1dda7f8869b73a433a0bce35c75c87176bf
       - run: git rev-parse HEAD
       - run: python3 -m unittest discover -s phase3 -p 'test_common_*.py' -v
   team12-audio:
@@ -50,7 +50,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: e67d7d42db2ad6694a1081cd03659282bea28df3
+          ref: 4b3f2caf2e8ff8a67131d2641d99136903004b25
       - run: git rev-parse HEAD
       - run: python3 -m py_compile scripts/team12_audio_inventory.py
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg
@@ -66,7 +66,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: 874890f35b4496fd9cba0b485556971fa7bb20c6
+          ref: 623c60f6eed674425820aa455a07a8ca48c4f7f5
           fetch-depth: 0
       - run: git rev-parse HEAD && git cat-file -e 7418e32:phase3/content.json
       - uses: actions/setup-python@v5
@@ -85,7 +85,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: 874890f35b4496fd9cba0b485556971fa7bb20c6
+          ref: 623c60f6eed674425820aa455a07a8ca48c4f7f5
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -108,7 +108,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: a0fdc31ab4f1202770665d2735ab4bef69b2002b
+          ref: 11cdb1c71f4d896c9d5ca219aca2d3b2361fe32a
       - run: git rev-parse HEAD
       - run: python3 -m unittest discover -s phase3 -p 'test_team14*.py' -v
   integration-baseline:
