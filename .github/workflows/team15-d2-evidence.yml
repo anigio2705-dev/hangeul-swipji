@@ -17,5 +17,24 @@ jobs:
         run: python -m unittest discover -s scripts -p test_team15_d2_evidence_gate.py -v
       - name: Validate six-team D2 evidence inventory
         run: python scripts/team15_d2_evidence_gate.py qa/team15-d2-evidence.json
+      - name: Checkout pinned team sources in isolated paths
+        shell: bash
+        run: |
+          mkdir -p team11 team12 team13 team14
+          for spec in \
+            "team11 a2abc3c08ec0c4d245ae0be0670a1b47148f2e00" \
+            "team12 edbf1d614e58f391ce2d63e3b3f0229370047c17" \
+            "team13 89e6ee0feec58b7fd1ca0f9da817447218eb94b2" \
+            "team14 5ca151c4abeafcc934209ae6f0d48764170acd82"; do
+            read -r dir sha <<< "$spec"
+            git fetch origin "$sha"
+            git archive "$sha" | tar -x -C "$dir"
+          done
       - name: Existing Team15 continuous real HTTP SQLite regression
+        env:
+          PYTHONPATH: team11/phase3:team13/phase3:team14/phase3
         run: python scripts/test_team15_continuous_instant_e2e.py
+      - name: Team12 education progress HTTP regression
+        env:
+          PYTHONPATH: team11/phase3:team12/phase3
+        run: python team12/phase3/test_team12_progress_http.py
