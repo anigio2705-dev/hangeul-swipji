@@ -79,6 +79,7 @@ def decide_refund(store, request_id, decision, reviewer):
 
             # Also ensure reason field stored in DB is stripped of extra whitespace
             if reason_clean != row['reason']:
+                # update trimmed reason to db
                 store.db.execute('UPDATE refund_requests SET reason=? WHERE request_id=?', (reason_clean, request_id))
 
         store.db.execute('UPDATE refund_requests SET state=?, updated_at=CURRENT_TIMESTAMP WHERE request_id=?',
