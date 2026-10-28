@@ -34,3 +34,4 @@ jobs:
           python -m unittest discover -s phase3 -p 'test_team14_instant_http_settlement.py' -v
           python -m unittest discover -s phase3 -p 'test_team14_crash_recovery.py' -v
           python -m unittest discover -s phase3 -p 'test_team14_initial_products.py' -v
+          python -m unittest discover -s phase3 -p 'test_team14_d2_catalog_http.py' -v
