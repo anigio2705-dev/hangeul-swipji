@@ -13,6 +13,7 @@ on:
       - 'scripts/team12_learning_handoff.js'
       - 'scripts/team12_provider_links.js'
       - 'learn.html'
+      - 'dashboard.html'
       - '.github/workflows/team12-education-audit.yml'
 permissions:
   contents: read
