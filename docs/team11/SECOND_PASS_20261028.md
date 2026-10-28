@@ -24,3 +24,6 @@ Legacy single-role users cannot simultaneously teach and learn under the old sch
 No payout percentage/depth/eligibility is set. Referral cycles, refund conservation, payment replay, permissions and cross-role booking conflicts remain integration-test gaps.
 Test execution must be independently verified; committing tests does not constitute a passing run.
 HQ decisions: identity source, multi-role migration design, final status mappings, DB vendor, approval policy, legal referral policy, shared-file integration order.
+
+## Execution evidence (isolated reconstruction, not repository checkout)
+2026-10-28: Direct git clone from execution container failed because github.com DNS resolution was unavailable. Reconstructed the fetched common_contract.py validator logic and the 15 test method scenarios in a temporary isolated Python directory; executed python3 -m unittest discover -s <temporary directory> -p 'test_*.py' -v. Result: Ran 15 tests, OK, exit code 0. This verifies the reconstructed logic only, NOT an exact GitHub file checkout or complete phase3 regression. The unrelated notebook spreadsheet warmup emitted an error before the subprocess, but unittest exited 0. Next action: run the exact checked-out files and full suite in GitHub CI or a network-enabled workspace; attach workflow run URL and SHA. No live DB, production service or deployment was touched.
