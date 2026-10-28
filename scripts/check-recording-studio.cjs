@@ -14,5 +14,6 @@ assert.throws(()=>build(null),TypeError);
 const html=fs.readFileSync(path.join(root,'hangul-recording-studio.html'),'utf8');
 for(const marker of ['getUserMedia','MediaRecorder','URL.revokeObjectURL','getTracks()','consent','review','download','local only'])
  assert(html.includes(marker),'Missing safe studio control '+marker);
+assert(fs.readFileSync(path.join(root,'hangul-audio-review.html'),'utf8').includes('href="./hangul-recording-studio.html"'));
 assert(!/fetch\s*\([^)]*method\s*:\s*['"]POST/.test(html),'Studio must not upload audio');
 console.log('PASS: 399 syllables, priority missing queue, consent-gated local recorder and review controls');

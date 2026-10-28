@@ -21,6 +21,7 @@ on:
       - 'scripts/team12_recording_queue.js'
       - 'scripts/check-recording-studio.cjs'
       - 'hangul-recording-studio.html'
+      - 'hangul-audio-review.html'
       - 'scripts/test_team12_audio_source_discovery.py'
       - 'scripts/team12_server_progress.js'
       - 'scripts/team12_server_progress.test.js'
