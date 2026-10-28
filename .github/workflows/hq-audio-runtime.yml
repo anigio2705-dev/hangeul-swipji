@@ -16,6 +16,8 @@ on:
       - 'hangul-basics.html'
       - 'hangul-week.html'
       - 'scripts/check-audio-runtime.cjs'
+      - 'scripts/team12_audio_inventory.py'
+      - 'scripts/test_team12_audio_inventory.py'
       - 'scripts/check-human-audio.cjs'
       - 'scripts/check-week-human-audio.cjs'
       - 'scripts/check-foundations.cjs'
@@ -39,6 +41,8 @@ jobs:
           node scripts/check-audio-review.cjs
           node scripts/check-human-audio.cjs
           node scripts/check-week-human-audio.cjs
+      - name: Test physical recording integrity and quarantine classification
+        run: python3 -m unittest discover -s scripts -p 'test_team12_audio_inventory.py' -v
       - name: Test 350 lessons and seven-day curriculum regression
         run: node scripts/check-foundations.cjs
       - name: State validation limits
