@@ -24,7 +24,7 @@ class InstantMatchingTests(unittest.TestCase):
         return self.cookie,uid
 
     def call(self,cookie,action,data=None,expected=200):
-        status,_,raw=self.request('/api/instant/'+action,{} if data is None and action!='status' else data,headers={'Cookie':cookie})
+        status,_,raw=self.request('/api/instant/'+action,{} if data is None and action not in ('status','reservations') else data,headers={'Cookie':cookie})
         self.assertEqual(expected,status,raw)
         return json.loads(raw)
 
