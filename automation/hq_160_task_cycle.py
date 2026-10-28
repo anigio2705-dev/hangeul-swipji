@@ -48,7 +48,7 @@ CURATED_TARGETS = {
     "14": ((109, "phase3/team14_referral_store.py"),
            (115, "phase3/team14_refund_workflow.py")),
     "15": ((8, "scripts/team15_independent_gate.py"),
-           (9, "scripts/team15_cross_team_smoke.py")),
+           (151, "scripts/team15_cross_team_smoke.py")),
     "16": ((55, "scripts/render-audio-credits.py"),),
 }
 STATES = frozenset({"unverified", "in_progress", "blocked", "retry", "code_verified", "complete"})
