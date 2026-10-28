@@ -1,11 +1,11 @@
 'use strict';
 const vm=require('node:vm'),fs=require('node:fs'),assert=require('node:assert/strict');
 const source=fs.readFileSync(require('node:path').join(__dirname,'../hangul-core.js'),'utf8');
-const meta={kind:'human',src:'./assets/hangul-audio/test.mp3',sourceUrl:'https://example.org/source',author:'Recorded speaker',license:'CC BY-SA 4.0'};
+const meta={kind:'human',src:'./assets/hangul-audio/test.mp3',sourceUrl:'https://example.org/source',author:'Recorded speaker',license:'CC BY-SA 4.0',sha256:'a'.repeat(64)};
 function setup(mode='ended',fetchMode='ok'){
- let played=0,synthetic=0,fetches=0;const statuses=[];
- const c={URL,setTimeout:(f,t)=>setTimeout(f,Math.min(t,10)),clearTimeout,Event:function(){},window:{addEventListener(){},speechSynthesis:{cancel(){},speak(){synthetic++}}},document:{baseURI:'https://example.org/',addEventListener(){},dispatchEvent(){},querySelectorAll(selector){return selector==='[data-sound]'?[]:[{set textContent(v){statuses.push(v)}}]},querySelector(){return null}},fetch:()=>{fetches++;if(fetchMode==='retry'&&fetches===1)return Promise.reject(Error('temporary'));return fetchMode==='hang'?new Promise(()=>{}):fetchMode==='reject'?Promise.reject(Error('network')):Promise.resolve({ok:true,json:async()=>fetchMode==='json-hang'?new Promise(()=>{}):({recordings:fetchMode==='rotate'&&fetches>1?{나:meta,아:{...meta,disabled:true,holdReason:'listening pending'}}:{가:meta,아:{...meta,disabled:true,holdReason:'listening pending'},machine:{...meta,kind:'synthetic'},unknown:{...meta,kind:'unknown'},external:{...meta,src:'https://example.org/a.mp3'}}})})},Audio:class{constructor(){played++}pause(){}play(){if(mode==='throw')throw Error('blocked');if(mode==='reject')return Promise.reject(Error('blocked'));if(mode==='hang')return Promise.resolve();return Promise.resolve().then(()=>mode==='error'?this.onerror?.():this.onended?.())}}};
- vm.createContext(c);vm.runInContext(source,c);return {h:c.window.HSHangul,stats:()=>({played,synthetic,statuses})};
+ let played=0,synthetic=0,fetches=0;const statuses=[],urls=[];
+ const c={URL,setTimeout:(f,t)=>setTimeout(f,Math.min(t,10)),clearTimeout,Event:function(){},window:{addEventListener(){},speechSynthesis:{cancel(){},speak(){synthetic++}}},document:{baseURI:'https://example.org/',addEventListener(){},dispatchEvent(){},querySelectorAll(selector){return selector==='[data-sound]'?[]:[{set textContent(v){statuses.push(v)}}]},querySelector(){return null}},fetch:()=>{fetches++;if(fetchMode==='retry'&&fetches===1)return Promise.reject(Error('temporary'));return fetchMode==='hang'?new Promise(()=>{}):fetchMode==='reject'?Promise.reject(Error('network')):Promise.resolve({ok:true,json:async()=>fetchMode==='json-hang'?new Promise(()=>{}):({recordings:fetchMode==='version'?{가:{...meta,sha256:(fetches===1?'a':'b').repeat(64)}}:fetchMode==='rotate'&&fetches>1?{나:meta,아:{...meta,disabled:true,holdReason:'listening pending'}}:{가:meta,아:{...meta,disabled:true,holdReason:'listening pending'},machine:{...meta,kind:'synthetic'},unknown:{...meta,kind:'unknown'},external:{...meta,src:'https://example.org/a.mp3'}}})})},Audio:class{constructor(src){played++;urls.push(src)}pause(){}play(){if(mode==='throw')throw Error('blocked');if(mode==='reject')return Promise.reject(Error('blocked'));if(mode==='hang')return Promise.resolve();return Promise.resolve().then(()=>mode==='error'?this.onerror?.():this.onended?.())}}};
+ vm.createContext(c);vm.runInContext(source,c);return {h:c.window.HSHangul,stats:()=>({played,synthetic,statuses,urls})};
 }
 (async()=>{
  const a=setup();await a.h.ready;
@@ -22,6 +22,14 @@ function setup(mode='ended',fetchMode='ok'){
  assert.equal(rotating.h.availability('나').state,'ready');
  assert.equal((await rotating.h.play('가')).status,'missing');
  assert.equal((await rotating.h.play('나')).status,'played');
+ const versioned=setup('ended','version');await versioned.h.ready;
+ assert.equal((await versioned.h.play('가')).status,'played');
+ assert.equal((await versioned.h.reloadManifest()).status,'ready');
+ assert.equal((await versioned.h.play('가')).status,'played');
+ const urls=versioned.stats().urls;
+ assert.equal(urls.length,2);assert(urls[0].includes('v=aaaaaaaaaaaaaaaa'));
+ assert(urls[1].includes('v=bbbbbbbbbbbbbbbb'));
+ assert.notEqual(urls[0],urls[1],'replaced audio at same path must have a new URL');
  const x=setup('hang');await x.h.ready;const pending=x.h.play('가');await Promise.resolve();await Promise.resolve();x.h.stop();assert.equal((await pending).status,'cancelled');
- console.log('PASS audio runtime: ended, held, missing, source-type rejection, play rejection, file error, manifest failure, timeout, cancellation and atomic manifest refresh; no TTS substitution.');
+ console.log('PASS audio runtime: ended, held, missing, source-type rejection, play rejection, file error, manifest failure, timeout, cancellation and atomic manifest refresh, versioned audio cache invalidation; no TTS substitution.');
 })().catch(e=>{console.error(e);process.exitCode=1});
