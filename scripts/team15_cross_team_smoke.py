@@ -19,8 +19,8 @@ for label, (team, candidates, tokens) in checks.items():
     for name in candidates:
         # input validation: name must be a relative path, no absolute or upwards traversal
         path_obj = Path(name)
-        if path_obj.is_absolute() or '..' in path_obj.parts:
-            issues.append(f"{label}: invalid candidate filename (absolute or parent traversal): {name}")
+        if path_obj.is_absolute() or '..' in path_obj.parts or name.strip() == '':
+            issues.append(f"{label}: invalid candidate filename (absolute, parent traversal, or empty): {repr(name)}")
             continue
         path = root / team / path_obj
         # Ensure the file path is normalized and within root
