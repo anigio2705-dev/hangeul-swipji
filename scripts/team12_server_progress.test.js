@@ -20,6 +20,7 @@ assert.equal(await stale.pull(),true,'stale client begins on student B');
 uid='student-A';
 assert.equal(await c.pull(),true);
 assert.equal(JSON.parse(storage.getItem(k)).done[0],true,'student A progress restored from its account backup');
+console.log('ACCOUNT_SWITCH_DIAG',JSON.stringify({A:records.get('student-A'),B:records.get('student-B'),backupA:storage.getItem('hs-team12-account-student-A-'+api.keys[1]),owner:storage.getItem('hs-team12-progress-owner')}));
 assert.equal(storage.getItem(api.keys[1]),null,'student B progress must not appear in student A');
 const beforeA=records.get('student-A').length;
 stale.changed(api.keys[1],JSON.stringify({done:{12:true}}));
