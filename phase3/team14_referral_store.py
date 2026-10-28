@@ -68,6 +68,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
    # Defensive: reject any internal whitespace characters
    if any(c.isspace() for c in val):
     raise SimError('INVALID_INPUT', f'{name} must not contain whitespace characters')
+   # Defensive: reject null bytes immediately
+   if '\x00' in val:
+    raise SimError('INVALID_INPUT', f'{name} must not contain null bytes')
 
   # Use external validators for allowed chars (e.g. ident does ASCII alphanum and selected punctuation)
   ident(event_id); ident(student_id); ident(lesson_id)
@@ -82,7 +85,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
    raise SimError('INVALID_INPUT', 'commission_bps must be a non-negative integer')
 
   # Defensive check: refuse to award if string IDs contain suspicious characters or non-ASCII or control chars
-  suspicious_chars = '\\"\'%;'
+  suspicious_chars = '\"\'%;'
   for val, name in [(student_id, 'student_id'), (lesson_id, 'lesson_id'), (event_id, 'event_id')]:
    if any(c in val for c in suspicious_chars):
     raise SimError('INVALID_INPUT', f'{name} contains invalid characters')
