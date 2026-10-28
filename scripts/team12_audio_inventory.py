@@ -38,7 +38,7 @@ def inspect(root):
     # Path regex must match exactly relative path starting with './assets/hangul-audio/'
     path_regex = re.compile(r"\./assets/hangul-audio/[a-zA-Z0-9\-_]+\.mp3$")
 
-    root_resolved = root.resolve()
+    root_resolved = root.resolve(strict=False)
 
     for word, entry in records.items():
         if not isinstance(word, str) or not isinstance(entry, dict):
@@ -77,18 +77,30 @@ def inspect(root):
                 problems.append({"word": word, "issue": "path_is_absolute", "path": src})
                 continue
 
-            src_path = (root / cleaned_src).resolve()
+            # Resolve src_path safely, allow that root_resolved might not exist yet
+            src_path = (root / cleaned_src).resolve(strict=False)
 
+            # root_resolved may not exist, check by parts prefix
             # Ensure src_path is inside root directory
             try:
-                src_path.relative_to(root_resolved)
-            except ValueError:
-                problems.append({"word": word, "issue": "invalid_path_outside_root", "path": src})
+                # Use parts comparison for robustness
+                if not src_path.is_absolute():
+                    problems.append({"word": word, "issue": "path_not_absolute_after_resolve", "path": src})
+                    continue
+
+                root_parts = root_resolved.parts
+                src_parts = src_path.parts
+
+                if len(src_parts) < len(root_parts) or src_parts[:len(root_parts)] != root_parts:
+                    problems.append({"word": word, "issue": "invalid_path_outside_root", "path": src})
+                    continue
+            except Exception as ex:
+                problems.append({"word": word, "issue": "invalid_path_outside_root_check_failed", "path": src, "detail": str(ex)})
                 continue
 
             # Extra check, path must start with root/assets/hangul-audio
-            rel_path = src_path.relative_to(root_resolved)
-            if not str(rel_path).startswith("assets/hangul-audio/"):
+            rel_path = src_path.relative_to(root_resolved) if root_resolved in src_path.parents or src_path == root_resolved else None
+            if rel_path is None or not str(rel_path).startswith("assets/hangul-audio/"):
                 problems.append({"word": word, "issue": "invalid_path_subdir", "path": src})
                 continue
 
