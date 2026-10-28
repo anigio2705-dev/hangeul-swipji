@@ -200,7 +200,8 @@ def record_lesson_event(db, user, booking_id, event_id, event_type):
         raise server.Error('예약 상태와 이벤트가 일치하지 않습니다',409)
     if event_type in ('lesson.completed','booking.cancelled'):
         prior=db.execute("""SELECT event_id FROM instant_lesson_events
-            WHERE booking_id=? AND event_type=? LIMIT 1""",(booking_id,event_type)).fetchone()
+            WHERE booking_id=? AND event_type IN ('lesson.completed','booking.cancelled')
+            LIMIT 1""",(booking_id,)).fetchone()
         if prior:
             raise server.Error('이미 기록된 예약 수업 이벤트입니다',409)
     payload=transaction_event_contract(booking_id,event_id,event_type)
