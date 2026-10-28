@@ -9,7 +9,6 @@ on:
       - 'automation/hq_backlog_160.md'
       - 'automation/hq_six_cycle_supervisor.py'
       - 'automation/test_hq_six_cycle_supervisor.py'
-      - 'automation/task-evidence.json'
       - '.github/workflows/hq-six-developers.yml'
   workflow_dispatch:
     inputs:
@@ -141,6 +140,30 @@ jobs:
             --depth "$HQ_DEPTH" \
             --repairs "$HQ_REPAIR" \
             --output "$RUNNER_TEMP/hq-six-cycle-verdict.json"
+      - name: Publish timestamped numbered verdicts in GitHub Actions summary
+        if: always()
+        run: |
+          python - <<'PY'
+          import datetime, json, os
+          from pathlib import Path
+          p = Path(os.environ["RUNNER_TEMP"]) / "hq-six-cycle-verdict.json"
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
+              f.write("## Six-team HQ verified cycle\n\n")
+              f.write("Checked UTC: " + datetime.datetime.now(datetime.timezone.utc).isoformat() + "\n\n")
+              if not p.exists():
+                  f.write("Supervisor report missing: FAIL, no completion credit.\n")
+              else:
+                  report = json.loads(p.read_text())
+                  for team, verdicts in report["team_verdicts"].items():
+                      if not verdicts:
+                          f.write(f"- Team {team}: no submitted numbered change\n")
+                      for v in verdicts:
+                          f.write(f"- Team {team}, #{v.get('task_number')}: {v['verdict']} — {v['reason']}\n")
+                  f.write(f"\nStaged pending CI: {report['staged_pending_CI']}\n")
+                  f.write(f"Promoted code-verified: {report['promoted_code_verified']}\n")
+                  f.write(f"Next dispatched: {report['dispatched_next']} — {report['next_reason']}\n")
+                  f.write("Final 160-item completion: NOT established by this run.\n")
+          PY
       - name: Save real six-team verification and next action
         if: always()
         uses: actions/upload-artifact@v4
