@@ -1,0 +1,15 @@
+name: HQ autonomous isolated worker
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check HQ baseline
+        run: python -m unittest discover -s automation -p 'test_*.py' -v
+      - name: Run integration workflow via existing pilot
+        run: echo 'HQ autonomous expansion requires guarded write runner and default-branch scheduling.'
