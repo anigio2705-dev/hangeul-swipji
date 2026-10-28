@@ -14,15 +14,15 @@ class CommonHttpJourney(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             original=server.DB_PATH
             server.DB_PATH=os.path.join(directory,"journey.sqlite3")
-            http=None
+            http_server=None
             try:
                 server.init_db()
-                http=ThreadingHTTPServer(("127.0.0.1",0),server.Handler)
-                http.failures={}
-                thread=threading.Thread(target=http.serve_forever,daemon=True)
+                http_server=ThreadingHTTPServer(("127.0.0.1",0),server.Handler)
+                http_server.failures={}
+                thread=threading.Thread(target=http_server.serve_forever,daemon=True)
                 thread.start()
                 def request(method,path,data=None,cookie=None):
-                    conn=http.client.HTTPConnection("127.0.0.1",http.server_port,timeout=10)
+                    conn=http.client.HTTPConnection("127.0.0.1",http_server.server_port,timeout=10)
                     headers={"Content-Type":"application/json"}
                     if cookie: headers["Cookie"]=cookie
                     try:
@@ -70,9 +70,9 @@ class CommonHttpJourney(unittest.TestCase):
                 self.assertEqual(status,200,body)
                 self.assertEqual(body["bookings"],[])
             finally:
-                if http is not None:
-                    http.shutdown()
-                    http.server_close()
+                if http_server is not None:
+                    http_server.shutdown()
+                    http_server.server_close()
                     thread.join(timeout=5)
                 server.DB_PATH=original
 
