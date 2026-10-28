@@ -18,7 +18,7 @@ class BoundedPatchTests(unittest.TestCase):
             apply_patch(original, {"old": "return 123", "new": "return 456"})
         with self.assertRaisesRegex(ValueError, "Null"):
             apply_patch(original, {"old": "def a():\n    return 123",
-                                   "new": "def a():\n    return '\\x00'"})
+                                   "new": "def a():\n    return '" + chr(0) + "'"})
 
     def test_truncated_or_whole_file_patch_rejected(self):
         with self.assertRaisesRegex(ValueError, "large"):
