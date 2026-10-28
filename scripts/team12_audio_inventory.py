@@ -142,7 +142,12 @@ def inspect(root):
     # Prepare inventory for 399 syllables
     for i, c in enumerate(CONSONANTS):
         for j, v in enumerate(VOWELS):
-            word = chr(0xAC00 + (i * 21 + j) * 28)
+            # Compose Hangul syllable code point
+            cp = 0xAC00 + (i * 21 + j) * 28
+            # Validate cp is valid (within Unicode Hangul Syllables block)
+            if cp > 0xD7A3:
+                continue
+            word = chr(cp)
             entry = records.get(word)
             state = "missing"
             if entry is not None and isinstance(entry, dict):
