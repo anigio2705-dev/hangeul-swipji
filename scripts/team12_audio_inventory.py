@@ -56,6 +56,12 @@ def inspect(root):
 
             # clean src removing leading './'
             cleaned_src = src[2:]
+
+            # Prevent suspicious path components like .. or //
+            if ".." in cleaned_src.split('/') or "" in cleaned_src.split('/'):
+                problems.append({"word": word, "issue": "path_contains_invalid_components", "path": src})
+                continue
+
             src_path = (root / cleaned_src).resolve()
 
             # Ensure src_path is inside root directory
@@ -86,6 +92,12 @@ def inspect(root):
         path = root / cleaned_src
 
         try:
+            # Prevent reading unexpectedly large files (> 100MB)
+            filesize = path.stat().st_size
+            if filesize > 100 * 1024 * 1024:
+                problems.append({"word": word, "issue": "file_too_large", "path": src, "size": filesize})
+                continue
+
             data_bytes = path.read_bytes()
         except Exception as e:
             problems.append({"word": word, "issue": "file_read_error", "path": src, "detail": str(e)})
