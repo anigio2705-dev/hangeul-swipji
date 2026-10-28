@@ -19,7 +19,7 @@ const sandbox={
   return Promise.resolve({ok:true,json:async()=>({user:{nickname:'test',role:'learner'},eligible:true,state:'idle'})});
  }
 };
-vm.createContext(sandbox);vm.runInContext(scripts[0][1],sandbox);
+vm.createContext(sandbox);vm.runInContext(scripts[0],sandbox);
 (async()=>{
  await new Promise(resolve=>setTimeout(resolve,30));
  assert.equal(requests,1);assert.equal(aborts,1);
