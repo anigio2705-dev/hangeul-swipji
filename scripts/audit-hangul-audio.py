@@ -160,7 +160,11 @@ for word, meta in manifest.get('recordings', {}).items():
     except Exception as e:
         raise IOError(f"Failed to hash file {file}") from e
 
-    if file_hash != meta.get('sha256'):
+    meta_sha256 = meta.get('sha256')
+    if not isinstance(meta_sha256, str):
+        raise ValueError(f"Missing or invalid 'sha256' in metadata for {word}")
+
+    if file_hash != meta_sha256:
         raise ValueError(f"SHA256 hash mismatch for {word}")
 
     kind = meta.get('kind', 'human')
