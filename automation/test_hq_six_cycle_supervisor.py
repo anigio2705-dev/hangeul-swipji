@@ -6,7 +6,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from hq_160_task_cycle import CURATED_TARGETS, contracts
-from hq_six_cycle_supervisor import supervise
+from hq_six_cycle_supervisor import supervise, promote_prior
 
 def sample():
     return "\n".join(f"{n}. [ ] Acceptance criterion {n}" for n in range(1, 161))
@@ -60,6 +60,20 @@ class SixTeamSupervisorTests(unittest.TestCase):
             repairs={"14": {"109": {"attempts": 1, "repair_instruction": "first failure"}}})
         self.assertFalse(again["dispatched_next"])
         api_again.assert_not_called()
+
+    def test_pending_ci_is_not_promoted_until_run_completes_successfully(self):
+        url = "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"
+        ledger = {"109": {"status": "in_progress", "independent_review": "pass",
+                          "ci_url": url, "ci_result": "pending"}}
+        with patch("hq_six_cycle_supervisor.api", return_value={
+            "status": "in_progress", "conclusion": None}):
+            self.assertEqual(promote_prior(ledger, "dummy"), [])
+            self.assertEqual(ledger["109"]["status"], "in_progress")
+        with patch("hq_six_cycle_supervisor.api", return_value={
+            "status": "completed", "conclusion": "success"}):
+            self.assertEqual(promote_prior(ledger, "dummy"), [109])
+            self.assertEqual(ledger["109"]["status"], "code_verified")
+            self.assertEqual(ledger["109"]["ci_result"], "success")
 
     def test_budget_caps_successful_chains(self):
         report, api = self.run_cycle(committed=True, depth=2)
