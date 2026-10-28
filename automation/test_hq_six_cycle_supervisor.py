@@ -24,10 +24,13 @@ class SixTeamSupervisorTests(unittest.TestCase):
                 (target / "team-result.json").write_text(
                     json.dumps({"team": team, "tasks": tasks}), encoding="utf-8")
             output = Path(directory) / "report.json"
-            with patch.dict(os.environ, {"GITHUB_REF_NAME": "automation/hq-pilot-13-14-15-20261029"}), \
+            with patch.dict(os.environ, {"GITHUB_REF_NAME": "automation/hq-pilot-13-14-15-20261029", "GITHUB_RUN_ID": "123"}), \
                  patch("hq_six_cycle_supervisor.load_catalog", return_value=contracts(sample())), \
                  patch("hq_six_cycle_supervisor.independent_check",
-                       return_value=(verdict, "Precise fix: assertion 7", {})), \
+                       return_value=(verdict, "Precise fix: assertion 7", {"commit": "a" * 40})), \
+                 patch("hq_six_cycle_supervisor.load_ledger", return_value=({}, "a" * 40)), \
+                 patch("hq_six_cycle_supervisor.save_ledger", return_value=None), \
+                 patch("hq_six_cycle_supervisor.promote_prior", return_value=[]), \
                  patch("hq_six_cycle_supervisor.four_role_evidence",
                        return_value={"status": "read_four_independent_artifacts"}), \
                  patch("hq_six_cycle_supervisor.api") as api:
