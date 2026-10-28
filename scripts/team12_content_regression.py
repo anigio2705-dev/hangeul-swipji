@@ -111,7 +111,14 @@ class Team12Regression(unittest.TestCase):
                 self.assertIsNotNone(value, f"Field '{field}' is None at lesson index {idx}")
                 if isinstance(value, str):
                     self.assertTrue(value.strip() != '', f"Field '{field}' is empty or whitespace at lesson index {idx}")
-            self.assertEqual(len(values), len(set(values)), f"Duplicate values found in '{field}'")
+            unique_values = set()
+            for v in values:
+                # Normalize by stripping strings
+                if isinstance(v, str):
+                    unique_values.add(v.strip())
+                else:
+                    unique_values.add(v)
+            self.assertEqual(len(values), len(unique_values), f"Duplicate values found in '{field}'")
         self.assertTrue(all(isinstance(lesson.get("status"), str) and lesson.get("status") == "authored" for lesson in lessons))
 
     def test_pilot_units_reference_professional_curriculum(self):
@@ -164,6 +171,7 @@ class Team12Regression(unittest.TestCase):
             self.assertIsNotNone(uid, f"unit id must not be None at index {idx}")
             if isinstance(uid, str):
                 self.assertTrue(uid.strip() != '', f"unit id string must not be empty or whitespace at index {idx}")
+                uid = uid.strip()
             if uid in unit_ids:
                 self.fail(f"Duplicate unit id found: {uid}")
             unit_ids.add(uid)
