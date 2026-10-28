@@ -116,12 +116,12 @@
     {
       "number": 50,
       "feature": "무료 이용을 유지하면서 원하는 사람만 유료 수업으로 넘어가게 한다.",
-      "implemented": "index.html + scripts/team12_learning_handoff.js + phase3/app.js 의 역할 필터 전달 수정; 예약 E2E 미검증",
-      "missing": "자동·실제 환경 검증 및 원본 완료 조건 중 미충족 사항은 증거란에 기재",
-      "evidence": "index.html + scripts/team12_learning_handoff.js + phase3/app.js 의 역할 필터 전달 수정; 예약 E2E 미검증",
+      "implemented": "learn.html 학습→dashboard.html 진도 확인→partner/teacher 선택 링크, scripts/team12_provider_links.js intent 저장, phase3/app.js 검색 필터 소비",
+      "missing": "실제 계정 로그인·강사 검색 API·예약 완료까지 브라우저 E2E 미검증",
+      "evidence": "learn.html, scripts/team12_provider_links.js, phase3/app.js, scripts/team12_content_regression.py, workflow team12-education-audit.yml",
       "progress": 70,
-      "reason": "코드·데이터 존재와 미검증 범위를 반영한 보수적 추정; CI 성공·실사용 성공을 가정하지 않음",
-      "next": "관련 기능 E2E 및 실제 데이터 전수 검증",
+      "reason": "기존 70% 유지: 실제 경로 코드 개선되었으나 예약·인증·E2E 증거가 없어 상향 불가",
+      "next": "13번과 승인된 강사 검색 및 예약 화면 통합 검증",
       "integration": "11·13번 계약 및 통합 검증 필요",
       "status": "수정 필요"
     },
@@ -365,5 +365,6 @@
       "integration": "타 브랜치 통합 미검증",
       "status": "외부 확인 대기"
     }
-  ]
+  ],
+  "version": "11차 갱신"
 }
