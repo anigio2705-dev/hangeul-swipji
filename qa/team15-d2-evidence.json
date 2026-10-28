@@ -1,0 +1,80 @@
+[
+  {
+    "team": "11",
+    "feature": "D2-99-actual-browser-and-integration",
+    "code_sha": "",
+    "ci_run_url": "",
+    "render_sha": "",
+    "http_evidence": "",
+    "browser_evidence": "",
+    "state": "not_started",
+    "blockers": [
+      "Current Render release SHA and real browser evidence not independently verified"
+    ]
+  },
+  {
+    "team": "12",
+    "feature": "D2-99-actual-browser-and-integration",
+    "code_sha": "",
+    "ci_run_url": "",
+    "render_sha": "",
+    "http_evidence": "",
+    "browser_evidence": "",
+    "state": "not_started",
+    "blockers": [
+      "Current Render release SHA and real browser evidence not independently verified"
+    ]
+  },
+  {
+    "team": "13",
+    "feature": "D2-99-actual-browser-and-integration",
+    "code_sha": "",
+    "ci_run_url": "",
+    "render_sha": "",
+    "http_evidence": "",
+    "browser_evidence": "",
+    "state": "not_started",
+    "blockers": [
+      "Current Render release SHA and real browser evidence not independently verified"
+    ]
+  },
+  {
+    "team": "14",
+    "feature": "D2-99-actual-browser-and-integration",
+    "code_sha": "",
+    "ci_run_url": "",
+    "render_sha": "",
+    "http_evidence": "",
+    "browser_evidence": "",
+    "state": "not_started",
+    "blockers": [
+      "Current Render release SHA and real browser evidence not independently verified"
+    ]
+  },
+  {
+    "team": "15",
+    "feature": "D2-99-actual-browser-and-integration",
+    "code_sha": "",
+    "ci_run_url": "",
+    "render_sha": "",
+    "http_evidence": "",
+    "browser_evidence": "",
+    "state": "not_started",
+    "blockers": [
+      "Current Render release SHA and real browser evidence not independently verified"
+    ]
+  },
+  {
+    "team": "16",
+    "feature": "D2-99-actual-browser-and-integration",
+    "code_sha": "",
+    "ci_run_url": "",
+    "render_sha": "",
+    "http_evidence": "",
+    "browser_evidence": "",
+    "state": "not_started",
+    "blockers": [
+      "Current Render release SHA and real browser evidence not independently verified"
+    ]
+  }
+]
