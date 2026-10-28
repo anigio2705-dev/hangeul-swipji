@@ -2,7 +2,7 @@
 // Disposable VM simulates an aborted, hung API request followed by a successful retry.
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path');
 const html=fs.readFileSync(path.join(__dirname,'../phase3/instant-speaking.html'),'utf8');
-const scripts=[...html.matchAll(/<script>([\\s\\S]*?)<\\/script>/g)];
+const scripts=html.split('<script>').slice(1).map(s=>s.split('</script>')[0]);
 assert.equal(scripts.length,1);
 const elements=Object.create(null);
 function element(id){return elements[id]||(elements[id]={hidden:false,disabled:false,textContent:'',value:'',querySelector(){return null},replaceChildren(){}});}
