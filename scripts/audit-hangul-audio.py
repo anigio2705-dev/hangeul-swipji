@@ -11,6 +11,7 @@ import re
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
+
 node = r'''const fs=require('fs'),vm=require('vm');const c={window:{addEventListener(){}},document:{addEventListener(){},dispatchEvent(){}},Event:function(){},fetch:async()=>({ok:true,json:async()=>({recordings:{}})})};vm.createContext(c);for(const f of ['hangul-core.js','hangul-week-data.js'])vm.runInContext(fs.readFileSync(f,'utf8'),c);const h=c.window.HSHangul;console.log(JSON.stringify({consonants:h.consonants,vowels:h.vowels,blocks:h.consonants.flatMap(([a])=>h.vowels.map(([b])=>h.compose(a,b))),days:c.window.HSWeek}));'''
 data = json.loads(subprocess.check_output(['node', '-e', node], cwd=ROOT))
 
