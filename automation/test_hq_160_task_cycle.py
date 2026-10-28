@@ -82,6 +82,12 @@ class HQ160TaskCycleTests(unittest.TestCase):
 
     def test_final_complete_requires_master_check(self):
         self.assertEqual(make_report(sample(), {"9": {"status": "complete"}})["final_complete"], 0)
+        checked = sample().replace("9. [ ]", "9. [x]")
+        self.assertEqual(make_report(checked, {"9": {"status": "complete"}})["final_complete"], 0)
+        proof = {"status": "complete", "commit": "a" * 40,
+                 "ci_conclusion": "success", "independent_review": "pass",
+                 "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"}
+        self.assertEqual(make_report(checked, {"9": proof})["final_complete"], 1)
 
 if __name__ == "__main__":
     unittest.main()
