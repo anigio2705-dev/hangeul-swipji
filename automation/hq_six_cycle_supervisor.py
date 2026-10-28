@@ -198,12 +198,16 @@ def supervise(root, token, depth, repairs, output):
               "test_site_verified": False, "dispatched_next": False}
     # No progress and no precise fix -> do not repeat identical six-team calls.
     if depth < 2 and (passed > 0 or repairable > 0):
-        api("/actions/workflows/" + WORKFLOW + "/dispatches", token, method="POST",
-            payload={"ref": HQ_REF, "inputs": {
-                "chain_depth": str(depth + 1),
-                "repair_instructions_json": json.dumps(next_repairs, ensure_ascii=False)}})
-        report["dispatched_next"] = True
-        report["next_reason"] = "new independently tested code" if passed else "specific bounded repair"
+        try:
+            api("/actions/workflows/" + WORKFLOW + "/dispatches", token, method="POST",
+                payload={"ref": HQ_REF, "inputs": {
+                    "chain_depth": str(depth + 1),
+                    "repair_instructions_json": json.dumps(next_repairs, ensure_ascii=False)}})
+            report["dispatched_next"] = True
+            report["next_reason"] = "new independently tested code" if passed else "specific bounded repair"
+        except Exception as exc:
+            report["next_reason"] = "DISPATCH_FAILED: " + type(exc).__name__
+            report["dispatch_error"] = str(exc)[:240]
     else:
         report["next_reason"] = "STOP: no independently tested progress or bounded depth reached"
     Path(output).write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
