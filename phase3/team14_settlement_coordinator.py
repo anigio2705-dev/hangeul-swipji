@@ -43,7 +43,12 @@ def settle_with_referral(settlement_store,referral_store,event_id,read_event,
         parent=read_referral_parent(learner)
         if parent is not None:
             referral_store.link(learner,ident(parent))
-    result=consume_internal_lesson_event(settlement_store,event_id,read_event,resolve_booking)
+    # Pin the authenticated server event snapshot for the entire operation.
+    # A second mutable DB read could otherwise change participants, action or amount
+    # between referral verification and settlement application.
+    result=consume_internal_lesson_event(
+        settlement_store,event_id,lambda requested_id: event if requested_id==event_id else None,
+        resolve_booking)
     if action=='complete':
         gross=lesson_statement(settlement_store,event['month_id'],event['lesson_id'])['gross_krw']
         award=referral_store.award(event_id,learner,event['lesson_id'],gross)
