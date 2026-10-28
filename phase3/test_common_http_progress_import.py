@@ -32,6 +32,26 @@ class LegacyProgressImportTests(FreeProgressHttpTests):
         self.assertEqual(self.request_import("learner-a",[{"stage":1,"lesson":1},{"stage":0,"lesson":1}])[0],400)
         self.assertNotIn((1,1),{(x["stage"],x["lesson"]) for x in self.request("learner-a")[1]["completed"]})
 
+    def test_import_relogin_and_second_session_restore(self):
+        # A separate HTTP connection with the same server-side account session
+        # must recover the completion from SQLite, not browser-local state.
+        self.assertEqual(self.request_import("learner-a",[{"stage":4,"lesson":12}])[0],200)
+        status,result=self.request("learner-a")
+        self.assertEqual(status,200)
+        self.assertIn((4,12),{(x["stage"],x["lesson"]) for x in result["completed"]})
+        self.assertNotIn((4,12),{(x["stage"],x["lesson"]) for x in self.request("learner-b")[1]["completed"]})
+
+    def test_import_rejects_expired_session(self):
+        import time
+        import server
+        with server.connect() as db:
+            db.execute("UPDATE sessions SET expires=? WHERE user_id='learner-a'",(time.time()-1,))
+        try:
+            self.assertEqual(self.request_import("learner-a",[{"stage":3,"lesson":11}])[0],401)
+        finally:
+            with server.connect() as db:
+                db.execute("UPDATE sessions SET expires=? WHERE user_id='learner-a'",(time.time()+3600,))
+
     def test_cross_origin_write_rejected(self):
         import http.client,json
         conn=http.client.HTTPConnection("127.0.0.1",self.http.server_port,timeout=5)
