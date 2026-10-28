@@ -60,9 +60,13 @@ for team, paths in EXPECT.items():
         if normalized_path.is_absolute():
             failures.append(f"{team}: absolute path not allowed: {path}")
             continue
-        # Prevent any '..' elements in path parts
+        # Reject any '..' elements in path parts
         if any(part == '..' for part in normalized_path.parts):
             failures.append(f"{team}: path traversal detected in {path}")
+            continue
+        # Reject empty parts or dot-only parts
+        if any(part == '' or part == '.' for part in normalized_path.parts):
+            failures.append(f"{team}: invalid path segment in {path}")
             continue
 
         file_path = directory / normalized_path
@@ -103,6 +107,10 @@ for team, paths in EXPECT.items():
                 continue
             if p_path.is_absolute() or any(part == '..' for part in p_path.parts):
                 failures.append(f"{team}: tracked path traversal detected: {p}")
+                changed_files.add(p)
+                continue
+            if any(part == '' or part == '.' for part in p_path.parts):
+                failures.append(f"{team}: invalid segment in tracked path: {p}")
                 changed_files.add(p)
                 continue
 
