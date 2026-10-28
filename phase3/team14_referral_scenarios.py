@@ -5,9 +5,13 @@ def simulate_referral(gross_krw,edges,depth_rates_bps=(300,),commission_bps=2000
  if type(commission_bps)!=int or not 0<=commission_bps<=10000:raise SimError('VALIDATION_ERROR','commission')
  if not isinstance(edges,(list,tuple)) or not isinstance(depth_rates_bps,(list,tuple)) or len(depth_rates_bps)>10:raise SimError('VALIDATION_ERROR','policy')
  if any(type(r)!=int or not 0<=r<=10000 for r in depth_rates_bps) or sum(depth_rates_bps)+commission_bps>10000:raise SimError('VALIDATION_ERROR','rates exceed gross')
+ if not isinstance(edges,(list,tuple)) or len(edges)>10000:
+  raise SimError('VALIDATION_ERROR','referral edges must be a bounded list')
  graph={}
- for child,parent in edges:
-  ident(child);ident(parent)
+ for edge in edges:
+  if not isinstance(edge,(list,tuple)) or len(edge)!=2:
+   raise SimError('VALIDATION_ERROR','referral edge must contain two IDs')
+  child,parent=edge;ident(child);ident(parent)
   if child==parent or child in graph:raise SimError('CONFLICT','self or duplicate referral')
   graph[child]=parent
  for node in graph:
