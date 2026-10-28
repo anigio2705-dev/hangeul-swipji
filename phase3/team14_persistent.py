@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS ledger(id INTEGER PRIMARY KEY AUTOINCREMENT,transacti
   if currency!='KRW': raise SimError('VALIDATION_ERROR','currency mismatch')
   if action not in ('complete','refund','refund_completed','cancel'): raise SimError('VALIDATION_ERROR','action')
   amount(amount_krw,action in ('refund','refund_completed'))
-  if action!='refund' and amount_krw!=0: raise SimError('VALIDATION_ERROR','unexpected amount')
+  if action not in ('refund','refund_completed') and amount_krw!=0: raise SimError('VALIDATION_ERROR','unexpected amount')
   target={'complete':'completed','refund':'refunded','refund_completed':'refunded','cancel':'cancelled'}[action]
   if booking_state is not None and booking_state!=target: raise SimError('INVALID_STATE','booking event')
   def apply():
