@@ -74,7 +74,9 @@ def inspect(root):
                 continue
 
             # Prevent absolute path use
-            if Path(cleaned_src).is_absolute():
+            # Using Path.is_absolute on cleaned_src itself can be misleading due to lacking root,
+            # check explicitly for initial '/' to prevent absolute paths.
+            if cleaned_src.startswith('/') or cleaned_src.startswith('\\'):
                 problems.append({"word": word, "issue": "path_is_absolute", "path": src})
                 continue
 
