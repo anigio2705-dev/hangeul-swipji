@@ -155,7 +155,7 @@ def make_report(backlog_text, evidence=None, failures=None):
                 and record.get("ci_conclusion") == "success"
                 and record.get("independent_review") == "pass"
                 and bool(re.fullmatch(
-                    r"https://github\\.com/anigio2705-dev/hangeul-swipji/actions/runs/[0-9]+",
+                    r"https://github\.com/anigio2705-dev/hangeul-swipji/actions/runs/[0-9]+",
                     record.get("ci_url", "")))
                 and (not task["external_gate"] or bool(record.get("external_evidence")))
                 and (not task["approval_gate"] or bool(record.get("approval_evidence"))))
