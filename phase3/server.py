@@ -202,7 +202,17 @@ class Handler(BaseHTTPRequestHandler):
     def booking(self,db,bid,u):
         b=db.execute('SELECT * FROM bookings WHERE id=?',(bid,)).fetchone()
         if not b: raise Error('예약이 없습니다',404)
-        if u['role']!='admin' and u['id'] not in (b['learner_id'],b['teacher_id']): raise Error('접근 권한이 없습니다',403)
+        if u['role']=='admin':
+            return b
+        # Never trust a cached role or the caller's booking participants.
+        # This check uses current database approval and role, so revocation
+        # also applies to bookings created before the approval change.
+        from team11_server_booking_adapter import authenticated_booking_access
+        decision=authenticated_booking_access(db,u['id'],bid,'view')
+        if not decision['allowed']:
+            status={'UNAUTHENTICATED':401,'NOT_FOUND':404,'VALIDATION_ERROR':400,
+                    'CONFLICT':409,'INVALID_STATE':409}.get(decision['code'],403)
+            raise Error('예약 접근 권한이 없습니다',status)
         return b
     def route(self,db,path,d,q):
         method=self.command
