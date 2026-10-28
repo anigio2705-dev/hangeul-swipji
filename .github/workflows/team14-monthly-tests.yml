@@ -9,7 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Execute exact checked-out Team14 tests
+      - name: Run original 14 and new persistent monthly tests
         run: |
           git rev-parse HEAD
           python -m unittest discover -s phase3 -p 'test_team14_monthly*.py' -v
+          python -m unittest discover -s phase3 -p 'test_team14_persistent.py' -v
