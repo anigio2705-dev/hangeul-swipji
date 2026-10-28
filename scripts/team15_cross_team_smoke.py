@@ -101,5 +101,12 @@ result = {
     "issues": issues
 }
 
-print(json.dumps(result, ensure_ascii=False, indent=2))
-sys.exit(1 if issues else 0)
+# Defensive print to stdout only if JSON is valid and complete
+try:
+    output = json.dumps(result, ensure_ascii=False, indent=2)
+except Exception as err:
+    print(f"JSON serialization error: {err}", file=sys.stderr)
+    sys.exit(1)
+else:
+    print(output)
+    sys.exit(1 if issues else 0)
