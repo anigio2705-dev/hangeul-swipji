@@ -173,6 +173,7 @@ class Team12Regression(unittest.TestCase):
             if isinstance(uid, str):
                 self.assertTrue(uid.strip() != '', f"unit id string must not be empty or whitespace at index {idx}")
                 uid = uid.strip()
+            # Check duplicate after normalization
             if uid in unit_ids:
                 self.fail(f"Duplicate unit id found: {uid}")
             unit_ids.add(uid)
