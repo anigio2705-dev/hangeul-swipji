@@ -100,12 +100,12 @@ jobs:
           import json, os
           report = json.load(open(os.path.join(os.environ["RUNNER_TEMP"], "hq-160-contracts.json")))
           with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
-              f.write("\\n## Next six-team scoped commands\\n\\n")
+              f.write("\n## Next six-team scoped commands\n\n")
               for team, assignment in report["assignments"].items():
                   if assignment:
-                      f.write(f"- Team {team}: #{assignment['task_number']} — {assignment['acceptance_criterion']} ({assignment['path']})\\n")
+                      f.write(f"- Team {team}: #{assignment['task_number']} — {assignment['acceptance_criterion']} ({assignment['path']})\n")
                   else:
-                      f.write(f"- Team {team}: no safe remaining curated assignment\\n")
+                      f.write(f"- Team {team}: no safe remaining curated assignment\n")
           PY
       - name: Upload auditable queue and team head snapshot
         uses: actions/upload-artifact@v4
