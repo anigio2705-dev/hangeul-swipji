@@ -13,9 +13,9 @@ def apply_booking_event(store,event):
     if event["currency"]!="KRW": raise SimError("VALIDATION_ERROR","currency mismatch")
     amount(event["amount_krw"])
     action=event["action"]
-    if action not in ("complete","refund","cancel"): raise SimError("VALIDATION_ERROR","event action")
+    if action not in ("complete","refund","refund_completed","cancel"): raise SimError("VALIDATION_ERROR","event action")
     # Team11 candidate booking states; Team13 currently persists reserved/test_paid/in_class.
-    expected={"complete":"completed","refund":"refunded","cancel":"cancelled"}[action]
+    expected={"complete":"completed","refund":"refunded","refund_completed":"refunded","cancel":"cancelled"}[action]
     if event["booking_status"]!=expected: raise SimError("INVALID_STATE","booking state mismatch")
     return store.event(event["month_id"],event["lesson_id"],event["booking_id"],
         event["transaction_id"],event["event_id"],action,event["amount_krw"],
