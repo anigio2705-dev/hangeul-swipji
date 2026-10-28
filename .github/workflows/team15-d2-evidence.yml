@@ -25,7 +25,7 @@ jobs:
             "team11 0edcdb0db15662c1cb0220c7ef0c50fce307bceb" \
             "team12 ac888b55c6737c929ae007b549f6a7a42ac8822a" \
             "team13 3ee5996ff4b0748c90f530c755775b7fac56d042" \
-            "team14 ffc81b87bc44074ac71b15739e18f48c881ed828"; do
+            "team14 f5808118486c4534a2a0e42d26d29f5fd511f19c"; do
             read -r dir sha <<< "$spec"
             git fetch origin "$sha"
             git archive "$sha" | tar -x -C "$dir"
