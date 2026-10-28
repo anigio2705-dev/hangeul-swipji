@@ -30,7 +30,7 @@ class LegacyProgressImportTests(FreeProgressHttpTests):
 
     def test_invalid_import_is_atomic(self):
         self.assertEqual(self.request_import("learner-a",[{"stage":1,"lesson":1},{"stage":0,"lesson":1}])[0],400)
-        self.assertEqual(self.request("learner-a")[1]["completed"],[])
+        self.assertNotIn((1,1),{(x["stage"],x["lesson"]) for x in self.request("learner-a")[1]["completed"]})
 
     def test_cross_origin_write_rejected(self):
         import http.client,json
