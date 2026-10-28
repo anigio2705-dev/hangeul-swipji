@@ -22,6 +22,9 @@ vowels = dict(data['vowels'])
 targets = {}
 
 def add(word, group, label=None):
+    if not isinstance(word, str):
+        # Skip non-string words
+        return
     sound = names.get(word, vowels.get(word, word))
     item = targets.setdefault(sound, {'text': sound, 'groups': [], 'labels': []})
     if group not in item['groups']:
@@ -31,14 +34,27 @@ def add(word, group, label=None):
         item['labels'].append(label_to_add)
 
 for c, name, _ in data['consonants']:
+    if not isinstance(c, str):
+        continue
     add(c, '\uc790\uc74c \uc774\ub984', c + ' \u00b7 ' + name)
 for v, sound in data['vowels']:
+    if not isinstance(v, str):
+        continue
     add(v, '\ubaa8\uc74c', v + ' \u00b7 ' + sound)
 for word in data['blocks']:
+    if not isinstance(word, str):
+        continue
     add(word, '\uae00\uc790\ud310 \uc74c\uc808')
 for day in data['days']:
-    for word, meaning in day.get('practice', []):
-        add(meaning if day.get('id') == 'H01' else word, '7\uc77c \uacfc\uc815')
+    if not isinstance(day, dict):
+        continue
+    for pair in day.get('practice', []) or []:
+        if not (isinstance(pair, (list, tuple)) and len(pair) >= 1):
+            continue
+        word = pair[0]
+        if not isinstance(word, str):
+            continue
+        add(day.get('meaning') if day.get('id') == 'H01' else word, '7\uc77c \uacfc\uc815')
 for word in ['\uad6d', '\uc0b0', '\uc637', '\ub2ec', '\ubc24', '\ubc25', '\uac15']:
     add(word, '\uae30\uc874 \ubc1b\uce68 \uc5f0\uc2b5')
 intro_path = ROOT / 'intro.html'
@@ -53,6 +69,8 @@ try:
 except json.JSONDecodeError as e:
     raise ValueError("Failed to parse units JSON from intro.html") from e
 for unit in intro:
+    if not isinstance(unit, dict):
+        continue
     v_list = unit.get('v', [])
     sent_list = unit.get('sent', [])
     for pair in v_list + sent_list:
@@ -64,6 +82,8 @@ for unit in intro:
 recordings = []
 
 for word, meta in manifest.get('recordings', {}).items():
+    if not isinstance(meta, dict):
+        raise ValueError(f"Invalid metadata for word: {word}")
     src = meta.get('src')
     if not isinstance(src, str):
         raise ValueError(f"Missing or invalid 'src' for word: {word}")
@@ -150,7 +170,10 @@ for word, meta in manifest.get('recordings', {}).items():
             raise ValueError(f"sourceTitle does not end with word for {word}")
         label_status = 'source-title-matched'
 
-    if not (isinstance(meta.get('author'), str) and isinstance(meta.get('licenseUrl'), str) and isinstance(meta.get('sourceUrl'), str)):
+    author = meta.get('author')
+    licenseUrl = meta.get('licenseUrl')
+    sourceUrl = meta.get('sourceUrl')
+    if not (isinstance(author, str) and isinstance(licenseUrl, str) and isinstance(sourceUrl, str)):
         raise ValueError(f"Missing or invalid required metadata (author/licenseUrl/sourceUrl) for {word}")
 
     recordings.append({'text': word, 'src': src, 'duration': round(duration, 3),
@@ -158,7 +181,7 @@ for word, meta in manifest.get('recordings', {}).items():
         'rmsDbfs': round(20 * math.log10(max(1, rms) / 32768), 2),
         'leadingSilence': round(lead, 3), 'trailingSilence': round(tail, 3),
         'signalWarnings': warnings, 'alignmentObserved': meta.get('segment',{}).get('observedText',''), 'kind': kind, 'labelStatus': meta.get('labelStatus', label_status), 'stage1Candidate': bool(meta.get('stage1Candidate')), 'stage2Candidate': bool(meta.get('stage2Candidate')), 'holdReason': meta.get('holdReason', ''),
-        'sourceUrl': meta['sourceUrl'], 'license': meta.get('license', ''),
+        'sourceUrl': sourceUrl, 'license': meta.get('license', ''),
         'held': bool(meta.get('disabled')), 'technicalStatus': 'decoded-and-hash-checked', 'listeningStatus': 'pending'})
 
 for word, item in targets.items():
