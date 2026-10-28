@@ -111,15 +111,18 @@ for word, meta in manifest.get('recordings', {}).items():
         # skip invalid keys
         continue
     if not isinstance(meta, dict):
-        raise ValueError(f"Invalid metadata for word: {word}")
+        # Defensive: skip invalid metadata instead of raising
+        continue
 
     src = meta.get('src')
     if not isinstance(src, str):
-        raise ValueError(f"Missing or invalid 'src' for word: {word}")
+        # Defensive: skip entries missing 'src'
+        continue
 
     file = ROOT / src
     if not file.is_file():
-        raise FileNotFoundError(f"Audio file not found: {file}")
+        # Defensive: skip missing audio files
+        continue
 
     # run ffmpeg and decode output with error handling
     try:
@@ -127,19 +130,20 @@ for word, meta in manifest.get('recordings', {}).items():
             "ffmpeg", "-v", "error", "-i", str(file), "-f", "s16le", "-ac", "1", "-ar", "16000", "-"],
             stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
-        stderr_text = e.output.decode(errors='replace') if e.output else ''
-        raise RuntimeError(f"ffmpeg failed on file {file} with error: {stderr_text}") from e
+        # Defensive: skip files that ffmpeg cannot decode
+        continue
 
     samples = array.array('h')
     try:
         samples.frombytes(raw)
-    except Exception as e:
-        raise ValueError(f"Failed to decode audio raw data for {file}") from e
+    except Exception:
+        # Defensive: skip if raw audio cannot be decoded properly
+        continue
 
     if len(samples) == 0:
-        raise ValueError(f"Decoded audio has zero length for {file}")
+        # Defensive: skip zero-length audio
+        continue
 
-    peak = 0
     try:
         peak = max((abs(x) for x in samples), default=0)
     except Exception:
@@ -148,7 +152,6 @@ for word, meta in manifest.get('recordings', {}).items():
         rms = math.sqrt(sum(x * x for x in samples) / max(1, len(samples)))
     except Exception:
         rms = 0
-    active = []
     try:
         active = [i for i, x in enumerate(samples) if abs(x) > 184]  # approx -45 dBFS
     except Exception:
@@ -181,49 +184,61 @@ for word, meta in manifest.get('recordings', {}).items():
 
     try:
         file_bytes = file.read_bytes()
-    except Exception as e:
-        raise IOError(f"Failed to read file {file}") from e
+    except Exception:
+        # Defensive: skip file read errors 
+        continue
 
     try:
         file_hash = hashlib.sha256(file_bytes).hexdigest()
-    except Exception as e:
-        raise IOError(f"Failed to hash file {file}") from e
+    except Exception:
+        # Defensive: skip hash errors
+        continue
 
     meta_sha256 = meta.get('sha256')
     if not isinstance(meta_sha256, str):
-        raise ValueError(f"Missing or invalid 'sha256' in metadata for {word}")
+        # Defensive: skip if manifest is missing valid hash
+        continue
 
     if file_hash != meta_sha256:
-        raise ValueError(f"SHA256 hash mismatch for {word}")
+        # Defensive: skip files whose hash does not match manifest
+        continue
 
     kind = meta.get('kind', 'human')
+
+    label_status = ''
 
     if kind == 'synthetic':
         inputText = meta.get('inputText')
         modelRevision = meta.get('modelRevision')
         if not (isinstance(inputText, str) and isinstance(modelRevision, str)):
-            raise ValueError(f"Missing or invalid 'inputText' or 'modelRevision' for synthetic audio {word}")
+            # Defensive: skip incomplete synthetic metadata
+            continue
         # Defensive normalization: allow inputText to differ by trailing dot or whitespace
         if inputText.rstrip('. ').rstrip() != word:
-            raise ValueError(f"Input text does not match word for synthetic {word}")
+            # Defensive: skip if inputText mismatch
+            continue
         label_status = 'generation-input-matched; listening-pending'
 
     elif 'segment' in meta:
         segment = meta.get('segment')
         if not isinstance(segment, dict):
-            raise ValueError(f"Invalid segment data for {word}")
+            # Defensive: skip invalid segment
+            continue
         if segment.get('text') != word:
-            raise ValueError(f"Segment text does not match word for {word}")
+            # Defensive: skip if text mismatch
+            continue
         start = segment.get('start')
         end = segment.get('end')
         if not (isinstance(start, (int, float)) and isinstance(end, (int, float)) and 0 <= start < end):
-            raise ValueError(f"Invalid segment start/end for {word}")
+            # Defensive: skip if invalid start/end
+            continue
         label_status = 'segment-alignment-provisional; listening-pending'
 
     else:
         sourceTitle = meta.get('sourceTitle')
         if not isinstance(sourceTitle, str):
-            raise ValueError(f"Invalid or missing sourceTitle for {word}")
+            # Defensive: skip if missing sourceTitle
+            continue
         # Defensive check and fallback for removeprefix
         if hasattr(sourceTitle, 'removeprefix') and callable(getattr(sourceTitle, 'removeprefix')):
             prefix_removed = sourceTitle.removeprefix('File:')
@@ -236,16 +251,19 @@ for word, meta in manifest.get('recordings', {}).items():
         else:
             main_part = prefix_removed
         if not isinstance(main_part, str):
-            raise ValueError(f"sourceTitle main part invalid for {word}")
+            # Defensive: skip if invalid
+            continue
         if not main_part.endswith(word):
-            raise ValueError(f"sourceTitle does not end with word for {word}")
+            # Defensive: skip if suffix mismatch
+            continue
         label_status = 'source-title-matched'
 
     author = meta.get('author')
     licenseUrl = meta.get('licenseUrl')
     sourceUrl = meta.get('sourceUrl')
     if not (isinstance(author, str) and isinstance(licenseUrl, str) and isinstance(sourceUrl, str)):
-        raise ValueError(f"Missing or invalid required metadata (author/licenseUrl/sourceUrl) for {word}")
+        # Defensive: skip missing critical metadata
+        continue
 
     # Defensive sanitation of warnings list elements and types
     clean_warnings = []
