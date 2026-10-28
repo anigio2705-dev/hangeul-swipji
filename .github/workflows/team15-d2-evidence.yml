@@ -1,0 +1,21 @@
+name: Team15 D2 independent QA and evidence gates
+on:
+  push:
+    branches: [qa/team15-d2-evidence-gates-20261028]
+  workflow_dispatch:
+jobs:
+  evidence-and-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Evidence gate unit tests
+        run: python -m unittest discover -s scripts -p test_team15_d2_evidence_gate.py -v
+      - name: Validate six-team D2 evidence inventory
+        run: python scripts/team15_d2_evidence_gate.py qa/team15-d2-evidence.json
+      - name: Existing Team15 continuous real HTTP SQLite regression
+        run: python scripts/test_team15_continuous_instant_e2e.py
