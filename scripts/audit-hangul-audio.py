@@ -44,15 +44,19 @@ for word in ['\uad6d', '\uc0b0', '\uc637', '\ub2ec', '\ubc24', '\ubc25', '\uac15
 intro_path = ROOT / 'intro.html'
 if not intro_path.is_file():
     raise FileNotFoundError(f"Intro file not found: {intro_path}")
-intro_match = re.search(r'const units=(\[.*?\]);', intro_path.read_text(encoding='utf-8'), re.S)
+intro_text = intro_path.read_text(encoding='utf-8')
+intro_match = re.search(r'const units=(\[.*?\]);', intro_text, re.S)
 if not intro_match or len(intro_match.groups()) < 1:
     raise ValueError("Failed to extract units from intro.html")
-intro = json.loads(intro_match[1])
+try:
+    intro = json.loads(intro_match[1])
+except json.JSONDecodeError as e:
+    raise ValueError("Failed to parse units JSON from intro.html") from e
 for unit in intro:
     v_list = unit.get('v', [])
     sent_list = unit.get('sent', [])
     for pair in v_list + sent_list:
-        if not (isinstance(pair, (list, tuple)) and len(pair) >= 1):
+        if not (isinstance(pair, (list, tuple)) and len(pair) >= 1 and isinstance(pair[0], str)):
             continue
         word = pair[0]
         add(word, '\uc785\ubb38 50\ub2e8\uc6d0')
@@ -61,8 +65,8 @@ recordings = []
 
 for word, meta in manifest.get('recordings', {}).items():
     src = meta.get('src')
-    if not src:
-        raise ValueError(f"Missing 'src' for word: {word}")
+    if not isinstance(src, str):
+        raise ValueError(f"Missing or invalid 'src' for word: {word}")
     file = ROOT / src
     if not file.is_file():
         raise FileNotFoundError(f"Audio file not found: {file}")
@@ -102,9 +106,13 @@ for word, meta in manifest.get('recordings', {}).items():
         warnings.append('\uc791\uc740 \ud3c9\uade0 \uc74c\ub7c9')
 
     try:
-        file_hash = hashlib.sha256(file.read_bytes()).hexdigest()
+        file_bytes = file.read_bytes()
     except Exception as e:
-        raise IOError(f"Failed to read or hash file {file}") from e
+        raise IOError(f"Failed to read file {file}") from e
+    try:
+        file_hash = hashlib.sha256(file_bytes).hexdigest()
+    except Exception as e:
+        raise IOError(f"Failed to hash file {file}") from e
 
     if file_hash != meta.get('sha256'):
         raise ValueError(f"SHA256 hash mismatch for {word}")
@@ -120,6 +128,8 @@ for word, meta in manifest.get('recordings', {}).items():
         label_status = 'generation-input-matched; listening-pending'
     elif 'segment' in meta:
         segment = meta.get('segment', {})
+        if not isinstance(segment, dict):
+            raise ValueError(f"Invalid segment data for {word}")
         if segment.get('text') != word:
             raise ValueError(f"Segment text does not match word for {word}")
         start = segment.get('start')
@@ -132,20 +142,20 @@ for word, meta in manifest.get('recordings', {}).items():
         if not isinstance(sourceTitle, str):
             raise ValueError(f"Invalid or missing sourceTitle for {word}")
         prefix_removed = sourceTitle.removeprefix('File:')
-        main_part = prefix_removed.rsplit('.', 1)[0]
+        main_part = prefix_removed.rsplit('.', 1)[0] if '.' in prefix_removed else prefix_removed
         if not main_part.endswith(word):
             raise ValueError(f"sourceTitle does not end with word for {word}")
         label_status = 'source-title-matched'
 
-    if not (meta.get('author') and meta.get('licenseUrl') and meta.get('sourceUrl')):
-        raise ValueError(f"Missing required metadata for {word} (author/licenseUrl/sourceUrl)")
+    if not (isinstance(meta.get('author'), str) and isinstance(meta.get('licenseUrl'), str) and isinstance(meta.get('sourceUrl'), str)):
+        raise ValueError(f"Missing or invalid required metadata (author/licenseUrl/sourceUrl) for {word}")
 
     recordings.append({'text': word, 'src': src, 'duration': round(duration, 3),
         'peakDbfs': round(20 * math.log10(max(1, peak) / 32768), 2),
         'rmsDbfs': round(20 * math.log10(max(1, rms) / 32768), 2),
         'leadingSilence': round(lead, 3), 'trailingSilence': round(tail, 3),
         'signalWarnings': warnings, 'alignmentObserved': meta.get('segment',{}).get('observedText',''), 'kind': kind, 'labelStatus': meta.get('labelStatus', label_status), 'stage1Candidate': bool(meta.get('stage1Candidate')), 'stage2Candidate': bool(meta.get('stage2Candidate')), 'holdReason': meta.get('holdReason', ''),
-        'sourceUrl': meta['sourceUrl'], 'license': meta['license'],
+        'sourceUrl': meta['sourceUrl'], 'license': meta.get('license', ''),
         'held': bool(meta.get('disabled')), 'technicalStatus': 'decoded-and-hash-checked', 'listeningStatus': 'pending'})
 
 for word, item in targets.items():
@@ -154,7 +164,7 @@ for word, item in targets.items():
     item['playbackAvailable'] = item['recordingAvailable'] and not recs.get(word, {}).get('disabled', False)
     item['listeningStatus'] = 'pending' if item['recordingAvailable'] else 'no-recording'
     if item['recordingAvailable']:
-        item['src'] = recs[word]['src']
+        item['src'] = recs[word].get('src', '')
 
 report = {'version': '20261026-human-only', 'scope': '\uae00\uc790\ud310\u00b77\uc77c \uacfc\uc815\u00b7\uc785\ubb38 50\ub2e8\uc6d0\uc758 \uc7ac\uc0dd \ub300\uc0c1',
     'note': '\ud30c\uc77c\u00b7\ubb38\uc790 \uc5f0\ucb60 \uac80\uc0ac\ub294 \uc2e4\uc81c \uc18c\ub9ac\uc758 \uc815\ud655\uc131\uc774\ub098 \uc798\ub9bc \uc5ec\ubd80\ub97c \uccad\ucde8 \uc2b9\uc778\ud55c \uac83\uc774 \uc544\ub2d9\ub2c8\ub2e4. \uae30\uae30 TTS\ub294 \uc74c\uc131\uc774 \ub2ec\ub77c \uc804\uc218 \ud488\uc9c8 \uc778\uc99d \ub300\uc0c1\uc774 \ub420 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.',
