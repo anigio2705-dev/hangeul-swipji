@@ -48,6 +48,16 @@ def decide_refund(store,request_id,decision,reviewer):
         if row['state']==decision:return dict(row)
         if row['state']!='requested':
             raise SimError('INVALID_STATE','refund decision locked')
+
+        # Additional stricter validation to ensure refund event integrity
+        if decision == 'approved':
+            # Validate amount_krw is positive integer
+            if not isinstance(row['amount_krw'], int) or row['amount_krw'] <= 0:
+                raise SimError('VALIDATION_ERROR','invalid refund amount')
+            # Optionally verify 'reason' is not empty (if business rule requires)
+            if not isinstance(row['reason'], str):
+                raise SimError('VALIDATION_ERROR','invalid refund reason')
+        
         store.db.execute('UPDATE refund_requests SET state=?,updated_at=CURRENT_TIMESTAMP WHERE request_id=?',
                          (decision,request_id))
     return dict(store.db.execute('SELECT * FROM refund_requests WHERE request_id=?',(request_id,)).fetchone())
