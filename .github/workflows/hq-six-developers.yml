@@ -4,6 +4,7 @@ on:
     branches: [automation/hq-pilot-13-14-15-20261029]
     paths:
       - 'automation/hq_six_developers.py'
+      - 'automation/test_hq_six_developers.py'
       - 'automation/hq_160_task_cycle.py'
       - 'automation/hq_backlog_160.md'
       - 'automation/hq_six_cycle_supervisor.py'
@@ -53,7 +54,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Validate numbered backlog contracts before spending API
-        run: python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+          python -m unittest discover -s automation -p 'test_hq_six_developers.py' -v
       - name: Copy trusted runner and canonical task contracts outside working tree
         run: |
           cp automation/hq_six_developers.py /tmp/hq_six_developers.py
