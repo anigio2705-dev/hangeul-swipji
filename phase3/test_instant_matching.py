@@ -403,6 +403,72 @@ class InstantMatchingTests(unittest.TestCase):
             self.assertEqual(1,db.execute('SELECT count(*) FROM instant_event_deliveries').fetchone()[0])
 
 
+
+    def test_real_http_instant_booking_session_completion_and_outbox(self):
+        learner,lid=self.account('flow-learner@example.test')
+        partner,pid=self.account('flow-partner@example.test','partner',True)
+        stranger,_=self.account('flow-stranger@example.test')
+        self.assertEqual(401,self.request('/api/instant/join',{},headers={'Cookie':''})[0])
+        self.assertEqual('waiting',self.call(learner,'join')['state'])
+        offer=self.call(partner,'join')
+        self.assertEqual('offered',offer['state'])
+        self.assertIsNone(self.call(learner,'session')['bookingId'])
+        self.call(learner,'ready',{'matchId':offer['matchId']})
+        active=self.call(partner,'ready',{'matchId':offer['matchId']})
+        self.assertEqual('active',active['state'])
+        self.assertEqual('active',self.call(learner,'join')['state'])
+        session=self.call(learner,'session')
+        booking_id=session['bookingId']
+        self.assertEqual(booking_id,self.call(partner,'session')['bookingId'])
+        self.assertEqual(active['roomUrl'],session['roomUrl'])
+        self.assertEqual(booking_id,self.call(learner,'session')['bookingId'])
+        with server.connect() as db:
+            b=db.execute('SELECT * FROM bookings WHERE id=?',(booking_id,)).fetchone()
+            self.assertEqual((lid,pid,'in_class'),(b['learner_id'],b['teacher_id'],b['status']))
+            self.assertEqual(1,db.execute('SELECT count(*) FROM instant_booking_links').fetchone()[0])
+        self.assertEqual(409,self.call(learner,'session-finish',{'matchId':offer['matchId']},409).get('status',409))
+        self.call(stranger,'session-observe',{'matchId':offer['matchId']},409)
+        self.call(stranger,'lesson-event',{'bookingId':booking_id,'eventId':'forged','type':'lesson.completed'},403)
+        self.call(learner,'lesson-event',{'bookingId':booking_id,'eventId':'early','type':'lesson.completed'},409)
+        self.assertEqual(1,self.call(learner,'session-observe',{'matchId':offer['matchId']})['observedParticipants'])
+        self.call(learner,'session-finish',{'matchId':offer['matchId']},409)
+        self.assertEqual(2,self.call(partner,'session-observe',{'matchId':offer['matchId']})['observedParticipants'])
+        result=self.call(learner,'session-finish',{'matchId':offer['matchId']})
+        event=result['event']
+        self.assertEqual('lesson.completed',event['type'])
+        self.assertEqual(booking_id,event['bookingId'])
+        self.assertEqual(lid,event['learnerId'])
+        self.assertEqual(pid,event['teacherId'])
+        self.assertEqual('idle',self.call(learner,'status')['state'])
+        self.call(partner,'session-finish',{'matchId':offer['matchId']},409)
+        self.call(partner,'lesson-event',{'bookingId':booking_id,'eventId':'duplicate','type':'lesson.completed'},409)
+        with server.connect() as db:
+            self.assertEqual('completed',db.execute('SELECT status FROM bookings WHERE id=?',(booking_id,)).fetchone()[0])
+            self.assertEqual(1,db.execute('SELECT count(*) FROM instant_lesson_events WHERE booking_id=?',(booking_id,)).fetchone()[0])
+            verified=matching.verified_event_for_team14(db,event['eventId'])
+            self.assertEqual(booking_id,verified['bookingId'])
+            self.assertEqual(1,len(matching.pending_settlement_events(db)))
+        with server.connect() as db:
+            self.assertEqual(1,len(matching.pending_settlement_events(db)))
+
+    def test_instant_match_without_partner_reconnect_and_cancel(self):
+        learner,_=self.account('waiting-learner@example.test')
+        partner,_=self.account('waiting-partner@example.test','partner',True)
+        self.assertEqual('waiting',self.call(learner,'join')['state'])
+        self.assertIsNone(self.call(learner,'session')['bookingId'])
+        self.assertEqual('waiting',self.call(learner,'join')['state'])
+        with server.connect() as db:
+            self.assertEqual(1,db.execute('SELECT count(*) FROM instant_queue').fetchone()[0])
+        offer=self.call(partner,'join')
+        self.call(learner,'ready',{'matchId':offer['matchId']})
+        self.call(partner,'ready',{'matchId':offer['matchId']})
+        self.call(learner,'session-observe',{'matchId':offer['matchId']})
+        self.call(partner,'leave')
+        self.call(learner,'session-finish',{'matchId':offer['matchId']},409)
+        with server.connect() as db:
+            self.assertEqual('in_class',db.execute('SELECT status FROM bookings JOIN instant_booking_links ON bookings.id=instant_booking_links.booking_id WHERE match_id=?',(offer['matchId'],)).fetchone()[0])
+            self.assertEqual(0,db.execute('SELECT count(*) FROM instant_lesson_events').fetchone()[0])
+
 del Harness
 
 if __name__=='__main__': unittest.main()
