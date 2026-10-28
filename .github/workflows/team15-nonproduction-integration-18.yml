@@ -1,0 +1,45 @@
+name: Team15 eighteenth-pass nonproduction HTTP and ledger integration
+on:
+  push:
+    branches:
+      - integration/team15-nonproduction-18th-20261028
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  real-http-and-sqlite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: qa
+      - uses: actions/checkout@v4
+        with:
+          ref: ee4b442fd658759cd4a67bee94b5ce10626478f4
+          path: team11
+      - uses: actions/checkout@v4
+        with:
+          ref: 5b629f37db4fbda393becf87e3d69d75b8edd4a6
+          path: team12
+      - uses: actions/checkout@v4
+        with:
+          ref: 88981c532497a15990e445d20d548ded9f309813
+          path: team13
+      - uses: actions/checkout@v4
+        with:
+          ref: 0c8083c370c91b6d4ea583f8d80bad125bd24d0b
+          path: team14
+      - name: Verify team source revisions
+        run: for d in team11 team12 team13 team14; do git -C "$d" rev-parse HEAD; done
+      - name: Real Team11 HTTP booking authorization with temporary server and SQLite
+        run: |
+          cd team11/phase3
+          python3 -m unittest -v test_common_http_booking_integration
+      - name: Full Team11 booking regression
+        run: python3 -m unittest discover -s team11/phase3 -p 'test_common_*.py' -v
+      - name: Real Team11-Team14 Python and persistent SQLite integration
+        run: python3 qa/scripts/test_team15_real_bridge.py
+      - name: Cross-team source contract tests
+        run: python3 qa/scripts/test_team15_boundaries.py
+      - name: Cross-team interface smoke
+        run: python3 qa/scripts/team15_cross_team_smoke.py
