@@ -190,6 +190,8 @@ def create_instant_booking(db, m, now):
 
 
 def instant_session(db, u, match_id):
+    if u is None:
+        raise server.Error('로그인이 필요합니다',401)
     m=current(db,u['id'])
     if not m or m['id']!=match_id or m['state']!='active':
         raise server.Error('현재 진행 중인 본인 매칭이 아닙니다',409)
@@ -230,6 +232,8 @@ def record_lesson_event(db, user, booking_id, event_id, event_type):
 
     Does not settle money or mutate the booking lifecycle owned by Team11.
     """
+    if user is None:
+        raise server.Error('로그인이 필요합니다',401)
     if event_type not in ('lesson.started','lesson.completed','booking.cancelled'):
         raise server.Error('지원하지 않는 수업 이벤트',400)
     if any(not isinstance(v, str) or not v.strip() or v != v.strip() or len(v) > 128
