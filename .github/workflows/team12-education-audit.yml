@@ -8,6 +8,9 @@ on:
       - 'scripts/team12_audio_inventory.py'
       - 'scripts/team12_content_regression.py'
       - 'hangul-core.js'
+      - 'phase3/app.js'
+      - 'index.html'
+      - 'scripts/team12_learning_handoff.js'
       - '.github/workflows/team12-education-audit.yml'
 permissions:
   contents: read
@@ -23,6 +26,11 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - name: Check Python syntax
         run: python3 -m py_compile scripts/team12_audio_inventory.py
+      - name: Check learner handoff JavaScript syntax
+        run: |
+          node --check scripts/team12_learning_handoff.js
+          node --check phase3/app.js
+          node --check hangul-core.js
       - name: Verify educational content structure
         run: python3 -m unittest discover -s scripts -p 'team12_content_regression.py' -v
       - name: Run physical audio audit
