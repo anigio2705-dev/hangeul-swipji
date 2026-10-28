@@ -26,8 +26,8 @@ class BacklogQueueTests(unittest.TestCase):
         report = build_report(sample(), ledger)
         self.assertEqual(report["counts"]["complete"], 0)
         self.assertEqual(report["counts"]["code_verified"], len(ledger))
-        self.assertEqual({x["number"] for x in report["review_queue"]}, {10, 59})
-        self.assertFalse({10, 59} & {x["number"] for x in report["next_queue"]})
+        self.assertEqual({x["number"] for x in report["review_queue"]}, {10, 52, 59})
+        self.assertFalse({10, 52, 59} & {x["number"] for x in report["next_queue"]})
 
     def test_exactly_160_and_unique(self):
         self.assertEqual(len(parse_backlog(sample())), 160)
