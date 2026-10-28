@@ -107,6 +107,35 @@ def reservation_snapshot(db, user_id):
             for b in rows]
 
 
+
+def authorized_booking_room(db, booking_id, user):
+    """Return a reserved room only to an authenticated booking participant.
+
+    Does not authenticate the external Jitsi provider: an already shared URL
+    remains accessible until the provider enforces its own access controls.
+    """
+    if not isinstance(booking_id,str) or not booking_id:
+        raise server.Error('예약 식별자가 필요합니다',400)
+    if user is None:
+        raise server.Error('로그인이 필요합니다',401)
+    b=db.execute("""SELECT b.*,s.start,s.end FROM bookings b
+                    JOIN slots s ON s.id=b.slot_id WHERE b.id=?""",
+                 (booking_id,)).fetchone()
+    if not b:
+        raise server.Error('예약이 없습니다',404)
+    if user['id'] not in (b['learner_id'],b['teacher_id']):
+        raise server.Error('예약 참여자만 입장할 수 있습니다',403)
+    if b['status']!='in_class':
+        raise server.Error('수업이 진행 중인 예약만 입장할 수 있습니다',409)
+    teacher=db.execute('SELECT role,approved FROM users WHERE id=?',(b['teacher_id'],)).fetchone()
+    if not teacher or teacher['role'] not in ('partner','teacher') or not teacher['approved']:
+        raise server.Error('승인되지 않은 강사입니다',403)
+    if not b['room']:
+        raise server.Error('화상방이 준비되지 않았습니다',409)
+    return {'bookingId':b['id'],'roomUrl':'https://meet.jit.si/'+b['room'],
+            'participantRole':'learner' if user['id']==b['learner_id'] else 'teacher'}
+
+
 def transaction_event_contract(booking_id, event_id, event_type, *, lesson_index=None, month_id=None):
     """Pure Team13 -> Team14 handoff. No ledger writes or payment calls.
 
