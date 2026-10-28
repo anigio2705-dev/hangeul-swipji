@@ -1,15 +1,5 @@
 name: HQ six parallel AI developers (isolated)
 on:
-  push:
-    branches: [automation/hq-pilot-13-14-15-20261029]
-    paths:
-      - 'automation/hq_six_developers.py'
-      - 'automation/test_hq_six_developers.py'
-      - 'automation/hq_160_task_cycle.py'
-      - 'automation/hq_backlog_160.md'
-      - 'automation/hq_six_cycle_supervisor.py'
-      - 'automation/test_hq_six_cycle_supervisor.py'
-      - '.github/workflows/hq-six-developers.yml'
   workflow_dispatch:
     inputs:
       chain_depth:
@@ -20,6 +10,9 @@ on:
         description: 'Bounded team-specific repair feedback JSON'
         required: false
         default: '{}'
+concurrency:
+  group: hq-160-single-dispatch-lane
+  cancel-in-progress: false
 permissions:
   contents: write
   actions: write
