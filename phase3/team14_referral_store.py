@@ -62,6 +62,8 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
   for val, name in [(student_id, 'student_id'), (event_id, 'event_id'), (lesson_id, 'lesson_id')]:
    if not isinstance(val, str) or not val.strip():
     raise SimError('INVALID_INPUT', f'{name} must be a non-empty string')
+   if any(c.isspace() for c in val):
+    raise SimError('INVALID_INPUT', f'{name} must not contain whitespace characters')
 
   # Use external validators for further checks
   ident(event_id); ident(student_id); ident(lesson_id)
