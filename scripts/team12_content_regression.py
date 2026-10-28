@@ -146,6 +146,9 @@ class Team12Regression(unittest.TestCase):
             self.assertIsNotNone(uid, "unit id must not be None")
             if isinstance(uid, str):
                 self.assertTrue(uid.strip() != '', "unit id string must not be empty or whitespace")
+            # Defensive: ensure no duplicates while adding
+            if uid in unit_ids:
+                self.fail(f"Duplicate unit id found: {uid}")
             unit_ids.add(uid)
         self.assertEqual(len(unit_ids), len(units))
         self.assertTrue(all(unit_id in ids for unit_id in unit_ids))
