@@ -52,6 +52,42 @@ class LegacyProgressImportTests(FreeProgressHttpTests):
             with server.connect() as db:
                 db.execute("UPDATE sessions SET expires=? WHERE user_id='learner-a'",(time.time()+3600,))
 
+    def test_new_login_session_restores_progress(self):
+        import hashlib,time
+        import server
+        self.assertEqual(self.request_import("learner-a",[{"stage":5,"lesson":19}])[0],200)
+        new_token="independent-login-learner-a"
+        with server.connect() as db:
+            db.execute("INSERT OR REPLACE INTO sessions(token,user_id,expires) VALUES(?,?,?)",
+                       (hashlib.sha256(new_token.encode()).hexdigest(),"learner-a",time.time()+3600))
+        import http.client,json
+        conn=http.client.HTTPConnection("127.0.0.1",self.http.server_port,timeout=5)
+        try:
+            conn.request("GET","/api/free-progress",headers={"Cookie":"hs3="+new_token})
+            response=conn.getresponse()
+            self.assertEqual(response.status,200)
+            body=json.loads(response.read())
+            self.assertIn((5,19),{(x["stage"],x["lesson"]) for x in body["completed"]})
+        finally:
+            conn.close()
+
+    def test_http_server_restart_retains_progress(self):
+        import threading
+        import server
+        from http.server import ThreadingHTTPServer
+        self.assertEqual(self.request_import("learner-a",[{"stage":6,"lesson":27}])[0],200)
+        cls=type(self)
+        cls.http.shutdown()
+        cls.http.server_close()
+        cls.thread.join(timeout=5)
+        cls.http=ThreadingHTTPServer(("127.0.0.1",0),server.Handler)
+        cls.http.failures={}
+        cls.thread=threading.Thread(target=cls.http.serve_forever,daemon=True)
+        cls.thread.start()
+        status,body=self.request("learner-a")
+        self.assertEqual(status,200)
+        self.assertIn((6,27),{(x["stage"],x["lesson"]) for x in body["completed"]})
+
     def test_cross_origin_write_rejected(self):
         import http.client,json
         conn=http.client.HTTPConnection("127.0.0.1",self.http.server_port,timeout=5)
