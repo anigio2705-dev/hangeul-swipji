@@ -44,3 +44,38 @@ def validate_amount_minor(value):
     if type(value) is not int or value < 0 or value > 10**15:
         raise ValueError("invalid minor-unit amount")
     return value
+
+# Candidate v1 contract: these names do not change legacy persisted states.
+BOOKING_STATES = frozenset(("reserved", "expired", "cancelled", "test_paid", "in_class", "completed", "refunded"))
+MATCH_STATES = frozenset(("idle", "waiting", "offered", "active", "ended"))
+TRANSACTION_STATES = frozenset(("pending", "authorized", "captured", "failed", "refunded", "partially_refunded"))
+ERROR_CODES = frozenset(("UNAUTHENTICATED", "FORBIDDEN", "NOT_FOUND", "VALIDATION_ERROR", "CONFLICT", "INVALID_STATE"))
+
+
+def roles_from_legacy(role):
+    """Read-only projection. Does not grant learner role to existing teachers."""
+    if not isinstance(role, str) or role not in ROLES:
+        raise ValueError("unknown legacy role")
+    return frozenset((role,))
+
+
+def legacy_role_for(roles):
+    """Only singleton roles round-trip without losing permissions."""
+    validated = validate_roles(roles)
+    if len(validated) != 1:
+        raise ValueError("multi-role account cannot be stored in legacy role column")
+    return next(iter(validated))
+
+
+def validate_state(value, domain):
+    allowed = {"booking": BOOKING_STATES, "match": MATCH_STATES,
+               "transaction": TRANSACTION_STATES}
+    if domain not in allowed or not isinstance(value, str) or value not in allowed[domain]:
+        raise ValueError("invalid state")
+    return value
+
+
+def validate_error_code(value):
+    if not isinstance(value, str) or value not in ERROR_CODES:
+        raise ValueError("invalid error code")
+    return value
