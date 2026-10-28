@@ -1,0 +1,65 @@
+name: Team15 nonproduction HTTP SQLite cross-team gate
+on:
+  push:
+    branches:
+      - integration/team15-e2e-run-20261028
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  real-http-and-ledger:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: qa
+      - uses: actions/checkout@v4
+        with:
+          ref: a2abc3c08ec0c4d245ae0be0670a1b47148f2e00
+          path: team11
+      - uses: actions/checkout@v4
+        with:
+          ref: edbf1d614e58f391ce2d63e3b3f0229370047c17
+          path: team12
+      - uses: actions/checkout@v4
+        with:
+          ref: 6cec6c5063b29ed288d8fe97c1befd0c9906e094
+          fetch-depth: 0 # test_standards96.py uses git show 7418e32:<file>
+          path: team13
+      - uses: actions/checkout@v4
+        with:
+          ref: 32f4fd13c0863ffa7e5940418711d9e2b5d91118
+          path: team14
+      - uses: actions/checkout@v4
+        with:
+          ref: integration/team15-nonproduction-25th-20261028
+          path: prior-qa
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: One real HTTP and SQLite match completion settlement referral refund journey
+        env:
+          PYTHONPATH: team11/phase3:team13/phase3:team14/phase3
+        run: python3 qa/scripts/test_team15_continuous_instant_e2e.py
+      - name: Real HTTP and SQLite signup progress teacher booking and completion gate
+        run: python3 qa/scripts/test_team15_real_http_booking_boundary.py
+      - name: Team12 browser-to-HTTP progress client regression
+        run: |
+          cd team12
+          node --check scripts/team12_server_progress.js
+          node scripts/team12_server_progress.test.js
+      - name: Team13 backend regression
+        run: python3 -m unittest discover -s team13/phase3 -p 'test_*.py' -v
+      - name: Team14 new verified instant HTTP settlement regression
+        env:
+          PYTHONPATH: team14/phase3:team13/phase3
+        run: python3 -m unittest discover -s team14/phase3 -p 'test_team14_instant_http_settlement.py' -v
+      - name: Team14 restart and fault injection at settlement referral refund boundaries
+        env:
+          PYTHONPATH: team14/phase3:team13/phase3
+        run: python3 -m unittest discover -s team14/phase3 -p 'test_team14_crash_recovery.py' -v
+      - name: Team11-Team14 real verified-event mock ledger and restart
+        run: python3 prior-qa/scripts/test_team15_real_bridge.py
