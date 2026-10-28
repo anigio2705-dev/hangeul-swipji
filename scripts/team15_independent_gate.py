@@ -15,7 +15,6 @@ EXPECT = {
 failures = []
 changes = {}
 
-
 def is_within_directory(base: Path, target: Path) -> bool:
     try:
         base = base.resolve(strict=True)
