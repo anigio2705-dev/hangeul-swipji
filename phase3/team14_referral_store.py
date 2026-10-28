@@ -82,6 +82,18 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
   if any(c in student_id for c in '\\"\'%;'):
    raise SimError('INVALID_INPUT', 'student_id contains invalid characters')
 
+  # Defensive check: refuse to award if student_id contains non-ASCII or control chars
+  if not all(32 <= ord(c) <= 126 for c in student_id):
+   raise SimError('INVALID_INPUT', 'student_id contains invalid characters')
+
+  # Defensive check: refuse to award if lesson_id contains suspicious characters
+  if any(c in lesson_id for c in '\\"\'%;'):
+   raise SimError('INVALID_INPUT', 'lesson_id contains invalid characters')
+
+  # Defensive check: refuse to award if lesson_id contains non-ASCII or control chars
+  if not all(32 <= ord(c) <= 126 for c in lesson_id):
+   raise SimError('INVALID_INPUT', 'lesson_id contains invalid characters')
+
   signature = json.dumps([student_id, lesson_id, gross_krw, list(depth_rates_bps), commission_bps], separators=(',', ':'))
   self.db.execute('BEGIN IMMEDIATE')
   try:
