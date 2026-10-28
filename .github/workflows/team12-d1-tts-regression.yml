@@ -1,0 +1,23 @@
+name: Team12 D1 Hangul TTS regression
+on:
+  push:
+    branches:
+      - 'team12/phase1-d1-audio-tts-20261028'
+  workflow_dispatch:
+jobs:
+  tts-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Hangul JavaScript syntax
+        run: |
+          node --check hangul-core.js
+          node --check hangul-board.js
+          node --check scripts/team12_tts_fallback.test.js
+      - name: Test human recording priority and Korean TTS fallback
+        run: node scripts/team12_tts_fallback.test.js
+      - name: Existing content regression
+        run: python3 scripts/team12_content_regression.py
