@@ -46,6 +46,8 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
  def award(self,event_id,student_id,lesson_id,gross_krw,depth_rates_bps=(300,),commission_bps=2000):
   import json
   ident(event_id);ident(student_id);ident(lesson_id);amount(gross_krw,True)
+  if not isinstance(depth_rates_bps,(list,tuple)) or len(depth_rates_bps)>10:
+   raise SimError('VALIDATION_ERROR','referral rate policy must be a bounded list')
   signature=json.dumps([student_id,lesson_id,gross_krw,list(depth_rates_bps),commission_bps],separators=(',',':'))
   self.db.execute('BEGIN IMMEDIATE')
   try:
