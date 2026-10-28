@@ -16,17 +16,23 @@ HQ_REF = "automation/hq-pilot-13-14-15-20261029"
 # Distinct files across ALL six teams; no team may edit another team's source.
 TASKS = {
     "11": ("team11/common-foundation-20261028", [
-        ("scripts/audit-hangul-audio.py", "Harden malformed audio inventory handling")]),
+        ("scripts/audit-hangul-audio.py", "Harden malformed audio inventory handling"),
+        ("scripts/find-human-audio-sources.py", "Harden candidate audio source validation")]),
     "12": ("team12/education-audit-20261028", [
-        ("scripts/team12_audio_inventory.py", "Harden education audio inventory validation")]),
+        ("scripts/team12_audio_inventory.py", "Harden education audio inventory validation"),
+        ("scripts/team12_content_regression.py", "Improve education content regression evidence handling")]),
     "13": ("team13/platform-bfcache-reconnect-20261028", [
-        ("phase3/instant_matching.py", "Harden matching error handling without changing match policy")]),
+        ("phase3/instant_matching.py", "Harden matching error handling without changing match policy"),
+        ("phase3/learning.py", "Improve malformed learning data handling without changing policy")]),
     "14": ("team14/business-systems-audit-20261028", [
-        ("phase3/team14_referral_store.py", "Harden invalid referral input rejection without changing financial rules")]),
+        ("phase3/team14_referral_store.py", "Harden invalid referral input rejection without changing financial rules"),
+        ("phase3/team14_refund_workflow.py", "Improve refund event validation without changing payment rules")]),
     "15": ("team15/quality-operations-20261028", [
-        ("scripts/team15_independent_gate.py", "Harden evidence gate diagnostics without weakening verification")]),
+        ("scripts/team15_independent_gate.py", "Harden evidence gate diagnostics without weakening verification"),
+        ("scripts/team15_cross_team_smoke.py", "Improve cross-team smoke-test failure reporting")]),
     "16": ("team16/global-growth-marketing-20261028", [
-        ("scripts/audit-professional-96.py", "Harden multilingual course audit input validation")]),
+        ("scripts/audit-professional-96.py", "Harden multilingual course audit input validation"),
+        ("scripts/render-audio-credits.py", "Improve multilingual audio attribution error handling")]),
 }
 # Baseline and candidate both use same safe, read-only checks.
 CHECKS = {
