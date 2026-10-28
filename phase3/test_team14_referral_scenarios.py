@@ -21,6 +21,11 @@ class ReferralScenariosTests(unittest.TestCase):
  def test_zero_and_overflow(self):
   for n in (0,-1,10**15+1,True):
    with self.assertRaises(SimError):simulate_referral(n,[])
+ def test_malformed_graph_rejected_without_unhandled_exception(self):
+  for edges in (None,'ab',[('a',)],[('a','b','c')],[123],[[None,'a']]):
+   with self.subTest(edges=edges),self.assertRaises(SimError):
+    simulate_referral(10000,edges)
+  with self.assertRaises(SimError):simulate_referral(10000,[('a','b')]*10001)
  def test_rounding_conservation(self):
   x=simulate_referral(1,[],(300,100))
   self.assertEqual(x['gross'],x['teacher']+x['platform']+sum(x['rewards']))
