@@ -11,6 +11,8 @@ on:
       - 'phase3/app.js'
       - 'index.html'
       - 'scripts/team12_learning_handoff.js'
+      - 'scripts/team12_provider_links.js'
+      - 'learn.html'
       - '.github/workflows/team12-education-audit.yml'
 permissions:
   contents: read
@@ -29,6 +31,7 @@ jobs:
       - name: Check learner handoff JavaScript syntax
         run: |
           node --check scripts/team12_learning_handoff.js
+          node --check scripts/team12_provider_links.js
           node --check phase3/app.js
           node --check hangul-core.js
       - name: Verify educational content structure
