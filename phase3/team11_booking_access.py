@@ -36,7 +36,7 @@ def booking_access(learner, provider, booking, actor_id, action):
         if action == "complete" and state != "in_class":
             return {"allowed": False, "code": "INVALID_STATE"}
         if action == "view" and state not in (
-            "reserved", "test_paid", "in_class", "completed", "cancelled", "refunded", "expired"
+            "reserved", "test_paid", "in_class", "completed", "test_settled", "cancelled", "refunded", "expired"
         ):
             return {"allowed": False, "code": "INVALID_STATE"}
         return {"allowed": True, "code": None}
