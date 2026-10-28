@@ -153,7 +153,10 @@ def inspect(root):
         path = root / cleaned_src
 
         try:
-            filesize = path.stat().st_size
+            # Re-check file size to further protect against TOCTOU
+            stat_obj = path.stat()
+            filesize = stat_obj.st_size
+
             if filesize > 100 * 1024 * 1024:
                 problems.append({"word": word, "issue": "file_too_large", "path": src, "size": filesize})
                 continue
@@ -166,6 +169,7 @@ def inspect(root):
             if len(data_bytes) < 10 or not (data_bytes.startswith(b'ID3') or (data_bytes[0] & 0xFF) == 0xFF):
                 problems.append({"word": word, "issue": "invalid_file_content", "path": src})
                 continue
+
         except Exception as e:
             problems.append({"word": word, "issue": "file_read_error", "path": src, "detail": str(e)})
             continue
