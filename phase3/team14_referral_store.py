@@ -130,7 +130,10 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
 
   # Defensive additional check: event_id must not contain any characters from a stricter disallowed set
   # Adding stricter rejection of suspicious Unicode direction chars and other invisible controls
-  disallowed_event_chars = set(chr(c) for c in range(0,32)) | set(['\u200b','\u200c','\u200d','\ufeff'])
+  # Use actual Unicode character literals instead of string-escaped forms
+  disallowed_event_chars = set(chr(c) for c in range(0,32)) | {'\u200b', '\u200c', '\u200d', '\ufeff'}
+  # Convert unicode escape strings to actual characters
+  disallowed_event_chars = {c if len(c) == 1 else c.encode('utf-8').decode('unicode_escape') for c in disallowed_event_chars}
   if any(c in disallowed_event_chars for c in event_id):
    raise SimError('INVALID_INPUT', 'event_id contains invisible control characters')
 
