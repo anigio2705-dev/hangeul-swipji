@@ -79,29 +79,19 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
 
   # Defensive check: refuse to award if student_id contains suspicious characters
   # This prevents unexpected injection and enforces stricter validation
-  if any(c in student_id for c in '\\"\'%;'):
-   raise SimError('INVALID_INPUT', 'student_id contains invalid characters')
+  suspicious_chars = '\\"\'%;'
+  for val, name in [(student_id, 'student_id'), (lesson_id, 'lesson_id'), (event_id, 'event_id')]:
+   if any(c in val for c in suspicious_chars):
+    raise SimError('INVALID_INPUT', f'{name} contains invalid characters')
 
-  # Defensive check: refuse to award if student_id contains non-ASCII or control chars
-  if not all(32 <= ord(c) <= 126 for c in student_id):
-   raise SimError('INVALID_INPUT', 'student_id contains invalid characters')
-
-  # Defensive check: refuse to award if lesson_id contains suspicious characters
-  if any(c in lesson_id for c in '\\"\'%;'):
-   raise SimError('INVALID_INPUT', 'lesson_id contains invalid characters')
-
-  # Defensive check: refuse to award if lesson_id contains non-ASCII or control chars
-  if not all(32 <= ord(c) <= 126 for c in lesson_id):
-   raise SimError('INVALID_INPUT', 'lesson_id contains invalid characters')
+  # Defensive check: refuse to award if string IDs contain non-ASCII or control chars
+  for val, name in [(student_id, 'student_id'), (lesson_id, 'lesson_id'), (event_id, 'event_id')]:
+   if not all(32 <= ord(c) <= 126 for c in val):
+    raise SimError('INVALID_INPUT', f'{name} contains invalid characters')
 
   signature = json.dumps([student_id, lesson_id, gross_krw, list(depth_rates_bps), commission_bps], separators=(',', ':'))
   self.db.execute('BEGIN IMMEDIATE')
   try:
-   # Defensive validation of student_id and lesson_id in referral_links and existing awards
-   # Prevent awarding to an unlinked student or issuing multiple awards for the same student and lesson
-   # It's allowed that the student has no referral link (i.e., root), so no error here
-   # Defensive: Confirm that lesson_id is well-formed (already checked) and not empty
-
    # Check for replay conflict
    old = self.db.execute('SELECT signature, result FROM referral_awards WHERE event_id=?', (event_id,)).fetchone()
    if old:
@@ -117,8 +107,6 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
    # Defensive check: ensure gross_krw > 0
    if gross_krw <= 0:
     raise SimError('INVALID_INPUT', 'gross_krw must be positive')
-
-   # Defensive check: ensure student_id is not empty and allowed by ident (already done above)
 
    edges = [(r['student_id'], r['parent_id']) for r in self.db.execute('SELECT student_id, parent_id FROM referral_links')]
    result = eligible_referral(gross_krw, student_id, edges, depth_rates_bps, commission_bps)
