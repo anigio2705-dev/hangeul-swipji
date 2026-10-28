@@ -83,6 +83,9 @@ for word, meta in manifest.get('recordings', {}).items():
     except Exception as e:
         raise ValueError(f"Failed to decode audio raw data for {file}") from e
 
+    if len(samples) == 0:
+        raise ValueError(f"Decoded audio has zero length for {file}")
+
     peak = max((abs(x) for x in samples), default=0)
     rms = math.sqrt(sum(x * x for x in samples) / max(1, len(samples)))
     active = [i for i, x in enumerate(samples) if abs(x) > 184]  # approx -45 dBFS
