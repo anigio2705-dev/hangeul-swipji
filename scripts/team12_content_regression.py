@@ -28,7 +28,11 @@ class Team12Regression(unittest.TestCase):
     def test_audio_418_scope_reconciliation(self):
         plan_file = ROOT / "docs/team12/recording-plan-399.json"
         self.assertTrue(plan_file.exists(), f"Missing file: {plan_file}")
-        plan = json.loads(plan_file.read_text(encoding="utf-8"))
+        plan_content = plan_file.read_text(encoding="utf-8")
+        try:
+            plan = json.loads(plan_content)
+        except json.JSONDecodeError as e:
+            self.fail(f"Invalid JSON in {plan_file}: {e}")
         self.assertIn("cells", plan)
         cells = plan["cells"]
         self.assertIsInstance(cells, list)
@@ -53,12 +57,17 @@ class Team12Regression(unittest.TestCase):
         self.assertEqual(statuses.count("held"), 26)
         self.assertEqual(statuses.count("ready_unapproved"), 19)
         self.assertIn("counts", plan)
-        self.assertEqual(len(cells), sum(plan["counts"].values()))
+        total_counts = sum(plan["counts"].values())
+        self.assertEqual(len(cells), total_counts)
 
     def test_professional_96_unique_and_linked(self):
         data_file = ROOT / "phase3/curriculum-96.json"
         self.assertTrue(data_file.exists(), f"Missing file: {data_file}")
-        data = json.loads(data_file.read_text(encoding="utf-8"))
+        data_content = data_file.read_text(encoding="utf-8")
+        try:
+            data = json.loads(data_content)
+        except json.JSONDecodeError as e:
+            self.fail(f"Invalid JSON in {data_file}: {e}")
         self.assertIn("stages", data)
         stages = data["stages"]
         self.assertIsInstance(stages, list)
@@ -77,8 +86,16 @@ class Team12Regression(unittest.TestCase):
         pilot_file = ROOT / "phase3/content.json"
         self.assertTrue(curriculum_file.exists(), f"Missing file: {curriculum_file}")
         self.assertTrue(pilot_file.exists(), f"Missing file: {pilot_file}")
-        curriculum = json.loads(curriculum_file.read_text(encoding="utf-8"))
-        pilot = json.loads(pilot_file.read_text(encoding="utf-8"))
+        curriculum_content = curriculum_file.read_text(encoding="utf-8")
+        pilot_content = pilot_file.read_text(encoding="utf-8")
+        try:
+            curriculum = json.loads(curriculum_content)
+        except json.JSONDecodeError as e:
+            self.fail(f"Invalid JSON in {curriculum_file}: {e}")
+        try:
+            pilot = json.loads(pilot_content)
+        except json.JSONDecodeError as e:
+            self.fail(f"Invalid JSON in {pilot_file}: {e}")
         ids = {lesson["unitId"] for stage in curriculum.get("stages", []) for lesson in stage.get("lessons", [])}
         units = pilot.get("units", [])
         self.assertEqual(len(units), 12)
@@ -88,7 +105,11 @@ class Team12Regression(unittest.TestCase):
     def test_399_board_cells_have_explicit_missing_and_held_states(self):
         manifest_file = ROOT / "hangul-audio-manifest.json"
         self.assertTrue(manifest_file.exists(), f"Missing file: {manifest_file}")
-        manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
+        manifest_content = manifest_file.read_text(encoding="utf-8")
+        try:
+            manifest = json.loads(manifest_content)
+        except json.JSONDecodeError as e:
+            self.fail(f"Invalid JSON in {manifest_file}: {e}")
         records = manifest.get("recordings", {})
         consonants = "\u3131\u3132\u3134\u3137\u3138\u3139\u3141\u3142\u3143\u3145\u3146\u3147\u3148\u3149\u314a\u314b\u314c\u314d\u314e"
         vowels = "\u314f\u3150\u3151\u3152\u3153\u3154\u3155\u3156\u3157\u3158\u3159\u315a\u315b\u315c\u315d\u315e\u315f\u3160\u3161\u3162\u3163"
@@ -169,7 +190,11 @@ class Team12Regression(unittest.TestCase):
     def test_hangul_manifest_no_synthetic_or_approved_without_review(self):
         manifest_file = ROOT / "hangul-audio-manifest.json"
         self.assertTrue(manifest_file.exists(), f"Missing file: {manifest_file}")
-        manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
+        manifest_content = manifest_file.read_text(encoding="utf-8")
+        try:
+            manifest = json.loads(manifest_content)
+        except json.JSONDecodeError as e:
+            self.fail(f"Invalid JSON in {manifest_file}: {e}")
         recordings = manifest.get("recordings", {})
         for word, entry in recordings.items():
             self.assertIsInstance(entry, dict)
