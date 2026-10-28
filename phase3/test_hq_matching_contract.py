@@ -4,6 +4,14 @@ import server
 import instant_matching as matching
 
 class MatchingContractTests(unittest.TestCase):
+    def test_unauthenticated_session_and_event_fail_before_db_access(self):
+        for action in (
+            lambda: matching.instant_session(None,None,'match-1'),
+            lambda: matching.record_lesson_event(None,None,'booking-1','event-1','lesson.started'),
+        ):
+            with self.subTest(action=action),self.assertRaises(server.Error) as caught:
+                action()
+            self.assertEqual(401,caught.exception.status)
     def test_valid_contract(self):
         e=matching.transaction_event_contract('booking-1','event-1','lesson.completed')
         self.assertEqual('booking-1',e['bookingId']);self.assertFalse(e['paymentExecuted'])
