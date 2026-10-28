@@ -323,6 +323,32 @@ class InstantMatchingTests(unittest.TestCase):
         self.assertEqual(first,self.call(teacher,'lesson-event',req)['event'])
 
 
+    def test_internal_settlement_acknowledgement_persists_and_deduplicates(self):
+        learner,learner_id=self.account('ack-learner@example.test')
+        teacher,teacher_id=self.account('ack-teacher@example.test','teacher',True)
+        now=time.time()
+        with server.connect() as db:
+            db.execute('INSERT INTO slots VALUES(?,?,?,?)',('ack-slot',teacher_id,now-100,now+3600))
+            db.execute("""INSERT INTO bookings
+              (id,learner_id,teacher_id,slot_id,unit_id,status,price,room,created_at)
+              VALUES(?,?,?,?,?,?,?,?,?)""",
+              ('ack-booking',learner_id,teacher_id,'ack-slot','unit','completed',20000,'ack-room',now))
+        req={'bookingId':'ack-booking','eventId':'ack-event','type':'lesson.completed'}
+        self.call(teacher,'lesson-event',req)
+        with server.connect() as db:
+            self.assertEqual(1,len(matching.pending_settlement_events(db)))
+            ack=matching.acknowledge_settlement_event(db,'ack-event','team14','receipt-1')
+            self.assertTrue(ack['acknowledged'])
+            self.assertEqual(ack,matching.acknowledge_settlement_event(db,'ack-event','team14','receipt-1'))
+            self.assertEqual([],matching.pending_settlement_events(db))
+            with self.assertRaises(server.Error) as err:
+                matching.acknowledge_settlement_event(db,'ack-event','team14','receipt-2')
+            self.assertEqual(409,err.exception.status)
+        with server.connect() as db:
+            self.assertEqual([],matching.pending_settlement_events(db))
+            self.assertEqual(1,db.execute('SELECT count(*) FROM instant_event_deliveries').fetchone()[0])
+
+
 del Harness
 
 if __name__=='__main__': unittest.main()
