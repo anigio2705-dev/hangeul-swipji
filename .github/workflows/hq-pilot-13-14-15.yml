@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Test HQ decision logic (no AI, no write access)
-        run: python -m unittest discover -s automation -p 'test_hq_pilot.py' -v
+        run: python -m unittest discover -s automation -p 'test_*.py' -v
       - name: Checkout latest team 13 and 14 branches, plus QA team 15
         shell: bash
         run: |
