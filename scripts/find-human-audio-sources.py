@@ -128,7 +128,9 @@ report = {
     'listeningApproved': False
 }
 
-(ROOT / 'audit' / 'audio-source-search.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
+audit_dir = ROOT / 'audit'
+audit_dir.mkdir(parents=True, exist_ok=True)
+(audit_dir / 'audio-source-search.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
 
 print(json.dumps({
     'targets': len(missing),
