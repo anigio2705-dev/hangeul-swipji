@@ -283,8 +283,9 @@ for word, meta in manifest.get('recordings', {}).items():
 
 for word, item in targets.items():
     recs = manifest.get('recordings', {})
-    item['recordingAvailable'] = word in recs
-    item['playbackAvailable'] = item['recordingAvailable'] and not recs.get(word, {}).get('disabled', False)
+    item['recordingAvailable'] = word in recs and isinstance(recs.get(word), dict)
+    item['playbackAvailable'] = (item['recordingAvailable'] and
+                                 not bool(recs.get(word, {}).get('disabled', False)))
     item['listeningStatus'] = 'pending' if item['recordingAvailable'] else 'no-recording'
     if item['recordingAvailable']:
         src = recs[word].get('src')
@@ -299,21 +300,21 @@ report = {
     'note': '\ud30c\uc77c\u00b7\ubb38\uc790 \uc5f0\ucb60 \uac80\uc0ac\ub294 \uc2e4\uc81c \uc18c\ub9ac\uc758 \uc815\ud655\uc131\uc774\ub098 \uc798\ub9bc \uc5ec\ubd80\ub97c \uccad\ucde8 \uc2b9\uc778\ud55c \uac83\uc774 \uc544\ub2d9\ub2c8\ub2e4. \uae30\uae30 TTS\ub294 \uc74c\uc131\uc774 \ub2ec\ub77c \uc804\uc218 \ud488\uc9c8 \uc778\uc99d \ub300\uc0c1\uc774 \ub420 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.',
     'counts': {
         'targets': len(targets),
-        'available': sum(x['recordingAvailable'] for x in targets.values()),
-        'missing': sum(not x['recordingAvailable'] for x in targets.values()),
+        'available': sum(bool(x.get('recordingAvailable')) for x in targets.values()),
+        'missing': sum(not bool(x.get('recordingAvailable')) for x in targets.values()),
         'decodedFiles': len(recordings),
-        'playbackAvailable': sum(x['playbackAvailable'] for x in targets.values()),
-        'humanFiles': sum(x.get('kind','human') == 'human' for x in manifest.get('recordings', {}).values()),
-        'syntheticFiles': sum(x.get('kind') == 'synthetic' for x in manifest.get('recordings', {}).values()),
-        'excludedSynthetic': len(manifest.get('retiredSynthetic',{})),
-        'held': sum(bool(x.get('disabled')) for x in manifest.get('recordings', {}).values()),
+        'playbackAvailable': sum(bool(x.get('playbackAvailable')) for x in targets.values()),
+        'humanFiles': sum(x.get('kind', 'human') == 'human' for x in manifest.get('recordings', {}).values() if isinstance(x, dict)),
+        'syntheticFiles': sum(x.get('kind') == 'synthetic' for x in manifest.get('recordings', {}).values() if isinstance(x, dict)),
+        'excludedSynthetic': len(manifest.get('retiredSynthetic', {})),
+        'held': sum(bool(x.get('disabled')) for x in manifest.get('recordings', {}).values() if isinstance(x, dict)),
         'listeningApproved': 0,
-        'signalWarnings': sum(bool(x.get('signalWarnings')) for x in recordings),
+        'signalWarnings': sum(bool(x.get('signalWarnings')) for x in recordings if isinstance(x, dict)),
     },
     'week': {
-        'targets': sum('7\uc77c \uacfc\uc815' in x['groups'] for x in targets.values()),
-        'available': sum('7\uc77c \uacfc\uc815' in x['groups'] and x['recordingAvailable'] for x in targets.values()),
-        'missing': sum('7\uc77c \uacfc\uc815' in x['groups'] and not x['recordingAvailable'] for x in targets.values()),
+        'targets': sum('7\uc77c \uacfc\uc815' in x.get('groups', []) for x in targets.values()),
+        'available': sum(('7\uc77c \uacfc\uc815' in x.get('groups', []) and x.get('recordingAvailable', False)) for x in targets.values()),
+        'missing': sum(('7\uc77c \uacfc\uc815' in x.get('groups', []) and not x.get('recordingAvailable', False)) for x in targets.values()),
         'listeningApproved': 0
     },
     'recordings': recordings,
