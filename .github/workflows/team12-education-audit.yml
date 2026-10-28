@@ -56,7 +56,12 @@ jobs:
           node --check phase3/app.js
           node --check hangul-core.js
       - name: Verify real HTTP and SQLite learner progress
-        run: cd phase3 && python3 -m unittest test_team12_progress_http -v
+        run: |
+          git fetch --no-tags origin team11/common-foundation-20261028
+          git worktree add --detach /tmp/team12-integration FETCH_HEAD
+          cp phase3/test_team12_progress_http.py /tmp/team12-integration/phase3/
+          cd /tmp/team12-integration/phase3
+          python3 -m unittest test_team12_progress_http -v
       - name: Verify educational content structure
         run: python3 -m unittest discover -s scripts -p 'team12_content_regression.py' -v
       - name: Run physical audio audit
