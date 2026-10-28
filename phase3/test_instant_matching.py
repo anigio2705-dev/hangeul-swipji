@@ -313,6 +313,11 @@ class InstantMatchingTests(unittest.TestCase):
         self.call(teacher,'lesson-event',{**req,'eventId':'event-bad','type':'lesson.started'},expected=409)
         self.call(teacher,'lesson-event',{**req,'eventId':'event-second'},expected=409)
         with server.connect() as db:
+            db.execute("UPDATE bookings SET status='cancelled' WHERE id=?",(req['bookingId'],))
+        self.call(teacher,'lesson-event',{**req,'eventId':'event-cancel-after-complete','type':'booking.cancelled'},expected=409)
+        with server.connect() as db:
+            db.execute("UPDATE bookings SET status='completed' WHERE id=?",(req['bookingId'],))
+        with server.connect() as db:
             events=list(db.execute('SELECT * FROM instant_lesson_events'))
             self.assertEqual(1,len(events))
             self.assertEqual(first,json.loads(events[0]['payload']))
