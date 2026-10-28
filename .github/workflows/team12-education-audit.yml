@@ -6,6 +6,8 @@ on:
       - team12/education-audit-20261028
     paths:
       - 'scripts/team12_audio_inventory.py'
+      - 'scripts/team12_content_regression.py'
+      - 'hangul-core.js'
       - '.github/workflows/team12-education-audit.yml'
 permissions:
   contents: read
@@ -21,6 +23,8 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - name: Check Python syntax
         run: python3 -m py_compile scripts/team12_audio_inventory.py
+      - name: Verify educational content structure
+        run: python3 -m unittest discover -s scripts -p 'team12_content_regression.py' -v
       - name: Run physical audio audit
         run: |
           python3 scripts/team12_audio_inventory.py --root . --output audit/team12-recording-inventory.json
