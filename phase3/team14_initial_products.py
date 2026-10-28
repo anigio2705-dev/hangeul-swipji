@@ -59,3 +59,44 @@ def expected_split(total_krw, referral_bps=0):
     return dict(gross=total_krw, teacher=teacher, referral=referral,
                 platform=platform, platform_including_referral=platform + referral,
                 real_money=False, payout_eligible=False)
+
+# D2 prices approved for TEST-ONLY simulation; production PG and price approval
+# remain separate. A completed event must match the server booking price.
+TEST_CATALOG = {
+    'trial_15': (15, 6000),
+    'partner_25': (25, 10000),
+    'professional_25': (25, 15000),
+}
+
+def bind_server_booking_product(server_db, store, month_id, booking_id, product_code,
+                                referral_bps=0):
+    """Create a single trusted mapping only when server booking price matches catalog.
+
+    Never edits Team13 bookings or emits a completion event. The existing
+    verified-event bridge is the sole path to simulate earned allocations.
+    """
+    ident(month_id)
+    ident(booking_id)
+    if product_code not in TEST_CATALOG:
+        raise SimError('VALIDATION_ERROR', 'unknown test product')
+    duration, price = TEST_CATALOG[product_code]
+    row = server_db.execute(
+        'SELECT b.price,b.status,u.role,u.approved FROM bookings b '
+        'JOIN users u ON u.id=b.teacher_id WHERE b.id=?', (booking_id,)
+    ).fetchone()
+    if row is None:
+        raise SimError('NOT_FOUND', 'server booking not found')
+    if row['price'] != price:
+        raise SimError('CONFLICT', 'server booking price differs from test catalog')
+    if row['role'] not in ('teacher', 'partner') or row['approved'] != 1:
+        raise SimError('FORBIDDEN', 'teacher is not approved')
+    if product_code == 'professional_25' and row['role'] != 'teacher':
+        raise SimError('FORBIDDEN', 'professional product requires teacher role')
+    if product_code == 'partner_25' and row['role'] != 'partner':
+        raise SimError('FORBIDDEN', 'partner product requires partner role')
+    if row['status'] not in ('test_paid', 'in_class', 'completed', 'test_settled'):
+        raise SimError('INVALID_STATE', 'booking not eligible')
+    result = create_simulated_package(store, month_id, [booking_id], duration,
+                                      price, referral_bps)
+    return dict(result, product_code=product_code, test_price_krw=price,
+                real_money=False, payment_executed=False, payout_eligible=False)
