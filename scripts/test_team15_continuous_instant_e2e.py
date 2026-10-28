@@ -110,7 +110,11 @@ class Team15ContinuousJourney(unittest.TestCase):
                 booking_id=learner_session["bookingId"]
                 self.assertEqual(booking_id,teacher_session["bookingId"])
                 self.assertEqual(learner_session["roomUrl"],teacher_session["roomUrl"])
-                self.api(student,"/api/instant/join",{},403)
+                rejoin=self.api(student,"/api/instant/join",{})
+                self.assertEqual(rejoin["matchId"],match_id)
+                self.assertEqual(rejoin["state"],"active")
+                with server.connect() as db:
+                    self.assertEqual(db.execute("SELECT count(*) FROM instant_booking_links WHERE match_id=?",(match_id,)).fetchone()[0],1)
                 self.api(outsider,"/api/instant/session-observe",{"matchId":match_id},409)
                 self.api(student,"/api/instant/session-finish",{"matchId":match_id},409)
                 self.api(student,"/api/instant/session-observe",{"matchId":match_id})
