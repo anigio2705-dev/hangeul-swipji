@@ -15,3 +15,4 @@ jobs:
           python -m unittest discover -s phase3 -p 'test_team14_monthly*.py' -v
           python -m unittest discover -s phase3 -p 'test_team14_persistent.py' -v
           python -m unittest discover -s phase3 -p 'test_team14_booking_events.py' -v
+          python -m unittest discover -s phase3 -p 'test_team14_referral_scenarios.py' -v
