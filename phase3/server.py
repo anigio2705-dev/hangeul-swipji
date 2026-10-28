@@ -377,6 +377,10 @@ class Handler(BaseHTTPRequestHandler):
             if method=='GET':
                 rows=[]
                 for b in db.execute('SELECT * FROM bookings WHERE learner_id=? OR teacher_id=? ORDER BY created_at DESC',(uid,uid)):
+                    # Recheck current database role and provider approval on each listing.
+                    from team11_server_booking_adapter import authenticated_booking_access
+                    if not authenticated_booking_access(db,uid,b['id'],'view')['allowed']:
+                        continue
                     v=dict(b); v.pop('room',None); v['sharedSeconds']=shared_seconds(db,b['id']); v['paymentMode']='provider-test' if db.execute('SELECT 1 FROM payment_sessions WHERE booking_id=?',(b['id'],)).fetchone() else 'simulated-test-only'; v['attendance']=[dict(a) for a in db.execute('SELECT * FROM attendance WHERE booking_id=?',(b['id'],))]; v['slot']=dict(db.execute('SELECT * FROM slots WHERE id=?',(b['slot_id'],)).fetchone()); v['disputes']=[dict(x) for x in db.execute('SELECT * FROM disputes WHERE booking_id=?',(b['id'],))]; rows.append(v)
                 return {'bookings':rows},None
             if method=='POST':
