@@ -1,0 +1,2 @@
+# Team 16 isolated growth prototypes
+No production publishing, cookie, analytics vendor or ad spend is enabled here. The VN/JP pages are deliberately noindex until localization, payment, privacy and 99 staging are verified. Events are consent-gated and emit only an in-page custom event, not a network request. See docs/team16/TEAM16_D1_GROWTH_AUDIT_20261028.md.
