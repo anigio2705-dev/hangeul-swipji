@@ -30,6 +30,16 @@ def request_refund(server_db,store,booking_id,request_id,actor_id,amount_krw):
             if (previous['booking_id'],previous['actor_id'],previous['amount_krw'])!=(booking_id,actor_id,amount_krw):
                 raise SimError('CONFLICT','refund request reused')
             return dict(previous)
+        # Reserve only the unrefunded balance, accounting for other open
+        # requests. Replays above must return before checking the new balance.
+        balance=store.db.execute('SELECT amount,refunded,state FROM lessons WHERE booking_id=?',
+                                 (booking_id,)).fetchone()
+        if balance is None or balance['state'] not in ('completed','completed_partially_refunded'):
+            raise SimError('INVALID_STATE','completed lesson required')
+        reserved=store.db.execute("""SELECT COALESCE(SUM(amount_krw),0) FROM refund_requests
+            WHERE booking_id=? AND state IN ('requested','approved')""",(booking_id,)).fetchone()[0]
+        if amount_krw+reserved>balance['amount']-balance['refunded']:
+            raise SimError('INVALID_STATE','refund exceeds available balance')
         store.db.execute(
             "INSERT INTO refund_requests(request_id,booking_id,actor_id,amount_krw,state) VALUES(?,?,?,?,'requested')",
             (request_id,booking_id,actor_id,amount_krw))

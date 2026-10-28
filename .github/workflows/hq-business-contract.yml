@@ -6,6 +6,8 @@ on:
       - 'phase3/team14_referral_scenarios.py'
       - 'phase3/team14_referral_store.py'
       - 'phase3/team14_referral_eligibility.py'
+      - 'phase3/team14_refund_workflow.py'
+      - 'phase3/test_hq_refund_requests.py'
       - 'phase3/instant_matching.py'
       - 'phase3/instant-speaking.html'
       - 'scripts/check-instant-page.cjs'
@@ -41,7 +43,8 @@ jobs:
             test_team14_monthly_boundaries \
             test_common_booking_access \
             test_hq_matching_contract \
-            test_hq_referral_eligibility
+            test_hq_referral_eligibility \
+            test_hq_refund_requests
       - name: Test browser-side timeout recovery without media provider
         run: node scripts/check-instant-page.cjs
       - name: Record validation boundary
