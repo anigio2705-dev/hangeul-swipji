@@ -24,6 +24,7 @@ from team14_persistent import MonthlyStore, SimError
 from team14_referral_store import ReferralStore
 from team14_statements import lesson_statement
 from team14_instant_verified_bridge import settle_verified_instant_event, refund_verified_instant_settlement
+import team14_recovery as recovery
 
 
 class Team15ContinuousJourney(unittest.TestCase):
@@ -113,8 +114,36 @@ class Team15ContinuousJourney(unittest.TestCase):
                 store.create_month("team15month",[("team15lesson",booking_id,price)])
                 with server.connect() as db:
                     with self.assertRaises(SimError):settle_verified_instant_event(db,store,referrals,"forged-event")
+                    # Team13 keeps its durable event pending until Team14 has a real ledger receipt.
+                    envelope=matching.verified_outbox_envelope(db,event_id)
+                    self.assertEqual(envelope["deliveryStatus"],"pending")
+                    self.assertTrue(any(row["eventId"]==event_id for row in matching.pending_settlement_events(db)))
+                    def crash_after_prepare(point):
+                        if point=="after_event_received":
+                            raise RuntimeError("injected after durable intent")
+                    recovery.FAULT_HOOK=crash_after_prepare
+                    try:
+                        with self.assertRaises(RuntimeError):
+                            settle_verified_instant_event(db,store,referrals,event_id)
+                    finally:
+                        recovery.FAULT_HOOK=None
+                    self.assertEqual(recovery.recovery_status(store,event_id)["status"],"prepared")
+                    # Separate DB process-reopen simulation: replay same trusted server event.
+                    store.close();referrals.close()
+                    store=MonthlyStore(monthly_path)
+                    referrals=ReferralStore(referral_path)
+                    self.assertEqual(matching.verified_outbox_envelope(db,event_id)["deliveryStatus"],"pending")
                     first=settle_verified_instant_event(db,store,referrals,event_id)
+                    self.assertEqual(recovery.recovery_status(store,event_id)["status"],"settled")
                     self.assertEqual(first,settle_verified_instant_event(db,store,referrals,event_id))
+                    receipt_id="team14-"+event_id
+                    with self.assertRaises(server.Error):
+                        matching.confirm_settlement_receipt(db,event_id,"team14",receipt_id)
+                    self.assertEqual(matching.verified_outbox_envelope(db,event_id)["deliveryStatus"],"pending")
+                    ack=matching.confirm_settlement_receipt(db,event_id,"team14",receipt_id,settlement_confirmed=True)
+                    self.assertTrue(ack["acknowledged"])
+                    self.assertEqual(matching.confirm_settlement_receipt(db,event_id,"team14",receipt_id,settlement_confirmed=True),ack)
+                    self.assertFalse(any(row["eventId"]==event_id for row in matching.pending_settlement_events(db)))
                     self.assertFalse(first["payment_executed"])
                     award=referrals.awards_for_lesson("team15lesson")
                     self.assertEqual(award["recipients"][0]["user_id"],parent_id)
