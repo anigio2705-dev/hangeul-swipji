@@ -82,6 +82,22 @@ def decide_refund(store, request_id, decision, reviewer):
                 # update trimmed reason to db
                 store.db.execute('UPDATE refund_requests SET reason=? WHERE request_id=?', (reason_clean, request_id))
 
+        # Extra validation: booking and lesson consistency before approving refund
+        if decision == 'approved':
+            # Fetch booking info to validate state and learner
+            booking = store.db.execute('SELECT id, learner_id, price, status FROM bookings WHERE id=?', (row['booking_id'],)).fetchone()
+            if booking is None:
+                raise SimError('NOT_FOUND', 'associated booking missing')
+            if booking['status'] not in ('completed', 'test_settled', 'refunded'):
+                raise SimError('INVALID_STATE', 'booking not completed for refund')
+            if booking['learner_id'] != row['actor_id']:
+                raise SimError('FORBIDDEN', 'actor no longer valid for refund')
+
+            # Fetch lesson info to check amount matches price
+            lesson = store.db.execute('SELECT amount FROM lessons WHERE booking_id=?', (row['booking_id'],)).fetchone()
+            if lesson is None or lesson['amount'] != booking['price']:
+                raise SimError('CONFLICT', 'booking price mismatch')
+
         store.db.execute('UPDATE refund_requests SET state=?, updated_at=CURRENT_TIMESTAMP WHERE request_id=?',
                          (decision, request_id))
     return dict(store.db.execute('SELECT * FROM refund_requests WHERE request_id=?', (request_id,)).fetchone())
