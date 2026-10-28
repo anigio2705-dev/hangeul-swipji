@@ -164,6 +164,25 @@ class InstantMatchingTests(unittest.TestCase):
             matching.transaction_event_contract('bridge-booking','event-2','payment.charge')
 
 
+    def test_monthly_completion_event_contract_is_pure_and_rejects_invalid_indices(self):
+        event=matching.transaction_event_contract(
+            'booking-1','operation-1','lesson.completed',month_id='month-1',lesson_index=0)
+        self.assertEqual('month-1',event['monthId'])
+        self.assertEqual(0,event['lessonIndex'])
+        self.assertEqual('operation-1',event['eventId'])
+        self.assertFalse(event['paymentExecuted'])
+        self.assertEqual(event,matching.transaction_event_contract(
+            'booking-1','operation-1','lesson.completed',month_id='month-1',lesson_index=0))
+        for kwargs in ({'month_id':'month-1'}, {'lesson_index':0},
+                       {'month_id':'month-1','lesson_index':True},
+                       {'month_id':'month-1','lesson_index':-1}):
+            with self.subTest(kwargs=kwargs),self.assertRaises(server.Error):
+                matching.transaction_event_contract('booking-1','operation-2','lesson.completed',**kwargs)
+        with server.connect() as db:
+            self.assertEqual(0,db.execute('SELECT count(*) FROM ledger').fetchone()[0])
+            self.assertEqual(0,db.execute('SELECT count(*) FROM bookings').fetchone()[0])
+
+
 del Harness
 
 if __name__=='__main__': unittest.main()
