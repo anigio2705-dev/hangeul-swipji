@@ -252,6 +252,13 @@ def record_lesson_event(db, user, booking_id, event_id, event_type):
              'booking.cancelled':('cancelled','refunded','expired')}
     if b['status'] not in allowed[event_type]:
         raise server.Error('예약 상태와 이벤트가 일치하지 않습니다',409)
+    if event_type=='lesson.completed' and not instant:
+        # For normal Team11 bookings, require server-tracked mutual attendance,
+        # confirmation and lesson evidence rather than a forged browser event.
+        rows=db.execute('SELECT user_id,confirmed FROM attendance WHERE booking_id=?',(booking_id,)).fetchall()
+        if (len(rows)!=2 or any(not row['confirmed'] for row in rows)
+            or not b['evidence']):
+            raise server.Error('예약 수업 완료에 대한 서버 검증 근거가 부족합니다',409)
     if event_type in ('lesson.completed','booking.cancelled'):
         prior=db.execute("""SELECT event_id FROM instant_lesson_events
             WHERE booking_id=? AND event_type IN ('lesson.completed','booking.cancelled')
