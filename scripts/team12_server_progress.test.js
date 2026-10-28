@@ -10,4 +10,20 @@ uid='student-B';assert.equal(await c.pull(),true);assert.equal(storage.getItem(k
 const second=api.client(fetcher,storage);assert.equal(await second.pull(),true);assert.equal(records.get('student-B').length,1);fail=true;assert.equal(await c.pull(),false);assert.equal(JSON.parse(storage.getItem(api.keys[1])).done[3],true,'offline must not delete local record');assert.equal(api.completed(JSON.stringify({done:{0:true,49:true,50:true}})).length,2,'only lessons 1–50 are valid');
 let release;let blocked=false;const slowFetch=async(path,opt={})=>{if(path==='/api/free-progress'&&opt.method==='POST'&&!blocked){blocked=true;await new Promise(resolve=>{release=resolve})}return fetcher(path,opt)};
 fail=false;const late=api.client(slowFetch,storage);assert.equal(await late.pull(),true);const k2=api.keys[1];late.changed(k2,JSON.stringify({done:{4:true}}));for(let i=0;i<20&&!release;i++)await Promise.resolve();assert.equal(typeof release,'function');late.changed(k2,JSON.stringify({done:{4:true,5:true}}));release();for(let i=0;i<30;i++)await Promise.resolve();assert.ok(records.get('student-B').some(x=>x.stage===2&&x.lesson===6),'completion added during pending HTTP request must be flushed');
+// Returning to an account must restore its own local-only records without
+// leaking the other account's completed lessons to the authenticated API.
+const stale=api.client(fetcher,storage);
+assert.equal(await stale.pull(),true,'stale client begins on student B');
+uid='student-A';
+assert.equal(await c.pull(),true);
+assert.equal(JSON.parse(storage.getItem(k)).done[0],true,'student A progress restored from its account backup');
+assert.equal(storage.getItem(api.keys[1]),null,'student B progress must not appear in student A');
+const beforeA=records.get('student-A').length;
+stale.changed(api.keys[1],JSON.stringify({done:{12:true}}));
+await stale.flush();
+assert.equal(records.get('student-A').length,beforeA,'stale client cannot upload another account progress');
+uid='student-B';
+assert.equal(await c.pull(),true);
+assert.equal(JSON.parse(storage.getItem(api.keys[1])).done[3],true,'student B local progress restored');
+assert.equal(JSON.parse(storage.getItem(api.keys[1])).done[5],true,'student B offline completion retained');
 console.log('team12 server progress integration tests passed');})().catch(e=>{console.error(e);process.exitCode=1});
