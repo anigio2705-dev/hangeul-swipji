@@ -284,7 +284,11 @@ report = {
 }
 
 output_path = ROOT / 'hangul-audio-audit.json'
-output_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+# Defensive write operation with exception handling
+try:
+    output_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+except Exception as e:
+    raise IOError(f"Failed to write report to {output_path}") from e
 
 print(json.dumps(report['counts'], ensure_ascii=False))
 for x in recordings:
