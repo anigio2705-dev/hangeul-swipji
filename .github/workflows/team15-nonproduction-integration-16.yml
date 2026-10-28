@@ -1,0 +1,37 @@
+name: Team15 nonproduction executable integration (16th)
+on:
+  push:
+    branches:
+      - integration/team15-nonproduction-16th-20261028
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: qa
+      - uses: actions/checkout@v4
+        with:
+          ref: 7f86b5d6ce734e04719e769caacf3d5917ebafc9
+          path: team11
+      - uses: actions/checkout@v4
+        with:
+          ref: 3b6bb3a0b2c033e626e959a8d216c48d2f14d428
+          path: team12
+      - uses: actions/checkout@v4
+        with:
+          ref: d74272a5fe4af87875e371a746d7a76f617e7ede
+          path: team13
+      - uses: actions/checkout@v4
+        with:
+          ref: 26def89377209517d16caf1bacbc198209a06221
+          path: team14
+      - name: Execute cross-team real functions and SQLite restart
+        run: python3 qa/scripts/test_team15_real_bridge.py
+      - name: Execute cross-team contract regression
+        run: python3 qa/scripts/test_team15_boundaries.py
+      - name: Execute source interface smoke
+        run: python3 qa/scripts/team15_cross_team_smoke.py
