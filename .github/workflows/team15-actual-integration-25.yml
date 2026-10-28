@@ -1,0 +1,53 @@
+name: Team15 25th actual HTTP and SQLite integration
+on:
+  push:
+    branches:
+      - integration/team15-nonproduction-25th-20261028
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  actual-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: qa
+      - uses: actions/checkout@v4
+        with:
+          ref: e39b9b0d205bf59bd1fe4fd430bd1732e05a5034
+          path: team11
+      - uses: actions/checkout@v4
+        with:
+          ref: edbf1d614e58f391ce2d63e3b3f0229370047c17
+          path: team12
+      - uses: actions/checkout@v4
+        with:
+          ref: fb5eb3a546a052d4043cbf75316abdc7f490eeae
+          path: team13
+      - uses: actions/checkout@v4
+        with:
+          ref: d40b197a7c9b9448e2b09cfd3de87f90b99f8cf4
+          path: team14
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Team11 real HTTP signup learning teacher and booking
+        run: |
+          cd team11/phase3
+          python3 -m unittest -v test_common_http_journey test_common_http_booking_integration
+      - name: Team12 real HTTP progress and session isolation
+        run: |
+          cd team12/phase3
+          python3 -m unittest -v test_team12_progress_http
+      - name: Team12 browser storage isolation
+        run: |
+          cd team12
+          node --check scripts/team12_server_progress.js
+          node scripts/team12_server_progress.test.js
+      - name: Team15 real HTTP SQLite multi-user journey
+        run: python3 qa/scripts/test_team15_http_progress_journey.py
+      - name: Team11 and Team14 persistent mock settlement bridge
+        run: python3 qa/scripts/test_team15_real_bridge.py
+      - name: Team11 full contract regression
+        run: python3 -m unittest discover -s team11/phase3 -p 'test_common_*.py' -v
