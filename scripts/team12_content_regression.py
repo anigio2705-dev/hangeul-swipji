@@ -43,6 +43,7 @@ class Team12Regression(unittest.TestCase):
             self.assertIn("syllable", c)
             syllable_value = c["syllable"]
             self.assertIsInstance(syllable_value, str, "syllable must be string")
+            self.assertTrue(syllable_value.strip() != '', "syllable must be non-empty string")
             syllables.add(syllable_value)
         self.assertEqual(len(syllables), 399)
         consonants = set()
@@ -54,7 +55,9 @@ class Team12Regression(unittest.TestCase):
             consonant_value = c["consonant"]
             vowel_value = c["vowel"]
             self.assertIsInstance(consonant_value, str, "consonant must be string")
+            self.assertTrue(consonant_value.strip() != '', "consonant must be non-empty string")
             self.assertIsInstance(vowel_value, str, "vowel must be string")
+            self.assertTrue(vowel_value.strip() != '', "vowel must be non-empty string")
             consonants.add(consonant_value)
             vowels.add(vowel_value)
         self.assertEqual(len(consonants), 19)
@@ -92,7 +95,10 @@ class Team12Regression(unittest.TestCase):
         self.assertEqual(len(lessons), 96)
         for field in ("slot", "unitId"):
             values = [lesson.get(field) for lesson in lessons]
-            self.assertTrue(all(value is not None and (not isinstance(value, str) or value.strip() != '') for value in values), field)
+            self.assertTrue(all(
+                value is not None and
+                (not isinstance(value, str) or value.strip() != '')
+                for value in values), field)
             self.assertEqual(len(values), len(set(values)), field)
         self.assertTrue(all(lesson.get("status") == "authored" for lesson in lessons))
 
