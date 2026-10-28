@@ -30,6 +30,11 @@ def request_refund(server_db,store,booking_id,request_id,actor_id,amount_krw):
             if (previous['booking_id'],previous['actor_id'],previous['amount_krw'])!=(booking_id,actor_id,amount_krw):
                 raise SimError('CONFLICT','refund request reused')
             return dict(previous)
+        # A refund ID is also a ledger transaction and operation ID. Reject
+        # collisions before accepting a request that could never be applied.
+        if (store.db.execute('SELECT 1 FROM operations WHERE id=?',(request_id,)).fetchone()
+            or store.db.execute('SELECT 1 FROM ledger WHERE transaction_id=?',(request_id,)).fetchone()):
+            raise SimError('CONFLICT','refund ID already used by settlement')
         # Reserve only the unrefunded balance, accounting for other open
         # requests. Replays above must return before checking the new balance.
         balance=store.db.execute('SELECT amount,refunded,state FROM lessons WHERE booking_id=?',
@@ -71,7 +76,17 @@ def apply_approved_refund(server_db,store,request_id):
         row=store.db.execute('SELECT * FROM refund_requests WHERE request_id=?',(request_id,)).fetchone()
         if row is None:raise SimError('NOT_FOUND','refund request missing')
         if row['state']=='applied':
-            return json.loads(store.db.execute('SELECT result FROM operations WHERE id=?',(request_id,)).fetchone()['result'])
+            prior=store.db.execute('SELECT result FROM operations WHERE id=?',(request_id,)).fetchone()
+            if prior is None:
+                raise SimError('CONFLICT','applied refund operation missing')
+            try:
+                result=json.loads(prior['result'])
+            except (TypeError,ValueError):
+                raise SimError('CONFLICT','invalid applied refund operation')
+            if (not isinstance(result,dict) or result.get('transaction_id')!=request_id
+                or result.get('real_money') is not False):
+                raise SimError('CONFLICT','applied refund operation mismatch')
+            return result
         if row['state']!='approved':raise SimError('INVALID_STATE','refund not approved')
         booking=server_db.execute('SELECT price,status,learner_id FROM bookings WHERE id=?',
                                   (row['booking_id'],)).fetchone()
