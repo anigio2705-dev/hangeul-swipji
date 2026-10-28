@@ -227,9 +227,12 @@ class Team12Regression(unittest.TestCase):
             self.assertTrue(entry.get("license"), word)
             listening_review = entry.get("listeningReview", {})
             self.assertIsInstance(listening_review, dict, f"listeningReview must be dict for {word}")
-            self.assertNotEqual(
-                listening_review.get("status"), "approved", word
-            )
+            # Validate status only if present to avoid false failure when key missing
+            status = listening_review.get("status")
+            if status is not None:
+                self.assertNotEqual(
+                    status, "approved", word
+                )
 
 if __name__ == "__main__":
     unittest.main()
