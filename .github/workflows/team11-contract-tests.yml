@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Verify actual checkout and execute 19 contract tests
+      - name: Verify actual checkout and execute 21 contract tests
         shell: bash
         run: |
           set -euo pipefail
