@@ -316,6 +316,10 @@ class InstantMatchingTests(unittest.TestCase):
             self.assertEqual(1,len(events))
             self.assertEqual(first,json.loads(events[0]['payload']))
             self.assertEqual([first],matching.pending_settlement_events(db))
+            verified=matching.verified_event_for_team14(db,'event-once')
+            self.assertTrue(verified['verifiedByServer'])
+            self.assertEqual(teacher_id,verified['teacherId'])
+            self.assertEqual(20000,verified['amount'])
             self.assertEqual([first],matching.pending_settlement_events(db,1))
             with self.assertRaises(server.Error):
                 matching.pending_settlement_events(db,0)
