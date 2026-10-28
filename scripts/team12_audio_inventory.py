@@ -99,7 +99,12 @@ def inspect(root):
                 continue
 
             # Extra check, path must start with root/assets/hangul-audio
-            rel_path = src_path.relative_to(root_resolved) if root_resolved in src_path.parents or src_path == root_resolved else None
+            rel_path = None
+            try:
+                rel_path = src_path.relative_to(root_resolved)
+            except Exception:
+                rel_path = None
+
             if rel_path is None or not str(rel_path).startswith("assets/hangul-audio/"):
                 problems.append({"word": word, "issue": "invalid_path_subdir", "path": src})
                 continue
