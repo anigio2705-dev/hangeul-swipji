@@ -3,7 +3,7 @@ from hq_six_developers import apply_patch, validate_candidate
 
 class BoundedPatchTests(unittest.TestCase):
     def test_single_unique_patch_and_valid_python(self):
-        original = "def calculate_total(value):\n    return value + 1\n"
+        original = "def calculate_total(value):\n    return value + 1\n" + ("# meaningful existing code context\n" * 5)
         changed = apply_patch(original, {
             "old": "return value + 1",
             "new": "return value + 2",
@@ -15,7 +15,7 @@ class BoundedPatchTests(unittest.TestCase):
     def test_ambiguous_or_null_patch_rejected(self):
         original = "def a():\n    return 123\ndef b():\n    return 123\n"
         with self.assertRaisesRegex(ValueError, "unambiguous"):
-            apply_patch(original, {"old": "return 123", "new": "return 456"})
+            apply_patch(original, {"old": "    return 123", "new": "    return 456"})
         with self.assertRaisesRegex(ValueError, "Null"):
             apply_patch(original, {"old": "def a():\n    return 123",
                                    "new": "def a():\n    return '" + chr(0) + "'"})
