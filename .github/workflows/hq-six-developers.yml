@@ -1,0 +1,55 @@
+name: HQ six parallel AI developers (isolated)
+on:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - 'automation/hq_six_developers.py'
+      - '.github/workflows/hq-six-developers.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  develop:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        team: ['11','12','13','14','15','16']
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    environment: hq-ai-pilot
+    concurrency:
+      group: hq-team-${{ matrix.team }}-isolated-dev
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Configure bot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Copy trusted runner outside working tree
+        run: cp automation/hq_six_developers.py /tmp/hq_six_developers.py
+      - name: Run isolated AI developer
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          HQ_TEAM: ${{ matrix.team }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: python /tmp/hq_six_developers.py
+      - name: Save team result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: team-${{ matrix.team }}-development
+          path: /tmp/team-result.json
+          if-no-files-found: ignore
+          retention-days: 7
