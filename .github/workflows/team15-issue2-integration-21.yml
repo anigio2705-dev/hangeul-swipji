@@ -1,0 +1,46 @@
+name: Team15 21st pass blocker-first nonproduction integration
+on:
+  push:
+    branches:
+      - integration/team15-issue2-21st-20261028
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  blocker-and-http:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: qa
+      - uses: actions/checkout@v4
+        with:
+          ref: ddca64258903489c0bbb27a244b14c66e97b3415
+          path: team11
+      - uses: actions/checkout@v4
+        with:
+          ref: 61d92fba72e81dca19cc7ca6c5a5544a08dad1da
+          path: team12
+      - uses: actions/checkout@v4
+        with:
+          ref: fb5eb3a546a052d4043cbf75316abdc7f490eeae
+          path: team13
+      - uses: actions/checkout@v4
+        with:
+          ref: 77e9a73c76a1122c2d9f6212ba0cd13a1bb33ade
+          path: team14
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Block on Team12 actual learner progress account-isolation regression
+        run: |
+          cd team12
+          node --check scripts/team12_server_progress.js
+          node scripts/team12_server_progress.test.js
+      - name: Team11 real HTTP booking and free progress API tests
+        run: |
+          cd team11/phase3
+          python3 -m unittest -v test_common_http_booking_integration
+          python3 -m unittest discover -p '*progress*.py' -v
+      - name: Team11-Team14 actual functions and persistent SQLite
+        run: python3 qa/scripts/test_team15_real_bridge.py
