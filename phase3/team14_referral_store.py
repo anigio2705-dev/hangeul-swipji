@@ -67,6 +67,14 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
   ident(event_id); ident(student_id); ident(lesson_id)
   amount(gross_krw, True)
 
+  # Additional validation: depth_rates_bps and commission_bps types and values
+  if (not isinstance(depth_rates_bps, (list, tuple)) or
+      not all(isinstance(rate, int) and rate >= 0 for rate in depth_rates_bps)):
+   raise SimError('INVALID_INPUT', 'depth_rates_bps must be a list or tuple of non-negative integers')
+
+  if not isinstance(commission_bps, int) or commission_bps < 0:
+   raise SimError('INVALID_INPUT', 'commission_bps must be a non-negative integer')
+
   signature = json.dumps([student_id, lesson_id, gross_krw, list(depth_rates_bps), commission_bps], separators=(',', ':'))
   self.db.execute('BEGIN IMMEDIATE')
   try:
