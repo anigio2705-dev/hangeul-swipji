@@ -80,11 +80,11 @@
     {
       "number": 47,
       "feature": "진도·오답·즐겨찾기·이어 배우기의 저장과 재접속 동작을 검사한다.",
-      "implemented": "7개 과정의 로컬 완료 기록을 dashboard.html에서 확인하고 미완료 첫 단원으로 직접 이동하는 ?unit= 딥링크 구현. 기존 백업/복원 유지",
-      "missing": "서버 계정별 DB 저장 및 기기간 동기화 미구현; 실제 브라우저 재접속 E2E 미검증",
-      "evidence": "dashboard.html; intro.html; beginner1.html; beginner2.html; intermediate1.html; intermediate2.html; advanced1.html; advanced2.html; scripts/team12_content_regression.py",
+      "implemented": "7개 과정의 로컬 완료 기록을 dashboard.html에서 확인하고 미완료 첫 단원으로 직접 이동하는 ?unit= 딥링크 구현. 기존 백업/복원 유지; scripts/team12_resume.js에서 완료값 true만 인정하는 재개 로직 분리, Node 행동 테스트 추가",
+      "missing": "서버 사용자 계정별 영구 저장·기기간 복원·예약 통합 테스트 미완료",
+      "evidence": "dashboard.html; intro.html; beginner1.html; beginner2.html; intermediate1.html; intermediate2.html; advanced1.html; advanced2.html; scripts/team12_content_regression.py; scripts/team12_resume.js; scripts/team12_resume.test.js",
       "progress": 40,
-      "reason": "로컬 완료 기록 기반 이어 배우기 실제 코드 구현으로 30→40; 서버 저장과 실제 E2E 미완료",
+      "reason": "실행 가능한 진도 선택 함수와 Node 행동 테스트 구현; CI 실행 확인 전 점수 유지",
       "next": "11번 학습 진도 API 계약 확인 후 서버 동기화 및 가상 계정 재접속 테스트",
       "integration": "타 브랜치 통합 미검증",
       "status": "미착수"
@@ -366,5 +366,5 @@
       "status": "외부 확인 대기"
     }
   ],
-  "version": "14차 갱신"
+  "version": "15차 갱신"
 }
