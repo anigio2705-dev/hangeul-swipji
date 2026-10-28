@@ -35,6 +35,7 @@ def inspect(root):
         raise ValueError("Manifest 'recordings' entry missing or invalid")
 
     problems, inventory = [], []
+    # Path regex must match exactly relative path starting with './assets/hangul-audio/'
     path_regex = re.compile(r"\./assets/hangul-audio/[a-zA-Z0-9\-_]+\.mp3$")
 
     root_resolved = root.resolve()
@@ -48,6 +49,11 @@ def inspect(root):
         # Use safe regex matching for valid path
         if not isinstance(src, str) or not path_regex.fullmatch(src):
             problems.append({"word": word, "issue": "invalid_source_path", "path": src})
+            continue
+
+        # Immediate escape for extremely long src
+        if len(src) > 260:
+            problems.append({"word": word, "issue": "source_path_too_long", "path": src})
             continue
 
         # Normalize and validate src path to prevent path traversal
@@ -64,6 +70,11 @@ def inspect(root):
             parts = cleaned_src.split('/')
             if any(p == '..' or p == '' for p in parts):
                 problems.append({"word": word, "issue": "path_contains_invalid_components", "path": src})
+                continue
+
+            # Prevent absolute path use
+            if Path(cleaned_src).is_absolute():
+                problems.append({"word": word, "issue": "path_is_absolute", "path": src})
                 continue
 
             src_path = (root / cleaned_src).resolve()
@@ -103,6 +114,9 @@ def inspect(root):
             filesize = path.stat().st_size
             if filesize > 100 * 1024 * 1024:
                 problems.append({"word": word, "issue": "file_too_large", "path": src, "size": filesize})
+                continue
+            if filesize == 0:
+                problems.append({"word": word, "issue": "file_empty", "path": src})
                 continue
 
             # Limit read size to filesize (already known and safe)
