@@ -1,0 +1,87 @@
+name: HQ 160-task queue audit (isolated)
+on:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - '.github/workflows/hq-backlog-queue.yml'
+      - 'automation/backlog_queue.py'
+      - 'automation/test_backlog_queue.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: hq-160-queue-audit
+  cancel-in-progress: false
+jobs:
+  audit:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run HQ tests and sandbox regressions
+        run: |
+          python -m unittest discover -s automation -p 'test_*.py' -v
+          python -m unittest discover -s automation/worker_sandbox -p 'test_*.py' -v
+      - name: Read master backlog from immutable source branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --depth=1 origin docs/platform-execution-backlog-20261027
+          git show FETCH_HEAD:docs/PLATFORM_EXECUTION_BACKLOG.md > "$RUNNER_TEMP/hq-master-backlog.md"
+      - name: Snapshot six team branch heads (read-only)
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, os, subprocess
+          branches = {
+              "11": "team11/common-foundation-20261028",
+              "12": "team12/education-audit-20261028",
+              "13": "team13/platform-bfcache-reconnect-20261028",
+              "14": "team14/business-systems-audit-20261028",
+              "15": "team15/quality-operations-20261028",
+              "16": "team16/global-growth-marketing-20261028",
+          }
+          heads = {}
+          for team, branch in branches.items():
+              result = subprocess.run(
+                  ["git", "ls-remote", "--heads", "origin", branch],
+                  capture_output=True, text=True, check=True, timeout=30)
+              if not result.stdout.strip():
+                  raise SystemExit("Missing team branch " + team)
+              heads[team] = {"branch": branch, "sha": result.stdout.split()[0]}
+          with open(os.path.join(os.environ["RUNNER_TEMP"], "hq-team-heads.json"), "w") as f:
+              json.dump(heads, f, indent=2)
+          PY
+      - name: Build evidence-gated priority queue
+        shell: bash
+        run: |
+          python automation/backlog_queue.py \
+            --backlog "$RUNNER_TEMP/hq-master-backlog.md" \
+            --branch-heads "$RUNNER_TEMP/hq-team-heads.json" \
+            --output "$RUNNER_TEMP/hq-backlog-report.json"
+          python - <<'PY'
+          import json, os
+          p = os.path.join(os.environ["RUNNER_TEMP"], "hq-backlog-report.json")
+          report = json.load(open(p))
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
+              f.write("## HQ 160-item verified queue\n\n")
+              f.write("Verified final completion: **%s / 160**\n\n" % report["counts"]["complete"])
+              f.write("Unverified: **%s**. No item is completed solely from a passing test.\n\n" % report["counts"]["unverified"])
+              f.write("| Priority | Team | Task | External gate |\n|---|---|---|---|\n")
+              for task in report["next_queue"]:
+                  f.write("| %s | %s | %s | %s |\n" % (
+                      task["number"], task["owner"], task["title"].replace("|", "/"),
+                      "yes" if task["external_gate"] else "no"))
+          PY
+      - name: Upload auditable queue and team head snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: hq-160-queue-evidence
+          path: |
+            ${{ runner.temp }}/hq-backlog-report.json
+            ${{ runner.temp }}/hq-team-heads.json
+          retention-days: 14
