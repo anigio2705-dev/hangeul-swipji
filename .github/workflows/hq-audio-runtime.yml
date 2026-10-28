@@ -17,6 +17,8 @@ on:
       - 'hangul-week.html'
       - 'scripts/check-audio-runtime.cjs'
       - 'scripts/team12_audio_inventory.py'
+      - 'scripts/team12_audio_source_discovery.py'
+      - 'scripts/test_team12_audio_source_discovery.py'
       - 'scripts/team12_server_progress.js'
       - 'scripts/team12_server_progress.test.js'
       - 'scripts/team12_resume.js'
@@ -51,16 +53,23 @@ jobs:
           node scripts/team12_resume.test.js
       - name: Test physical recording integrity and quarantine classification
         run: python3 -m unittest discover -s scripts -p 'test_team12_audio_inventory.py' -v
+      - name: Test bounded Commons discovery and license candidate filtering
+        run: python3 -m unittest discover -s scripts -p 'test_team12_audio_source_discovery.py' -v
       - name: Ensure physical MP3 decoder is available
         run: command -v ffmpeg || (sudo apt-get update -qq && sudo apt-get install -y ffmpeg)
       - name: Audit real recording files, hashes and human provenance
         run: python3 scripts/team12_audio_inventory.py --root . --output "$RUNNER_TEMP/hq-audio-inventory.json"
+      - name: Search Commons for the 12 priority missing human recordings (candidate review only)
+        continue-on-error: true
+        run: python3 scripts/team12_audio_source_discovery.py --inventory "$RUNNER_TEMP/hq-audio-inventory.json" --output "$RUNNER_TEMP/hq-audio-candidates.json" --max-targets 12
       - name: Save physical recording inventory evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: hq-audio-inventory
-          path: ${{ runner.temp }}/hq-audio-inventory.json
+          path: |
+            ${{ runner.temp }}/hq-audio-inventory.json
+            ${{ runner.temp }}/hq-audio-candidates.json
           if-no-files-found: ignore
           retention-days: 14
       - name: Test 350 lessons and seven-day curriculum regression
