@@ -20,6 +20,12 @@ class Team11BoundaryTests(unittest.TestCase):
         self.assertTrue(authorize_provider({"role":"teacher","approved":1},
                         "professional_teacher").allowed)
 
+    def test_legacy_teacher_conversation_compatibility(self):
+        self.assertTrue(authorize_provider({"role":"teacher","approved":1},
+            "conversation_partner").allowed)
+        self.assertFalse(authorize_provider({"role":"teacher","approved":0},
+            "conversation_partner").allowed)
+
     def test_legacy_unapproved_provider_denied(self):
         for role, kind in (("teacher","professional_teacher"),
                            ("partner","conversation_partner")):
