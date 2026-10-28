@@ -21,8 +21,16 @@ def settle_from_server_db(settlement_store,referral_store,server_db_path,event_i
         if requested_booking_id!=booking_id:
             raise SimError('FORBIDDEN','booking ID mismatch')
         # Authentication is established by Team13's internal reader, never HTTP input.
-        return read_server_booking(server_db_path,booking_id,month,lesson,
+        booking=read_server_booking(server_db_path,booking_id,month,lesson,
                                    authenticated_event=True)
+        lesson_row=settlement_store.db.execute(
+            'SELECT amount FROM lessons WHERE id=? AND month_id=? AND booking_id=?',
+            (lesson,month,booking_id)).fetchone()
+        if lesson_row is None:
+            raise SimError('NOT_FOUND','settlement lesson not found')
+        if lesson_row['amount']!=booking['booking_price_krw']:
+            raise SimError('CONFLICT','server booking price and settlement amount differ')
+        return booking
     def referral_reader(learner_id):
         return read_server_referral_parent(server_db_path,learner_id)
     return settle_with_referral(settlement_store,referral_store,event_id,
