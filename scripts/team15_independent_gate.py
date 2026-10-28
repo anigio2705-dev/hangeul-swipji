@@ -38,7 +38,9 @@ for team, paths in EXPECT.items():
         failures.append(f"{team}: checkout missing or path not a directory")
         continue
     try:
-        sha = subprocess.check_output(["git", "-C", str(directory), "rev-parse", "HEAD"], text=True, stderr=subprocess.PIPE).strip()
+        sha = subprocess.check_output([
+            "git", "-C", str(directory), "rev-parse", "HEAD"
+        ], text=True, stderr=subprocess.PIPE).strip()
     except subprocess.CalledProcessError as e:
         failures.append(f"{team}: git rev-parse failed: {e}")
         continue
@@ -80,7 +82,9 @@ for team, paths in EXPECT.items():
 
     if team != "integration":
         try:
-            tracked = subprocess.check_output(["git", "-C", str(directory), "ls-files"], text=True, stderr=subprocess.PIPE).splitlines()
+            tracked = subprocess.check_output([
+                "git", "-C", str(directory), "ls-files"
+            ], text=True, stderr=subprocess.PIPE).splitlines()
         except subprocess.CalledProcessError as e:
             failures.append(f"{team}: git ls-files failed: {e}")
             tracked = []
