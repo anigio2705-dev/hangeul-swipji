@@ -37,11 +37,8 @@ def request_refund(server_db, store, booking_id, request_id, actor_id, amount_kr
                 raise SimError('CONFLICT', 'refund request reused')
             return dict(previous)
         store.db.execute(
-            "INSERT INTO refund_requests(request_id,booking_id,actor_id,amount_krw,state,reason) VALUES(?,?,?,?,?,'')",
-            (request_id, booking_id, actor_id, amount_krw, 'requested'))
-        # Update reason separately if provided and non-empty
-        if reason:
-            store.db.execute('UPDATE refund_requests SET reason=? WHERE request_id=?', (reason, request_id))
+            "INSERT INTO refund_requests(request_id,booking_id,actor_id,amount_krw,state,reason) VALUES(?,?,?,?,?,?)",
+            (request_id, booking_id, actor_id, amount_krw, 'requested', '' if reason == '' else reason))
     return dict(store.db.execute('SELECT * FROM refund_requests WHERE request_id=?', (request_id,)).fetchone())
 
 
@@ -70,6 +67,10 @@ def decide_refund(store, request_id, decision, reviewer):
             # Verify 'reason' is a non-empty string (business rule enhancement)
             if not isinstance(row['reason'], str) or not row['reason'].strip():
                 raise SimError('VALIDATION_ERROR', 'refund reason required')
+            # Also ensure reason field stored in DB is stripped of extra whitespace
+            reason_clean = row['reason'].strip()
+            if reason_clean != row['reason']:
+                store.db.execute('UPDATE refund_requests SET reason=? WHERE request_id=?', (reason_clean, request_id))
 
         store.db.execute('UPDATE refund_requests SET state=?, updated_at=CURRENT_TIMESTAMP WHERE request_id=?',
                          (decision, request_id))
