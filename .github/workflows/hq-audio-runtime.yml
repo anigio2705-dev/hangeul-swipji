@@ -4,6 +4,9 @@ on:
     branches: [automation/hq-pilot-13-14-15-20261029]
     paths:
       - 'hangul-core.js'
+      - 'hangul-audio-review.js'
+      - 'hangul-audio-audit.json'
+      - 'scripts/check-audio-review.cjs'
       - 'hangul-audio-manifest.json'
       - 'hangul-audio-human-only.json'
       - 'hangul-week-data.js'
@@ -33,6 +36,7 @@ jobs:
       - name: Test human-only audio playback, failures and manifest refresh
         run: |
           node scripts/check-audio-runtime.cjs
+          node scripts/check-audio-review.cjs
           node scripts/check-human-audio.cjs
           node scripts/check-week-human-audio.cjs
       - name: Test 350 lessons and seven-day curriculum regression
