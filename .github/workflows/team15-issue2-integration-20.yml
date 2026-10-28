@@ -1,0 +1,52 @@
+name: Team15 twentieth-pass nonproduction real HTTP and DB checks
+on:
+  push:
+    branches:
+      - integration/team15-issue2-20th-20261028
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  nonproduction-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: qa
+      - uses: actions/checkout@v4
+        with:
+          ref: ae8071f1381745fdc4f4f4b270fa1b5c619f4265
+          path: team11
+      - uses: actions/checkout@v4
+        with:
+          ref: aea81457dd56960d8aa83b583b99bc8cfe88c7fd
+          path: team12
+      - uses: actions/checkout@v4
+        with:
+          ref: 65e237bac3ba0ff7a68f8ad641e1f0c1f7418d90
+          path: team13
+      - uses: actions/checkout@v4
+        with:
+          ref: b016fdaa4d9751718f2671acd9a5506e53b353d2
+          path: team14
+      - name: Confirm latest pinned source revisions
+        run: for d in team11 team12 team13 team14; do git -C "$d" rev-parse HEAD; done
+      - name: Verify Team11 actual HTTP session and booking API
+        run: |
+          cd team11/phase3
+          python3 -m unittest -v test_common_http_booking_integration
+      - name: Verify Team11 progress API integration regressions
+        run: |
+          cd team11/phase3
+          python3 -m unittest discover -p '*progress*.py' -v
+      - name: Verify Team12 JavaScript syntax
+        run: |
+          find team12 -name '*.js' -not -path '*/node_modules/*' -print0 | xargs -0 -r -n1 node --check
+      - name: Execute Team11-Team14 verified mock ledger bridge with persistent SQLite
+        run: python3 qa/scripts/test_team15_real_bridge.py
+      - name: Execute Team11 complete common regression
+        run: python3 -m unittest discover -s team11/phase3 -p 'test_common_*.py' -v
+      - name: Execute Team14 settlement regression
+        run: |
+          cd team14/phase3
+          python3 -m unittest discover -p 'test_team14*.py' -v
