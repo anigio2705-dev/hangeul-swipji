@@ -9,8 +9,8 @@ ROOT = Path(__file__).resolve().parents[1]
 class Team12Regression(unittest.TestCase):
     def test_seven_course_resume_deep_links(self):
         dashboard = (ROOT / "dashboard.html").read_text(encoding="utf-8")
-        self.assertIn("const nextUnit=Array.from({length:50}", dashboard)
-        self.assertIn('"?unit="+(nextUnit===undefined?50:nextUnit+1)', dashboard)
+        self.assertIn("window.HSTeam12Resume.nextLesson(state)", dashboard)
+        self.assertIn('"?unit="+nextUnit', dashboard)
         for name in ("intro", "beginner1", "beginner2", "intermediate1",
                      "intermediate2", "advanced1", "advanced2"):
             page = (ROOT / (name + ".html")).read_text(encoding="utf-8")
