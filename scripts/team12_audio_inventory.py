@@ -58,14 +58,17 @@ def inspect(root):
             cleaned_src = src[2:]
 
             # Prevent suspicious path components like .. or //
-            if ".." in cleaned_src.split('/') or "" in cleaned_src.split('/'):
+            parts = cleaned_src.split('/')
+            if any(p == '..' for p in parts) or any(p == '' for p in parts):
                 problems.append({"word": word, "issue": "path_contains_invalid_components", "path": src})
                 continue
 
             src_path = (root / cleaned_src).resolve()
 
             # Ensure src_path is inside root directory
-            if root_resolved not in src_path.parents and src_path != root_resolved:
+            try:
+                src_path.relative_to(root_resolved)
+            except ValueError:
                 problems.append({"word": word, "issue": "invalid_path_outside_root", "path": src})
                 continue
 
@@ -98,6 +101,7 @@ def inspect(root):
                 problems.append({"word": word, "issue": "file_too_large", "path": src, "size": filesize})
                 continue
 
+            # Limit read size to filesize (already known and safe)
             data_bytes = path.read_bytes()
         except Exception as e:
             problems.append({"word": word, "issue": "file_read_error", "path": src, "detail": str(e)})
