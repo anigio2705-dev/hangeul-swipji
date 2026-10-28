@@ -57,13 +57,15 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
  
  def award(self, event_id, student_id, lesson_id, gross_krw, depth_rates_bps=(300,), commission_bps=2000):
   import json
-  ident(event_id); ident(student_id); ident(lesson_id); amount(gross_krw, True)
 
-  # Input validation for referral identifiers
-  # Reject empty or whitespace-only strings
+  # Validate input types and basic format for all string IDs
   for val, name in [(student_id, 'student_id'), (event_id, 'event_id'), (lesson_id, 'lesson_id')]:
    if not isinstance(val, str) or not val.strip():
     raise SimError('INVALID_INPUT', f'{name} must be a non-empty string')
+
+  # Use external validators for further checks
+  ident(event_id); ident(student_id); ident(lesson_id)
+  amount(gross_krw, True)
 
   signature = json.dumps([student_id, lesson_id, gross_krw, list(depth_rates_bps), commission_bps], separators=(',', ':'))
   self.db.execute('BEGIN IMMEDIATE')
