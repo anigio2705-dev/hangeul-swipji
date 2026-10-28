@@ -1,0 +1,29 @@
+# Issue #4: NEW nonproduction service proposal, NOT existing public homepage.
+# Deploy only after explicit approval and Render connection. Never on main.
+# Render Free filesystem is ephemeral; data may be lost after spin-down/redeploy.
+services:
+  - type: web
+    name: hangeul-swipji-issue4-preview
+    runtime: python
+    repo: https://github.com/anigio2705-dev/hangeul-swipji
+    branch: integration/issue4-staging-preview-20261028
+    region: singapore
+    plan: free
+    autoDeployTrigger: 'off'
+    buildCommand: python3 -m compileall -q phase3 scripts
+    startCommand: python3 -B phase3/staging_server.py
+    healthCheckPath: /healthz
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.14
+      - key: HS_STAGING_USER
+        value: review
+      - key: HS_STAGING_PASSWORD
+        generateValue: true
+      - key: HS_STAGING_ADMIN_PASSWORD
+        generateValue: true
+      - key: HS_STAGING_DB
+        value: /tmp/hangeul-swipji-staging/platform.sqlite3
+# RENDER_EXTERNAL_URL is supplied by the hosting environment and used as the
+# allowed HTTPS origin. Do NOT set a guessed domain, live credentials, or real DB.
+# Persistent multi-day learner testing requires approved persistent storage.
