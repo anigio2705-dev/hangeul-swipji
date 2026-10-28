@@ -3,7 +3,7 @@
   "branch": "team12/education-audit-20261028",
   "source": "docs/platform-execution-backlog-20261027:docs/PLATFORM_EXECUTION_BACKLOG.md",
   "progressType": "estimated evidence-constrained development, NOT completion",
-  "meanPercent": 36.33,
+  "meanPercent": 36.67,
   "items": [
     {
       "number": 41,
@@ -80,12 +80,12 @@
     {
       "number": 47,
       "feature": "진도·오답·즐겨찾기·이어 배우기의 저장과 재접속 동작을 검사한다.",
-      "implemented": "dashboard.html 존재; 재접속·영구 저장 미검증",
-      "missing": "자동·실제 환경 검증 및 원본 완료 조건 중 미충족 사항은 증거란에 기재",
-      "evidence": "dashboard.html 존재; 재접속·영구 저장 미검증",
-      "progress": 30,
-      "reason": "코드·데이터 존재와 미검증 범위를 반영한 보수적 추정; CI 성공·실사용 성공을 가정하지 않음",
-      "next": "관련 기능 E2E 및 실제 데이터 전수 검증",
+      "implemented": "7개 과정의 로컬 완료 기록을 dashboard.html에서 확인하고 미완료 첫 단원으로 직접 이동하는 ?unit= 딥링크 구현. 기존 백업/복원 유지",
+      "missing": "서버 계정별 DB 저장 및 기기간 동기화 미구현; 실제 브라우저 재접속 E2E 미검증",
+      "evidence": "dashboard.html; intro.html; beginner1.html; beginner2.html; intermediate1.html; intermediate2.html; advanced1.html; advanced2.html; scripts/team12_content_regression.py",
+      "progress": 40,
+      "reason": "로컬 완료 기록 기반 이어 배우기 실제 코드 구현으로 30→40; 서버 저장과 실제 E2E 미완료",
+      "next": "11번 학습 진도 API 계약 확인 후 서버 동기화 및 가상 계정 재접속 테스트",
       "integration": "타 브랜치 통합 미검증",
       "status": "미착수"
     },
@@ -366,5 +366,5 @@
       "status": "외부 확인 대기"
     }
   ],
-  "version": "13차 갱신"
+  "version": "14차 갱신"
 }
