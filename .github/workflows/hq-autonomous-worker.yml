@@ -1,15 +1,47 @@
 name: HQ autonomous isolated worker
 on:
   workflow_dispatch:
+    inputs:
+      repair_fixture:
+        description: 'Inject a sandbox-only failing fixture to verify AI repair'
+        type: boolean
+        required: false
+        default: false
+concurrency:
+  group: hq-autonomous-isolated
+  cancel-in-progress: false
 permissions:
-  contents: read
+  contents: write
 jobs:
-  diagnose:
+  sandbox-repair:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
+    environment: hq-ai-pilot
     steps:
       - uses: actions/checkout@v4
-      - name: Check HQ baseline
-        run: python -m unittest discover -s automation -p 'test_*.py' -v
-      - name: Run integration workflow via existing pilot
-        run: echo 'HQ autonomous expansion requires guarded write runner and default-branch scheduling.'
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Configure bot identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Optional test failure injection (sandbox only)
+        if: inputs.repair_fixture == true
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('automation/worker_sandbox/task.py')
+          p.write_text('def calculate_total(a, b):\n    return a - b\n')
+          PY
+      - name: Run bounded AI repair
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: |
+          python automation/hq_sandbox_worker.py
+      - name: Final sandbox verification
+        run: python -m unittest discover -s automation/worker_sandbox -p 'test_*.py' -v
