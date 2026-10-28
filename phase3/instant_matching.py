@@ -397,6 +397,7 @@ def route(handler, db, path, data):
         db.execute("UPDATE bookings SET status='completed' WHERE id=? AND status='in_class'",(b['id'],))
         event_id='instant-complete-'+m['id']
         event=record_lesson_event(db,u,b['id'],event_id,'lesson.completed')
+        end(db,m)
         return {'event':event,'bookingId':b['id'],'verification':'both-participants-observed-test-only'},None
     if action=='join':
         if not eligible(db,u,now):
