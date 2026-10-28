@@ -39,5 +39,25 @@ class LegacyDatabaseContractTests(unittest.TestCase):
             legacy_role_for(("learner", "partner"))
 
 
+    def test_unapproved_partner_is_not_eligible_to_teach(self):
+        self.assertFalse(can_teach(roles_from_legacy("partner"),
+                                   "conversation_partner", "requested"))
+        self.assertFalse(can_teach(roles_from_legacy("partner"),
+                                   "conversation_partner", "rejected"))
+        self.assertFalse(can_teach(roles_from_legacy("partner"),
+                                   "conversation_partner", "suspended"))
+        self.assertTrue(can_teach(roles_from_legacy("partner"),
+                                  "conversation_partner", "approved"))
+
+    def test_legacy_schema_rejects_multirole_and_unknown_role(self):
+        for role in ("learner,teacher", "owner"):
+            with self.subTest(role=role), self.assertRaises(sqlite3.IntegrityError):
+                self.db.execute(
+                    "INSERT INTO users(id,email,password,nickname,role,referral_code,created_at)"
+                    " VALUES(?,?,?,?,?,?,?)",
+                    ("u-" + role, role + "@example.test", "test-only", "test",
+                     role, "ref-" + role, 0.0))
+
+
 if __name__ == "__main__":
     unittest.main()
