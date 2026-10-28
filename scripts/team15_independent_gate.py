@@ -132,13 +132,22 @@ for team, paths in EXPECT.items():
             team_file = directory / p_path
             try:
                 resolved_team_file = team_file.resolve(strict=True)
-                resolved_integration_file = integration_file.resolve(strict=True)
             except FileNotFoundError:
-                # If file missing in either tree, mark as changed
+                # Missing in team tree marks as changed
                 changed_files.add(p)
                 continue
             except Exception as e:
-                failures.append(f"{team}: path resolution error for tracked files {team_file} or {integration_file}: {e}")
+                failures.append(f"{team}: path resolution error for team file {team_file}: {e}")
+                changed_files.add(p)
+                continue
+            try:
+                resolved_integration_file = integration_file.resolve(strict=True)
+            except FileNotFoundError:
+                # Missing in integration tree marks as changed
+                changed_files.add(p)
+                continue
+            except Exception as e:
+                failures.append(f"{team}: path resolution error for integration file {integration_file}: {e}")
                 changed_files.add(p)
                 continue
 
