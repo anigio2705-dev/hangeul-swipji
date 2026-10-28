@@ -92,6 +92,11 @@ def inspect(root):
                 problems.append({"word": word, "issue": "null_byte_in_path_component", "path": src})
                 continue
 
+            # Reject path components with non-ASCII or suspicious characters
+            if any(not re.fullmatch(r'[\w\-]+', p) for p in parts):
+                problems.append({"word": word, "issue": "path_component_invalid_characters", "path": src})
+                continue
+
             # Resolve final absolute path
             src_path = (root / cleaned_src).resolve(strict=False)
 
@@ -140,6 +145,7 @@ def inspect(root):
             # Validate the filename component strictly
             if src_path.is_file():
                 filename = src_path.name
+                # Reject filename with uppercase extensions or hidden files
                 if not re.fullmatch(r"[a-zA-Z0-9\-_]+\.mp3", filename):
                     problems.append({"word": word, "issue": "invalid_filename", "filename": filename})
                     continue
