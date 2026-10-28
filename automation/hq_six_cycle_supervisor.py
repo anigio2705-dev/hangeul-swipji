@@ -3,6 +3,7 @@
 Never counts controller WAIT cycles as development, and never marks a final
 backlog item complete. Only the approved HQ isolation ref may dispatch.
 """
+import base64
 import io
 import json
 import os
@@ -154,21 +155,62 @@ def four_role_evidence(token):
     return {"status": "read_four_independent_artifacts", "roles_read": list(roles),
             "opinions": roles, "provisional_choice": "hybrid_nonoverlap_plus_independent_gate"}
 
+def load_ledger(token):
+    data = api("/contents/automation/task-evidence.json?ref=" + HQ_REF.replace("/", "%2F"), token)
+    raw = base64.b64decode(data["content"])
+    return json.loads(raw), data["sha"]
+
+def save_ledger(token, ledger, blob_sha, changed):
+    if not changed:
+        return None
+    result = api("/contents/automation/task-evidence.json", token, method="PUT",
+                 payload={"branch": HQ_REF, "sha": blob_sha,
+                          "message": "chore(hq): preserve independent numbered code verification evidence",
+                          "content": base64.b64encode(
+                              (json.dumps(ledger, ensure_ascii=False, indent=2) + "\\n").encode()).decode()})
+    return result.get("commit", {}).get("sha")
+
+def promote_prior(ledger, token):
+    promoted = []
+    for number, record in ledger.items():
+        if record.get("status") != "in_progress" or record.get("independent_review") != "pass":
+            continue
+        match = re.fullmatch(
+            r"https://github\\.com/anigio2705-dev/hangeul-swipji/actions/runs/([0-9]+)",
+            record.get("ci_url", ""))
+        if not match:
+            continue
+        run = api("/actions/runs/" + match.group(1), token)
+        if run.get("status") != "completed":
+            continue
+        if run.get("conclusion") == "success":
+            record["status"] = "code_verified"
+            record["ci_result"] = "success"
+            promoted.append(int(number))
+        elif run.get("conclusion") in ("failure", "cancelled", "timed_out"):
+            record["status"] = "unverified"
+            record["ci_result"] = run["conclusion"]
+            record["independent_review"] = "CI_failed_after_local_test"
+    return promoted
+
 def supervise(root, token, depth, repairs, output):
     if os.environ.get("GITHUB_REF_NAME") != HQ_REF:
         raise RuntimeError("Supervisor restricted to approved isolated branch")
     if not (0 <= depth <= 2) or not isinstance(repairs, dict):
         raise ValueError("Unsafe dispatch budget")
     catalog = load_catalog("automation/hq_backlog_160.md")
+    ledger, ledger_sha = load_ledger(token)
+    original_ledger = json.dumps(ledger, sort_keys=True)
+    promoted = promote_prior(ledger, token)
     teams = load_team_results(root)
     verdicts, next_repairs = {}, json.loads(json.dumps(repairs))
-    passed, repairable = 0, 0
+    passed, repairable, staged = 0, 0, []
     for team, result in teams.items():
         verdicts[team] = []
         for task in result["tasks"]:
             number = task.get("task_number")
             status = task.get("status")
-            if status == "committed":
+            if status in ("committed", "verification_requested"):
                 try:
                     verdict, reason, evidence = independent_check(team, task, token, catalog)
                 except Exception as exc:
@@ -176,7 +218,16 @@ def supervise(root, token, depth, repairs, output):
                 verdicts[team].append({"task_number": number, "verdict": verdict,
                                        "reason": reason, "evidence": evidence})
                 if verdict == "TEST_PASS_PENDING_CI":
-                    passed += 1
+                    if ledger.get(str(number), {}).get("status") not in ("complete", "code_verified"):
+                        ledger[str(number)] = {
+                            "status": "in_progress", "commit": evidence["commit"],
+                            "ci_url": "https://github.com/" + REPO + "/actions/runs/" + os.environ["GITHUB_RUN_ID"],
+                            "ci_result": "pending", "independent_review": "pass",
+                            "scope": "Independent source diff and functional regression passed; final CI run and public site still pending",
+                            "owner": team, "path": task["path"]}
+                        staged.append(number)
+                    if status == "committed":
+                        passed += 1
                 elif verdict == "RETRY" and isinstance(number, int):
                     prev = next_repairs.setdefault(team, {}).get(str(number), {})
                     attempts = prev.get("attempts", 0) + 1
@@ -190,21 +241,25 @@ def supervise(root, token, depth, repairs, output):
             elif status in ("already_verified_or_blocked", "dependency_blocked", "awaiting_independent_verification"):
                 verdicts[team].append({"task_number": number, "verdict": "WAIT",
                                        "reason": status})
+    ledger_commit = save_ledger(token, ledger, ledger_sha,
+                                json.dumps(ledger, sort_keys=True) != original_ledger)
     review = four_role_evidence(token)
     report = {"schema": 1, "depth": depth, "team_verdicts": verdicts,
               "verified_new_functional_code": passed, "repairable": repairable,
+              "staged_pending_CI": staged, "promoted_code_verified": promoted,
+              "evidence_commit": ledger_commit,
               "independent_review": review,
               "completed_160": "not established; never inferred from CI",
               "test_site_verified": False, "dispatched_next": False}
     # No progress and no precise fix -> do not repeat identical six-team calls.
-    if depth < 2 and (passed > 0 or repairable > 0):
+    if depth < 2 and (passed > 0 or repairable > 0 or promoted or staged):
         try:
             api("/actions/workflows/" + WORKFLOW + "/dispatches", token, method="POST",
                 payload={"ref": HQ_REF, "inputs": {
                     "chain_depth": str(depth + 1),
                     "repair_instructions_json": json.dumps(next_repairs, ensure_ascii=False)}})
             report["dispatched_next"] = True
-            report["next_reason"] = "new independently tested code" if passed else "specific bounded repair"
+            report["next_reason"] = ("independently tested code or prior CI promotion" if (passed or promoted or staged) else "specific bounded repair")
         except Exception as exc:
             report["next_reason"] = "DISPATCH_FAILED: " + type(exc).__name__
             report["dispatch_error"] = str(exc)[:240]
