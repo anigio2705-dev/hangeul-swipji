@@ -8,8 +8,8 @@ import time
 
 BRANCH = "automation/hq-pilot-13-14-15-20261029"
 TASKS = [
-    ("queue", ["python", "-m", "unittest", "automation.test_backlog_queue", "-v"]),
-    ("hq", ["python", "-m", "unittest", "automation.test_hq_pilot", "-v"]),
+    ("queue", ["python", "-m", "unittest", "discover", "-s", "automation", "-p", "test_backlog_queue.py", "-v"]),
+    ("hq", ["python", "-m", "unittest", "discover", "-s", "automation", "-p", "test_hq_pilot.py", "-v"]),
     ("sandbox", ["python", "-m", "unittest", "discover", "-s", "automation/worker_sandbox", "-p", "test_*.py", "-v"]),
 ]
 def run_cycle(tasks=TASKS, runner=subprocess.run):
