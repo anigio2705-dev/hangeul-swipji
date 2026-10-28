@@ -315,6 +315,10 @@ class InstantMatchingTests(unittest.TestCase):
             events=list(db.execute('SELECT * FROM instant_lesson_events'))
             self.assertEqual(1,len(events))
             self.assertEqual(first,json.loads(events[0]['payload']))
+            self.assertEqual([first],matching.pending_settlement_events(db))
+            self.assertEqual([first],matching.pending_settlement_events(db,1))
+            with self.assertRaises(server.Error):
+                matching.pending_settlement_events(db,0)
             self.assertEqual(0,db.execute('SELECT count(*) FROM ledger').fetchone()[0])
         self.assertEqual(first,self.call(teacher,'lesson-event',req)['event'])
 
