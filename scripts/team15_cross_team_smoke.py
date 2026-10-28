@@ -20,7 +20,7 @@ for label, (team, candidates, tokens) in checks.items():
     for name in candidates:
         # input validation: name must be a relative path, no absolute or upwards traversal
         path_obj = Path(name)
-        if path_obj.is_absolute() or '..' in path_obj.parts or name.strip() == '':
+        if (not isinstance(name, str) or name.strip() == '' or path_obj.is_absolute() or '..' in path_obj.parts):
             issues.append(f"{label}: invalid candidate filename (absolute, parent traversal, or empty): {repr(name)}")
             continue
         # Compose full path and ensure it is normalized and within root
