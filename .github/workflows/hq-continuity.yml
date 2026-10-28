@@ -1,0 +1,38 @@
+name: HQ bounded continuation (isolated)
+on:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - 'automation/hq_continuity.py'
+      - 'automation/test_hq_continuity.py'
+      - '.github/workflows/hq-continuity.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: hq-continuity-isolated
+  cancel-in-progress: false
+jobs:
+  validate:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test continuation safety
+        run: python -m unittest automation.test_hq_continuity -v
+      - name: Execute bounded verification queue
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: python automation/hq_continuity.py --max-seconds 3000 --cycles 1
+      - name: Upload evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hq-continuity-evidence
+          path: automation/continuity-result.json
+          if-no-files-found: ignore
+          retention-days: 7
