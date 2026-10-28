@@ -1,0 +1,15 @@
+name: Team14 isolated monthly tests
+on:
+  push:
+    branches:
+      - team14/business-systems-audit-20261028
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Execute exact checked-out Team14 tests
+        run: |
+          git rev-parse HEAD
+          python -m unittest discover -s phase3 -p 'test_team14_monthly*.py' -v
