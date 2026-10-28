@@ -72,6 +72,22 @@ def cleanup(db, now):
 
 
 def end(db, m):
+    """Close a match without leaving an abandoned simulated booking in_class.
+
+    A completed booking is never cancelled; only an unfinished instant booking
+    is transitioned to cancelled.  The deterministic cancellation event is
+    stored in the same SQLite transaction as the status change and can be
+    replayed safely to Team14 via the existing outbox.
+    """
+    booking = linked_booking(db, m['id'])
+    if booking and booking['status'] == 'in_class':
+        db.execute("UPDATE bookings SET status='cancelled' WHERE id=? AND status='in_class'",
+                   (booking['id'],))
+        learner = db.execute('SELECT * FROM users WHERE id=?',
+                             (m['learner_id'],)).fetchone()
+        if learner:
+            record_lesson_event(db, learner, booking['id'],
+                                'instant-cancel-'+m['id'], 'booking.cancelled')
     db.execute("UPDATE instant_matches SET state='ended' WHERE id=?", (m['id'],))
     db.execute('DELETE FROM instant_queue WHERE user_id IN (?,?)', (m['learner_id'], m['partner_id']))
 
