@@ -144,7 +144,7 @@ def main():
             raise ValueError("Unsafe repair instruction")
         goal = contract["criterion"]
         last = shell("git", "log", "-1", "--format=%s", "--", path)
-        if last.returncode == 0 and ("task #" + str(number)) in last.stdout:
+        if last.returncode == 0 and ("task #" + str(number)) in last.stdout and not instruction:
             report.append({"task_number": number, "path": path, "status": "awaiting_independent_verification"})
             continue
         file = Path(path)
