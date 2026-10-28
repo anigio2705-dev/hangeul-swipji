@@ -19,7 +19,7 @@
     if(a<0||b<0)throw new Error('Invalid Hangul letters');
     return String.fromCharCode(0xac00+(a*21+b)*28);
   }
-  const records={},holds={};let current=null,run=0,release=null,manifestError=false;
+  const records=Object.create(null),holds=Object.create(null);let current=null,run=0,release=null,manifestError=false;
   const schedule=typeof setTimeout==='function'?setTimeout:null,cancelTimer=typeof clearTimeout==='function'?clearTimeout:()=>{};
   let loading=null;
   function loadManifest(){
@@ -28,14 +28,16 @@
     const request=fetch('./hangul-audio-manifest.json?v=20261027-audio-retry', {cache:'no-store'})
       .then(r=>{if(!r.ok)throw Error('audio manifest');return r.json()});
     loading=(schedule?Promise.race([request,new Promise((_,reject)=>{timer=schedule(()=>reject(Error('audio manifest timeout')),15000)})]):request)
-      .then(m=>{if(!m.recordings||typeof m.recordings!=='object'||Array.isArray(m.recordings))throw Error('invalid audio manifest');const seenSources=new Set();
-        const human=Object.entries(m.recordings).filter(([,a])=>{
+      .then(m=>{if(!m.recordings||typeof m.recordings!=='object'||Array.isArray(m.recordings))throw Error('invalid audio manifest');const seenSources=new Set(),seenDigests=new Set();
+        const human=Object.entries(m.recordings).filter(([word,a])=>{
+          // Reject reserved object property names and blank keys from untrusted manifests.
+          if(!word.trim()||['__proto__','constructor','prototype'].includes(word))return false;
           if(!a||a.kind!=='human'||typeof a.src!=='string'||!/^\.\/assets\/hangul-audio\/[\w-]+\.mp3$/.test(a.src)||
              !/^[a-f0-9]{64}$/i.test(a.sha256||'')||typeof a.sourceUrl!=='string'||!/^https:\/\/[^\s]+$/.test(a.sourceUrl)||
              typeof a.author!=='string'||!a.author.trim()||typeof a.license!=='string'||!a.license.trim())return false;
           // Never allow one recording file to impersonate multiple distinct letters.
-          if(seenSources.has(a.src))return false;
-          seenSources.add(a.src);return true;
+          if(seenSources.has(a.src)||seenDigests.has(a.sha256.toLowerCase()))return false;
+          seenSources.add(a.src);seenDigests.add(a.sha256.toLowerCase());return true;
         });
         // Replace stale inventory on refresh; removed/held files must not remain playable.
         for(const key of Object.keys(records))delete records[key];
