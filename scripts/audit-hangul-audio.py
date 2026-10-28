@@ -212,13 +212,27 @@ for word, meta in manifest.get('recordings', {}).items():
     if not (isinstance(author, str) and isinstance(licenseUrl, str) and isinstance(sourceUrl, str)):
         raise ValueError(f"Missing or invalid required metadata (author/licenseUrl/sourceUrl) for {word}")
 
+    # Defensive sanitation of warnings list elements and types
+    clean_warnings = []
+    for w in warnings:
+        if isinstance(w, str):
+            clean_warnings.append(w)
+
     recordings.append({'text': word, 'src': src, 'duration': round(duration, 3),
         'peakDbfs': round(20 * math.log10(max(1, peak) / 32768), 2),
         'rmsDbfs': round(20 * math.log10(max(1, rms) / 32768), 2),
         'leadingSilence': round(lead, 3), 'trailingSilence': round(tail, 3),
-        'signalWarnings': warnings, 'alignmentObserved': meta.get('segment',{}).get('observedText',''), 'kind': kind, 'labelStatus': meta.get('labelStatus', label_status), 'stage1Candidate': bool(meta.get('stage1Candidate')), 'stage2Candidate': bool(meta.get('stage2Candidate')), 'holdReason': meta.get('holdReason', ''),
+        'signalWarnings': clean_warnings, 'alignmentObserved': mixinGetSegmentObservedText(meta), 'kind': kind, 'labelStatus': meta.get('labelStatus', label_status), 'stage1Candidate': bool(meta.get('stage1Candidate')), 'stage2Candidate': bool(meta.get('stage2Candidate')), 'holdReason': meta.get('holdReason', ''),
         'sourceUrl': sourceUrl, 'license': meta.get('license', ''),
         'held': bool(meta.get('disabled')), 'technicalStatus': 'decoded-and-hash-checked', 'listeningStatus': 'pending'})
+
+def mixinGetSegmentObservedText(meta_dict):
+    seg = meta_dict.get('segment')
+    if isinstance(seg, dict):
+        obs = seg.get('observedText')
+        if isinstance(obs, str):
+            return obs
+    return ''
 
 for word, item in targets.items():
     recs = manifest.get('recordings', {})
@@ -243,7 +257,7 @@ report = {
         'excludedSynthetic': len(manifest.get('retiredSynthetic',{})),
         'held': sum(bool(x.get('disabled')) for x in manifest.get('recordings', {}).values()),
         'listeningApproved': 0,
-        'signalWarnings': sum(bool(x['signalWarnings']) for x in recordings),
+        'signalWarnings': sum(bool(x.get('signalWarnings')) for x in recordings),
     },
     'week': {
         'targets': sum('7\uc77c \uacfc\uc815' in x['groups'] for x in targets.values()),
@@ -260,5 +274,7 @@ output_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', 
 
 print(json.dumps(report['counts'], ensure_ascii=False))
 for x in recordings:
-    if x['signalWarnings']:
-        print(x['text'], ', '.join(x['signalWarnings']))
+    if x.get('signalWarnings'):
+        warnings_list = [w for w in x['signalWarnings'] if isinstance(w, str)]
+        if warnings_list:
+            print(x['text'], ', '.join(warnings_list))
