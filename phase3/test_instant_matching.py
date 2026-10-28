@@ -559,6 +559,38 @@ class InstantMatchingTests(unittest.TestCase):
                 matching.verified_outbox_envelope(db,'tamper-event')
             self.assertEqual(403,revoked.exception.status)
 
+    def test_active_leave_cancels_booking_once_and_preserves_outbox_after_reconnect(self):
+        learner, learner_id = self.account('cancel-learner@example.test')
+        partner, _ = self.account('cancel-partner@example.test', 'partner', True)
+        self.call(learner, 'join')
+        offered = self.call(partner, 'join')
+        match_id = offered['matchId']
+        self.call(learner, 'ready', {'matchId': match_id})
+        self.call(partner, 'ready', {'matchId': match_id})
+        with server.connect() as db:
+            booking = matching.linked_booking(db, match_id)
+            self.assertEqual('in_class', booking['status'])
+            booking_id = booking['id']
+        self.assertEqual('idle', self.call(partner, 'leave')['state'])
+        self.assertEqual('idle', self.call(learner, 'leave')['state'])
+        with server.connect() as db:
+            self.assertEqual('cancelled', db.execute(
+                'SELECT status FROM bookings WHERE id=?', (booking_id,)
+            ).fetchone()['status'])
+            event_id = 'instant-cancel-' + match_id
+            rows = db.execute(
+                'SELECT event_id, actor_id, event_type FROM instant_lesson_events WHERE booking_id=?',
+                (booking_id,)
+            ).fetchall()
+            self.assertEqual(1, len(rows))
+            self.assertEqual(event_id, rows[0]['event_id'])
+            self.assertEqual(learner_id, rows[0]['actor_id'])
+            self.assertEqual('booking.cancelled', rows[0]['event_type'])
+            self.assertTrue(any(e['eventId'] == event_id for e in
+                                matching.pending_settlement_events(db)))
+            self.assertEqual('pending',
+                matching.verified_outbox_envelope(db, event_id)['deliveryStatus'])
+
 del Harness
 
 if __name__=='__main__': unittest.main()
