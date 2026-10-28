@@ -188,7 +188,15 @@ class StagingHandler(server.Handler):
         # Provider probes disclose no users/content and do not require the outer gate.
         if self.path == '/healthz':
             try:
-                with server.connect() as db: db.execute('SELECT 1 FROM users LIMIT 1')
+                with server.connect() as db:
+                    if db.execute('PRAGMA quick_check').fetchone()[0] != 'ok':
+                        raise RuntimeError('SQLite quick_check failed')
+                    required = {'users', 'sessions', 'free_lesson_progress',
+                                'free_quiz_results', 'free_resume_positions'}
+                    existing = {row[0] for row in db.execute(
+                        "SELECT name FROM sqlite_master WHERE type='table'")}
+                    if not required.issubset(existing):
+                        raise RuntimeError('Required authentication/progress tables missing')
                 return self.send(200, {'ok': True, 'scope': 'isolated-staging',
                     'requestGuardVersion': 'document-navigation-v2',
                     'gateSessionVersion': 'signed-cookie-v1',
