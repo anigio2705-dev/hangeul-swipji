@@ -21,9 +21,9 @@ def is_within_directory(base: Path, target: Path) -> bool:
         base = base.resolve(strict=True)
         target = target.resolve(strict=True)
     except FileNotFoundError:
-        # If the file doesn't exist, resolve(strict=True) fails; fallback to strict=False
-        base = base.resolve(strict=False)
-        target = target.resolve(strict=False)
+        # If the file doesn't exist, no way to verify containment strictly
+        # Return False to err on side of caution
+        return False
     except Exception:
         return False
     try:
@@ -63,7 +63,10 @@ for team, paths in EXPECT.items():
 
         file_path = directory / normalized_path
         try:
-            resolved_file_path = file_path.resolve(strict=False)
+            resolved_file_path = file_path.resolve(strict=True)
+        except FileNotFoundError:
+            failures.append(f"{team}: missing file {path}")
+            continue
         except Exception as e:
             failures.append(f"{team}: path resolution error for {file_path}: {e}")
             continue
@@ -98,8 +101,12 @@ for team, paths in EXPECT.items():
             integration_file = ROOT / "integration" / p_path
             team_file = directory / p_path
             try:
-                resolved_team_file = team_file.resolve(strict=False)
-                resolved_integration_file = integration_file.resolve(strict=False)
+                resolved_team_file = team_file.resolve(strict=True)
+                resolved_integration_file = integration_file.resolve(strict=True)
+            except FileNotFoundError:
+                # If file missing in either tree, mark as changed
+                changed_files.add(p)
+                continue
             except Exception as e:
                 failures.append(f"{team}: path resolution error for tracked files {team_file} or {integration_file}: {e}")
                 changed_files.add(p)
