@@ -82,10 +82,19 @@ def build_report(backlog_text, evidence=None, branch_heads=None, timestamp=None,
             "status": status, "master_checked": checked,
             "external_gate": number in EXTERNAL_GATES,
         })
-    pending = {entry["number"]: entry for entry in entries if entry["status"] not in ("complete", "blocked")}
-    ordered = [pending[n] for n in PRIORITY if n in pending]
-    # Prefer tasks that can advance in an isolated branch without live-system changes.
-    queue = sorted(ordered, key=lambda e: (e["external_gate"], PRIORITY.index(e["number"])))[:limit]
+    # Code-verified work needs review/deployment evidence, NOT another coding pass.
+    # Re-queuing it as implementation work wastes time and risks regressions.
+    active = {entry["number"]: entry for entry in entries
+              if entry["status"] in ("unverified", "in_progress")}
+    ordered = [active[n] for n in PRIORITY if n in active]
+    # Continue already-started safe work first; avoid external/production gates.
+    queue = sorted(ordered, key=lambda e: (
+        e["external_gate"], e["status"] != "in_progress",
+        PRIORITY.index(e["number"])))[:limit]
+    review_queue = [entry for entry in entries
+                    if entry["status"] == "code_verified"]
+    review_queue.sort(key=lambda e: (
+        e["external_gate"], PRIORITY.index(e["number"])))
     counts = {s: sum(e["status"] == s for e in entries) for s in sorted(ALLOWED_STATUSES)}
     return {
         "schema_version": 1,
@@ -95,6 +104,7 @@ def build_report(backlog_text, evidence=None, branch_heads=None, timestamp=None,
         "counts": counts,
         "branch_heads": branch_heads or {},
         "next_queue": queue,
+        "review_queue": review_queue[:limit],
         "tasks": entries,
         "safety": {
             "write_scope": "isolated branches only",
@@ -117,8 +127,10 @@ def main():
     heads = json.loads(Path(args.branch_heads).read_text()) if args.branch_heads else {}
     report = build_report(Path(args.backlog).read_text(encoding="utf-8"), evidence, heads, limit=args.limit)
     Path(args.output).write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"Verified completion: {report['counts']['complete']}/160; queue: " +
-          ", ".join(str(t["number"]) for t in report["next_queue"]))
+    print(f"Verified completion: {report['counts']['complete']}/160; build queue: " +
+          ", ".join(str(t["number"]) for t in report["next_queue"]) +
+          "; review queue: " +
+          ", ".join(str(t["number"]) for t in report["review_queue"]))
 
 if __name__ == "__main__":
     main()

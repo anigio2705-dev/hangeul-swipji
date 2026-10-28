@@ -81,6 +81,32 @@ class BacklogQueueTests(unittest.TestCase):
         self.assertEqual(report["counts"]["code_verified"], 1)
         self.assertEqual(report["counts"]["complete"], 0)
         self.assertNotIn(11, [x["number"] for x in report["next_queue"]])
+        self.assertEqual([x["number"] for x in report["review_queue"]], [12])
+
+    def test_verified_work_moves_to_review_without_duplicate_development(self):
+        report = build_report(sample(), {
+            "11": verified("code_verified"),
+            "12": {"status": "in_progress"},
+            "13": {"status": "blocked"},
+            "14": verified("code_verified"),
+        }, limit=5)
+        build = [x["number"] for x in report["next_queue"]]
+        review = [x["number"] for x in report["review_queue"]]
+        self.assertNotIn(11, build)
+        self.assertNotIn(14, build)
+        self.assertNotIn(13, build)
+        self.assertIn(12, build)
+        self.assertEqual(review, [11, 14])
+        self.assertEqual(report["counts"]["complete"], 0)
+
+    def test_started_work_before_unverified_in_same_safety_tier(self):
+        report = build_report(sample(), {
+            "22": {"status": "in_progress"},
+            "24": {"status": "in_progress"},
+            "51": {"status": "in_progress"},
+        }, limit=4)
+        self.assertEqual([x["number"] for x in report["next_queue"]][:2], [22, 51])
+        self.assertNotIn(24, [x["number"] for x in report["next_queue"]])
 
 if __name__ == "__main__":
     unittest.main()
