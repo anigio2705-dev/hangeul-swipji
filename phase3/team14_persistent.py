@@ -7,6 +7,10 @@ class SimError(ValueError):
 def ident(v):
  if not isinstance(v,str) or not re.fullmatch(r'[A-Za-z0-9_-]{1,128}',v): raise SimError('VALIDATION_ERROR','invalid identifier')
  return v
+def _fault(point):
+ hook=FAULT_HOOK
+ if hook is not None: hook(point)
+FAULT_HOOK=None
 def amount(v,positive=False):
  if type(v)!=int or v<(1 if positive else 0) or v>MAX: raise SimError('VALIDATION_ERROR','invalid KRW amount')
  return v
@@ -39,6 +43,7 @@ CREATE TABLE IF NOT EXISTS ledger(id INTEGER PRIMARY KEY AUTOINCREMENT,transacti
     if prior['signature']!=sig: raise SimError('CONFLICT','idempotency conflict')
     return json.loads(prior['result'])
    result=apply()
+   _fault('before_operation_commit')
    self.db.execute('INSERT INTO operations VALUES(?,?,?)',(op,sig,json.dumps(result)))
    return result
  def create_month(self,month_id,lessons,currency='KRW',commission_bps=2000,referral_bps=300,operation_id=None):
@@ -100,7 +105,10 @@ CREATE TABLE IF NOT EXISTS ledger(id INTEGER PRIMARY KEY AUTOINCREMENT,transacti
    if self.db.execute('SELECT 1 FROM ledger WHERE transaction_id=? LIMIT 1',(transaction_id,)).fetchone():
     raise SimError('CONFLICT','transaction reused across operations')
    try:
-    self.db.executemany('INSERT INTO ledger(transaction_id,lesson_id,kind,amount) VALUES(?,?,?,?)',((transaction_id,lesson_id,k,v) for k,v in entries))
+    _fault('before_ledger')
+    for k,v in entries:
+     self.db.execute('INSERT INTO ledger(transaction_id,lesson_id,kind,amount) VALUES(?,?,?,?)',(transaction_id,lesson_id,k,v))
+     _fault('after_'+k)
    except sqlite3.IntegrityError as exc:
     raise SimError('CONFLICT','transaction reused') from exc
    self.db.execute('UPDATE lessons SET state=?,refunded=? WHERE id=?',(next_state,new_refunded,lesson_id))
