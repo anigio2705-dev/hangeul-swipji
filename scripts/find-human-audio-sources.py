@@ -58,12 +58,11 @@ for t in audio.get('targets', []):
         suspicious_labels = ['', '', ' ']
         korean_labels_decoded = ['\uc790\uc74c \uc774\ub984', '\ubaa8\uc74c', '\uae00\uc790\ud325 \uc74c\uc808']
         # Defensive: reject if group string contains suspicious labels or decoded Korean labels
-        labels_lower = [g.lower() for g in groups_str]
+        groups_lower = [g.lower() for g in groups_str]
+        # Defensive: match must be exact string in groups_str, not substring
         if any(lbl in groups_str for lbl in suspicious_labels):
             missing.append(text)
             continue
-        # Because the korean_labels_decoded are literal escape sequences, check with raw text
-        # Defensive: only add if any literal string exactly matches
         if any(lbl in groups_str for lbl in korean_labels_decoded):
             missing.append(text)
             continue
