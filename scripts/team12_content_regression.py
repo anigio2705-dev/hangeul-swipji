@@ -184,7 +184,10 @@ class Team12Regression(unittest.TestCase):
                     status = listening_review.get("status")
                     if status is not None:
                         self.assertEqual(status, "pending", word)
-        self.assertEqual(sum(counts.values()), 399)
+        # Defensive: ensure no unexpected statuses in manifest
+        allowed_states = {"ready_unapproved", "held", "missing"}
+        total_counted = sum(counts.values())
+        self.assertEqual(total_counted, 399)
         self.assertEqual(counts, {"ready_unapproved": 19, "held": 26, "missing": 354})
 
     def test_learner_to_provider_handoff_contract(self):
