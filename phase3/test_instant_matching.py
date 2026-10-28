@@ -482,6 +482,83 @@ class InstantMatchingTests(unittest.TestCase):
             self.assertEqual('in_class',db.execute('SELECT status FROM bookings JOIN instant_booking_links ON bookings.id=instant_booking_links.booking_id WHERE match_id=?',(offer['matchId'],)).fetchone()[0])
             self.assertEqual(0,db.execute('SELECT count(*) FROM instant_lesson_events').fetchone()[0])
 
+
+    def test_outbox_restarts_crash_boundaries_and_durable_ack(self):
+        learner, learner_id=self.account('recovery-learner@example.test')
+        teacher, teacher_id=self.account('recovery-teacher@example.test','teacher',True)
+        now=time.time()
+        with server.connect() as db:
+            db.execute('INSERT INTO slots VALUES(?,?,?,?)',('recovery-slot',teacher_id,now-100,now+3600))
+            db.execute("""INSERT INTO bookings
+              (id,learner_id,teacher_id,slot_id,unit_id,status,price,room,created_at)
+              VALUES(?,?,?,?,?,?,?,?,?)""",
+              ('recovery-booking',learner_id,teacher_id,'recovery-slot','unit','completed',20000,'recovery-room',now))
+            self.seed_verified_standard_completion(db,'recovery-booking',learner_id,teacher_id,now)
+        event=self.call(teacher,'lesson-event',{'bookingId':'recovery-booking','eventId':'recovery-once','type':'lesson.completed'})['event']
+        # Crash just after event commit: reopen SQLite without any acknowledgement.
+        with server.connect() as db:
+            envelope=matching.verified_outbox_envelope(db,'recovery-once')
+            self.assertEqual('pending',envelope['deliveryStatus'])
+            self.assertEqual('recovery-once',envelope['eventId'])
+            self.assertEqual(1,envelope['version'])
+            self.assertEqual(20000,envelope['amount'])
+            self.assertTrue(envelope['completedAt']>0)
+            self.assertEqual(1,len(matching.pending_settlement_events(db)))
+            with self.assertRaises(server.Error) as unconfirmed:
+                matching.confirm_settlement_receipt(db,'recovery-once','team14','durable-receipt')
+            self.assertEqual(409,unconfirmed.exception.status)
+        # Crash before delivery and lost response after downstream ledger commit:
+        # producer still sees pending; Team14 must dedupe the stable event ID.
+        downstream_receipts={}
+        def downstream(db,payload):
+            self.assertEqual('recovery-once',payload['eventId'])
+            downstream_receipts.setdefault(payload['eventId'],'durable-receipt')
+            return downstream_receipts[payload['eventId']]
+        with server.connect() as db:
+            pending=matching.pending_settlement_events(db)
+            self.assertEqual(1,len(pending))
+            self.assertEqual('durable-receipt',downstream(db,pending[0]))
+        with server.connect() as db:
+            self.assertEqual(1,len(matching.pending_settlement_events(db)))
+            receipt=downstream(db,matching.pending_settlement_events(db)[0])
+            matching.confirm_settlement_receipt(db,'recovery-once','team14',receipt,settlement_confirmed=True)
+        with server.connect() as db:
+            self.assertEqual([],matching.pending_settlement_events(db))
+            self.assertEqual('acknowledged',matching.verified_outbox_envelope(db,'recovery-once')['deliveryStatus'])
+            self.assertEqual(1,len(downstream_receipts))
+            self.assertEqual(1,db.execute('SELECT count(*) FROM instant_event_deliveries').fetchone()[0])
+            with self.assertRaises(server.Error):
+                matching.confirm_settlement_receipt(db,'recovery-once','team14','wrong-receipt',settlement_confirmed=True)
+        self.call(teacher,'lesson-event',{'bookingId':'recovery-booking','eventId':'recovery-second','type':'lesson.completed'},409)
+
+    def test_outbox_rejects_tampering_and_duplicate_terminal_rows(self):
+        learner,lid=self.account('tamper-learner@example.test')
+        teacher,tid=self.account('tamper-teacher@example.test','teacher',True)
+        now=time.time()
+        with server.connect() as db:
+            db.execute('INSERT INTO slots VALUES(?,?,?,?)',('tamper-slot',tid,now-100,now+3600))
+            db.execute("""INSERT INTO bookings
+              (id,learner_id,teacher_id,slot_id,unit_id,status,price,room,created_at)
+              VALUES(?,?,?,?,?,?,?,?,?)""",
+              ('tamper-booking',lid,tid,'tamper-slot','unit','completed',20000,'tamper-room',now))
+            self.seed_verified_standard_completion(db,'tamper-booking',lid,tid,now)
+        self.call(teacher,'lesson-event',{'bookingId':'tamper-booking','eventId':'tamper-event','type':'lesson.completed'})
+        with server.connect() as db:
+            with self.assertRaises(__import__('sqlite3').IntegrityError):
+                db.execute("""INSERT INTO instant_lesson_events VALUES(?,?,?,?,?,?)""",
+                           ('forged-terminal','tamper-booking',tid,'lesson.completed',now,'{}'))
+            original=db.execute('SELECT payload FROM instant_lesson_events WHERE event_id=?',('tamper-event',)).fetchone()[0]
+            altered=json.loads(original);altered['amount']=1
+            db.execute('UPDATE instant_lesson_events SET payload=? WHERE event_id=?',(json.dumps(altered),'tamper-event'))
+            with self.assertRaises(server.Error) as forged:
+                matching.verified_outbox_envelope(db,'tamper-event')
+            self.assertEqual(409,forged.exception.status)
+            db.execute('UPDATE instant_lesson_events SET payload=? WHERE event_id=?',(original,'tamper-event'))
+            db.execute('UPDATE users SET approved=0 WHERE id=?',(tid,))
+            with self.assertRaises(server.Error) as revoked:
+                matching.verified_outbox_envelope(db,'tamper-event')
+            self.assertEqual(403,revoked.exception.status)
+
 del Harness
 
 if __name__=='__main__': unittest.main()
