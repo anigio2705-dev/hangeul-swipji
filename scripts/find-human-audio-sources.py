@@ -84,11 +84,12 @@ for t in audio.get('targets', []):
 def safe_str(s):
     if not isinstance(s, str):
         return ''
-    # Strip whitespace and remove pipe and control characters
+    # Strip whitespace
     s = s.strip()
+    # Remove pipe and control characters
     s = s.replace('|', '')
     s = s.replace('\n', '').replace('\r', '')
-    # Remove any control characters
+    # Remove any control characters (non-printable)
     s = ''.join(ch for ch in s if ch.isprintable())
     # Defensive length limit
     if len(s) > 255:
