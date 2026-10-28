@@ -62,8 +62,8 @@ class Team12Regression(unittest.TestCase):
     def test_399_board_cells_have_explicit_missing_and_held_states(self):
         manifest = json.loads((ROOT / "hangul-audio-manifest.json").read_text(encoding="utf-8"))
         records = manifest["recordings"]
-        consonants = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ"
-        vowels = "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ"
+        consonants = "\u3131\u3132\u3134\u3137\u3138\u3139\u3141\u3142\u3143\u3145\u3146\u3147\u3148\u3149\u314a\u314b\u314c\u314d\u314e"
+        vowels = "\u314f\u3150\u3151\u3152\u3153\u3154\u3155\u3156\u3157\u3158\u3159\u315a\u315b\u315c\u315d\u315e\u315f\u3160\u3161\u3162\u3163"
         counts = {"ready_unapproved": 0, "held": 0, "missing": 0}
         for i, _ in enumerate(consonants):
             for j, _ in enumerate(vowels):
@@ -83,12 +83,12 @@ class Team12Regression(unittest.TestCase):
         self.assertIn("state.team12ProviderRole=role", app)
         self.assertIn("sessionStorage.getItem('hs-team12-provider-intent')", app)
         self.assertIn("sessionStorage.removeItem('hs-team12-provider-intent')", app)
-        self.assertIn("field('참여 유형','role',state.team12ProviderRole||''", app)
+        self.assertIn("field('\uc0c8\uc5ec \uc720\ud615','role',state.team12ProviderRole||''", app)
         self.assertIn("state.view='discover'", app)
         self.assertIn("data-team12-handoff", home)
         self.assertIn("scripts/team12_learning_handoff.js", home)
-        self.assertIn("['partner','회화 파트너 찾기']", handoff)
-        self.assertIn("['teacher','전문 강사 찾기']", handoff)
+        self.assertIn("['partner','\ud68c\ud654 \ud30c\ud2b8\ub108 \ucc3e\uae30']", handoff)
+        self.assertIn("['teacher','\uc804\ubb38 \uac15\uc0ac \ucc3e\uae30']", handoff)
         self.assertNotIn("/api/bookings", handoff)
         self.assertNotIn("/api/payments", handoff)
 
@@ -102,7 +102,7 @@ class Team12Regression(unittest.TestCase):
         self.assertIn('scripts/team12_provider_links.js', learn)
         self.assertIn("sessionStorage.setItem('hs-team12-provider-intent', role)", links)
         self.assertIn("sessionStorage.getItem('hs-team12-provider-intent')", app)
-        self.assertIn("field('참여 유형','role',state.team12ProviderRole||''", app)
+        self.assertIn("field('\uc0c8\uc5ec \uc720\ud615','role',state.team12ProviderRole||''", app)
 
     def test_dashboard_to_provider_booking_discovery_contract(self):
         dashboard = (ROOT / "dashboard.html").read_text(encoding="utf-8")
