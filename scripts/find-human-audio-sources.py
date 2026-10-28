@@ -23,35 +23,65 @@ for t in audio.get('targets', []):
         isinstance(recording_available, bool) and
         isinstance(groups, list) and
         any(isinstance(g, str) for g in groups)):
-        if (not recording_available and any(g in ['', '', ' '] or g in ['', '', ' '] for g in groups)):
+        # Defensive: discard groups with non-str elements, filter only str
+        groups_str = [g for g in groups if isinstance(g, str)]
+        if (not recording_available and any(g in ['\u007f\u007f\u007f', '\u007f\u007f', '\u007f\u007f\u007f\u007f \u007f\u007f\u007f'] for g in groups_str)):
             # Original had specific Korean strings, corrected here:
-            if any(g in ['자음 이름','모음','글자판 음절'] for g in groups):
+            if any(g in ['\uc790\uc74c \uc774\ub984','\ubaa8\uc74c','\uae00\uc790\ud310 \uc74c\uc808'] for g in groups_str):
                 missing.append(text)
 
 # Using safe filtering to ensure titles are safe strings
 def safe_str(s):
     if not isinstance(s, str):
         return ''
-    return s.replace('|', '').replace('\n', '').replace('\r', '').strip()
+    # Strip whitespace and remove pipe and control characters
+    s = s.strip()
+    s = s.replace('|', '')
+    s = s.replace('\n', '').replace('\r', '')
+    # Remove any control characters
+    s = ''.join(ch for ch in s if ch.isprintable())
+    return s
 
 titles = []
 for word in missing:
     word = safe_str(word)
     if not word:
         continue
+    # Safety check: only allow alnum and dash, underscore, dot
+    if not all(c.isalnum() or c in '-_.' for c in word):
+        continue
     for ext in ['ogg', 'oga']:
         title = f'File:Ko-{word}.{ext}'
-        # Simple validation: disallow suspicious characters
-        if all(c.isalnum() or c in '-_.' for c in word):
-            titles.append(title)
+        titles.append(title)
 
 batches = [titles[i:i + 50] for i in range(0, len(titles), 50)]
 
 def query(batch):
-    # Validate batch entries
-    filtered_batch = [t for t in batch if isinstance(t, str) and t.startswith('File:Ko-')]
+    # Validate batch entries strictly
+    filtered_batch = []
+    for t in batch:
+        if not isinstance(t, str):
+            continue
+        if not t.startswith('File:Ko-'):
+            continue
+        # Extract name portion and validate characters
+        name_part = t[8:]  # remove 'File:Ko-'
+        # name_part should be something like 'word.ext', check word part
+        if '.' not in name_part:
+            continue
+        word_part, ext = name_part.rsplit('.', 1)
+        if ext not in ['ogg', 'oga']:
+            continue
+        if not word_part:
+            continue
+        # Validate characters in word_part
+        if not all(c.isalnum() or c in '-_.' for c in word_part):
+            continue
+        filtered_batch.append(t)
+
     if not filtered_batch:
         return {'error': 'empty or invalid batch', 'titles': batch}
+
     url = 'https://commons.wikimedia.org/w/api.php?' + urllib.parse.urlencode({
         'action': 'query',
         'format': 'json',
