@@ -591,6 +591,74 @@ class InstantMatchingTests(unittest.TestCase):
             self.assertEqual('pending',
                 matching.verified_outbox_envelope(db, event_id)['deliveryStatus'])
 
+    def test_d2_server_catalog_snapshots_for_partner_and_teacher(self):
+        for role, code, minutes, price in (
+                ('partner','partner_25',25,10000),
+                ('teacher','professional_25',25,15000)):
+            with self.subTest(role=role):
+                learner,_=self.account('catalog-learner-'+role+'@example.test')
+                partner,uid=self.account('catalog-partner-'+role+'@example.test',role,True)
+                with server.connect() as db:
+                    db.execute('UPDATE users SET price=20000 WHERE id=?',(uid,))
+                self.call(learner,'join')
+                match=self.call(partner,'join')['matchId']
+                self.call(learner,'ready',{'matchId':match})
+                self.call(partner,'ready',{'matchId':match})
+                with server.connect() as db:
+                    booking=matching.linked_booking(db,match)
+                    self.assertEqual(price,booking['price'])
+                    product=matching.verified_booking_product(db,booking['id'])
+                    self.assertEqual((product['product_code'],product['duration_minutes'],
+                                      product['price_krw'],product['currency']),
+                                     (code,minutes,price,'KRW'))
+                    self.assertEqual(price,db.execute(
+                        'SELECT price FROM bookings WHERE id=?',(booking['id'],)
+                    ).fetchone()['price'])
+                self.call(learner,'session-observe',{'matchId':match})
+                self.call(partner,'session-observe',{'matchId':match})
+                result=self.call(learner,'session-finish',{'matchId':match})
+                self.assertEqual(price,result['event']['amount'])
+                self.assertEqual(code,result['event']['productCode'])
+                self.assertEqual(minutes,result['event']['durationMinutes'])
+                self.assertEqual(price,result['event']['priceKrw'])
+                event_id=result['event']['eventId']
+                with server.connect() as db:
+                    envelope=matching.verified_outbox_envelope(db,event_id)
+                    self.assertEqual((code,minutes,price),
+                        (envelope['productCode'],envelope['durationMinutes'],
+                         envelope['priceKrw']))
+                    self.assertEqual('pending',envelope['deliveryStatus'])
+
+    def test_d2_cancelled_product_snapshot_and_amount_tampering_rejected(self):
+        learner,_=self.account('catalog-cancel-learner@example.test')
+        partner,uid=self.account('catalog-cancel-partner@example.test','partner',True)
+        with server.connect() as db:
+            db.execute('UPDATE users SET price=20000 WHERE id=?',(uid,))
+        self.call(learner,'join')
+        match=self.call(partner,'join')['matchId']
+        self.call(learner,'ready',{'matchId':match})
+        self.call(partner,'ready',{'matchId':match})
+        with server.connect() as db:
+            booking_id=matching.linked_booking(db,match)['id']
+        self.call(partner,'leave')
+        event_id='instant-cancel-'+match
+        with server.connect() as db:
+            self.assertEqual(10000,db.execute('SELECT price FROM bookings WHERE id=?',
+                                              (booking_id,)).fetchone()[0])
+            envelope=matching.verified_outbox_envelope(db,event_id)
+            self.assertEqual('partner_25',envelope['productCode'])
+            self.assertEqual(10000,envelope['priceKrw'])
+            db.execute('UPDATE bookings SET price=20000 WHERE id=?',(booking_id,))
+            with self.assertRaises(server.Error) as broken:
+                matching.verified_outbox_envelope(db,event_id)
+            self.assertEqual(409,broken.exception.status)
+            db.execute('UPDATE bookings SET price=10000 WHERE id=?',(booking_id,))
+            db.execute('UPDATE booking_product_snapshots SET price_krw=20000 WHERE booking_id=?',
+                       (booking_id,))
+            with self.assertRaises(server.Error) as tampered:
+                matching.verified_outbox_envelope(db,event_id)
+            self.assertEqual(409,tampered.exception.status)
+
 del Harness
 
 if __name__=='__main__': unittest.main()
