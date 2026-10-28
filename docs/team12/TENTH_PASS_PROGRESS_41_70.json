@@ -116,12 +116,12 @@
     {
       "number": 50,
       "feature": "무료 이용을 유지하면서 원하는 사람만 유료 수업으로 넘어가게 한다.",
-      "implemented": "learn.html→dashboard.html→index.html#teaching-platform, dashboard.html partner/teacher 링크, scripts/team12_provider_links.js 세션 intent 저장, phase3/app.js 로그인 후 검색 필터 소비",
-      "missing": "실제 로그인·강사 검색 API·예약 제출·예약 복원 브라우저 통합 미검증",
-      "evidence": "learn.html; dashboard.html; scripts/team12_provider_links.js; phase3/app.js; scripts/team12_content_regression.py",
+      "implemented": "learn.html→dashboard.html→index.html#teaching-platform, dashboard.html partner/teacher 링크, scripts/team12_provider_links.js 세션 intent 저장, phase3/app.js 로그인 후 검색 필터 소비; 가상 브라우저에서 실제 provider-links JS 클릭 이벤트 실행 테스트 추가",
+      "missing": "실제 서버 로그인·예약 API 통합, 브라우저 E2E 미완료",
+      "evidence": "learn.html; dashboard.html; scripts/team12_provider_links.js; phase3/app.js; scripts/team12_content_regression.py; scripts/team12_provider_links.test.js",
       "progress": 70,
-      "reason": "UI 동선 구현 범위 확대; 13번 예약 통합 및 실제 E2E 증거 부족으로 70% 유지",
-      "next": "13번 팀과 로그인/검색/예약 E2E 검증",
+      "reason": "클라이언트 이벤트 실행형 검사 추가, 실제 서버 통합 미검증으로 기존 점수 유지",
+      "next": "11번 학습 진도 서버 API 및 13번 검색·예약 API 계약 확보 후 실제 HTTP 연결",
       "integration": "11·13번 계약 및 통합 검증 필요",
       "status": "수정 필요"
     },
@@ -366,5 +366,5 @@
       "status": "외부 확인 대기"
     }
   ],
-  "version": "15차 갱신"
+  "version": "16차 갱신"
 }
