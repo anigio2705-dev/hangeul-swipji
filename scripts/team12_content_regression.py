@@ -46,6 +46,28 @@ class Team12Regression(unittest.TestCase):
         self.assertEqual(sum(counts.values()), 399)
         self.assertEqual(counts, {"ready_unapproved": 19, "held": 26, "missing": 354})
 
+    def test_learner_to_provider_handoff_contract(self):
+        app = (ROOT / "phase3/app.js").read_text(encoding="utf-8")
+        home = (ROOT / "index.html").read_text(encoding="utf-8")
+        handoff = (ROOT / "scripts/team12_learning_handoff.js").read_text(encoding="utf-8")
+        self.assertIn("state.team12ProviderRole=role", app)
+        self.assertIn("field('참여 유형','role',state.team12ProviderRole||''", app)
+        self.assertIn("state.view='discover'", app)
+        self.assertIn("data-team12-handoff", home)
+        self.assertIn("scripts/team12_learning_handoff.js", home)
+        self.assertIn("['partner','회화 파트너 찾기']", handoff)
+        self.assertIn("['teacher','전문 강사 찾기']", handoff)
+        self.assertNotIn("/api/bookings", handoff)
+        self.assertNotIn("/api/payments", handoff)
+
+    def test_audio_ui_missing_and_playing_event_contract(self):
+        core = (ROOT / "hangul-core.js").read_text(encoding="utf-8")
+        self.assertIn("return {status:'missing',missing}", core)
+        self.assertIn("return {status:'held',missing}", core)
+        self.assertIn("sound.onplaying=()=>", core)
+        self.assertIn("sound.onerror=()=>", core)
+        self.assertIn("new URL(records[word].src, document.baseURI)", core)
+
     def test_hangul_manifest_no_synthetic_or_approved_without_review(self):
         manifest = json.loads((ROOT / "hangul-audio-manifest.json").read_text(encoding="utf-8"))
         for word, entry in manifest["recordings"].items():
