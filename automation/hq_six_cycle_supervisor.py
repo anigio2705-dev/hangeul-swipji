@@ -11,7 +11,9 @@ import subprocess
 import tempfile
 import zipfile
 from pathlib import Path
-from urllib.request import Request, urlopen
+from urllib.error import HTTPError
+from urllib.parse import urlsplit
+from urllib.request import Request, urlopen, build_opener, HTTPRedirectHandler
 
 from hq_160_task_cycle import CURATED_TARGETS, load_catalog
 
@@ -32,9 +34,29 @@ def api(path, token, method="GET", payload=None, raw=False):
                       "Accept": "application/vnd.github+json",
                       "Content-Type": "application/json",
                       "User-Agent": "hq-six-cycle-gate"})
+    if raw:
+        class NoRedirect(HTTPRedirectHandler):
+            def redirect_request(self, request, fp, code, msg, headers, newurl):
+                return None
+        try:
+            with build_opener(NoRedirect()).open(req, timeout=35) as response:
+                return response.read()
+        except HTTPError as exc:
+            if exc.code not in (302, 303) or not exc.headers.get("Location"):
+                raise
+            location = exc.headers["Location"]
+            host = urlsplit(location).hostname or ""
+            if urlsplit(location).scheme != "https" or not (
+                host.endswith(".githubusercontent.com") or
+                host.endswith(".blob.core.windows.net")
+            ):
+                raise ValueError("Untrusted artifact redirect")
+            # Signed artifact URL must never receive the GitHub token.
+            with urlopen(Request(location, headers={"User-Agent": "hq-six-cycle-gate"}), timeout=35) as response:
+                return response.read()
     with urlopen(req, timeout=35) as response:
         data = response.read()
-        return data if raw else (json.loads(data) if data else {})
+        return json.loads(data) if data else {}
 
 def cmd(args, cwd=None, timeout=120):
     return subprocess.run(args, cwd=cwd, capture_output=True, text=True, timeout=timeout)
