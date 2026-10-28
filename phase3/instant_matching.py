@@ -7,6 +7,24 @@ import server
 TTL = 45
 OFFER_TTL = 60
 
+# Server-only test prices; never take an amount from browser JSON or users.price.
+PRODUCT_CATALOG = {
+    'trial_15': (15, 6000),
+    'partner_25': (25, 10000),
+    'professional_25': (25, 15000),
+}
+
+
+def server_product_for_partner(partner):
+    """Default instant product is determined by approved teacher role."""
+    code = 'professional_25' if partner['role'] == 'teacher' else 'partner_25'
+    if partner['role'] not in ('teacher', 'partner'):
+        raise server.Error('지원되지 않는 강사 역할', 403)
+    duration, price = PRODUCT_CATALOG[code]
+    return {'product_code': code, 'duration_minutes': duration,
+            'price_krw': price, 'currency': 'KRW'}
+
+
 
 def initialize(db):
     db.executescript('''
@@ -29,6 +47,13 @@ def initialize(db):
     CREATE TABLE IF NOT EXISTS instant_event_deliveries(
       event_id TEXT PRIMARY KEY REFERENCES instant_lesson_events(event_id),
       consumer TEXT NOT NULL, acknowledged_at REAL NOT NULL, receipt_id TEXT NOT NULL UNIQUE);
+    CREATE TABLE IF NOT EXISTS booking_product_snapshots(
+      booking_id TEXT PRIMARY KEY REFERENCES bookings(id),
+      product_code TEXT NOT NULL CHECK(product_code IN
+        ('trial_15','partner_25','professional_25')),
+      duration_minutes INTEGER NOT NULL CHECK(duration_minutes IN (15,25)),
+      price_krw INTEGER NOT NULL CHECK(price_krw>0),
+      currency TEXT NOT NULL DEFAULT 'KRW' CHECK(currency='KRW'));
     CREATE TABLE IF NOT EXISTS instant_booking_links(
       match_id TEXT PRIMARY KEY REFERENCES instant_matches(id),
       booking_id TEXT NOT NULL UNIQUE REFERENCES bookings(id));
@@ -192,17 +217,41 @@ def create_instant_booking(db, m, now):
     if (not learner or learner['role']!='learner' or not partner
         or partner['role'] not in ('teacher','partner') or not partner['approved']):
         raise server.Error('매칭 당사자 또는 강사 승인이 유효하지 않습니다',403)
+    product=server_product_for_partner(partner)
     slot_id=server.ident()
     booking_id=server.ident()
     db.execute('INSERT INTO slots VALUES(?,?,?,?)',
-               (slot_id,m['partner_id'],now-1,now+3600))
+               (slot_id,m['partner_id'],now-1,now+product['duration_minutes']*60))
     db.execute("""INSERT INTO bookings
       (id,learner_id,teacher_id,slot_id,unit_id,status,price,room,created_at)
       VALUES(?,?,?,?,?,?,?,?,?)""",
       (booking_id,m['learner_id'],m['partner_id'],slot_id,
-       'instant-simulated-session','in_class',partner['price'],m['room'],now))
+       'instant-simulated-session','in_class',product['price_krw'],m['room'],now))
+    db.execute('''INSERT INTO booking_product_snapshots
+      (booking_id,product_code,duration_minutes,price_krw,currency)
+      VALUES(?,?,?,?,?)''',
+      (booking_id,product['product_code'],product['duration_minutes'],
+       product['price_krw'],product['currency']))
     db.execute('INSERT INTO instant_booking_links VALUES(?,?)',(m['id'],booking_id))
     return linked_booking(db,m['id'])
+
+
+def verified_booking_product(db, booking_id):
+    """Fail closed for instant bookings with a tampered or absent product snapshot."""
+    b=db.execute('SELECT b.price,u.role FROM bookings b JOIN users u '
+                 'ON u.id=b.teacher_id WHERE b.id=?',(booking_id,)).fetchone()
+    row=db.execute('SELECT product_code,duration_minutes,price_krw,currency '
+                   'FROM booking_product_snapshots WHERE booking_id=?',
+                   (booking_id,)).fetchone()
+    if not b or not row:
+        raise server.Error('서버 상품 계약이 없습니다',409)
+    catalog=PRODUCT_CATALOG.get(row['product_code'])
+    expected_role='teacher' if row['product_code']=='professional_25' else 'partner'
+    if (not catalog or (row['duration_minutes'],row['price_krw'])!=catalog
+        or row['currency']!='KRW' or b['price']!=row['price_krw']
+        or (row['product_code']!='trial_15' and b['role']!=expected_role)):
+        raise server.Error('예약 금액과 서버 상품 계약이 다릅니다',409)
+    return dict(row)
 
 
 def instant_session(db, u, match_id):
@@ -284,6 +333,11 @@ def record_lesson_event(db, user, booking_id, event_id, event_type):
         if prior:
             raise server.Error('이미 기록된 예약 수업 이벤트입니다',409)
     payload=transaction_event_contract(booking_id,event_id,event_type)
+    if instant:
+        snapshot=verified_booking_product(db,booking_id)
+        payload.update(productCode=snapshot['product_code'],
+                       durationMinutes=snapshot['duration_minutes'],
+                       priceKrw=snapshot['price_krw'],currency='KRW')
     payload.update(actorId=user['id'],learnerId=b['learner_id'],teacherId=b['teacher_id'],
                    amount=b['price'],bookingStatus=b['status'],deliveryStatus='pending')
     db.execute('INSERT INTO instant_lesson_events VALUES(?,?,?,?,?,?)',
@@ -305,7 +359,10 @@ def verified_outbox_envelope(db, event_id):
     payload=json.loads(row['payload'])
     if payload.get('version')!=1 or payload.get('paymentExecuted') is not False:
         raise server.Error('지원하지 않는 이벤트 버전 또는 결제 상태',409)
-    return {'version':1,'eventId':event_id,'bookingId':verified['bookingId'],
+    product_fields={k:verified[k] for k in
+                    ('productCode','durationMinutes','priceKrw','currency')
+                    if k in verified}
+    return dict({'version':1,'eventId':event_id,'bookingId':verified['bookingId'],
             'learnerId':verified['learnerId'],'teacherId':verified['teacherId'],
             'amount':verified['amount'],'currency':'KRW',
             'completedAt':row['created'],'type':verified['type'],
@@ -313,7 +370,7 @@ def verified_outbox_envelope(db, event_id):
             'deliveryStatus':'acknowledged' if delivery else 'pending',
             'attempts':attempts['attempts'] if attempts else 0,
             'receiptId':delivery['receipt_id'] if delivery else None,
-            'paymentExecuted':False,'verifiedByServer':True}
+            'paymentExecuted':False,'verifiedByServer':True}, **product_fields)
 
 
 def confirm_settlement_receipt(db, event_id, consumer, receipt_id, settlement_confirmed=False):
@@ -425,10 +482,23 @@ def verified_event_for_team14(db, event_id):
         or payload.get('amount')!=row['price']
         or payload.get('bookingStatus')!=row['status']):
         raise server.Error('이벤트와 서버 예약 데이터가 일치하지 않습니다',409)
-    return {'eventId':event_id,'bookingId':row['booking_id'],
-            'learnerId':row['learner_id'],'teacherId':row['teacher_id'],
-            'amount':row['price'],'status':row['status'],
-            'type':row['event_type'],'verifiedByServer':True}
+    verified={'eventId':event_id,'bookingId':row['booking_id'],
+              'learnerId':row['learner_id'],'teacherId':row['teacher_id'],
+              'amount':row['price'],'status':row['status'],
+              'type':row['event_type'],'verifiedByServer':True}
+    linked=db.execute('SELECT 1 FROM instant_booking_links WHERE booking_id=?',
+                      (row['booking_id'],)).fetchone()
+    if linked:
+        product=verified_booking_product(db,row['booking_id'])
+        if (payload.get('productCode')!=product['product_code']
+            or payload.get('durationMinutes')!=product['duration_minutes']
+            or payload.get('priceKrw')!=product['price_krw']
+            or payload.get('currency')!='KRW'):
+            raise server.Error('이벤트 상품 계약이 서버 기록과 다릅니다',409)
+        verified.update(productCode=product['product_code'],
+                        durationMinutes=product['duration_minutes'],
+                        priceKrw=product['price_krw'],currency='KRW')
+    return verified
 
 
 def route(handler, db, path, data):
