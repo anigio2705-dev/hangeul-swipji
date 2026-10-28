@@ -7,6 +7,7 @@ on:
       - '.github/workflows/hq-pilot-13-14-15.yml'
       - 'automation/hq_pilot.py'
       - 'automation/test_hq_pilot.py'
+      - 'automation/ai_failure_triage.py'
 permissions:
   contents: read
 jobs:
@@ -49,12 +50,30 @@ jobs:
         if: success() || failure()
         env:
           PYTHONPATH: team13/phase3:team14/phase3
-        run: python -m unittest discover -s team14/phase3 -p test_team14_d2_catalog_http.py -v
+        shell: bash
+        run: |
+          set -o pipefail
+          python -m unittest discover -s team14/phase3 -p test_team14_d2_catalog_http.py -v 2>&1 | tee /tmp/hq-contract-test.log
       - name: Team14 recovery cross-test
         if: success() || failure()
         env:
           PYTHONPATH: team13/phase3:team14/phase3
         run: python -m unittest discover -s team14/phase3 -p test_team14_crash_recovery.py -v
+      - name: Read-only AI triage on contract test failure
+        if: failure()
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -f /tmp/hq-contract-test.log ]; then
+            python automation/ai_failure_triage.py < /tmp/hq-contract-test.log
+          fi
+      - name: Upload AI diagnosis (never code changes)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hq-ai-triage
+          path: hq-triage-report.txt
+          if-no-files-found: ignore
       - name: Explain limits
         if: always()
         run: |
