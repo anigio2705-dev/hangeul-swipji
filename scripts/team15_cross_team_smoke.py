@@ -92,7 +92,7 @@ for label, team, terms in [
         except OSError as e:
             issues.append(f"{label}: error accessing file size {p}: {e}")
             continue
-        if size >= 2_000_000:
+        if size > 2_000_000:
             # Skip very large files silently
             continue
         try:
