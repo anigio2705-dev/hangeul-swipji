@@ -62,4 +62,31 @@ class CoordinatorTests(unittest.TestCase):
  def test_referral_parent_change_rejected(self):
   self.run_event()
   with self.assertRaises(SimError):self.run_event('other_parent')
+ def test_forged_student_cannot_create_referral_link(self):
+  self.event['learner_id']='other'
+  with self.assertRaises(SimError):self.run_event()
+  self.assertEqual(self.r.db.execute('SELECT COUNT(*) FROM referral_links').fetchone()[0],0)
+ def test_unapproved_teacher_cannot_create_referral_link(self):
+  self.record['teacher_approved']=False
+  with self.assertRaises(SimError):self.run_event()
+  self.assertEqual(self.r.db.execute('SELECT COUNT(*) FROM referral_links').fetchone()[0],0)
+ def test_failed_referral_award_recovered_by_replay(self):
+  original=self.r.award
+  def fail(*args,**kwargs):raise RuntimeError('simulated referral DB failure')
+  self.r.award=fail
+  with self.assertRaises(RuntimeError):self.run_event()
+  self.r.award=original
+  self.assertEqual(self.s.db.execute('SELECT COUNT(*) FROM ledger').fetchone()[0],3)
+  self.assertEqual(self.r.db.execute('SELECT COUNT(*) FROM referral_awards').fetchone()[0],0)
+  self.run_event()
+  self.assertEqual(self.s.db.execute('SELECT COUNT(*) FROM ledger').fetchone()[0],3)
+  self.assertEqual(self.r.db.execute('SELECT COUNT(*) FROM referral_awards').fetchone()[0],1)
+ def test_refund_replay_does_not_duplicate_reversal(self):
+  self.run_event()
+  self.event.update(event_id='ev2',transaction_id='tx2',action='refund_completed',
+                    booking_status='refunded',amount_krw=10000)
+  self.record['booking_status']='refunded'
+  self.run_event();self.run_event()
+  self.assertEqual(self.s.totals('month1')['refunded'],10000)
+  self.assertEqual(self.s.totals('month1')['teacher'],0)
 if __name__=='__main__':unittest.main()
