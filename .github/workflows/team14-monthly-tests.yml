@@ -9,7 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run original 14 and new persistent monthly tests
+      - name: Syntax check first (fail fast)
+        run: |
+          python -m compileall -q phase3/team14_monthly_sim.py phase3/test_team14_monthly_sim.py phase3/test_team14_monthly_boundaries.py phase3/team14_persistent.py phase3/test_team14_persistent.py phase3/team14_booking_events.py phase3/test_team14_booking_events.py phase3/team14_referral_scenarios.py phase3/test_team14_referral_scenarios.py phase3/test_team14_ninth_pass.py
+      - name: Run all original and new Team14 tests
         run: |
           git rev-parse HEAD
           python -m unittest discover -s phase3 -p 'test_team14_monthly*.py' -v
