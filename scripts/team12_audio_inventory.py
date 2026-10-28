@@ -80,6 +80,11 @@ def inspect(root):
                 problems.append({"word": word, "issue": "path_is_absolute", "path": src})
                 continue
 
+            # Check for null bytes in entire src
+            if '\x00' in src:
+                problems.append({"word": word, "issue": "null_byte_in_path", "path": src})
+                continue
+
             # Check for path normalization issues (e.g., symlinks or path traversal escaping root)
             # Reject any path components with suspicious chars
             for comp in parts:
