@@ -1,0 +1,54 @@
+name: Team15 22nd nonproduction cross-team integration gate
+on:
+  push:
+    branches:
+      - integration/team15-issue2-22nd-20261028
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: qa
+      - uses: actions/checkout@v4
+        with:
+          ref: ddca64258903489c0bbb27a244b14c66e97b3415
+          path: team11
+      - uses: actions/checkout@v4
+        with:
+          ref: 5bd9282e3f43de99979af84cfb0ba467b0616c07
+          path: team12
+      - uses: actions/checkout@v4
+        with:
+          ref: fb5eb3a546a052d4043cbf75316abdc7f490eeae
+          path: team13
+      - uses: actions/checkout@v4
+        with:
+          ref: c4fb65312a28d9608606919d31255106eed2d5da
+          path: team14
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Confirm revisions
+        run: for d in team11 team12 team13 team14; do echo "$d $(git -C "$d" rev-parse HEAD)"; done
+      - name: Team12 progress JavaScript syntax and account isolation
+        run: |
+          cd team12
+          node --check scripts/team12_server_progress.js
+          node scripts/team12_server_progress.test.js
+      - name: Team11 actual loopback HTTP booking and progress tests
+        run: |
+          cd team11/phase3
+          python3 -m unittest -v test_common_http_booking_integration
+          python3 -m unittest discover -p '*progress*.py' -v
+      - name: Team11 complete contract regression
+        run: python3 -m unittest discover -s team11/phase3 -p 'test_common_*.py' -v
+      - name: Team13 real backend tests
+        run: python3 -m unittest discover -s team13/phase3 -p 'test_*.py' -v
+      - name: Team14 persistent mock business regression
+        run: python3 -m unittest discover -s team14/phase3 -p 'test_team14*.py' -v
+      - name: Team11 to Team14 real bridge with SQLite restart
+        run: python3 qa/scripts/test_team15_real_bridge.py
