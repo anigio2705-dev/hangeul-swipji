@@ -83,7 +83,8 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
    old=self.db.execute('SELECT signature,result FROM referral_awards WHERE event_id=?',(event_id,)).fetchone()
    if old:
     if old['signature']!=signature:raise SimError('CONFLICT','event replay changed')
-    self.db.execute('COMMIT');return _verified_award(old['result'],student_id,gross_krw)
+    verified=_verified_award(old['result'],student_id,gross_krw)
+    self.db.execute('COMMIT');return verified
    if self.db.execute('SELECT 1 FROM referral_awards WHERE lesson_id=?',(lesson_id,)).fetchone():
     raise SimError('CONFLICT','lesson already awarded')
    edges=[(r['student_id'],r['parent_id']) for r in self.db.execute('SELECT student_id,parent_id FROM referral_links')]
