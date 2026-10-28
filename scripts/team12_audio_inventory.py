@@ -100,6 +100,21 @@ def inspect(root):
                     problems.append({"word": word, "issue": "resolved_path_contains_parent", "path": src})
                     continue
 
+                # Additional check to deny any symlink components on resolved path parts inside root
+                # Slightly slower but more secure
+                current_path = root_resolved
+                for part in src_parts[len(root_parts):]:
+                    current_path = current_path / part
+                    try:
+                        if current_path.is_symlink():
+                            problems.append({"word": word, "issue": "path_component_is_symlink", "path": str(current_path)})
+                            raise StopIteration  # break outer loops
+                    except Exception:
+                        # If stat fails, treat as problem
+                        problems.append({"word": word, "issue": "cannot_stat_symlink_check", "path": str(current_path)})
+                        raise StopIteration
+            except StopIteration:
+                continue
             except Exception as ex:
                 problems.append({"word": word, "issue": "invalid_path_outside_root_check_failed", "path": src, "detail": str(ex)})
                 continue
