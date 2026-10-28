@@ -31,6 +31,19 @@ await p.frameLocator('iframe').getByText('Intercepted media: no real call').wait
 assert.equal(await q.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);check('mobile390 has no horizontal overflow');
 await q.locator('#stop').click();await q.locator('#queue').waitFor();await p.locator('#queue').waitFor();assert.equal(await p.locator('iframe').count(),0);check('end removes both frames and does not silently requeue');
 await p.locator('#queue').click();await q.locator('#queue').click();await q.locator('#ready').waitFor();fs.writeFileSync(clock,String(Number(fs.readFileSync(clock))+61));await q.locator('#queue').waitFor();await p.locator('#queue').waitFor();check('unanswered offer and stale presence expire');
+// A pagehide/pageshow cycle models bfcache suspension without destroying the document.
+await p.evaluate(()=>dispatchEvent(new Event('pagehide')));
+await p.evaluate(()=>dispatchEvent(new Event('pageshow')));
+await p.locator('#queue').waitFor();
+await p.locator('#queue').click();
+await p.locator('#status').filter({hasText:'접속 중인 상대'}).waitFor();
+check('pagehide/pageshow restarts status polling and allows a fresh queue join');
+await p.reload();
+await p.locator('#status').filter({hasText:'접속 중인 상대'}).waitFor();
+check('reload restores the existing waiting state without an extra join');
+await p.locator('#stop').click();
+await p.locator('#queue').waitFor();
+check('explicit leave clears waiting state after reload');
 await p.getByRole('link',{name:'예약한 강사 수업',exact:true}).click();await p.locator('#studio-root').waitFor();check('booked class remains separately reachable');assert.deepEqual(errors,[]);
 fs.writeFileSync(path.join(root,'../audit/staging9-instant-results.json'),JSON.stringify({checkedAt:new Date().toISOString(),mode:'local-https-instant-auto-matching',checks,errors,providerFrameMocked:true,actualTwoDeviceCallVerified:false,publicServerDeployed:false},null,2)+'\n');
 }finally{if(browser)await browser.close();if(server)server.kill();fs.rmSync(tmp,{recursive:true,force:true});}})().catch(e=>{console.error(e);process.exitCode=1});

@@ -67,7 +67,7 @@ $('start').onclick=()=>{
 };
 // Do not send a leave on unload: stale tabs must not cancel another tab's new match.
 // Presence expires after 45 seconds without a heartbeat.
-addEventListener('pagehide',()=>{clearInterval(timer);closeVideo();});
+addEventListener('pagehide',()=>{clearInterval(timer);timer=null;closeVideo();});
 addEventListener('pageshow',()=>{run('status');poll();});
 run('status');poll();
 })();

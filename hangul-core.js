@@ -50,13 +50,14 @@
     if(release){release();release=null}
   }
   async function recording(word,token){
-    const sound=new Audio(records[word].src);current=sound;
-    status('사람 녹음 재생: '+word+' · 청취 정확성 미검증 / Human recording; listening review pending');
+    const sound=new Audio(new URL(records[word].src, document.baseURI).href);current=sound;
+    status('사람 녹음 로딩 중: '+word+' · 청취 정확성 미검증 / Loading human recording; listening review pending');
     await new Promise((resolve,reject)=>{
       let timer=null,settled=false;
-      const finish=(error)=>{if(settled)return;settled=true;if(timer!==null)cancelTimer(timer);sound.onended=null;sound.onerror=null;if(error){sound.pause();reject(error)}else resolve()};
+      const finish=(error)=>{if(settled)return;settled=true;if(timer!==null)cancelTimer(timer);sound.onended=null;sound.onerror=null;sound.onplaying=null;if(error){sound.pause();reject(error)}else resolve()};
       release=()=>finish();
       if(schedule)timer=schedule(()=>finish(Error('음성 응답 시간이 초과됐습니다. 다시 눌러 주세요. / Audio timeout; try again.')),15000);
+      sound.onplaying=()=>{if(token===run)status('사람 녹음 재생 중: '+word+' · 청취 정확성 미검증 / Playing human recording; listening review pending')};
       sound.onended=()=>finish();
       sound.onerror=()=>finish(Error('녹음 파일을 재생하지 못했습니다. 다시 눌러 주세요.'));
       try{Promise.resolve(sound.play()).catch(()=>finish(Error('재생을 시작하지 못했습니다. 글자를 다시 눌러 주세요.')))}catch(e){finish(Error('재생을 시작하지 못했습니다. 글자를 다시 눌러 주세요.'))}
