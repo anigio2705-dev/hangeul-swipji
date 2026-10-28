@@ -40,6 +40,9 @@ def request_refund(server_db, store, booking_id, request_id, actor_id, amount_kr
         if previous is not None:
             if (previous['booking_id'], previous['actor_id'], previous['amount_krw']) != (booking_id, actor_id, amount_krw):
                 raise SimError('CONFLICT', 'refund request reused')
+            # enforce reason is still valid if exists
+            if not isinstance(previous['reason'], str) or not previous['reason'].strip():
+                raise SimError('VALIDATION_ERROR', 'stored refund reason invalid')
             return dict(previous)
 
         # Additional validation to prevent requesting refund with empty reason
