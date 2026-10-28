@@ -41,12 +41,19 @@ for team, paths in EXPECT.items():
         sha = subprocess.check_output([
             "git", "-C", str(directory), "rev-parse", "HEAD"
         ], text=True, stderr=subprocess.PIPE).strip()
+        if not sha:
+            failures.append(f"{team}: empty git rev-parse output")
+            continue
     except subprocess.CalledProcessError as e:
         failures.append(f"{team}: git rev-parse failed: {e}")
         continue
     except FileNotFoundError:
         failures.append(f"{team}: git command not found")
         continue
+    except Exception as e:
+        failures.append(f"{team}: unexpected error running git rev-parse: {e}")
+        continue
+
     print(f"{team} SHA={sha}")
     for path in paths:
         # Defensive path normalization: ensure path is relative and does not escape team directory
@@ -94,6 +101,9 @@ for team, paths in EXPECT.items():
             tracked = []
         except FileNotFoundError:
             failures.append(f"{team}: git command not found")
+            tracked = []
+        except Exception as e:
+            failures.append(f"{team}: unexpected error running git ls-files: {e}")
             tracked = []
 
         changed_files = set()
