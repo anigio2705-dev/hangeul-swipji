@@ -144,4 +144,5 @@ class Team15ContinuousJourney(unittest.TestCase):
                 store.close()
                 referrals.close()
 
+del StagingHarness  # Do not auto-discover the imported Team13 base test suite under Team11 runtime.
 if __name__=="__main__":unittest.main(verbosity=2)
