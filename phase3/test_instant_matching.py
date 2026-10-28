@@ -47,7 +47,9 @@ class InstantMatchingTests(unittest.TestCase):
         self.call(b,'leave');self.assertEqual('idle',self.call(a,'status')['state'])
         self.assertEqual('idle',self.call(b,'leave')['state'])
         with server.connect() as db:
-            for table in ('bookings','ledger','attendance','slots'):
+            self.assertEqual(1,db.execute('SELECT count(*) FROM bookings').fetchone()[0])
+            self.assertEqual(1,db.execute('SELECT count(*) FROM instant_booking_links').fetchone()[0])
+            for table in ('ledger','attendance'):
                 self.assertEqual(0,db.execute('SELECT count(*) FROM '+table).fetchone()[0])
 
     def test_expired_presence_and_offers_do_not_requeue(self):
