@@ -12,7 +12,17 @@ class D2CatalogHttpTests(unittest.TestCase):
     setUp=Journey.setUp
     tearDown=Journey.tearDown
     request=Journey.request
-    account=Journey.account
+    def account(self,email,role='learner',approved=False,referral_code=None):
+        cookie,uid=Journey.account(self,email,role,approved,referral_code)
+        # Existing Team13 creates instant bookings from users.price.
+        # Simulate the 11/13 product selection BEFORE a match, never mutate
+        # the booking or completion event after it was generated.
+        if role=='partner':
+            with server.connect() as db:
+                db.execute('UPDATE users SET price=? WHERE id=?',
+                           (TEST_CATALOG['partner_25'][1],uid))
+        return cookie,uid
+
     call=Journey.call
     journey=Journey.journey
     prepare_settlement=Journey.prepare_settlement
