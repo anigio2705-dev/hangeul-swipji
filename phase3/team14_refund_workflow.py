@@ -118,7 +118,10 @@ def apply_approved_refund(server_db, store, request_id):
         if row is None:
             raise SimError('NOT_FOUND', 'refund request missing')
         if row['state'] == 'applied':
-            return json.loads(store.db.execute('SELECT result FROM operations WHERE id=?', (request_id,)).fetchone()['result'])
+            result_str = store.db.execute('SELECT result FROM operations WHERE id=?', (request_id,)).fetchone()
+            if result_str is None:
+                raise SimError('NOT_FOUND', 'operation result missing')
+            return json.loads(result_str['result'])
         if row['state'] != 'approved':
             raise SimError('INVALID_STATE', 'refund not approved')
         booking = server_db.execute('SELECT price,status,learner_id FROM bookings WHERE id=?',
@@ -135,6 +138,8 @@ def apply_approved_refund(server_db, store, request_id):
             raise SimError('INVALID_STATE', 'no completed settlement to refund')
         month = store.db.execute('SELECT commission,referral FROM months WHERE id=?',
                                (lesson['month_id'],)).fetchone()
+        if month is None:
+            raise SimError('NOT_FOUND', 'month data missing for refund')
         price = lesson['amount']
         old = lesson['refunded']
         new = old + row['amount_krw']
