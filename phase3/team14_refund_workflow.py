@@ -174,7 +174,7 @@ def apply_approved_refund(server_db, store, request_id):
         store.db.execute('UPDATE lessons SET state=?,refunded=? WHERE id=?', (state, new, lesson['id']))
         result = dict(transaction_id=request_id, state=state, real_money=False)
         store.db.execute('INSERT INTO operations VALUES(?,?,?)', (request_id, signature, json.dumps(result)))
-        store.db.execute("UPDATE refund_requests SET state='applied',updated_at=CURRENT_TIMESTAMP WHERE request_id=?",
+        store.db.execute("""UPDATE refund_requests SET state='applied',updated_at=CURRENT_TIMESTAMP WHERE request_id=?""",
                          (request_id,))
         team14_persistent._fault('before_refund_commit')
     return result
