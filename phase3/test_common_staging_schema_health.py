@@ -24,8 +24,8 @@ class StagingHealthSchemaTests(unittest.TestCase):
             path = str(Path(tmp) / 'progress.sqlite3')
             with sqlite3.connect(path) as db:
                 db.executescript(schema)
-                db.execute("INSERT INTO users(id,email,password,role,created_at) VALUES(?,?,?,?,?)",
-                           ('u-d2', 'd2@example.test', 'dummy-hash', 'student', 1.0))
+                db.execute("INSERT INTO users(id,email,password,nickname,role,referral_code,created_at) VALUES(?,?,?,?,?,?,?)",
+                           ('u-d2', 'd2@example.test', 'dummy-hash', 'D2', 'learner', 'D2-REF', 1.0))
                 db.execute("INSERT INTO free_lesson_progress(user_id,stage,lesson,completed_at) VALUES(?,?,?,?)",
                            ('u-d2', 1, 1, 1.0))
                 db.commit()
