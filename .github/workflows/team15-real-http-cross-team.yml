@@ -18,7 +18,7 @@ jobs:
           path: qa
       - uses: actions/checkout@v4
         with:
-          ref: e39b9b0d205bf59bd1fe4fd430bd1732e05a5034
+          ref: a2abc3c08ec0c4d245ae0be0670a1b47148f2e00
           path: team11
       - uses: actions/checkout@v4
         with:
@@ -42,7 +42,7 @@ jobs:
           node-version: '20'
       - name: One real HTTP and SQLite match completion settlement referral refund journey
         env:
-          PYTHONPATH: team14/phase3:team13/phase3
+          PYTHONPATH: team11/phase3:team13/phase3:team14/phase3
         run: python3 qa/scripts/test_team15_continuous_instant_e2e.py
       - name: Real HTTP and SQLite signup progress teacher booking and completion gate
         run: python3 qa/scripts/test_team15_real_http_booking_boundary.py
