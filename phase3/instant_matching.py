@@ -231,6 +231,12 @@ def record_lesson_event(db, user, booking_id, event_id, event_type):
         raise server.Error('예약 및 이벤트 식별자가 필요합니다',400)
     b=db.execute('SELECT * FROM bookings WHERE id=?',(booking_id,)).fetchone()
     if not b: raise server.Error('예약이 없습니다',404)
+    instant=db.execute('SELECT match_id FROM instant_booking_links WHERE booking_id=?',(booking_id,)).fetchone()
+    if instant and event_type=='lesson.completed':
+        if b['status']!='completed' or db.execute(
+            'SELECT count(*) FROM instant_session_evidence WHERE match_id=?',(instant['match_id'],)
+        ).fetchone()[0]!=2:
+            raise server.Error('양측 수업 연결 확인이 완료되지 않았습니다',409)
     if user['id'] not in (b['learner_id'],b['teacher_id']):
         raise server.Error('예약 참여자만 기록할 수 있습니다',403)
     teacher=db.execute('SELECT role,approved FROM users WHERE id=?',(b['teacher_id'],)).fetchone()
