@@ -11,7 +11,11 @@ import unittest
 import time
 import sqlite3
 
-import server
+import server  # Team11 official authenticated HTTP+SQLite server
+import sys
+# Keep the authenticated Team11 server cached as 'server', but load the Team13
+# instant/staging adapters from their pinned checkout, not Team11 legacy copies.
+sys.path[:]=[p for p in sys.path if not p.rstrip('/').endswith('team11/phase3')]
 import instant_matching as matching
 from test_staging import StagingTests as StagingHarness
 from team14_persistent import MonthlyStore, SimError
