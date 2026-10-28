@@ -49,6 +49,11 @@ def inspect(root):
 
         # Normalize and validate src path to prevent path traversal
         try:
+            # Must start exactly with './'
+            if not src.startswith("./"):
+                problems.append({"word": word, "issue": "source_path_missing_dot_slash", "path": src})
+                continue
+
             # clean src removing leading './'
             cleaned_src = src[2:]
             src_path = (root / cleaned_src).resolve()
@@ -64,15 +69,21 @@ def inspect(root):
                 problems.append({"word": word, "issue": "invalid_path_subdir", "path": src})
                 continue
 
+            # Validate the filename component strictly
+            if src_path.is_file():
+                filename = src_path.name
+                if not re.fullmatch(r"[a-zA-Z0-9\-_]+\.mp3", filename):
+                    problems.append({"word": word, "issue": "invalid_filename", "filename": filename})
+                    continue
+            else:
+                problems.append({"word": word, "issue": "file_missing", "path": src})
+                continue
+
         except Exception as e:
             problems.append({"word": word, "issue": "invalid_path", "path": src, "detail": str(e)})
             continue
 
         path = root / cleaned_src
-
-        if not path.is_file():
-            problems.append({"word": word, "issue": "file_missing", "path": src})
-            continue
 
         try:
             data_bytes = path.read_bytes()
