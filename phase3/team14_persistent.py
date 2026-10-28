@@ -56,10 +56,10 @@ CREATE TABLE IF NOT EXISTS ledger(id INTEGER PRIMARY KEY AUTOINCREMENT,transacti
  def event(self,month_id,lesson_id,booking_id,transaction_id,operation_id,action,amount_krw=0,currency='KRW',booking_state=None):
   for x in (month_id,lesson_id,booking_id,transaction_id,operation_id): ident(x)
   if currency!='KRW': raise SimError('VALIDATION_ERROR','currency mismatch')
-  if action not in ('complete','refund','cancel'): raise SimError('VALIDATION_ERROR','action')
-  amount(amount_krw,action=='refund')
+  if action not in ('complete','refund','refund_completed','cancel'): raise SimError('VALIDATION_ERROR','action')
+  amount(amount_krw,action in ('refund','refund_completed'))
   if action!='refund' and amount_krw!=0: raise SimError('VALIDATION_ERROR','unexpected amount')
-  target={'complete':'completed','refund':'refunded','cancel':'cancelled'}[action]
+  target={'complete':'completed','refund':'refunded','refund_completed':'refunded','cancel':'cancelled'}[action]
   if booking_state is not None and booking_state!=target: raise SimError('INVALID_STATE','booking event')
   def apply():
    row=self.db.execute('SELECT l.*,m.commission,m.referral FROM lessons l JOIN months m ON m.id=l.month_id WHERE l.id=? AND l.month_id=? AND l.booking_id=?',(lesson_id,month_id,booking_id)).fetchone()
@@ -76,6 +76,22 @@ CREATE TABLE IF NOT EXISTS ledger(id INTEGER PRIMARY KEY AUTOINCREMENT,transacti
     entries=[('refund_reversal',-amount_krw)]
     new_refunded=refunded+amount_krw
     next_state='refunded' if new_refunded==price else 'partially_refunded'
+   elif action=='refund_completed':
+    if state not in ('completed','completed_partially_refunded') or refunded+amount_krw>price:
+     raise SimError('INVALID_STATE','completed refund not permitted')
+    new_refunded=refunded+amount_krw
+    # Cumulative target allocation prevents rounding drift across partial refunds.
+    teacher_full=price*(10000-row['commission'])//10000
+    referral_full=price*row['referral']//10000
+    platform_full=price-teacher_full-referral_full
+    def allocated(total,paid): return total*paid//price
+    entries=[('refund_reversal',-amount_krw),
+     ('teacher_reversal',-(allocated(teacher_full,new_refunded)-allocated(teacher_full,refunded))),
+     ('referral_reversal',-(allocated(referral_full,new_refunded)-allocated(referral_full,refunded))),
+     ('platform_reversal',-(amount_krw
+        -(allocated(teacher_full,new_refunded)-allocated(teacher_full,refunded))
+        -(allocated(referral_full,new_refunded)-allocated(referral_full,refunded))))]
+    next_state='refunded' if new_refunded==price else 'completed_partially_refunded'
    else:
     if state!='reserved': raise SimError('INVALID_STATE','cancel not permitted')
     entries=[('refund_reversal',-price)]
@@ -96,7 +112,7 @@ CREATE TABLE IF NOT EXISTS ledger(id INTEGER PRIMARY KEY AUTOINCREMENT,transacti
   if not lessons: raise SimError('NOT_FOUND','month')
   gross=sum(r['amount'] for r in lessons);refunds=sum(r['refunded'] for r in lessons)
   sums={r['kind']:r['total'] for r in self.db.execute('SELECT kind,SUM(amount) total FROM ledger WHERE lesson_id IN (SELECT id FROM lessons WHERE month_id=?) GROUP BY kind',(month_id,))}
-  teacher=sums.get('teacher_accrual',0);referral=sums.get('referral_accrual',0);platform=sums.get('platform_remainder',0)
+  teacher=sums.get('teacher_accrual',0)+sums.get('teacher_reversal',0);referral=sums.get('referral_accrual',0)+sums.get('referral_reversal',0);platform=sums.get('platform_remainder',0)+sums.get('platform_reversal',0)
   pending=gross-refunds-teacher-referral-platform
   if pending<0 or sums.get('refund_reversal',0)!=-refunds: raise AssertionError('conservation')
   return dict(gross=gross,teacher=teacher,referral=referral,platform=platform,refunded=refunds,pending=pending,real_money=False,rates_approved=False)
