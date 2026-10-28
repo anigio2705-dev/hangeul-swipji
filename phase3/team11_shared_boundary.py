@@ -27,7 +27,11 @@ def authorize_provider(user, kind, *, candidate=False, approvals=None):
         return AccessDecision(False, "VALIDATION_ERROR")
     view = (from_candidate(user, approvals if approvals is not None else {})
             if candidate else from_legacy_user(user))
-    return AccessDecision(view.may_provide(kind), None if view.may_provide(kind) else "FORBIDDEN")
+    allowed = view.may_provide(kind)
+    if not candidate and kind == "conversation_partner" and user["role"] == "teacher":
+        # Existing instant matching permits approved teachers on provider side.
+        allowed = user["approved"] == 1
+    return AccessDecision(allowed, None if allowed else "FORBIDDEN")
 
 
 def authorize_student(user, *, candidate=False, approvals=None):
