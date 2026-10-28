@@ -16,7 +16,7 @@ data = json.loads(subprocess.check_output(['node', '-e', node], cwd=ROOT))
 manifest_path = ROOT / 'hangul-audio-manifest.json'
 if not manifest_path.is_file():
     raise FileNotFoundError(f"Manifest file not found: {manifest_path}")
-manifest = json.loads(manifest_path.read_text())
+manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
 names = {c: n for c, n, _ in data['consonants']}
 vowels = dict(data['vowels'])
 targets = {}
@@ -82,6 +82,9 @@ for unit in intro:
 recordings = []
 
 for word, meta in manifest.get('recordings', {}).items():
+    if not isinstance(word, str):
+        # skip invalid keys
+        continue
     if not isinstance(meta, dict):
         raise ValueError(f"Invalid metadata for word: {word}")
     src = meta.get('src')
@@ -93,7 +96,7 @@ for word, meta in manifest.get('recordings', {}).items():
 
     # run ffmpeg and decode output with error handling
     try:
-        raw = subprocess.check_output(['ffmpeg', '-v', 'error', '-i', str(file), '-f', 's16le', '-ac', '1', '-ar', '16000', '-'], stderr=subprocess.STDOUT)
+        raw = subprocess.check_output(["ffmpeg", "-v", "error", "-i", str(file), "-f", "s16le", "-ac", "1", "-ar", "16000", "-"], stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
         raise RuntimeError(f"ffmpeg failed on file {file} with error: {e.output.decode(errors='replace')}") from e
 
@@ -144,13 +147,13 @@ for word, meta in manifest.get('recordings', {}).items():
     if kind == 'synthetic':
         inputText = meta.get('inputText')
         modelRevision = meta.get('modelRevision')
-        if not inputText or not modelRevision:
-            raise ValueError(f"Missing 'inputText' or 'modelRevision' for synthetic audio {word}")
+        if not (isinstance(inputText, str) and isinstance(modelRevision, str)):
+            raise ValueError(f"Missing or invalid 'inputText' or 'modelRevision' for synthetic audio {word}")
         if inputText.rstrip('.') != word:
             raise ValueError(f"Input text does not match word for synthetic {word}")
         label_status = 'generation-input-matched; listening-pending'
     elif 'segment' in meta:
-        segment = meta.get('segment', {})
+        segment = meta.get('segment')
         if not isinstance(segment, dict):
             raise ValueError(f"Invalid segment data for {word}")
         if segment.get('text') != word:
@@ -164,7 +167,13 @@ for word, meta in manifest.get('recordings', {}).items():
         sourceTitle = meta.get('sourceTitle')
         if not isinstance(sourceTitle, str):
             raise ValueError(f"Invalid or missing sourceTitle for {word}")
-        prefix_removed = sourceTitle.removeprefix('File:')
+        # Use removeprefix if available; fallback otherwise
+        if hasattr(sourceTitle, 'removeprefix'):
+            prefix_removed = sourceTitle.removeprefix('File:')
+        else:
+            prefix_removed = sourceTitle
+            if prefix_removed.startswith('File:'):
+                prefix_removed = prefix_removed[5:]
         main_part = prefix_removed.rsplit('.', 1)[0] if '.' in prefix_removed else prefix_removed
         if not main_part.endswith(word):
             raise ValueError(f"sourceTitle does not end with word for {word}")
