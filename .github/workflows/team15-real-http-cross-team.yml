@@ -26,12 +26,12 @@ jobs:
           path: team12
       - uses: actions/checkout@v4
         with:
-          ref: fb5eb3a546a052d4043cbf75316abdc7f490eeae
+          ref: 89e6ee0feec58b7fd1ca0f9da817447218eb94b2
           fetch-depth: 0 # test_standards96.py uses git show 7418e32:<file>
           path: team13
       - uses: actions/checkout@v4
         with:
-          ref: d40b197a7c9b9448e2b09cfd3de87f90b99f8cf4
+          ref: 5ca151c4abeafcc934209ae6f0d48764170acd82
           path: team14
       - uses: actions/checkout@v4
         with:
@@ -40,6 +40,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: One real HTTP and SQLite match completion settlement referral refund journey
+        env:
+          PYTHONPATH: team14/phase3:team13/phase3
+        run: python3 qa/scripts/test_team15_continuous_instant_e2e.py
       - name: Real HTTP and SQLite signup progress teacher booking and completion gate
         run: python3 qa/scripts/test_team15_real_http_booking_boundary.py
       - name: Team12 browser-to-HTTP progress client regression
@@ -49,5 +53,9 @@ jobs:
           node scripts/team12_server_progress.test.js
       - name: Team13 backend regression
         run: python3 -m unittest discover -s team13/phase3 -p 'test_*.py' -v
+      - name: Team14 new verified instant HTTP settlement regression
+        env:
+          PYTHONPATH: team14/phase3:team13/phase3
+        run: python3 -m unittest discover -s team14/phase3 -p 'test_team14_instant_http_settlement.py' -v
       - name: Team11-Team14 real verified-event mock ledger and restart
         run: python3 prior-qa/scripts/test_team15_real_bridge.py
