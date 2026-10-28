@@ -6,6 +6,8 @@ on:
       - 'automation/hq_controller.py'
       - '.github/workflows/hq-ten-cycle-supervisor.yml'
   workflow_dispatch:
+  schedule:
+    - cron: '15 * * * *'
 permissions:
   contents: read
   actions: write
