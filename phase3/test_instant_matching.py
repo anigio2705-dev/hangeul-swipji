@@ -290,6 +290,35 @@ class InstantMatchingTests(unittest.TestCase):
         self.call(teacher,'booking-room',request,expected=409)
 
 
+    def test_lesson_event_http_outbox_idempotency_authorization_and_persistence(self):
+        learner,learner_id=self.account('event-learner@example.test')
+        teacher,teacher_id=self.account('event-teacher@example.test','teacher',True)
+        outsider,_=self.account('event-outsider@example.test')
+        now=time.time()
+        with server.connect() as db:
+            db.execute('INSERT INTO slots VALUES(?,?,?,?)',('event-slot',teacher_id,now-100,now+3600))
+            db.execute("""INSERT INTO bookings
+              (id,learner_id,teacher_id,slot_id,unit_id,status,price,room,created_at)
+              VALUES(?,?,?,?,?,?,?,?,?)""",
+              ('event-booking',learner_id,teacher_id,'event-slot','unit','completed',20000,'event-room',now))
+        req={'bookingId':'event-booking','eventId':'event-once','type':'lesson.completed'}
+        self.call(outsider,'lesson-event',req,expected=403)
+        first=self.call(teacher,'lesson-event',req)['event']
+        self.assertEqual('pending',first['deliveryStatus'])
+        self.assertEqual(20000,first['amount'])
+        self.assertFalse(first['paymentExecuted'])
+        self.assertEqual(first,self.call(teacher,'lesson-event',req)['event'])
+        self.call(learner,'lesson-event',req,expected=409)
+        self.call(teacher,'lesson-event',{**req,'type':'booking.cancelled'},expected=409)
+        self.call(teacher,'lesson-event',{**req,'eventId':'event-bad','type':'lesson.started'},expected=409)
+        with server.connect() as db:
+            events=list(db.execute('SELECT * FROM instant_lesson_events'))
+            self.assertEqual(1,len(events))
+            self.assertEqual(first,json.loads(events[0]['payload']))
+            self.assertEqual(0,db.execute('SELECT count(*) FROM ledger').fetchone()[0])
+        self.assertEqual(first,self.call(teacher,'lesson-event',req)['event'])
+
+
 del Harness
 
 if __name__=='__main__': unittest.main()
