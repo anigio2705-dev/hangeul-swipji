@@ -410,11 +410,19 @@ def verified_event_for_team14(db, event_id):
              'lesson.started':('test_paid','in_class')}
     if row['event_type'] not in allowed or row['status'] not in allowed[row['event_type']]:
         raise server.Error('현재 예약 상태에서 유효하지 않은 수업 이벤트입니다',409)
-    payload=json.loads(row['payload'])
-    if (payload.get('eventId')!=event_id or payload.get('bookingId')!=row['booking_id']
+    try:
+        payload=json.loads(row['payload'])
+        if not isinstance(payload,dict):
+            raise ValueError('not an event object')
+    except (TypeError,ValueError):
+        raise server.Error('저장된 수업 이벤트가 손상되었습니다',409)
+    if (payload.get('version')!=1 or payload.get('paymentExecuted') is not False
+        or payload.get('type')!=row['event_type']
+        or payload.get('actorId')!=row['actor_id']
+        or payload.get('eventId')!=event_id or payload.get('bookingId')!=row['booking_id']
         or payload.get('learnerId')!=row['learner_id']
         or payload.get('teacherId')!=row['teacher_id']
-        or payload.get('amount')!=row['price']
+        or type(payload.get('amount')) is not int or payload.get('amount')!=row['price']
         or payload.get('bookingStatus')!=row['status']):
         raise server.Error('이벤트와 서버 예약 데이터가 일치하지 않습니다',409)
     return {'eventId':event_id,'bookingId':row['booking_id'],

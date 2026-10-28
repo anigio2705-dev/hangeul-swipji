@@ -12,6 +12,34 @@ class MatchingContractTests(unittest.TestCase):
             with self.subTest(action=action),self.assertRaises(server.Error) as caught:
                 action()
             self.assertEqual(401,caught.exception.status)
+    def test_tampered_settlement_event_cannot_pass_server_verification(self):
+        import json
+        from types import SimpleNamespace
+        row={'event_type':'lesson.completed','status':'completed','role':'teacher',
+             'approved':1,'event_id':'event1','booking_id':'booking1',
+             'actor_id':'teacher1','learner_id':'learner1','teacher_id':'teacher1','price':10000}
+        good={'version':1,'paymentExecuted':False,'type':'lesson.completed',
+              'actorId':'teacher1','eventId':'event1','bookingId':'booking1',
+              'learnerId':'learner1','teacherId':'teacher1','amount':10000,
+              'bookingStatus':'completed'}
+        class FakeDB:
+            def execute(self,query,params):
+                return SimpleNamespace(fetchone=lambda:row)
+        row['payload']=json.dumps(good)
+        self.assertTrue(matching.verified_event_for_team14(FakeDB(),'event1')['verifiedByServer'])
+        for change in ({'type':'booking.cancelled'},{'actorId':'intruder'},
+                       {'paymentExecuted':True},{'version':2},{'amount':True},
+                       {'learnerId':'someone-else'}):
+            with self.subTest(change=change):
+                row['payload']=json.dumps({**good,**change})
+                with self.assertRaises(server.Error) as caught:
+                    matching.verified_event_for_team14(FakeDB(),'event1')
+                self.assertEqual(409,caught.exception.status)
+        for corrupt in ('not-json','[]','null'):
+            row['payload']=corrupt
+            with self.subTest(corrupt=corrupt),self.assertRaises(server.Error) as caught:
+                matching.verified_event_for_team14(FakeDB(),'event1')
+            self.assertEqual(409,caught.exception.status)
     def test_valid_contract(self):
         e=matching.transaction_event_contract('booking-1','event-1','lesson.completed')
         self.assertEqual('booking-1',e['bookingId']);self.assertFalse(e['paymentExecuted'])
