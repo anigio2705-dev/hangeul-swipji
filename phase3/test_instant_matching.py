@@ -153,6 +153,7 @@ class InstantMatchingTests(unittest.TestCase):
             item=response['reservations'][0]
             self.assertEqual('bridge-booking',item['bookingId'])
             self.assertEqual(expected_role,item['participantRole'])
+            self.assertEqual('not_started',item['lessonState'])
             self.assertNotIn('room',str(response))
         self.assertEqual([],self.call(stranger,'reservations')['reservations'])
         with server.connect() as db:
@@ -201,6 +202,29 @@ class InstantMatchingTests(unittest.TestCase):
         self.call(partner,'join',expected=403)
         with server.connect() as db:
             self.assertEqual(0,db.execute("SELECT count(*) FROM instant_matches WHERE state<>'ended'").fetchone()[0])
+
+
+    def test_reservation_lesson_states_survive_reconnect_and_hide_other_users(self):
+        learner,learner_id=self.account('state-learner@example.test')
+        teacher,teacher_id=self.account('state-teacher@example.test','teacher',True)
+        outsider,_=self.account('state-outsider@example.test')
+        now=time.time()
+        statuses=('reserved','in_class','completed','cancelled','expired','refunded')
+        with server.connect() as db:
+            for i,status in enumerate(statuses):
+                slot='state-slot-'+str(i)
+                db.execute('INSERT INTO slots VALUES(?,?,?,?)',(slot,teacher_id,now+3600+i*7200,now+7200+i*7200))
+                db.execute("""INSERT INTO bookings
+                  (id,learner_id,teacher_id,slot_id,unit_id,status,price,room,created_at)
+                  VALUES(?,?,?,?,?,?,?,?,?)""",
+                  ('state-booking-'+str(i),learner_id,teacher_id,slot,'unit',status,20000,'private-room-'+str(i),now))
+        expected=['not_started','in_progress','completed','cancelled','cancelled','cancelled']
+        for cookie in (learner,teacher):
+            for _ in range(2):
+                data=self.call(cookie,'reservations')['reservations']
+                self.assertEqual(expected,[item['lessonState'] for item in data])
+                self.assertNotIn('private-room',str(data))
+        self.assertEqual([],self.call(outsider,'reservations')['reservations'])
 
 
 del Harness
