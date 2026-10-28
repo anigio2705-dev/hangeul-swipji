@@ -33,5 +33,7 @@ def settle_from_server_db(settlement_store,referral_store,server_db_path,event_i
         return booking
     def referral_reader(learner_id):
         return read_server_referral_parent(server_db_path,learner_id)
+    # Freeze one server-owned event snapshot; do not re-read mutable event data.
     return settle_with_referral(settlement_store,referral_store,event_id,
-                                read_event,booking_reader,referral_reader)
+                                lambda requested: event if requested==event_id else None,
+                                booking_reader,referral_reader)
