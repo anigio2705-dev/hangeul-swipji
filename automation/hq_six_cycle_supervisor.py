@@ -24,6 +24,7 @@ FOUR_REVIEW_RUN = 40782295178
 REGRESSIONS = {
     "13": ["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_instant_matching.py"],
     "14": ["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_team14_referral_store.py"],
+    "16": ["python", "scripts/render-audio-credits.py"],
 }
 
 def api(path, token, method="GET", payload=None, raw=False):
@@ -111,6 +112,14 @@ def independent_check(team, task, token, catalog):
             checked = cmd(command, cwd=temp, timeout=180)
             if checked.returncode:
                 return "RETRY", "Independent regression failed: " + (checked.stdout + checked.stderr)[-500:], {}
+            if team == "16":
+                rendered = Path(temp) / "hangul-audio-credits.html"
+                manifest = Path(temp) / "hangul-audio-manifest.json"
+                if not rendered.is_file() or not manifest.is_file():
+                    return "RETRY", "Audio attribution renderer did not produce expected evidence", {}
+                entries = json.loads(manifest.read_text(encoding="utf-8"))["recordings"]
+                if rendered.read_text(encoding="utf-8").count("<tr>") != len(entries) + 1:
+                    return "RETRY", "Audio attribution rows do not match manifest", {}
             return "TEST_PASS_PENDING_CI", "Independent diff and functional regression passed; final backlog gate remains", {
                 "commit": sha, "changed_files": files, "independent_test": "success",
                 "test_command": " ".join(command)}
