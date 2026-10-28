@@ -1,0 +1,41 @@
+name: HQ business and booking safety regression (isolated)
+on:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - 'phase3/team14_referral_scenarios.py'
+      - 'phase3/team14_referral_store.py'
+      - 'phase3/team14_referral_eligibility.py'
+      - 'phase3/team14_monthly_sim.py'
+      - 'phase3/team11_booking_access.py'
+      - 'phase3/test_team14_referral_scenarios.py'
+      - 'phase3/test_team14_referral_store.py'
+      - 'phase3/test_team14_monthly_boundaries.py'
+      - 'phase3/test_common_booking_access.py'
+      - '.github/workflows/hq-business-contract.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  isolated-contract:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test simulated referral, monthly ledger and booking ownership
+        env:
+          PYTHONPATH: phase3
+        run: |
+          python -m unittest -v \
+            test_team14_referral_scenarios \
+            test_team14_referral_store \
+            test_team14_monthly_boundaries \
+            test_common_booking_access
+      - name: Record validation boundary
+        if: always()
+        run: |
+          echo 'Test-only simulated accounting and booking ownership. No production DB, live payments, deployment, or policy approval.' >> "$GITHUB_STEP_SUMMARY"
