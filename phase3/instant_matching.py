@@ -161,13 +161,15 @@ def transaction_event_contract(booking_id, event_id, event_type, *, lesson_index
 def route(handler, db, path, data):
     u=handler.user(db)
     action=path.removeprefix('/api/instant/')
-    allowed={'reservations':'GET','status':'GET','join':'POST','heartbeat':'POST','ready':'POST','leave':'POST'}
+    allowed={'reservations':'GET','booking-room':'POST','status':'GET','join':'POST','heartbeat':'POST','ready':'POST','leave':'POST'}
     if action not in allowed: raise server.Error('페이지 없음',404)
     if handler.command!=allowed[action]: raise server.Error('지원하지 않는 요청',405)
     now=time.time()
     cleanup(db,now)
     if action=='reservations':
         return {'reservations':reservation_snapshot(db,u['id'])},None
+    if action=='booking-room':
+        return authorized_booking_room(db,data.get('bookingId'),u),None
     if action=='join':
         if not eligible(db,u,now):
             raise server.Error('학생 또는 승인된 대화 파트너로 참여하세요. 예약 수업 중에는 대기할 수 없습니다.',403)
