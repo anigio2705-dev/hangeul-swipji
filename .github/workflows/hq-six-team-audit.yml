@@ -1,0 +1,35 @@
+name: HQ six-team evidence audit (isolated)
+on:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - 'automation/hq_six_team_audit.py'
+      - '.github/workflows/hq-six-team-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  audit:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate audit script
+        run: python -m py_compile automation/hq_six_team_audit.py
+      - name: Inspect all six branches and CI
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python automation/hq_six_team_audit.py
+      - name: Publish team verdicts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hq-six-team-audit
+          path: hq-six-team-audit.json
+          if-no-files-found: warn
+          retention-days: 14
