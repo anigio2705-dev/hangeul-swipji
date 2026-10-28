@@ -87,7 +87,7 @@ class Team12Regression(unittest.TestCase):
         self.assertEqual(len(lessons), 96)
         for field in ("slot", "unitId"):
             values = [lesson.get(field) for lesson in lessons]
-            self.assertTrue(all(value is not None and value != '' for value in values), field)
+            self.assertTrue(all(value is not None and (not isinstance(value, str) or value.strip() != '') for value in values), field)
             self.assertEqual(len(values), len(set(values)), field)
         self.assertTrue(all(lesson.get("status") == "authored" for lesson in lessons))
 
@@ -107,7 +107,7 @@ class Team12Regression(unittest.TestCase):
         except json.JSONDecodeError as e:
             self.fail(f"Invalid JSON in {pilot_file}: {e}")
         ids = {lesson["unitId"] for stage in curriculum.get("stages", []) for lesson in stage.get("lessons", []) if isinstance(lesson, dict) and isinstance(lesson.get("unitId"), (str, int))}
-        self.assertTrue(all((isinstance(unit, dict) and "id" in unit and unit["id"] is not None) for unit in pilot.get("units", [])), "All units must be dicts with id")
+        self.assertTrue(all(isinstance(unit, dict) and "id" in unit and unit["id"] is not None and (isinstance(unit["id"], (str, int)) and (not isinstance(unit["id"], str) or unit["id"].strip() != '')) for unit in pilot.get("units", [])), "All units must be dicts with non-empty id")
         units = pilot.get("units", [])
         self.assertIsInstance(units, list, "units should be list")
         self.assertEqual(len(units), 12)
