@@ -66,4 +66,14 @@ class ServerDbWiringTests(unittest.TestCase):
  def test_missing_authenticated_event(self):
   with self.assertRaises(SimError):
    settle_from_server_db(self.s,self.r,self.server,'ev',None)
+ def test_mutable_event_reader_only_once(self):
+  calls=[]
+  def reader(event_id):
+   calls.append(event_id)
+   if len(calls)>1:
+    return dict(self.events['ev'],learner_id='forged')
+   return dict(self.events['ev'])
+  result=settle_from_server_db(self.s,self.r,self.server,'ev',reader)
+  self.assertEqual(result['settlement']['state'],'completed')
+  self.assertEqual(calls,['ev'])
 if __name__=='__main__':unittest.main()
