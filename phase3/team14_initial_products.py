@@ -100,3 +100,38 @@ def bind_server_booking_product(server_db, store, month_id, booking_id, product_
                                       price, referral_bps)
     return dict(result, product_code=product_code, test_price_krw=price,
                 real_money=False, payment_executed=False, payout_eligible=False)
+
+
+# Only a server-committed contract can be used for actual Team13 settlement.
+# This is intentionally independent of users.price and any browser-supplied amount.
+def verify_server_product_contract(server_db, booking_id, trusted_event=None):
+    """Read product snapshot created by Team13, rejecting missing or changed contracts.
+
+    Agreed schema for Team13: booking_product_snapshots(booking_id PRIMARY KEY,
+      product_code, duration_minutes, price_krw, currency). Until Team13 persists
+    this row during booking creation, fail CLOSED rather than infer from price.
+    """
+    ident(booking_id)
+    try:
+        row=server_db.execute(
+            'SELECT product_code,duration_minutes,price_krw,currency '
+            'FROM booking_product_snapshots WHERE booking_id=?', (booking_id,)
+        ).fetchone()
+    except __import__('sqlite3').OperationalError as exc:
+        raise SimError('CONTRACT_MISSING','Team13 booking product snapshot not deployed') from exc
+    if row is None:raise SimError('CONTRACT_MISSING','booking product snapshot missing')
+    product_code=row['product_code']
+    if product_code not in TEST_CATALOG:
+        raise SimError('CONFLICT','unknown server product code')
+    duration, price=TEST_CATALOG[product_code]
+    if (row['duration_minutes']!=duration or row['price_krw']!=price
+            or row['currency']!='KRW'):
+        raise SimError('CONFLICT','server product snapshot differs from catalog')
+    booking=server_db.execute('SELECT price FROM bookings WHERE id=?',(booking_id,)).fetchone()
+    if booking is None or booking['price']!=price:
+        raise SimError('CONFLICT','server booking price differs from product snapshot')
+    if trusted_event is not None:
+        if trusted_event.get('bookingId')!=booking_id or trusted_event.get('amount')!=price:
+            raise SimError('CONFLICT','verified completion amount differs from snapshot')
+    return dict(product_code=product_code,duration_minutes=duration,
+                price_krw=price,currency='KRW',real_money=False)
