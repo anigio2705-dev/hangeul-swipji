@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - team16/eight-language-ui-20261030
+      - integration/team16-eight-language-staging-20261030
   workflow_dispatch:
 jobs:
   language-regression:
