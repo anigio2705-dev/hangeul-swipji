@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - audit/hq-six-task47-atomic-switch-20261030-0658
+  pull_request:
+    paths:
+      - 'scripts/team12_server_progress.js'
+      - 'scripts/test_hq_task47_atomic_account_switch.cjs'
+      - '.github/workflows/hq-task47-atomic-account-switch-20261030.yml'
 permissions:
   contents: read
 jobs:
