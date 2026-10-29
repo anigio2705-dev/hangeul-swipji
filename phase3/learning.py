@@ -85,7 +85,8 @@ def save_placement(db,uid,groups):
     if not isinstance(groups,list) or len(groups)!=4 or any(isinstance(n,bool) or not isinstance(n,int) or not 0<=n<=5 for n in groups):
         raise ValueError('\ub124 \uc601\uc5ed\uc758 \uc815\ub2f5 \uc218\ub294 \uac01\uac01 0~5 \uc815\uc218\uc5ec\uc57c \ud569\ub2c8\ub2e4')
     score=sum(groups)
-    # Fix backlog 47: correct the placement stage calculation to allow up to 20 total score for groups sum since max 4*5=20
+    # Four 0-5 groups yield 0-20. Preserve the seven placement stages:
+    # 0-3, 4-6, 7-9, 10-12, 13-15, 16-17, 18-20.
     if score<=3:
         stage=0
     elif score<=6:
@@ -96,7 +97,7 @@ def save_placement(db,uid,groups):
         stage=3
     elif score<=15:
         stage=4
-    elif score<=20:
+    elif score<=17:
         stage=5
     else:
         stage=6
