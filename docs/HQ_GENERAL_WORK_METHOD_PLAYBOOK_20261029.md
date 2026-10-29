@@ -215,3 +215,11 @@
 - **재검증:** 실제 기능 코드 `df5d1f4f298a380938b2e0da43a201449198d938`; 보완 테스트 커밋 `06ccbc3f7009c36a1836649fdfc15d4b90a4beec`. 같은 head의 [독립 CI #40801855223](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801855223) SUCCESS, [제어 회귀 #40801855218](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801855218) SUCCESS, [큐 감사 #40801855271](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801855271) SUCCESS.
 - **판정:** #54는 **CODE_VERIFIED**(기본 자동 검증 통과). 기존 7개에서 **8/160**으로 증가. 15팀 별도 통합 검토·실제 녹음·청취·브라우저·대표 최종 승인은 미완료이므로 **최종 0/160**. 16팀 정부지원 모의 신청은 별도 큐로 유지하고 이 개발 시간을 잠식하지 않는다.
 - **재사용 규칙:** 검증된 계약 수가 증가하면 기존 필수 계약 보존과 신규 계약 전체의 유효성 검사를 함께 수행한다. 고정된 총개수 가정으로 개발 확장을 막지 않는다. OpenAI Agent Improvement Loop의 '실패→재현 테스트→수정→독립 평가' 패턴을 적용했다. 모델 AI 개발 호출은 없었고, GitHub CI 재실행 비용만 발생했으며 정확한 비용 금액은 미계측.
+
+
+### 2026-10-29 10:43 KST — #54 CANDIDATE→CODE_VERIFIED 승격 시 회귀 오류와 최종 복구
+
+- #54의 실제 기능·독립 검사는 먼저 통과했지만, 상태 장부를 `CODE_VERIFIED`로 올린 뒤 [CI #40801930464](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801930464)와 [큐 감사 #40801930310](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801930310)이 실패했다. 원인은 테스트가 #54를 **영구 CANDIDATE**라고 가정한 것. 상태 승격 자체를 잘못으로 취급하지 않고 독립 증거가 있을 때만 CODE_VERIFIED를 허용하도록 회귀 테스트를 수정했다.
+- 수정 커밋 `1452373f069d80f86eff41cc1b96c2f90faf293d`. 해당 정확한 SHA의 [음원/계약 CI #40801992829](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801992829), [총괄 제어 회귀 #40801992951](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801992951), [160개 큐 감사 #40801992568](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801992568) 모두 **SUCCESS**.
+- **새 재사용 규칙:** 테스트는 단일 임시 상태를 영구 고정하지 않고 허용된 상태 전이와 필수 증거를 함께 검증한다. 테스트를 삭제·완화하지 않고 #54 CODE_VERIFIED에 대해 장부 status와 CI 증거가 모두 존재하는지 추가 확인했다.
+- 실제 6팀 AI 개발 dispatch는 이번 구간에 새로 발생하지 않았다. 총괄의 직접 구현 1개(#54)와 검증 통과는 확인했지만, 무인 6팀 연속 실행이 완성됐다는 뜻은 아니다. 최종 승인 0/160, 실제 홈페이지 시연 미검증.
