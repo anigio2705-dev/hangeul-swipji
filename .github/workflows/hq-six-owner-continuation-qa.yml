@@ -24,4 +24,5 @@ jobs:
       - name: Verify READY intake and supervisor gates
         run: |
           python -m unittest discover -s automation -p 'test_hq_traffic_lights.py' -v
-          python -m unittest discover -s automation -p 'test_hq_six_supervisor.py' -v
+          python -m unittest discover -s automation -p 'test_hq_six_cycle_supervisor.py' -v
+          python -m unittest discover -s automation -p 'test_hq_ready_provenance.py' -v
