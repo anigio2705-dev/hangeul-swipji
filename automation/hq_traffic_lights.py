@@ -80,6 +80,7 @@ def readiness(catalog, ledger, registry, root=Path(".")):
         source = entry.get("source_paths")
         tests = entry.get("test_paths")
         ci = entry.get("independent_ci_url", "")
+        ci_sha = entry.get("independent_ci_sha", "")
         # Multiple observed files are allowed as read-only context only when
         # a single, explicit editable file is independently authorized.
         editable = entry.get("editable_path")
@@ -92,6 +93,7 @@ def readiness(catalog, ledger, registry, root=Path(".")):
         reviewed = entry.get("independent_team15") == "PASS"
         ci_ref = isinstance(ci, str) and bool(re.fullmatch(
             r"https://github\.com/anigio2705-dev/hangeul-swipji/actions/runs/[0-9]+", ci))
+        ci_sha_ok = isinstance(ci_sha, str) and bool(re.fullmatch(r"[0-9a-f]{40}", ci_sha))
         paths = (isinstance(source, list) and bool(source)
                  and isinstance(tests, list) and bool(tests)
                  and len(source) == len(set(source))
@@ -100,9 +102,9 @@ def readiness(catalog, ledger, registry, root=Path(".")):
                  and all(valid_path(p) for p in source + tests))
         deps = all(ledger.get(str(d), {}).get("status") == "complete"
                    for d in task["dependencies"])
-        if not (authorized and reviewed and ci_ref and paths and deps and editable_ok):
+        if not (authorized and reviewed and ci_ref and ci_sha_ok and paths and deps and editable_ok):
             missing = [name for name, ok in (("owner", authorized), ("independent_review", reviewed),
-                ("ci_reference", ci_ref), ("real_paths", paths),
+                ("ci_reference", ci_ref), ("exact_ci_sha", ci_sha_ok), ("real_paths", paths),
                 ("single_editable_path", editable_ok), ("dependencies", deps)) if not ok]
             result["invalid_ready"].append({"task": number, "reason": ", ".join(missing)})
             continue
@@ -152,6 +154,23 @@ def readiness(catalog, ledger, registry, root=Path(".")):
             blockers.append("missing_or_invalid_test_path")
         if entry.get("independent_team15") != "PASS":
             blockers.append("team15_independent_review_pending")
+        # Intake must say why a candidate cannot become a verifiable READY.
+        # These are diagnostics, not a promotion or a substitute for live CI.
+        ci_url = entry.get("independent_ci_url", "")
+        if not (isinstance(ci_url, str) and re.fullmatch(
+                r"https://github\\.com/anigio2705-dev/hangeul-swipji/actions/runs/[0-9]+", ci_url)):
+            blockers.append("independent_ci_reference_missing")
+        if not (isinstance(entry.get("independent_ci_sha"), str) and re.fullmatch(
+                r"[0-9a-f]{40}", entry["independent_ci_sha"])):
+            blockers.append("independent_ci_sha_missing")
+        target = entry.get("editable_path") or (
+            source[0] if isinstance(source, list) and len(source) == 1 else None)
+        if not (isinstance(target, str) and target.endswith(".py")
+                and not target.startswith(("automation/", ".github/"))
+                and isinstance(tests, list) and bool(tests)
+                and all(isinstance(p, str) and p.endswith(".py")
+                        and Path(p).name.startswith("test_") for p in tests)):
+            blockers.append("unsupported_python_unittest_runner")
         if any(ledger.get(str(dep), {}).get("status") != "complete"
                for dep in task["dependencies"]):
             blockers.append("dependencies_not_complete")
