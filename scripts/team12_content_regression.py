@@ -25,6 +25,39 @@ class Team12Regression(unittest.TestCase):
             self.assertIn('n>=1&&n<=units.length', page, name)
             self.assertIn('unit=n-1;tab=0;reviewMode=false', page, name)
 
+    def test_free_curriculum_and_reading_inventory_is_not_truncated(self):
+        """Task #41: inspect all real lesson/quiz and reading sources, not a UI string."""
+        import subprocess
+        script = r"""
+const {courses,lessons,reading}=require('./scripts/curriculum-source.cjs');
+let units=0,quizzes=0,passages=0,readingQuestions=0;
+for(const course of courses){
+  const items=lessons(course);
+  if(items.length!==50)throw Error('Missing course units: '+course);
+  for(const unit of items){
+    if(!Array.isArray(unit.quiz))throw Error('Missing quiz array');
+    units++;quizzes+=unit.quiz.length;
+  }
+}
+const source=reading('ko');
+for(let level=1;level<=15;level++)for(let book=1;book<=40;book++){
+  const item=source.get(level,book);
+  if(!item||!Array.isArray(item.paragraphs)||!item.paragraphs.length
+     ||!Array.isArray(item.translations)||item.paragraphs.length!==item.translations.length
+     ||!Array.isArray(item.q)||!item.q.length)throw Error('Broken reading '+level+'-'+book);
+  passages++;readingQuestions+=item.q.length;
+}
+console.log(JSON.stringify({courses:courses.length,units,quizzes,passages,readingQuestions}));
+"""
+        completed = subprocess.run(
+            ["node", "-e", script], cwd=ROOT, capture_output=True,
+            text=True, timeout=90, check=True)
+        totals = json.loads(completed.stdout)
+        self.assertEqual(totals, {
+            "courses": 7, "units": 350, "quizzes": 1758,
+            "passages": 600, "readingQuestions": 1800,
+        }, "Content preservation counts differ from the approved baseline")
+
     def test_audio_418_scope_reconciliation(self):
         plan_file = ROOT / "docs/team12/recording-plan-399.json"
         self.assertTrue(plan_file.exists(), f"Missing file: {plan_file}")
