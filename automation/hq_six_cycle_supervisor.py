@@ -157,6 +157,15 @@ def independent_check(team, task, token, catalog):
             syntax = cmd(["python", "-m", "py_compile", path], cwd=temp)
             if syntax.returncode:
                 return "RETRY", "Independent syntax check failed: " + syntax.stderr[-350:], {}
+            # The candidate may only change its assigned source, never the
+            # trusted HQ test. Reject an older team branch with divergent tests
+            # even when the test suite happens to report green.
+            for trusted_test in dynamic_tests:
+                try:
+                    if (Path(temp) / trusted_test).read_bytes() != Path(trusted_test).read_bytes():
+                        return "RETRY", "Dynamic regression differs from trusted HQ test: " + trusted_test, {}
+                except OSError:
+                    return "RETRY", "Trusted dynamic regression missing: " + trusted_test, {}
             command = REGRESSIONS.get((team, number))
             commands = ([command] if command else []) + [
                 ["python", "-m", "unittest", "discover", "-s", str(Path(t).parent), "-p", Path(t).name]
