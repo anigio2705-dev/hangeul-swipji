@@ -575,12 +575,13 @@
       "acceptance": "강사/학습자 각각의 소개 대상 강사/학습자 네 조합을 권한·중복·순환·자기소개 거부와 함께 모의 검증",
       "unmet": [
         "역할별 네 조합 수락/거부를 1:1 매핑한 독립 회귀검사 미확인",
-        "정책·보상·실결제 승인 전 차단 유지"
+        "정책·보상·실결제 승인 전 차단 유지",
+        "중앙 격리 정본 automation/hq-pilot-13-14-15-20261029의 phase3/team14_referral_scenarios.py에는 simulate_introduction_review 함수가 없고, test_team14_referral_scenarios.py에는 4역할×수락/거절 8개 독립 반례가 없음(2026-10-30 03:51 KST 직접 파일 대조). PR #59 격리 브랜치에만 해당 함수와 테스트가 있으며 CI #40925701190은 신규 경계 3개 PASS지만 전체 FAIL; 통합/15팀 독립 검증 전 READY 금지"
       ],
       "state": "CANDIDATE",
       "independent_team15": "PENDING",
       "dependencies": [],
-      "note": "2026-10-29 15:28+ KST six-team full-order source/path audit; only observed paths. Candidate is NOT READY or CODE_VERIFIED."
+      "note": "2026-10-29 15:28+ KST six-team full-order source/path audit; only observed paths. Candidate is NOT READY or CODE_VERIFIED. | 2026-10-30 03:51 KST central HQ audit: canonical pilot lacks simulate_introduction_review and four-role accept/reject tests; isolated PR #59 has them but is not merged. Need independent team15 review, exact-SHA whole CI and single explicit editable_path before READY. No AI calls or final completion."
     },
     "109": {
       "owner": "14",
