@@ -54,8 +54,8 @@ function load(course,storage){
   return {get,sandbox,storage,units:vm.runInContext('units',sandbox),
     ui:vm.runInContext('ui',sandbox)};
 }
-function chooseAndSubmit(view,answers){
-  const {get,units,ui}=view,content=get('content'),q=units[0].quiz;
+function chooseAndSubmit(view,answers,unitIndex=0){
+  const {get,units,ui}=view,content=get('content'),q=units[unitIndex].quiz;
   const sections=content.children.filter(x=>x.className==='mistake');
   assert.equal(sections.length,q.length,'Quiz question count');
   sections.forEach((section,i)=>{
@@ -102,6 +102,23 @@ for(const course of courses){
   const resumed=load(course,store);
   assert.ok(resumed.get('nav').children[0].textContent.startsWith('✓ '),
     course+': completion not restored on reload');
-  console.log('PASS #44 '+course+': 50 units, example, wrong answer, review, full score, next, reload');
+  // Exercise every remaining unit's actual quiz and persisted completion, not
+  // just the first representative lesson. This is still a DOM simulation.
+  for(let i=1;i<50;i++){
+    resumed.get('nav').children[i].onclick();
+    resumed.get('tabs').children[3].onclick();
+    const questions=units[i].quiz;
+    assert.ok(questions.length>0,course+': missing unit '+(i+1)+' quiz');
+    questions.forEach(q=>assert.ok(Number.isInteger(q[3])&&q[3]>=0&&q[3]<q[2].length,
+      course+': invalid correct answer index in unit '+(i+1)));
+    chooseAndSubmit(resumed,questions.map(q=>q[3]),i);
+  }
+  const finished=JSON.parse(store.get(key));
+  assert.equal(Object.values(finished.done).filter(Boolean).length,50,
+    course+': all 50 units must persist successful completion');
+  const finalReload=load(course,store);
+  assert.equal(finalReload.get('nav').children.filter(n=>n.textContent.startsWith('✓ ')).length,50,
+    course+': all completed lessons must survive reload');
+  console.log('PASS #44 '+course+': 50 unit quizzes, wrong answer, review, full score, next, reload');
 }
 console.log('PASS #44 seven courses: 350 lessons simulated in actual course scripts');
