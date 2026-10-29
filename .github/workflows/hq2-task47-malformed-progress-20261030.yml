@@ -1,0 +1,25 @@
+name: HQ2 task47 malformed progress fail-closed regression
+on:
+  push:
+    branches:
+      - audit/hq2-task47-malformed-progress-20261030-0702
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-task47:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Existing account progress regression
+        run: node scripts/team12_server_progress.test.js
+      - name: Existing network failure atomicity
+        run: node scripts/test_hq_task47_atomic_account_switch.cjs
+      - name: Malformed HTTP payload account switch must fail closed
+        run: node scripts/test_hq2_task47_malformed_progress.cjs
+      - name: No semantic READY bypass
+        run: python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
