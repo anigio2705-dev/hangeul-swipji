@@ -32,28 +32,38 @@ jobs:
           teams = request.get("teams")
           repairs = request.get("repairs")
           if not isinstance(teams, list) or not teams or len(teams) > 2:
-              raise SystemExit("Repair dispatch allows 1-2 selected teams only")
-          if sorted(set(teams)) != sorted(teams) or not set(teams) <= {"13", "15"}:
-              raise SystemExit("Repair dispatch restricted to teams 13 and 15")
+              raise SystemExit("Dispatch allows 1-2 selected teams only")
+          if sorted(set(teams)) != sorted(teams) or not set(teams) <= {"11","12","13","14","15","16"}:
+              raise SystemExit("Unknown or repeated team")
           mode = request.get("mode", "repair")
           if mode == "advance":
-              # Only one independently safe next item after a documented
-              # exhausted regression. Never replay #22 or an arbitrary team.
-              if teams != ["13"] or repairs != {}:
-                  raise SystemExit("Next-safe dispatch must target only team13 with no repairs")
-              if request.get("source_run_id") != 40791928076:
-                  raise SystemExit("Next-safe source evidence mismatch")
-              import sys
+              # One explicitly verified eligible assignment, never an arbitrary
+              # repeated workflow run or a previously blocked backlog item.
+              if len(teams) != 1 or repairs != {}:
+                  raise SystemExit("Advance requires exactly one team and no repairs")
+              if request.get("source_run_id") != 40795966081:
+                  raise SystemExit("Expected prior successful HQ controller gate")
+              import sys, subprocess
               sys.path.insert(0, "automation")
               from hq_160_task_cycle import load_catalog, next_assignment
               catalog = load_catalog("automation/hq_backlog_160.md")
               ledger = json.loads(Path("automation/task-evidence.json").read_text())
-              if ledger.get("22", {}).get("status") != "blocked":
-                  raise SystemExit("Prior #22 failure must be persisted before advancing")
-              selected = next_assignment("13", catalog, ledger)
-              if selected is None or selected["task_number"] != 47:
-                  raise SystemExit("Expected independent safe next task #47; refuse dispatch")
+              selected = next_assignment(teams[0], catalog, ledger)
+              if selected is None or selected["task_number"] != request.get("expected_next_task"):
+                  raise SystemExit("No matching safe next assignment; refuse dispatch")
+              if selected["task_number"] != 41 or teams != ["12"]:
+                  raise SystemExit("This one-shot pilot permits only team12 task #41")
+              expected = request.get("expected_team_commit")
+              if not isinstance(expected, str) or len(expected) != 40:
+                  raise SystemExit("Missing exact candidate commit")
+              head = subprocess.run(["git", "ls-remote", "--heads", "origin",
+                  "automation/hq-team-12-autodev-20261029"], check=True,
+                  capture_output=True, text=True, timeout=30).stdout.split()[0]
+              if head != expected:
+                  raise SystemExit("Team branch moved since approval; do not replay")
           elif mode == "repair":
+              if not set(teams) <= {"13", "15"}:
+                  raise SystemExit("Existing bounded repair restricted to teams 13 and 15")
               if not isinstance(repairs, dict) or set(repairs) != set(teams):
                   raise SystemExit("Repair payload must match selected teams")
               for team in teams:
