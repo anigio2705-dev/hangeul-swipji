@@ -44,7 +44,9 @@ for unit in intro:
 
 recordings = []
 for word, meta in manifest['recordings'].items():
-    file = ROOT / meta['src']
+    file = (ROOT / meta['src']).resolve()
+    if not file.is_relative_to(ROOT.resolve()) or not file.is_file():
+        raise ValueError(f'Audio source missing or outside repository: {word}')
     raw = subprocess.check_output(['ffmpeg', '-v', 'error', '-i', str(file), '-f', 's16le', '-ac', '1', '-ar', '16000', '-'])
     samples = array.array('h', raw)
     peak = max((abs(x) for x in samples), default=0)
