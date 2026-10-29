@@ -58,11 +58,15 @@
     if(!words.length||words.some(w=>typeof w!=='string'||!w.trim()))return {status:'invalid'};
     const missing=words.filter(word=>!records[word]);
     if(missing.some(w=>holds[w])){status('재생 보류: '+missing.filter(w=>holds[w]).map(w=>w+' · '+holds[w].holdReason).join(' / '));return {status:'held',missing}}
-    if(missing.length){status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요.');return {status:'missing',missing}}
+    if(missing.length && (words.length===1 || missing.length===words.length)){status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요.');return {status:'missing',missing}}
+    const playable=missing.length?words.filter(word=>records[word]):words;
     try{
-      for(const word of words){if(token!==run)return {status:'cancelled'};await recording(word,token)}
-      if(token===run)status('재생 완료 · 청취 정확성 미검증 / Playback ended; listening review pending.');
-      return {status:token===run?'played':'cancelled',words};
+      for(const word of playable){if(token!==run)return {status:'cancelled'};await recording(word,token)}
+      if(token===run)status(missing.length
+        ?'일부만 재생했습니다. 녹음 준비 중: '+missing.join(' · ')+'. 나머지 글자는 선생님과 함께 읽어 주세요. / Partial playback; missing human recordings.'
+        :'재생 완료 · 청취 정확성 미검증 / Playback ended; listening review pending.');
+      if(token!==run)return {status:'cancelled'};
+      return missing.length?{status:'partial',words:playable,missing}:{status:'played',words};
     }catch(e){if(token===run){stop();status(e.message)}return {status:'error',message:e.message}}
   }
   const el=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!==undefined)x.textContent=text;return x};
