@@ -107,6 +107,11 @@ class HQ160TaskCycleTests(unittest.TestCase):
         trusted["ci_conclusion"] = "failure"
         self.assertEqual(verify_submission(assignment, submission, trusted)["verdict"], "RETRY")
         trusted["ci_conclusion"] = "success"
+        trusted["ci_head_sha"] = "b" * 40
+        mismatch = verify_submission(assignment, submission, trusted)
+        self.assertEqual(mismatch["verdict"], "RETRY")
+        self.assertIn("exact commit", mismatch["repair_instruction"])
+        trusted["ci_head_sha"] = sha
         passed = verify_submission(assignment, submission, trusted)
         self.assertEqual(passed["verdict"], "CODE_VERIFIED")
         self.assertNotEqual(passed["verdict"], "COMPLETE")
