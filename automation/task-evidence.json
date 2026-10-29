@@ -49,16 +49,20 @@
     "scope": "Wrong task/file mapping rejected; 160-item final completion unchanged. Team13 placement boundary bug was repaired as a separate safety correction, not #47 completion."
   },
   "49": {
-    "status": "in_progress",
+    "status": "code_verified",
     "commit": "9fb8a54b1cc183bd30ca47deab99cd1c76c0a40f",
     "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797947894",
-    "ci_result": "pending",
+    "ci_result": "success",
     "independent_review": "pass",
     "task_specific_verified": true,
     "test_command": "python -m unittest discover -s phase3 -p test_global_learning.py + trusted automation/verify_task49.py",
-    "scope": "Independent source diff and task-specific functional regression passed; final CI run and public site still pending",
+    "scope": "Task #49 implementation verified for weak-skill retry recommendations, next-unit guidance, zero-possible guard, and explicit non-certified mode. 6 learning regressions and trusted semantic tests passed on exact corrected SHA. Actual site and representative testing remain open.",
     "owner": "12",
-    "path": "phase3/learning.py"
+    "path": "phase3/learning.py",
+    "ci_conclusion": "success",
+    "implementation_verified": true,
+    "final_approved": false,
+    "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797845758"
   },
   "52": {
     "status": "code_verified",
