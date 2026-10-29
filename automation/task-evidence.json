@@ -16,6 +16,18 @@
     "source_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40791928076",
     "scope": "Needs a different, regression-preserving #22 fix. Do not repeat rejected patch; next independent safe team13 task may proceed. Not a final completion."
   },
+  "47": {
+    "status": "in_progress",
+    "commit": "cbf75b2c0b6a1415419e8c6b6e2e790cc279b84c",
+    "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40794974511",
+    "ci_result": "pending",
+    "independent_review": "pass",
+    "scope": "Team13 #47 commit exists and matching regression passed, but this is not a learning-specific test. Independent learning regression pending; do not promote from green workflow alone.",
+    "owner": "13",
+    "path": "phase3/learning.py",
+    "task_specific_verified": false,
+    "test_command": "python -m unittest discover -s phase3 -p test_instant_matching.py"
+  },
   "52": {
     "status": "code_verified",
     "commit": "5038a7fd41df1f6c3fa97d5534c19c17ea821b3d",
@@ -49,15 +61,5 @@
     "scope": "Independent source diff and functional regression passed; final CI run and public site still pending",
     "owner": "14",
     "path": "phase3/team14_referral_store.py"
-  },
-  "47": {
-    "status": "in_progress",
-    "commit": "cbf75b2c0b6a1415419e8c6b6e2e790cc279b84c",
-    "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40794974511",
-    "ci_result": "pending",
-    "independent_review": "pass",
-    "scope": "Independent source diff and functional regression passed; final CI run and public site still pending",
-    "owner": "13",
-    "path": "phase3/learning.py"
   }
 }
