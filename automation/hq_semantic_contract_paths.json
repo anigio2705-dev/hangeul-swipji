@@ -4,6 +4,18 @@
   "source_branch": "automation/hq-pilot-13-14-15-20261029",
   "policy": "Mapped paths are observed in this isolated branch. CODE_VERIFIED reflects existing evidence, never final approval; READY requires independent 15-team semantic review and relevant CI. CANDIDATE/BLOCKED are not dispatchable.",
   "items": {
+    "9": {
+      "owner": "15",
+      "support": ["11"],
+      "state": "CANDIDATE",
+      "source_paths": ["automation/hq_traffic_lights.py", "automation/hq_160_task_cycle.py"],
+      "test_paths": ["automation/test_hq_traffic_lights.py", "automation/test_hq_160_task_cycle.py"],
+      "acceptance": "각 160개 과제의 책임팀·수락 조건·검증 증거·차단 사유·다음 조치가 정확히 연결되고, 독립 READY·파일 충돌 안전성이 유지됨",
+      "dependencies": [],
+      "unmet": ["전체 160개별 blocker/next-action 기록 전수 미검증", "이번 변경은 읽기 전용 공유 컨텍스트의 잘못된 충돌 판정 수정만 검증", "15팀 별도 의미 감사와 실제 6팀 개발·테스트99 검증 미완료", "자동 개발 runner는 automation/ 파일 수정 금지; #9를 READY로 직접 dispatch하지 말 것"],
+      "independent_team15": "PENDING",
+      "note": "2026-10-29 18:32 KST: shared read-only context false collision reproduced by CI 40850372628 FAIL (0 instead of 2); fix 8ba9ea71 CI 40850415341 PASS (8 readiness + 13 task-cycle tests). Separate audit branch only, not merged; task #9 remains CANDIDATE."
+    },
     "11": {
       "owner": "11",
       "support": [
