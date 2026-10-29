@@ -1,0 +1,31 @@
+name: Team15 independent audio-manifest retry regression
+on:
+  push:
+    branches:
+      - audit/team15-manifest-retry-sequence-20261030-0838
+  pull_request:
+    paths:
+      - hangul-core.js
+      - hangul-board.js
+      - scripts/test-hangul-board-sequence.js
+      - scripts/check-audio-runtime.cjs
+      - .github/workflows/team15-manifest-retry-sequence.yml
+permissions:
+  contents: read
+jobs:
+  retry-audio:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Recover board sequence after transient manifest failure
+        run: node scripts/test-hangul-board-sequence.js
+      - name: Explicit manifest retry and human-only runtime regression
+        run: node scripts/check-audio-runtime.cjs
+      - name: Partial/held/cancelled audio regression
+        run: node scripts/test-hangul-partial-playback.js
+      - name: Syntax checks
+        run: node --check hangul-core.js && node --check hangul-board.js
