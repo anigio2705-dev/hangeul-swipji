@@ -49,7 +49,12 @@ CHECKS = {
 FORBIDDEN_CALLS = {"eval", "exec", "compile", "__import__"}
 FORBIDDEN_IMPORTS = {"requests", "urllib", "http", "socket", "subprocess", "ctypes"}
 def shell(*args, timeout=120):
-    return subprocess.run(args, capture_output=True, text=True, timeout=timeout)
+    # Candidate source and its regression tests run in child processes. Never
+    # inherit GitHub/OpenAI bearer tokens into a potentially modified module.
+    clean_env = {k: v for k, v in os.environ.items()
+                 if k not in ("GITHUB_TOKEN", "OPENAI_API_KEY")}
+    return subprocess.run(args, capture_output=True, text=True,
+                          timeout=timeout, env=clean_env)
 def validate_ownership():
     all_paths = [p for _, tasks in TASKS.values() for p, _ in tasks]
     if len(all_paths) != len(set(all_paths)):
