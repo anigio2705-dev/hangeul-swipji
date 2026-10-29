@@ -172,3 +172,37 @@ test('failed manifest requests are retried without delayed autoplay',async()=>{
   await new Promise(resolve=>setTimeout(resolve,0));
   assert.equal((await H.play('가')).status,'missing');
 });
+
+test('manifest refresh revokes stale playable badges and refuses taps until the new inventory arrives',async()=>{
+  const human={kind:'human',src:'./assets/hangul-audio/ac00-r2.mp3',sha256:'a'.repeat(64),
+    sourceUrl:'https://example.test/recording',author:'speaker',license:'CC-BY'};
+  let refreshResponse,requests=0,created=0;
+  const badge={dataset:{sound:'가'},classList:{toggle(){}},setAttribute(){}};
+  const context={
+    document:{baseURI:'https://example.test/hangul-basics.html',addEventListener(){},dispatchEvent(){},
+      querySelectorAll(selector){return selector==='[data-sound]'?[badge]:[]},querySelector:()=>null},
+    window:{addEventListener(){},speechSynthesis:{cancel(){}}},
+    Audio:class{constructor(){created++}play(){throw Error('stale audio must not play')}pause(){}},
+    URL,Event:class{},setTimeout,clearTimeout,
+    fetch:()=>{
+      requests++;
+      if(requests===1)return Promise.resolve({ok:true,json:async()=>({recordings:{'가':human}})});
+      return new Promise(resolve=>{refreshResponse=resolve});
+    }
+  };
+  vm.runInNewContext(source,context);
+  const H=context.window.HSHangul;
+  await H.ready;
+  assert.equal(H.availability('가').state,'ready');
+  const pending=H.reloadManifest();
+  assert.equal(requests,2);
+  assert.equal(H.availability('가').state,'unavailable','old audio must not appear playable during refresh');
+  assert.equal(badge.dataset.audioState,'unavailable','badge must update before the network reply');
+  assert.equal((await H.play('가')).status,'loading','tap during refresh must not play stale audio');
+  assert.equal(created,0);
+  refreshResponse({ok:true,json:async()=>({recordings:{}})});
+  assert.equal((await pending).status,'ready');
+  assert.equal(H.availability('가').state,'missing','withdrawn recording must stay unavailable');
+  assert.equal((await H.play('가')).status,'missing');
+  assert.equal(created,0);
+});
