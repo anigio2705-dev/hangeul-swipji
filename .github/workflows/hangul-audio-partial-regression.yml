@@ -1,0 +1,27 @@
+name: Hangul human-audio partial playback regression
+on:
+  push:
+    branches:
+      - feature/hangul-partial-audio-20261030
+    paths:
+      - hangul-core.js
+      - scripts/test-hangul-partial-playback.js
+      - .github/workflows/hangul-audio-partial-regression.yml
+  pull_request:
+    paths:
+      - hangul-core.js
+      - scripts/test-hangul-partial-playback.js
+      - .github/workflows/hangul-audio-partial-regression.yml
+permissions:
+  contents: read
+jobs:
+  test-audio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run six playback regressions without network or secrets
+        run: node scripts/test-hangul-partial-playback.js
