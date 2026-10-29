@@ -1,0 +1,39 @@
+name: HQ task 143 legacy language regression (isolated)
+on:
+  push:
+    branches:
+      - 'audit/hq2-task143-global-language-20261029-2000'
+    paths:
+      - 'global-language.js'
+      - 'automation/test_task143_global_language_contract.cjs'
+      - 'automation/test_task143_language_contract.py'
+      - '.github/workflows/hq-task143-global-language-regression.yml'
+  pull_request:
+    branches:
+      - 'automation/hq-pilot-13-14-15-20261029'
+    paths:
+      - 'global-language.js'
+      - 'automation/test_task143_global_language_contract.cjs'
+      - 'automation/test_task143_language_contract.py'
+      - '.github/workflows/hq-task143-global-language-regression.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/audit/hq2-task143-global-language-20261029-2000' || (github.event_name == 'pull_request' && github.head_ref == 'audit/hq2-task143-global-language-20261029-2000')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate syntax and batched translation regression
+        run: |
+          node --check global-language.js
+          node automation/test_task143_global_language_contract.cjs
+          python -m unittest discover -s automation -p test_task143_language_contract.py -v
