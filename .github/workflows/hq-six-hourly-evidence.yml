@@ -1,0 +1,36 @@
+name: HQ six-team last-hour evidence classification (read-only)
+on:
+  push:
+    branches:
+      - audit/hq-six-hourly-evidence-classification-20261030-0639
+  pull_request:
+    paths:
+      - 'automation/hq_six_team_audit.py'
+      - 'automation/test_hq_six_hourly_evidence.py'
+      - '.github/workflows/hq-six-hourly-evidence.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  strict-evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run stale CI and JSON-only false-positive regressions
+        run: python -m unittest discover -s automation -p 'test_hq_six_hourly_evidence.py' -v
+      - name: Read team branch heads and exact-SHA CI (no writes or model calls)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python automation/hq_six_team_audit.py
+      - name: Save read-only audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hq-six-hourly-evidence
+          path: hq-six-team-audit.json
+          if-no-files-found: warn
+          retention-days: 7
