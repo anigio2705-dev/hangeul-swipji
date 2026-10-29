@@ -1,0 +1,34 @@
+name: HQ task46 reading mobile Chromium E2E (isolated)
+on:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - 'reading.html'
+      - 'reading-curriculum.js'
+      - 'reading-alternates.js'
+      - 'scripts/browser-audit-reading-600.cjs'
+      - '.github/workflows/hq-task46-reading-mobile.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  task46-browser:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Chromium browser runner
+        run: |
+          npm install --no-save playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Exercise 600 reading entries and real 375px mobile flow
+        run: node scripts/browser-audit-reading-600.cjs
+      - name: Preserve scope of independent evidence
+        if: always()
+        run: |
+          echo 'Task #46: browser test covers 600 entry structure and a representative 375px mobile level/book/quiz/reload path.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Not verified: all 1800 answers semantically, all 600 mobile journeys, production deployment, actual human device, teacher approval.' >> "$GITHUB_STEP_SUMMARY"
