@@ -91,7 +91,27 @@ for(const course of courses){
   retryButton.onclick();
   assert.equal(get('content').children.filter(x=>x.className==='mistake').length,q.length,
     course+': retry did not restore quiz');
+  // #45 bounded partial-score regression: one correct + all other answers wrong.
+  // A retry must re-score from the new selections, never carry old points.
+  assert.ok(q.length>=2,course+': partial score requires two questions');
+  const mixed=q.map((x,i)=>i===0?x[3]:(x[3]+1)%x[2].length);
+  chooseAndSubmit(view,mixed);
+  const partialFeedback=get('content').children.find(x=>x.className==='feedback');
+  assert.equal(partialFeedback?.textContent,view.ui.ko.result+': 1 / '+q.length,
+    course+': mixed score miscalculated');
   const key='hs-'+course+'-v1';
+  let mixedSaved=JSON.parse(store.get(key));
+  assert.equal(Object.keys(mixedSaved.mistakes).length,q.length-1,
+    course+': partial quiz wrong-answer count');
+  assert.ok(!mixedSaved.done['0'],course+': partial score incorrectly marked complete');
+  function retryCurrent(){
+    const row=get('content').children.find(x=>x.className==='row');
+    const button=row?.children.find(x=>x.tagName==='button'&&x.textContent===view.ui.ko.retry);
+    assert.ok(button,course+': retry control disappeared');button.onclick();
+  }
+  retryCurrent();
+  chooseAndSubmit(view,wrong);
+  retryCurrent();
   let saved=JSON.parse(store.get(key));
   assert.equal(Object.keys(saved.mistakes).length,q.length,course+': wrong answers not saved');
   assert.ok(!saved.done['0'],course+': wrong answers marked complete');
