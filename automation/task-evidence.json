@@ -6,12 +6,32 @@
     "ci_result": "success",
     "scope": "HQ queue keeps stable 1-160 IDs and prevents re-implementing code-verified tasks; final master review remains open"
   },
+  "22": {
+    "status": "blocked",
+    "owner": "13",
+    "path": "phase3/instant_matching.py",
+    "block_reason": "One targeted AI repair rejected by regression test test_new_tables_do_not_modify_existing_booking: expected HTTP 403, got 200 for instant join during an existing booking.",
+    "repair_attempts": 1,
+    "source_run_id": 40791928076,
+    "source_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40791928076",
+    "scope": "Needs a different, regression-preserving #22 fix. Do not repeat rejected patch; next independent safe team13 task may proceed. Not a final completion."
+  },
   "52": {
     "status": "code_verified",
     "commit": "5038a7fd41df1f6c3fa97d5534c19c17ea821b3d",
     "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40746321354",
     "ci_result": "success",
     "scope": "Classify missing, held/unreviewed and playback failures separately; reject invalid human audio sources and duplicate 7-day mappings. Actual pronunciation listening and browser/mobile playback remain unverified."
+  },
+  "55": {
+    "status": "code_verified",
+    "commit": "ccac78a7b57683a3cf0809d2a1308ae3f907e56d",
+    "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40789832598",
+    "ci_result": "success",
+    "independent_review": "pass",
+    "scope": "Independent source diff and functional regression passed; final CI run and public site still pending",
+    "owner": "16",
+    "path": "scripts/render-audio-credits.py"
   },
   "59": {
     "status": "code_verified",
@@ -29,15 +49,5 @@
     "scope": "Independent source diff and functional regression passed; final CI run and public site still pending",
     "owner": "14",
     "path": "phase3/team14_referral_store.py"
-  },
-  "55": {
-    "status": "code_verified",
-    "commit": "ccac78a7b57683a3cf0809d2a1308ae3f907e56d",
-    "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40789832598",
-    "ci_result": "success",
-    "independent_review": "pass",
-    "scope": "Independent source diff and functional regression passed; final CI run and public site still pending",
-    "owner": "16",
-    "path": "scripts/render-audio-credits.py"
   }
 }
