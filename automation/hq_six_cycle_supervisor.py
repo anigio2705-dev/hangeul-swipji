@@ -235,7 +235,15 @@ def supervise(root, token, depth, repairs, output):
                 verdicts[team].append({"task_number": number, "verdict": verdict,
                                        "reason": reason, "evidence": evidence})
                 if verdict == "TEST_PASS_PENDING_CI":
-                    if ledger.get(str(number), {}).get("status") not in ("complete", "code_verified"):
+                    previous = ledger.get(str(number), {})
+                    # A previously reviewed SHA is not new development, even
+                    # if a developer artifact is replayed in another workflow.
+                    # Do not dispatch more AI work or count it twice.
+                    new_commit = (
+                        previous.get("status") not in ("complete", "code_verified")
+                        and previous.get("commit") != evidence["commit"]
+                    )
+                    if new_commit:
                         ledger[str(number)] = {
                             "status": "in_progress", "commit": evidence["commit"],
                             "ci_url": "https://github.com/" + REPO + "/actions/runs/" + os.environ["GITHUB_RUN_ID"],
@@ -243,7 +251,7 @@ def supervise(root, token, depth, repairs, output):
                             "scope": "Independent source diff and functional regression passed; final CI run and public site still pending",
                             "owner": team, "path": task["path"]}
                         staged.append(number)
-                    if status == "committed":
+                    if new_commit and status == "committed":
                         passed += 1
                         progress_teams.add(team)
                 elif verdict == "RETRY" and isinstance(number, int):
