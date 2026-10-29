@@ -101,6 +101,35 @@
     });
     if(token===run){current=null;release=null}
   }
+  async function synthesized(word,token){
+    const synth=window.speechSynthesis;
+    const Utterance=window.SpeechSynthesisUtterance;
+    if(!synth||typeof synth.speak!=='function'||typeof Utterance!=='function'){
+      status('이 기기는 한국어 TTS를 지원하지 않습니다. / Korean TTS unavailable.');
+      return {status:'tts-unavailable',word};
+    }
+    return new Promise(resolve=>{
+      const utterance=new Utterance(word);
+      utterance.lang='ko-KR';
+      utterance.rate=0.85;
+      let finished=false,timer=null;
+      const finish=(result)=>{
+        if(finished)return;
+        finished=true;
+        if(timer!==null)cancelTimer(timer);
+        if(release===cancel)release=null;
+        resolve(result);
+      };
+      const cancel=()=>finish({status:'cancelled',word});
+      release=cancel;
+      utterance.onstart=()=>{if(token===run)status('한국어 합성음 재생 중: '+word+' / Korean synthetic TTS (not human recording)')};
+      utterance.onend=()=>finish({status:token===run?'tts-played':'cancelled',word});
+      utterance.onerror=()=>finish({status:'tts-error',word});
+      if(schedule)timer=schedule(()=>{synth.cancel();finish({status:'tts-timeout',word})},15000);
+      status('사람 녹음 없음 · 한국어 합성음 시도: '+word+' / Synthetic TTS, not a human recording');
+      try{synth.speak(utterance)}catch(_){finish({status:'tts-error',word})}
+    });
+  }
   async function play(value){
     stop();const token=run;
     await (manifestError?loadManifest():(loading||ready));if(token!==run)return {status:'cancelled'};
@@ -109,11 +138,20 @@
     if(!words.length||words.some(w=>typeof w!=='string'||!w.trim()))return {status:'invalid'};
     const missing=words.filter(word=>!records[word]);
     if(missing.some(w=>holds[w])){status('재생 보류: '+missing.filter(w=>holds[w]).map(w=>w+' · '+holds[w].holdReason).join(' / '));return {status:'held',missing}}
-    if(missing.length){status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요.');return {status:'missing',missing}}
     try{
-      for(const word of words){if(token!==run)return {status:'cancelled'};await recording(word,token)}
-      if(token===run)status('재생 완료 · 청취 정확성 미검증 / Playback ended; listening review pending.');
-      return {status:token===run?'played':'cancelled',words};
+      let usedTts=false;
+      for(const word of words){
+        if(token!==run)return {status:'cancelled'};
+        if(records[word]){await recording(word,token);continue}
+        usedTts=true;
+        const result=await synthesized(word,token);
+        if(result.status!=='tts-played'){
+          if(token===run)status('합성음 재생 불가: '+word+' · '+result.status+' / Synthetic TTS failed or unavailable');
+          return {status:result.status,word,missing};
+        }
+      }
+      if(token===run)status(usedTts?'재생 완료 · 합성음 포함 (사람 녹음 아님) / Synthetic TTS used':'사람 녹음 재생 완료 · 청취 정확성 미검증');
+      return {status:token===run?(usedTts?'tts-played':'played'):'cancelled',words};
     }catch(e){if(token===run){stop();status(e.message)}return {status:'error',message:e.message}}
   }
   const el=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!==undefined)x.textContent=text;return x};
