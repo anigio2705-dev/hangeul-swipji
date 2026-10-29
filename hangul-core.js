@@ -87,7 +87,7 @@
     // must not replay a stale browser/CDN-cached recording after manifest refresh.
     const digest=records[word].sha256;
     if(typeof digest==='string'&&/^[0-9a-f]{64}$/i.test(digest))asset.searchParams.set('v',digest.slice(0,16));
-    const sound=new Audio(asset.href);current=sound;
+    const sound=new Audio(asset.href);sound.preload='auto';current=sound;
     status('사람 녹음 로딩 중: '+word+' · 청취 정확성 미검증 / Loading human recording; listening review pending');
     await new Promise((resolve,reject)=>{
       let timer=null,settled=false;
@@ -124,7 +124,7 @@
   function refreshBadges(){
     document.querySelectorAll('[data-sound]').forEach(b=>{
       const info=availability(b.dataset.sound);b.dataset.audioState=info.state;
-      const native=info.state==='ready';b.classList.toggle('has-recording',native);
+      const native=info.state==='ready';b.classList.toggle('has-recording',native);b.classList.toggle('audio-unavailable',!native);b.setAttribute('aria-description',info.label);
       const held=info.state==='held'?holds[b.dataset.sound]:null;b.classList.toggle('is-held',!!held);b.setAttribute('aria-label',b.dataset.sound+' · '+info.label);
       b.title=info.label;
     });
