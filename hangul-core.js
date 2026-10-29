@@ -19,7 +19,7 @@
     if(a<0||b<0)throw new Error('Invalid Hangul letters');
     return String.fromCharCode(0xac00+(a*21+b)*28);
   }
-  const records={},holds={};let current=null,run=0,release=null,manifestError=false;
+  const records={},holds={};let current=null,run=0,release=null,manifestError=false,manifestLoaded=false;
   const schedule=typeof setTimeout==='function'?setTimeout:null,cancelTimer=typeof clearTimeout==='function'?clearTimeout:()=>{};
   let loading=null;
   function loadManifest(){
@@ -28,8 +28,8 @@
     const request=fetch('./hangul-audio-manifest.json?v=20261027-audio-retry', {cache:'no-store'})
       .then(r=>{if(!r.ok)throw Error('audio manifest');return r.json()});
     loading=(schedule?Promise.race([request,new Promise((_,reject)=>{timer=schedule(()=>reject(Error('audio manifest timeout')),15000)})]):request)
-      .then(m=>{if(!m.recordings||typeof m.recordings!=='object')throw Error('invalid audio manifest');const human=Object.entries(m.recordings).filter(([,a])=>a.kind==='human'&&typeof a.src==='string'&&/^\.\/assets\/hangul-audio\/[\w-]+\.mp3$/.test(a.src)&&a.sourceUrl&&a.author&&a.license);Object.assign(records,Object.fromEntries(human.filter(([,a])=>!a.disabled)));Object.assign(holds,Object.fromEntries(human.filter(([,a])=>a.disabled)));manifestError=false;document.dispatchEvent(new Event('hs-audio-ready'))})
-      .catch(()=>{manifestError=true;document.dispatchEvent(new Event('hs-audio-ready'))})
+      .then(m=>{if(!m.recordings||typeof m.recordings!=='object')throw Error('invalid audio manifest');const human=Object.entries(m.recordings).filter(([,a])=>a.kind==='human'&&typeof a.src==='string'&&/^\.\/assets\/hangul-audio\/[\w-]+\.mp3$/.test(a.src)&&a.sourceUrl&&a.author&&a.license);Object.assign(records,Object.fromEntries(human.filter(([,a])=>!a.disabled)));Object.assign(holds,Object.fromEntries(human.filter(([,a])=>a.disabled)));manifestError=false;manifestLoaded=true;document.dispatchEvent(new Event('hs-audio-ready'))})
+      .catch(()=>{manifestError=true;manifestLoaded=false;document.dispatchEvent(new Event('hs-audio-ready'))})
       .finally(()=>{if(timer!==null)cancelTimer(timer);loading=null});
     return loading;
   }
@@ -107,19 +107,56 @@
   }
   async function play(value){
     stop();const token=run;
-    await (manifestError?loadManifest():(loading||ready));if(token!==run)return {status:'cancelled'};
-    if(manifestError){const substitute=await fallback(Array.isArray(value)?value:[value],token);if(substitute)return substitute;status('음성 목록을 불러오지 못했습니다. 글자를 다시 누르면 재시도합니다. / Audio list unavailable; click again to retry.');return {status:'manifest-error'}}
     const words=Array.isArray(value)?value:[value];
     if(!words.length||words.some(w=>typeof w!=='string'||!w.trim()))return {status:'invalid'};
+    // A device TTS click must not wait for a failing manifest request: some
+    // mobile browsers lose user activation after an await, even if it resolves.
+    if(manifestError&&syntheticEnabled)return fallback(words,token);
+    // Same for available human recordings: start Audio.play synchronously in
+    // the user gesture when the manifest has already been loaded.
+    if(!manifestLoaded)await (manifestError?loadManifest():(loading||ready));
+    if(token!==run)return {status:'cancelled'};
+    if(manifestError){
+      status('음성 목록을 불러오지 못했습니다. 글자를 다시 누르면 재시도합니다. / Audio list unavailable; click again to retry.');
+      return {status:'manifest-error'};
+    }
     const missing=words.filter(word=>!records[word]);
-    if(missing.length&&syntheticEnabled){const substitute=await fallback(words,token);if(substitute)return substitute}
-    if(missing.some(w=>holds[w])){status('재생 보류: '+missing.filter(w=>holds[w]).map(w=>w+' · '+holds[w].holdReason).join(' / '));return {status:'held',missing}}
-    if(missing.length){status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요.');return {status:'missing',missing}}
+    // Without explicit opt-in, never play a partial sequence or silently
+    // replace an unavailable human recording with a synthetic voice.
+    if(missing.length&&!syntheticEnabled){
+      const held=missing.filter(w=>holds[w]);
+      if(held.length){
+        status('재생 보류: '+held.map(w=>w+' · '+holds[w].holdReason).join(' / '));
+        return {status:'held',missing};
+      }
+      status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요.');
+      return {status:'missing',missing};
+    }
+    const humanWords=[],syntheticWords=[];
     try{
-      for(const word of words){if(token!==run)return {status:'cancelled'};await recording(word,token)}
-      if(token===run)status('재생 완료 · 청취 정확성 미검증 / Playback ended; listening review pending.');
-      return {status:token===run?'played':'cancelled',words};
-    }catch(e){if(token===run){stop();status(e.message)}return {status:'error',message:e.message}}
+      // Preserve the caller's order. A valid human recording ALWAYS wins,
+      // including when a later syllable in the same sequence is unavailable.
+      for(const word of words){
+        if(token!==run)return {status:'cancelled'};
+        if(records[word]){
+          await recording(word,token);
+          humanWords.push(word);
+        }else{
+          const result=await fallback([word],token);
+          if(!result||result.status!=='synthetic')return result||{status:'missing',missing:[word]};
+          syntheticWords.push(word);
+        }
+      }
+      if(token===run){
+        status(syntheticWords.length
+          ?'재생 완료 · 사람 녹음 '+humanWords.length+'개, 기기 합성음 '+syntheticWords.length+'개 (사람 녹음 아님).'
+          :'재생 완료 · 사람 녹음 청취 정확성 미검증 / Playback ended; listening review pending.');
+      }
+      return {status:token!==run?'cancelled':syntheticWords.length?(humanWords.length?'mixed':'synthetic'):'played',words,humanWords,syntheticWords};
+    }catch(e){
+      if(token===run){stop();status(e.message)}
+      return {status:'error',message:e.message};
+    }
   }
   const el=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!==undefined)x.textContent=text;return x};
   function soundButton(word,label=word){
