@@ -52,12 +52,12 @@ class InitialProductTests(unittest.TestCase):
         db.row_factory=sqlite3.Row
         db.executescript("""
           CREATE TABLE users(id TEXT PRIMARY KEY,role TEXT,approved INTEGER);
-          CREATE TABLE bookings(id TEXT PRIMARY KEY,teacher_id TEXT,price INTEGER);
+          CREATE TABLE bookings(id TEXT PRIMARY KEY,teacher_id TEXT,price INTEGER,status TEXT);
           CREATE TABLE booking_product_snapshots(
             booking_id TEXT PRIMARY KEY,product_code TEXT,
             duration_minutes INTEGER,price_krw INTEGER,currency TEXT);
           INSERT INTO users VALUES('t','partner',1);
-          INSERT INTO bookings VALUES('b','t',10000);
+          INSERT INTO bookings VALUES('b','t',10000,'completed');
           INSERT INTO booking_product_snapshots VALUES('b','partner_25',25,10000,'KRW');
         """)
         verified=dict(verifiedByServer=True,type='lesson.completed',status='completed',
@@ -74,6 +74,10 @@ class InitialProductTests(unittest.TestCase):
                       dict(verified,currency='USD')):
             with self.subTest(event=event),self.assertRaises(SimError):
                 verify_server_product_contract(db,'b',event)
+        db.execute("UPDATE bookings SET status='cancelled' WHERE id='b'")
+        with self.assertRaises(SimError):
+            verify_server_product_contract(db,'b',verified)
+        db.execute("UPDATE bookings SET status='completed' WHERE id='b'")
         db.execute("UPDATE booking_product_snapshots SET product_code='professional_25',price_krw=15000 WHERE booking_id='b'")
         db.execute("UPDATE bookings SET price=15000 WHERE id='b'")
         with self.assertRaises(SimError):
