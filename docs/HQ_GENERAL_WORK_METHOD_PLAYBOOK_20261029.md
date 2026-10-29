@@ -474,3 +474,13 @@
 ### 18:24 KST 교차 감사 정정 — #59 상태와 장부 브랜치 불일치
 
 다른 예약 실행 「한글쉽지 무인 개발」의 **18:24 최신 완료 보고**는 경로 등록 26, CODE_VERIFIED 12, BLOCKED 3이라고 기록했다. 특히 #59의 기존 부분 검증이 새로 발견된 '모' UI 오류를 놓쳤으므로 BLOCKED로 정정했다고 설명한다. 반면 이 문서가 위치한 중앙 격리 브랜치 `automation/hq-pilot-13-14-15-20261029`를 직접 재조회하면 `automation/hq_semantic_contract_paths.json` blob `f9391842`는 24개(CANDIDATE 11/BLOCKED 2/CODE_VERIFIED 11), `automation/task-evidence.json` blob `bb3d03a1`는 CODE_VERIFIED 13(#59 포함), BLOCKED 2(#22/#47)다. **서로 다른 브랜치·스냅샷의 수치를 합치거나 중앙 장부를 검증 없이 자동 덮어쓰지 않는다.** #59 오류·수정·정확한 CI를 검토하고 중앙 계약/증거 원장에 적절한 상태 정정을 별도 독립 감사로 통합해야 한다. 최종 승인 0/160은 두 보고에서 동일하다.
+
+### 2026-10-29 20:40 KST — 6팀 동적 READY 제출의 감독 검증 차단 교정 (격리 후보)
+
+- **실제 장애:** 기존 `automation/hq_six_developers.py`는 15팀 독립 승인 READY 과제를 `assignment_source=reviewed_READY`로 제출할 수 있으나, `automation/hq_six_cycle_supervisor.py::independent_check`는 `CURATED_TARGETS`의 옛 번호/경로만 허용하여 신규 READY 제출을 무조건 RETRY 처리했다. 신규 READY에 대해 독립 과제 테스트도 실행하지 않아 기존 기능 검증 경로가 끊겼다. 16팀의 기존 #55 음원 크레딧 검사가 모든 16팀 과제에 잘못 적용될 위험도 있었다.
+- **수정 가설:** HQ 소유 `next_assignment`의 독립 심사 READY 계약과 제출 번호·단일 수정 파일이 정확히 일치할 때만 신규 제출을 검증하고, 계약에 적힌 `test_*.py` unittest를 반드시 실행하며 0개 테스트는 실패로 처리하면 기존 #22/#47 차단을 유지하면서 신규 READY 검증 경로가 열린다.
+- **실제 코드:** 격리 브랜치 `audit/hq-six-dynamic-ready-supervisor-20261029-2037`; 코드 SHA `098a4a21e080517c6f8a62ec63f0fdd975ed15d4`, 회귀 테스트 수정 SHA `801ef5a79ff0d9a7e07f45a38357156ac9bd3ccd`, CI 트리거 SHA `901fb7dbdf31c08aa65130c3ccff32a1a7b15847`. 기존 curated 검증을 유지하면서 새 동적 제출은 독립 READY 검증 없으면 거절한다. 신규 테스트 3개(정상 동적 제출/미승인 제출/0개 테스트 반례)를 추가했다.
+- **독립 CI:** [#40867122578](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40867122578) `regression` SUCCESS, 정확한 SHA `901fb7dbdf31c08aa65130c3ccff32a1a7b15847`. 로그에서 supervisor 16개, task-cycle 13개, runner 7개, 총 **36개 단위 검사 PASS** 확인. 이는 **격리된 제어 프로그램 회귀 통과**이지 팀 AI 개발이나 실제 홈페이지 검증이 아니다.
+- **독립 검토:** [초안 PR #37](https://github.com/anigio2705-dev/hangeul-swipji/pull/37)로 15팀 검토 대기. main/운영 DB/결제/Render 테스트99 변경 없음.
+- **남은 병목:** 중앙 파일 `hq_semantic_contract_paths.json`은 24개 매핑, READY 0, CANDIDATE 11, BLOCKED 2, CODE_VERIFIED 11. 팀별 후보는 11=#11, 12=#45, 13=#23, 14=#101, 15=#151, 16=#143이나 모두 독립 READY 승격 미완료다. 해당 후보들은 대부분 다중 소스 또는 HTML/JS이며 현 Python 단일 파일 패치 러너가 바로 수행할 수 없다. **새 6개 팀 AI 호출·6개 개발 job·신규 bot 커밋 0**. 과거 마지막 실제 6팀 워크플로 #40797947894는 12팀 job+감독 job뿐, AI 호출 0.
+- **후속 안전 관문:** 15팀이 실제 파일/테스트/소유권을 독립 심사한 Python 단일 파일 READY를 공급하고, #37 변경을 독립 검토·격리 통합한 뒤 승인된 pilot ref에서만 workflow_dispatch를 수행한다. 6팀 모두 READY 전에는 API 호출 상한 증액·가짜 READY 승격·무의미한 반복 dispatch 금지. 현재 도구 연결에는 Actions workflow_dispatch 쓰기 액션이 제공되지 않아 이번 대화 실행에서 6개 job 시작을 주장할 수 없다. 

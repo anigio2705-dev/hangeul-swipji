@@ -1,0 +1,26 @@
+name: HQ isolated dynamic READY verification (no AI calls)
+on:
+  push:
+    branches:
+      - audit/hq-six-dynamic-ready-supervisor-20261029-2037
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  regression:
+    if: github.ref == 'refs/heads/audit/hq-six-dynamic-ready-supervisor-20261029-2037'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile trusted gate and regression
+        run: |
+          python -m py_compile automation/hq_six_cycle_supervisor.py automation/test_hq_six_cycle_supervisor.py
+      - name: Exercise READY authorization, independent test and repair gates
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_six_cycle_supervisor.py' -v
+          python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+          python -m unittest discover -s automation -p 'test_hq_six_developers.py' -v

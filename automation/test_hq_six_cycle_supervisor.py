@@ -178,5 +178,69 @@ class SixTeamSupervisorTests(unittest.TestCase):
         self.assertFalse(report["dispatched_next"])
         api.assert_not_called()
 
+
+    def test_dynamic_ready_submission_runs_reviewed_task_specific_unittest(self):
+        from types import SimpleNamespace
+        catalog = contracts(sample())
+        assignment = {"source": "independently_reviewed_READY_registry",
+                      "task_number": 23, "path": "phase3/lesson_acceptance.py",
+                      "independent_test_paths": ["phase3/test_lesson_acceptance.py"]}
+        commit = "b" * 40
+        def github_response(endpoint, _token):
+            if endpoint.startswith("/branches/"):
+                return {"commit": {"sha": commit}}
+            return {"files": [{"filename": "phase3/lesson_acceptance.py"}],
+                    "commit": {"message": "bot(team13): task #23 tested isolated fix"}}
+        success = SimpleNamespace(returncode=0, stdout="Ran 1 test in 0.001s\\nOK", stderr="")
+        with patch("hq_six_cycle_supervisor.next_assignment", return_value=assignment), \
+             patch("hq_six_cycle_supervisor.api", side_effect=github_response), \
+             patch("hq_six_cycle_supervisor.cmd", return_value=success) as run:
+            verdict, reason, evidence = independent_check(
+                "13", {"task_number": 23, "path": "phase3/lesson_acceptance.py",
+                       "assignment_source": "reviewed_READY", "commit": commit},
+                "token", catalog)
+        self.assertEqual(verdict, "TEST_PASS_PENDING_CI")
+        self.assertIn("test_lesson_acceptance.py", evidence["test_command"])
+        self.assertTrue(any("unittest" in call.args[0] for call in run.call_args_list))
+
+    def test_dynamic_ready_submission_fails_closed_without_independent_ready(self):
+        catalog = contracts(sample())
+        with patch("hq_six_cycle_supervisor.next_assignment", return_value=None), \
+             patch("hq_six_cycle_supervisor.api") as api:
+            verdict, reason, evidence = independent_check(
+                "13", {"task_number": 23, "path": "phase3/lesson_acceptance.py",
+                       "assignment_source": "reviewed_READY", "commit": "b" * 40},
+                "token", catalog)
+        self.assertEqual(verdict, "RETRY")
+        self.assertIn("Unreviewed", reason)
+        self.assertEqual(evidence, {})
+        api.assert_not_called()
+
+    def test_dynamic_ready_zero_tests_never_passes(self):
+        from types import SimpleNamespace
+        catalog = contracts(sample())
+        assignment = {"source": "independently_reviewed_READY_registry",
+                      "task_number": 143, "path": "scripts/team16_locale.py",
+                      "independent_test_paths": ["scripts/test_team16_locale.py"]}
+        commit = "c" * 40
+        def github_response(endpoint, _token):
+            if endpoint.startswith("/branches/"):
+                return {"commit": {"sha": commit}}
+            return {"files": [{"filename": "scripts/team16_locale.py"}],
+                    "commit": {"message": "bot(team16): task #143 tested isolated fix"}}
+        def command_result(command, **_kwargs):
+            output = "Ran 0 tests in 0.000s\\nOK" if "unittest" in command else "OK"
+            return SimpleNamespace(returncode=0, stdout=output, stderr="")
+        with patch("hq_six_cycle_supervisor.next_assignment", return_value=assignment), \
+             patch("hq_six_cycle_supervisor.api", side_effect=github_response), \
+             patch("hq_six_cycle_supervisor.cmd", side_effect=command_result):
+            verdict, reason, evidence = independent_check(
+                "16", {"task_number": 143, "path": "scripts/team16_locale.py",
+                       "assignment_source": "reviewed_READY", "commit": commit},
+                "token", catalog)
+        self.assertEqual(verdict, "RETRY")
+        self.assertIn("zero tests", reason)
+        self.assertEqual(evidence, {})
+
 if __name__ == "__main__":
     unittest.main()
