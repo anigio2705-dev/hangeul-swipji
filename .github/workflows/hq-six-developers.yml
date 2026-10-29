@@ -58,9 +58,11 @@ jobs:
         run: |
           python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
           python -m unittest discover -s automation -p 'test_hq_six_developers.py' -v
+          python -m unittest discover -s automation -p 'test_hq_six_candidate_artifacts.py' -v
       - name: Copy trusted runner and canonical task contracts outside working tree
         run: |
           cp automation/hq_six_developers.py /tmp/hq_six_developers.py
+          cp automation/hq_six_candidate_artifacts.py /tmp/hq_six_candidate_artifacts.py
           cp automation/hq_160_task_cycle.py /tmp/hq_160_task_cycle.py
           cp automation/hq_traffic_lights.py /tmp/hq_traffic_lights.py
           cp automation/hq_semantic_contract_paths.json /tmp/hq_semantic_contract_paths.json
@@ -110,6 +112,15 @@ jobs:
               "committed": sum(t.get("status") == "committed" for x in history for t in x.get("tasks", []))
           }, indent=2))
           PY
+      - name: One bounded candidate AI artifact if independently approved READY is empty
+        if: success()
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          HQ_TEAM: ${{ matrix.team }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: |
+          python /tmp/hq_six_candidate_artifacts.py
+          echo "Exploratory candidate only; independent team15 READY and product CI still required."
       - name: Save team result
         if: always()
         uses: actions/upload-artifact@v4
