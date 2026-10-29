@@ -49,18 +49,21 @@
     "scope": "Wrong task/file mapping rejected; 160-item final completion unchanged. Team13 placement boundary bug was repaired as a separate safety correction, not #47 completion."
   },
   "49": {
-    "status": "blocked",
+    "status": "unverified",
     "commit": "a61974ef90ed9355977eedcb71a523f20f47cbd6",
     "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797620270",
-    "ci_result": "semantic_gate_failed",
-    "independent_review": "semantic_rejected",
+    "ci_result": "rejected_previous_patch",
+    "independent_review": "pending_corrective_candidate",
     "task_specific_verified": false,
     "test_command": "python -m unittest discover -s phase3 -p test_global_learning.py",
     "scope": "Semantically unsafe AI patch rejected; no #49 completion credit.",
     "owner": "12",
     "path": "phase3/learning.py",
     "block_reason": "AI changed recommendations condition from (unit not booked OR weak) to (unit not booked AND NOT weak), leaving weak learners with zero recommended lessons. Existing global-learning suite missed this boundary; immutable HQ verify_task49.py added and independent CI running. Do not promote successful workflow #40797620270 to code_verified.",
-    "rejected_commit": "a61974ef90ed9355977eedcb71a523f20f47cbd6"
+    "rejected_commit": "a61974ef90ed9355977eedcb71a523f20f47cbd6",
+    "corrective_candidate": "9fb8a54b1cc183bd30ca47deab99cd1c76c0a40f",
+    "corrective_audit_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797845758",
+    "next_action": "Independently verify exact corrective candidate SHA via six-team supervisor; do not promote without matching CI."
   },
   "52": {
     "status": "code_verified",
