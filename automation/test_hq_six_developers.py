@@ -3,7 +3,7 @@ import tempfile
 from pathlib import Path
 from unittest.mock import patch
 from types import SimpleNamespace
-from hq_six_developers import apply_patch, validate_candidate, choose_work_items, run_checks
+from hq_six_developers import apply_patch, validate_candidate, choose_work_items, run_checks, require_clean_hq_checkout, require_clean_team_checkout, HQ_REF
 from hq_160_task_cycle import _semantic_dispatch_gate, contracts
 
 class BoundedPatchTests(unittest.TestCase):
@@ -83,6 +83,88 @@ class BoundedPatchTests(unittest.TestCase):
             apply_patch("def a():\n    return 123\n", {
                 "old": "def a():\n    return 123",
                 "new": "def a():\n    return 123"})
+
+
+class Team11PreflightTests(unittest.TestCase):
+    """Independent #11 negative cases; no model API, network or deployment."""
+
+    SHA = "a" * 40
+    STALE = "b" * 40
+
+    def fake_shell(self, values):
+        def run(*args, **kwargs):
+            command = tuple(args)
+            if command not in values:
+                raise AssertionError("Unexpected git command: " + repr(command))
+            value = values[command]
+            return SimpleNamespace(returncode=0, stdout=value, stderr="")
+        return run
+
+    def hq_values(self):
+        return {
+            ("git", "status", "--porcelain=v1", "--untracked-files=all"): "",
+            ("git", "symbolic-ref", "--quiet", "--short", "HEAD"): HQ_REF + "\n",
+            ("git", "rev-parse", "HEAD"): self.SHA + "\n",
+            ("git", "ls-remote", "--exit-code", "origin", "refs/heads/" + HQ_REF):
+                self.SHA + "\trefs/heads/" + HQ_REF + "\n",
+        }
+
+    def team_values(self):
+        source = "team11/common-foundation-20261028"
+        return source, {
+            ("git", "status", "--porcelain=v1", "--untracked-files=all"): "",
+            ("git", "rev-parse", "HEAD"): self.SHA + "\n",
+            ("git", "rev-parse", "FETCH_HEAD"): self.SHA + "\n",
+            ("git", "ls-remote", "--exit-code", "origin", "refs/heads/" + source):
+                self.SHA + "\trefs/heads/" + source + "\n",
+        }
+
+    def test_clean_current_hq_and_team_checkout_pass(self):
+        with patch("hq_six_developers.shell", side_effect=self.fake_shell(self.hq_values())):
+            require_clean_hq_checkout()
+        source, values = self.team_values()
+        with patch("hq_six_developers.shell", side_effect=self.fake_shell(values)):
+            require_clean_team_checkout(source)
+
+    def test_dirty_and_untracked_hq_checkout_block_before_ai(self):
+        for status in (" M automation/hq_six_developers.py\n", "?? unexpected.py\n"):
+            with self.subTest(status=status):
+                values = self.hq_values()
+                values[("git", "status", "--porcelain=v1", "--untracked-files=all")] = status
+                with patch("hq_six_developers.shell", side_effect=self.fake_shell(values)):
+                    with self.assertRaisesRegex(RuntimeError, "dirty or untracked"):
+                        require_clean_hq_checkout()
+
+    def test_wrong_or_stale_hq_branch_blocks(self):
+        values = self.hq_values()
+        values[("git", "symbolic-ref", "--quiet", "--short", "HEAD")] = "main\n"
+        with patch("hq_six_developers.shell", side_effect=self.fake_shell(values)):
+            with self.assertRaisesRegex(RuntimeError, "wrong HQ branch"):
+                require_clean_hq_checkout()
+        values = self.hq_values()
+        values[("git", "ls-remote", "--exit-code", "origin", "refs/heads/" + HQ_REF)] = self.STALE + "\trefs/heads/" + HQ_REF
+        with patch("hq_six_developers.shell", side_effect=self.fake_shell(values)):
+            with self.assertRaisesRegex(RuntimeError, "HQ HEAD stale"):
+                require_clean_hq_checkout()
+
+    def test_dirty_and_racing_team_checkout_blocks(self):
+        source, values = self.team_values()
+        values[("git", "status", "--porcelain=v1", "--untracked-files=all")] = "?? injected.txt\n"
+        with patch("hq_six_developers.shell", side_effect=self.fake_shell(values)):
+            with self.assertRaisesRegex(RuntimeError, "dirty or untracked"):
+                require_clean_team_checkout(source)
+        source, values = self.team_values()
+        values[("git", "ls-remote", "--exit-code", "origin", "refs/heads/" + source)] = self.STALE + "\trefs/heads/" + source
+        with patch("hq_six_developers.shell", side_effect=self.fake_shell(values)):
+            with self.assertRaisesRegex(RuntimeError, "team HEAD stale"):
+                require_clean_team_checkout(source)
+
+    def test_git_command_failure_is_never_interpreted_as_clean(self):
+        values = self.hq_values()
+        with patch("hq_six_developers.shell", side_effect=self.fake_shell(values)) as mocked:
+            mocked.side_effect = lambda *args, **kwargs: SimpleNamespace(returncode=128, stdout="", stderr="fatal")
+            with self.assertRaisesRegex(RuntimeError, "git command failed"):
+                require_clean_hq_checkout()
 
 if __name__ == "__main__":
     unittest.main()
