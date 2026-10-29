@@ -450,3 +450,11 @@
 - **수정:** 실험 브랜치에 `.gitignore`로 `__pycache__/`, `*.py[cod]`, `.pytest_cache/`만 무시한다. 다른 비추적 파일의 거부 조건은 유지한다. 실제 checkout 검사 로그도 추가했다.
 - **재검증:** [CI #40830582694](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40830582694), 정확한 SHA `a92ce28ab8c9461734923c15b8c37475505811d2`, 25개 테스트 + 실제 원격 HEAD/clean checkout 검사 모두 PASS. PR [#24](https://github.com/anigio2705-dev/hangeul-swipji/pull/24)는 격리 초안이며 HQ 통합 전. 모델 API 호출 0, 6팀 실제 AI 개발 0, 신규 CODE_VERIFIED 0, 최종 완료 0.
 - **교훈:** 작업 전 상태 검사는 테스트가 생성하는 무해한 빌드 산출물과 실제 사용자·AI 수정물을 구분해야 한다. 단, 무조건 `git clean -fd`로 제거하거나 모든 untracked를 무시하지 않는다. 정확한 실패 로그를 보고 좁은 예외만 추가한 뒤 동일 실 checkout 검사를 재실행한다.
+
+
+## 2026-10-29 16:40 KST — 160개 소유권 충돌 및 테스트99 데이터 유실 방지 실증
+- **소유권 독립 대조:** PR #27의 160개 계약을 전수 비교하여 잘못된 49개 소관(#1–10, #31–40, #81–100, #141–142/#144–150)만 수정됐고, 수락 기준·증거·상태는 한 칸도 변경되지 않았음을 검증했다. 기존 49개 불일치 → 0개, 중복 번호 0. [독립 CI #40836327097](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40836327097) PASS, 격리 총괄 브랜치 병합 SHA `9034ff994bc3bfe0f6199ff4d59b1be00933136e`. **READY 승격/신규 기능 완료/6팀 AI 호출로 계산하지 않는다.**
+- **배포 실패 원인:** Render 최초 배포 원장 `audit/staging99-deployment.json`의 `ad5757d`는 과거 기록일 뿐 현재 실행 SHA가 아니다. `deploy/render-staging.yaml`은 `plan: free`, `HS_STAGING_DB=/tmp/hangeul-swipji-staging/platform.sqlite3`, 자동 배포 off다. 2026-10-29 읽기 전용 실제 서버 대조 CI [#40832698519](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40832698519)는 `sourceSHA256, appSHA256, deployedCommit` 불일치로 실패했다. 따라서 현재 배포 SHA와 백업/복구는 미확인.
+- **가설·변경:** 테스트99 자동 재배포 전에 소스에 포함된 무료/임시 DB 위험과 과거 배포 SHA 오인을 독립적으로 차단하면, 승인되지 않은 재배포가 테스트 예약/모의 결제 기록을 지우는 위험을 줄인다. 격리 브랜치에 `automation/staging99_redeploy_guard.py` 및 6개 반례, 읽기 전용 CI를 추가했다.
+- **검증:** [CI #40837155467](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40837155467)에서 6개 단위 테스트 PASS 및 실제 블루프린트에 대한 **예상된 BLOCKED(exit 2)** 확인. 녹색 CI는 '위험 탐지기 정상'만 의미한다. 배포 성공, 실제 영속 디스크, 백업 복구, 대표 승인과는 무관하다.
+- **후속 안전 조건:** 11·13팀은 Render 관리자 권한으로 실제 서비스의 현재 SHA·DB 마운트·백업·복구 테스트를 확인하고, 15팀은 기존 개설→상대 신청/수락→연결→화상·수업 상태 흐름을 독립 PC/모바일에서 확인한다. 그 전까지 테스트99 재배포 및 운영 홈페이지 변경 금지. 이 방법은 OpenAI Agent Improvement Loop의 '실패 관찰→반례 평가→변경→독립 재검증' 패턴을 사용했다. API 모델 호출 0회; 새 제품 기능 검증 0건.
