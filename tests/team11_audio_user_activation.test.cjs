@@ -117,3 +117,58 @@ test('board distinguishes TTS errors, cancellation, and manifest failures',()=>{
   assert.match(board,/result\.status==='missing'/);
   assert.match(board,/result\.status==='tts-played'/);
 });
+
+test('early mobile tap does not attempt playback after manifest await; retry stays inside tap',async()=>{
+  let deliver;
+  const pending=new Promise(resolve=>{deliver=resolve});
+  let insideClick=false;
+  const calls=[];
+  const context={
+    document:{baseURI:'https://example.test/hangul-basics.html',addEventListener(){},dispatchEvent(){},querySelectorAll:()=>[],querySelector:()=>null},
+    window:{addEventListener(){},speechSynthesis:{cancel(){}}},
+    Audio:class{
+      constructor(url){this.url=url}
+      play(){calls.push({url:this.url,insideClick});this.onended?.();return Promise.resolve()}
+      pause(){}
+    },
+    URL,Event:class{},setTimeout,clearTimeout,fetch:()=>pending
+  };
+  vm.runInNewContext(source,context);
+  const H=context.window.HSHangul;
+  insideClick=true;
+  const first=H.play('가');
+  insideClick=false;
+  assert.equal((await first).status,'loading');
+  assert.equal(calls.length,0,'must not queue autoplay after async manifest fetch');
+  deliver({ok:true,json:async()=>({recordings:{'가':{
+    kind:'human',src:'./assets/hangul-audio/ac00-r2.mp3',
+    sha256:'a'.repeat(64),sourceUrl:'https://example.test/recording',
+    author:'speaker',license:'CC-BY'
+  }}})});
+  await H.ready;
+  insideClick=true;
+  const second=H.play('가');
+  insideClick=false;
+  assert.equal(calls.length,1);
+  assert.equal(calls[0].insideClick,true,'Audio.play must start during fresh user activation');
+  assert.equal((await second).status,'played');
+});
+test('failed manifest requests are retried without delayed autoplay',async()=>{
+  let requests=0;
+  const manifest={recordings:{}};
+  const context={
+    document:{baseURI:'https://example.test/',addEventListener(){},dispatchEvent(){},querySelectorAll:()=>[],querySelector:()=>null},
+    window:{addEventListener(){},speechSynthesis:{cancel(){}}},
+    Audio:class{constructor(){throw Error('must not create Audio')}},
+    URL,Event:class{},setTimeout,clearTimeout,
+    fetch:()=>{requests++;return requests===1?Promise.reject(Error('offline')):Promise.resolve({ok:true,json:async()=>manifest})}
+  };
+  vm.runInNewContext(source,context);
+  const H=context.window.HSHangul;
+  await H.ready;
+  assert.equal((await H.play('가')).status,'manifest-error');
+  assert.equal(requests,2,'fresh tap initiates one manifest retry');
+  // Retry request is asynchronous; no Audio should be started from its completion.
+  await new Promise(resolve=>setTimeout(resolve,0));
+  assert.equal((await H.play('가')).status,'missing');
+});
