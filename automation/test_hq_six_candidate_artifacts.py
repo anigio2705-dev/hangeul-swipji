@@ -40,6 +40,13 @@ class CandidateArtifactTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_artifact(data, "16")
 
+    def test_team14_prompt_requires_distinct_person_acceptance_and_negative_cases(self):
+        goal = TEAM_TASKS["14"][2].lower()
+        self.assertIn("two distinct person identities", goal)
+        self.assertIn("valid acceptance", goal)
+        self.assertIn("self-identity and cyclic introductions are rejected", goal)
+        self.assertIn("do not reject merely because both people have the same role", goal)
+
     def test_missing_role_pair_rejected(self):
         data = self.sample("14")
         data["items"][-1]["id"] = "other"
