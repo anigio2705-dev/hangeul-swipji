@@ -1,0 +1,39 @@
+name: HQ staging99 data-loss redeploy blocker (read-only)
+on:
+  push:
+    branches:
+      - automation/hq-staging99-data-loss-gate-20261029
+    paths:
+      - automation/staging99_redeploy_guard.py
+      - automation/test_staging99_redeploy_guard.py
+      - .github/workflows/hq-staging99-data-loss-gate.yml
+      - deploy/render-staging.yaml
+      - audit/staging99-deployment.json
+  pull_request:
+    branches:
+      - automation/hq-pilot-13-14-15-20261029
+permissions:
+  contents: read
+jobs:
+  safety-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify data-loss fail-closed negative fixtures
+        run: python -m unittest automation.test_staging99_redeploy_guard -v
+      - name: Require BLOCKED status for current free ephemeral staging
+        shell: bash
+        run: |
+          set +e
+          python automation/staging99_redeploy_guard.py
+          code=$?
+          set -e
+          if [ "$code" -ne 2 ]; then
+            echo "Unexpected status: $code; no deployment permitted" >&2
+            exit 1
+          fi
+          echo "STAGING99 REDEPLOY BLOCKED: free ephemeral SQLite, current SHA and backup unverified. No deployment attempted." >> "$GITHUB_STEP_SUMMARY"
