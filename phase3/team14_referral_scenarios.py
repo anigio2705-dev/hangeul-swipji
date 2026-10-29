@@ -16,6 +16,27 @@ def simulate_introduction(introducer_role, introduced_role):
              status='simulation_only',real_money=False,
              payment_enabled=False,policy_approved=False)
 
+def simulate_introduction_review(introducer_id, introducer_role,
+                                 introduced_id, introduced_role, decision):
+ """Model a mock accept/reject outcome for any of the four role pairs.
+
+ No identities, account roles, consent or permissions are verified here.
+ This MUST NOT write a referral link, grant a benefit, or be used as a
+ real authorization or commercial-policy decision.
+ """
+ ident(introducer_id)
+ ident(introduced_id)
+ if introducer_id == introduced_id:
+  raise SimError('CONFLICT', 'self-introduction is not allowed')
+ if type(decision) is not str or decision not in ('accept', 'reject'):
+  raise SimError('VALIDATION_ERROR', 'mock decision must be accept or reject')
+ scenario = simulate_introduction(introducer_role, introduced_role)
+ scenario.update(introducer_id=introducer_id, introduced_id=introduced_id,
+                 review_decision=decision, review_mode='mock_only',
+                 identity_verified=False, role_verified=False,
+                 authorization_granted=False, reward_eligible=False)
+ return scenario
+
 def simulate_referral(gross_krw,edges,depth_rates_bps=(300,),commission_bps=2000):
  amount(gross_krw,True)
  if type(commission_bps)!=int or not 0<=commission_bps<=10000:raise SimError('VALIDATION_ERROR','commission')
