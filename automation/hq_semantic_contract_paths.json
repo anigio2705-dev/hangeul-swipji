@@ -165,14 +165,18 @@
         41
       ],
       "unmet": [
-        "기존 Chromium 600개 정합성 스크립트의 현재 정확한 SHA CI 성공을 이 감사에서 확인하지 못함",
+        "375px Chromium 대표 흐름(레벨10→15·40권·3문항·근거·저장복원·가로 넘침)은 PASS, 그러나 600개 전체 모바일 흐름·실제 휴대폰 검증 미완료",
         "문항의 본문 의미상 정답 유일성·근거 및 해설 정확성에 대한 독립 교육 검수 미완료",
         "읽기 15레벨의 학습자 수준/난도 적합성 검증 미완료; 유사도 진단은 의미 검증이 아님",
-        "375px 모바일에서 15레벨 탐색·40권 선택·문항 응답·근거 표시·가로 넘침 실사용 검증 미완료",
-        "15팀 독립 의미 검증·대표 최종 승인 미완료"
+        "15팀 독립 의미 검증·대표 최종 승인 미완료",
+        "리딩 600개/1800문항의 교육적 의미 정확성 및 실서비스 브라우저 검증 미완료"
       ],
       "independent_team15": "PENDING",
-      "note": "2026-10-29 13:54 KST isolated branch file/path audit: reading.html loads reading-curriculum.js and reading-alternates.js; CSS has @media 920/580/800px, and quiz result appends answer-evidence from q.evidence. Existing scripts/browser-audit-reading-600.cjs exercises content(1..15,1..40) at 1280x800 and checks title, paragraphs, translations, quiz structure, duplicate choices, correct indices. It does not exercise 375px mobile, answer-evidence accuracy or graded semantic difficulty. scripts/audit-reading-similarity.cjs explicitly calls similarity heuristics non-certification. No new #46 test execution or CI success established; no READY promotion. Source path verification only. CI #40820463681 and #40820475679 initially failed because #46 included team15 as an implementation support team, whereas canonical automation/hq_160_task_cycle.py TEAM_OWNERS allows only team13 as support for #41-50. Team15 remains independent QA and must not be added to implementation support. Fixed contract mapping without weakening the test."
+      "note": "2026-10-29 13:54 KST isolated branch file/path audit: reading.html loads reading-curriculum.js and reading-alternates.js; CSS has @media 920/580/800px, and quiz result appends answer-evidence from q.evidence. Existing scripts/browser-audit-reading-600.cjs exercises content(1..15,1..40) at 1280x800 and checks title, paragraphs, translations, quiz structure, duplicate choices, correct indices. It does not exercise 375px mobile, answer-evidence accuracy or graded semantic difficulty. scripts/audit-reading-similarity.cjs explicitly calls similarity heuristics non-certification. No new #46 test execution or CI success established; no READY promotion. Source path verification only. CI #40820463681 and #40820475679 initially failed because #46 included team15 as an implementation support team, whereas canonical automation/hq_160_task_cycle.py TEAM_OWNERS allows only team13 as support for #41-50. Team15 remains independent QA and must not be added to implementation support. Fixed contract mapping without weakening the test. 2026-10-29 14:06 KST: Found real mobile regression: selecting a level hides the entire sidebar with no reopen action. Added accessible Change level control to reading.html, extended Chromium test to 375px navigation/quiz/persistence/overflow; initial CI #40821383705 FAIL because ubuntu-latest resolved to Ubuntu 26.04 unsupported by pinned Playwright; pinned Ubuntu 24.04; exact SHA 47d484fd CI #40821422787 SUCCESS with 600 entries and 375px flow. Remains CANDIDATE: no full semantic review, no real phone or public deployment.",
+      "mobile_browser_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40821422787",
+      "mobile_browser_ci_sha": "47d484fd5b006d2378b127e0f31539f703509180",
+      "mobile_ui_fix_commit": "09f2ffcfcbf0a6928614577b4c0a2bb51b37482f",
+      "mobile_browser_scope": "Chromium 1280x800 structural 600-entry audit + 375x812 representative interactive flow, level 10 to 15 via newly accessible change-level button, book 40, unanswered and correct quiz, evidence visibility, localStorage reload, no horizontal overflow. 600 original=0 generated=600; this is not semantic correctness or actual phone testing."
     },
     "47": {
       "owner": "12",
