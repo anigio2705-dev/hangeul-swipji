@@ -1,0 +1,27 @@
+name: HQ READY editable-target collision audit (isolated)
+on:
+  push:
+    branches:
+      - audit/hq-six-ready-editable-collision-20261029
+    paths:
+      - automation/hq_traffic_lights.py
+      - automation/test_hq_traffic_lights.py
+      - automation/hq_160_task_cycle.py
+      - .github/workflows/hq-ready-editable-collision-audit.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-regression:
+    if: github.ref == 'refs/heads/audit/hq-six-ready-editable-collision-20261029'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independent READY and queue regressions (no AI, no deployment)
+        run: |
+          python -m unittest discover -s automation -p test_hq_traffic_lights.py -v
+          python -m unittest discover -s automation -p test_hq_160_task_cycle.py -v
