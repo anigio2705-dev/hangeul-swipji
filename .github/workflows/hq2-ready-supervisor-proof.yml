@@ -7,6 +7,13 @@ on:
       - 'automation/hq_six_cycle_supervisor.py'
       - 'automation/test_hq_six_cycle_supervisor.py'
       - '.github/workflows/hq2-ready-supervisor-proof.yml'
+  pull_request:
+    branches:
+      - automation/hq-pilot-13-14-15-20261029
+    paths:
+      - 'automation/hq_six_cycle_supervisor.py'
+      - 'automation/test_hq_six_cycle_supervisor.py'
+      - '.github/workflows/hq2-ready-supervisor-proof.yml'
 permissions:
   contents: read
 jobs:
