@@ -23,6 +23,8 @@ jobs:
         run: node scripts/team12_server_progress.test.js
       - name: Verify atomic account switch after failed server read
         run: node scripts/test_hq_task47_atomic_account_switch.cjs
+      - name: Verify malformed server payload never changes account owner
+        run: node scripts/test_hq2_task47_malformed_progress.cjs
       - name: Scope boundary
         if: always()
         run: echo 'Isolated Node regression only; no READY promotion, deploy, production DB, or payment.' >> "$GITHUB_STEP_SUMMARY"
