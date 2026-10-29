@@ -45,3 +45,9 @@
 - 과거 배포 보류 이유: 2026-10-28 자정 예약과 모의 결제 기록이 재배포시 유실될 위험이 있는 임시 SQLite에 저장돼 있었음. 배포를 단순 반복하지 말고 Render 영속 저장소 및 DB 백업·복구를 확인할 것.
 
 앞으로 매 보고에 운영 홈페이지와 위 테스트99 링크 두 개를 제공하고, 현재 배포 버전/확인된 실제 작동 기능과 코드만 준비된 미반영 기능을 명확히 구분한다.
+
+## 총괄본부 2: 2026-10-29 15:57 이후 배포 식별 기능 보강
+- 별도 GitHub 배포 원장 `audit/staging99-deployment.json`에는 2026-10-27 **실제 Render 최초 배포 SHA `ad5757d9327a6871b70649da081d5cefb8a1a74b`**가 기록되어 있다. 앞 문단의 `0aa0092`는 다른 시점의 개발 기준 기록이며 **현재 실제 Render 배포 SHA는 여전히 미확인**이다.
+- `deploy/render-staging.yaml`의 `branch: integration/phase2-phase3-20261027`, `autoDeployTrigger: off`는 저장소의 제안 설정이다. 실제 Render 서비스 설정을 조회한 근거가 아니므로 현행 배포 브랜치라고 단정하지 않는다.
+- 격리 HQ 브랜치 `phase3/staging_server.py`의 `/healthz`에 `deployedCommit`(검증된 40자리 `RENDER_GIT_COMMIT` 또는 null)을 추가했다: 코드 `f94a4503`, 반례 테스트 `b9018e65`, 읽기 전용 독립 CI 워크플로 `b5f1382e`. 테스트99에 배포한 것이 아니며 신규 CI 성공도 별도 확인이 필요하다.
+- #13·#16 계약의 실제 파일·테스트 경로를 CANDIDATE로 등록했다. Render 관리자 권한·현재 SHA·임시 SQLite 데이터 보호·실제 브라우저 증거가 없으면 READY/실사용 검증/대표 승인으로 승격하지 않는다.
