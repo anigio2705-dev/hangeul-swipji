@@ -1,0 +1,200 @@
+{
+  "schema": 1,
+  "source": "docs/HQ_160_DEVELOPMENT_CONTRACTS_20261029.md",
+  "source_branch": "automation/hq-pilot-13-14-15-20261029",
+  "policy": "Mapped paths are observed in this isolated branch. CODE_VERIFIED reflects existing evidence, never final approval; READY requires independent 15-team semantic review and relevant CI. CANDIDATE/BLOCKED are not dispatchable.",
+  "items": {
+    "22": {
+      "owner": "13",
+      "support": [
+        "15"
+      ],
+      "state": "BLOCKED",
+      "source_paths": [
+        "phase3/instant_matching.py"
+      ],
+      "test_paths": [
+        "phase3/test_instant_matching.py",
+        "phase3/test_hq_matching_contract.py"
+      ],
+      "acceptance": "동일 예약의 학습자와 승인된 파트너가 동일한 방 식별자를 받으며 비참여자는 403/409 차단, 기존 예약 중 즉시 매칭 시도는 403 유지",
+      "unmet": [
+        "기존 예약 중 즉시 매칭 403 회귀 실패 수정",
+        "동일 예약 양쪽 입장과 외부 비참여자 차단 독립 재검증"
+      ],
+      "independent_team15": "PENDING",
+      "dependencies": [],
+      "note": "기존 반려 CI 40791928076; 임의 재시도 금지"
+    },
+    "41": {
+      "owner": "12",
+      "support": [
+        "15"
+      ],
+      "state": "CODE_VERIFIED",
+      "source_paths": [
+        "scripts/team12_content_regression.py",
+        "scripts/curriculum-source.cjs"
+      ],
+      "test_paths": [
+        "automation/verify_task41.py"
+      ],
+      "acceptance": "7과정·350단원·1758 퀴즈·읽기600개·읽기문항1800개 구조와 정답 인덱스 보존",
+      "unmet": [
+        "과거 원문 전체 대조 및 실제 브라우저/대표 검수"
+      ],
+      "independent_team15": "PENDING",
+      "dependencies": [],
+      "evidence_run": 40797443716
+    },
+    "47": {
+      "owner": "12",
+      "support": [
+        "13",
+        "15"
+      ],
+      "state": "BLOCKED",
+      "source_paths": [
+        "scripts/team12_server_progress.js",
+        "scripts/team12_resume.js",
+        "dashboard.html",
+        "phase3/server.py"
+      ],
+      "test_paths": [
+        "scripts/team12_server_progress.test.js",
+        "scripts/team12_resume.test.js",
+        "phase3/test_team12_progress_http.py",
+        "phase3/test_common_http_free_progress.py"
+      ],
+      "acceptance": "진도·오답·즐겨찾기·이어 배우기가 계정별 저장·재접속·다중 기기에서 복원되며 타 계정과 격리",
+      "unmet": [
+        "오답 저장·복원 검증",
+        "즐겨찾기 저장·복원 검증",
+        "4개 항목 통합 재접속 회귀",
+        "15팀 의미 검증"
+      ],
+      "independent_team15": "PENDING",
+      "dependencies": [],
+      "forbidden_mapping": "phase3/learning.py",
+      "note": "과거 13팀 진단점수 코드 오배정 금지"
+    },
+    "49": {
+      "owner": "12",
+      "support": [
+        "15"
+      ],
+      "state": "CODE_VERIFIED",
+      "source_paths": [
+        "phase3/learning.py"
+      ],
+      "test_paths": [
+        "phase3/test_global_learning.py",
+        "automation/verify_task49.py"
+      ],
+      "acceptance": "취약 학습자는 관련 복습, 완료 학습자는 다음 단원 추천; 공식 능력 인증 아님 명시",
+      "unmet": [
+        "실제 홈페이지 진단·추천 사용 검증"
+      ],
+      "independent_team15": "PENDING",
+      "dependencies": [],
+      "evidence_run": 40797845758
+    },
+    "51": {
+      "owner": "12",
+      "support": [
+        "11",
+        "15",
+        "16"
+      ],
+      "state": "CANDIDATE",
+      "source_paths": [
+        "hangul-core.js",
+        "hangul-board.js",
+        "hangul-basics.html",
+        "hangul-audio-manifest.json"
+      ],
+      "test_paths": [
+        "scripts/team12_content_regression.py",
+        "scripts/audit-hangul-audio.py"
+      ],
+      "acceptance": "19 자음 ×21 모음 = 399 글자판 조합과 자음 19개를 포함한 418 대상 정의를 실제 화면·필수 음원 목록과 대조",
+      "unmet": [
+        "418 범위에 자음 이름·모음 발음·중복 음절 포함 여부 원본과 일치 검증",
+        "실제 화면 전체 클릭/표시 검사",
+        "15팀 의미 검증"
+      ],
+      "independent_team15": "PENDING",
+      "dependencies": [],
+      "note": "399 글자판 조합과 418 음원 범위는 서로 다른 집합; 무조건 동일하다고 주장 금지"
+    },
+    "52": {
+      "owner": "12",
+      "support": [
+        "11",
+        "15"
+      ],
+      "state": "CODE_VERIFIED",
+      "source_paths": [
+        "scripts/team12_audio_inventory.py",
+        "hangul-audio-manifest.json"
+      ],
+      "test_paths": [
+        "scripts/test_team12_audio_inventory.py"
+      ],
+      "acceptance": "누락·보류·무효 출처·중복·디코딩 실패를 분리하고 청취 승인·브라우저 재생은 별도 상태로 기록",
+      "unmet": [
+        "실제 사람 청취 검수",
+        "실제 브라우저·모바일 재생 확인"
+      ],
+      "independent_team15": "PENDING",
+      "dependencies": [],
+      "evidence_run": 40746321354
+    },
+    "55": {
+      "owner": "12",
+      "support": [
+        "16",
+        "15"
+      ],
+      "state": "CODE_VERIFIED",
+      "source_paths": [
+        "scripts/render-audio-credits.py",
+        "hangul-audio-manifest.json"
+      ],
+      "test_paths": [
+        "scripts/check-audio-runtime.cjs"
+      ],
+      "acceptance": "음원별 출처·화자·라이선스와 인간 음성 여부를 기록하고 화면에 출처 표기를 연결",
+      "unmet": [
+        "음원 청취 승인",
+        "실제 공개 UI 출처 표시 검증"
+      ],
+      "independent_team15": "PENDING",
+      "dependencies": [],
+      "evidence_run": 40789832598
+    },
+    "109": {
+      "owner": "14",
+      "support": [
+        "15"
+      ],
+      "state": "CODE_VERIFIED",
+      "source_paths": [
+        "phase3/team14_referral_store.py",
+        "phase3/team14_referral_eligibility.py"
+      ],
+      "test_paths": [
+        "phase3/test_team14_referral_store.py",
+        "phase3/test_hq_referral_eligibility.py"
+      ],
+      "acceptance": "자기 추천·순환 추천·중복 연결을 거절하고 모의 금액 보존·실결제 비활성화",
+      "unmet": [
+        "다중 계정 실사용 악용 검증",
+        "가짜 거래·서로 돌려 소개하는 악용의 독립 통합 검사"
+      ],
+      "independent_team15": "PENDING",
+      "dependencies": [],
+      "evidence_run": 40789832598
+    }
+  }
+}
