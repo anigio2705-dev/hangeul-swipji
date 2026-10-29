@@ -81,12 +81,30 @@ class SixTeamSupervisorTests(unittest.TestCase):
         repair = json.loads(inputs["repair_instructions_json"])["13"]["22"]
         self.assertEqual(repair["attempts"], 1)
         self.assertIn("exact unique", repair["repair_instruction"])
+        ledger = {}
         again, api_again = self.run_cycle(
             committed=True, team="13", task_number=22, task_status="blocked",
             feedback="Patch must make one unambiguous real change",
-            depth=1, repairs={"13": {"22": repair}})
-        self.assertFalse(again["dispatched_next"])
-        api_again.assert_not_called()
+            depth=1, repairs={"13": {"22": repair}}, ledger=ledger)
+        self.assertEqual(ledger["22"]["status"], "blocked")
+        self.assertEqual(ledger["22"]["repair_attempts"], 1)
+        self.assertTrue(again["dispatched_next"])
+        self.assertEqual(again["dispatched_teams"], ["13"])
+        self.assertEqual(json.loads(api_again.call_args.kwargs["payload"]["inputs"]["teams_json"]), ["13"])
+        # The exhausted #22 is skipped; the next independent team13 task is #47.
+        self.assertNotIn("22", str(again["staged_pending_CI"]))
+
+    def test_exhausted_repair_without_safe_followup_stops_and_persists_block(self):
+        ledger = {}
+        report, api = self.run_cycle(
+            committed=True, team="14", task_number=109, task_status="blocked",
+            feedback="Regression or unexpected changes: assertion 403 != 200",
+            repairs={"14": {"109": {"attempts": 1,
+                                     "repair_instruction": "First exact regression fix"}}},
+            ledger=ledger)
+        self.assertEqual(ledger["109"]["status"], "blocked")
+        self.assertFalse(report["dispatched_next"])
+        api.assert_not_called()
 
     def test_success_without_next_safe_task_does_not_repeat_dispatch(self):
         report, api = self.run_cycle(committed=True, team="14", task_number=109)
