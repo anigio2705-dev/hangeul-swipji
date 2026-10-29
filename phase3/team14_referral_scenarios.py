@@ -21,8 +21,9 @@ def simulate_introduction_review(introducer_id, introducer_role,
                                  existing_edges=()):
  """Pure mock accept/reject of a role pair with duplicate/cycle preflight.
 
- Existing edges point from introducer to introduced person. This function
- never verifies identities or consent and NEVER writes a referral, grants
+ Existing edges are (introducer, introduced) pairs. One introducer may
+ refer many people; each introduced person may have only one direct introducer.
+ This function never verifies identities or consent and NEVER writes a referral, grants
  authorization, or pays an award. An accept outcome is simulation only.
  """
  ident(introducer_id)
@@ -41,16 +42,16 @@ def simulate_introduction_review(introducer_id, introducer_role,
   source, target = edge
   ident(source)
   ident(target)
-  if source == target or source in graph:
-   raise SimError('CONFLICT', 'self or duplicate introduction')
-  graph[source] = target
+  if source == target or target in graph:
+   raise SimError('CONFLICT', 'self or competing introduction for one person')
+  graph[target] = source
  # A rejected mock proposal never becomes an edge. Validate the
  # existing graph in both cases, but only an accepted proposal can collide
  # with an existing introducer or create a new cycle.
  if decision == 'accept':
-  if introducer_id in graph:
-   raise SimError('CONFLICT', 'introduction already exists')
-  graph[introducer_id] = introduced_id
+  if introduced_id in graph:
+   raise SimError('CONFLICT', 'introduced person already has an introducer')
+  graph[introduced_id] = introducer_id
  # Reject both a new cycle and an unrelated pre-existing cycle in O(E).
  resolved = set()
  for node in graph:

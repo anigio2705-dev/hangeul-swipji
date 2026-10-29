@@ -113,7 +113,8 @@ class ReferralScenariosTests(unittest.TestCase):
    review([('alice','bob')])
   self.assertEqual(ctx.exception.code,'CONFLICT')
   for edges in ([('bob','alice')], [('bob','carol'),('carol','alice')],
-                [('x','y'),('y','x')], [('x','y'),('x','z')]):
+                [('x','y'),('y','x')], [('x','z'),('y','z')],
+                [('charlie','bob')]):
    with self.subTest(edges=edges),self.assertRaises(SimError) as ctx:
     review(edges)
    self.assertEqual(ctx.exception.code,'CONFLICT')
@@ -123,6 +124,28 @@ class ReferralScenariosTests(unittest.TestCase):
   self.assertFalse(result['reward_eligible'])
   self.assertFalse(result['payment_enabled'])
   self.assertFalse(result['identity_verified'])
+ def test_one_introducer_can_refer_multiple_people_but_introduced_person_is_unique(self):
+  from team14_referral_scenarios import simulate_introduction_review
+  # One legitimate introducer may introduce many distinct people.
+  # Each introduced person can have only one direct introducer.
+  accepted=simulate_introduction_review(
+   'alice','teacher','bob','student','accept',
+   existing_edges=[('alice','carol'),('alice','dave'),('x','y')])
+  self.assertEqual(accepted['review_decision'],'accept')
+  self.assertFalse(accepted['authorization_granted'])
+  self.assertFalse(accepted['reward_eligible'])
+  self.assertFalse(accepted['payment_enabled'])
+  for edges in ([('charlie','bob')], [('alice','bob')]):
+   with self.subTest(edges=edges), self.assertRaises(SimError) as ctx:
+    simulate_introduction_review('alice','teacher','bob','student','accept',
+                                  existing_edges=edges)
+   self.assertEqual(ctx.exception.code,'CONFLICT')
+  # An unrelated existing graph with multiple children per introducer is valid.
+  accepted=simulate_introduction_review(
+   'alice','student','bob','teacher','accept',
+   existing_edges=[('x','y'),('x','z')])
+  self.assertEqual(accepted['scenario_id'],'student_introduces_teacher')
+  self.assertFalse(accepted['policy_approved'])
  def test_mock_review_rejects_malformed_existing_edges(self):
   from team14_referral_scenarios import simulate_introduction_review
   def review(edges):
