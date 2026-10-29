@@ -55,5 +55,28 @@ class ReadinessTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Unknown"):
             readiness(c, {}, {"schema": 1, "items": {"161": {}}})
 
+    def test_parallel_ready_tasks_cannot_claim_the_same_source_file(self):
+        c = catalog()
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            for name in ("shared.py", "separate.py", "test_feature.py"):
+                (root / name).write_text("pass\n")
+            def record(path):
+                return {"owner": "12", "state": "READY",
+                        "source_paths": [path], "test_paths": ["test_feature.py"],
+                        "independent_team15": "PASS",
+                        "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"}
+            reg = {"schema": 1, "items": {
+                "41": record("shared.py"), "49": record("shared.py")}}
+            blocked = readiness(c, {}, reg, root)
+            self.assertEqual(blocked["dispatchable_total"], 0)
+            self.assertEqual({x["task"] for x in blocked["invalid_ready"]}, {41, 49})
+            self.assertTrue(all("exclusive_file_collision" in x["reason"]
+                                for x in blocked["invalid_ready"]))
+            reg["items"]["49"] = record("separate.py")
+            allowed = readiness(c, {}, reg, root)
+            self.assertEqual(allowed["dispatchable_total"], 2)
+            self.assertEqual(allowed["invalid_ready"], [])
+
 if __name__ == "__main__":
     unittest.main()
