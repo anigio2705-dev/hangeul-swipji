@@ -32,7 +32,8 @@ class Element {
 function load(course,storage){
   const html=fs.readFileSync(path.join(root,course+'.html'),'utf8');
   const blocks=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)];
-  assert.ok(blocks.length>=1,course+': missing inline course script');
+  const main=blocks.find(block=>block[1].includes('const units='));
+  assert.ok(main,course+': missing inline course script');
   const ids=new Map(),get=id=>{if(!ids.has(id))ids.set(id,new Element());return ids.get(id)};
   const document={
     documentElement:{lang:'ko'},getElementById:get,createElement:tag=>new Element(tag),
@@ -49,7 +50,7 @@ function load(course,storage){
     speechSynthesis:{cancel(){},speak(){throw Error('No audio in test')}},
     SpeechSynthesisUtterance:class{},setTimeout,clearTimeout
   });
-  vm.runInContext(blocks[0][1],sandbox,{filename:course+'.html#main',timeout:7000});
+  vm.runInContext(main[1],sandbox,{filename:course+'.html#main',timeout:7000});
   return {get,sandbox,storage,units:vm.runInContext('units',sandbox),
     ui:vm.runInContext('ui',sandbox)};
 }
