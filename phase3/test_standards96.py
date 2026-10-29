@@ -16,8 +16,12 @@ class Standards96Tests(unittest.TestCase):
             self.assertTrue(all(not a['autoApproved'] for a in m['fourSkillAssessments']))
             for ref in m['sourceReferences']:self.assertEqual(ref['sha256'],hashlib.sha256((server.ROOT.parent/ref['path']).read_bytes()).hexdigest())
     def test_original_24_source_materials_preserved_exactly(self):
-        for f in ('phase3/content.json','phase3/content-expansion.json','index.html','hangul-audio-manifest.json'):
+        for f in ('phase3/content.json','phase3/content-expansion.json','hangul-audio-manifest.json'):
             self.assertEqual((server.ROOT.parent/f).read_bytes(),subprocess.check_output(['git','show','7418e32:'+f],cwd=server.ROOT.parent))
+        # The integration preview intentionally adds a staging notice to index.html.
+        # Preserve the approved staging baseline byte-for-byte, rather than the older production index.
+        f='index.html'
+        self.assertEqual((server.ROOT.parent/f).read_bytes(),subprocess.check_output(['git','show','0d746eaee4716896b9ecaa2836f7d01f350abf00:'+f],cwd=server.ROOT.parent))
     def test_all_new_72_have_unique_reading_questions_and_correct_grade_without_client_score(self):
         self.real();us=json.loads((server.ROOT/'content-remaining72.json').read_text())['units'];self.assertEqual(72,len(us))
         self.assertEqual(72,len({u['reading'] for u in us}));self.assertEqual(216,len({a['question'] for u in us for a in u['assessment']}))
