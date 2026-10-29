@@ -79,7 +79,10 @@ jobs:
               run = subprocess.run(["python", "/tmp/hq_six_developers.py"])
               result_file = pathlib.Path("/tmp/team-result.json")
               if run.returncode or not result_file.exists():
-                  print("Runner failed; stop instead of spending more API", flush=True)
+                  history.append({"team": os.environ.get("HQ_TEAM", "unknown"), "calls": 0,
+                                  "tasks": [], "status": "BLOCKED",
+                                  "reason": "runner_failed_or_result_missing", "round": round_no})
+                  print("Runner BLOCKED; preserving evidence for supervisor", flush=True)
                   break
               result = json.loads(result_file.read_text())
               result["round"] = round_no
