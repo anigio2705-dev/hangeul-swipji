@@ -6,8 +6,8 @@
   ],
   "repairs": {},
   "expected_next_task": 41,
-  "expected_team_commit": "b16a79a7cf9f45eae7ac29e830c821d7d0b835c9",
-  "reason": "One-shot verified source-preservation inventory: team12 task #41 candidate has an actual test-code commit, and HQ supervisor now runs both the candidate regression and trusted independent automation/verify_task41.py. Do not spend AI tokens rewriting an existing candidate. Stage pending CI only if exact team branch HEAD, diff, functional tests and trusted 350/1758/600/1800 inventory pass.",
+  "expected_team_commit": "635aef9507f0cf908d4382a4be5f5d3e12975607",
+  "reason": "Second and final targeted #41 verification after diagnosing and fixing two pre-existing wrong Korean provider-role test literals. Real source has 참여 유형; tests incorrectly asserted 새여 유형. Candidate now contains original 350/1758/600/1800 inventory check plus corrected assertions. Trusted independent verifier and candidate regression must both pass. No API call expected; do not repeat if this fails.",
   "scope": "approved isolated branch only; no main, live database, real payments or public deployment",
   "final_completion_claim": false
 }
