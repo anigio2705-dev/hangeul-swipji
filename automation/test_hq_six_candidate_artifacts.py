@@ -65,5 +65,45 @@ class CandidateArtifactTests(unittest.TestCase):
             validate_artifact(data, "12")
 
 
+
+from hq_six_candidate_semantic_review import semantic_review_flags
+
+
+class CandidateSemanticRedFlagTests(unittest.TestCase):
+    def test_stale_warning_override_is_not_fail_closed(self):
+        data = {"team": "11", "items": [{"id": "stale_checkout",
+            "text": "stale checkout", "expected": "default behavior is warning without blocking"}]}
+        self.assertIn(("stale_checkout", "stale_checkout_must_block"),
+                      semantic_review_flags(data))
+
+    def test_safe_stale_block_not_flagged(self):
+        data = {"team": "11", "items": [{"id": "stale_checkout",
+            "text": "stale checkout", "expected": "Block until branch is refreshed"}]}
+        self.assertEqual([], semantic_review_flags(data))
+
+    def test_topic_particle_and_unspecified_number_flagged(self):
+        data = {"team": "12", "items": [
+            {"id": "topic", "text": "저는 학생입니다", "expected": "The 는 particle marks the subject."},
+            {"id": "one", "text": "What is the Korean word for the number 'one'?",
+             "expected": "하나"}]}
+        self.assertEqual(2, len(semantic_review_flags(data)))
+
+    def test_role_equality_is_not_same_identity(self):
+        data = {"team": "14", "items": [{"id": "teacher_teacher",
+            "text": "another teacher", "expected": "Reject because same teacher role"}]}
+        self.assertIn(("teacher_teacher", "role_equality_is_not_identity"),
+                      semantic_review_flags(data))
+
+    def test_recording_without_consent_flagged(self):
+        data = {"team": "15", "items": [{"id": "record", "text": "Record session",
+            "expected": "Audio is recorded securely"}]}
+        self.assertIn(("record", "recording_without_consent_condition"),
+                      semantic_review_flags(data))
+
+    def test_localization_requires_source_grounding(self):
+        self.assertIn(("*", "localized_labels_need_exact_source_mapping"),
+                      semantic_review_flags({"team": "16", "items": []}))
+
+
 if __name__ == "__main__":
     unittest.main()
