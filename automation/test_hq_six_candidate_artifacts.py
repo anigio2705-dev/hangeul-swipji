@@ -46,6 +46,22 @@ class CandidateArtifactTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_artifact(data, "14")
 
+    def test_team14_rejects_extra_role_cases_even_with_all_four_required(self):
+        # #101 requires exactly the four approved teacher/student directions.
+        # The former subset-only check accepted arbitrary fifth through twelfth
+        # scenarios, despite the generator's explicit exactly-four contract.
+        for count in (5, 12):
+            with self.subTest(total_cases=count):
+                data = self.sample("14")
+                for index in range(count - 4):
+                    data["items"].append({
+                        "id": "extra_role_" + str(index),
+                        "text": "Unapproved fifth referral role direction",
+                        "expected": "Must not pass strict four-direction schema",
+                    })
+                with self.assertRaises(ValueError):
+                    validate_artifact(data, "14")
+
     def test_duplicate_case_rejected(self):
         data = self.sample("11")
         data["items"][-1]["id"] = data["items"][0]["id"]
