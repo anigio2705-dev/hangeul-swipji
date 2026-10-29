@@ -121,7 +121,7 @@ def independent_check(team, task, token, catalog, registry=None, root=Path("."),
         entry = registry["items"][str(number)]
         baseline_sha = entry.get("independent_ci_sha")
         match = re.fullmatch(
-            r"https://github\\.com/anigio2705-dev/hangeul-swipji/actions/runs/([0-9]+)",
+            r"https://github\.com/anigio2705-dev/hangeul-swipji/actions/runs/([0-9]+)",
             entry.get("independent_ci_url", ""))
         if not isinstance(baseline_sha, str) or not re.fullmatch(r"[a-f0-9]{40}", baseline_sha) or not match:
             return "RETRY", "READY independent CI requires exact 40-character SHA and run URL", {}
