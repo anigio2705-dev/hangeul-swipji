@@ -4,6 +4,33 @@
   "source_branch": "automation/hq-pilot-13-14-15-20261029",
   "policy": "Mapped paths are observed in this isolated branch. CODE_VERIFIED reflects existing evidence, never final approval; READY requires independent 15-team semantic review and relevant CI. CANDIDATE/BLOCKED are not dispatchable.",
   "items": {
+    "9": {
+      "owner": "15",
+      "support": [
+        "11"
+      ],
+      "state": "CANDIDATE",
+      "source_paths": [
+        "automation/hq_160_task_cycle.py",
+        "automation/hq_semantic_contract_paths.json"
+      ],
+      "test_paths": [
+        "automation/test_hq_curated_failclosed.py",
+        "automation/test_hq_160_task_cycle.py"
+      ],
+      "acceptance": "#9 각 번호의 단일 책임팀·완료 기준·근거·차단 사유·후속 행동을 기록하되 독립 READY 없는 curated fallback은 AI 개발을 호출하지 않아야 한다.",
+      "dependencies": [],
+      "unmet": [
+        "현재 160개 전체의 독립 검증된 READY 공급이 0개이며 큐 안전 수정은 개발 생산성을 의미하지 않음",
+        "15팀과 분리된 독립 QA/통합 검증, 신규 6팀 AI 호출 및 실제 후속 과제 승계 미확인",
+        "테스트99 배포·PC/모바일 E2E·대표 최종 승인 미완료"
+      ],
+      "independent_team15": "PENDING",
+      "note": "2026-10-29 17:36 KST: legacy curated fallback reproduced unsafe dispatch of unmapped #8, CODE_VERIFIED #41/#55/#56/#109, with empty evidence. Red CI #40843239242 (9 failures) -> isolated code 2f9529a8 and adjusted unit tests 6e47335f -> exact SHA green #40843302966 (3 negative regressions + 13 task-cycle tests). Source changed by central HQ, NOT six-team AI. No READY promotion or test99 deployment.",
+      "pilot_branch": "automation/hq-failclosed-curated-20261029-1733",
+      "pilot_sha": "6e47335f8fd04089f3df830388c462d5e78207ea",
+      "pilot_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40843302966"
+    },
     "11": {
       "owner": "11",
       "support": [
