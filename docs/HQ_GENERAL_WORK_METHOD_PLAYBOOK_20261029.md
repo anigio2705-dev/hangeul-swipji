@@ -249,3 +249,11 @@
 - **독립 CI:** [40807293449](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40807293449) exact head `20f812c82707bb09950bfe6bbc2b6048f711690a` **SUCCESS**. 이 테스트는 실제 브라우저·음성 청취를 대신하지 않는다. 기존 코드의 신규 자동 검증이므로 신규 구현 기능 1개로 계산하지 않는다. #43은 CODE_VERIFIED로 별도 기록하고 최종 승인 0/160을 유지한다.
 - **4역할 실제 산출물 재판독:** Actions #40782295178의 개발·품질 2역할은 hybrid, 운영은 six_parallel, 비용은 four_roles_one_task를 제안했다. 4개 모두 통제 실험/비용 자료 부재를 인정했다. 선택은 충돌 없는 독립 과제 병렬화 + 15팀 독립 의미 검증의 혼합형을 유지하며 속도 우위는 주장하지 않는다.
 - **재사용 교훈 (OpenAI Agent Improvement Loop):** 실제 코드/실패 증거 → 재실행 가능한 평가 → 정확한 SHA의 CI 검증 → 계약·장부 갱신. 단순 CI 성공을 6팀 AI 개발·실사용·최종 승인으로 과장하지 않는다. 모델 API 개발 호출 0회; GitHub CI 비용은 미계측.
+
+### 2026-10-29 11:38 KST — #43 계약 지원팀 오배정 재현·복구
+
+- 신규 #43 자동 실행 테스트 [CI #40807293449](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40807293449)는 정확한 SHA `20f812c82707bb09950bfe6bbc2b6048f711690a`에서 **SUCCESS**, 실제 `Independently exercise task 43` 단계와 기존 #54·160 계약 검사도 통과했다.
+- 계약 상세화 첫 기록에서 #43 지원팀을 15로 넣었으나 원본 `TEAM_OWNERS`의 41~50번 지원팀은 **13**이었다. [큐 감사 #40807412396](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40807412396)가 `Supporting team must be authorized in canonical contract (task=43)`로 **FAIL**하여 잘못된 소관을 발견했다.
+- 15팀은 **독립 감사 주체**이며 계약상 지원 개발팀과 구분해야 한다. registry·증거 장부·160개 계약 문서의 #43 지원팀을 13으로 바로잡았고, 정확한 수정 head `239cbee466030ce029f182fc126cc2afe19041b6`에서 [큐 감사 #40807492858](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40807492858)가 **SUCCESS**를 반환했다. 같은 잘못된 배정으로 반복 AI 호출하지 않았다.
+- **지표:** 기존 기능에 새 독립 실행 회귀를 붙여 #43을 코드 검증으로 추가(8→9/160). 신규 사업 기능 구현은 **0건**, 새로운 6팀 AI dispatch **0회**, 최종 승인 **0/160**, 실제 테스트 홈페이지 **미검증**. 정확한 CI는 자동화 검증이지 실사용 승인 아님.
+- **후속:** 아직 READY=0이며 6팀 병렬 연속 개발은 중단. #44 등 미검증 과제의 실제 경로·독립 회귀·15팀 의미 검증을 별도 공급해야 하며, 검증되지 않은 과제에 임의 READY를 주지 않는다. 모델 호출 비용 0(이번 실행의 새 AI 개발 호출 없음); GitHub CI 비용 미계측.
