@@ -144,7 +144,11 @@ def verify_server_product_contract(server_db, booking_id, trusted_event=None):
             raise SimError('FORBIDDEN','unverified server event')
         if trusted_event.get('type')!='lesson.completed' or trusted_event.get('status') not in ('completed','test_settled'):
             raise SimError('INVALID_STATE','not a completed lesson event')
-        if trusted_event.get('bookingId')!=booking_id or trusted_event.get('amount')!=price:
+        if (trusted_event.get('bookingId')!=booking_id or trusted_event.get('amount')!=price
+                or trusted_event.get('productCode')!=product_code
+                or trusted_event.get('durationMinutes')!=duration
+                or trusted_event.get('priceKrw')!=price
+                or trusted_event.get('currency')!='KRW'):
             raise SimError('CONFLICT','verified completion amount differs from snapshot')
     return dict(product_code=product_code,duration_minutes=duration,
                 price_krw=price,currency='KRW',real_money=False)
