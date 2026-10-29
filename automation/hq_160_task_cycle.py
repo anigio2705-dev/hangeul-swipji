@@ -108,11 +108,69 @@ def contracts(backlog_text):
 def load_catalog(backlog_path):
     return contracts(Path(backlog_path).read_text(encoding="utf-8"))
 
-def next_assignment(team, catalog, evidence=None, failures=None):
+def _reviewed_ready_assignment(team, catalog, evidence, failures, registry=None, root=None):
+    """Dispatch a new *independently reviewed* READY item, not only curated IDs.
+
+    hq_traffic_lights.readiness is the single conservative path/owner/dependency/
+    collision gate. This is static eligibility; the runner must still verify the
+    live CI conclusion, exact SHA and task-specific regression before accepting
+    any developer patch. No automatic READY promotion occurs here.
+    """
+    from hq_traffic_lights import readiness
+
+    if registry is None:
+        file = Path(__file__).with_name("hq_semantic_contract_paths.json")
+        if not file.is_file():
+            return None  # fail closed; never guess a contract
+        registry = json.loads(file.read_text(encoding="utf-8"))
+    base = Path(root) if root is not None else Path(__file__).resolve().parents[1]
+    queue = readiness(catalog, evidence, registry, base)["dispatchable"]
+    for candidate in queue:
+        number = candidate["task"]
+        task = catalog[number]
+        # Only the canonical owner may develop a new READY item; support teams
+        # can review but must not independently produce duplicate patches.
+        if candidate["owner"] != team or task["owner"] != team:
+            continue
+        state = evidence.get(str(number), {}).get("status", "unverified")
+        if state not in STATES:
+            raise ValueError("Invalid task state")
+        if state not in ("unverified", "retry"):
+            continue  # no duplicate AI calls for pending CI or verified work
+        source_paths = candidate["source_paths"]
+        if len(source_paths) != 1:
+            continue  # existing verify_submission permits one changed file
+        retry = failures.get(str(number), {})
+        attempts = retry.get("attempts", 0)
+        if not isinstance(attempts, int) or attempts < 0:
+            raise ValueError("Invalid retry count")
+        if attempts >= 2:
+            continue
+        instruction = retry.get("repair_instruction", "")
+        if not isinstance(instruction, str) or len(instruction) > 1200:
+            raise ValueError("Invalid repair instruction")
+        return {
+            "team": team, "task_number": number, "path": source_paths[0],
+            "owner": task["owner"], "support": task["support"],
+            "acceptance_criterion": task["criterion"],
+            "required_evidence": task["evidence_required"],
+            "attempt": attempts + 1,
+            "repair_instruction": instruction,
+            "mode": "repair" if instruction else "develop",
+            "source": "independently_reviewed_READY_registry",
+            "independent_test_paths": registry["items"][str(number)]["test_paths"],
+        }
+    return None
+
+
+def next_assignment(team, catalog, evidence=None, failures=None, registry=None, root=None):
     """Skip already code-verified work and repeat failures; keep tasks isolated."""
     if team not in CURATED_TARGETS:
         raise ValueError("Unknown team")
     evidence, failures = evidence or {}, failures or {}
+    reviewed = _reviewed_ready_assignment(team, catalog, evidence, failures, registry, root)
+    if reviewed is not None:
+        return reviewed
     for number, path in CURATED_TARGETS[team]:
         if not _semantic_dispatch_gate(number, path, failures):
             continue
