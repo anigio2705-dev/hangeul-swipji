@@ -43,10 +43,13 @@ class Task143LanguageContract(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     codes(altered)
 
-    def test_extended_selector_is_separate_unverified_surface(self):
+    def test_legacy_selector_exposes_only_approved_languages(self):
         extra = (ROOT / "global-language.js").read_text(encoding="utf-8")
-        self.assertIn("Français", extra)
-        # This is a risk inventory, NOT proof that both selectors load together.
+        # The legacy UI must not reintroduce languages that were hidden
+        # pending complete interface translation. This is NOT browser proof.
+        self.assertNotIn("Français", extra)
+        self.assertNotIn("Português", extra)
+        self.assertIn("Tiếng Việt", extra)
         self.assertNotEqual(extra, (ROOT / "site-language.js").read_text(encoding="utf-8"))
 
 
