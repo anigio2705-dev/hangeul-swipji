@@ -1,0 +1,27 @@
+name: HQ independent Team11 audio gesture gate
+on:
+  push:
+    branches:
+      - audit/hq-six-team11-audio-qa-20261030-0739
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audio-gesture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check real audio code syntax
+        run: |
+          node --check hangul-core.js
+          node --check hangul-board.js
+      - name: Run Team11 gesture regression against exact branch source
+        run: node --test tests/team11_audio_user_activation.test.cjs
+      - name: Independent negative manifest and hold regression
+        run: node --test tests/hq_team11_audio_manifest_negative.test.cjs
