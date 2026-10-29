@@ -39,6 +39,7 @@ PATCH_REPAIR_HINTS = {
         "shown in the developer feedback before proposing another patch.",
 }
 REGRESSIONS = {
+    ("12", 41): ["python", "scripts/team12_content_regression.py"],
     ("13", 22): ["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_instant_matching.py"],
     ("14", 109): ["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_team14_referral_store.py"],
     ("16", 55): ["python", "scripts/render-audio-credits.py"],
@@ -129,6 +130,15 @@ def independent_check(team, task, token, catalog):
             checked = cmd(command, cwd=temp, timeout=180)
             if checked.returncode:
                 return "RETRY", "Independent regression failed: " + (checked.stdout + checked.stderr)[-500:], {}
+            if (team, number) == ("12", 41):
+                # The AI may edit its own regression file. Run an immutable HQ
+                # verifier OUTSIDE the candidate worktree as an independent gate.
+                trusted_check = cmd(
+                    ["python", str(Path(__file__).resolve().parent / "verify_task41.py"), temp],
+                    cwd=temp, timeout=120)
+                if trusted_check.returncode:
+                    return "RETRY", "Trusted #41 source audit failed: " + (
+                        trusted_check.stdout + trusted_check.stderr)[-500:], {}
             if team == "16":
                 rendered = Path(temp) / "hangul-audio-credits.html"
                 manifest = Path(temp) / "hangul-audio-manifest.json"
@@ -139,7 +149,8 @@ def independent_check(team, task, token, catalog):
                     return "RETRY", "Audio attribution rows do not match manifest", {}
             return "TEST_PASS_PENDING_CI", "Independent diff and functional regression passed; final backlog gate remains", {
                 "commit": sha, "changed_files": files, "independent_test": "success",
-                "test_command": " ".join(command)}
+                "test_command": " ".join(command) + (
+                    " + trusted automation/verify_task41.py" if (team, number) == ("12", 41) else "")}
         finally:
             cmd(["git", "worktree", "remove", "--force", temp], timeout=45)
 
