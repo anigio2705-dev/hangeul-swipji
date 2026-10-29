@@ -1,0 +1,5 @@
+# Test runners create Python bytecode; these generated artifacts are not source edits.
+# Unknown untracked files remain visible to the #11 preflight gate.
+__pycache__/
+*.py[cod]
+.pytest_cache/

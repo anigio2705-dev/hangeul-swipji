@@ -7,6 +7,7 @@ No main, deployment, production database or real-payment changes.
 import ast
 import json
 import os
+import re
 from pathlib import Path
 import subprocess
 import time
@@ -49,6 +50,40 @@ FORBIDDEN_CALLS = {"eval", "exec", "compile", "__import__"}
 FORBIDDEN_IMPORTS = {"requests", "urllib", "http", "socket", "subprocess", "ctypes"}
 def shell(*args, timeout=120):
     return subprocess.run(args, capture_output=True, text=True, timeout=timeout)
+
+def _trusted_git(*args):
+    """Fail closed on Git errors; never treat an empty output as approval."""
+    result = shell("git", *args)
+    if result.returncode:
+        raise RuntimeError("Preflight git command failed: " + " ".join(args))
+    return result.stdout.strip()
+
+
+def require_clean_hq_checkout():
+    """#11: verify the exact approved HQ ref before touching a team branch."""
+    if _trusted_git("status", "--porcelain=v1", "--untracked-files=all"):
+        raise RuntimeError("Preflight dirty or untracked HQ worktree")
+    branch = _trusted_git("symbolic-ref", "--quiet", "--short", "HEAD")
+    if branch != HQ_REF:
+        raise RuntimeError("Preflight wrong HQ branch")
+    local = _trusted_git("rev-parse", "HEAD")
+    remote = _trusted_git("ls-remote", "--exit-code", "origin", "refs/heads/" + HQ_REF)
+    sha = remote.split()[0] if remote else ""
+    if not re.fullmatch(r"[0-9a-f]{40}", local) or sha != local:
+        raise RuntimeError("Preflight HQ HEAD stale or missing")
+
+
+def require_clean_team_checkout(source_branch):
+    """#11: fail if fetch, checkout or remote head changed before AI patching."""
+    if _trusted_git("status", "--porcelain=v1", "--untracked-files=all"):
+        raise RuntimeError("Preflight dirty or untracked team worktree")
+    local = _trusted_git("rev-parse", "HEAD")
+    fetched = _trusted_git("rev-parse", "FETCH_HEAD")
+    remote = _trusted_git("ls-remote", "--exit-code", "origin", "refs/heads/" + source_branch)
+    sha = remote.split()[0] if remote else ""
+    if not re.fullmatch(r"[0-9a-f]{40}", local) or local != fetched or sha != local:
+        raise RuntimeError("Preflight team HEAD stale or changed")
+
 def validate_ownership():
     all_paths = [p for _, tasks in TASKS.values() for p, _ in tasks]
     if len(all_paths) != len(set(all_paths)):
@@ -167,6 +202,7 @@ def main():
     team = os.environ.get("HQ_TEAM")
     if team not in TASKS or os.environ.get("GITHUB_REF_NAME") != HQ_REF:
         raise RuntimeError("Unauthorized team or branch")
+    require_clean_hq_checkout()
     if not os.environ.get("OPENAI_API_KEY"):
         raise RuntimeError("Missing API key")
     max_seconds = min(3000, max(60, int(os.environ.get("HQ_MAX_SECONDS", "3000"))))
@@ -189,6 +225,7 @@ def main():
         raise RuntimeError("Fetch failed")
     if shell("git", "checkout", "-B", output_branch, "FETCH_HEAD").returncode:
         raise RuntimeError("Checkout failed")
+    require_clean_team_checkout(source_branch)
     # Trusted READY registry is copied by the workflow before branch checkout.
     registry = json.loads(Path("/tmp/hq_semantic_contract_paths.json").read_text(encoding="utf-8"))
     work_items = choose_work_items(team, catalog, evidence, repairs, registry, Path.cwd())
