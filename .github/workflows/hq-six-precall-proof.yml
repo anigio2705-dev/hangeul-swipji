@@ -1,0 +1,34 @@
+name: HQ six-team pre-call READY provenance proof (isolated)
+on:
+  push:
+    branches:
+      - audit/hq-six-precall-ci-20261030-0340
+    paths:
+      - 'automation/hq_six_developers.py'
+      - 'automation/test_hq_ready_provenance.py'
+      - 'automation/test_hq_six_developers.py'
+      - '.github/workflows/hq-six-developers.yml'
+      - '.github/workflows/hq-six-precall-proof.yml'
+  pull_request:
+    branches:
+      - automation/hq-pilot-13-14-15-20261029
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify fail-closed provenance and six-team regression
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s automation -p 'test_hq_ready_provenance.py' -v
+          python -m unittest discover -s automation -p 'test_hq_six_developers.py' -v
+          python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+          python -m unittest discover -s automation -p 'test_hq_traffic_lights.py' -v
+          python -m unittest discover -s automation -p 'test_hq_six_cycle_supervisor.py' -v
+          python -m py_compile automation/hq_six_developers.py
