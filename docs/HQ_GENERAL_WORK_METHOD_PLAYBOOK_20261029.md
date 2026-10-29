@@ -304,3 +304,11 @@
 - **12:38 KST verified outcome:** #56 integrated candidate b3a78ce6 passed exact-HQ-SHA independent CI #40813039896; log exposed invalid input counted as missing (4 vs 3). Correction commit 4b90f8ed passed exact-HQ-SHA CI #40813120338: mocked Hangul 6 lookup titles and 3 valid targets, malicious ../bad excluded, provenance metadata and no audio approval, 3 contract tests, 11 queue regressions. Only now #56 is promoted from READY to CODE_VERIFIED in ledger/registry/contract. 9→10 code-verified; final approved remains 0/160. This integration was direct HQ code work, not a new six-team AI bot commit; no new AI model call. External audio/license/listening/public browser remain blocked. This is the feedback→negative eval→verified fix loop.
 
 - **12:39 KST independent promotion regression:** after CODE_VERIFIED ledger update, HQ queue CI #40813188962 and READY audit #40813188959 failed because the strict contract test requires registry `evidence_run` for every CODE_VERIFIED task. This was a real missing proof pointer, not a feature failure. Corrected #56 registry to include exact successful CI run 40813120338 without weakening the gate; rerun CI required. The bounded team11 AI job was skipped after failed audit, so no model spend or duplicate dispatch occurred.
+
+## 2026-10-29 — 외부 비판 반영: AGI 주장과 다중 에이전트 자율 개발 증거 구분
+- 이 프로젝트는 **AGI 모델 자체의 개발이 아니라 AI 개발팀을 오케스트레이션하는 다중 에이전트 소프트웨어 개발 시스템**이다. AGI 또는 완전 자율 운영이라고 홍보하지 않는다.
+- **증거 단계 A(자동 실행):** 예약 실행, Actions 시작·종료, CI 성공. 이것만으로 AI 판단이나 코드 수정은 입증되지 않는다.
+- **증거 단계 B(실제 AI 개발):** 각 팀별 독립 과제 선택 근거, AI 호출 기록, 변경 diff·커밋 작성자/시각, 실패 로그·수정 diff·재검증이 동일 과제에 연결돼야 한다. 총괄 직접 수정과 6팀 bot 수정은 별도 집계.
+- **증거 단계 C(연속 자율 운영):** 대표의 추가 지시 없이 여러 번 연속으로 A→B→독립 QA→차기 과제 배정이 이어졌음을 시간순 실행 ID와 커밋으로 증명한다. 최소 3회 연속 사이클 및 2개 이상 서로 다른 개발팀의 실제 AI 호출·코드 변경을 검증 전에는 '6팀 자율 개발 성공' 판정 금지. 이 수치는 내부 검증 관문이지 AGI 인정 기준이 아니다.
+- 팀별 격리 브랜치가 존재한다는 사실은 실제 팀별 개발 활동의 충분조건이 아니다. 성공 CI만으로 실패 원인을 AI가 판단해 수정했다고 추론하지 않는다. 독립 검증팀은 A/B/C 각각 PASS/FAIL/UNKNOWN으로 판정한다.
+- 현재 기준(2026-10-29 12:28 KST): 코드 검증 9/160, 최종 승인 0/160, READY 1, 여섯 팀 연속 개발 미입증. 숫자는 새 근거로 갱신한다.
