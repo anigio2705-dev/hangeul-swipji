@@ -112,3 +112,16 @@
 **팀 간 역할:** 16팀이 성장·자금조달 자료의 책임자, 14팀은 수익·수수료·재무 가정 검토 지원, 15팀은 숫자·증빙 독립 검증, 총괄은 우선순위와 충돌 관리. 16팀의 기존 #55 등 개발 작업을 폐기하거나 다른 팀과 충돌시키지 않는다. 160개 원본 과제 번호는 유지하며 이 항목은 역할·운영 규칙의 확장이다.
 
 **검증 상태:** 업무 지시와 방법론 기록 단계. 실제 정부 공고 조사·신청서 작성·투자 유치는 별도 산출물 확인 전까지 완료로 표시하지 않는다.
+
+
+## 2026-10-29 10:02 KST — #41 유효 검증과 #49 가짜 녹색 차단
+
+**가설:** 실제 과제 의미·파일·독립 테스트를 연결하면 WAIT 반복 대신 안전한 과제를 완료하고 다음 과제를 배정할 수 있다.
+
+**#41 실제 검증:** 팀12 격리 브랜치 [b16a79a7](https://github.com/anigio2705-dev/hangeul-swipji/commit/b16a79a7cf9f45eae7ac29e830c821d7d0b835c9)에서 350단원·1758퀴즈·읽기600개·읽기문항1800개를 실제 JS 원본에서 읽는 회귀 검사를 추가했다. 첫 독립 CI [#40797359156](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797359156)은 실패했다. 원인은 기존 두 검사가 실제 앱의 '참여 유형' 대신 '새여 유형'을 찾는 잘못된 문자열이었다. 검사를 삭제하지 않고 [635aef95](https://github.com/anigio2705-dev/hangeul-swipji/commit/635aef9507f0cf908d4382a4be5f5d3e12975607)에서 정확한 문구로 고쳤다. [독립 CI #40797443716](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797443716)에서 350/1758/600/1800, 정답 인덱스 무결성, 팀12 회귀 **11개 통과**. [감독 CI #40797462981](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797462981)도 같은 후보 SHA의 독립 회귀를 통과했다. 장부는 #41을 code_verified로 승격해 기존 5→6건이 됐으며 **최종 승인 0/160**은 유지한다. 브라우저·실사용·전체 원문 의미 검수는 별개다.
+
+**후속 #49 자동 배정:** 원본 #49는 무료 진단의 취약 영역과 다음 학습 추천, 공식 인증 오인 금지다. 기존 잘못된 #47 매핑을 재사용하지 않고 **12팀 phase3/learning.py + test_global_learning.py**에 연결했다. [컨트롤러 CI #40797544489](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797544489) 및 [160개 큐 감사 #40797544543](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797544543) 성공 후, [배정 #40797610609](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797610609)이 실제 [개발 #40797620270](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797620270)을 시작했다. 요청 수락과 코드 변경은 구분한다.
+
+**#49 AI 오류 독립 반려:** AI [a61974ef](https://github.com/anigio2705-dev/hangeul-swipji/commit/a61974ef90ed9355977eedcb71a523f20f47cbd6)는 추천 조건을 OR에서 AND NOT으로 바꿔 취약 학습자의 추천을 모두 없앴다. 일반 학습 회귀는 녹색이었으나 과제 의미를 위반했다. 총괄은 #49를 blocked로 기록하고 별도 신뢰 검사 automation/verify_task49.py를 만들었다. [반려 CI #40797781568](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797781568)은 실제 취약 학습자 추천 누락을 재현해 실패했다. [수정 9fb8a54b](https://github.com/anigio2705-dev/hangeul-swipji/commit/9fb8a54b1cc183bd30ca47deab99cd1c76c0a40f)는 취약 학습자 재추천 복원, 추천 모드와 비공식 인증 표기를 추가했다. [재검증 #40797845758](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797845758)의 성공 확인 전에는 #49 code_verified로 승격하지 않는다.
+
+**고정 개선 규칙:** (1) 과제 수용 기준을 검증하는 신뢰 테스트는 AI 수정 대상 밖에 둔다. (2) 일반 CI 녹색만으로 의미적 통과를 인정하지 않는다. (3) 반려 SHA·실패 CI·수정 SHA를 보존한다. (4) 정확한 다음 과제만 배정하고 중복 호출을 막는다. (5) 개발 실행시간과 실제 홈페이지·대표 검수시간을 분리하고 미계측은 0으로 기재하지 않는다.
