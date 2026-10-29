@@ -8,6 +8,7 @@ import ast
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 import time
 from urllib.request import Request, urlopen
@@ -174,9 +175,14 @@ def run_checks(team, path, extra_tests=()):
     for command in commands:
         result = shell(*command, timeout=120)
         output = result.stdout + result.stderr
-        if result.returncode or (extra_tests and "discover" in command
-                                 and ("Ran 0 tests" in output or "Ran 0 test" in output)):
-            return False, output[-2000:] or "Task-specific regression ran zero tests"
+        if result.returncode:
+            return False, output[-2000:] or "Regression command failed without diagnostic output"
+        # Python unittest discovery returns exit 0 even when it ran zero tests.
+        # Require positive, anchored unittest execution evidence for every
+        # independently reviewed task-specific test file.
+        if extra_tests and "discover" in command:
+            if not re.search(r"(?m)^Ran [1-9][0-9]* tests? in ", output):
+                return False, (output[-1800:] + "\nNo positive unittest execution evidence")[-2000:]
     return True, ""
 def main():
     validate_ownership()

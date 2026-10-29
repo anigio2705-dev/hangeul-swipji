@@ -1,0 +1,25 @@
+name: HQ six positive unittest evidence isolated QA
+on:
+  push:
+    branches:
+      - audit/hq-six-positive-unittest-evidence-20261029-2238
+    paths:
+      - 'automation/hq_six_developers.py'
+      - 'automation/test_hq_six_developers.py'
+      - 'docs/HQ_GENERAL_WORK_METHOD_PLAYBOOK_20261029.md'
+      - '.github/workflows/hq-six-positive-unittest-evidence-ci.yml'
+permissions:
+  contents: read
+jobs:
+  positive-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify six-team patch runner and queue safety
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_six_developers.py' -v
+          python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
