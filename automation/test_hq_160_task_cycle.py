@@ -32,6 +32,9 @@ class HQ160TaskCycleTests(unittest.TestCase):
         self.assertEqual(report["final_complete"], 0)
         self.assertEqual(len(report["assignments"]), 6)
         for team, assignment in report["assignments"].items():
+            if team == "13":
+                self.assertIsNone(assignment, "Blocked #22 must not be dispatched")
+                continue
             self.assertIsNotNone(assignment)
             self.assertEqual(assignment["team"], team)
             self.assertIn(team, [assignment["owner"]] + assignment["support"])
@@ -56,6 +59,13 @@ class HQ160TaskCycleTests(unittest.TestCase):
         self.assertEqual(next_assignment("12", catalog, pending)["task_number"], 52)
         pending["52"] = {"status": "code_verified"}
         self.assertEqual(next_assignment("12", catalog, pending)["task_number"], 49)
+
+    def test_unverified_snapshot_cannot_dispatch_blocked_semantic_contract(self):
+        catalog = contracts(sample())
+        self.assertIsNone(next_assignment("13", catalog, evidence={}),
+                          "A missing ledger entry must not reopen blocked #22")
+        self.assertEqual(56, next_assignment("11", catalog, evidence={})["task_number"],
+                         "Candidate #51 must be quarantined until team15 reviews it")
 
     def test_wrong_scope_47_is_not_assigned_to_team13(self):
         catalog = contracts(sample())
