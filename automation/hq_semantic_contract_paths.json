@@ -47,6 +47,31 @@
       "dependencies": [],
       "evidence_run": 40797443716
     },
+    "43": {
+      "owner": "12",
+      "support": [
+        "15"
+      ],
+      "state": "CODE_VERIFIED",
+      "source_paths": [
+        "hangul-core.js",
+        "hangul-board.js",
+        "hangul-basics.html"
+      ],
+      "test_paths": [
+        "automation/verify_task43.cjs"
+      ],
+      "acceptance": "19개 자음·21개 모음을 한눈에 표시하고 399개 서로 다른 조합을 클릭해 조합식·선택 글자를 갱신하며 다시 듣기 및 글자 만들기 조작이 연결됨",
+      "unmet": [
+        "실제 PC/모바일 브라우저 렌더링과 화면 접근성 검증",
+        "녹음 누락 음절의 실제 청취 검증은 별도 #51~#59",
+        "15팀 별도 통합 의미 검토와 대표 승인"
+      ],
+      "independent_team15": "PENDING",
+      "dependencies": [],
+      "evidence_run": 40807293449,
+      "note": "기존 구현을 새로 만든 것이 아니라 실 코드 실행을 모사한 독립 #43 회귀를 신규 추가. CI 40807293449 exact head 20f812c82707bb09950bfe6bbc2b6048f711690a PASS. 실제 음성 파일·브라우저 재생·공개 배포 완료로 해석 금지."
+    },
     "47": {
       "owner": "12",
       "support": [
