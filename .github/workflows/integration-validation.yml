@@ -20,7 +20,20 @@ jobs:
         with:
           node-version: '22'
       - run: npm ci --prefix phase3 --ignore-scripts
-      - run: ./phase3/node_modules/.bin/playwright install --with-deps chromium
+      - name: Install Chromium with retries and actionable diagnostics
+        run: |
+          set -o pipefail
+          for attempt in 1 2 3; do
+            echo "Playwright Chromium installation attempt ${attempt}/3"
+            if ./phase3/node_modules/.bin/playwright install --with-deps chromium; then
+              exit 0
+            fi
+            echo "Attempt ${attempt} failed; checking package manager and disk space"
+            df -h
+            if [ "${attempt}" -lt 3 ]; then sleep 15; fi
+          done
+          echo "Chromium installation failed after three attempts"
+          exit 1
       - run: sudo apt-get install -y fonts-noto-cjk
       - run: python -m unittest discover -s phase3 -p 'test_*.py' -v
       - run: node phase3/postgres-test.cjs
