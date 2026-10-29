@@ -1,0 +1,43 @@
+name: HQ six-team READY intake audit (isolated)
+on:
+  push:
+    branches:
+      - audit/hq-six-ready-preflight-20261029-2135
+    paths:
+      - 'automation/hq_six_candidate_preflight.py'
+      - 'automation/test_hq_six_candidate_preflight.py'
+      - '.github/workflows/hq-six-ready-intake-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test six-team intake negative fixtures
+        run: python -m unittest discover -s automation -p 'test_hq_six_candidate_preflight.py' -v
+      - name: Inspect actual 160-item contracts and READY blockers
+        run: |
+          python automation/hq_six_candidate_preflight.py --output /tmp/hq-six-ready-intake.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/hq-six-ready-intake.json').read_text())
+          assert len(x['teams'])==6
+          with open(__import__('os').environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('## Real READY intake (read-only; no AI calls)\\n\\n')
+              for team, d in x['teams'].items():
+                  f.write(f"- Team {team}: candidate #{d['next_candidate']}; blockers: {', '.join(d['next_blockers'])}\\n")
+              f.write(f"\\nDispatchable READY: {x['dispatchable_total']}\\n")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hq-six-ready-intake-evidence
+          path: /tmp/hq-six-ready-intake.json
+          if-no-files-found: warn
