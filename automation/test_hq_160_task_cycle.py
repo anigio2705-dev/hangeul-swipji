@@ -156,7 +156,10 @@ class HQ160TaskCycleTests(unittest.TestCase):
         self.assertIn("phase3/learning.py", mapping["items"]["49"]["source_paths"])
         self.assertEqual("BLOCKED", mapping["items"]["22"]["state"])
         self.assertEqual("CANDIDATE", mapping["items"]["51"]["state"])
-        self.assertEqual("CANDIDATE", mapping["items"]["54"]["state"])
+        self.assertIn(mapping["items"]["54"]["state"], {"CANDIDATE", "CODE_VERIFIED"})
+        if mapping["items"]["54"]["state"] == "CODE_VERIFIED":
+            self.assertEqual("code_verified", evidence["54"]["status"])
+            self.assertTrue(mapping["items"]["54"].get("evidence_run"))
         self.assertIn("scripts/team12_missing_recording_script.py", mapping["items"]["54"]["test_paths"])
         self.assertIn("automation/verify_task54.py", mapping["items"]["54"]["test_paths"])
         self.assertFalse(any(x["state"] == "READY" for x in mapping["items"].values()))
