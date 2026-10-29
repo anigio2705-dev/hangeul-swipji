@@ -96,6 +96,25 @@ def readiness(catalog, ledger, registry, root=Path(".")):
             continue
         result["dispatchable"].append({"task": number, "owner": task["owner"],
                                        "source_paths": source})
+    # A file cannot be owned by two parallel READY assignments. Reject both
+    # rather than silently letting iteration order choose an unsafe winner.
+    owners_by_path = {}
+    for assignment in result["dispatchable"]:
+        for path in assignment["source_paths"]:
+            owners_by_path.setdefault(path, set()).add(assignment["task"])
+    conflicts = {}
+    for path, tasks in owners_by_path.items():
+        if len(tasks) > 1:
+            for number in tasks:
+                conflicts.setdefault(number, set()).add(path)
+    if conflicts:
+        result["dispatchable"] = [assignment for assignment in result["dispatchable"]
+                                  if assignment["task"] not in conflicts]
+        for number in sorted(conflicts):
+            result["invalid_ready"].append({
+                "task": number,
+                "reason": "exclusive_file_collision: " + ", ".join(sorted(conflicts[number])),
+            })
     result["dispatchable_total"] = len(result["dispatchable"])
     result["rule"] = ("READY is a static queue candidate only; exact SHA, live CI and "
                       "independent task regression must be revalidated before promotion.")
