@@ -163,5 +163,43 @@ class ReadinessTests(unittest.TestCase):
             self.assertIsNone(next_assignment("12", c,
                               {"41": {"status": "code_verified"}}, registry=reg, root=root))
 
+    def test_read_only_context_can_be_shared_but_editable_target_cannot(self):
+        """Parallel READY work may read the same file but cannot edit the same file."""
+        c = catalog()
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            for name in ("edit_a.py", "edit_b.py", "shared_context.py", "test_a.py", "test_b.py"):
+                (root / name).write_text("pass\\n")
+            def record(number, editable, test):
+                return {"owner": "12", "state": "READY",
+                        "source_paths": [editable, "shared_context.py"],
+                        "editable_path": editable,
+                        "test_paths": [test], "independent_team15": "PASS",
+                        "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"}
+            reg = {"schema": 1, "items": {
+                "41": record(41, "edit_a.py", "test_a.py"),
+                "49": record(49, "edit_b.py", "test_b.py")}}
+            shared_read_only = readiness(c, {}, reg, root)
+            self.assertEqual(shared_read_only["dispatchable_total"], 2)
+            self.assertEqual(shared_read_only["invalid_ready"], [])
+            # Distinct task IDs must not bypass exclusive editable-file ownership.
+            reg["items"]["49"]["source_paths"] = ["edit_a.py", "shared_context.py"]
+            reg["items"]["49"]["editable_path"] = "edit_a.py"
+            collision = readiness(c, {}, reg, root)
+            self.assertEqual(collision["dispatchable_total"], 0)
+            self.assertEqual({item["task"] for item in collision["invalid_ready"]}, {41, 49})
+            self.assertTrue(all("exclusive_file_collision" in item["reason"]
+                                for item in collision["invalid_ready"]))
+
+            # Read/write overlap is unsafe even with different editable targets.
+            # Task 41 reads shared_context.py; task 49 now writes it.
+            reg["items"]["49"]["source_paths"] = ["shared_context.py", "edit_b.py"]
+            reg["items"]["49"]["editable_path"] = "shared_context.py"
+            read_write = readiness(c, {}, reg, root)
+            self.assertEqual(read_write["dispatchable_total"], 0)
+            self.assertEqual({item["task"] for item in read_write["invalid_ready"]}, {41, 49})
+            self.assertTrue(all("exclusive_file_collision" in item["reason"]
+                                for item in read_write["invalid_ready"]))
+
 if __name__ == "__main__":
     unittest.main()

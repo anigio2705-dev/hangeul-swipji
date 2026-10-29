@@ -111,17 +111,22 @@ def readiness(catalog, ledger, registry, root=Path(".")):
         if editable is not None:
             assignment["editable_path"] = editable
         result["dispatchable"].append(assignment)
-    # A file cannot be owned by two parallel READY assignments. Reject both
-    # rather than silently letting iteration order choose an unsafe winner.
-    owners_by_path = {}
+    # Shared read-only context is safe, but write/write AND read/write
+    # overlaps are unsafe. A task owns exactly its independently authorized
+    # editable target; every other source path remains read-only context.
+    writers_by_path = {}
     for assignment in result["dispatchable"]:
-        for path in assignment["source_paths"]:
-            owners_by_path.setdefault(path, set()).add(assignment["task"])
+        path = assignment.get("editable_path") or assignment["source_paths"][0]
+        writers_by_path.setdefault(path, set()).add(assignment["task"])
     conflicts = {}
-    for path, tasks in owners_by_path.items():
-        if len(tasks) > 1:
-            for number in tasks:
+    for assignment in result["dispatchable"]:
+        number = assignment["task"]
+        for path in assignment["source_paths"]:
+            other_writers = writers_by_path.get(path, set()) - {number}
+            if other_writers:
                 conflicts.setdefault(number, set()).add(path)
+                for writer in other_writers:
+                    conflicts.setdefault(writer, set()).add(path)
     if conflicts:
         result["dispatchable"] = [assignment for assignment in result["dispatchable"]
                                   if assignment["task"] not in conflicts]

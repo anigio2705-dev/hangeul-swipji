@@ -474,3 +474,17 @@
 ### 18:24 KST 교차 감사 정정 — #59 상태와 장부 브랜치 불일치
 
 다른 예약 실행 「한글쉽지 무인 개발」의 **18:24 최신 완료 보고**는 경로 등록 26, CODE_VERIFIED 12, BLOCKED 3이라고 기록했다. 특히 #59의 기존 부분 검증이 새로 발견된 '모' UI 오류를 놓쳤으므로 BLOCKED로 정정했다고 설명한다. 반면 이 문서가 위치한 중앙 격리 브랜치 `automation/hq-pilot-13-14-15-20261029`를 직접 재조회하면 `automation/hq_semantic_contract_paths.json` blob `f9391842`는 24개(CANDIDATE 11/BLOCKED 2/CODE_VERIFIED 11), `automation/task-evidence.json` blob `bb3d03a1`는 CODE_VERIFIED 13(#59 포함), BLOCKED 2(#22/#47)다. **서로 다른 브랜치·스냅샷의 수치를 합치거나 중앙 장부를 검증 없이 자동 덮어쓰지 않는다.** #59 오류·수정·정확한 CI를 검토하고 중앙 계약/증거 원장에 적절한 상태 정정을 별도 독립 감사로 통합해야 한다. 최종 승인 0/160은 두 보고에서 동일하다.
+
+## 2026-10-29 18:32 KST — 공유 읽기 전용 컨텍스트가 READY 병렬 실행을 잘못 차단한 오류
+
+- **교차 판독:** 다른 예약 작업 「한글쉽지 무인 개발」 18:24 저장 결과는 #59 음원 UI 수정 `f0e8fd4d`, 코드 검증 12/160, READY 0, 최종 승인 0. 이 브랜치의 별도 장부는 CODE_VERIFIED 13, 경로 등록 24로 서로 달라 #59 BLOCKED 정정과 #10/#59 증거를 독립 통합해야 한다. 최신 여섯 팀 bot 개발 워크플로 [#40797947894](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797947894)는 12팀만 job 수행, 신규 AI 코드 0; 이후 HQ2 #22 격리 검증은 6팀 bot 개발로 산입하지 않는다.
+- **공식 방법:** OpenAI [Agent Improvement Loop](https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop)의 실패 trace를 재현 평가로 고정한 후 수정 후보를 동일 평가로 재실행하는 원칙 중 **실패→고정 회귀 평가→수정→동일 평가 재실행** 하나만 제한 적용. 외부 AI 호출·새 자격증명·비용 집행 없음.
+- **사전 가설:** `automation/hq_traffic_lights.py`의 병렬 충돌 검사에서 `source_paths` 전부를 독점 수정 대상으로 계산하면 서로 다른 `editable_path`가 동일 읽기 전용 컨텍스트를 참조하는 두 READY가 모두 차단된다. 안전성 조건은 동일 실제 수정 대상의 이중 배정은 계속 거부하는 것이다.
+- **실패 재현:** 격리 브랜치 `audit/hq-six-ready-editable-collision-20261029`에서 `automation/test_hq_traffic_lights.py`에 서로 다른 수정 파일 + 공유 컨텍스트 정상 사례, 동일 수정 파일 충돌 반례를 추가. [#40850372628](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40850372628)에서 `dispatchable_total` 예상 2, 실제 0으로 **FAIL**.
+- **실제 수정:** `automation/hq_traffic_lights.py`는 사전 검증된 `editable_path`(단일 파일이면 첫 번째 소스)만 배타적으로 잠근다. `source_paths`는 계속 실존 경로·팀 소유·CI 참조·15팀 승인 검사 대상이다. 코드 커밋 [`8ba9ea71`](https://github.com/anigio2705-dev/hangeul-swipji/commit/8ba9ea712958c82737575921fac6b89f9cb2ff7e).
+- **재검증:** [#40850415341](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40850415341) **SUCCESS** — READY 충돌/승인 회귀 8개, 160개 작업 배정 회귀 13개, 총 21개. 같은 수정 대상 충돌 반례 유지. 실제 READY=0이므로 팀 AI 호출이나 신규 기능 완료가 발생했다는 뜻이 아니다.
+- **위험·비용·통합 조건:** `main`, 운영 사이트, 테스트99, Render/SQLite, 실결제는 건드리지 않았다. 신규 CI는 짧은 Python 2회 실행만 사용하고 API 토큰을 소비하지 않는다. #9의 실제 코드/테스트 경로를 CANDIDATE로 등록하되 15팀의 독립 의미 감사와 전체 160개별 다음 조치 검증이 끝나기 전 READY/완료로 올리지 않는다. 중앙 HQ 통합은 별도 독립 검토 후 수행한다.
+- **다음 행동:** ① #59 상태 불일치 정정 ② #9 CANDIDATE에 대한 독립 QA ③ 각 팀의 실제 READY 공급 ④ 새 bot SHA·CI·테스트99 브라우저 결과로만 개발 성공 인정. 현재 테스트99 Render의 실제 배포 SHA·DB 영속성/백업이 확인되지 않아 재배포 금지.
+
+- **추가 Kill-Critic 반례(초기 수정의 위험 발견):** 첫 수정은 공유 읽기 컨텍스트끼리의 오탐은 없앴지만, 한 과제가 읽는 파일을 다른 과제가 **수정하는 읽기/쓰기 경합**을 허용했다. 같은 회귀에 반례를 추가하자 [#40850746509](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40850746509)에서 실제 `dispatchable_total=2`(안전한 예상 0)로 **FAIL**.
+- **최종 안전 수정:** 모든 READY 과제의 독립 승인된 수정 파일을 기록하고, 다른 과제의 소스 컨텍스트에 해당 파일이 있으면 **두 과제를 모두 차단**한다. 읽기/읽기 공유만 허용한다. 최종 코드 [`cc2a630d`](https://github.com/anigio2705-dev/hangeul-swipji/commit/cc2a630ddbcf34e73ce24a666675bb4422bd4dc4); [#40850797899](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40850797899) **SUCCESS**, READY 8개·160 배정 13개·계약 소유권 4개, 합계 25개 PASS. #9는 CANDIDATE, 실제 READY 0, 신규 팀 AI 호출 0. 독립 15팀 검토와 중앙 통합은 여전히 필요하다.
