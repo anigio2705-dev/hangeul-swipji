@@ -1,0 +1,31 @@
+name: HQ #101 referral role matrix isolated integration gate
+on:
+  push:
+    branches:
+      - audit/hq-six-101-product-source-integration-20261030-0540
+    paths:
+      - 'phase3/team14_referral_scenarios.py'
+      - 'phase3/test_team14_referral_scenarios.py'
+      - '.github/workflows/hq-task101-integration-gate-20261030.yml'
+permissions:
+  contents: read
+jobs:
+  verify-mock-product:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify four-role accept/reject, uniqueness, cycles, and no-payment flags
+        env:
+          PYTHONPATH: phase3
+        run: |
+          python -m unittest -v test_team14_referral_scenarios test_team14_referral_store
+      - name: Preserve six-team semantic gate
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+      - name: Explicit non-deployment boundary
+        if: always()
+        run: echo 'Source-only mock integration. No READY promotion, live money, DB, or Render deploy.' >> "$GITHUB_STEP_SUMMARY"
