@@ -111,12 +111,13 @@ def readiness(catalog, ledger, registry, root=Path(".")):
         if editable is not None:
             assignment["editable_path"] = editable
         result["dispatchable"].append(assignment)
-    # A file cannot be owned by two parallel READY assignments. Reject both
-    # rather than silently letting iteration order choose an unsafe winner.
+    # Only the independently authorized *editable* file is exclusively owned.
+    # Multiple agents may read the same source context without modifying it.
+    # Reject both assignments when their editable targets overlap.
     owners_by_path = {}
     for assignment in result["dispatchable"]:
-        for path in assignment["source_paths"]:
-            owners_by_path.setdefault(path, set()).add(assignment["task"])
+        editable = assignment.get("editable_path") or assignment["source_paths"][0]
+        owners_by_path.setdefault(editable, set()).add(assignment["task"])
     conflicts = {}
     for path, tasks in owners_by_path.items():
         if len(tasks) > 1:
