@@ -74,6 +74,19 @@ for(const course of courses){
   assert.equal(get('tabs').children.length,5,course+': lesson tabs');
   assert.ok(get('lessonTitle').textContent,'Missing lesson title');
   assert.ok(get('coachPhrase').textContent,'Missing lesson example');
+  // #48: unfinished units may be skipped, and learners may go back without
+  // completing or unlocking intervening lessons. Exercise all seven courses.
+  const skipStore=new Map(),skipView=load(course,skipStore);
+  assert.equal(skipView.get('nav').children.length,50,course+': skip navigation list');
+  for(const n of [49,24,0]){
+    skipView.get('nav').children[n].onclick();
+    assert.equal(skipView.get('lessonTitle').textContent,skipView.units[n].title[0],
+      course+': skip/back navigation failed at unit '+(n+1));
+  }
+  const skipState=JSON.parse(skipStore.get('hs-'+course+'-v1')||'{}');
+  assert.equal(Object.keys(skipState.done||{}).length,0,
+    course+': navigating without answering must not award completion');
+
   get('tabs').children[3].onclick();
   const q=units[0].quiz;
   assert.ok(q.length>=1,course+': missing exercises');
@@ -158,3 +171,4 @@ for(const course of courses){
   console.log('PASS #44 '+course+': 50 unit quizzes, wrong answer, review, full score, next, reload');
 }
 console.log('PASS #44 seven courses: 350 lessons simulated in actual course scripts');
+console.log('PASS #48 all seven courses: skip to lesson 50, return to 25 and 1 without completion');
