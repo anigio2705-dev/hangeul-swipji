@@ -42,8 +42,11 @@
         // Replace stale inventory on refresh; removed/held files must not remain playable.
         for(const key of Object.keys(records))delete records[key];
         for(const key of Object.keys(holds))delete holds[key];
-        Object.assign(records,Object.fromEntries(human.filter(([,a])=>!a.disabled)));
-        Object.assign(holds,Object.fromEntries(human.filter(([,a])=>a.disabled)));
+        // An explicit listening-review hold is authoritative even when a
+        // recording mistakenly omits the separate disabled flag.
+        const isHeld=a=>!!a.disabled||['held','hold','rejected','blocked','failed'].includes(String(a.listeningReview?.status||'').toLowerCase());
+        Object.assign(records,Object.fromEntries(human.filter(([,a])=>!isHeld(a))));
+        Object.assign(holds,Object.fromEntries(human.filter(([,a])=>isHeld(a)).map(([word,a])=>[word,{...a,holdReason:a.holdReason||'청취 검수 보류'}])));
         manifestError=false;manifestLoaded=true;document.dispatchEvent(new Event('hs-audio-ready'))})
       .catch(()=>{manifestError=true;manifestLoaded=false;document.dispatchEvent(new Event('hs-audio-ready'))})
       .finally(()=>{if(timer!==null)cancelTimer(timer);loading=null});
