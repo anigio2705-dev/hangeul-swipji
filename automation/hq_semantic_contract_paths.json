@@ -139,9 +139,41 @@
       "partial_data_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40815818683",
       "partial_data_ci_sha": "69b50e42499dfd3b1504e353b8454e666aa0f923",
       "partial_ui_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40815975914",
-    "mixed_score_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40818744778",
-    "mixed_score_ci_sha": "272dd7e9cae849c29cc6d7e274a8ac48289fbd4d",
-    "mixed_score_scope": "7 course first units, 0/N and 1/N and retry N/N, isolated localStorage; exact-SHA CI PASS. Explanations 0/1758 and semantic answer correctness remain BLOCKED for #45 promotion."
+      "mixed_score_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40818744778",
+      "mixed_score_ci_sha": "272dd7e9cae849c29cc6d7e274a8ac48289fbd4d",
+      "mixed_score_scope": "7 course first units, 0/N and 1/N and retry N/N, isolated localStorage; exact-SHA CI PASS. Explanations 0/1758 and semantic answer correctness remain BLOCKED for #45 promotion."
+    },
+    "46": {
+      "owner": "12",
+      "support": [
+        "15",
+        "13"
+      ],
+      "state": "CANDIDATE",
+      "source_paths": [
+        "reading.html",
+        "reading-curriculum.js",
+        "reading-alternates.js"
+      ],
+      "test_paths": [
+        "scripts/browser-audit-reading-600.cjs",
+        "scripts/audit-reading-similarity.cjs",
+        "scripts/audit-phase2-content.cjs",
+        "scripts/curriculum-source.cjs"
+      ],
+      "acceptance": "15단계×40개=600개 읽기 지문에서 수준별 난도·한영 문장 대응·본문과 1800개 문항 연결·정답 및 근거/해설 노출·PC/모바일 표시를 독립 검증",
+      "dependencies": [
+        41
+      ],
+      "unmet": [
+        "기존 Chromium 600개 정합성 스크립트의 현재 정확한 SHA CI 성공을 이 감사에서 확인하지 못함",
+        "문항의 본문 의미상 정답 유일성·근거 및 해설 정확성에 대한 독립 교육 검수 미완료",
+        "읽기 15레벨의 학습자 수준/난도 적합성 검증 미완료; 유사도 진단은 의미 검증이 아님",
+        "375px 모바일에서 15레벨 탐색·40권 선택·문항 응답·근거 표시·가로 넘침 실사용 검증 미완료",
+        "15팀 독립 의미 검증·대표 최종 승인 미완료"
+      ],
+      "independent_team15": "PENDING",
+      "note": "2026-10-29 13:54 KST isolated branch file/path audit: reading.html loads reading-curriculum.js and reading-alternates.js; CSS has @media 920/580/800px, and quiz result appends answer-evidence from q.evidence. Existing scripts/browser-audit-reading-600.cjs exercises content(1..15,1..40) at 1280x800 and checks title, paragraphs, translations, quiz structure, duplicate choices, correct indices. It does not exercise 375px mobile, answer-evidence accuracy or graded semantic difficulty. scripts/audit-reading-similarity.cjs explicitly calls similarity heuristics non-certification. No new #46 test execution or CI success established; no READY promotion. Source path verification only."
     },
     "47": {
       "owner": "12",
