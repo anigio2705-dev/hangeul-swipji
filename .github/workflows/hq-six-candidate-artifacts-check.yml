@@ -1,0 +1,28 @@
+name: HQ six-team candidate artifact safety tests (isolated)
+on:
+  pull_request:
+    paths:
+      - 'automation/hq_six_candidate_artifacts.py'
+      - 'automation/test_hq_six_candidate_artifacts.py'
+      - '.github/workflows/hq-six-developers.yml'
+      - '.github/workflows/hq-six-candidate-artifacts-check.yml'
+  push:
+    branches:
+      - automation/hq-pilot-13-14-15-20261029
+    paths:
+      - 'automation/hq_six_candidate_artifacts.py'
+      - 'automation/test_hq_six_candidate_artifacts.py'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Syntax and negative safety cases
+        run: |
+          python -m py_compile automation/hq_six_candidate_artifacts.py
+          python -m unittest discover -s automation -p 'test_hq_six_candidate_artifacts.py' -v
