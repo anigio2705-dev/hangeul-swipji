@@ -8,7 +8,7 @@ const source=fs.readFileSync(path.join(__dirname,'..','hangul-core.js'),'utf8');
 test('team12 audio script parses without duplicate lexical declarations',()=>{
   assert.doesNotThrow(()=>new vm.Script(source,{filename:'hangul-core.js'}));
 });
-const ga={kind:'human',src:'./assets/hangul-audio/ga.mp3',sourceUrl:'https://example.test/ga',author:'reviewed',license:'reviewed'};
+const ga={kind:'human',src:'./assets/hangul-audio/ga.mp3',sha256:'a'.repeat(64),sourceUrl:'https://example.test/ga',author:'reviewed',license:'reviewed'};
 function boot({recordings={},failed=false,speech=true}={}){
   const sounds=[];
   class Utterance{constructor(word){this.text=word}}
