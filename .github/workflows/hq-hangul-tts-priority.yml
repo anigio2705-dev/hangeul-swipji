@@ -1,0 +1,27 @@
+name: HQ Hangul audio human-first product regression (isolated)
+on:
+  push:
+    branches:
+      - audit/hq-six-audio-priority-20261030-0738
+    paths:
+      - hangul-core.js
+      - tests/hangul_tts_priority.test.cjs
+      - .github/workflows/hq-hangul-tts-priority.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  product-audio-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check product JavaScript syntax
+        run: node --check hangul-core.js
+      - name: Run human-first and opt-in audio behavior tests
+        run: node --test tests/hangul_tts_priority.test.cjs
