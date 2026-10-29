@@ -124,6 +124,40 @@ def propose(path, goal, source, feedback, task_number, repair_instruction):
         raise ValueError("Empty AI patch")
     patch = json.loads(message)
     return apply_patch(source, patch)
+def ready_branch_path_gaps(team, registry, root):
+    """Diagnose reviewed READY files absent on an existing team branch.
+
+    This is read-only evidence: it never promotes contracts, changes checkout,
+    resets a team branch, or bypasses dependency/CI gates.
+    """
+    root = Path(root).resolve()
+    gaps = []
+    for number, entry in sorted(registry.get("items", {}).items(),
+                                key=lambda item: int(item[0])):
+        if (not isinstance(entry, dict) or entry.get("owner") != team
+                or entry.get("state") != "READY"
+                or entry.get("independent_team15") != "PASS"
+                or not entry.get("independent_ci_url")):
+            continue
+        for kind in ("source_paths", "test_paths"):
+            paths = entry.get(kind, [])
+            if not isinstance(paths, list):
+                continue
+            for path in paths:
+                if not isinstance(path, str):
+                    gaps.append({"task_number": int(number), "path": str(path),
+                                 "reason": "invalid_contract_path"})
+                    continue
+                relative = Path(path)
+                if (not path or relative.is_absolute() or ".." in relative.parts
+                        or "\\" in path or not (root / relative).resolve().is_relative_to(root)):
+                    gaps.append({"task_number": int(number), "path": path,
+                                 "reason": "invalid_contract_path"})
+                elif not (root / relative).is_file():
+                    gaps.append({"task_number": int(number), "path": path,
+                                 "reason": "missing_on_existing_team_branch"})
+    return gaps
+
 def choose_work_items(team, catalog, evidence, repairs, registry, root):
     """Prefer independently reviewed READY work over the legacy fixed queue.
 
@@ -207,8 +241,13 @@ def main():
         raise RuntimeError("Checkout failed")
     # Trusted READY registry is copied by the workflow before branch checkout.
     registry = json.loads(Path("/tmp/hq_semantic_contract_paths.json").read_text(encoding="utf-8"))
+    branch_gaps = ready_branch_path_gaps(team, registry, Path.cwd())
     work_items = choose_work_items(team, catalog, evidence, repairs, registry, Path.cwd())
-    started, calls, report = time.monotonic(), 0, []
+    started, calls, report = time.monotonic(), 0, [
+        {"task_number": gap["task_number"], "path": gap["path"],
+         "status": "ready_branch_preflight_blocked", "reason": gap["reason"]}
+        for gap in branch_gaps
+    ]
     for item in work_items:
         if calls >= max_calls or time.monotonic()-started >= max_seconds-250: break
         path, number = item["path"], item["number"]
