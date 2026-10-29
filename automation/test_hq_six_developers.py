@@ -12,11 +12,11 @@ class BoundedPatchTests(unittest.TestCase):
         self.assertFalse(_semantic_dispatch_gate(22, 'phase3/instant_matching.py'))
 
     def test_reviewed_ready_reaches_actual_six_team_runner(self):
-        c = contracts("\\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
+        c = contracts("\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
-            (root / "feature.py").write_text("def feature(): return True\\n")
-            (root / "test_feature.py").write_text("import unittest\\nclass TestFeature(unittest.TestCase):\\n def test_feature(self): self.assertTrue(True)\\n")
+            (root / "feature.py").write_text("def feature(): return True\n")
+            (root / "test_feature.py").write_text("import unittest\nclass TestFeature(unittest.TestCase):\n def test_feature(self): self.assertTrue(True)\n")
             record = {"owner": "12", "state": "READY",
                       "source_paths": ["feature.py"], "test_paths": ["test_feature.py"],
                       "independent_team15": "PASS",
@@ -36,7 +36,7 @@ class BoundedPatchTests(unittest.TestCase):
             self.assertIn("non-Python", blocked[0]["unsupported_reason"])
 
     def test_ready_task_specific_unittest_cannot_pass_with_zero_tests(self):
-        fake = SimpleNamespace(returncode=0, stdout="", stderr="Ran 0 tests in 0.000s\\nOK\\n")
+        fake = SimpleNamespace(returncode=0, stdout="", stderr="Ran 0 tests in 0.000s\nOK\n")
         with patch("hq_six_developers.shell", return_value=fake):
             ok, message = run_checks("12", "feature.py", ["test_feature.py"])
         self.assertFalse(ok)
