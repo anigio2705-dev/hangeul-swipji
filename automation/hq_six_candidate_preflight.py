@@ -1,6 +1,7 @@
 """Read-only six-team READY intake: actionable evidence, never self-approval."""
 import argparse
 import json
+import re
 from pathlib import Path
 from hq_160_task_cycle import load_catalog
 from hq_traffic_lights import TEAMS, readiness
@@ -20,8 +21,17 @@ def summarize(catalog, ledger, registry, root):
             if editable is None and len(source) == 1:
                 editable = source[0]
             blockers = list(candidate["blockers"])
-            if not entry.get("independent_ci_url"):
+            # A CI link alone does not establish the tested revision. Pilot
+            # runs and incomplete SHA strings cannot be promoted to READY.
+            ci_url = entry.get("independent_ci_url")
+            ci_sha = entry.get("independent_ci_sha")
+            if (not isinstance(ci_url, str) or not re.fullmatch(
+                r"https://github\\.com/anigio2705-dev/hangeul-swipji/actions/runs/[0-9]+",
+                ci_url) or not isinstance(ci_sha, str)
+                or not re.fullmatch(r"[0-9a-f]{40}", ci_sha)):
                 blockers.append("exact_sha_independent_ci_missing")
+            if candidate.get("unmet_acceptance") or entry.get("unmet"):
+                blockers.append("acceptance_criteria_unmet")
             if not editable or editable not in source:
                 blockers.append("single_editable_path_missing")
             elif not editable.endswith(".py") or editable.startswith(("automation/", ".github/")):
