@@ -146,7 +146,6 @@
     "46": {
       "owner": "12",
       "support": [
-        "15",
         "13"
       ],
       "state": "CANDIDATE",
@@ -173,7 +172,7 @@
         "15팀 독립 의미 검증·대표 최종 승인 미완료"
       ],
       "independent_team15": "PENDING",
-      "note": "2026-10-29 13:54 KST isolated branch file/path audit: reading.html loads reading-curriculum.js and reading-alternates.js; CSS has @media 920/580/800px, and quiz result appends answer-evidence from q.evidence. Existing scripts/browser-audit-reading-600.cjs exercises content(1..15,1..40) at 1280x800 and checks title, paragraphs, translations, quiz structure, duplicate choices, correct indices. It does not exercise 375px mobile, answer-evidence accuracy or graded semantic difficulty. scripts/audit-reading-similarity.cjs explicitly calls similarity heuristics non-certification. No new #46 test execution or CI success established; no READY promotion. Source path verification only."
+      "note": "2026-10-29 13:54 KST isolated branch file/path audit: reading.html loads reading-curriculum.js and reading-alternates.js; CSS has @media 920/580/800px, and quiz result appends answer-evidence from q.evidence. Existing scripts/browser-audit-reading-600.cjs exercises content(1..15,1..40) at 1280x800 and checks title, paragraphs, translations, quiz structure, duplicate choices, correct indices. It does not exercise 375px mobile, answer-evidence accuracy or graded semantic difficulty. scripts/audit-reading-similarity.cjs explicitly calls similarity heuristics non-certification. No new #46 test execution or CI success established; no READY promotion. Source path verification only. CI #40820463681 and #40820475679 initially failed because #46 included team15 as an implementation support team, whereas canonical automation/hq_160_task_cycle.py TEAM_OWNERS allows only team13 as support for #41-50. Team15 remains independent QA and must not be added to implementation support. Fixed contract mapping without weakening the test."
     },
     "47": {
       "owner": "12",
