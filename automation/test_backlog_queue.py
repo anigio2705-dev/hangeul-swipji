@@ -35,6 +35,17 @@ class BacklogQueueTests(unittest.TestCase):
         queue_numbers = {x["number"] for x in report["next_queue"]}
         self.assertFalse((verified_numbers | blocked_numbers) & queue_numbers)
 
+    def test_review_queue_is_not_limited_by_dispatch_batch_size(self):
+        # Regression for CI 40824705443: a 13th verified item was hidden.
+        ledger = {str(n): verified() for n in range(1, 16)}
+        report = build_report(sample(), ledger, limit=3)
+        self.assertEqual(report["counts"]["code_verified"], 15)
+        self.assertEqual(len(report["next_queue"]), 3)
+        self.assertEqual({x["number"] for x in report["review_queue"]},
+                         set(range(1, 16)))
+        self.assertFalse({x["number"] for x in report["next_queue"]} &
+                         {x["number"] for x in report["review_queue"]})
+
     def test_exactly_160_and_unique(self):
         self.assertEqual(len(parse_backlog(sample())), 160)
         with self.assertRaises(ValueError):
