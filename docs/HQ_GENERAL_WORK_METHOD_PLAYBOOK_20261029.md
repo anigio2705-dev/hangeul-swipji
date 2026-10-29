@@ -485,3 +485,6 @@
 - **재검증:** [#40850415341](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40850415341) **SUCCESS** — READY 충돌/승인 회귀 8개, 160개 작업 배정 회귀 13개, 총 21개. 같은 수정 대상 충돌 반례 유지. 실제 READY=0이므로 팀 AI 호출이나 신규 기능 완료가 발생했다는 뜻이 아니다.
 - **위험·비용·통합 조건:** `main`, 운영 사이트, 테스트99, Render/SQLite, 실결제는 건드리지 않았다. 신규 CI는 짧은 Python 2회 실행만 사용하고 API 토큰을 소비하지 않는다. #9의 실제 코드/테스트 경로를 CANDIDATE로 등록하되 15팀의 독립 의미 감사와 전체 160개별 다음 조치 검증이 끝나기 전 READY/완료로 올리지 않는다. 중앙 HQ 통합은 별도 독립 검토 후 수행한다.
 - **다음 행동:** ① #59 상태 불일치 정정 ② #9 CANDIDATE에 대한 독립 QA ③ 각 팀의 실제 READY 공급 ④ 새 bot SHA·CI·테스트99 브라우저 결과로만 개발 성공 인정. 현재 테스트99 Render의 실제 배포 SHA·DB 영속성/백업이 확인되지 않아 재배포 금지.
+
+- **추가 Kill-Critic 반례(초기 수정의 위험 발견):** 첫 수정은 공유 읽기 컨텍스트끼리의 오탐은 없앴지만, 한 과제가 읽는 파일을 다른 과제가 **수정하는 읽기/쓰기 경합**을 허용했다. 같은 회귀에 반례를 추가하자 [#40850746509](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40850746509)에서 실제 `dispatchable_total=2`(안전한 예상 0)로 **FAIL**.
+- **최종 안전 수정:** 모든 READY 과제의 독립 승인된 수정 파일을 기록하고, 다른 과제의 소스 컨텍스트에 해당 파일이 있으면 **두 과제를 모두 차단**한다. 읽기/읽기 공유만 허용한다. 최종 코드 [`cc2a630d`](https://github.com/anigio2705-dev/hangeul-swipji/commit/cc2a630ddbcf34e73ce24a666675bb4422bd4dc4); [#40850797899](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40850797899) **SUCCESS**, READY 8개·160 배정 13개·계약 소유권 4개, 합계 25개 PASS. #9는 CANDIDATE, 실제 READY 0, 신규 팀 AI 호출 0. 독립 15팀 검토와 중앙 통합은 여전히 필요하다.
