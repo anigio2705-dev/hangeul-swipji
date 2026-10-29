@@ -146,40 +146,6 @@
       return {status:token===run?(ttsUsed?'tts-played':'played'):'cancelled',words};
     }catch(e){if(token===run){stop();status(e.message)}return {status:'error',message:e.message}}
   }
-  // Optional Korean device TTS: never impersonates a human recording.
-  // Keep OFF by default and refuse playback of recordings explicitly on hold.
-  let syntheticEnabled=false;
-  function canSynthesize(){return !!(window.speechSynthesis&&typeof window.SpeechSynthesisUtterance==='function')}
-  function setSyntheticEnabled(value){
-    syntheticEnabled=!!value;
-    if(!syntheticEnabled)stop();
-    status(syntheticEnabled?'기기 합성음 보조 켜짐 · 사람 녹음 아님':'기기 합성음 보조 꺼짐');
-    refreshBadges();
-    return syntheticEnabled;
-  }
-  function synthesize(word,token){
-    return new Promise(resolve=>{
-      if(!canSynthesize())return resolve({status:'tts-unsupported'});
-      if(token!==run)return resolve({status:'cancelled'});
-      const utterance=new window.SpeechSynthesisUtterance(word);
-      utterance.lang='ko-KR';utterance.rate=.82;
-      let finished=false,timer=null;
-      const done=(result)=>{if(finished)return;finished=true;if(timer!==null)cancelTimer(timer);release=null;resolve(result)};
-      release=()=>done({status:'cancelled'});
-      if(schedule)timer=schedule(()=>{window.speechSynthesis.cancel();done({status:'tts-timeout'})},12000);
-      utterance.onstart=()=>{if(token===run)status('기기 한국어 합성음 재생 중: '+word+' · 사람 녹음 아님')};
-      utterance.onend=()=>done({status:'tts-played'});
-      utterance.onerror=()=>done({status:'tts-error'});
-      try{window.speechSynthesis.speak(utterance)}catch(_){done({status:'tts-error'})}
-    });
-  }
-  // For absent/held recordings, the explicit opt-in fallback runs after a user
-  // gesture; a held human file itself is never played. Human files remain first.
-  async function optionalSynthetic(word){
-    stop();const token=run;
-    if(!syntheticEnabled)return {status:'tts-disabled'};
-    return synthesize(word,token);
-  }
   const el=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!==undefined)x.textContent=text;return x};
   function soundButton(word,label=word){
     const b=el('button','sound notranslate',label);b.type='button';b.translate=false;
@@ -204,5 +170,5 @@
   document.addEventListener('hs-audio-ready',refreshBadges);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});
   window.addEventListener('pagehide',stop);
-  window.HSHangul={consonants,vowels,compose,records,ready,reloadManifest,availability,play,stop,status,el,soundButton,refreshBadges,canSynthesize,setSyntheticEnabled,optionalSynthetic};
+  window.HSHangul={consonants,vowels,compose,records,ready,reloadManifest,availability,play,stop,status,el,soundButton,refreshBadges,canSynthesize,setSyntheticEnabled};
 })();
