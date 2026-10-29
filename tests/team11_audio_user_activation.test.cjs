@@ -85,3 +85,25 @@ test('TTS is opt-in, human-first, and never plays a held human asset',async()=>{
   assert.ok(calls.cancel>cancelsBefore,'enabling TTS also cancels an older playback');
   H.setSyntheticEnabled(false);
 });
+
+test('cancelled synthetic completion cannot release a newer playback',async()=>{
+  const spoken=[];
+  const synth={cancel(){},speak(u){spoken.push(u);u.onstart?.()}};
+  const context={
+    document:{baseURI:'https://example.test/',addEventListener(){},dispatchEvent(){},querySelectorAll:()=>[],querySelector:()=>null},
+    window:{addEventListener(){},speechSynthesis:synth,SpeechSynthesisUtterance:class{constructor(t){this.text=t}}},
+    Event:class{},URL,setTimeout,clearTimeout,
+    Audio:class{pause(){} play(){return Promise.resolve()}},
+    fetch:async()=>({ok:true,json:async()=>({recordings:{}})})
+  };
+  vm.runInNewContext(source,context);
+  const H=context.window.HSHangul;await H.ready;H.setSyntheticEnabled(true);
+  const first=H.play('나');
+  await Promise.resolve();
+  const second=H.play('다');
+  await Promise.resolve();
+  spoken[0]?.onend?.(); // a stale callback after cancellation
+  H.stop();
+  assert.equal((await first).status,'cancelled');
+  assert.equal((await second).status,'cancelled');
+});
