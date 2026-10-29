@@ -64,6 +64,37 @@ class BoundedPatchTests(unittest.TestCase):
             self.assertEqual(blocked[0]["number"], 45)
             self.assertIn("non-Python", blocked[0]["unsupported_reason"])
 
+    def test_multiple_independently_reviewed_ready_tasks_are_queued_for_bounded_continuation(self):
+        # A team with two distinct, independently reviewed Python tasks must
+        # not stop after selecting the first one. The call/time budget in main
+        # still caps actual API spending and never bypasses provenance checks.
+        c = contracts("\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            for name in ("first.py", "second.py"):
+                (root / name).write_text("def feature(): return True\n")
+            for name in ("test_first.py", "test_second.py"):
+                (root / name).write_text(
+                    "import unittest\nclass TestFeature(unittest.TestCase):\n"
+                    " def test_feature(self): self.assertTrue(True)\n")
+            def reviewed(source, test):
+                return {"owner": "12", "state": "READY",
+                        "source_paths": [source], "test_paths": [test],
+                        "independent_team15": "PASS",
+                        "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123",
+                        "independent_ci_sha": "a" * 40}
+            reg = {"schema": 1, "items": {
+                "45": reviewed("first.py", "test_first.py"),
+                "46": reviewed("second.py", "test_second.py"),
+                "47": {"owner": "12", "state": "CANDIDATE",
+                       "source_paths": ["first.py"], "test_paths": ["test_first.py"]},
+            }}
+            chosen = choose_work_items("12", c, {}, {}, reg, root)
+            self.assertEqual([item["number"] for item in chosen], [45, 46])
+            self.assertTrue(all(item["dynamic"] and not item["unsupported_reason"]
+                                for item in chosen))
+            self.assertEqual(reg["items"]["47"]["state"], "CANDIDATE")
+
     def test_ready_task_specific_unittest_cannot_pass_with_zero_tests(self):
         fake = SimpleNamespace(returncode=0, stdout="", stderr="Ran 0 tests in 0.000s\nOK\n")
         with patch("hq_six_developers.shell", return_value=fake):
