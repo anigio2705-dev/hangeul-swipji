@@ -1,0 +1,2805 @@
+{
+  "schema": 1,
+  "scope": "399 composed board syllables; 19 consonant-name targets are separate (418 inventory targets, not 418 approved recordings)",
+  "manifest_version": "20261026-human-only",
+  "counts": {
+    "ready_unapproved": 19,
+    "held": 26,
+    "missing": 354
+  },
+  "cells": [
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅏ",
+      "syllable": "가",
+      "status": "ready_unapproved",
+      "src": "./assets/hangul-audio/ac00-r2.mp3"
+    },
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅑ",
+      "syllable": "갸",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅓ",
+      "syllable": "거",
+      "status": "ready_unapproved",
+      "src": "./assets/hangul-audio/ac70.mp3"
+    },
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅕ",
+      "syllable": "겨",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅗ",
+      "syllable": "고",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅛ",
+      "syllable": "교",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅜ",
+      "syllable": "구",
+      "status": "held",
+      "src": "./assets/hangul-audio/ad6c-week1.mp3"
+    },
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅠ",
+      "syllable": "규",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅡ",
+      "syllable": "그",
+      "status": "held",
+      "src": "./assets/hangul-audio/adf8-20261027.mp3"
+    },
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅣ",
+      "syllable": "기",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅐ",
+      "syllable": "개",
+      "status": "held",
+      "src": "./assets/hangul-audio/ac1c-20261027.mp3"
+    },
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅒ",
+      "syllable": "걔",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅔ",
+      "syllable": "게",
+      "status": "held",
+      "src": "./assets/hangul-audio/ac8c-20261027.mp3"
+    },
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅖ",
+      "syllable": "계",
+      "status": "held",
+      "src": "./assets/hangul-audio/acc4-20261027.mp3"
+    },
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅘ",
+      "syllable": "과",
+      "status": "held",
+      "src": "./assets/hangul-audio/acfc-20261027.mp3"
+    },
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅙ",
+      "syllable": "괘",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅚ",
+      "syllable": "괴",
+      "status": "held",
+      "src": "./assets/hangul-audio/ad34-20261027.mp3"
+    },
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅝ",
+      "syllable": "궈",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅞ",
+      "syllable": "궤",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅟ",
+      "syllable": "귀",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄱ",
+      "vowel": "ㅢ",
+      "syllable": "긔",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅏ",
+      "syllable": "나",
+      "status": "ready_unapproved",
+      "src": "./assets/hangul-audio/b098-r2.mp3"
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅑ",
+      "syllable": "냐",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅓ",
+      "syllable": "너",
+      "status": "ready_unapproved",
+      "src": "./assets/hangul-audio/b108.mp3"
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅕ",
+      "syllable": "녀",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅗ",
+      "syllable": "노",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅛ",
+      "syllable": "뇨",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅜ",
+      "syllable": "누",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅠ",
+      "syllable": "뉴",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅡ",
+      "syllable": "느",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅣ",
+      "syllable": "니",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅐ",
+      "syllable": "내",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅒ",
+      "syllable": "냬",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅔ",
+      "syllable": "네",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅖ",
+      "syllable": "녜",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅘ",
+      "syllable": "놔",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅙ",
+      "syllable": "놰",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅚ",
+      "syllable": "뇌",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅝ",
+      "syllable": "눠",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅞ",
+      "syllable": "눼",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅟ",
+      "syllable": "뉘",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄴ",
+      "vowel": "ㅢ",
+      "syllable": "늬",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅏ",
+      "syllable": "다",
+      "status": "held",
+      "src": "./assets/hangul-audio/b2e4-week1.mp3"
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅑ",
+      "syllable": "댜",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅓ",
+      "syllable": "더",
+      "status": "ready_unapproved",
+      "src": "./assets/hangul-audio/b354.mp3"
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅕ",
+      "syllable": "뎌",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅗ",
+      "syllable": "도",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅛ",
+      "syllable": "됴",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅜ",
+      "syllable": "두",
+      "status": "ready_unapproved",
+      "src": "./assets/hangul-audio/b450.mp3"
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅠ",
+      "syllable": "듀",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅡ",
+      "syllable": "드",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅣ",
+      "syllable": "디",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅐ",
+      "syllable": "대",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅒ",
+      "syllable": "댸",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅔ",
+      "syllable": "데",
+      "status": "held",
+      "src": "./assets/hangul-audio/b370-20261027.mp3"
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅖ",
+      "syllable": "뎨",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅘ",
+      "syllable": "돠",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅙ",
+      "syllable": "돼",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅚ",
+      "syllable": "되",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅝ",
+      "syllable": "둬",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅞ",
+      "syllable": "뒈",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅟ",
+      "syllable": "뒤",
+      "status": "held",
+      "src": "./assets/hangul-audio/b4a4-20261027.mp3"
+    },
+    {
+      "consonant": "ㄷ",
+      "vowel": "ㅢ",
+      "syllable": "듸",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅏ",
+      "syllable": "라",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅑ",
+      "syllable": "랴",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅓ",
+      "syllable": "러",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅕ",
+      "syllable": "려",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅗ",
+      "syllable": "로",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅛ",
+      "syllable": "료",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅜ",
+      "syllable": "루",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅠ",
+      "syllable": "류",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅡ",
+      "syllable": "르",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅣ",
+      "syllable": "리",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅐ",
+      "syllable": "래",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅒ",
+      "syllable": "럐",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅔ",
+      "syllable": "레",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅖ",
+      "syllable": "례",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅘ",
+      "syllable": "롸",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅙ",
+      "syllable": "뢔",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅚ",
+      "syllable": "뢰",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅝ",
+      "syllable": "뤄",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅞ",
+      "syllable": "뤠",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅟ",
+      "syllable": "뤼",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄹ",
+      "vowel": "ㅢ",
+      "syllable": "릐",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅏ",
+      "syllable": "마",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅑ",
+      "syllable": "먀",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅓ",
+      "syllable": "머",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅕ",
+      "syllable": "며",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅗ",
+      "syllable": "모",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅛ",
+      "syllable": "묘",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅜ",
+      "syllable": "무",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅠ",
+      "syllable": "뮤",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅡ",
+      "syllable": "므",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅣ",
+      "syllable": "미",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅐ",
+      "syllable": "매",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅒ",
+      "syllable": "먜",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅔ",
+      "syllable": "메",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅖ",
+      "syllable": "몌",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅘ",
+      "syllable": "뫄",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅙ",
+      "syllable": "뫠",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅚ",
+      "syllable": "뫼",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅝ",
+      "syllable": "뭐",
+      "status": "held",
+      "src": "./assets/hangul-audio/bb50-20261027.mp3"
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅞ",
+      "syllable": "뭬",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅟ",
+      "syllable": "뮈",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅁ",
+      "vowel": "ㅢ",
+      "syllable": "믜",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅏ",
+      "syllable": "바",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅑ",
+      "syllable": "뱌",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅓ",
+      "syllable": "버",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅕ",
+      "syllable": "벼",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅗ",
+      "syllable": "보",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅛ",
+      "syllable": "뵤",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅜ",
+      "syllable": "부",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅠ",
+      "syllable": "뷰",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅡ",
+      "syllable": "브",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅣ",
+      "syllable": "비",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅐ",
+      "syllable": "배",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅒ",
+      "syllable": "뱨",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅔ",
+      "syllable": "베",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅖ",
+      "syllable": "볘",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅘ",
+      "syllable": "봐",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅙ",
+      "syllable": "봬",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅚ",
+      "syllable": "뵈",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅝ",
+      "syllable": "붜",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅞ",
+      "syllable": "붸",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅟ",
+      "syllable": "뷔",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅂ",
+      "vowel": "ㅢ",
+      "syllable": "븨",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅏ",
+      "syllable": "사",
+      "status": "ready_unapproved",
+      "src": "./assets/hangul-audio/c0ac.mp3"
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅑ",
+      "syllable": "샤",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅓ",
+      "syllable": "서",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅕ",
+      "syllable": "셔",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅗ",
+      "syllable": "소",
+      "status": "ready_unapproved",
+      "src": "./assets/hangul-audio/c18c.mp3"
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅛ",
+      "syllable": "쇼",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅜ",
+      "syllable": "수",
+      "status": "held",
+      "src": "./assets/hangul-audio/c218-20261027.mp3"
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅠ",
+      "syllable": "슈",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅡ",
+      "syllable": "스",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅣ",
+      "syllable": "시",
+      "status": "held",
+      "src": "./assets/hangul-audio/c2dc-20261027.mp3"
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅐ",
+      "syllable": "새",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅒ",
+      "syllable": "섀",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅔ",
+      "syllable": "세",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅖ",
+      "syllable": "셰",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅘ",
+      "syllable": "솨",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅙ",
+      "syllable": "쇄",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅚ",
+      "syllable": "쇠",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅝ",
+      "syllable": "숴",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅞ",
+      "syllable": "쉐",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅟ",
+      "syllable": "쉬",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅅ",
+      "vowel": "ㅢ",
+      "syllable": "싀",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅏ",
+      "syllable": "아",
+      "status": "held",
+      "src": "./assets/hangul-audio/c544-week1.mp3"
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅑ",
+      "syllable": "야",
+      "status": "held",
+      "src": "./assets/hangul-audio/c57c-week1.mp3"
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅓ",
+      "syllable": "어",
+      "status": "ready_unapproved",
+      "src": "./assets/hangul-audio/c5b4.mp3"
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅕ",
+      "syllable": "여",
+      "status": "held",
+      "src": "./assets/hangul-audio/c5ec-week1.mp3"
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅗ",
+      "syllable": "오",
+      "status": "ready_unapproved",
+      "src": "./assets/hangul-audio/c624.mp3"
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅛ",
+      "syllable": "요",
+      "status": "held",
+      "src": "./assets/hangul-audio/c694-week1.mp3"
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅜ",
+      "syllable": "우",
+      "status": "held",
+      "src": "./assets/hangul-audio/c6b0-week1.mp3"
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅠ",
+      "syllable": "유",
+      "status": "held",
+      "src": "./assets/hangul-audio/c720-week1.mp3"
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅡ",
+      "syllable": "으",
+      "status": "held",
+      "src": "./assets/hangul-audio/c73c-week1.mp3"
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅣ",
+      "syllable": "이",
+      "status": "ready_unapproved",
+      "src": "./assets/hangul-audio/c774.mp3"
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅐ",
+      "syllable": "애",
+      "status": "held",
+      "src": "./assets/hangul-audio/c560.mp3"
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅒ",
+      "syllable": "얘",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅔ",
+      "syllable": "에",
+      "status": "ready_unapproved",
+      "src": "./assets/hangul-audio/c5d0.mp3"
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅖ",
+      "syllable": "예",
+      "status": "ready_unapproved",
+      "src": "./assets/hangul-audio/c608.mp3"
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅘ",
+      "syllable": "와",
+      "status": "ready_unapproved",
+      "src": "./assets/hangul-audio/c640.mp3"
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅙ",
+      "syllable": "왜",
+      "status": "ready_unapproved",
+      "src": "./assets/hangul-audio/c65c.mp3"
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅚ",
+      "syllable": "외",
+      "status": "ready_unapproved",
+      "src": "./assets/hangul-audio/c678.mp3"
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅝ",
+      "syllable": "워",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅞ",
+      "syllable": "웨",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅟ",
+      "syllable": "위",
+      "status": "ready_unapproved",
+      "src": "./assets/hangul-audio/c704.mp3"
+    },
+    {
+      "consonant": "ㅇ",
+      "vowel": "ㅢ",
+      "syllable": "의",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅏ",
+      "syllable": "자",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅑ",
+      "syllable": "쟈",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅓ",
+      "syllable": "저",
+      "status": "ready_unapproved",
+      "src": "./assets/hangul-audio/c800.mp3"
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅕ",
+      "syllable": "져",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅗ",
+      "syllable": "조",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅛ",
+      "syllable": "죠",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅜ",
+      "syllable": "주",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅠ",
+      "syllable": "쥬",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅡ",
+      "syllable": "즈",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅣ",
+      "syllable": "지",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅐ",
+      "syllable": "재",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅒ",
+      "syllable": "쟤",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅔ",
+      "syllable": "제",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅖ",
+      "syllable": "졔",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅘ",
+      "syllable": "좌",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅙ",
+      "syllable": "좨",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅚ",
+      "syllable": "죄",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅝ",
+      "syllable": "줘",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅞ",
+      "syllable": "줴",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅟ",
+      "syllable": "쥐",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅈ",
+      "vowel": "ㅢ",
+      "syllable": "즤",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅏ",
+      "syllable": "차",
+      "status": "ready_unapproved",
+      "src": "./assets/hangul-audio/cc28.mp3"
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅑ",
+      "syllable": "챠",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅓ",
+      "syllable": "처",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅕ",
+      "syllable": "쳐",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅗ",
+      "syllable": "초",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅛ",
+      "syllable": "쵸",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅜ",
+      "syllable": "추",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅠ",
+      "syllable": "츄",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅡ",
+      "syllable": "츠",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅣ",
+      "syllable": "치",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅐ",
+      "syllable": "채",
+      "status": "held",
+      "src": "./assets/hangul-audio/cc44-20261027.mp3"
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅒ",
+      "syllable": "챼",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅔ",
+      "syllable": "체",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅖ",
+      "syllable": "쳬",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅘ",
+      "syllable": "촤",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅙ",
+      "syllable": "쵀",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅚ",
+      "syllable": "최",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅝ",
+      "syllable": "춰",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅞ",
+      "syllable": "췌",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅟ",
+      "syllable": "취",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅊ",
+      "vowel": "ㅢ",
+      "syllable": "츼",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅏ",
+      "syllable": "카",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅑ",
+      "syllable": "캬",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅓ",
+      "syllable": "커",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅕ",
+      "syllable": "켜",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅗ",
+      "syllable": "코",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅛ",
+      "syllable": "쿄",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅜ",
+      "syllable": "쿠",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅠ",
+      "syllable": "큐",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅡ",
+      "syllable": "크",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅣ",
+      "syllable": "키",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅐ",
+      "syllable": "캐",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅒ",
+      "syllable": "컈",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅔ",
+      "syllable": "케",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅖ",
+      "syllable": "켸",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅘ",
+      "syllable": "콰",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅙ",
+      "syllable": "쾌",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅚ",
+      "syllable": "쾨",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅝ",
+      "syllable": "쿼",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅞ",
+      "syllable": "퀘",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅟ",
+      "syllable": "퀴",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅋ",
+      "vowel": "ㅢ",
+      "syllable": "킈",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅏ",
+      "syllable": "타",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅑ",
+      "syllable": "탸",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅓ",
+      "syllable": "터",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅕ",
+      "syllable": "텨",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅗ",
+      "syllable": "토",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅛ",
+      "syllable": "툐",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅜ",
+      "syllable": "투",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅠ",
+      "syllable": "튜",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅡ",
+      "syllable": "트",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅣ",
+      "syllable": "티",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅐ",
+      "syllable": "태",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅒ",
+      "syllable": "턔",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅔ",
+      "syllable": "테",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅖ",
+      "syllable": "톄",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅘ",
+      "syllable": "톼",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅙ",
+      "syllable": "퇘",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅚ",
+      "syllable": "퇴",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅝ",
+      "syllable": "퉈",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅞ",
+      "syllable": "퉤",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅟ",
+      "syllable": "튀",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅌ",
+      "vowel": "ㅢ",
+      "syllable": "틔",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅏ",
+      "syllable": "파",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅑ",
+      "syllable": "퍄",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅓ",
+      "syllable": "퍼",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅕ",
+      "syllable": "펴",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅗ",
+      "syllable": "포",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅛ",
+      "syllable": "표",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅜ",
+      "syllable": "푸",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅠ",
+      "syllable": "퓨",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅡ",
+      "syllable": "프",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅣ",
+      "syllable": "피",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅐ",
+      "syllable": "패",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅒ",
+      "syllable": "퍠",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅔ",
+      "syllable": "페",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅖ",
+      "syllable": "폐",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅘ",
+      "syllable": "퐈",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅙ",
+      "syllable": "퐤",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅚ",
+      "syllable": "푀",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅝ",
+      "syllable": "풔",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅞ",
+      "syllable": "풰",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅟ",
+      "syllable": "퓌",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅍ",
+      "vowel": "ㅢ",
+      "syllable": "픠",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅏ",
+      "syllable": "하",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅑ",
+      "syllable": "햐",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅓ",
+      "syllable": "허",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅕ",
+      "syllable": "혀",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅗ",
+      "syllable": "호",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅛ",
+      "syllable": "효",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅜ",
+      "syllable": "후",
+      "status": "held",
+      "src": "./assets/hangul-audio/d6c4-20261027.mp3"
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅠ",
+      "syllable": "휴",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅡ",
+      "syllable": "흐",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅣ",
+      "syllable": "히",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅐ",
+      "syllable": "해",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅒ",
+      "syllable": "햬",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅔ",
+      "syllable": "헤",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅖ",
+      "syllable": "혜",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅘ",
+      "syllable": "화",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅙ",
+      "syllable": "홰",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅚ",
+      "syllable": "회",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅝ",
+      "syllable": "훠",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅞ",
+      "syllable": "훼",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅟ",
+      "syllable": "휘",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅎ",
+      "vowel": "ㅢ",
+      "syllable": "희",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅏ",
+      "syllable": "까",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅑ",
+      "syllable": "꺄",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅓ",
+      "syllable": "꺼",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅕ",
+      "syllable": "껴",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅗ",
+      "syllable": "꼬",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅛ",
+      "syllable": "꾜",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅜ",
+      "syllable": "꾸",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅠ",
+      "syllable": "뀨",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅡ",
+      "syllable": "끄",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅣ",
+      "syllable": "끼",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅐ",
+      "syllable": "깨",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅒ",
+      "syllable": "꺠",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅔ",
+      "syllable": "께",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅖ",
+      "syllable": "꼐",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅘ",
+      "syllable": "꽈",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅙ",
+      "syllable": "꽤",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅚ",
+      "syllable": "꾀",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅝ",
+      "syllable": "꿔",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅞ",
+      "syllable": "꿰",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅟ",
+      "syllable": "뀌",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄲ",
+      "vowel": "ㅢ",
+      "syllable": "끠",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅏ",
+      "syllable": "따",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅑ",
+      "syllable": "땨",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅓ",
+      "syllable": "떠",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅕ",
+      "syllable": "뗘",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅗ",
+      "syllable": "또",
+      "status": "held",
+      "src": "./assets/hangul-audio/b610-20261027.mp3"
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅛ",
+      "syllable": "뚀",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅜ",
+      "syllable": "뚜",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅠ",
+      "syllable": "뜌",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅡ",
+      "syllable": "뜨",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅣ",
+      "syllable": "띠",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅐ",
+      "syllable": "때",
+      "status": "held",
+      "src": "./assets/hangul-audio/b54c-20261027.mp3"
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅒ",
+      "syllable": "떄",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅔ",
+      "syllable": "떼",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅖ",
+      "syllable": "뗴",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅘ",
+      "syllable": "똬",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅙ",
+      "syllable": "뙈",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅚ",
+      "syllable": "뙤",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅝ",
+      "syllable": "뚸",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅞ",
+      "syllable": "뛔",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅟ",
+      "syllable": "뛰",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㄸ",
+      "vowel": "ㅢ",
+      "syllable": "띄",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅏ",
+      "syllable": "빠",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅑ",
+      "syllable": "뺘",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅓ",
+      "syllable": "뻐",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅕ",
+      "syllable": "뼈",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅗ",
+      "syllable": "뽀",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅛ",
+      "syllable": "뾰",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅜ",
+      "syllable": "뿌",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅠ",
+      "syllable": "쀼",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅡ",
+      "syllable": "쁘",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅣ",
+      "syllable": "삐",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅐ",
+      "syllable": "빼",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅒ",
+      "syllable": "뺴",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅔ",
+      "syllable": "뻬",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅖ",
+      "syllable": "뼤",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅘ",
+      "syllable": "뽜",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅙ",
+      "syllable": "뽸",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅚ",
+      "syllable": "뾔",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅝ",
+      "syllable": "뿨",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅞ",
+      "syllable": "쀄",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅟ",
+      "syllable": "쀠",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅃ",
+      "vowel": "ㅢ",
+      "syllable": "쁴",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅏ",
+      "syllable": "싸",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅑ",
+      "syllable": "쌰",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅓ",
+      "syllable": "써",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅕ",
+      "syllable": "쎠",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅗ",
+      "syllable": "쏘",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅛ",
+      "syllable": "쑈",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅜ",
+      "syllable": "쑤",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅠ",
+      "syllable": "쓔",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅡ",
+      "syllable": "쓰",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅣ",
+      "syllable": "씨",
+      "status": "held",
+      "src": "./assets/hangul-audio/c528-20261027.mp3"
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅐ",
+      "syllable": "쌔",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅒ",
+      "syllable": "썌",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅔ",
+      "syllable": "쎄",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅖ",
+      "syllable": "쎼",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅘ",
+      "syllable": "쏴",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅙ",
+      "syllable": "쐐",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅚ",
+      "syllable": "쐬",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅝ",
+      "syllable": "쒀",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅞ",
+      "syllable": "쒜",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅟ",
+      "syllable": "쒸",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅆ",
+      "vowel": "ㅢ",
+      "syllable": "씌",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅏ",
+      "syllable": "짜",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅑ",
+      "syllable": "쨔",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅓ",
+      "syllable": "쩌",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅕ",
+      "syllable": "쪄",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅗ",
+      "syllable": "쪼",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅛ",
+      "syllable": "쬬",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅜ",
+      "syllable": "쭈",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅠ",
+      "syllable": "쮸",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅡ",
+      "syllable": "쯔",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅣ",
+      "syllable": "찌",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅐ",
+      "syllable": "째",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅒ",
+      "syllable": "쨰",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅔ",
+      "syllable": "쩨",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅖ",
+      "syllable": "쪠",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅘ",
+      "syllable": "쫘",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅙ",
+      "syllable": "쫴",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅚ",
+      "syllable": "쬐",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅝ",
+      "syllable": "쭤",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅞ",
+      "syllable": "쮀",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅟ",
+      "syllable": "쮜",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "consonant": "ㅉ",
+      "vowel": "ㅢ",
+      "syllable": "쯰",
+      "status": "missing",
+      "src": null
+    }
+  ]
+}
