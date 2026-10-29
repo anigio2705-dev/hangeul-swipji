@@ -76,7 +76,8 @@ class DynamicReadySupervisorTests(unittest.TestCase):
             return SimpleNamespace(returncode=0, stdout="Ran 1 test in 0.001s\nOK\n", stderr="")
         with patch("hq_six_cycle_supervisor.reviewed_dynamic_tests", return_value=["test_feature.py"]), \
              patch("hq_six_cycle_supervisor.api", side_effect=fake_api), \
-             patch("hq_six_cycle_supervisor.cmd", side_effect=fake_cmd):
+             patch("hq_six_cycle_supervisor.cmd", side_effect=fake_cmd), \
+             patch("pathlib.Path.read_bytes", return_value=b"unchanged HQ regression"):
             verdict, reason, proof = independent_check(
                 "12", {"task_number": 45, "path": "feature.py", "commit": sha}, "token", catalog())
         self.assertEqual(verdict, "TEST_PASS_PENDING_CI")
@@ -96,11 +97,30 @@ class DynamicReadySupervisorTests(unittest.TestCase):
             return SimpleNamespace(returncode=0, stdout=output, stderr="")
         with patch("hq_six_cycle_supervisor.reviewed_dynamic_tests", return_value=["test_feature.py"]), \
              patch("hq_six_cycle_supervisor.api", side_effect=fake_api), \
-             patch("hq_six_cycle_supervisor.cmd", side_effect=fake_cmd):
+             patch("hq_six_cycle_supervisor.cmd", side_effect=fake_cmd), \
+             patch("pathlib.Path.read_bytes", return_value=b"unchanged HQ regression"):
             verdict, reason, proof = independent_check(
                 "12", {"task_number": 45, "path": "feature.py", "commit": sha}, "token", catalog())
         self.assertEqual(verdict, "RETRY")
         self.assertIn("zero tests", reason)
+        self.assertEqual(proof, {})
+
+    def test_team_branch_cannot_replace_trusted_hq_regression(self):
+        sha = "a" * 40
+        def fake_api(path, token):
+            if "/branches/" in path:
+                return {"commit": {"sha": sha}}
+            return {"commit": {"message": "bot(team12): task #45 tested isolated fix to feature.py"},
+                    "files": [{"filename": "feature.py"}]}
+        success = SimpleNamespace(returncode=0, stdout="Ran 1 test\nOK\n", stderr="")
+        with patch("hq_six_cycle_supervisor.reviewed_dynamic_tests", return_value=["test_feature.py"]), \
+             patch("hq_six_cycle_supervisor.api", side_effect=fake_api), \
+             patch("hq_six_cycle_supervisor.cmd", return_value=success), \
+             patch("pathlib.Path.read_bytes", side_effect=[b"tampered team test", b"trusted HQ test"]):
+            verdict, reason, proof = independent_check(
+                "12", {"task_number": 45, "path": "feature.py", "commit": sha}, "token", catalog())
+        self.assertEqual(verdict, "RETRY")
+        self.assertIn("differs from trusted HQ test", reason)
         self.assertEqual(proof, {})
 
     def test_wrong_scope_is_rejected_before_github_lookup(self):
