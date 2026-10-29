@@ -14,7 +14,7 @@ def sample():
 class SixTeamSupervisorTests(unittest.TestCase):
     def run_cycle(self, committed=False, verdict="TEST_PASS_PENDING_CI", depth=0,
                   repairs=None, team="14", task_number=109, task_status="committed",
-                  feedback=None):
+                  feedback=None, ledger=None):
         self._selected_team = team
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "artifacts"
@@ -34,7 +34,7 @@ class SixTeamSupervisorTests(unittest.TestCase):
                  patch("hq_six_cycle_supervisor.load_catalog", return_value=contracts(sample())), \
                  patch("hq_six_cycle_supervisor.independent_check",
                        return_value=(verdict, "Precise fix: assertion 7", {"commit": "a" * 40})), \
-                 patch("hq_six_cycle_supervisor.load_ledger", return_value=({}, "a" * 40)), \
+                 patch("hq_six_cycle_supervisor.load_ledger", return_value=(ledger if ledger is not None else {}, "a" * 40)), \
                  patch("hq_six_cycle_supervisor.save_ledger", return_value=None), \
                  patch("hq_six_cycle_supervisor.promote_prior", return_value=[]), \
                  patch("hq_six_cycle_supervisor.four_role_evidence",
@@ -93,6 +93,19 @@ class SixTeamSupervisorTests(unittest.TestCase):
         self.assertFalse(report["dispatched_next"])
         self.assertEqual(report["verified_new_functional_code"], 1)
         api.assert_not_called()
+
+    def test_replayed_sha_does_not_count_as_new_development_or_dispatch(self):
+        sha = "a" * 40
+        for previous_status in ("in_progress", "code_verified"):
+            with self.subTest(previous_status=previous_status):
+                ledger = {"22": {"status": previous_status, "commit": sha,
+                                  "independent_review": "pass"}}
+                report, api = self.run_cycle(
+                    committed=True, team="13", task_number=22, ledger=ledger)
+                self.assertEqual(report["verified_new_functional_code"], 0)
+                self.assertEqual(report["staged_pending_CI"], [])
+                self.assertFalse(report["dispatched_next"])
+                api.assert_not_called()
 
     def test_pending_ci_is_not_promoted_until_run_completes_successfully(self):
         url = "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"
