@@ -1,0 +1,21 @@
+name: Team15 isolated Hangul TTS fallback regression
+on:
+  push:
+    branches:
+      - audit/team15-audio-fallback-20261030
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audio-fallback:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Verify human recording priority, held policy, Korean TTS fallback
+        run: node scripts/test_team15_hangul_tts_fallback.cjs
+      - name: Confirm no deployment
+        run: echo 'Isolated code verification only. No main merge, test99 deploy, live listening or final approval.'
