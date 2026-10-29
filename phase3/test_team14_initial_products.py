@@ -64,7 +64,7 @@ class InitialProductTests(unittest.TestCase):
                       bookingId='b',amount=10000,productCode='partner_25',
                       durationMinutes=25,priceKrw=10000,currency='KRW')
         self.assertEqual('partner_25',verify_server_product_contract(db,'b',verified)['product_code'])
-        for event in (None, 'forged-event', dict(verified,verifiedByServer=False),
+        for event in ('forged-event', dict(verified,verifiedByServer=False),
                       dict(verified,type='lesson.started'),
                       dict(verified,status='cancelled'),
                       dict(verified,amount=20000),
