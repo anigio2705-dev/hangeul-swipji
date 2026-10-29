@@ -181,6 +181,27 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
 
 pages = [p for r in results if isinstance(r, dict) for p in r.get('pages', []) if isinstance(p, dict)]
 
+def review_candidate(page):
+    """Expose metadata presence for human review, never auto-grant rights."""
+    images = page.get('imageinfo') if isinstance(page, dict) else None
+    info = images[0] if isinstance(images, list) and images and isinstance(images[0], dict) else {}
+    metadata = info.get('extmetadata')
+    if not isinstance(metadata, dict):
+        metadata = {}
+    def has_field(key):
+        field = metadata.get(key)
+        return (isinstance(field, dict) and isinstance(field.get('value'), str)
+                and bool(field['value'].strip()))
+    return {
+        'title': page.get('title', ''),
+        'has_license_name': has_field('LicenseShortName'),
+        'has_license_url': has_field('LicenseUrl'),
+        'has_author': has_field('Artist'),
+        'review_status': 'pending_independent_license_and_listening_review',
+        'rightsApproved': False,
+        'listeningApproved': False,
+    }
+
 report = {
     'queriedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(),
     'scope': 'Exact Ko-<target>.ogg/.oga filename inventory only; absence is not proof that no other recording exists',
@@ -189,6 +210,7 @@ report = {
     'responses': len(pages),
     'failedBatches': [r for r in results if isinstance(r, dict) and 'error' in r],
     'candidates': [p for p in pages if p.get('imageinfo')],
+    'candidateReview': [review_candidate(p) for p in pages if p.get('imageinfo')],
     'notFoundTitles': sum('missing' in p for p in pages),
     'listeningApproved': False
 }
