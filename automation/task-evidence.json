@@ -64,6 +64,39 @@
     "final_approved": false,
     "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797845758"
   },
+  "51": {
+    "status": "unverified",
+    "owner": "12",
+    "support": [
+      "11",
+      "15",
+      "16"
+    ],
+    "semantic_state": "CANDIDATE",
+    "independent_review": "pending",
+    "task_specific_verified": false,
+    "verified_subcomponents": [
+      {
+        "scope": "399 syllable board inventory",
+        "commit": "7b90d87a1e86972a49718074153fb9f77dfca245",
+        "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40800638728",
+        "ci_conclusion": "success"
+      },
+      {
+        "scope": "19 consonant-name buttons inventory",
+        "commit": "5dc4ebba85cdb29a2e67193168dba3db03cce581",
+        "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801647878",
+        "ci_conclusion": "success"
+      }
+    ],
+    "unmet": [
+      "15-team independent semantic review",
+      "missing/held human recordings",
+      "browser playback/listening review and rights approval"
+    ],
+    "implementation_verified": false,
+    "final_approved": false
+  },
   "52": {
     "status": "code_verified",
     "commit": "5038a7fd41df1f6c3fa97d5534c19c17ea821b3d",

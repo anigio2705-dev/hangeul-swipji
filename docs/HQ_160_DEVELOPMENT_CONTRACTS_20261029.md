@@ -203,3 +203,10 @@
 - 구현: `scripts/team12_recording_plan.py --check`는 실제 JS 구성과 음원 목록을 다시 실행해 계획과 다르면 실패한다. 독립 격리 브랜치 CI `.github/workflows/hq-team12-board-inventory.yml`를 추가했다. 커밋 `7b90d87a`, `0a4c8501`, `e58190fb`.
 - 이 실행에서 CI 성공 결과를 아직 조회하지 못했다. **#51 CANDIDATE 유지, 신규 CODE_VERIFIED 증가 0, 최종 완료 증가 0.** 실제 브라우저 클릭·재생, 인간 청취 승인, 15팀 독립 의미 검증은 남아 있다.
 - 안전: `main`·운영 DB·실결제·공개 배포·외부 제출 변경 없음. 해당 계약이 READY가 되기 전까지 개발팀 자동 dispatch 금지.
+
+## 2026-10-29 10:39 KST — #51 399+19 실제 인벤토리 검증 증거
+
+- 12팀 담당, 11·15·16팀 지원. 실제 소스 `hangul-core.js`, `hangul-board.js`, `hangul-audio-manifest.json`; 검증 `scripts/team12_recording_plan.py --check`(399개)와 `scripts/team12_consonant_names.py --check`(19개).
+- 19개 이름: 검수 보류 14, 녹음 없음 5. 399개 음절: 준비됐지만 청취 미승인 19, 검수 보류 26, 누락 354. 418개 대상이 모두 녹음됐다는 뜻이 아니다.
+- 실제 변경 커밋 `5dc4ebba85cdb29a2e67193168dba3db03cce581`; 해당 SHA의 독립 CI https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801647878 SUCCESS. 기존 399/교육/계약 회귀 검사를 유지하면서 이름 19개 검사를 추가했다.
+- **현재 상태 CANDIDATE.** 15팀의 독립 의미 검토, 실제 화면·재생·권리 검수, 필수 음원 보충이 미완료. 신규 CODE_VERIFIED 과제 수 증가 없음. 과제 전체의 READY 자동 승격 금지.
