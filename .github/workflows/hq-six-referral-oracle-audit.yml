@@ -1,0 +1,34 @@
+name: HQ independent referral oracle audit (isolated)
+on:
+  push:
+    branches:
+      - audit/hq-six-referral-oracle-20261029-2340
+    paths:
+      - phase3/test_hq_six_referral_oracle.py
+      - phase3/team14_referral_scenarios.py
+      - phase3/test_team14_referral_scenarios.py
+      - .github/workflows/hq-six-referral-oracle-audit.yml
+  pull_request:
+    branches:
+      - audit/hq2-referral-linear-20261029-2305
+    paths:
+      - phase3/test_hq_six_referral_oracle.py
+      - phase3/team14_referral_scenarios.py
+      - phase3/test_team14_referral_scenarios.py
+      - .github/workflows/hq-six-referral-oracle-audit.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-referral-oracle:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run exhaustive independent graph oracle
+        run: python -m unittest discover -s phase3 -p 'test_hq_six_referral_oracle.py' -v
+      - name: Run existing product referral scenarios
+        run: python -m unittest discover -s phase3 -p 'test_team14_referral_scenarios.py' -v
