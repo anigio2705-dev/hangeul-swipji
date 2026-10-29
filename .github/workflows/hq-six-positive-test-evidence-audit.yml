@@ -1,0 +1,29 @@
+name: HQ positive unittest evidence gate (isolated)
+on:
+  push:
+    branches:
+      - audit/hq-six-positive-test-evidence-20261029-2050
+    paths:
+      - 'automation/hq_six_cycle_supervisor.py'
+      - 'automation/test_hq_six_cycle_supervisor.py'
+      - '.github/workflows/hq-six-positive-test-evidence-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  positive-unittest-evidence:
+    if: github.ref == 'refs/heads/audit/hq-six-positive-test-evidence-20261029-2050'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile exact gate and tests
+        run: python -m py_compile automation/hq_six_cycle_supervisor.py automation/test_hq_six_cycle_supervisor.py
+      - name: Independently test positive unittest evidence and legacy contracts
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_six_cycle_supervisor.py' -v
+          python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+          python -m unittest discover -s automation -p 'test_hq_six_developers.py' -v
