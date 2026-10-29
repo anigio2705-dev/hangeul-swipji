@@ -438,7 +438,10 @@ def route(handler, db, path, data):
     if action not in allowed: raise server.Error('페이지 없음',404)
     if handler.command!=allowed[action]: raise server.Error('지원하지 않는 요청',405)
     now=time.time()
-    cleanup(db,now)
+    # The read-only reservation list must not expire an unrelated instant
+    # match. Keep all other endpoint cleanup semantics unchanged.
+    if action != 'reservations':
+        cleanup(db,now)
     if action=='reservations':
         return {'reservations':reservation_snapshot(db,u['id'])},None
     if action=='booking-room':

@@ -9,9 +9,13 @@ permissions:
   contents: read
 jobs:
   test:
-    runs-on: ubuntu-latest
+    # Chromium 1.51.1 dependencies are not supported on ubuntu-26.04.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Source-preservation test compares files against historical 7418e32.
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'

@@ -8,7 +8,9 @@ permissions:
   contents: read
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    # Playwright 1.51.1 cannot install Chromium dependencies on ubuntu-26.04.
+    # Pin the known-supported runner until the browser package is upgraded.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
