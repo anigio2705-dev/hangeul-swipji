@@ -1,0 +1,25 @@
+name: HQ team11 isolated checkout preflight gate
+on:
+  push:
+    branches: [automation/hq-team11-preflight-20261029]
+    paths:
+      - 'automation/hq_six_developers.py'
+      - 'automation/test_hq_six_developers.py'
+      - '.github/workflows/hq-team11-preflight.yml'
+permissions:
+  contents: read
+jobs:
+  preflight-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test dirty, stale and concurrent checkout rejection
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_six_developers.py' -v
+          python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+      - name: Compile the trusted runner
+        run: python -m py_compile automation/hq_six_developers.py
