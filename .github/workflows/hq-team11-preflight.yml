@@ -23,3 +23,15 @@ jobs:
           python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
       - name: Compile the trusted runner
         run: python -m py_compile automation/hq_six_developers.py
+      - name: Verify real isolated checkout HEAD and clean worktree
+        run: |
+          python - <<'PY'
+          import sys
+          sys.path.insert(0, "automation")
+          import hq_six_developers as runner
+          # The same trusted check is exercised against the actual isolated
+          # CI branch; production HQ_REF remains unchanged in source code.
+          runner.HQ_REF = "automation/hq-team11-preflight-20261029"
+          runner.require_clean_hq_checkout()
+          print("Real git checkout clean and exact remote HEAD verified")
+          PY
