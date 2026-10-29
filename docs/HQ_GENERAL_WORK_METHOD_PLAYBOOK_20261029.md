@@ -458,3 +458,12 @@
 - **가설·변경:** 테스트99 자동 재배포 전에 소스에 포함된 무료/임시 DB 위험과 과거 배포 SHA 오인을 독립적으로 차단하면, 승인되지 않은 재배포가 테스트 예약/모의 결제 기록을 지우는 위험을 줄인다. 격리 브랜치에 `automation/staging99_redeploy_guard.py` 및 6개 반례, 읽기 전용 CI를 추가했다.
 - **검증:** [CI #40837155467](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40837155467)에서 6개 단위 테스트 PASS 및 실제 블루프린트에 대한 **예상된 BLOCKED(exit 2)** 확인. 녹색 CI는 '위험 탐지기 정상'만 의미한다. 배포 성공, 실제 영속 디스크, 백업 복구, 대표 승인과는 무관하다.
 - **후속 안전 조건:** 11·13팀은 Render 관리자 권한으로 실제 서비스의 현재 SHA·DB 마운트·백업·복구 테스트를 확인하고, 15팀은 기존 개설→상대 신청/수락→연결→화상·수업 상태 흐름을 독립 PC/모바일에서 확인한다. 그 전까지 테스트99 재배포 및 운영 홈페이지 변경 금지. 이 방법은 OpenAI Agent Improvement Loop의 '실패 관찰→반례 평가→변경→독립 재검증' 패턴을 사용했다. API 모델 호출 0회; 새 제품 기능 검증 0건.
+
+
+## 2026-10-29 17:34 KST — #22 격리 회귀의 성공 범위·실패 분리 감사
+- **직접 교차 판독:** '한글쉽지 무인 개발' 최신 저장 완료 보고(16:40 KST)는 담당팀 49건 정정 PR #27 통합 SHA `9034ff99`, 테스트99 배포 안전 차단 PR #28 통합 SHA `c5ab9f0b`, 코드 증거 13/160, READY 0, 대표 승인 0을 보고했다. GitHub 최신 Actions와 별도 #22 PR #29를 독립 확인했다. 17:33 KST에 다른 무인 개발 예약 실행이 시작돼 이 보고 이후 변경 여부는 다음 조회에서 재검증한다.
+- **새로운 실증:** PR #29는 `phase3/instant_matching.py`의 예약 목록 GET이 무관한 즉시 매칭의 TTL을 변경하는 부작용을 재현했다. 최초 테스트 커밋 `0d710a11`, 좁힌 수정 `b68e71dc`. [독립 #22 격리 CI #40840063355](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40840063355)에서 `test_instant_matching.py` 21개 + `test_hq_matching_contract.py` 5개, 총 26개 PASS. `reservations`에만 cleanup 예외를 주고 다른 endpoint의 TTL 정리는 유지한다. **이는 중앙 HQ 직접 수정으로 팀13 AI bot 실적이 아니다.**
+- **별도 실패:** [광범위 CI #40840087919](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40840087919) FAIL은 Playwright Chromium 설치 단계에서 발생해 후속 브라우저·통합 테스트는 실행되지 않았다. PASS한 26개 격리 테스트로 광범위 CI·현재 테스트99 E2E·원래 #22 403/200 장애의 최종 해결을 대체하지 않는다.
+- **이번 공식 방법 1개:** [OpenAI Agent Improvement Loop](https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop)의 trace→feedback→반례 eval→재실행 방식을 적용. **가설:** 읽기 전용 예약 조회의 무관한 TTL 변경을 한정적으로 차단하면 기존 예약/즉시매칭 회귀 없이 부작용을 제거할 수 있다. **전후:** 이전에는 해당 반례가 없었고 실패가 재현됨 → 21+5 격리 검사 PASS. **홀드아웃:** 원래 403 예상/200 관측, 예약 양측 동일 방·비참여자 거부, 전체 브라우저 E2E 및 실패한 Chromium 설치 문제는 아직 별도 검증 필요.
+- **비용·안전·상태:** 이번 감사에서 신규 모델 API 호출 0회, 신규 팀 bot 커밋 0건, 신규 운영 배포 0건. 기존 워크플로 마지막 실제 bot SHA는 12팀 #49 `a61974ef` (10:00:09 KST). 중앙 브랜치로 PR #29를 병합하지 않고 본 감사 계약/방법론만 새로운 격리 브랜치에 기록했다. 테스트99 Render의 임시 SQLite 영속성·백업·복구와 현재 배포 SHA 미확인 상태에서 재배포 금지. READY 0, 최종 승인 0/160 유지.
+- **다음 검증 명령:** 15팀은 PR #29의 최소 변경·403/200 재현·권한/TTL 반례를 독립 감사하고, 11팀은 Playwright 설치 실패를 환경/의존성 문제로 분리 재현하며, 13팀은 현재 테스트99를 변경하지 않고 기존 강의 개설→수락→연결→화상 흐름의 읽기 전용 증거를 확보한다. 검증 전 #22 READY·CODE_VERIFIED·대표 완료 승격 금지.
