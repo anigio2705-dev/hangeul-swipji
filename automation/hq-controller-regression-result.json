@@ -1,8 +1,8 @@
 {
-  "run_id": 40799186265,
-  "run_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40799186265",
-  "source_sha": "a6c92c2335c1c28b7a2f527261db0b0c1ecfa215",
-  "test_status": "success",
-  "checked_utc": "2026-10-29T01:14:31.135140+00:00",
+  "run_id": 40799269444,
+  "run_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40799269444",
+  "source_sha": "597d3841e63b4d3ba35c57e5a2824d70fe6102a3",
+  "test_status": "failure",
+  "checked_utc": "2026-10-29T01:15:13.557010+00:00",
   "note": "Controller unit/compile tests only; not real website verification or 160-item completion"
 }\n
