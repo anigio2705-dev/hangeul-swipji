@@ -4,12 +4,14 @@ This only verifies ownership metadata; it never promotes READY, CODE_VERIFIED,
 test99 deployment, AI development calls, or representative approval.
 Run: python -m unittest automation/test_hq_contract_owner_consistency.py -v
 """
+import json
 import re
 import unittest
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACTS = ROOT / "docs/HQ_160_DEVELOPMENT_CONTRACTS_20261029.md"
+REGISTRY = ROOT / "automation/hq_semantic_contract_paths.json"
 
 def expected_owner(number):
     if 1 <= number <= 10 or 151 <= number <= 160:
@@ -41,7 +43,72 @@ def parse_contract_owners(source):
         found[number] = int(owner.group(1))
     return found
 
+
+def inspect_registry_mappings(registry, root):
+    """Check actual mapped paths and canonical ownership; never grant READY."""
+    failures = []
+    items = registry.get("items", {})
+    if not isinstance(items, dict):
+        return ["registry.items must be a dictionary"]
+    for key, item in items.items():
+        if not isinstance(key, str) or not key.isdigit() or not 1 <= int(key) <= 160:
+            failures.append(f"invalid task id {key!r}")
+            continue
+        if not isinstance(item, dict):
+            failures.append(f"task #{key} must be an object")
+            continue
+        if item.get("owner") != str(expected_owner(int(key))):
+            failures.append(f"task #{key} has wrong primary owner")
+        for field in ("source_paths", "test_paths"):
+            values = item.get(field)
+            if not isinstance(values, list) or not values:
+                failures.append(f"task #{key} has no {field}")
+                continue
+            for value in values:
+                if (not isinstance(value, str) or not value
+                        or PurePosixPath(value).is_absolute()
+                        or ".." in PurePosixPath(value).parts
+                        or "\\" in value
+                        or not (root / value).is_file()):
+                    failures.append(f"task #{key} invalid or absent {field}: {value!r}")
+    return failures
+
 class ContractOwnerConsistency(unittest.TestCase):
+
+    def test_all_registered_source_and_test_paths_exist_with_correct_owner(self):
+        registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
+        self.assertEqual(inspect_registry_mappings(registry, ROOT), [])
+
+    def test_registry_rejects_wrong_owner_and_missing_test_file(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / "feature.py").write_text("pass\\n")
+            registry = {"items": {"22": {"owner": "12",
+                "source_paths": ["feature.py"], "test_paths": ["missing_test.py"]}}}
+            failures = inspect_registry_mappings(registry, root)
+            self.assertTrue(any("wrong primary owner" in x for x in failures))
+            self.assertTrue(any("missing_test.py" in x for x in failures))
+
+    def test_registry_rejects_path_traversal_and_empty_sources(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as folder:
+            registry = {"items": {"143": {"owner": "16",
+                "source_paths": ["../outside.js"],
+                "test_paths": []}}}
+            failures = inspect_registry_mappings(registry, Path(folder))
+            self.assertTrue(any("outside.js" in x for x in failures))
+            self.assertTrue(any("no test_paths" in x for x in failures))
+
+    def test_registry_rejects_windows_style_path_separator(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as folder:
+            registry = {"items": {"22": {"owner": "13",
+                "source_paths": ["phase3\\\\instant_matching.py"],
+                "test_paths": ["phase3/test_instant_matching.py"]}}}
+            failures = inspect_registry_mappings(registry, Path(folder))
+            self.assertTrue(any("invalid or absent source_paths" in x for x in failures))
+
     def test_exactly_160_unique_contracts_with_canonical_owner(self):
         owners = parse_contract_owners(CONTRACTS.read_text(encoding="utf-8"))
         self.assertEqual(set(owners), set(range(1, 161)))
