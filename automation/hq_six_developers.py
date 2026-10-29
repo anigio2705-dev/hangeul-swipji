@@ -11,7 +11,7 @@ from pathlib import Path
 import subprocess
 import time
 from urllib.request import Request, urlopen
-from hq_160_task_cycle import CURATED_TARGETS, load_catalog
+from hq_160_task_cycle import CURATED_TARGETS, load_catalog, _semantic_dispatch_gate
 
 HQ_REF = "automation/hq-pilot-13-14-15-20261029"
 # Distinct files across ALL six teams; no team may edit another team's source.
@@ -161,6 +161,10 @@ def main():
     for path, _legacy_goal in work:
         if calls >= max_calls or time.monotonic()-started >= max_seconds-250: break
         number = mapped_paths[path]
+        if not _semantic_dispatch_gate(number, path, repairs.get(team, {})):
+            report.append({"task_number": number, "path": path,
+                           "status": "semantic_contract_not_ready"})
+            continue
         contract = catalog[number]
         if team != contract["owner"] and team not in contract["support"]:
             raise RuntimeError("Unauthorized task assignment")

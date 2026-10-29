@@ -1,7 +1,12 @@
 import unittest
 from hq_six_developers import apply_patch, validate_candidate
+from hq_160_task_cycle import _semantic_dispatch_gate
 
 class BoundedPatchTests(unittest.TestCase):
+    def test_runner_must_reject_unreviewed_semantic_task_even_if_ledger_is_stale(self):
+        self.assertFalse(_semantic_dispatch_gate(51, 'scripts/audit-hangul-audio.py'))
+        self.assertFalse(_semantic_dispatch_gate(22, 'phase3/instant_matching.py'))
+
     def test_single_unique_patch_and_valid_python(self):
         original = "def calculate_total(value):\n    return value + 1\n" + ("# meaningful existing code context\n" * 5)
         changed = apply_patch(original, {

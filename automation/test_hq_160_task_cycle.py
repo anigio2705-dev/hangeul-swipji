@@ -162,7 +162,13 @@ class HQ160TaskCycleTests(unittest.TestCase):
             self.assertTrue(mapping["items"]["54"].get("evidence_run"))
         self.assertIn("scripts/team12_missing_recording_script.py", mapping["items"]["54"]["test_paths"])
         self.assertIn("automation/verify_task54.py", mapping["items"]["54"]["test_paths"])
-        self.assertFalse(any(x["state"] == "READY" for x in mapping["items"].values()))
+        # READY is allowed only when the independent queue gate accepts it;
+        # the old blanket assertion made READY=0 an enforced permanent state.
+        from hq_traffic_lights import readiness
+        actual = readiness(tasks, evidence, mapping, root)
+        declared = {int(n) for n, x in mapping["items"].items() if x["state"] == "READY"}
+        dispatched = {x["task"] for x in actual["dispatchable"]}
+        self.assertEqual(declared, dispatched, actual["invalid_ready"])
 
 if __name__ == "__main__":
     unittest.main()

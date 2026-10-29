@@ -235,6 +235,31 @@
       "dependencies": [],
       "evidence_run": 40789832598
     },
+    "56": {
+      "owner": "12",
+      "support": [
+        "11",
+        "15",
+        "16"
+      ],
+      "state": "CANDIDATE",
+      "source_paths": [
+        "scripts/find-human-audio-sources.py"
+      ],
+      "test_paths": [
+        "automation/test_task56_audio_contract.py"
+      ],
+      "acceptance": "사람 녹음 화자·발음·속도·무음·파일 형식·확보 방법의 수락 기준을 문서화하고 출처 후보 검색 프로그램이 청취·라이선스 승인과 구분되도록 독립 검증",
+      "unmet": [
+        "후보 출처 메타데이터의 허가·품질 기준 자동 분류와 재현 테스트",
+        "15팀 독립 의미 검증 및 정확한 CI 성공 확인",
+        "실제 사람 음원 청취·사용권·브라우저 검수"
+      ],
+      "independent_team15": "PENDING",
+      "dependencies": [],
+      "standards_path": "docs/team11/human-audio-acceptance-standards.md",
+      "note": "11팀은 12팀 소관 #56의 지원 개발팀. READY 전환 전 독립 15팀 계약·CI 검증 필수. 사람 녹음 승인 아님."
+    },
     "109": {
       "owner": "14",
       "support": [

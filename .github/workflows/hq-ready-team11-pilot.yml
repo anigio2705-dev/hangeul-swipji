@@ -1,0 +1,91 @@
+name: HQ team15 semantic review and bounded team11 READY pilot
+on:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - 'automation/hq_semantic_contract_paths.json'
+      - 'automation/test_task56_audio_contract.py'
+      - 'automation/hq_six_developers.py'
+      - 'automation/test_hq_160_task_cycle.py'
+      - 'docs/team11/human-audio-acceptance-standards.md'
+      - '.github/workflows/hq-ready-team11-pilot.yml'
+permissions:
+  contents: read
+concurrency:
+  group: hq-ready-team11-pilot
+  cancel-in-progress: false
+jobs:
+  independent-contract-audit:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    runs-on: ubuntu-latest
+    outputs:
+      ready: ${{ steps.gate.outputs.ready }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Team15-style independent task56 semantic regression
+        run: |
+          python -m unittest discover -s automation -p 'test_task56_audio_contract.py' -v
+          python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+          python -m unittest discover -s automation -p 'test_hq_six_developers.py' -v
+          python automation/hq_traffic_lights.py --output /tmp/hq-ready.json
+      - name: Fail closed unless task56 is independently READY
+        id: gate
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          x=json.loads(Path('/tmp/hq-ready.json').read_text())['dispatch_readiness']
+          ready=[item for item in x['dispatchable'] if item['task']==56]
+          if ready and ready[0]['owner']!='12':
+              raise SystemExit('Wrong owner for task56')
+          with open(os.environ['GITHUB_OUTPUT'],'a') as out:
+              out.write('ready='+('true' if ready else 'false')+'\n')
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:
+              out.write('Task56 READY='+str(bool(ready))+'; mapped='+str(x['mapped_total'])+'; dispatchable='+str(x['dispatchable_total'])+'\n')
+          PY
+  bounded-team11-development:
+    needs: independent-contract-audit
+    if: needs.independent-contract-audit.outputs.ready == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: hq-ai-pilot
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Configure isolated bot
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+      - name: Copy immutable HQ runner, registry and ledger
+        run: |
+          cp automation/hq_six_developers.py /tmp/hq_six_developers.py
+          cp automation/hq_160_task_cycle.py /tmp/hq_160_task_cycle.py
+          cp automation/hq_semantic_contract_paths.json /tmp/hq_semantic_contract_paths.json
+          cp automation/hq_backlog_160.md /tmp/hq_backlog_160.md
+          cp automation/task-evidence.json /tmp/hq-task-evidence.json
+      - name: One bounded AI call for #56 only; never main or production
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          HQ_TEAM: '11'
+          HQ_MAX_CALLS: '1'
+          HQ_MAX_SECONDS: '900'
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: |
+          python /tmp/hq_six_developers.py
+      - name: Preserve actual AI call and commit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hq-ready-team11-task56-result
+          path: /tmp/team-result.json
+          if-no-files-found: warn
+          retention-days: 14
