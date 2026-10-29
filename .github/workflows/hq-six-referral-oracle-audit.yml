@@ -8,6 +8,14 @@ on:
       - phase3/team14_referral_scenarios.py
       - phase3/test_team14_referral_scenarios.py
       - .github/workflows/hq-six-referral-oracle-audit.yml
+  pull_request:
+    branches:
+      - audit/hq2-referral-linear-20261029-2305
+    paths:
+      - phase3/test_hq_six_referral_oracle.py
+      - phase3/team14_referral_scenarios.py
+      - phase3/test_team14_referral_scenarios.py
+      - .github/workflows/hq-six-referral-oracle-audit.yml
   workflow_dispatch:
 permissions:
   contents: read
