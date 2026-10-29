@@ -1,0 +1,18 @@
+name: Team12 integrated audio smoke
+on:
+  push:
+    branches:
+      - integration/team12-audio-review-20261030
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audio:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check hangul-core.js && node --check hangul-board.js && node --check hangul-week.js
+      - run: node scripts/team12_audio_integration.test.cjs
