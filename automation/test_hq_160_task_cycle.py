@@ -90,7 +90,8 @@ class HQ160TaskCycleTests(unittest.TestCase):
         self.assertEqual(task["attempt"], 2)
         self.assertIn("assertion 42", task["repair_instruction"])
         next_task = next_assignment("15", catalog, failures={"8": {"attempts": 2}})
-        self.assertEqual(next_task["task_number"], 151)
+        # An unreviewed #151 CANDIDATE is never a safe fallback.
+        self.assertIsNone(next_task, "Unreviewed CANDIDATE #151 cannot bypass independent QA")
 
     def test_independent_verification_not_developer_self_report(self):
         assignment = next_assignment("15", contracts(sample()))
@@ -144,7 +145,13 @@ class HQ160TaskCycleTests(unittest.TestCase):
                 self.assertTrue(set(item["support"]) - set(tasks[number]["support"]) == set(),
                                 "Supporting team must be authorized in canonical contract")
                 self.assertTrue(item["acceptance"] and item["unmet"])
-                self.assertTrue(item["source_paths"] and item["test_paths"])
+                self.assertTrue(item["source_paths"], "Observed candidate source paths required")
+                if not item["test_paths"]:
+                    self.assertEqual(item["state"], "CANDIDATE",
+                                     "Unmapped regression must never be READY")
+                    self.assertTrue(any("검사" in gap or "테스트" in gap
+                                        for gap in item["unmet"]),
+                                    "Missing test mapping must be explicitly documented")
                 for path in item["source_paths"] + item["test_paths"]:
                     self.assertTrue((root / path).is_file(), f"Missing real mapped path for #{number}: {path}")
                 self.assertIn(item["state"], {"CANDIDATE", "BLOCKED", "CODE_VERIFIED", "READY"})

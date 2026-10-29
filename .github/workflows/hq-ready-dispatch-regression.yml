@@ -6,6 +6,7 @@ on:
       - 'automation/hq_160_task_cycle.py'
       - 'automation/hq_traffic_lights.py'
       - 'automation/test_hq_160_task_cycle.py'
+      - 'automation/test_task143_language_contract.py'
       - 'automation/test_hq_traffic_lights.py'
       - 'automation/hq_semantic_contract_paths.json'
       - '.github/workflows/hq-ready-dispatch-regression.yml'
@@ -26,6 +27,7 @@ jobs:
         run: |
           python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
           python -m unittest discover -s automation -p 'test_hq_traffic_lights.py' -v
+          python -m unittest discover -s automation -p 'test_task143_language_contract.py' -v
       - name: Reconcile actual READY inventory without promoting any task
         run: |
           python automation/hq_traffic_lights.py --output /tmp/hq-ready-audit.json

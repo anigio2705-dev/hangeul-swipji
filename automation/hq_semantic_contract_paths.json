@@ -4,6 +4,28 @@
   "source_branch": "automation/hq-pilot-13-14-15-20261029",
   "policy": "Mapped paths are observed in this isolated branch. CODE_VERIFIED reflects existing evidence, never final approval; READY requires independent 15-team semantic review and relevant CI. CANDIDATE/BLOCKED are not dispatchable.",
   "items": {
+    "11": {
+      "owner": "11",
+      "support": [
+        "15"
+      ],
+      "source_paths": [
+        ".github/workflows/hq-six-developers.yml",
+        "automation/hq_six_developers.py"
+      ],
+      "test_paths": [
+        "automation/test_hq_six_developers.py"
+      ],
+      "acceptance": "작업 직전 격리 통합 브랜치 HEAD와 작업 트리의 미커밋·미추적 변경을 확인하고 불일치 시 AI 수정·push 차단",
+      "unmet": [
+        "기존 fetch/checkout 외에 dirty/untracked와 HEAD 경합 차단 반례 테스트 미확인",
+        "15팀 독립 의미 검증 및 정확한 SHA CI 미확인"
+      ],
+      "state": "CANDIDATE",
+      "independent_team15": "PENDING",
+      "dependencies": [],
+      "note": "2026-10-29 15:28+ KST six-team full-order source/path audit; only observed paths. Candidate is NOT READY or CODE_VERIFIED."
+    },
     "22": {
       "owner": "13",
       "support": [
@@ -25,6 +47,31 @@
       "independent_team15": "PENDING",
       "dependencies": [],
       "note": "기존 반려 CI 40791928076; 임의 재시도 금지"
+    },
+    "23": {
+      "owner": "13",
+      "support": [
+        "15"
+      ],
+      "source_paths": [
+        "phase3/instant-speaking.html",
+        "phase3/instant_matching.py"
+      ],
+      "test_paths": [
+        "phase3/test_instant_matching.py"
+      ],
+      "acceptance": "앱/테스트 인증과 Jitsi 진행자 인증을 분리하고 강사의 실제 방 입장과 거부 경로를 검증",
+      "dependencies": [
+        22
+      ],
+      "unmet": [
+        "Jitsi 진행자 인증 테스트·실제 강사 계정 입장 미확인",
+        "#22 403/200 회귀 차단",
+        "15팀 독립 의미 검증 미완료"
+      ],
+      "state": "CANDIDATE",
+      "independent_team15": "PENDING",
+      "note": "2026-10-29 15:28+ KST six-team full-order source/path audit; only observed paths. Candidate is NOT READY or CODE_VERIFIED."
     },
     "41": {
       "owner": "12",
@@ -433,6 +480,54 @@
       "integration_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40813120338",
       "evidence_run": 40813120338
     },
+    "61": {
+      "owner": "12",
+      "support": [
+        "16"
+      ],
+      "source_paths": [
+        "phase3/content.json",
+        "phase3/content-expansion.json",
+        "phase3/content-remaining72.json",
+        "phase3/curriculum-96.json"
+      ],
+      "test_paths": [
+        "scripts/audit-professional-96.py",
+        "phase3/test_standards96.py"
+      ],
+      "acceptance": "전문 96수업·288문항 고유 ID/누락·원본 보존 및 단원별 교수 필수요소를 독립 검증",
+      "unmet": [
+        "이번 수정 SHA의 관련 CI 미확인",
+        "교육적 정답·난이도·원문 보존의 15팀 독립 의미 검증 미완료"
+      ],
+      "state": "CANDIDATE",
+      "independent_team15": "PENDING",
+      "dependencies": [],
+      "note": "2026-10-29 15:28+ KST six-team full-order source/path audit; only observed paths. Candidate is NOT READY or CODE_VERIFIED."
+    },
+    "101": {
+      "owner": "14",
+      "support": [
+        "15"
+      ],
+      "source_paths": [
+        "phase3/team14_referral_store.py",
+        "phase3/team14_referral_scenarios.py"
+      ],
+      "test_paths": [
+        "phase3/test_team14_referral_store.py",
+        "phase3/test_team14_referral_scenarios.py"
+      ],
+      "acceptance": "강사/학습자 각각의 소개 대상 강사/학습자 네 조합을 권한·중복·순환·자기소개 거부와 함께 모의 검증",
+      "unmet": [
+        "역할별 네 조합 수락/거부를 1:1 매핑한 독립 회귀검사 미확인",
+        "정책·보상·실결제 승인 전 차단 유지"
+      ],
+      "state": "CANDIDATE",
+      "independent_team15": "PENDING",
+      "dependencies": [],
+      "note": "2026-10-29 15:28+ KST six-team full-order source/path audit; only observed paths. Candidate is NOT READY or CODE_VERIFIED."
+    },
     "109": {
       "owner": "14",
       "support": [
@@ -455,6 +550,56 @@
       "independent_team15": "PENDING",
       "dependencies": [],
       "evidence_run": 40789832598
+    },
+    "143": {
+      "owner": "16",
+      "support": [
+        "13"
+      ],
+      "source_paths": [
+        "site-language.js",
+        "global-language.js"
+      ],
+      "test_paths": [
+        "automation/test_task143_language_contract.py"
+      ],
+      "acceptance": "지정 8개 언어의 모든 핵심 UI가 함께 전환되고 미지원 언어·상하단 불일치·재접속 회귀가 없음",
+      "unmet": [
+        "신규 8언어 정적 목록·반례 검사는 전체 화면 번역 검증이 아님",
+        "두 언어 스크립트 동시 노출 여부·실제 브라우저·재접속·상하단 동기화 검증 미완료",
+        "15팀 독립 의미 검증 미완료"
+      ],
+      "state": "CANDIDATE",
+      "independent_team15": "PENDING",
+      "dependencies": [],
+      "note": "2026-10-29 15:28+ KST six-team full-order source/path audit; only observed paths. Candidate is NOT READY or CODE_VERIFIED."
+    },
+    "151": {
+      "owner": "15",
+      "support": [
+        "11",
+        "12",
+        "13",
+        "14",
+        "16"
+      ],
+      "source_paths": [
+        "phase3/server.py",
+        "phase3/instant_matching.py"
+      ],
+      "test_paths": [
+        "phase3/test_common_http_journey.py",
+        "scripts/test_team15_continuous_instant_e2e.py"
+      ],
+      "acceptance": "무료 사용자/학습자/파트너/전문 강사/관리자별 완전한 격리 이용 여정과 거부 경로를 독립 E2E로 검증",
+      "unmet": [
+        "기존 HTTP/SQLite 테스트는 5개 역할 전수 및 실제 브라우저·화상 검증이 아님",
+        "15팀 작성 테스트와 독립 최종 감사 역할 분리 필요"
+      ],
+      "state": "CANDIDATE",
+      "independent_team15": "PENDING",
+      "dependencies": [],
+      "note": "2026-10-29 15:28+ KST six-team full-order source/path audit; only observed paths. Candidate is NOT READY or CODE_VERIFIED."
     }
   }
 }
