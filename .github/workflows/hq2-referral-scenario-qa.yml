@@ -1,0 +1,32 @@
+name: HQ2 isolated referral scenario regression
+on:
+  push:
+    branches:
+      - automation/hq2-referral-scenario-linear-20261029-2355
+    paths:
+      - 'phase3/team14_referral_scenarios.py'
+      - 'phase3/test_team14_referral_scenarios.py'
+      - '.github/workflows/hq2-referral-scenario-qa.yml'
+  pull_request:
+    paths:
+      - 'phase3/team14_referral_scenarios.py'
+      - 'phase3/test_team14_referral_scenarios.py'
+      - '.github/workflows/hq2-referral-scenario-qa.yml'
+permissions:
+  contents: read
+jobs:
+  independent-referral-regressions:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile only the affected simulation
+        run: python -m py_compile phase3/team14_referral_scenarios.py phase3/test_team14_referral_scenarios.py
+      - name: Independently execute referral scenarios and safety tests
+        run: |
+          python -m unittest discover -s phase3 -p 'test_team14_referral_scenarios.py' -v
+          python -m unittest discover -s phase3 -p 'test_team14_referral_store.py' -v
+          python -m unittest discover -s phase3 -p 'test_team14_referral_eligibility.py' -v
