@@ -86,6 +86,9 @@ def readiness(catalog, ledger, registry, root=Path(".")):
             r"https://github\.com/anigio2705-dev/hangeul-swipji/actions/runs/[0-9]+", ci))
         paths = (isinstance(source, list) and bool(source)
                  and isinstance(tests, list) and bool(tests)
+                 and len(source) == len(set(source))
+                 and len(tests) == len(set(tests))
+                 and not set(source).intersection(tests)
                  and all(valid_path(p) for p in source + tests))
         deps = all(ledger.get(str(d), {}).get("status") == "complete"
                    for d in task["dependencies"])
