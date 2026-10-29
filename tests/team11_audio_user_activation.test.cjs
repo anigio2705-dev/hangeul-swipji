@@ -206,3 +206,36 @@ test('manifest refresh revokes stale playable badges and refuses taps until the 
   assert.equal((await H.play('가')).status,'missing');
   assert.equal(created,0);
 });
+
+test('mobile BFCache restore revalidates audio without autoplay or duplicate initial fetch',async()=>{
+  const handlers={};let requests=0,deliver,created=0;
+  const record={kind:'human',src:'./assets/hangul-audio/ac00-r2.mp3',sha256:'a'.repeat(64),
+    sourceUrl:'https://example.test/recording',author:'speaker',license:'CC-BY'};
+  const context={
+    document:{baseURI:'https://example.test/hangul-week.html',hidden:false,addEventListener(){},dispatchEvent(){},
+      querySelectorAll:()=>[],querySelector:()=>null},
+    window:{addEventListener(name,fn){handlers[name]=fn},speechSynthesis:{cancel(){}}},
+    Audio:class{constructor(){created++}play(){throw Error('BFCache must not autoplay')}pause(){}},
+    URL,Event:class{},setTimeout,clearTimeout,
+    fetch:()=>{
+      requests++;
+      if(requests===1)return Promise.resolve({ok:true,json:async()=>({recordings:{'가':record}})});
+      return new Promise(resolve=>{deliver=resolve});
+    }
+  };
+  vm.runInNewContext(source,context);
+  const H=context.window.HSHangul;await H.ready;
+  assert.equal(H.availability('가').state,'ready');
+  handlers.pageshow({persisted:false});
+  assert.equal(requests,1,'initial pageshow must not duplicate the initial manifest request');
+  handlers.pagehide();
+  handlers.pageshow({persisted:true});
+  assert.equal(requests,2,'restored pages must request a fresh manifest');
+  assert.equal(H.availability('가').state,'unavailable','BFCache must not expose a stale recording');
+  assert.equal((await H.play('가')).status,'loading');
+  assert.equal(created,0,'restore must never autoplay audio');
+  deliver({ok:true,json:async()=>({recordings:{}})});
+  await new Promise(resolve=>setTimeout(resolve,0));
+  assert.equal(H.availability('가').state,'missing');
+  assert.equal(created,0);
+});
