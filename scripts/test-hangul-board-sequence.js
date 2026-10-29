@@ -50,6 +50,8 @@ async function main() {
   const some = await exercise(['가', '나']);
   assert.equal(some.calls.length, 1);
   assert.deepEqual(Array.from(some.calls[0]), ['가', '나']);
+  assert.match(some.statuses.at(-1), /2\/14개 재생/);
+  assert.match(some.statuses.at(-1), /다/);
   const none = await exercise([]);
   assert.equal(none.calls.length, 0);
   assert.match(none.statuses.at(-1), /재생 가능한 사람 녹음이 없습니다/);
