@@ -19,7 +19,7 @@ class ReadinessTests(unittest.TestCase):
                 "22": {"owner": "13", "state": "BLOCKED", "source_paths": ["feature.py"], "test_paths": ["test_feature.py"]},
                 "41": {"owner": "12", "state": "CANDIDATE", "source_paths": ["feature.py"], "test_paths": ["test_feature.py"]},
                 "49": {"owner": "12", "state": "READY", "source_paths": ["feature.py"], "test_paths": ["test_feature.py"],
-                       "independent_team15": "PENDING", "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"}
+                       "independent_team15": "PENDING", "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123", "independent_ci_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
             }}
             result = readiness(c, {}, reg, root)
             self.assertEqual(result["mapped_total"], 3)
@@ -37,7 +37,7 @@ class ReadinessTests(unittest.TestCase):
                 (root / name).write_text("pass\n")
             record = {"owner": "12", "state": "READY", "source_paths": ["feature.py"],
                       "test_paths": ["test_feature.py"], "independent_team15": "PASS",
-                      "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"}
+                      "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123", "independent_ci_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
             reg = {"schema": 1, "items": {"49": record}}
             self.assertEqual(readiness(c, {}, reg, root)["dispatchable"], [{"task": 49, "owner": "12", "source_paths": ["feature.py"]}])
             record["owner"] = "13"
@@ -65,7 +65,7 @@ class ReadinessTests(unittest.TestCase):
                 return {"owner": "12", "state": "READY",
                         "source_paths": [path], "test_paths": ["test_feature.py"],
                         "independent_team15": "PASS",
-                        "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"}
+                        "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123", "independent_ci_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
             reg = {"schema": 1, "items": {
                 "41": record("shared.py"), "49": record("shared.py")}}
             blocked = readiness(c, {}, reg, root)
@@ -110,7 +110,7 @@ class ReadinessTests(unittest.TestCase):
                           out["candidate_supply"]["12"][0]["blockers"])
             self.assertIn("missing_or_invalid_source_path",
                           out["candidate_supply"]["15"][0]["blockers"])
-            self.assertEqual(out["candidate_supply"]["16"][0]["blockers"], [])
+            self.assertEqual(out["candidate_supply"]["16"][0]["blockers"], ["independent_ci_reference_missing", "independent_ci_sha_missing"])
             self.assertEqual(out["candidate_supply"]["16"][0]["state"], "CANDIDATE")
             self.assertEqual(out["blocked"], [22])
 
@@ -140,7 +140,7 @@ class ReadinessTests(unittest.TestCase):
                 "owner": "12", "state": "READY",
                 "source_paths": ["target.py", "context.py"],
                 "test_paths": ["test_target.py"], "independent_team15": "PASS",
-                "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123",
+                "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123", "independent_ci_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
             }
             reg = {"schema": 1, "items": {"41": record}}
             without = readiness(c, {}, reg, root)
@@ -177,7 +177,7 @@ class ReadinessTests(unittest.TestCase):
                         "editable_path": target, "test_paths": [f"test_{number}.py"],
                         "independent_team15": "PASS",
                         "independent_ci_url":
-                            "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"}
+                            "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123", "independent_ci_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
             reg = {"schema": 1, "items": {"41": record(41), "49": record(49)}}
             result = readiness(c, {}, reg, root)
             self.assertEqual(result["dispatchable_total"], 2)
@@ -187,6 +187,51 @@ class ReadinessTests(unittest.TestCase):
             collision = readiness(c, {}, reg, root)
             self.assertEqual(collision["dispatchable_total"], 0)
             self.assertEqual({x["task"] for x in collision["invalid_ready"]}, {41, 49})
+
+
+    def test_candidate_intake_identifies_missing_ci_and_unsupported_js_runner(self):
+        c = catalog()
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            for path in ("feature.py", "test_feature.py", "global-language.js", "test_language.cjs"):
+                (root / path).write_text("pass\\n")
+            good = {"owner": "14", "state": "CANDIDATE",
+                    "source_paths": ["feature.py"], "test_paths": ["test_feature.py"],
+                    "independent_team15": "PASS",
+                    "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123",
+                    "independent_ci_sha": "a" * 40}
+            js = {"owner": "16", "state": "CANDIDATE",
+                  "source_paths": ["global-language.js"], "test_paths": ["test_language.cjs"],
+                  "independent_team15": "PASS",
+                  "independent_ci_url": good["independent_ci_url"],
+                  "independent_ci_sha": good["independent_ci_sha"]}
+            registry = {"schema": 1, "items": {"101": good, "143": js}}
+            result = readiness(c, {}, registry, root)
+            self.assertEqual(result["dispatchable_total"], 0)
+            self.assertEqual(result["candidate_supply"]["14"][0]["blockers"], [])
+            self.assertIn("unsupported_python_unittest_runner",
+                          result["candidate_supply"]["16"][0]["blockers"])
+            good["independent_ci_sha"] = "unverified"
+            blocked = readiness(c, {}, registry, root)
+            self.assertIn("independent_ci_sha_missing",
+                          blocked["candidate_supply"]["14"][0]["blockers"])
+
+    def test_ready_must_have_exact_ci_sha_not_only_green_url(self):
+        c = catalog()
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "feature.py").write_text("pass\\n")
+            (root / "test_feature.py").write_text("pass\\n")
+            record = {"owner": "14", "state": "READY",
+                      "source_paths": ["feature.py"], "test_paths": ["test_feature.py"],
+                      "independent_team15": "PASS",
+                      "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"}
+            registry = {"schema": 1, "items": {"101": record}}
+            out = readiness(c, {}, registry, root)
+            self.assertEqual(out["dispatchable_total"], 0)
+            self.assertIn("exact_ci_sha", out["invalid_ready"][0]["reason"])
+            record["independent_ci_sha"] = "a" * 40
+            self.assertEqual(readiness(c, {}, registry, root)["dispatchable_total"], 1)
 
 if __name__ == "__main__":
     unittest.main()

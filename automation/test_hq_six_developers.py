@@ -20,7 +20,7 @@ class BoundedPatchTests(unittest.TestCase):
             record = {"owner": "12", "state": "READY",
                       "source_paths": ["feature.py"], "test_paths": ["test_feature.py"],
                       "independent_team15": "PASS",
-                      "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"}
+                      "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123", "independent_ci_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
             reg = {"schema": 1, "items": {"45": record}}
             chosen = choose_work_items("12", c, {}, {}, reg, root)
             self.assertEqual(len(chosen), 1)
@@ -48,7 +48,7 @@ class BoundedPatchTests(unittest.TestCase):
                 return {"owner": "12", "state": "READY",
                         "source_paths": [path], "test_paths": ["test_feature.py"],
                         "independent_team15": "PASS",
-                        "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"}
+                        "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123", "independent_ci_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
             reg = {"schema": 1, "items": {"45": entry("page.html"),
                                           "46": entry("feature.py")}}
             chosen = choose_work_items("12", c, {}, {}, reg, root)
