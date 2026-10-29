@@ -69,6 +69,7 @@ jobs:
       - name: Run isolated AI developer
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
           HQ_TEAM: ${{ matrix.team }}
           HQ_MAX_CALLS: '2'
           HQ_REPAIR_INSTRUCTIONS: ${{ inputs.repair_instructions_json || '{}' }}
