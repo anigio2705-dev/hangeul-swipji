@@ -146,17 +146,8 @@
       return {status:token===run?(ttsUsed?'tts-played':'played'):'cancelled',words};
     }catch(e){if(token===run){stop();status(e.message)}return {status:'error',message:e.message}}
   }
-  // Optional Korean device TTS: never impersonates a human recording.
-  // Keep OFF by default and refuse playback of recordings explicitly on hold.
-  let syntheticEnabled=false;
-  function canSynthesize(){return !!(window.speechSynthesis&&typeof window.SpeechSynthesisUtterance==='function')}
-  function setSyntheticEnabled(value){
-    syntheticEnabled=!!value;
-    if(!syntheticEnabled)stop();
-    status(syntheticEnabled?'기기 합성음 보조 켜짐 · 사람 녹음 아님':'기기 합성음 보조 꺼짐');
-    refreshBadges();
-    return syntheticEnabled;
-  }
+  // The shared opt-in flag and helpers are declared once above. A second
+  // declaration made this entire file a SyntaxError on the team12 branch.
   function synthesize(word,token){
     return new Promise(resolve=>{
       if(!canSynthesize())return resolve({status:'tts-unsupported'});
@@ -178,6 +169,17 @@
   async function optionalSynthetic(word){
     stop();const token=run;
     if(!syntheticEnabled)return {status:'tts-disabled'};
+    // Do not synthesize if the manifest is unavailable: the recording could
+    // be deliberately held for teacher review. A failed fetch is not consent.
+    if(!manifestLoaded||manifestError){
+      status('음성 목록 확인 전에는 합성음을 재생할 수 없습니다. / Audio manifest unavailable.');
+      return {status:'manifest-error'};
+    }
+    if(holds[word]){
+      status('검수 보류 음성은 합성음으로도 우회하지 않습니다: '+word);
+      return {status:'held',word};
+    }
+    if(records[word])return {status:'human-available',word};
     return synthesize(word,token);
   }
   const el=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!==undefined)x.textContent=text;return x};
