@@ -39,9 +39,10 @@ PATCH_REPAIR_HINTS = {
         "shown in the developer feedback before proposing another patch.",
 }
 REGRESSIONS = {
-    "13": ["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_instant_matching.py"],
-    "14": ["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_team14_referral_store.py"],
-    "16": ["python", "scripts/render-audio-credits.py"],
+    ("13", 22): ["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_instant_matching.py"],
+    ("13", 47): ["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_global_learning.py"],
+    ("14", 109): ["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_team14_referral_store.py"],
+    ("16", 55): ["python", "scripts/render-audio-credits.py"],
 }
 
 def api(path, token, method="GET", payload=None, raw=False):
@@ -122,7 +123,7 @@ def independent_check(team, task, token, catalog):
             syntax = cmd(["python", "-m", "py_compile", path], cwd=temp)
             if syntax.returncode:
                 return "RETRY", "Independent syntax check failed: " + syntax.stderr[-350:], {}
-            command = REGRESSIONS.get(team)
+            command = REGRESSIONS.get((team, number))
             if not command:
                 return "PROVISIONAL", "Syntax verified; independent functional regression not configured", {
                     "commit": sha, "changed_files": files, "syntax": "success"}
@@ -189,7 +190,11 @@ def save_ledger(token, ledger, blob_sha, changed):
 def promote_prior(ledger, token):
     promoted = []
     for number, record in ledger.items():
-        if record.get("status") != "in_progress" or record.get("independent_review") != "pass":
+        if (record.get("status") != "in_progress"
+                or record.get("independent_review") != "pass"
+                or record.get("task_specific_verified") is not True):
+            # An unrelated green test (e.g. matching tests for learning.py)
+            # must never promote a numbered task to code_verified.
             continue
         match = re.fullmatch(
             r"https://github\.com/anigio2705-dev/hangeul-swipji/actions/runs/([0-9]+)",
@@ -248,7 +253,9 @@ def supervise(root, token, depth, repairs, output):
                             "status": "in_progress", "commit": evidence["commit"],
                             "ci_url": "https://github.com/" + REPO + "/actions/runs/" + os.environ["GITHUB_RUN_ID"],
                             "ci_result": "pending", "independent_review": "pass",
-                            "scope": "Independent source diff and functional regression passed; final CI run and public site still pending",
+                            "task_specific_verified": True,
+                            "test_command": evidence["test_command"],
+                            "scope": "Independent source diff and task-specific functional regression passed; final CI run and public site still pending",
                             "owner": team, "path": task["path"]}
                         staged.append(number)
                     if new_commit and status == "committed":
