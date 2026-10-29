@@ -42,8 +42,11 @@
         // Replace stale inventory on refresh; removed/held files must not remain playable.
         for(const key of Object.keys(records))delete records[key];
         for(const key of Object.keys(holds))delete holds[key];
-        Object.assign(records,Object.fromEntries(human.filter(([,a])=>!a.disabled)));
-        Object.assign(holds,Object.fromEntries(human.filter(([,a])=>a.disabled)));
+        // An explicit listening-review hold is authoritative even when a
+        // recording mistakenly omits the separate disabled flag.
+        const isHeld=a=>!!a.disabled||['held','hold','rejected','blocked','failed'].includes(String(a.listeningReview?.status||'').toLowerCase());
+        Object.assign(records,Object.fromEntries(human.filter(([,a])=>!isHeld(a))));
+        Object.assign(holds,Object.fromEntries(human.filter(([,a])=>isHeld(a)).map(([word,a])=>[word,{...a,holdReason:a.holdReason||'청취 검수 보류'}])));
         manifestError=false;manifestLoaded=true;document.dispatchEvent(new Event('hs-audio-ready'))})
       .catch(()=>{manifestError=true;manifestLoaded=false;document.dispatchEvent(new Event('hs-audio-ready'))})
       .finally(()=>{if(timer!==null)cancelTimer(timer);loading=null});
@@ -146,11 +149,19 @@
       return {status:token===run?(ttsUsed?'tts-played':'played'):'cancelled',words};
     }catch(e){if(token===run){stop();status(e.message)}return {status:'error',message:e.message}}
   }
-  // Existing callers use the same opt-in API; one implementation only.
+  // Optional device TTS is never a bypass for an explicit recording hold.
+  // A failed/unloaded manifest must not be treated as permission to synthesize.
   async function optionalSynthetic(word){
     stop();const token=run;
     if(!syntheticEnabled)return {status:'tts-disabled',word};
-    // Never play a held or non-reviewed human recording. TTS remains labeled.
+    if(typeof word!=='string'||!word.trim())return {status:'invalid',word};
+    if(!manifestLoaded)await (manifestError?loadManifest():(loading||ready));
+    if(token!==run)return {status:'cancelled',word};
+    if(manifestError)return {status:'manifest-error',word};
+    if(holds[word]){
+      status('재생 보류: '+word+' · '+(holds[word].holdReason||'청취 검수 대기'));
+      return {status:'held',word};
+    }
     return synthesized(word,token);
   }
   const el=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!==undefined)x.textContent=text;return x};

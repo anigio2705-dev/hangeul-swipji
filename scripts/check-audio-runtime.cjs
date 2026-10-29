@@ -4,13 +4,21 @@ const source=fs.readFileSync(require('node:path').join(__dirname,'../hangul-core
 const meta={kind:'human',src:'./assets/hangul-audio/test.mp3',sourceUrl:'https://example.org/source',author:'Recorded speaker',license:'CC BY-SA 4.0',sha256:'a'.repeat(64)};
 function setup(mode='ended',fetchMode='ok'){
  let played=0,synthetic=0,fetches=0;const statuses=[];
- const c={URL,setTimeout:(f,t)=>setTimeout(f,Math.min(t,10)),clearTimeout,Event:function(){},window:{addEventListener(){},speechSynthesis:{cancel(){},speak(){synthetic++}}},document:{baseURI:'https://example.org/',addEventListener(){},dispatchEvent(){},querySelectorAll(){return[{set textContent(v){statuses.push(v)}}]}},fetch:()=>{fetches++;if(fetchMode==='retry'&&fetches===1)return Promise.reject(Error('temporary'));return fetchMode==='hang'?new Promise(()=>{}):fetchMode==='reject'?Promise.reject(Error('network')):Promise.resolve({ok:true,json:async()=>fetchMode==='json-hang'?new Promise(()=>{}):({recordings:{가:meta,아:{...meta,src:'./assets/hangul-audio/test-held.mp3',sha256:'b'.repeat(64),disabled:true,holdReason:'listening pending'},machine:{...meta,kind:'synthetic'},unknown:{...meta,kind:'unknown'},external:{...meta,src:'https://example.org/a.mp3'}}})})},Audio:class{constructor(){played++}pause(){}play(){if(mode==='throw')throw Error('blocked');if(mode==='reject')return Promise.reject(Error('blocked'));if(mode==='hang')return Promise.resolve();return Promise.resolve().then(()=>mode==='error'?this.onerror?.():this.onended?.())}}};
+ const c={URL,setTimeout:(f,t)=>setTimeout(f,Math.min(t,10)),clearTimeout,Event:function(){},window:{addEventListener(){},speechSynthesis:{cancel(){},speak(utterance){synthetic++;Promise.resolve().then(()=>utterance.onend?.())}},SpeechSynthesisUtterance:class{constructor(word){this.text=word}}},document:{baseURI:'https://example.org/',addEventListener(){},dispatchEvent(){},querySelectorAll(){return[{set textContent(v){statuses.push(v)}}]}},fetch:()=>{fetches++;if(fetchMode==='retry'&&fetches===1)return Promise.reject(Error('temporary'));return fetchMode==='hang'?new Promise(()=>{}):fetchMode==='reject'?Promise.reject(Error('network')):Promise.resolve({ok:true,json:async()=>fetchMode==='json-hang'?new Promise(()=>{}):({recordings:{가:meta,아:{...meta,src:'./assets/hangul-audio/test-held.mp3',sha256:'b'.repeat(64),disabled:true,holdReason:'listening pending'},reviewHeld:{...meta,src:'./assets/hangul-audio/test-review.mp3',sha256:'c'.repeat(64),listeningReview:{status:'held'}},machine:{...meta,kind:'synthetic'},unknown:{...meta,kind:'unknown'},external:{...meta,src:'https://example.org/a.mp3'}}})})},Audio:class{constructor(){played++}pause(){}play(){if(mode==='throw')throw Error('blocked');if(mode==='reject')return Promise.reject(Error('blocked'));if(mode==='hang')return Promise.resolve();return Promise.resolve().then(()=>mode==='error'?this.onerror?.():this.onended?.())}}};
  vm.createContext(c);vm.runInContext(source,c);return {h:c.window.HSHangul,stats:()=>({played,synthetic,statuses})};
 }
 (async()=>{
  const a=setup();await a.h.ready;
  for(const word of ['missing','machine','unknown','external'])assert.equal((await a.h.play(word)).status,'missing');
  assert.equal((await a.h.play('아')).status,'held');assert.equal(a.stats().played,0);
+ const opt=setup();await opt.h.ready;assert.equal(opt.h.setSyntheticEnabled(true),true);
+ assert.equal((await opt.h.optionalSynthetic('아')).status,'held');assert.equal(opt.stats().synthetic,0);
+ assert.equal(opt.h.availability('reviewHeld').state,'held');
+ assert.equal((await opt.h.optionalSynthetic('reviewHeld')).status,'held');assert.equal(opt.stats().synthetic,0);
+ assert.equal((await opt.h.play('아')).status,'held');assert.equal(opt.stats().synthetic,0);
+ assert.equal((await opt.h.optionalSynthetic('missing')).status,'tts-played');assert.equal(opt.stats().synthetic,1);
+ const unavailable=setup('ended','reject');await unavailable.h.ready;unavailable.h.setSyntheticEnabled(true);
+ assert.equal((await unavailable.h.optionalSynthetic('아')).status,'manifest-error');assert.equal(unavailable.stats().synthetic,0);
  assert.equal((await a.h.play('가')).status,'played');assert.equal(a.stats().played,1);assert.equal(a.stats().synthetic,0);
  for(const mode of ['throw','reject','error','hang']){const x=setup(mode);await x.h.ready;assert.equal((await x.h.play('가')).status,'error',mode)}
  for(const fetchMode of ['reject','hang','json-hang']){const x=setup('ended',fetchMode);assert.equal((await x.h.play('가')).status,'manifest-error',fetchMode)}
