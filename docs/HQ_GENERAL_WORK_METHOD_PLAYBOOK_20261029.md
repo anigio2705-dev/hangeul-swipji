@@ -458,3 +458,14 @@
 - **가설·변경:** 테스트99 자동 재배포 전에 소스에 포함된 무료/임시 DB 위험과 과거 배포 SHA 오인을 독립적으로 차단하면, 승인되지 않은 재배포가 테스트 예약/모의 결제 기록을 지우는 위험을 줄인다. 격리 브랜치에 `automation/staging99_redeploy_guard.py` 및 6개 반례, 읽기 전용 CI를 추가했다.
 - **검증:** [CI #40837155467](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40837155467)에서 6개 단위 테스트 PASS 및 실제 블루프린트에 대한 **예상된 BLOCKED(exit 2)** 확인. 녹색 CI는 '위험 탐지기 정상'만 의미한다. 배포 성공, 실제 영속 디스크, 백업 복구, 대표 승인과는 무관하다.
 - **후속 안전 조건:** 11·13팀은 Render 관리자 권한으로 실제 서비스의 현재 SHA·DB 마운트·백업·복구 테스트를 확인하고, 15팀은 기존 개설→상대 신청/수락→연결→화상·수업 상태 흐름을 독립 PC/모바일에서 확인한다. 그 전까지 테스트99 재배포 및 운영 홈페이지 변경 금지. 이 방법은 OpenAI Agent Improvement Loop의 '실패 관찰→반례 평가→변경→독립 재검증' 패턴을 사용했다. API 모델 호출 0회; 새 제품 기능 검증 0건.
+
+
+## 2026-10-29 17:36 KST — 유령 개발 dispatch 차단 (#9 계약 후보, 격리 실험)
+- **문제:** `automation/hq_160_task_cycle.py`의 legacy `CURATED_TARGETS`는 계약 원장의 `READY` 관문과 분리되어 있었다. `_semantic_dispatch_gate`는 등록되지 않은 #8을 통과시키고, 이미 `CODE_VERIFIED`인 #41·#55·#56 등을 빈 증거 장부에서 다시 배정할 수 있었다. 160개 계약을 읽더라도 실행 큐가 그 계약을 무시하는 오류다.
+- **가설:** 독립적으로 검증된 `READY` 큐(`_reviewed_ready_assignment`)만 개발 실행을 허용하면, 잘못된 기존 curated 매핑으로 인한 유령 호출이 0이 되고 승인된 READY에 대한 dispatch는 기존 검증 경로를 유지한다. 비용 증가는 없으며 기존 불필요 호출을 줄인다.
+- **재현:** 새 `automation/test_hq_curated_failclosed.py`의 실제 GitHub Actions [#40843239242](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40843239242) 실패(3개 테스트/9개 subtest 실패): 미매핑 #8, 기검증 #41·#55·#56·#109, 빈 장부에서도 5팀 유령 배정.
+- **격리 변경:** `automation/hq_160_task_cycle.py`의 legacy fallback을 fail-closed 처리(`2f9529a8`), 이전 단위 테스트에서 legacy 경로의 상태 전이만 별도 mock으로 검증하도록 구분(`6e47335f`). 신규 READY 배정은 독립 검증/경로·충돌·선행조건을 검사하는 `_reviewed_ready_assignment`를 그대로 유지.
+- **사후 증거:** 정확한 SHA `6e47335f8fd04089f3df830388c462d5e78207ea`의 독립 GitHub Actions [#40843302966](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40843302966) SUCCESS: 신규 3개 fail-closed 테스트 + 기존 13개 task-cycle 회귀 테스트. 테스트99 배포 없음.
+- **채택 범위/남은 병목:** 격리 브랜치에서만 PASS. 160개 기능 완료 증가 0, 신규 6팀 AI 개발 0. `READY=0`의 원인은 이 패치만으로 해결되지 않으며, #9는 CANDIDATE로 상세화했을 뿐이다. 중앙 HQ 수정은 6팀 bot 실적으로 계산하지 않는다. 15팀 독립 QA와 실제 READY 후보 공급 후 별도 제한 호출·새 diff·CI·후속 승계 검증이 필요하다.
+- **재사용 규칙:** 과거 고정 작업 목록은 탐색 힌트로만 사용한다. 실제 dispatch는 단일 독립 승인 큐로 제한한다. 검증은 '오류 재현 RED → 동일 반례 GREEN → 기존 회귀 GREEN'을 필수로 하며, 코드만 고친 것을 실서비스 성공으로 보고하지 않는다.
+- **OpenAI 공식 사례:** [Agent Improvement Loop](https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop)의 실제 실패→재사용 가능한 eval→검증된 변경 패턴을 한 건에 적용. 모델 자율성·AGI 성취의 증거가 아니다.
