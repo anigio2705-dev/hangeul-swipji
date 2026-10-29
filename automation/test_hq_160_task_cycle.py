@@ -46,6 +46,13 @@ class HQ160TaskCycleTests(unittest.TestCase):
             "41": {"status": "code_verified"}, "52": {"status": "code_verified"},
         }))
 
+    def test_pending_independent_ci_is_not_assigned_again(self):
+        catalog = contracts(sample())
+        pending = {"41": {"status": "in_progress", "independent_review": "pass"}}
+        self.assertEqual(next_assignment("12", catalog, pending)["task_number"], 52)
+        pending["52"] = {"status": "code_verified"}
+        self.assertIsNone(next_assignment("12", catalog, pending))
+
     def test_failure_feedback_is_specific_and_retry_is_bounded(self):
         catalog = contracts(sample())
         failure = {"8": {"attempts": 1, "repair_instruction": "Fix failed assertion 42"}}
