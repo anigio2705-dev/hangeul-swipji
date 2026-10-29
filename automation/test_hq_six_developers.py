@@ -84,5 +84,26 @@ class BoundedPatchTests(unittest.TestCase):
                 "old": "def a():\n    return 123",
                 "new": "def a():\n    return 123"})
 
+    def test_workflow_retry_never_reuses_stale_results_or_crashes_on_os(self):
+        """The actual GitHub inline runner must preserve truthful six-team evidence."""
+        import ast
+        workflow = (Path(__file__).resolve().parents[1] /
+                    ".github/workflows/hq-six-developers.yml").read_text(encoding="utf-8")
+        self.assertIn("  push:\n    branches:\n      - automation/hq-pilot-13-14-15-20261029", workflow)
+        self.assertIn("      - 'automation/hq_semantic_contract_paths.json'", workflow)
+        heredoc = workflow.split("          python - <<'PY'\n", 1)[1].split("\n          PY", 1)[0]
+        script = "\n".join(line[10:] if line.startswith("          ") else line
+                           for line in heredoc.splitlines())
+        parsed = ast.parse(script)
+        imports = {alias.name for node in parsed.body if isinstance(node, ast.Import)
+                   for alias in node.names}
+        self.assertIn("os", imports, "A failed runner must not crash while recording BLOCKED")
+        self.assertIn('result_file = pathlib.Path("/tmp/team-result.json")', script)
+        self.assertIn("result_file.unlink(missing_ok=True)", script)
+        self.assertLess(script.index("result_file.unlink(missing_ok=True)"),
+                        script.index('subprocess.run(["python", "/tmp/hq_six_developers.py"])'))
+        self.assertIn('"reason": "runner_failed_or_result_missing"', script)
+        self.assertIn('pathlib.Path("/tmp/team-result.json").write_text', script)
+
 if __name__ == "__main__":
     unittest.main()
