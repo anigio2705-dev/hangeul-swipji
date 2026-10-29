@@ -2,16 +2,18 @@ name: Phase 3 isolated test platform
 on:
   push:
     branches: ['phase3/**']
-    paths: ['phase3/**', '.github/workflows/phase3-isolated-tests.yml']
+    paths: ['phase3/**', 'index.html', 'hangul-audio-manifest.json', '.github/workflows/phase3-isolated-tests.yml']
   pull_request:
     paths: ['phase3/**', '.github/workflows/phase3-isolated-tests.yml']
 permissions:
   contents: read
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
