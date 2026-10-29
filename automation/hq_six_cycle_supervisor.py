@@ -298,7 +298,7 @@ def supervise(root, token, depth, repairs, output):
             progress_teams.add(owner)
     candidates = sorted(progress_teams | repair_teams)
     eligible = [team for team in candidates
-                if next_assignment(team, catalog, ledger, next_repairs) is not None]
+                if next_assignment(team, catalog, ledger, next_repairs.get(team, {})) is not None]
     report["dispatched_teams"] = []
     if depth < 2 and eligible:
         try:
