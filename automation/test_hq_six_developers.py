@@ -21,15 +21,15 @@ class BoundedPatchTests(unittest.TestCase):
                                    "new": "def a():\n    return '" + chr(0) + "'"})
 
     def test_team15_collision_gate_cannot_be_weakened_by_ai(self):
-        original = ("changes = {'11': {'shared.py'}, '13': {'shared.py'}}\\n"
-                    "failures = []\\n"
-                    "common = ['shared.py']\\n"
-                    "if common:\\n"
-                    "    failures.append('overlap')\\n"
-                    "# preserve existing verification\\n")
+        original = ("changes = {'11': {'shared.py'}, '13': {'shared.py'}}\n"
+                    "failures = []\n"
+                    "common = ['shared.py']\n"
+                    "if common:\n"
+                    "    failures.append('overlap')\n"
+                    "# preserve existing verification\n")
         weakened = original.replace(
             "    failures.append('overlap')",
-            "    if 'shared.py' in []:\\n        failures.append('overlap')")
+            "    if 'shared.py' in []:\n        failures.append('overlap')")
         with self.assertRaisesRegex(ValueError, "Collision gate weakening forbidden"):
             validate_candidate(original, weakened, "scripts/team15_independent_gate.py")
         safe = original.replace("# preserve existing verification",
