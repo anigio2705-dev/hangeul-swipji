@@ -62,13 +62,13 @@ def summary(db,uid):
             if skill not in latest:latest[skill]=item
             bucket=observed if record['kind']=='teacher-observation' else text_checks
             if skill not in bucket:bucket[skill]=item
-    weak=sorted({s for bucket in (observed,text_checks) for s,v in bucket.items() if v['earned']/v['possible']<.67})
+    weak=sorted({s for bucket in (observed,text_checks) for s,v in bucket.items() if v.get('possible',0)>0 and v['earned']/v['possible']<.67})
     last=records[0]['unit_id'] if records else None
     stage=p['unitMapping'].get(last,{}).get('stage') or ([1,1,2,3,3,4,4][placement['stage']] if placement else 1)
     candidates=[m for m in p['stages'] if m['id']==stage][0]['lessons']
     booked={r['unit_id'] for r in records if r['phase']=='post' and r['score']==r['max_score']}
-    ready=[v for v in candidates if v['status']=='authored' and (v['unitId'] not in booked and not weak)]
+    ready=[v for v in candidates if v['status']=='authored' and (v['unitId'] not in booked or bool(weak))]
     if last and weak:ready.sort(key=lambda v:v['unitId']!=last)
     elif last:
         next_id=p['unitMapping'].get(last,{}).get('nextUnitId');ready.sort(key=lambda v:v['unitId']!=next_id)
-    return dict(placement=placement,records=records,latestSkillChecks=latest,observedSkillChecks=observed,textCheckSkillChecks=text_checks,weakSkills=weak,recommendations=ready[:3],recommendationBasis='Internal advisory: latest task and available authored lessons; not certified placement.',productionDatabaseUsed=False)
+    return dict(placement=placement,records=records,latestSkillChecks=latest,observedSkillChecks=observed,textCheckSkillChecks=text_checks,weakSkills=weak,recommendations=ready[:3],recommendationMode=('review_weak_skills' if weak else 'continue_next_unit'),recommendationsCertified=False,recommendationBasis='Internal advisory: latest task and available authored lessons; not certified placement.',productionDatabaseUsed=False)
