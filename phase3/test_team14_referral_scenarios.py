@@ -29,4 +29,17 @@ class ReferralScenariosTests(unittest.TestCase):
  def test_rounding_conservation(self):
   x=simulate_referral(1,[],(300,100))
   self.assertEqual(x['gross'],x['teacher']+x['platform']+sum(x['rewards']))
+ def test_long_chain_is_linear_time_and_cycle_fails_closed(self):
+  """A valid 7k-person simulation must not repeat every ancestor walk."""
+  import time
+  n=7000
+  edges=[('user'+str(i),'user'+str(i+1)) for i in range(n)]
+  start=time.perf_counter()
+  result=simulate_referral(10000,edges)
+  elapsed=time.perf_counter()-start
+  self.assertLess(elapsed,2.5,'referral validation appears quadratic')
+  self.assertFalse(result['real_money'])
+  self.assertFalse(result['payment_enabled'])
+  with self.assertRaises(SimError):
+   simulate_referral(10000,edges+[('user'+str(n),'user0')])
 if __name__=='__main__':unittest.main()
