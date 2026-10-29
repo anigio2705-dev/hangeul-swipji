@@ -99,7 +99,12 @@ def next_assignment(team, catalog, evidence=None, failures=None):
         # A separately reviewed commit is awaiting its own CI; do not spend
         # another AI call rewriting it while that exact verification is pending.
         if state == "in_progress" and evidence.get(str(number), {}).get("independent_review") == "pass":
-            continue
+            # A previous review using the WRONG task regression (e.g. #47
+            # learning.py checked with matching tests) is not a valid gate.
+            # Re-queue that exact item for task-specific verification; keep
+            # correctly verified, CI-pending items out of the AI queue.
+            if evidence[str(number)].get("task_specific_verified") is not False:
+                continue
         if any(evidence.get(str(dep), {}).get("status") != "complete"
                for dep in task["dependencies"]):
             continue
@@ -119,7 +124,9 @@ def next_assignment(team, catalog, evidence=None, failures=None):
             "required_evidence": task["evidence_required"],
             "attempt": attempts + 1,
             "repair_instruction": instruction,
-            "mode": "repair" if instruction else "develop",
+            "mode": ("repair" if instruction else "verify_existing"
+                     if state == "in_progress" and evidence.get(str(number), {}).get("task_specific_verified") is False
+                     else "develop"),
         }
     return None
 
