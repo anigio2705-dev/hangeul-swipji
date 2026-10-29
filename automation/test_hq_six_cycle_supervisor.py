@@ -6,7 +6,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from hq_160_task_cycle import CURATED_TARGETS, contracts
-from hq_six_cycle_supervisor import supervise, promote_prior, REGRESSIONS
+from hq_six_cycle_supervisor import supervise, promote_prior, REGRESSIONS, independent_check
 
 def sample():
     return "\n".join(f"{n}. [ ] Acceptance criterion {n}" for n in range(1, 161))
@@ -152,6 +152,14 @@ class SixTeamSupervisorTests(unittest.TestCase):
             self.assertEqual(promote_prior(ledger, "dummy"), [109])
             self.assertEqual(ledger["109"]["status"], "code_verified")
             self.assertEqual(ledger["109"]["ci_result"], "success")
+
+    def test_wrong_scope_placement_patch_cannot_pass_backlog_47(self):
+        verdict, reason, evidence = independent_check(
+            "13", {"task_number": 47, "path": "phase3/learning.py",
+                   "commit": "a" * 40}, "unused", contracts(sample()))
+        self.assertEqual(verdict, "RETRY")
+        self.assertIn("Wrong task/file mapping", reason)
+        self.assertEqual(evidence, {})
 
     def test_learning_item_47_uses_learning_regression_not_matching(self):
         self.assertIn("test_global_learning.py", REGRESSIONS[("13", 47)])
