@@ -1,0 +1,23 @@
+name: HQ task59 missing-audio UI regression (isolated)
+on:
+  push:
+    branches:
+      - automation/hq-task59-audio-ui-20261029
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audio-ui:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check board syntax
+        run: node --check hangul-board.js
+      - name: Reproduce missing human recording and verify user-facing behavior
+        run: node automation/verify_task59_missing_audio.cjs
+      - name: Preserve human-only playback and failure reporting
+        run: node scripts/check-audio-runtime.cjs
