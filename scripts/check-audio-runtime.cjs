@@ -14,7 +14,7 @@ function setup(mode='ended',fetchMode='ok'){
  assert.equal((await a.h.play('아')).status,'held');assert.equal(a.stats().played,0);
  assert.equal((await a.h.play('가')).status,'played');assert.equal(a.stats().played,1);assert.equal(a.stats().synthetic,0);
  for(const mode of ['throw','reject','error','hang']){const x=setup(mode);await x.h.ready;assert.equal((await x.h.play('가')).status,'error',mode)}
- for(const fetchMode of ['reject','hang','json-hang']){const x=setup('ended',fetchMode);assert.equal((await x.h.play('가')).status,'manifest-error',fetchMode)}
+ for(const fetchMode of ['reject','hang','json-hang']){const x=setup('ended',fetchMode);await x.h.ready;assert.equal((await x.h.play('가')).status,'manifest-error',fetchMode)}
  const failedCount=setup('ended','reject');await failedCount.h.ready;
  failedCount.h.refreshBadges();
  assert.equal(failedCount.stats().counts.recording,'확인 불가','failed manifest must not advertise stale playable recordings');
@@ -41,7 +41,7 @@ function setup(mode='ended',fetchMode='ok'){
  assert.equal((await stale.h.reloadManifest()).status,'manifest-error');
  stale.h.refreshBadges();assert.equal(stale.stats().badgeClasses['has-recording'],false,'manifest failure must clear stale ready badge');
  assert.match(stale.stats().badgeLabels['aria-label'],/목록 연결 오류/);
- const retry=setup('ended','retry');await retry.h.ready;assert.equal(retry.h.availability('가').state,'unavailable');assert.equal((await retry.h.play('가')).status,'played');assert.equal(retry.h.availability('가').state,'ready');assert.equal(retry.h.availability('아').state,'held');assert.equal(retry.h.availability('missing').state,'missing');
+ const retry=setup('ended','retry');await retry.h.ready;assert.equal(retry.h.availability('가').state,'unavailable');assert.equal((await retry.h.play('가')).status,'manifest-error');await new Promise(resolve=>setTimeout(resolve,5));assert.equal((await retry.h.play('가')).status,'played');assert.equal(retry.h.availability('가').state,'ready');assert.equal(retry.h.availability('아').state,'held');assert.equal(retry.h.availability('missing').state,'missing');
  const early=setup('ended','rotate');
  // User may press refresh while the first manifest request is still pending.
  assert.equal((await early.h.reloadManifest()).status,'ready');
