@@ -1,0 +1,26 @@
+name: HQ2 Hangul audio hold regression
+on:
+  push:
+    branches:
+      - integration/hq2-audio-held-gate-20261030
+  pull_request:
+    paths:
+      - hangul-core.js
+      - scripts/check-audio-runtime.cjs
+      - .github/workflows/hq2-audio-hold-regression.yml
+permissions:
+  contents: read
+jobs:
+  audio-hold:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: JavaScript syntax
+        run: node --check hangul-core.js
+      - name: Runtime review hold and TTS regression
+        run: node scripts/check-audio-runtime.cjs
+      - name: Foundation contracts
+        run: node scripts/check-foundations.cjs
