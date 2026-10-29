@@ -67,7 +67,7 @@ def summary(db,uid):
     stage=p['unitMapping'].get(last,{}).get('stage') or ([1,1,2,3,3,4,4][placement['stage']] if placement else 1)
     candidates=[m for m in p['stages'] if m['id']==stage][0]['lessons']
     booked={r['unit_id'] for r in records if r['phase']=='post' and r['score']==r['max_score']}
-    ready=[v for v in candidates if v['status']=='authored' and (v['unitId'] not in booked or weak)]
+    ready=[v for v in candidates if v['status']=='authored' and (v['unitId'] not in booked and not weak)]
     if last and weak:ready.sort(key=lambda v:v['unitId']!=last)
     elif last:
         next_id=p['unitMapping'].get(last,{}).get('nextUnitId');ready.sort(key=lambda v:v['unitId']!=next_id)
