@@ -443,3 +443,10 @@
 - **검증:** 실제 코드 변경 `373ed581bdf19e94c76f541fa432d09418c5ab38`, 테스트 `cc5cc7b88e8eea1764490a88944786f797ce9266`; 격리 CI #40830454401 SUCCESS, 팀 개발기 테스트 12개(기존 7 + 신규 5), 160계약 테스트 13개, 합계 25개 PASS. PR https://github.com/anigio2705-dev/hangeul-swipji/pull/24 (draft). 후속 실제 git checkout 통합검사 커밋 `8930f39dc622ae3d053ab4ee8fe360d6fe001a0a`은 이 기록 시점에 CI 결과 미확정이다.
 - **한계/판정:** #11은 15팀의 별도 의미 검증 및 최신 CI 확인·HQ 통합 전이므로 CANDIDATE 유지, READY/새 CODE_VERIFIED/실제 6팀 AI 호출 0건. 6팀 하위 AI 실제 호출도 미확인. PR #23의 기존 충돌을 임의 병합하지 않았다. 승인된 HQ 격리 브랜치와 신규 실험 브랜치 외 main·운영 DB·결제·공개 배포·외부 제출은 건드리지 않았다.
 - **다음 자동 안전 작업:** #11 PR의 정확한 SHA CI 및 독립 검토 후 HQ 통합; #9의 실경로/차단 증거를 기존 PR #23과 중복 없이 합치고 15팀 의미 검증으로 READY 공급. READY=0인 동안 동일 AI 호출 반복 금지.
+
+
+### 15:41 KST — #11 실제 CI 실패→재현→수정→재검증
+- **실패:** [CI #40830511738](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40830511738)는 신규 반례 12개+계약 회귀 13개가 모두 PASS였지만, 이어서 실제 git checkout 사전검사가 `Preflight dirty or untracked HQ worktree`로 실패했다. 원인은 CI가 생성한 Python `__pycache__` 비추적 산출물이었다. 단순 테스트 PASS만으로 통합 성공이라고 할 수 없는 사례.
+- **수정:** 실험 브랜치에 `.gitignore`로 `__pycache__/`, `*.py[cod]`, `.pytest_cache/`만 무시한다. 다른 비추적 파일의 거부 조건은 유지한다. 실제 checkout 검사 로그도 추가했다.
+- **재검증:** [CI #40830582694](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40830582694), 정확한 SHA `a92ce28ab8c9461734923c15b8c37475505811d2`, 25개 테스트 + 실제 원격 HEAD/clean checkout 검사 모두 PASS. PR [#24](https://github.com/anigio2705-dev/hangeul-swipji/pull/24)는 격리 초안이며 HQ 통합 전. 모델 API 호출 0, 6팀 실제 AI 개발 0, 신규 CODE_VERIFIED 0, 최종 완료 0.
+- **교훈:** 작업 전 상태 검사는 테스트가 생성하는 무해한 빌드 산출물과 실제 사용자·AI 수정물을 구분해야 한다. 단, 무조건 `git clean -fd`로 제거하거나 모든 untracked를 무시하지 않는다. 정확한 실패 로그를 보고 좁은 예외만 추가한 뒤 동일 실 checkout 검사를 재실행한다.
