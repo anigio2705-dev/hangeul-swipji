@@ -560,11 +560,14 @@
         "site-language.js",
         "global-language.js"
       ],
-      "test_paths": [],
+      "test_paths": [
+        "automation/test_task143_language_contract.py"
+      ],
       "acceptance": "지정 8개 언어의 모든 핵심 UI가 함께 전환되고 미지원 언어·상하단 불일치·재접속 회귀가 없음",
       "unmet": [
-        "전 화면 8개 언어 자동 회귀검사 경로 미확정",
-        "두 언어 스크립트 동시 노출 여부 및 실제 브라우저 번역 검증 미확인"
+        "신규 8언어 정적 목록·반례 검사는 전체 화면 번역 검증이 아님",
+        "두 언어 스크립트 동시 노출 여부·실제 브라우저·재접속·상하단 동기화 검증 미완료",
+        "15팀 독립 의미 검증 미완료"
       ],
       "state": "CANDIDATE",
       "independent_team15": "PENDING",
