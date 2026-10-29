@@ -474,3 +474,11 @@
 ### 18:24 KST 교차 감사 정정 — #59 상태와 장부 브랜치 불일치
 
 다른 예약 실행 「한글쉽지 무인 개발」의 **18:24 최신 완료 보고**는 경로 등록 26, CODE_VERIFIED 12, BLOCKED 3이라고 기록했다. 특히 #59의 기존 부분 검증이 새로 발견된 '모' UI 오류를 놓쳤으므로 BLOCKED로 정정했다고 설명한다. 반면 이 문서가 위치한 중앙 격리 브랜치 `automation/hq-pilot-13-14-15-20261029`를 직접 재조회하면 `automation/hq_semantic_contract_paths.json` blob `f9391842`는 24개(CANDIDATE 11/BLOCKED 2/CODE_VERIFIED 11), `automation/task-evidence.json` blob `bb3d03a1`는 CODE_VERIFIED 13(#59 포함), BLOCKED 2(#22/#47)다. **서로 다른 브랜치·스냅샷의 수치를 합치거나 중앙 장부를 검증 없이 자동 덮어쓰지 않는다.** #59 오류·수정·정확한 CI를 검토하고 중앙 계약/증거 원장에 적절한 상태 정정을 별도 독립 감사로 통합해야 한다. 최종 승인 0/160은 두 보고에서 동일하다.
+
+
+### 2026-10-30 08:28 KST — CI 환경 실패와 제품 실패의 분리 (독립 감사)
+
+- [integration run #40973272936](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40973272936)의 Playwright 설치가 `Cannot install dependencies for ubuntu26.04-x64 with Playwright 1.51.1`로 종료했다. 제품 테스트가 실행되기 전의 CI 러너 호환성 실패이므로 제품 오류나 완료로 오판하지 않는다.
+- [격리 PR #91](https://github.com/anigio2705-dev/hangeul-swipji/pull/91)은 `integration-validation.yml`을 `ubuntu-24.04`로 고정했다. [격리 PR #95](https://github.com/anigio2705-dev/hangeul-swipji/pull/95)는 `scripts/ci_runner_pin_guard.py`와 7개 정상/부정 회귀 테스트 및 CI 실행 관문을 추가했다. 두 PR은 별도 CI 및 통합 검증이 끝나기 전에는 완료로 계산하지 않는다.
+- OpenAI [Codex CI autofix 사례](https://developers.openai.com/cookbook/examples/codex/autofix-github-actions)의 로그→원인 분류→최소 수정→반례 테스트→동일 검사 반복을 적용했다. 이번 독립 감사에서 신규 AI API 호출이나 외부 지출 없음; CI 비용 미확인.
+- 테스트99의 SQLite 영속성·독립 백업/복구·실제 배포 SHA는 미확인. 읽기 전용 `automation/staging99_redeploy_guard.py`가 PASS하는 것은 안전한 배포 승인과 다르다. Render 재배포·운영 변경 금지.
