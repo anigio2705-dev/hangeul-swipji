@@ -1,0 +1,31 @@
+name: HQ isolated Playwright runner pin regression
+on:
+  push:
+    branches:
+      - audit/hq-ci-runner-regression-20261030-0828
+    paths:
+      - scripts/ci_runner_pin_guard.py
+      - scripts/test_ci_runner_pin_guard.py
+      - .github/workflows/integration-validation.yml
+      - .github/workflows/hq-ci-runner-pin-regression.yml
+  pull_request:
+    paths:
+      - scripts/ci_runner_pin_guard.py
+      - scripts/test_ci_runner_pin_guard.py
+      - .github/workflows/integration-validation.yml
+      - .github/workflows/hq-ci-runner-pin-regression.yml
+permissions:
+  contents: read
+jobs:
+  runner-guard:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Negative and positive runner compatibility regressions
+        run: python -m unittest scripts.test_ci_runner_pin_guard -v
+      - name: Validate actual integration workflow
+        run: python scripts/ci_runner_pin_guard.py
