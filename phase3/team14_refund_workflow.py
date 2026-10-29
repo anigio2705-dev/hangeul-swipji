@@ -9,9 +9,11 @@ def _init(store):
         state TEXT NOT NULL CHECK(state IN ('requested','approved','rejected','cancelled','applied')),
         reason TEXT NOT NULL DEFAULT '', updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)""")
 
-def request_refund(server_db,store,booking_id,request_id,actor_id,amount_krw):
+def request_refund(server_db,store,booking_id,request_id,actor_id,amount_krw,reason=''):
     for value in (booking_id,request_id,actor_id):ident(value)
     amount(amount_krw,True)
+    if not isinstance(reason,str) or len(reason)>2000 or any(ord(c)<32 and c not in '\\n\\t' for c in reason):
+        raise SimError('VALIDATION_ERROR','invalid refund reason')
     booking=server_db.execute(
         'SELECT learner_id,teacher_id,price,status FROM bookings WHERE id=?',
         (booking_id,)).fetchone()
@@ -27,12 +29,12 @@ def request_refund(server_db,store,booking_id,request_id,actor_id,amount_krw):
     with store.atomic():
         previous=store.db.execute('SELECT * FROM refund_requests WHERE request_id=?',(request_id,)).fetchone()
         if previous is not None:
-            if (previous['booking_id'],previous['actor_id'],previous['amount_krw'])!=(booking_id,actor_id,amount_krw):
+            if (previous['booking_id'],previous['actor_id'],previous['amount_krw'],previous['reason'])!=(booking_id,actor_id,amount_krw,reason):
                 raise SimError('CONFLICT','refund request reused')
             return dict(previous)
         store.db.execute(
-            "INSERT INTO refund_requests(request_id,booking_id,actor_id,amount_krw,state) VALUES(?,?,?,?,'requested')",
-            (request_id,booking_id,actor_id,amount_krw))
+            "INSERT INTO refund_requests(request_id,booking_id,actor_id,amount_krw,state,reason) VALUES(?,?,?,?,'requested',?)",
+            (request_id,booking_id,actor_id,amount_krw,reason))
     return dict(store.db.execute('SELECT * FROM refund_requests WHERE request_id=?',(request_id,)).fetchone())
 
 def decide_refund(store,request_id,decision,reviewer):
