@@ -458,3 +458,10 @@
 - **실접속 한계:** 이 실행의 웹 조회는 테스트99 /healthz 접근 실패, 셸 DNS 실패. 기존 2026-10-27 HTTP 11/11 기록은 과거 근거로만 보존. 인증 뒤 PC/모바일·현재 /healthz 해시·Render Deploys 기록 미확인. Render 연결/관리 권한 없으므로 테스트99 자동 배포는 안전 조건 미충족으로 보류한다.
 - **공식 개선 사례:** OpenAI Agent Improvement Loop (https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop)의 실패 관측→재현 가능한 평가로 변환 원칙을 적용. `automation/hq_test99_gate.py`, `automation/test_hq_test99_gate.py` 및 격리 CI `.github/workflows/hq-test99-acceptance.yml`를 추가해 과거 URL/CI만으로 최종 수락하는 거짓 양성을 차단한다. 정상·오염된 SHA·서버 모드·인증 브라우저·모바일·환경 격리·대표 승인 등 9개 테스트. CI는 공개 /healthz와 비인증 홈만 GET, 비밀값/운영DB/결제 접근 없음; 결과를 별도 아티팩트로 보존한다. **독립 CI 결과는 Actions #40832562392에서 확인**한다.
 - **재사용 규칙:** `CODE_VERIFIED` ≠ `TEST99_BROWSER_VERIFIED` ≠ `OWNER_APPROVED`. 과거 배포 기록, 정적 구성, HTTP health 200은 배포 SHA 일치·실제 테스트 DB 격리·인증 후 기능·모바일 증거를 대체하지 못한다. main/운영 Pages/운영DB/실결제/실배포/외부 제출 0, AI 모델 호출 0. 이번 신규 제품 기능 CODE_VERIFIED 0, 최종 승인 0.
+
+
+#### 16:01 KST — 독립 CI 실접속 확인 및 해시 불일치: 실패 원인 교정
+- 앞선 직접 웹/DNS 접근 실패는 **호스팅 서비스 전체 중단 증거가 아니다**. [정확한 격리 CI #40832650710](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40832650710)에서 11개 반례 PASS, GitHub runner의 공개 HTTPS GET은 `/healthz=200`, `mode=test`, `scope=isolated-staging`, origin 일치, 비인증 `/=401`을 실측했다. 실행 환경별 네트워크 차이를 기록한다.
+- **실제 차단:** 호스팅 `sourceSHA256=e9d1368308005470c4e6cbf04e1d237eeb61ff1d0abc0f01c14558a90ee8b755`와 이 브랜치 `phase3/staging_server.py` SHA256 `ed0101f530d46b1d8d097ed25a061267854df672f91be03f99a6677f2067a9a6`가 다르다. Render의 실제 배포 커밋/브랜치·격리 DB 설정, 인증 후 PC/모바일 기능은 아직 미확인. 과거 배포 `ad5757d`를 현재 실행 SHA로 오인 금지.
+- **실패→수정→재검증:** #40832639204는 보안 조건 두 개(origin 일치/비인증 홈 401)를 추가하면서 정상 테스트 fixture를 먼저 갱신하지 않아 FAIL; 다음 커밋 `3da528d3`에서 fixture와 반례를 보강하여 11개 PASS. CI 성공과 테스트99 실제 반영/대표 승인 상태는 분리. 공개 HTTP 검사 성공만으로 실서비스 최종 승인 0/160 유지.
+- **후속 안전 조치:** Render 관리 로그·실제 배포 SHA·환경변수 격리 증거가 확보되기 전에는 기존 서비스 자동 배포 금지. 팀11/13의 배포 탐색 및 팀15의 인증 PC·모바일 검증을 미해결 차단 조건으로 기록. 신규 6팀 AI 개발 0, 신규 CODE_VERIFIED 0, 기존 13/160 유지.
