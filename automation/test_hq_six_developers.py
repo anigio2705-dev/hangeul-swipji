@@ -14,7 +14,7 @@ class BoundedPatchTests(unittest.TestCase):
     def test_support_only_task_never_enters_legacy_development_queue(self):
         # #51/#56 belong to team12; #55 belongs to team12.
         # Supporting teams 11/16 must not claim them as autonomous work.
-        c = contracts("\\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
+        c = contracts("\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
         with tempfile.TemporaryDirectory() as d:
             registry = {"schema": 1, "items": {}}
             for team in ("11", "16"):
@@ -23,7 +23,7 @@ class BoundedPatchTests(unittest.TestCase):
                                 for item in choose_work_items("12", c, {}, {}, registry, Path(d))))
 
     def test_support_cannot_become_sole_implementer_after_ready(self):
-        c = contracts("\\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
+        c = contracts("\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
         self.assertIn("11", c[56]["support"])
         self.assertIn("16", c[55]["support"])
         with self.assertRaisesRegex(RuntimeError, "sole owner"):
