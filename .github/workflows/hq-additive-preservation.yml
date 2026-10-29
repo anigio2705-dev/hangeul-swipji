@@ -52,6 +52,11 @@ jobs:
             assert got == sha, f'{path}: original changed'
           print('Eight immutable source HTML blobs preserved exactly')
           PY
+      - name: Browser-test all 600 reading entries and 375px mobile level switching
+        run: |
+          npm ci --prefix phase3 --ignore-scripts
+          ./phase3/node_modules/.bin/playwright install --with-deps chromium
+          NODE_PATH="$PWD/phase3/node_modules" node scripts/browser-audit-reading-600.cjs
       - name: Audit 96 lessons and original-source policy
         run: python scripts/audit-professional-96.py
       - name: Evidence scope
