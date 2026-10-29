@@ -1,0 +1,21 @@
+{
+  "team": "11",
+  "task_number": 11,
+  "items": [
+    {
+      "id": "clean_checkout_preflight",
+      "text": "Verify that a preflight check on a clean workspace with no local modifications allows proceeding with the checkout operation.",
+      "expected": "The operation proceeds without any warnings or blocks because the workspace is clean, ensuring no local changes are lost."
+    },
+    {
+      "id": "dirty_checkout_preflight",
+      "text": "Verify that a preflight check on a dirty workspace containing uncommitted changes blocks the checkout operation.",
+      "expected": "The operation is blocked and an explicit warning is displayed indicating presence of uncommitted changes to prevent accidental data loss."
+    },
+    {
+      "id": "stale_checkout_preflight",
+      "text": "Verify that a preflight check on a stale checkout workspace that is behind the remote branch warns the user but allows override.",
+      "expected": "The system warns about stale local state with an option to fetch/update before checkout; blocking depends on configuration but default behavior is warning without blocking."
+    }
+  ]
+}
