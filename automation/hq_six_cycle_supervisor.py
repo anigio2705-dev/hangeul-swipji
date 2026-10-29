@@ -295,7 +295,7 @@ def supervise(root, token, depth, repairs, output):
                         and (number, task.get("path")) in CURATED_TARGETS[team]
                         and isinstance(attempts, int) and attempts >= 1
                     )
-                    if exhausted and ledger.get(str(number), {}).get("status") not in ("complete", "code_verified"):
+                    if exhausted and ledger.get(str(number), {}).get("status") not in ("complete", "code_verified", "blocked"):
                         ledger[str(number)] = {
                             "status": "blocked", "owner": team,
                             "path": task["path"], "block_reason": detail,
