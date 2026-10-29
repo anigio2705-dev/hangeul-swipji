@@ -56,6 +56,31 @@ class SixTeamReadyIntakeTests(unittest.TestCase):
                       report["teams"]["15"]["next_blockers"])
         self.assertFalse(report["teams"]["15"]["candidates"][0]["ready"])
 
+    def test_ci_url_without_exact_sha_remains_blocked(self):
+        reg = {"items": {"101": {
+            "source_paths": ["phase3/team14_referral_store.py"],
+            "test_paths": ["phase3/test_team14_referral_store.py"],
+            "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40800000000",
+            "independent_team15": "PASS",
+            "unmet": [],
+        }}}
+        with patch("hq_six_candidate_preflight.readiness", return_value=sample_queue("14", 101)):
+            report = summarize({}, {}, reg, ".")
+        self.assertIn("exact_sha_independent_ci_missing", report["teams"]["14"]["next_blockers"])
+
+    def test_unmet_acceptance_never_disappears_from_candidate_blockers(self):
+        reg = {"items": {"101": {
+            "source_paths": ["phase3/team14_referral_store.py"],
+            "test_paths": ["phase3/test_team14_referral_store.py"],
+            "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40800000000",
+            "independent_ci_sha": "a" * 40,
+            "independent_team15": "PASS",
+            "unmet": ["four role combinations not independently verified"],
+        }}}
+        with patch("hq_six_candidate_preflight.readiness", return_value=sample_queue("14", 101)):
+            report = summarize({}, {}, reg, ".")
+        self.assertIn("acceptance_criteria_unmet", report["teams"]["14"]["next_blockers"])
+
     def test_multifile_candidate_requires_explicit_editable_path(self):
         reg = {"items": {"23": {
             "source_paths": ["phase3/instant_matching.py", "phase3/instant-speaking.html"],
