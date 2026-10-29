@@ -5,6 +5,8 @@ var KEY='hs-site-language',languages=[['ko','한국어'],['en','English'],['ja',
 var params=new URLSearchParams(location.search),valid=new Set(languages.map(function(x){return x[0]})),requested=params.get('lang'),saved='';
 try{saved=localStorage.getItem(KEY)||localStorage.getItem('hs-language')||''}catch(e){}
 var lang=valid.has(requested)?requested:valid.has(saved)?saved:'ko';
+// A legacy saved language outside the approved eight must not persist in navigation.
+if(saved&&!valid.has(saved)){try{localStorage.removeItem(KEY);localStorage.removeItem('hs-language');localStorage.removeItem('hs-translation-language')}catch(e){}}
 function store(code){try{localStorage.setItem(KEY,code);localStorage.setItem('hs-language',code);localStorage.setItem('hs-translation-language',code)}catch(e){}}
 function cookie(code){var val=code==='ko'?'/ko/ko':'/ko/'+code;document.cookie='googtrans='+val+';path=/;SameSite=Lax';}
 var UI_MESSAGES={
