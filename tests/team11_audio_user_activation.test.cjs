@@ -107,3 +107,13 @@ test('cancelled synthetic completion cannot release a newer playback',async()=>{
   assert.equal((await first).status,'cancelled');
   assert.equal((await second).status,'cancelled');
 });
+
+test('board distinguishes TTS errors, cancellation, and manifest failures',()=>{
+  const board=fs.readFileSync(path.join(__dirname,'..','hangul-board.js'),'utf8');
+  assert.match(board,/result\.status\?\.startsWith\('tts-'\)/);
+  assert.match(board,/result\.status==='cancelled'/);
+  assert.match(board,/result\.status==='manifest-error'/);
+  assert.match(board,/result\.status==='held'/);
+  assert.match(board,/result\.status==='missing'/);
+  assert.match(board,/result\.status==='tts-played'/);
+});
