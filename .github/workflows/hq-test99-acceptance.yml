@@ -1,0 +1,34 @@
+name: HQ test99 read-only acceptance evidence (isolated)
+on:
+  push:
+    branches: [automation/hq-test99-acceptance-20261029]
+    paths:
+      - 'automation/hq_test99_gate.py'
+      - 'automation/test_hq_test99_gate.py'
+      - '.github/workflows/hq-test99-acceptance.yml'
+      - 'deploy/render-staging.yaml'
+      - 'audit/staging99-deployment.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test99-acceptance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independent fail-closed negative tests
+        run: python -m unittest discover -s automation -p 'test_hq_test99_gate.py' -v
+      - name: Public HTTPS probe only; no authentication or deployment
+        run: python automation/hq_test99_gate.py --probe --desired-sha "$GITHUB_SHA" --out /tmp/test99-evidence.json
+      - name: Preserve evidence (not approval)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test99-readonly-evidence
+          path: /tmp/test99-evidence.json
+          if-no-files-found: warn
+          retention-days: 7
