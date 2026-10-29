@@ -1,0 +1,24 @@
+name: HQ recursive six-team evidence gate (isolated)
+on:
+  push:
+    branches:
+      - automation/hq-recursive-evidence-audit-20261029
+    paths:
+      - automation/hq_recursive_execution_audit.py
+      - automation/test_hq_recursive_execution_audit.py
+      - .github/workflows/hq-recursive-evidence-gate.yml
+permissions:
+  contents: read
+jobs:
+  evidence-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile read-only evidence gate
+        run: python -m py_compile automation/hq_recursive_execution_audit.py
+      - name: Reject unverified synthetic agent execution claims
+        run: python -m unittest discover -s automation -p 'test_hq_recursive_execution_audit.py' -v
