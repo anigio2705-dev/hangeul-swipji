@@ -24,6 +24,10 @@
   let loading=null;
   function loadManifest(){
     if(loading)return loading;
+    // A refresh must revoke the old inventory immediately. Otherwise taps during
+    // the network request can play a recording that has just been withdrawn.
+    manifestLoaded=false;
+    manifestError=false;
     let timer=null;
     const request=fetch('./hangul-audio-manifest.json?v=20261027-audio-retry', {cache:'no-store'})
       .then(r=>{if(!r.ok)throw Error('audio manifest');return r.json()});
@@ -56,7 +60,9 @@
     // A manual refresh must fetch fresh data even if the initial request is still
     // pending. Reusing that initial promise would leave a just-uploaded file unseen.
     if(loading)await loading;
-    await loadManifest();
+    const refresh=loadManifest();
+    refreshBadges(); // Remove stale playable badges while the new list is pending.
+    await refresh;
     if(manifestError){
       status('음원 목록 연결에 실패했습니다. 다시 확인을 눌러 주세요. / Recording list unavailable; retry.');
       return {status:'manifest-error'};
@@ -68,6 +74,7 @@
   }
   function availability(word){
     if(manifestError)return {state:'unavailable',label:'목록 연결 오류 · 다시 눌러 재시도'};
+    if(!manifestLoaded)return {state:'unavailable',label:'음원 목록 확인 중 · 준비되면 다시 눌러 주세요'};
     if(records[word])return {state:'ready',label:'♪ 사람 녹음 듣기 · 청취 검수 전'};
     if(holds[word])return {state:'held',label:'검수 대기 · '+holds[word].holdReason};
     return {state:'missing',label:'녹음 없음 · 실제 사람 녹음 필요'};
