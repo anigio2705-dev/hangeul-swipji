@@ -1,14 +1,13 @@
 {
   "mode": "advance",
-  "source_run_id": 40791928076,
+  "source_run_id": 40795966081,
   "teams": [
-    "13"
+    "12"
   ],
   "repairs": {},
-  "expected_next_task": 47,
-  "reason": "2026-10-29 09:40 KST: #22 blocked; #47 previously tested against wrong matching suite and its team13 code incorrectly mapped scores 18-20 to stage 5. Team branch now has corrective commit 9cff0b099a9c3ca4e465c29639518d03cf638ed0. Verify existing #47 commit using independent test_global_learning.py plus explicit 17/18/20 placement boundary assertions. Do not spend AI tokens rewriting already corrected code. Treat dispatch acceptance separately from verified development.",
-  "scope": "approved isolated branch only",
-  "final_completion_claim": false,
-  "expected_team_commit": "9cff0b099a9c3ca4e465c29639518d03cf638ed0",
-  "expected_regression": "python -m unittest discover -s phase3 -p test_global_learning.py; 17->5,18->6,20->6"
+  "expected_next_task": 41,
+  "expected_team_commit": "b16a79a7cf9f45eae7ac29e830c821d7d0b835c9",
+  "reason": "One-shot verified source-preservation inventory: team12 task #41 candidate has an actual test-code commit, and HQ supervisor now runs both the candidate regression and trusted independent automation/verify_task41.py. Do not spend AI tokens rewriting an existing candidate. Stage pending CI only if exact team branch HEAD, diff, functional tests and trusted 350/1758/600/1800 inventory pass.",
+  "scope": "approved isolated branch only; no main, live database, real payments or public deployment",
+  "final_completion_claim": false
 }
