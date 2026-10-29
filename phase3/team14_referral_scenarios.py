@@ -14,12 +14,16 @@ def simulate_referral(gross_krw,edges,depth_rates_bps=(300,),commission_bps=2000
   child,parent=edge;ident(child);ident(parent)
   if child==parent or child in graph:raise SimError('CONFLICT','self or duplicate referral')
   graph[child]=parent
+ # Each node is traversed at most once across all roots.  The old
+ # per-root traversal was quadratic on long, otherwise valid referral chains.
+ resolved=set()
  for node in graph:
-  seen={node};cur=node
-  while cur in graph:
-   cur=graph[cur]
-   if cur in seen:raise SimError('CONFLICT','referral cycle')
-   seen.add(cur)
+  if node in resolved:continue
+  visiting=set();cur=node
+  while cur in graph and cur not in resolved:
+   if cur in visiting:raise SimError('CONFLICT','referral cycle')
+   visiting.add(cur);cur=graph[cur]
+  resolved.update(visiting)
  teacher=gross_krw*(10000-commission_bps-sum(depth_rates_bps))//10000
  rewards=[gross_krw*r//10000 for r in depth_rates_bps]
  platform=gross_krw-teacher-sum(rewards)
