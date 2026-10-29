@@ -3,13 +3,34 @@ import tempfile
 from pathlib import Path
 from unittest.mock import patch
 from types import SimpleNamespace
-from hq_six_developers import apply_patch, validate_candidate, choose_work_items, run_checks
+from hq_six_developers import apply_patch, validate_candidate, choose_work_items, run_checks, require_task_owner
 from hq_160_task_cycle import _semantic_dispatch_gate, contracts
 
 class BoundedPatchTests(unittest.TestCase):
     def test_runner_must_reject_unreviewed_semantic_task_even_if_ledger_is_stale(self):
         self.assertFalse(_semantic_dispatch_gate(51, 'scripts/audit-hangul-audio.py'))
         self.assertFalse(_semantic_dispatch_gate(22, 'phase3/instant_matching.py'))
+
+    def test_support_only_legacy_work_is_not_autonomously_assigned_after_continuation(self):
+        # Team 11 supports #51/#56 and team 16 supports #55, but team12 owns all.
+        c = contracts("\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
+        with tempfile.TemporaryDirectory() as d:
+            reg = {"schema": 1, "items": {}}
+            self.assertEqual(choose_work_items("11", c, {}, {}, reg, Path(d)), [])
+            self.assertEqual(choose_work_items("16", c, {}, {}, reg, Path(d)), [])
+            self.assertTrue(all(c[item["number"]]["owner"] == "12"
+                                for item in choose_work_items("12", c, {}, {}, reg, Path(d))))
+
+    def test_support_is_never_owner_authorization_even_for_reviewed_ready(self):
+        c = contracts("\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
+        self.assertIn("11", c[56]["support"])
+        self.assertIn("16", c[55]["support"])
+        with self.assertRaisesRegex(RuntimeError, "sole owner"):
+            require_task_owner("11", c[56])
+        with self.assertRaisesRegex(RuntimeError, "sole owner"):
+            require_task_owner("16", c[55])
+        require_task_owner("12", c[56])
+        require_task_owner("14", c[101])
 
     def test_reviewed_ready_reaches_actual_six_team_runner(self):
         c = contracts("\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))

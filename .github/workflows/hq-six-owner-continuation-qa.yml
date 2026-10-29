@@ -1,0 +1,28 @@
+name: HQ six owner and multi-READY integration regression (isolated)
+on:
+  push:
+    branches:
+      - audit/hq-six-owner-continuation-integration-20261030-0435
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  isolated-owner-continuation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Syntax-check runner and regression
+        run: python -m py_compile automation/hq_six_developers.py automation/test_hq_six_developers.py
+      - name: Test actual runner owner and multi-READY invariants
+        run: python -m unittest discover -s automation -p 'test_hq_six_developers.py' -v
+      - name: Verify canonical owner and queue regression
+        run: python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+      - name: Verify READY intake and supervisor gates
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_traffic_lights.py' -v
+          python -m unittest discover -s automation -p 'test_hq_six_cycle_supervisor.py' -v
+          python -m unittest discover -s automation -p 'test_hq_ready_provenance.py' -v
