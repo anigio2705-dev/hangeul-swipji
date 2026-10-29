@@ -33,7 +33,7 @@ class ReferralScenariosTests(unittest.TestCase):
   edges=[('node'+str(i),'node'+str(i+1)) for i in range(9000)]
   started=time.monotonic()
   result=simulate_referral(10000,edges)
-  self.assertLess(time.monotonic()-started,3.5,'referral validation regressed to quadratic scanning')
+  self.assertLess(time.monotonic()-started,1.0,'referral validation regressed to quadratic scanning')
   self.assertEqual(result['gross'],10000)
   self.assertFalse(result['real_money'])
   self.assertFalse(result['payment_enabled'])
