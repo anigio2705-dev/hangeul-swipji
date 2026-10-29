@@ -1,0 +1,126 @@
+{
+  "schema": 1,
+  "scope": "19 consonant names from live hangul-core.js; not approved recordings",
+  "manifest_version": "20261026-human-only",
+  "counts": {
+    "ready_unapproved": 0,
+    "held": 14,
+    "missing": 5
+  },
+  "names": [
+    {
+      "letter": "ㄱ",
+      "name": "기역",
+      "status": "held",
+      "src": "./assets/hangul-audio/ae30-c5ed-human-name.mp3"
+    },
+    {
+      "letter": "ㄴ",
+      "name": "니은",
+      "status": "held",
+      "src": "./assets/hangul-audio/b2c8-c740-human-name.mp3"
+    },
+    {
+      "letter": "ㄷ",
+      "name": "디귿",
+      "status": "held",
+      "src": "./assets/hangul-audio/b514-adff-human-name.mp3"
+    },
+    {
+      "letter": "ㄹ",
+      "name": "리을",
+      "status": "held",
+      "src": "./assets/hangul-audio/b9ac-c744-human-name.mp3"
+    },
+    {
+      "letter": "ㅁ",
+      "name": "미음",
+      "status": "held",
+      "src": "./assets/hangul-audio/bbf8-c74c-human-name.mp3"
+    },
+    {
+      "letter": "ㅂ",
+      "name": "비읍",
+      "status": "held",
+      "src": "./assets/hangul-audio/be44-c74d-human-name.mp3"
+    },
+    {
+      "letter": "ㅅ",
+      "name": "시옷",
+      "status": "held",
+      "src": "./assets/hangul-audio/c2dc-c637-human-name.mp3"
+    },
+    {
+      "letter": "ㅇ",
+      "name": "이응",
+      "status": "held",
+      "src": "./assets/hangul-audio/c774-c751-human-name.mp3"
+    },
+    {
+      "letter": "ㅈ",
+      "name": "지읒",
+      "status": "held",
+      "src": "./assets/hangul-audio/c9c0-c752-human-name.mp3"
+    },
+    {
+      "letter": "ㅊ",
+      "name": "치읓",
+      "status": "held",
+      "src": "./assets/hangul-audio/ce58-c753-human-name.mp3"
+    },
+    {
+      "letter": "ㅋ",
+      "name": "키읔",
+      "status": "held",
+      "src": "./assets/hangul-audio/d0a4-c754-human-name.mp3"
+    },
+    {
+      "letter": "ㅌ",
+      "name": "티읕",
+      "status": "held",
+      "src": "./assets/hangul-audio/d2f0-c755-human-name.mp3"
+    },
+    {
+      "letter": "ㅍ",
+      "name": "피읖",
+      "status": "held",
+      "src": "./assets/hangul-audio/d53c-c756-human-name.mp3"
+    },
+    {
+      "letter": "ㅎ",
+      "name": "히읗",
+      "status": "held",
+      "src": "./assets/hangul-audio/d788-c757-human-name.mp3"
+    },
+    {
+      "letter": "ㄲ",
+      "name": "쌍기역",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "letter": "ㄸ",
+      "name": "쌍디귿",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "letter": "ㅃ",
+      "name": "쌍비읍",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "letter": "ㅆ",
+      "name": "쌍시옷",
+      "status": "missing",
+      "src": null
+    },
+    {
+      "letter": "ㅉ",
+      "name": "쌍지읒",
+      "status": "missing",
+      "src": null
+    }
+  ]
+}

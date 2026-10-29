@@ -6,6 +6,8 @@ on:
     paths:
       - scripts/team12_recording_plan.py
       - docs/team12/recording-plan-399.json
+      - docs/team12/consonant-name-plan-19.json
+      - scripts/team12_consonant_names.py
       - hangul-core.js
       - hangul-board.js
       - hangul-audio-manifest.json
@@ -38,6 +40,8 @@ jobs:
           node --check hangul-board.js
       - name: Independently reconcile live board and manifest
         run: python scripts/team12_recording_plan.py --check
+      - name: Verify all 19 consonant-name buttons against actual manifest
+        run: python scripts/team12_consonant_names.py --check
       - name: Run existing education and audio inventory regression
         run: python scripts/team12_content_regression.py
       - name: Validate numbered contracts remain unchanged
