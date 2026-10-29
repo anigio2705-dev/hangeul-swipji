@@ -205,3 +205,13 @@
 - **재현 가능한 회귀:** GitHub Actions 기존 `HQ team12 board inventory independent gate`에 이름 목록 검사를 추가하되 기존 JS 구문, 399개 조합, 교육 회귀, 160개 계약 검사를 유지했다. 코드 커밋 `5dc4ebba85cdb29a2e67193168dba3db03cce581`; **정확한 SHA의 독립 CI #40801647878 SUCCESS**, 새 이름 검사 단계와 기존 단계 모두 PASS.
 - **참조 방법:** OpenAI Agent Improvement Loop의 '실패 관찰 → 독립 재현 가능한 eval → 수정 후 동일 eval 재실행'을 채택. 가설은 기존 399개 검사에 누락된 자음 이름을 실제 자료와 분리해 검사하면 가짜 완료 판정을 막는다는 것. 이번에는 새로운 AI 개발 호출을 하지 않아 모델 API 비용 증가 없음; CI 1회 발생. 개발 소요시간과 실제 사용 검수시간은 별도.
 - **판정:** 19개 이름 인벤토리 검사 **PASS**, 전체 #51은 **CANDIDATE**, CODE_VERIFIED/READY/실사용/대표 승인으로 승격 금지. 실제 녹음 보충·청취·권리·브라우저 재생 및 15팀 독립 의미 검토가 남았다. 다른 안전한 과제의 개발을 막지 않도록 #51은 격리한다.
+
+## 2026-10-29 10:42 KST — #54 누락 359개 녹음 대본 실제 구현과 실패 재작업
+
+- **원본 과제 #54:** '필수 누락359개 등 기존 수치를 재확인하고 대상별 녹음 대본을 완성한다.' 실제 `hangul-core.js` 399음절과 19 자음 이름을 manifest에 대조해 **음절 누락 354 + 자음 이름 누락 5 = 359**를 확인했다.
+- **실제 산출물:** `scripts/team12_missing_recording_script.py`가 `docs/team12/missing-recording-script-359.json`의 대상별 한국어 발화 문구, 2회 반복, 700ms 휴지, 조합·자음 이름 문맥을 생성/검사한다. 이는 녹음용 대본이며 음성 파일을 만든 것이 아니다.
+- **독립 의미 검증:** `automation/verify_task54.py`는 생성기를 사용하지 않고 실제 `hangul-core.js`를 Node VM에서 읽고 manifest에서 누락 대상 359개를 독립 계산한다. 보류·준비 음원은 대본에서 제외하고 중복·오류·누락을 거부한다.
+- **실패와 수정:** 최초 CI [#40801797093](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801797093)에서 359 대본 검사와 독립 의미 검증은 통과했으나 기존 160개 계약 테스트가 매핑이 반드시 8개여야 한다는 고정 가정으로 실패했다. 원래 8개 계약이 보존되고 **추가 계약도 모두 경로·책임팀·검사 조건을 검증**하도록 회귀 테스트를 보강했다(검사 완화가 아니라 확장).
+- **재검증:** 실제 기능 코드 `df5d1f4f298a380938b2e0da43a201449198d938`; 보완 테스트 커밋 `06ccbc3f7009c36a1836649fdfc15d4b90a4beec`. 같은 head의 [독립 CI #40801855223](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801855223) SUCCESS, [제어 회귀 #40801855218](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801855218) SUCCESS, [큐 감사 #40801855271](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801855271) SUCCESS.
+- **판정:** #54는 **CODE_VERIFIED**(기본 자동 검증 통과). 기존 7개에서 **8/160**으로 증가. 15팀 별도 통합 검토·실제 녹음·청취·브라우저·대표 최종 승인은 미완료이므로 **최종 0/160**. 16팀 정부지원 모의 신청은 별도 큐로 유지하고 이 개발 시간을 잠식하지 않는다.
+- **재사용 규칙:** 검증된 계약 수가 증가하면 기존 필수 계약 보존과 신규 계약 전체의 유효성 검사를 함께 수행한다. 고정된 총개수 가정으로 개발 확장을 막지 않는다. OpenAI Agent Improvement Loop의 '실패→재현 테스트→수정→독립 평가' 패턴을 적용했다. 모델 AI 개발 호출은 없었고, GitHub CI 재실행 비용만 발생했으며 정확한 비용 금액은 미계측.

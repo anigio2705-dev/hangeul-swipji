@@ -210,3 +210,10 @@
 - 19개 이름: 검수 보류 14, 녹음 없음 5. 399개 음절: 준비됐지만 청취 미승인 19, 검수 보류 26, 누락 354. 418개 대상이 모두 녹음됐다는 뜻이 아니다.
 - 실제 변경 커밋 `5dc4ebba85cdb29a2e67193168dba3db03cce581`; 해당 SHA의 독립 CI https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801647878 SUCCESS. 기존 399/교육/계약 회귀 검사를 유지하면서 이름 19개 검사를 추가했다.
 - **현재 상태 CANDIDATE.** 15팀의 독립 의미 검토, 실제 화면·재생·권리 검수, 필수 음원 보충이 미완료. 신규 CODE_VERIFIED 과제 수 증가 없음. 과제 전체의 READY 자동 승격 금지.
+
+## 2026-10-29 10:42 KST — #54 누락 녹음 대본 구현 CODE_VERIFIED
+
+- 원본 목표: 누락 359개 재확인 및 대상별 사람 녹음 대본. 12팀 단일 책임, 11·15·16팀 지원. `hangul-core.js` + manifest + 399/19 인벤토리에서 354음절 + 5자음 이름을 실제 확인했다.
+- 구현 `scripts/team12_missing_recording_script.py`, 결과 `docs/team12/missing-recording-script-359.json`; 독립 의미 검사 `automation/verify_task54.py`. 모든 359개에 발화 문자·2회 반복·휴지·문맥 기록. 외부 TTS·실제 음원 생성 없음.
+- 코드 커밋 `df5d1f4f298a380938b2e0da43a201449198d938`, 회귀 보완 `06ccbc3f7009c36a1836649fdfc15d4b90a4beec`. 독립 CI https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801855223 SUCCESS. 최초 실패 CI https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801797093 은 확장 계약을 거부하는 고정 개수 테스트 오류였고 재현·수정·재검증했다.
+- **CODE_VERIFIED (8/160 누적)**, **최종 승인 0/160**. 15팀 별도 통합 검토, 상위 #51의 실제 재생·녹음 확보, 대표 검수는 별도. 원본 계약의 선행 관계는 임의 제거하지 않는다.

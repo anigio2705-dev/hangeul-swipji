@@ -104,6 +104,28 @@
     "ci_result": "success",
     "scope": "Classify missing, held/unreviewed and playback failures separately; reject invalid human audio sources and duplicate 7-day mappings. Actual pronunciation listening and browser/mobile playback remain unverified."
   },
+  "54": {
+    "status": "code_verified",
+    "owner": "12",
+    "support": [
+      "11",
+      "15",
+      "16"
+    ],
+    "path": "scripts/team12_missing_recording_script.py",
+    "commit": "df5d1f4f298a380938b2e0da43a201449198d938",
+    "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801855223",
+    "ci_result": "success",
+    "ci_conclusion": "success",
+    "ci_head_sha": "06ccbc3f7009c36a1836649fdfc15d4b90a4beec",
+    "independent_review": "pass",
+    "task_specific_verified": true,
+    "implementation_verified": true,
+    "final_approved": false,
+    "test_command": "python scripts/team12_missing_recording_script.py --check && python automation/verify_task54.py",
+    "scope": "Task #54: generated 359 individual human-only recording prompts from actual 354 missing syllables and 5 missing consonant names; independent live Hangul board/manifest semantic check and existing 160-contract regression passed. No audio recorded, no human listening approval, no public site verification.",
+    "review_scope": "Independent automated semantic check only; 15-team human/AI workflow review remains pending for final integration."
+  },
   "55": {
     "status": "code_verified",
     "commit": "ccac78a7b57683a3cf0809d2a1308ae3f907e56d",
