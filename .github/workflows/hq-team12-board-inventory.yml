@@ -11,6 +11,7 @@ on:
       - scripts/team12_missing_recording_script.py
       - docs/team12/missing-recording-script-359.json
       - automation/verify_task54.py
+      - automation/verify_task43.cjs
       - automation/test_hq_160_task_cycle.py
       - hangul-core.js
       - hangul-board.js
@@ -48,6 +49,8 @@ jobs:
         run: python scripts/team12_consonant_names.py --check
       - name: Reconcile missing 359 human recording prompts
         run: python scripts/team12_missing_recording_script.py --check
+      - name: Independently exercise task 43 full alphabet board and click controls
+        run: node automation/verify_task43.cjs
       - name: Independently verify task 54 semantics against live board
         run: python automation/verify_task54.py
       - name: Run existing education and audio inventory regression
