@@ -21,8 +21,9 @@ ORIGINAL_PATHS = (
 )
 
 
-def inspect(root, base=BASE_COMMIT, paths=ORIGINAL_PATHS, git_show=None):
+def inspect(root, base=BASE_COMMIT, paths=None, git_show=None):
     """Return exact per-file evidence, preserving a failure on unavailable history."""
+    paths = ORIGINAL_PATHS if paths is None else paths
     if not re.fullmatch(r"[0-9a-f]{7,40}", base):
         raise ValueError("base must be a Git commit SHA")
     root = Path(root).resolve()
