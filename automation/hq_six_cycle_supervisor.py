@@ -140,6 +140,13 @@ def independent_check(team, task, token, catalog):
                 if trusted_check.returncode:
                     return "RETRY", "Trusted #41 source audit failed: " + (
                         trusted_check.stdout + trusted_check.stderr)[-500:], {}
+            if (team, number) == ("12", 49):
+                trusted_check = cmd(
+                    ["python", str(Path(__file__).resolve().parent / "verify_task49.py"), temp],
+                    cwd=temp, timeout=120)
+                if trusted_check.returncode:
+                    return "RETRY", "Trusted #49 recommendation semantics failed: " + (
+                        trusted_check.stdout + trusted_check.stderr)[-500:], {}
             if team == "16":
                 rendered = Path(temp) / "hangul-audio-credits.html"
                 manifest = Path(temp) / "hangul-audio-manifest.json"
@@ -151,7 +158,8 @@ def independent_check(team, task, token, catalog):
             return "TEST_PASS_PENDING_CI", "Independent diff and functional regression passed; final backlog gate remains", {
                 "commit": sha, "changed_files": files, "independent_test": "success",
                 "test_command": " ".join(command) + (
-                    " + trusted automation/verify_task41.py" if (team, number) == ("12", 41) else "")}
+                    " + trusted automation/verify_task41.py" if (team, number) == ("12", 41) else
+                    " + trusted automation/verify_task49.py" if (team, number) == ("12", 49) else "")}
         finally:
             cmd(["git", "worktree", "remove", "--force", temp], timeout=45)
 
