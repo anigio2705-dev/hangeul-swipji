@@ -60,6 +60,29 @@ def shell(*args):
     return subprocess.run(args, text=True, capture_output=True, timeout=90)
 
 
+def generated_python_cache(path):
+    """Only untracked .pyc inside a __pycache__ directory may be discarded."""
+    p = Path(path)
+    return (not p.is_absolute() and ".." not in p.parts
+            and "__pycache__" in p.parts and p.suffix == ".pyc")
+
+
+def require_clean_checkout():
+    status = shell("git", "status", "--porcelain", "-uall")
+    if status.returncode:
+        raise ValueError("git status unavailable")
+    # Pre-call unit tests create untracked Python bytecode on older team
+    # branches without .gitignore. Never remove tracked or arbitrary files.
+    for line in status.stdout.splitlines():
+        if line.startswith("?? ") and generated_python_cache(line[3:]):
+            Path(line[3:]).unlink(missing_ok=True)
+    again = shell("git", "status", "--porcelain", "-uall")
+    if again.returncode or again.stdout.strip():
+        names = [line[:2] + " " + Path(line[3:]).name
+                 for line in again.stdout.splitlines()[:6]]
+        raise ValueError("dirty checkout remains after safe cache cleanup: " + repr(names))
+
+
 def main():
     team = os.environ.get("HQ_TEAM", "")
     if team not in TEAM_TASKS:
@@ -79,9 +102,7 @@ def main():
         return
     if any(t.get("status") == "committed" for t in report.get("tasks", [])):
         return
-    status = shell("git", "status", "--porcelain")
-    if status.returncode or status.stdout.strip():
-        raise ValueError("dirty checkout; no prototype generation")
+    require_clean_checkout()
     number, minimum, goal = TEAM_TASKS[team]
     path = ROOT / ("team" + team) / ("task" + str(number) + ".json")
     if path.exists():
