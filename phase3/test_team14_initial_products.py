@@ -71,7 +71,8 @@ class InitialProductTests(unittest.TestCase):
                       dict(verified,productCode='professional_25'),
                       dict(verified,durationMinutes=15),
                       dict(verified,priceKrw=6000),
-                      dict(verified,currency='USD')):
+                      dict(verified,currency='USD'),
+                      dict(verified,bookingId='other-booking')):
             with self.subTest(event=event),self.assertRaises(SimError):
                 verify_server_product_contract(db,'b',event)
         db.execute("UPDATE bookings SET status='cancelled' WHERE id='b'")
