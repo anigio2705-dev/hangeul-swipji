@@ -36,7 +36,8 @@ TASKS = {
 # Baseline and candidate both use same safe, read-only checks.
 CHECKS = {
     "11": [["python", "-m", "py_compile", "scripts/audit-hangul-audio.py"]],
-    "12": [["python", "-m", "py_compile", "scripts/team12_audio_inventory.py"]],
+    "12": [["python", "-m", "py_compile", "scripts/team12_audio_inventory.py"],
+           ["python", "scripts/team12_content_regression.py"]],
     "13": [["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_instant_matching.py"]],
     "14": [["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_team14_referral_store.py"]],
     "15": [["python", "-m", "py_compile", "scripts/team15_independent_gate.py"]],
