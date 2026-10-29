@@ -1,0 +1,24 @@
+name: HQ six READY fallback isolated regression
+on:
+  push:
+    branches:
+      - automation/hq-six-ready-fallback-20261029-2235
+    paths:
+      - 'automation/hq_six_developers.py'
+      - 'automation/test_hq_six_developers.py'
+      - '.github/workflows/hq-six-ready-fallback-ci.yml'
+permissions:
+  contents: read
+jobs:
+  isolated-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify runnable READY fallback and existing safety gates
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_six_developers.py' -v
+          python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
