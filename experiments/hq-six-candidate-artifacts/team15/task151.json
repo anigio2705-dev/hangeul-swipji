@@ -1,0 +1,31 @@
+{
+  "team": "15",
+  "task_number": 151,
+  "items": [
+    {
+      "id": "learner_journey_complete_lesson",
+      "text": "As a learner, complete a full Korean lesson including listening, speaking, and writing exercises and submit all answers.",
+      "expected": "All answers are saved correctly, progress is updated to reflect lesson completion, and appropriate feedback is provided for each exercise, ensuring accurate tracking of learner's progress."
+    },
+    {
+      "id": "tutor_assign_and_review_homework",
+      "text": "As a tutor, assign homework to a learner, then review and provide feedback on submitted work.",
+      "expected": "Homework is successfully assigned to the learner, the learner can submit their work, and tutor feedback appears correctly in the learner's dashboard with notifications sent, ensuring effective tutor-student communication."
+    },
+    {
+      "id": "speaking_partner_initiate_and_record_session",
+      "text": "As a speaking partner, start a speaking practice session with a learner, record the session, and provide post-session notes.",
+      "expected": "Session is initiated without errors, audio is recorded and stored securely, and notes are attached to the session log viewable by both speaking partner and learner for continuous improvement."
+    },
+    {
+      "id": "admin_manage_user_roles",
+      "text": "As an admin, change the role of a user from learner to tutor, then verify role permissions update accordingly.",
+      "expected": "User role is changed successfully without data loss, the user immediately gains tutor permissions (access to tutor-specific features), and the system logs the role change for audit purposes."
+    },
+    {
+      "id": "unauthorized_visitor_access_restriction",
+      "text": "As an unauthorized visitor (not logged in), attempt to access learner-specific lesson content and tutor dashboards.",
+      "expected": "Access is denied with clear messages prompting login or registration, and no restricted content is exposed, ensuring platform security and proper access control."
+    }
+  ]
+}
