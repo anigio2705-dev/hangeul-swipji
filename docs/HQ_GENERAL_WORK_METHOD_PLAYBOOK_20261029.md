@@ -474,3 +474,13 @@
 ### 18:24 KST 교차 감사 정정 — #59 상태와 장부 브랜치 불일치
 
 다른 예약 실행 「한글쉽지 무인 개발」의 **18:24 최신 완료 보고**는 경로 등록 26, CODE_VERIFIED 12, BLOCKED 3이라고 기록했다. 특히 #59의 기존 부분 검증이 새로 발견된 '모' UI 오류를 놓쳤으므로 BLOCKED로 정정했다고 설명한다. 반면 이 문서가 위치한 중앙 격리 브랜치 `automation/hq-pilot-13-14-15-20261029`를 직접 재조회하면 `automation/hq_semantic_contract_paths.json` blob `f9391842`는 24개(CANDIDATE 11/BLOCKED 2/CODE_VERIFIED 11), `automation/task-evidence.json` blob `bb3d03a1`는 CODE_VERIFIED 13(#59 포함), BLOCKED 2(#22/#47)다. **서로 다른 브랜치·스냅샷의 수치를 합치거나 중앙 장부를 검증 없이 자동 덮어쓰지 않는다.** #59 오류·수정·정확한 CI를 검토하고 중앙 계약/증거 원장에 적절한 상태 정정을 별도 독립 감사로 통합해야 한다. 최종 승인 0/160은 두 보고에서 동일하다.
+
+
+## 2026-10-30 01:20 KST — READY 미충족 수락 조건 우회 방지 (중앙 HQ 격리 실증)
+
+- **문제/가설:** `automation/hq_traffic_lights.py`의 정적 READY 관문은 `independent_team15=PASS`, 형식상 CI URL/SHA, 실제 경로가 존재하면 `unmet`에 테스트99 E2E 등 미완료 조건이 남아 있어도 dispatch할 수 있었다. READY가 0인 현재 상태에서는 즉시 호출로 이어지지 않지만, 향후 임의 READY 승격 시 잘못된 과제에 비용을 쓰거나 미완료를 완료로 오인할 위험이다.
+- **반례 먼저:** 격리 PR [#53](https://github.com/anigio2705-dev/hangeul-swipji/pull/53)의 테스트 SHA `ff230566`에서 `unmet=["Test99 browser replay not verified"]`인 READY가 dispatchable=1이 되는 결함을 재현. 독립 [CI #40910282696](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40910282696) FAIL, `AssertionError: 1 != 0` (11개 중 1개 실패).
+- **수정:** `automation/hq_traffic_lights.py`는 READY의 `unmet`가 **명시적으로 빈 목록**일 때만 dispatch를 허용한다. 미존재·문자열·비어 있지 않은 목록은 `unmet_acceptance` 차단 사유로 반환한다. 변경 `7051410d`; 기존 테스트 계약 보강 `0b97bcc0`, `22be566f`, `d5b8f996`. 중간 [CI #40910389615](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40910389615) FAIL은 기존 synthetic READY 테스트가 `unmet` 필드를 생략했기 때문이며, 명시적 `unmet=[]`를 넣어 수정했다.
+- **동일 평가 재실행:** 최종 코드/테스트 SHA `d5b8f996797da37ac21041b3e4dd70a0e47272dd`에서 [CI #40910546897](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40910546897) SUCCESS. 11개 READY/큐 테스트 + 13개 계약 테스트 + 9개 실제 러너 테스트 = **33 PASS**, 중앙 경로 매핑 24, 실제 READY 0. 이는 중앙 안전 게이트 개선이며 **6팀 AI 호출/봇 커밋/160개 기능 완료가 아니다.**
+- **OpenAI 공식 개선 루프 적용:** [Agent Improvement Loop](https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop)의 실제 실패 사례→재현 평가→작은 수정→동일 평가 재실행을 사용. 검증 가설은 미충족 수락 항목이 있는 가짜 READY를 차단하면서 정상 `unmet=[]`는 유지한다는 것. 모델 API 비용 0; 격리 CI 실행 시간만 소요, main/Render/운영 DB/실결제 영향 없음.
+- **다음:** 15팀의 독립 의미·증거 심사 후에만 실제 후보 `unmet=[]` 승인. #101/11/45/23/151/143의 미완료 조건은 자동 삭제하지 않는다. 기존 pilot에 PR을 자동 병합하지 않으며 6팀의 별도 실제 AI 호출·커밋·후속 번호를 독립 추적한다.

@@ -190,7 +190,7 @@ class HQ160TaskCycleTests(unittest.TestCase):
             (root / "new-feature.py").write_text("pass\n")
             (root / "test-new-feature.py").write_text("pass\n")
             record = {
-                "owner": "12", "support": ["13"], "state": "READY",
+                "owner": "12", "support": ["13"], "state": "READY", "unmet": [],
                 "source_paths": ["new-feature.py"],
                 "test_paths": ["test-new-feature.py"],
                 "independent_team15": "PASS",
@@ -225,7 +225,7 @@ class HQ160TaskCycleTests(unittest.TestCase):
             for name in ("shared.py", "other.py", "test.py"):
                 (root / name).write_text("pass\n")
             def item(number, path):
-                return {"owner": "12", "support": ["13"], "state": "READY",
+                return {"owner": "12", "support": ["13"], "state": "READY", "unmet": [],
                         "source_paths": [path], "test_paths": ["test.py"],
                         "independent_team15": "PASS",
                         "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123", "independent_ci_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}

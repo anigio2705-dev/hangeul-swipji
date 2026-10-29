@@ -217,3 +217,10 @@
 - 구현 `scripts/team12_missing_recording_script.py`, 결과 `docs/team12/missing-recording-script-359.json`; 독립 의미 검사 `automation/verify_task54.py`. 모든 359개에 발화 문자·2회 반복·휴지·문맥 기록. 외부 TTS·실제 음원 생성 없음.
 - 코드 커밋 `df5d1f4f298a380938b2e0da43a201449198d938`, 회귀 보완 `06ccbc3f7009c36a1836649fdfc15d4b90a4beec`. 독립 CI https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801855223 SUCCESS. 최초 실패 CI https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801797093 은 확장 계약을 거부하는 고정 개수 테스트 오류였고 재현·수정·재검증했다.
 - **CODE_VERIFIED (8/160 누적)**, **최종 승인 0/160**. 15팀 별도 통합 검토, 상위 #51의 실제 재생·녹음 확보, 대표 검수는 별도. 원본 계약의 선행 관계는 임의 제거하지 않는다.
+
+
+## 2026-10-30 01:20 KST — 160개 공통 READY 계약의 미충족 수락 차단 증거 (격리)
+
+- **수락 조건 추가(160개 공통):** `READY`는 독립 15팀 의미 검증, 정확한 CI 실행·SHA, 실제 파일/테스트 경로, 소유권·의존성 외에 **미충족 수락 목록 `unmet`의 명시적 빈 배열**이 필요하다. 누락·문자열·비어 있지 않은 목록은 `unmet_acceptance`로 차단한다. 실제 테스트99 검증이나 대표 승인이 필요한 계약에서 이를 증거 없이 비우는 행위는 금지한다.
+- **실제 코드:** `automation/hq_traffic_lights.py`; **재현/회귀:** `automation/test_hq_traffic_lights.py`, `automation/test_hq_160_task_cycle.py`, `automation/test_hq_six_developers.py`; 격리 [PR #53](https://github.com/anigio2705-dev/hangeul-swipji/pull/53). 첫 [FAIL #40910282696](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40910282696) → 최종 [PASS #40910546897](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40910546897), 검증 head `d5b8f996797da37ac21041b3e4dd70a0e47272dd`.
+- **영향/한계:** 현재 READY 0, 최종 승인 0/160. 본 변경은 계약 집행 보호이며 #101 등 제품 기능 개발/실제 배포/15팀 독립 승인 증거가 아니다. 중앙 격리 브랜치에만 존재하며 pilot/main/테스트99 미반영.

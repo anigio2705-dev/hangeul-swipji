@@ -17,7 +17,7 @@ class BoundedPatchTests(unittest.TestCase):
             root = Path(d)
             (root / "feature.py").write_text("def feature(): return True\n")
             (root / "test_feature.py").write_text("import unittest\nclass TestFeature(unittest.TestCase):\n def test_feature(self): self.assertTrue(True)\n")
-            record = {"owner": "12", "state": "READY",
+            record = {"owner": "12", "state": "READY", "unmet": [],
                       "source_paths": ["feature.py"], "test_paths": ["test_feature.py"],
                       "independent_team15": "PASS",
                       "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123", "independent_ci_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
@@ -45,7 +45,7 @@ class BoundedPatchTests(unittest.TestCase):
                 "import unittest\nclass TestFeature(unittest.TestCase):\n"
                 " def test_feature(self): self.assertTrue(True)\n")
             def entry(path):
-                return {"owner": "12", "state": "READY",
+                return {"owner": "12", "state": "READY", "unmet": [],
                         "source_paths": [path], "test_paths": ["test_feature.py"],
                         "independent_team15": "PASS",
                         "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123", "independent_ci_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
