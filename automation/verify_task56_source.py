@@ -19,6 +19,7 @@ def check(source):
     with tempfile.TemporaryDirectory(prefix="hq56-") as temp:
         root = Path(temp)
         (root / "scripts").mkdir()
+        (root / "audit").mkdir()
         script = root / "scripts" / "find-human-audio-sources.py"
         shutil.copyfile(source, script)
         targets = [
