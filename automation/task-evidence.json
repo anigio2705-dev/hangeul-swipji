@@ -48,6 +48,20 @@
     "task_specific_verified": false,
     "scope": "Wrong task/file mapping rejected; 160-item final completion unchanged. Team13 placement boundary bug was repaired as a separate safety correction, not #47 completion."
   },
+  "49": {
+    "status": "blocked",
+    "commit": "a61974ef90ed9355977eedcb71a523f20f47cbd6",
+    "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797620270",
+    "ci_result": "semantic_gate_failed",
+    "independent_review": "semantic_rejected",
+    "task_specific_verified": false,
+    "test_command": "python -m unittest discover -s phase3 -p test_global_learning.py",
+    "scope": "Semantically unsafe AI patch rejected; no #49 completion credit.",
+    "owner": "12",
+    "path": "phase3/learning.py",
+    "block_reason": "AI changed recommendations condition from (unit not booked OR weak) to (unit not booked AND NOT weak), leaving weak learners with zero recommended lessons. Existing global-learning suite missed this boundary; immutable HQ verify_task49.py added and independent CI running. Do not promote successful workflow #40797620270 to code_verified.",
+    "rejected_commit": "a61974ef90ed9355977eedcb71a523f20f47cbd6"
+  },
   "52": {
     "status": "code_verified",
     "commit": "5038a7fd41df1f6c3fa97d5534c19c17ea821b3d",
@@ -81,17 +95,5 @@
     "scope": "Independent source diff and functional regression passed; final CI run and public site still pending",
     "owner": "14",
     "path": "phase3/team14_referral_store.py"
-  },
-  "49": {
-    "status": "in_progress",
-    "commit": "a61974ef90ed9355977eedcb71a523f20f47cbd6",
-    "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797620270",
-    "ci_result": "pending",
-    "independent_review": "pass",
-    "task_specific_verified": true,
-    "test_command": "python -m unittest discover -s phase3 -p test_global_learning.py",
-    "scope": "Independent source diff and task-specific functional regression passed; final CI run and public site still pending",
-    "owner": "12",
-    "path": "phase3/learning.py"
   }
 }
