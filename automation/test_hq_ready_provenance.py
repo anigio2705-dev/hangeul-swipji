@@ -8,7 +8,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from hq_six_developers import verify_ready_provenance
+from hq_six_developers import verify_ready_provenance, shell
 
 
 class ReadyProvenanceTests(unittest.TestCase):
@@ -99,6 +99,18 @@ class ReadyProvenanceTests(unittest.TestCase):
              patch("hq_six_developers.shell", side_effect=self.git):
             with self.assertRaisesRegex(ValueError, "READY_FILE_MISSING"):
                 verify_ready_provenance(self.item, self.registry, self.root)
+
+
+    def test_candidate_subprocess_never_receives_api_or_github_tokens(self):
+        with patch.dict(os.environ, {"GITHUB_TOKEN": "secret-gh",
+                                     "OPENAI_API_KEY": "secret-ai",
+                                     "SAFE_FLAG": "allowed"}), \
+             patch("hq_six_developers.subprocess.run") as process:
+            shell("python", "--version")
+            sent = process.call_args.kwargs["env"]
+            self.assertNotIn("GITHUB_TOKEN", sent)
+            self.assertNotIn("OPENAI_API_KEY", sent)
+            self.assertEqual(sent["SAFE_FLAG"], "allowed")
 
 
 if __name__ == "__main__":
