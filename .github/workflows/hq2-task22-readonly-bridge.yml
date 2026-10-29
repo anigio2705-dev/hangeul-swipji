@@ -6,6 +6,7 @@ on:
     paths:
       - phase3/instant_matching.py
       - phase3/test_instant_matching.py
+      - phase3/instant-browser-test.cjs
       - .github/workflows/hq2-task22-readonly-bridge.yml
   workflow_dispatch:
 permissions:
@@ -26,6 +27,15 @@ jobs:
         run: python -m unittest discover -s phase3 -p test_instant_matching.py -v
       - name: Verify independent matching event security contract
         run: python -m unittest discover -s phase3 -p test_hq_matching_contract.py -v
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated Chromium dependencies on supported Ubuntu
+        run: |
+          npm ci --prefix phase3 --ignore-scripts
+          ./phase3/node_modules/.bin/playwright install --with-deps chromium
+      - name: Exercise two independent Chromium accounts with mocked media
+        run: node phase3/instant-browser-test.cjs
       - name: Explain acceptance limits
         if: always()
         run: |
