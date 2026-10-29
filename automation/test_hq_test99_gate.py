@@ -14,6 +14,8 @@ class Test99Acceptance(unittest.TestCase):
                          health_scope="isolated-staging",
                          hosted_source_sha256=self.base["local_staging_source_sha256"],
                          verified_deploy_sha="a" * 40,
+                         health_origin_matches=True,
+                         unauthenticated_home_status=401,
                          hosting_configuration_verified_live=True,
                          authenticated_browser_pass=True,
                          mobile_browser_pass=True, owner_approval=True)
@@ -47,6 +49,14 @@ class Test99Acceptance(unittest.TestCase):
         errors = acceptance_gate(self.good, "a" * 40)["reasons"]
         self.assertIn("AUTHENTICATED_BROWSER_UNVERIFIED", errors)
         self.assertIn("MOBILE_BROWSER_UNVERIFIED", errors)
+
+    def test_hosted_origin_must_match(self):
+        self.good["health_origin_matches"] = False
+        self.assertIn("HOSTED_ORIGIN_UNVERIFIED", acceptance_gate(self.good, "a" * 40)["reasons"])
+
+    def test_private_home_must_not_be_public(self):
+        self.good["unauthenticated_home_status"] = 200
+        self.assertIn("PRIVATE_GATE_UNVERIFIED", acceptance_gate(self.good, "a" * 40)["reasons"])
 
     def test_live_isolation_not_inferred_from_yaml(self):
         self.good["hosting_configuration_verified_live"] = False
