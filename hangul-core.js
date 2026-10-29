@@ -106,7 +106,13 @@
     // Do not await an already loaded manifest: even a resolved await yields the
     // user click activation on some mobile browsers, causing Audio.play() to
     // reject with NotAllowedError despite a valid human recording.
-    if(!manifestLoaded)await (manifestError?loadManifest():(loading||ready));
+    if(!manifestLoaded){
+      // Mobile browsers require Audio.play() during the original tap. Waiting for
+      // a network manifest loses transient user activation, so ask for a fresh tap.
+      if(manifestError){void loadManifest();status('음원 목록을 다시 연결하고 있습니다. 준비되면 글자를 다시 눌러 주세요.');return {status:'manifest-error'}}
+      status('음원 목록을 불러오는 중입니다. 준비되면 글자를 다시 눌러 주세요.');
+      return {status:'loading'};
+    }
     if(token!==run)return {status:'cancelled'};
     if(manifestError){status('음성 목록을 불러오지 못했습니다. 글자를 다시 누르면 재시도합니다. / Audio list unavailable; click again to retry.');return {status:'manifest-error'}}
     const words=Array.isArray(value)?value:[value];
