@@ -434,3 +434,15 @@
 - 6개 팀 브랜치의 최근 8개 커밋을 GitHub commits API로 조회하고 **작성자 계정**과 커밋 메시지, UTC 시간을 교차 확인했다. 최신 브랜치 HEAD가 반드시 `github-actions[bot]`의 새 개발 커밋은 아니다. 예: 11팀 HEAD `b22380cd`(작성자 anigio2705-dev), 12팀 HEAD `9fb8a54b`(동일), 13팀 HEAD `9cff0b09`는 메시지에 `bot(team13)`가 있지만 실제 작성자 계정은 anigio2705-dev, 15팀 HEAD `d1f592e9`(동일). 이 네 HEAD는 **봇 신규 개발로 집계 금지**.
 - 최근 확인된 실제 `github-actions[bot]` 작성 커밋: 11팀 `f7b52ebf`(2026-10-29 08:50:08 KST, #56), 12팀 `a61974ef`(10:00:09, #49), 13팀 `cbf75b2c`(09:35:39, #47 오배정·오류 포함), 14팀 `e75d948d`(08:44:39, #109), 15팀 `2760c9c7`(09:07:28, #8 위험 수정 이후 복구 필요), 16팀 `ccac78a7`(08:43:31, #55). **최신 실제 bot 커밋 시각은 10:00:09 KST**. #47 오배정과 #8 위험 수정을 성과로 계산하지 않는다.
 - 운영 규칙: 보고 표에 '팀 브랜치 HEAD(사람/복구 포함)'와 '최근 실제 github-actions[bot] SHA'를 분리하고, 작업 번호와 코드 diff/정확한 독립 CI까지 확인한 경우만 개발 실적으로 인정한다. 작성자 문자열만으로 자동 개발의 독립 기능 완료를 증명하지 않는다.
+
+
+## 2026-10-29 15:38 KST — 재귀형 6팀 조직: 실제 하위 호출 증거 관문 (격리 실험)
+
+- **근거 문서:** `docs/HQ_RECURSIVE_SIX_TEAM_ORGANIZATION_20261029.md`, `docs/HQ_SIX_TEAM_AGI_CAPABILITY_ORDERS_20261029.md`, `docs/HQ_SIX_TEAM_FULL_WORK_ORDERS_20261029.md`를 직접 확인. 각 팀은 탐색/구현/독립 QA/수정/다음 큐 역할을 정의하지만 역할 정의만으로 실제 하위 AI 실행을 인정하지 않는다.
+- **개발·감사 교차 판독:** 15:34 KST 무인개발 보고의 후보 6건, 독립 17개 검사 PASS, PR #23 병합 충돌, READY 0, 최종 0/160을 GitHub Actions #40829945192 및 격리 계약 원장과 대조했다. 신규 6팀 AI 호출과 bot 커밋은 이 후보 검사에서 0건. [후보 검사 CI](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40829945192), [충돌 중인 초안 PR #23](https://github.com/anigio2705-dev/hangeul-swipji/pull/23). 서로 다른 자동화가 같은 계약 문서를 병행 수정하면 최신 상세화 내용을 덮어쓸 수 있으므로 강제 병합 금지.
+- **선별한 공식 방법:** [OpenAI Agent Improvement Loop](https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop)의 trace → feedback → 재사용 가능한 eval → 수정 제안 순환. 이번 병목은 '조직도만 존재해도 하위 AI가 작동한 것처럼 집계'하는 위험이므로 실제 호출·독립 QA·diff·다음 번호를 별개 증거로 검증하는 평가 관문을 우선 적용.
+- **검증 가능한 가설:** 기존 문서만으로는 6팀별 하위 역할 실행 여부가 검증되지 않는다. 별도 호출 ID와 독립 검증자가 확인한 ID, 변경 SHA/파일, 독립 CI, 후속 번호가 없으면 NOT_PROVEN/UNVERIFIED/INCOMPLETE를 반환해야 한다. 모두 있어도 REVIEW_REQUIRED까지만 허용하고 OWNER_APPROVED를 절대 자동 부여하지 않는다.
+- **격리 구현:** `automation/hq_recursive_execution_audit.py`, `automation/test_hq_recursive_execution_audit.py`, 읽기 전용 CI `.github/workflows/hq-recursive-evidence-gate.yml`을 `automation/hq-recursive-evidence-audit-20261029` 브랜치에 추가했다. 6팀 소유권 160개 분할과 #47→13팀 오배정, 가짜 CI URL, 중복 호출 ID, 하위 구현/QA 동일 호출, 실패 후 수정 부재, 승인 오인을 반례로 검사한다.
+- **실패와 자기교정:** 최초 CI [#40830403731](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40830403731)은 8개 중 2개 FAIL. GitHub Actions URL 정규표현식의 과잉 이스케이프가 원인이었고 `17957122c23a1a6506eee66830b2a90f47b01f0f`에서 수정, [재검증 #40830423183](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40830423183) 요청. CI가 실제 성공하기 전에는 통과를 선언하지 않는다.
+- **안전/비용:** 실제 모델 API 호출·하위 에이전트 생성 없음, 읽기 전용 5분 상한 CI, `contents: read`, 운영 DB/결제/배포/main/대외 제출 변경 없음. 별도 격리 브랜치로만 기록하며 정본 병합은 충돌 해소와 독립 승인 이후.
+- **남은 핵심 관문:** 팀별 실제 하위 AI 호출 0→증거 생성, 15팀이 GitHub run/job/commit을 독립 조회하여 호출 ID를 확정, 실패 시 재현·수정·동일 테스트 재실행, 다음 번호 자동 승계. 이 검증기 자체의 통과는 AGI나 6팀 실행 성공을 의미하지 않는다.
