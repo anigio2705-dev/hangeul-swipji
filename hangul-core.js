@@ -64,13 +64,55 @@
     });
     if(token===run){current=null;release=null}
   }
+  // Optional device TTS is not a human recording and never silently replaces one.
+  let syntheticEnabled=false;
+  function canSynthesize(){return !!(window.speechSynthesis&&typeof window.SpeechSynthesisUtterance==='function')}
+  function setSyntheticEnabled(value){
+    syntheticEnabled=!!value;
+    if(!syntheticEnabled)stop();
+    status(syntheticEnabled?'기기 합성음(TTS) 보조가 켜졌습니다. 사람 녹음이 아닙니다.':'기기 합성음(TTS) 보조가 꺼졌습니다.');
+    return syntheticEnabled;
+  }
+  function tts(word,token){
+    return new Promise(resolve=>{
+      if(!canSynthesize())return resolve({status:'unsupported',message:'이 브라우저는 기기 합성음을 지원하지 않습니다.'});
+      const utterance=new SpeechSynthesisUtterance(word);
+      utterance.lang='ko-KR';utterance.rate=.82;utterance.pitch=1;
+      let done=false,timer=null;
+      const finish=(result)=>{
+        if(done)return;done=true;
+        if(timer!==null)cancelTimer(timer);
+        release=null;resolve(result);
+      };
+      release=()=>finish({status:'cancelled'});
+      if(schedule)timer=schedule(()=>{
+        window.speechSynthesis.cancel();
+        finish({status:'error',message:'합성음이 응답하지 않습니다. 기기 한국어 음성을 확인해 주세요.'});
+      },12000);
+      utterance.onstart=()=>{if(token===run)status('기기 합성음 재생 중: '+word+' · 사람 녹음이 아닙니다. / Device synthetic voice')};
+      utterance.onend=()=>finish({status:'synthetic',word});
+      utterance.onerror=()=>finish({status:'error',message:'기기 합성음을 재생하지 못했습니다. 한국어 음성 설정을 확인해 주세요.'});
+      try{window.speechSynthesis.speak(utterance)}catch(_){finish({status:'error',message:'기기 합성음을 시작하지 못했습니다.'})}
+    });
+  }
+  async function fallback(words,token){
+    if(!syntheticEnabled)return null;
+    for(const word of words){
+      if(token!==run)return {status:'cancelled'};
+      const result=await tts(word,token);
+      if(result.status!=='synthetic'){if(token===run)status(result.message||'합성음 재생 취소');return result}
+    }
+    if(token===run)status('기기 합성음 재생 종료 · 사람 녹음이 아닙니다. 발음 정확성은 기기에 따라 다릅니다.');
+    return {status:token===run?'synthetic':'cancelled',words};
+  }
   async function play(value){
     stop();const token=run;
     await (manifestError?loadManifest():(loading||ready));if(token!==run)return {status:'cancelled'};
-    if(manifestError){status('음성 목록을 불러오지 못했습니다. 글자를 다시 누르면 재시도합니다. / Audio list unavailable; click again to retry.');return {status:'manifest-error'}}
+    if(manifestError){const substitute=await fallback(Array.isArray(value)?value:[value],token);if(substitute)return substitute;status('음성 목록을 불러오지 못했습니다. 글자를 다시 누르면 재시도합니다. / Audio list unavailable; click again to retry.');return {status:'manifest-error'}}
     const words=Array.isArray(value)?value:[value];
     if(!words.length||words.some(w=>typeof w!=='string'||!w.trim()))return {status:'invalid'};
     const missing=words.filter(word=>!records[word]);
+    if(missing.length&&syntheticEnabled){const substitute=await fallback(words,token);if(substitute)return substitute}
     if(missing.some(w=>holds[w])){status('재생 보류: '+missing.filter(w=>holds[w]).map(w=>w+' · '+holds[w].holdReason).join(' / '));return {status:'held',missing}}
     if(missing.length){status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요.');return {status:'missing',missing}}
     try{
@@ -97,5 +139,5 @@
   document.addEventListener('hs-audio-ready',refreshBadges);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});
   window.addEventListener('pagehide',stop);
-  window.HSHangul={consonants,vowels,compose,records,ready,availability,play,stop,status,el,soundButton,refreshBadges};
+  window.HSHangul={consonants,vowels,compose,records,ready,availability,play,stop,status,el,soundButton,refreshBadges,setSyntheticEnabled,canSynthesize};
 })();
