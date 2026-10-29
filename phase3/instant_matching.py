@@ -438,7 +438,11 @@ def route(handler, db, path, data):
     if action not in allowed: raise server.Error('페이지 없음',404)
     if handler.command!=allowed[action]: raise server.Error('지원하지 않는 요청',405)
     now=time.time()
-    cleanup(db,now)
+    # Booking list, reserved-room lookup and lesson-event writes must not
+    # expire an unrelated instant match as a side effect. Queue TTL cleanup
+    # belongs to the instant-match lifecycle endpoints only.
+    if action not in ('reservations', 'booking-room', 'lesson-event'):
+        cleanup(db,now)
     if action=='reservations':
         return {'reservations':reservation_snapshot(db,u['id'])},None
     if action=='booking-room':
