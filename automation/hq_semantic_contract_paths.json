@@ -561,6 +561,39 @@
       "integration_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40813120338",
       "evidence_run": 40813120338
     },
+    "59": {
+      "owner": "12",
+      "support": [
+        "11",
+        "15",
+        "16"
+      ],
+      "state": "CANDIDATE",
+      "source_paths": [
+        "hangul-board.js",
+        "hangul-core.js",
+        "hangul-audio-manifest.json"
+      ],
+      "test_paths": [
+        "automation/verify_task59_missing_audio.cjs",
+        "scripts/check-audio-runtime.cjs"
+      ],
+      "acceptance": "누락/보류된 모 음절을 실제 사람 녹음으로 오인시키지 않고 재생/반복 버튼을 비활성화하며 대체 학습 안내 제공; 확보된 가 녹음 재생·반복 유지. 전체 #59에는 파일 오류 재시도 UX 및 실사용 청취가 추가 필요.",
+      "dependencies": [],
+      "unmet": [
+        "실제 사람의 모 단독 녹음이 manifest에 존재하지 않음; 실제 발음 재생 해결은 별도 #53/#57",
+        "파일 네트워크 실패 시 UI에서 재시도 버튼을 제공하는 동작과 전체 399 음절의 동일 상태 검증 미완료",
+        "15팀 독립 의미 검증, PC/모바일 실제 브라우저 및 테스트99 배포·대표 승인 미완료",
+        "신규 테스트 파일은 pilot branch에만 존재; 중앙 계약 브랜치에 병합/재검증 전 READY 금지"
+      ],
+      "independent_team15": "PENDING",
+      "pilot_branch": "automation/hq-task59-audio-ui-20261029",
+      "pilot_sha": "f0e8fd4d090adf4e6b1ba788f8ed030f983bfcac",
+      "pilot_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40848693610",
+      "red_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40848633295",
+      "pilot_pr": "https://github.com/anigio2705-dev/hangeul-swipji/pull/32",
+      "note": "2026-10-29 18:19 KST central HQ isolated code, not team12 bot: real board DOM red->green; human-only audio runtime remains green. CANDIDATE, not READY or CODE_VERIFIED for full #59; no sound supplied and no test99 deployment."
+    },
     "61": {
       "owner": "12",
       "support": [
