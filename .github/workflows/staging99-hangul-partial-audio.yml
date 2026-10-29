@@ -1,0 +1,35 @@
+name: Staging99 Hangul human-audio partial playback regression
+on:
+  push:
+    branches:
+      - feature/staging99-partial-audio-20261030
+    paths:
+      - hangul-core.js
+      - scripts/test-hangul-partial-playback.js
+      - scripts/test-hangul-board-sequence.js
+      - hangul-board.js
+      - hangul-basics.html
+      - .github/workflows/staging99-hangul-partial-audio.yml
+  pull_request:
+    paths:
+      - hangul-core.js
+      - scripts/test-hangul-partial-playback.js
+      - scripts/test-hangul-board-sequence.js
+      - hangul-board.js
+      - hangul-basics.html
+      - .github/workflows/staging99-hangul-partial-audio.yml
+permissions:
+  contents: read
+jobs:
+  test-audio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run audio and actual board interaction regressions
+        run: |
+          node scripts/test-hangul-partial-playback.js
+          node scripts/test-hangul-board-sequence.js
