@@ -35,6 +35,8 @@ def verify(candidate_root):
                 raise AssertionError("Weak learner must receive a relevant retry recommendation")
             if "not certified" not in weak["recommendationBasis"]:
                 raise AssertionError("Recommendation must not be presented as certified placement")
+            if weak.get("recommendationMode") != "review_weak_skills" or weak.get("recommendationsCertified") is not False:
+                raise AssertionError("Weak-skill guidance must be explicitly non-certified")
             db.execute("DELETE FROM learning_checks")
             db.execute("INSERT INTO learning_checks VALUES (?,?,?,?,?,?,?,?)", (
                 "student", "u1", "post", 2, 2, "text-check",
@@ -44,6 +46,8 @@ def verify(candidate_root):
                 raise AssertionError("Strong learner should receive next-unit guidance")
             if strong["recommendations"][0]["unitId"] != "u2":
                 raise AssertionError("Completed unit should not be recommended again without weakness")
+            if strong.get("recommendationMode") != "continue_next_unit" or strong.get("recommendationsCertified") is not False:
+                raise AssertionError("Next-unit guidance must remain explicitly non-certified")
     finally:
         db.close()
     return True
