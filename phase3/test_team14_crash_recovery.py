@@ -88,6 +88,11 @@ class RecoveryCrashTests(unittest.TestCase):
   self.assertEqual(applied,apply_approved_refund(self.server,self.s,'refund1'))
   with self.assertRaises(SimError):decide_refund(self.s,'refund1','cancelled','test_reviewer')
  def test_reject_and_cancel_are_terminal(self):
+  # A refund is valid only after the lesson has been settled; preserve the
+  # pre-settlement rejection as a regression before testing terminal states.
+  with self.assertRaises(SimError):
+   request_refund(self.server,self.s,'booking','before_settlement','student',1000)
+  self.run_event()
   for suffix,choice in (('reject','rejected'),('cancel','cancelled')):
    rid='refund_'+suffix
    request_refund(self.server,self.s,'booking',rid,'student',1000)
