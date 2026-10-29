@@ -158,7 +158,7 @@ def readiness(catalog, ledger, registry, root=Path(".")):
         # These are diagnostics, not a promotion or a substitute for live CI.
         ci_url = entry.get("independent_ci_url", "")
         if not (isinstance(ci_url, str) and re.fullmatch(
-                r"https://github\\.com/anigio2705-dev/hangeul-swipji/actions/runs/[0-9]+", ci_url)):
+                r"https://github\.com/anigio2705-dev/hangeul-swipji/actions/runs/[0-9]+", ci_url)):
             blockers.append("independent_ci_reference_missing")
         if not (isinstance(entry.get("independent_ci_sha"), str) and re.fullmatch(
                 r"[0-9a-f]{40}", entry["independent_ci_sha"])):
