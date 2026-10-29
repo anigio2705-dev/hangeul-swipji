@@ -192,8 +192,8 @@ class SixTeamSupervisorTests(unittest.TestCase):
             return {"files": [{"filename": "phase3/lesson_acceptance.py"}],
                     "commit": {"message": "bot(team13): task #23 tested isolated fix"}}
         success = SimpleNamespace(returncode=0, stdout="Ran 1 test in 0.001s\\nOK", stderr="")
-        with patch("hq_six_cycle_supervisor.next_assignment", return_value=assignment), \\
-             patch("hq_six_cycle_supervisor.api", side_effect=github_response), \\
+        with patch("hq_six_cycle_supervisor.next_assignment", return_value=assignment), \
+             patch("hq_six_cycle_supervisor.api", side_effect=github_response), \
              patch("hq_six_cycle_supervisor.cmd", return_value=success) as run:
             verdict, reason, evidence = independent_check(
                 "13", {"task_number": 23, "path": "phase3/lesson_acceptance.py",
@@ -205,7 +205,7 @@ class SixTeamSupervisorTests(unittest.TestCase):
 
     def test_dynamic_ready_submission_fails_closed_without_independent_ready(self):
         catalog = contracts(sample())
-        with patch("hq_six_cycle_supervisor.next_assignment", return_value=None), \\
+        with patch("hq_six_cycle_supervisor.next_assignment", return_value=None), \
              patch("hq_six_cycle_supervisor.api") as api:
             verdict, reason, evidence = independent_check(
                 "13", {"task_number": 23, "path": "phase3/lesson_acceptance.py",
@@ -231,8 +231,8 @@ class SixTeamSupervisorTests(unittest.TestCase):
         def command_result(command, **_kwargs):
             output = "Ran 0 tests in 0.000s\\nOK" if "unittest" in command else "OK"
             return SimpleNamespace(returncode=0, stdout=output, stderr="")
-        with patch("hq_six_cycle_supervisor.next_assignment", return_value=assignment), \\
-             patch("hq_six_cycle_supervisor.api", side_effect=github_response), \\
+        with patch("hq_six_cycle_supervisor.next_assignment", return_value=assignment), \
+             patch("hq_six_cycle_supervisor.api", side_effect=github_response), \
              patch("hq_six_cycle_supervisor.cmd", side_effect=command_result):
             verdict, reason, evidence = independent_check(
                 "16", {"task_number": 143, "path": "scripts/team16_locale.py",
