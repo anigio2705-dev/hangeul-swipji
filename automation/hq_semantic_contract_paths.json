@@ -682,5 +682,12 @@
     "team14_repair_pr": 68,
     "team14_repair_ci": 40942292435,
     "next_action": "One bounded team14 candidate regeneration only; five existing artifacts must not incur repeat API cost"
+  },
+  "last_reviewed_dispatch": {
+    "date": "2026-10-30",
+    "result": "BLOCKED",
+    "reason": "No independently approved READY tasks; six AI jobs must not spend API calls on unreviewed work.",
+    "ready_count": 0,
+    "policy": "Do not promote CANDIDATE or CODE_VERIFIED to READY without independent team15 approval and exact SHA CI provenance."
   }
 }
