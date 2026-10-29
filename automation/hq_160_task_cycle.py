@@ -57,6 +57,20 @@ CURATED_TARGETS = {
 }
 STATES = frozenset({"unverified", "in_progress", "blocked", "retry", "code_verified", "complete"})
 
+# Trusted HQ mapping: CANDIDATE/BLOCKED contracts are not dispatchable even if
+# an old or incomplete evidence snapshot accidentally labels them unverified.
+# Only the HQ-owned contract can change this; an AI team patch cannot.
+def _semantic_dispatch_gate(number, path):
+    registry = Path(__file__).with_name("hq_semantic_contract_paths.json")
+    if not registry.is_file():
+        return False  # fail closed if the approved contract registry disappears
+    item = json.loads(registry.read_text(encoding="utf-8")).get("items", {}).get(str(number))
+    if item is None:
+        return True  # legacy curated targets remain, pending independent expansion
+    if item.get("state") in ("BLOCKED", "CANDIDATE"):
+        return False
+    return path in item.get("source_paths", [])
+
 def contracts(backlog_text):
     matches = [(int(n), flag.lower() == "x", title.strip())
                for n, flag, title in ITEM.findall(backlog_text)]
@@ -92,6 +106,8 @@ def next_assignment(team, catalog, evidence=None, failures=None):
         raise ValueError("Unknown team")
     evidence, failures = evidence or {}, failures or {}
     for number, path in CURATED_TARGETS[team]:
+        if not _semantic_dispatch_gate(number, path):
+            continue
         task = catalog[number]
         if team != task["owner"] and team not in task["support"]:
             raise ValueError("Team has no authority for item " + str(number))
