@@ -18,13 +18,17 @@
       ],
       "acceptance": "작업 직전 격리 통합 브랜치 HEAD와 작업 트리의 미커밋·미추적 변경을 확인하고 불일치 시 AI 수정·push 차단",
       "unmet": [
-        "기존 fetch/checkout 외에 dirty/untracked와 HEAD 경합 차단 반례 테스트 미확인",
-        "15팀 독립 의미 검증 및 정확한 SHA CI 미확인"
+        "15팀 독립 의미 검증과 최신 HQ 브랜치 통합 미완료",
+        "팀11 실제 AI 개발 호출·원격 경합 실전 검증 미완료"
       ],
       "state": "CANDIDATE",
       "independent_team15": "PENDING",
       "dependencies": [],
-      "note": "2026-10-29 15:28+ KST six-team full-order source/path audit; only observed paths. Candidate is NOT READY or CODE_VERIFIED."
+      "note": "2026-10-29 15:40 KST: isolated pilot #11 fail-closed dirty/untracked/stale HQ+team checkout guards. First integration CI #40830511738 FAIL due generated Python __pycache__; added narrowly scoped .gitignore, exact SHA a92ce28 CI #40830582694 PASS. HQ branch runner remains unchanged until reviewed merge. Not READY/CODE_VERIFIED.",
+      "pilot_branch": "automation/hq-team11-preflight-20261029",
+      "pilot_sha": "a92ce28ab8c9461734923c15b8c37475505811d2",
+      "pilot_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40830582694",
+      "pilot_ci_scope": "12 runner tests (5 new preflight cases), 13 task-cycle regressions, real isolated checkout clean+remote HEAD check. Pilot branch only; not merged into HQ."
     },
     "22": {
       "owner": "13",
