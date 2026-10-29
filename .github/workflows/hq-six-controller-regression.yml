@@ -6,6 +6,8 @@ on:
     paths:
       - automation/hq_160_task_cycle.py
       - automation/hq_six_cycle_supervisor.py
+      - automation/hq_six_developers.py
+      - automation/test_hq_six_developers.py
       - automation/test_hq_160_task_cycle.py
       - automation/test_hq_six_cycle_supervisor.py
       - .github/workflows/hq-six-developers.yml
