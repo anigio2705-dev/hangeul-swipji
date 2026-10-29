@@ -42,8 +42,12 @@ class HQ160TaskCycleTests(unittest.TestCase):
         catalog = contracts(sample())
         task = next_assignment("12", catalog, {"41": {"status": "code_verified"}})
         self.assertEqual(task["task_number"], 52)
+        self.assertEqual(next_assignment("12", catalog, {
+            "41": {"status": "code_verified"}, "52": {"status": "code_verified"},
+        })["task_number"], 49)
         self.assertIsNone(next_assignment("12", catalog, {
             "41": {"status": "code_verified"}, "52": {"status": "code_verified"},
+            "49": {"status": "code_verified"},
         }))
 
     def test_pending_independent_ci_is_not_assigned_again(self):
@@ -51,7 +55,7 @@ class HQ160TaskCycleTests(unittest.TestCase):
         pending = {"41": {"status": "in_progress", "independent_review": "pass"}}
         self.assertEqual(next_assignment("12", catalog, pending)["task_number"], 52)
         pending["52"] = {"status": "code_verified"}
-        self.assertIsNone(next_assignment("12", catalog, pending))
+        self.assertEqual(next_assignment("12", catalog, pending)["task_number"], 49)
 
     def test_wrong_scope_47_is_not_assigned_to_team13(self):
         catalog = contracts(sample())
