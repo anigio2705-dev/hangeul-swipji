@@ -15,7 +15,9 @@ assert.equal(new Set(codes).size, approved.length, 'no duplicate language codes'
 
 const match = source.match(/result\.split\((\/[^;\n]+\/)\)/);
 assert.ok(match, 'batch translation separator must be explicit');
-const separator = vm.runInNewContext(match[1]);
+// Recreate the regexp in this realm: Node assert.deepStrictEqual rejects cross-realm arrays.
+const parsed = vm.runInNewContext(match[1]);
+const separator = new RegExp(parsed.source, parsed.flags);
 assert.deepEqual('첫째 [~] 둘째 [~] 셋째'.split(separator),
                  ['첫째', '둘째', '셋째'], 'batch results must split into original items');
 assert.deepEqual('first[~]second'.split(separator), ['first', 'second']);
