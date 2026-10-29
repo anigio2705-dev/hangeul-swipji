@@ -61,12 +61,17 @@ class InitialProductTests(unittest.TestCase):
           INSERT INTO booking_product_snapshots VALUES('b','partner_25',25,10000,'KRW');
         """)
         verified=dict(verifiedByServer=True,type='lesson.completed',status='completed',
-                      bookingId='b',amount=10000)
+                      bookingId='b',amount=10000,productCode='partner_25',
+                      durationMinutes=25,priceKrw=10000,currency='KRW')
         self.assertEqual('partner_25',verify_server_product_contract(db,'b',verified)['product_code'])
         for event in (dict(verified,verifiedByServer=False),
                       dict(verified,type='lesson.started'),
                       dict(verified,status='cancelled'),
-                      dict(verified,amount=20000)):
+                      dict(verified,amount=20000),
+                      dict(verified,productCode='professional_25'),
+                      dict(verified,durationMinutes=15),
+                      dict(verified,priceKrw=6000),
+                      dict(verified,currency='USD')):
             with self.subTest(event=event),self.assertRaises(SimError):
                 verify_server_product_contract(db,'b',event)
         db.execute("UPDATE booking_product_snapshots SET product_code='professional_25',price_krw=15000 WHERE booking_id='b'")
