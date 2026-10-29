@@ -1,0 +1,21 @@
+{
+  "team": "13",
+  "task_number": 22,
+  "items": [
+    {
+      "id": "instant_join_denial_existing_booking",
+      "text": "Test scenario where a user with an existing booking tries to instant-join the video session without proper authorization token.",
+      "expected": "The system should deny access and return an authorization error, ensuring unauthorized instant-join attempts are blocked to protect session integrity."
+    },
+    {
+      "id": "legitimate_participant_authorization",
+      "text": "Test scenario where a user with a valid booking and correct video authorization token attempts to join the video session.",
+      "expected": "The system should grant video session access, allowing seamless joining, confirming proper token validation and participant legitimacy."
+    },
+    {
+      "id": "booking_without_token_access_attempt",
+      "text": "Test scenario where a user has a confirmed booking but attempts to join the video room without presenting any room token.",
+      "expected": "The system should prevent joining the video room and prompt for a valid token, enforcing security by requiring token presence alongside booking."
+    }
+  ]
+}
