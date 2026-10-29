@@ -104,7 +104,7 @@ class ReadinessTests(unittest.TestCase):
             self.assertEqual(out["candidate_supply_next"]["16"], 143)
             self.assertIn("team15_independent_review_pending",
                           out["candidate_supply"]["11"][0]["blockers"])
-            self.assertIn("single_file_runner_limit",
+            self.assertIn("explicit_single_editable_path_required",
                           out["candidate_supply"]["12"][0]["blockers"])
             self.assertIn("missing_or_invalid_test_path",
                           out["candidate_supply"]["12"][0]["blockers"])
@@ -128,6 +128,40 @@ class ReadinessTests(unittest.TestCase):
             self.assertEqual(out["already_verified"], [49])
             self.assertEqual(out["candidate_supply"]["12"], [])
             self.assertIsNone(out["candidate_supply_next"]["12"])
+
+    def test_multi_source_ready_requires_reviewed_single_editable_path(self):
+        from hq_160_task_cycle import next_assignment
+        c = catalog()
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            for name in ("target.py", "context.py", "test_target.py"):
+                (root / name).write_text("pass\\n")
+            record = {
+                "owner": "12", "state": "READY",
+                "source_paths": ["target.py", "context.py"],
+                "test_paths": ["test_target.py"], "independent_team15": "PASS",
+                "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123",
+            }
+            reg = {"schema": 1, "items": {"41": record}}
+            without = readiness(c, {}, reg, root)
+            self.assertEqual(without["dispatchable_total"], 0)
+            self.assertIn("single_editable_path", without["invalid_ready"][0]["reason"])
+            self.assertIsNone(next_assignment("12", c, {}, registry=reg, root=root))
+            record["editable_path"] = "../outside.py"
+            self.assertEqual(readiness(c, {}, reg, root)["dispatchable_total"], 0)
+            record["editable_path"] = "test_target.py"
+            self.assertEqual(readiness(c, {}, reg, root)["dispatchable_total"], 0)
+            record["editable_path"] = "target.py"
+            allowed = readiness(c, {}, reg, root)
+            self.assertEqual(allowed["dispatchable_total"], 1)
+            self.assertEqual(allowed["dispatchable"][0]["editable_path"], "target.py")
+            assigned = next_assignment("12", c, {}, registry=reg, root=root)
+            self.assertEqual(assigned["task_number"], 41)
+            self.assertEqual(assigned["path"], "target.py")
+            self.assertEqual(assigned["independent_test_paths"], ["test_target.py"])
+            # A code-verified item is never re-opened by the same READY record.
+            self.assertIsNone(next_assignment("12", c,
+                              {"41": {"status": "code_verified"}}, registry=reg, root=root))
 
 if __name__ == "__main__":
     unittest.main()
