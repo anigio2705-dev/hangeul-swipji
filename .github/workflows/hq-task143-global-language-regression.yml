@@ -6,6 +6,7 @@ on:
     paths:
       - 'global-language.js'
       - 'automation/test_task143_global_language_contract.cjs'
+      - 'automation/test_task143_language_contract.py'
       - '.github/workflows/hq-task143-global-language-regression.yml'
   pull_request:
     branches:
@@ -13,6 +14,7 @@ on:
     paths:
       - 'global-language.js'
       - 'automation/test_task143_global_language_contract.cjs'
+      - 'automation/test_task143_language_contract.py'
       - '.github/workflows/hq-task143-global-language-regression.yml'
   workflow_dispatch:
 permissions:
