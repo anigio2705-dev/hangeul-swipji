@@ -31,6 +31,12 @@ class RunnerPinRegressionTests(unittest.TestCase):
         self.assertIn("PLAYWRIGHT_RUNNER_MUST_BE_UBUNTU_24_04",
                       validate_workflow(sample))
 
+    def test_unrelated_job_cannot_spoof_validate_runner(self):
+        sample = BASE.replace("runs-on: ubuntu-24.04", "runs-on: ubuntu-latest")
+        sample += "\n  other_job:\n    runs-on: ubuntu-24.04\n    steps:\n      - run: echo ok\n"
+        self.assertIn("PLAYWRIGHT_RUNNER_MUST_BE_UBUNTU_24_04",
+                      validate_workflow(sample))
+
     def test_removing_browser_checks_fails(self):
         self.assertIn("BROWSER_REGRESSION_REMOVED",
                       validate_workflow(BASE.replace("node phase3/browser-test.cjs", "echo skip")))
