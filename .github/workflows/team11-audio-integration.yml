@@ -10,6 +10,7 @@ on:
       - 'hangul-week.js'
       - 'hangul-week.html'
       - 'tests/team11_audio_user_activation.test.cjs'
+      - '.github/workflows/team11-audio-integration.yml'
       - 'tests/team11_audio_surface_integration.test.cjs'
       - 'scripts/check-audio-runtime.cjs'
       - 'scripts/check-foundations.cjs'
