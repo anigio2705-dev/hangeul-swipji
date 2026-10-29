@@ -204,5 +204,9 @@
   document.addEventListener('hs-audio-ready',refreshBadges);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});
   window.addEventListener('pagehide',stop);
+  // Safari/Chrome may restore this page from the back-forward cache without
+  // running the script again. Revalidate withdrawn recordings on that return;
+  // never start playback automatically (a fresh tap is still required).
+  window.addEventListener('pageshow',event=>{if(event.persisted)void reloadManifest()});
   window.HSHangul={consonants,vowels,compose,records,ready,reloadManifest,availability,play,stop,status,el,soundButton,refreshBadges,canSynthesize,setSyntheticEnabled,optionalSynthetic};
 })();
