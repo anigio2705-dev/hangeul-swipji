@@ -74,6 +74,23 @@ def validate_candidate(original, candidate, path):
         if isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id in FORBIDDEN_CALLS:
             if not any(isinstance(x, ast.Call) and isinstance(x.func, ast.Name) and x.func.id == n.func.id for x in ast.walk(old)):
                 raise ValueError("New dynamic execution forbidden")
+    # Team15's independent collision gate must fail closed for *every*
+    # overlapping changed file. AI edits that hide unlisted collisions are
+    # unsafe even when syntax and a narrow smoke test pass.
+    if path == "scripts/team15_independent_gate.py":
+        checks = [node for node in ast.walk(new) if isinstance(node, ast.If)
+                  and isinstance(node.test, ast.Name) and node.test.id == "common"]
+        if len(checks) != 1:
+            raise ValueError("Collision gate weakening forbidden: missing overlap condition")
+        direct_failure = any(
+            isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Call)
+            and isinstance(stmt.value.func, ast.Attribute)
+            and isinstance(stmt.value.func.value, ast.Name)
+            and stmt.value.func.value.id == "failures"
+            and stmt.value.func.attr == "append"
+            for stmt in checks[0].body)
+        if not direct_failure:
+            raise ValueError("Collision gate weakening forbidden: all overlaps must fail")
     compile(candidate, path, "exec")
 def apply_patch(source, patch):
     """Apply a single small exact-match edit; reject truncated full-file output."""
