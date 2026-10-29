@@ -4,6 +4,33 @@
   "source_branch": "automation/hq-pilot-13-14-15-20261029",
   "policy": "Mapped paths are observed in this isolated branch. CODE_VERIFIED reflects existing evidence, never final approval; READY requires independent 15-team semantic review and relevant CI. CANDIDATE/BLOCKED are not dispatchable.",
   "items": {
+    "9": {
+      "owner": "15",
+      "support": [
+        "11"
+      ],
+      "state": "CANDIDATE",
+      "source_paths": [
+        "automation/hq_160_task_cycle.py",
+        "automation/hq_semantic_contract_paths.json"
+      ],
+      "test_paths": [
+        "automation/test_hq_curated_failclosed.py",
+        "automation/test_hq_160_task_cycle.py"
+      ],
+      "acceptance": "#9 각 번호의 단일 책임팀·완료 기준·근거·차단 사유·후속 행동을 기록하되 독립 READY 없는 curated fallback은 AI 개발을 호출하지 않아야 한다.",
+      "dependencies": [],
+      "unmet": [
+        "현재 160개 전체의 독립 검증된 READY 공급이 0개이며 큐 안전 수정은 개발 생산성을 의미하지 않음",
+        "15팀과 분리된 독립 QA/통합 검증, 신규 6팀 AI 호출 및 실제 후속 과제 승계 미확인",
+        "테스트99 배포·PC/모바일 E2E·대표 최종 승인 미완료"
+      ],
+      "independent_team15": "PENDING",
+      "note": "2026-10-29 17:36 KST: legacy curated fallback reproduced unsafe dispatch of unmapped #8, CODE_VERIFIED #41/#55/#56/#109, with empty evidence. Red CI #40843239242 (9 failures) -> isolated code 2f9529a8 and adjusted unit tests 6e47335f -> exact SHA green #40843302966 (3 negative regressions + 13 task-cycle tests). Source changed by central HQ, NOT six-team AI. No READY promotion or test99 deployment.",
+      "pilot_branch": "automation/hq-failclosed-curated-20261029-1733",
+      "pilot_sha": "6e47335f8fd04089f3df830388c462d5e78207ea",
+      "pilot_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40843302966"
+    },
     "11": {
       "owner": "11",
       "support": [
@@ -533,6 +560,43 @@
       "integration_commit": "4b90f8ed765ad2dbc79dcafd8d5b5303673eac8e",
       "integration_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40813120338",
       "evidence_run": 40813120338
+    },
+    "59": {
+      "owner": "12",
+      "support": [
+        "11",
+        "15",
+        "16"
+      ],
+      "state": "BLOCKED",
+      "source_paths": [
+        "hangul-board.js",
+        "hangul-core.js",
+        "hangul-audio-manifest.json"
+      ],
+      "test_paths": [
+        "scripts/check-audio-runtime.cjs"
+      ],
+      "acceptance": "누락/보류된 모 음절을 실제 사람 녹음으로 오인시키지 않고 재생/반복 버튼을 비활성화하며 대체 학습 안내 제공; 확보된 가 녹음 재생·반복 유지. 전체 #59에는 파일 오류 재시도 UX 및 실사용 청취가 추가 필요.",
+      "dependencies": [],
+      "unmet": [
+        "실제 사람의 모 단독 녹음이 manifest에 존재하지 않음; 실제 발음 재생 해결은 별도 #53/#57",
+        "파일 네트워크 실패 시 UI에서 재시도 버튼을 제공하는 동작과 전체 399 음절의 동일 상태 검증 미완료",
+        "15팀 독립 의미 검증, PC/모바일 실제 브라우저 및 테스트99 배포·대표 승인 미완료",
+        "신규 테스트 파일은 pilot branch에만 존재; 중앙 계약 브랜치에 병합/재검증 전 READY 금지",
+        "중앙 계약 브랜치의 테스트 경로는 기존 런타임 검사만 존재; 신규 UI 회귀 테스트는 PR #32의 격리 브랜치에 있으며 아직 통합되지 않음",
+        "과거 task-evidence #59 code_verified는 코어 런타임만 검증했으며 UI RED CI #40848633295 반례를 통과하지 못해 blocked로 재판정; 격리 수정은 15팀 QA 전"
+      ],
+      "independent_team15": "PENDING",
+      "pilot_branch": "automation/hq-task59-audio-ui-20261029",
+      "pilot_sha": "f0e8fd4d090adf4e6b1ba788f8ed030f983bfcac",
+      "pilot_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40848693610",
+      "red_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40848633295",
+      "pilot_pr": "https://github.com/anigio2705-dev/hangeul-swipji/pull/32",
+      "note": "2026-10-29 18:19 KST central HQ isolated code, not team12 bot: real board DOM red->green; human-only audio runtime remains green. CANDIDATE, not READY or CODE_VERIFIED for full #59; no sound supplied and no test99 deployment. 18:20 KST contract path regression #40848831040 failed because pilot-only test was incorrectly listed as local; corrected without bypassing existence assertion. 18:22 KST ledger downgraded from code_verified to blocked on verified UI regression; existing historic CI retained as scoped evidence.",
+      "pilot_test_paths": [
+        "automation/verify_task59_missing_audio.cjs"
+      ]
     },
     "61": {
       "owner": "12",

@@ -246,11 +246,19 @@
     "evidence_run": 40813120338
   },
   "59": {
-    "status": "code_verified",
+    "status": "blocked",
     "commit": "f5afd95a2c1b2c2205f6f195ef68e7af2c3641a0",
     "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40737701879",
     "ci_result": "success",
-    "scope": "Human-only missing/held/error status and retry refresh; teacher-assisted practice guidance. Browser/mobile playback still unverified"
+    "scope": "Human-only missing/held/error status and retry refresh; teacher-assisted practice guidance. Browser/mobile playback still unverified",
+    "previous_status": "code_verified",
+    "block_reason": "Previously checked human-only audio runtime did not cover selected-syllable UI: missing standalone 모 had an enabled replay control. Reproduced RED on unchanged main board in CI #40848633295; exact fix only in isolated draft PR #32, not in canonical/test99. Entire #59 requires failed-file retry UX and independent team15+browser verification.",
+    "regression_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40848633295",
+    "isolated_fix_sha": "f0e8fd4d090adf4e6b1ba788f8ed030f983bfcac",
+    "isolated_fix_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40848693610",
+    "isolated_fix_pr": "https://github.com/anigio2705-dev/hangeul-swipji/pull/32",
+    "next_action": "15팀 독립 QA of draft PR #32; missing-file retry UI regression; human 모 recording separate #53/#57; protect Render test99 SQLite before any deploy",
+    "final_approved": false
   },
   "109": {
     "status": "code_verified",
