@@ -129,15 +129,16 @@
         "1758개 데이터 항목 보기 중복·정답 인덱스·3개 반례 검사 CI PASS (부분 검증만)",
         "정답 의미의 교육적 정확성 검증 미완료",
         "문항별 실제 해설 0/1758: 해설 콘텐츠·화면 제공 미완료",
-        "부분 점수 계산과 재도전의 독립 동적 UI 검사 미완료",
+        "전체 오답 0/N 점수 및 재도전 UI 7개 과정 CI PASS; 부분 정답 혼합 점수·재도전 후 재채점 추가 검증 필요",
         "실제 PC/모바일 브라우저·대표 검수 미완료",
         "15팀 독립 의미 검증 미완료"
       ],
       "independent_team15": "PENDING",
       "dependencies": [],
-      "note": "2026-10-29 13:04 KST HQ2 direct audit: 7 actual course HTML files parsed, 350 units and 1758 quizzes; no duplicate option strings, no invalid correct-answer indices, and 0 explicit per-question explanations. Negative fixtures verify the detector rejects duplicates, invalid indices, missing units. Partial audit only, never count as READY or CODE_VERIFIED before independent CI and explanation/scoring/retry validation. Independent CI #40815818683 SUCCESS at exact SHA 69b50e42499d after YAML fix; 1758 quiz data checks and 3 negative fixtures PASS. This is PARTIAL, not full #45 acceptance.",
+      "note": "2026-10-29 13:04 KST HQ2 direct audit: 7 actual course HTML files parsed, 350 units and 1758 quizzes; no duplicate option strings, no invalid correct-answer indices, and 0 explicit per-question explanations. Negative fixtures verify the detector rejects duplicates, invalid indices, missing units. Partial audit only, never count as READY or CODE_VERIFIED before independent CI and explanation/scoring/retry validation. Independent CI #40815818683 SUCCESS at exact SHA 69b50e42499d after YAML fix; 1758 quiz data checks and 3 negative fixtures PASS. This is PARTIAL, not full #45 acceptance. Real course DOM simulation now also asserts all-wrong 0/N score and retry button across 7 courses; exact SHA 8526fefc CI #40815975914 SUCCESS.",
       "partial_data_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40815818683",
-      "partial_data_ci_sha": "69b50e42499dfd3b1504e353b8454e666aa0f923"
+      "partial_data_ci_sha": "69b50e42499dfd3b1504e353b8454e666aa0f923",
+      "partial_ui_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40815975914"
     },
     "47": {
       "owner": "12",
