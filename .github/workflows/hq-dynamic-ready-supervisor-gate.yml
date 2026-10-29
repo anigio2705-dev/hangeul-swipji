@@ -1,0 +1,41 @@
+name: HQ dynamic READY supervisor independent gate (isolated)
+on:
+  push:
+    branches:
+      - automation/hq-dynamic-ready-supervisor-20261029
+    paths:
+      - automation/hq_six_cycle_supervisor.py
+      - automation/test_hq_dynamic_ready_supervisor.py
+      - automation/test_hq_six_cycle_supervisor.py
+      - automation/hq_160_task_cycle.py
+      - automation/hq_traffic_lights.py
+      - automation/hq_semantic_contract_paths.json
+      - .github/workflows/hq-dynamic-ready-supervisor-gate.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: hq-dynamic-ready-supervisor-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  independent-dynamic-ready-review:
+    if: github.ref == 'refs/heads/automation/hq-dynamic-ready-supervisor-20261029'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile trusted supervisor
+        run: python -m py_compile automation/hq_six_cycle_supervisor.py
+      - name: Dynamic READY negative fixtures and task-specific regression
+        run: python -m unittest discover -s automation -p 'test_hq_dynamic_ready_supervisor.py' -v
+      - name: Existing supervisor and numbered contract regressions
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_six_cycle_supervisor.py' -v
+          python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+      - name: Preserve strict outcome boundary
+        if: always()
+        run: |
+          echo 'This CI tests the independent verifier only. No model call, new six-team bot commit, READY promotion, final task approval, production deployment, or payment action is established.' >> "$GITHUB_STEP_SUMMARY"
