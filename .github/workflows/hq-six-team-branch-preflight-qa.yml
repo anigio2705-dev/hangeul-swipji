@@ -1,0 +1,26 @@
+name: HQ six team branch READY path preflight (isolated)
+on:
+  push:
+    branches:
+      - audit/hq-six-team-branch-preflight-20261029-2349
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  isolated-qa:
+    if: github.ref == 'refs/heads/audit/hq-six-team-branch-preflight-20261029-2349'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify preserved team branch READY path diagnostics
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_six_developers.py' -v
+          python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+      - name: Verify no deployment or real-payment side effects
+        run: |
+          python -m py_compile automation/hq_six_developers.py
+          echo "Isolated read-only QA only. No API calls, deployments or payment."
