@@ -32,6 +32,26 @@
     "final_approved": false,
     "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797443716"
   },
+  "42": {
+    "status": "code_verified",
+    "owner": "12",
+    "support": [
+      "13"
+    ],
+    "path": "learn.html",
+    "commit": "5f06aa657b489bbaf443fac88ca47eab77b8f1e1",
+    "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40824395587",
+    "ci_result": "success",
+    "ci_conclusion": "success",
+    "ci_head_sha": "5f06aa657b489bbaf443fac88ca47eab77b8f1e1",
+    "independent_review": "pass",
+    "task_specific_verified": true,
+    "implementation_verified": true,
+    "final_approved": false,
+    "test_command": "node automation/verify_task42.cjs && python -m unittest discover -s automation -p test_hq_160_task_cycle.py -v",
+    "scope": "Task #42: visible Korean/English suggested prerequisite for all 7 course entry cards, no level lock; seven live HTML targets exist. Independent Node semantic/negative fixture check plus 11 canonical queue tests passed on exact SHA. Real beginner comprehension, all locale translations, mobile browser, representative approval remain unverified.",
+    "review_scope": "Automated independent Node semantic and queue regression; separate team15 integration and human usability pending."
+  },
   "43": {
     "status": "code_verified",
     "owner": "12",

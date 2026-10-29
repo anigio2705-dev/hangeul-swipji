@@ -47,6 +47,31 @@
       "dependencies": [],
       "evidence_run": 40797443716
     },
+    "42": {
+      "owner": "12",
+      "support": [
+        "13"
+      ],
+      "state": "CODE_VERIFIED",
+      "source_paths": [
+        "learn.html"
+      ],
+      "test_paths": [
+        "automation/verify_task42.cjs"
+      ],
+      "dependencies": [],
+      "acceptance": "7개 무료 과정에 단계별 한국어·영어 수준 설명과 권장 선행 과정을 표시하고, 입문은 선행 없이 시작하며 7개 과정 모두 잠금 없이 직접 진입",
+      "unmet": [
+        "초보자 대상 실제 이해도/접근성 테스트",
+        "다국어 전체 번역",
+        "모바일 브라우저 실사용",
+        "15팀 별도 통합 의미 검증 및 대표 승인"
+      ],
+      "independent_team15": "PENDING",
+      "evidence_run": 40824395587,
+      "source_change_commit": "5f06aa657b489bbaf443fac88ca47eab77b8f1e1",
+      "note": "Node semantic gate and negative fixtures + 11 canonical queue tests PASS on exact SHA; existing courses retained, suggested prerequisites do not lock free entry. Not real-browser or user acceptance."
+    },
     "43": {
       "owner": "12",
       "support": [
