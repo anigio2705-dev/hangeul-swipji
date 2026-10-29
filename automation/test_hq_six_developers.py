@@ -64,6 +64,19 @@ class BoundedPatchTests(unittest.TestCase):
             self.assertEqual(blocked[0]["number"], 45)
             self.assertIn("non-Python", blocked[0]["unsupported_reason"])
 
+    def test_ready_task_specific_unittest_requires_positive_execution_evidence(self):
+        # Exit 0 and an 'OK' footer alone must not certify an absent test run.
+        missing = SimpleNamespace(returncode=0, stdout="", stderr="OK\\n")
+        with patch("hq_six_developers.shell", return_value=missing):
+            passed, message = run_checks("12", "feature.py", ["test_feature.py"])
+        self.assertFalse(passed, "A test runner without a Ran N tests marker is not evidence")
+        self.assertIn("positive", message.lower())
+        # One real unittest is sufficient; zero is not, even with exit code 0.
+        positive = SimpleNamespace(returncode=0, stdout="", stderr="Ran 1 test in 0.001s\\n\\nOK\\n")
+        with patch("hq_six_developers.shell", return_value=positive):
+            passed, _ = run_checks("12", "feature.py", ["test_feature.py"])
+        self.assertTrue(passed)
+
     def test_ready_task_specific_unittest_cannot_pass_with_zero_tests(self):
         fake = SimpleNamespace(returncode=0, stdout="", stderr="Ran 0 tests in 0.000s\nOK\n")
         with patch("hq_six_developers.shell", return_value=fake):
