@@ -1,0 +1,63 @@
+name: HQ test99 deployment provenance (read-only)
+on:
+  push:
+    branches:
+      - automation/hq-pilot-13-14-15-20261029
+    paths:
+      - phase3/staging_server.py
+      - phase3/test_staging.py
+      - .github/workflows/hq-test99-provenance.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  local-staging-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify isolated staging HTTP security and deploy-commit contract
+        run: python -m unittest discover -s phase3 -p test_staging.py -v
+  test99-live-readonly:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compare real test99 health with exact candidate code (no credentials or deployment)
+        env:
+          EXPECTED_COMMIT: ${{ github.sha }}
+        run: |
+          python - <<'PY'
+          import hashlib, json, os, pathlib
+          from urllib.request import Request, urlopen
+          url = 'https://hangeul-swipji99-test.onrender.com/healthz'
+          expected = {
+              'sourceSHA256': hashlib.sha256(pathlib.Path('phase3/staging_server.py').read_bytes()).hexdigest(),
+              'appSHA256': hashlib.sha256(pathlib.Path('phase3/app.js').read_bytes()).hexdigest(),
+              'configuredOrigin': 'https://hangeul-swipji99-test.onrender.com',
+              'scope': 'isolated-staging',
+              'deployedCommit': os.environ['EXPECTED_COMMIT'],
+          }
+          try:
+              with urlopen(Request(url, headers={'Accept': 'application/json'}), timeout=25) as response:
+                  if response.geturl() != url or response.status != 200:
+                      raise RuntimeError('Unexpected redirect or non-200 response')
+                  raw = response.read(8193)
+              if len(raw) > 8192:
+                  raise RuntimeError('Oversized health response')
+              observed = json.loads(raw)
+              if not isinstance(observed, dict) or observed.get('ok') is not True:
+                  raise RuntimeError('Missing isolated health confirmation')
+              failures = [key for key, value in expected.items() if observed.get(key) != value]
+              if failures:
+                  raise RuntimeError('Test99 not deployed at candidate SHA or mismatched isolation: ' + ','.join(failures))
+              print('TEST99 VERIFIED: live HTTPS /healthz, isolated scope, exact commit and both source hashes')
+          except Exception as exc:
+              raise SystemExit('TEST99 NOT VERIFIED (no deployment credit): ' + str(exc))
+          PY
