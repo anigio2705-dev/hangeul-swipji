@@ -126,7 +126,11 @@ class HQ160TaskCycleTests(unittest.TestCase):
         tasks = contracts((root / "automation/hq_backlog_160.md").read_text(encoding="utf-8"))
         evidence = json.loads((root / "automation/task-evidence.json").read_text(encoding="utf-8"))
         self.assertEqual(1, mapping["schema"])
-        self.assertEqual({22, 41, 47, 49, 51, 52, 55, 109}, {int(n) for n in mapping["items"]})
+        # Preserve the original eight independently audited mappings while
+        # permitting additional fully validated semantic contracts.
+        mapped = {int(n) for n in mapping["items"]}
+        self.assertTrue({22, 41, 47, 49, 51, 52, 55, 109}.issubset(mapped))
+        self.assertGreaterEqual(len(mapped), 8)
         for raw_number, item in mapping["items"].items():
             number = int(raw_number)
             with self.subTest(task=number):
@@ -152,6 +156,9 @@ class HQ160TaskCycleTests(unittest.TestCase):
         self.assertIn("phase3/learning.py", mapping["items"]["49"]["source_paths"])
         self.assertEqual("BLOCKED", mapping["items"]["22"]["state"])
         self.assertEqual("CANDIDATE", mapping["items"]["51"]["state"])
+        self.assertEqual("CANDIDATE", mapping["items"]["54"]["state"])
+        self.assertIn("scripts/team12_missing_recording_script.py", mapping["items"]["54"]["test_paths"])
+        self.assertIn("automation/verify_task54.py", mapping["items"]["54"]["test_paths"])
         self.assertFalse(any(x["state"] == "READY" for x in mapping["items"].values()))
 
 if __name__ == "__main__":

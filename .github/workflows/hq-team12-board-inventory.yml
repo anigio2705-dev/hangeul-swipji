@@ -11,6 +11,7 @@ on:
       - scripts/team12_missing_recording_script.py
       - docs/team12/missing-recording-script-359.json
       - automation/verify_task54.py
+      - automation/test_hq_160_task_cycle.py
       - hangul-core.js
       - hangul-board.js
       - hangul-audio-manifest.json
