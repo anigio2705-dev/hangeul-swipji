@@ -106,6 +106,8 @@
     // Do not await an already loaded manifest: even a resolved await yields the
     // user click activation on some mobile browsers, causing Audio.play() to
     // reject with NotAllowedError despite a valid human recording.
+    // The first tap may occur while the manifest is still loading. Never
+    // fabricate audio; tell the learner to tap again after the list is ready.
     if(!manifestLoaded)await (manifestError?loadManifest():(loading||ready));
     if(token!==run)return {status:'cancelled'};
     if(manifestError){status('음성 목록을 불러오지 못했습니다. 글자를 다시 누르면 재시도합니다. / Audio list unavailable; click again to retry.');return {status:'manifest-error'}}
