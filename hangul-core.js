@@ -137,7 +137,8 @@
     const words=Array.isArray(value)?value:[value];
     if(!words.length||words.some(w=>typeof w!=='string'||!w.trim()))return {status:'invalid'};
     const missing=words.filter(word=>!records[word]);
-    if(missing.some(w=>holds[w])){status('재생 보류: '+missing.filter(w=>holds[w]).map(w=>w+' · '+holds[w].holdReason).join(' / '));return {status:'held',missing}}
+    if(missing.some(w=>holds[w])&&!syntheticEnabled){status('사람 녹음 검수 보류: '+missing.filter(w=>holds[w]).map(w=>w+' · '+holds[w].holdReason).join(' / ')+'. 기기 합성음은 별도 선택 사항입니다.');return {status:'held',missing}}
+    if(missing.some(w=>holds[w])&&syntheticEnabled)status('검수 보류된 사람 녹음은 재생하지 않습니다. 선택한 기기 합성음으로 연습합니다.');
     if(missing.length&&!syntheticEnabled){status('녹음 준비 중: '+missing.join(' · ')+'. 사람 녹음이 없으며, 원하면 기기 합성음 보조를 켜세요.');return {status:'missing',missing}}
     try{
       let ttsUsed=false;
