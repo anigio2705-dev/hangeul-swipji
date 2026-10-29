@@ -112,6 +112,26 @@
     "task_specific_verified": false,
     "scope": "Wrong task/file mapping rejected; 160-item final completion unchanged. Team13 placement boundary bug was repaired as a separate safety correction, not #47 completion."
   },
+  "48": {
+    "status": "code_verified",
+    "owner": "12",
+    "support": [
+      "13"
+    ],
+    "path": "intro.html;beginner1.html;beginner2.html;intermediate1.html;intermediate2.html;advanced1.html;advanced2.html",
+    "commit": "e01dad81b0ffe6b89fc0681a9e124d6437224e16",
+    "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40824601123",
+    "ci_result": "success",
+    "ci_conclusion": "success",
+    "ci_head_sha": "e01dad81b0ffe6b89fc0681a9e124d6437224e16",
+    "independent_review": "pass",
+    "task_specific_verified": true,
+    "implementation_verified": true,
+    "final_approved": false,
+    "test_command": "node automation/verify_task44.cjs",
+    "scope": "Existing seven course-page navigation independently tested: jump unfinished lesson 1 to 50, return to 25 and 1, no completion awarded for navigation. Existing 350-lesson quiz regression retained. This is verification of existing behavior, not new feature implementation.",
+    "review_scope": "Independent GitHub team15-lesson-flow simulated DOM CI; actual browser/mobile, learner and representative review pending."
+  },
   "49": {
     "status": "code_verified",
     "commit": "9fb8a54b1cc183bd30ca47deab99cd1c76c0a40f",

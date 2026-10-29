@@ -233,6 +233,35 @@
       "forbidden_mapping": "phase3/learning.py",
       "note": "과거 13팀 진단점수 코드 오배정 금지"
     },
+    "48": {
+      "owner": "12",
+      "support": [
+        "13"
+      ],
+      "state": "CODE_VERIFIED",
+      "source_paths": [
+        "intro.html",
+        "beginner1.html",
+        "beginner2.html",
+        "intermediate1.html",
+        "intermediate2.html",
+        "advanced1.html",
+        "advanced2.html"
+      ],
+      "test_paths": [
+        "automation/verify_task44.cjs"
+      ],
+      "dependencies": [],
+      "acceptance": "7개 무료 과정에서 미완료 단원을 1→50→25→1 자유 이동하며 이동만으로 완료 처리되지 않음",
+      "unmet": [
+        "실제 PC/모바일 브라우저와 키보드 접근성 검증",
+        "15팀 별도 통합 의미 검증 및 대표 승인"
+      ],
+      "independent_team15": "PENDING",
+      "evidence_run": 40824601123,
+      "source_change_commit": "e01dad81b0ffe6b89fc0681a9e124d6437224e16",
+      "note": "Independent Node DOM test + existing 350-lesson regression passed exact SHA CI; existing implementation only."
+    },
     "49": {
       "owner": "12",
       "support": [
