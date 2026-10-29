@@ -1,0 +1,22 @@
+name: HQ isolated referral role-label matrix QA
+on:
+  push:
+    branches:
+      - audit/hq-six-role-matrix-20261029-2234
+    paths:
+      - phase3/test_team14_referral_store.py
+      - .github/workflows/hq-role-matrix-qa.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  referral-matrix:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run mock referral store and scenario regressions
+        run: python -m unittest discover -s phase3 -p 'test_team14_referral*.py' -v
