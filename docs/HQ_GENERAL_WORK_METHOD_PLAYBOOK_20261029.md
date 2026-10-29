@@ -414,3 +414,11 @@
 - **이번 실행의 실제 계약 수정:** #51은 399 글자판 조합과 19 자음 이름을 별도 파일·검사·CI로 확인한 기존 근거가 원장에 누락되어 있었다. 실제 `docs/team12/consonant-name-plan-19.json` 및 `scripts/team12_consonant_names.py`를 확인하고, [399 목록 CI #40800638728](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40800638728), [19 이름 CI #40801647878](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801647878) SUCCESS를 #51 원장에 반영했다(계약 수정 SHA `a0c929eabe200fc03f193763a41d2de54982c24f`). 자음 이름 음원 **14 보류·5 누락·승인 0**. 418개 대상 목록은 418개 재생 가능 음원이 아니다. 15팀 의미 검증·브라우저 전체 재생·인간 청취·권리 검토 전 **CANDIDATE 유지**. 문서 변경 자체의 신규 CI PASS는 아직 주장하지 않는다.
 - **선별한 공식 방법:** [OpenAI Agent Improvement Loop](https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop)의 실제 trace → 인간/모델 피드백 → 반복 eval 전환. 이번에는 '워크플로 SUCCESS ⇒ 개발 성공'이라는 오판을 반례로 삼아 `실제 AI 호출·실제 신규 bot SHA·정확한 작업 번호·독립 CI·최종 승인`을 분리하는 평가를 적용했다. 안전성: 승인된 격리 브랜치의 문서만 변경, `main`·운영 DB·실결제·배포·외부 제출 변경 금지 유지. 비용: 이번 감사/계약 보강에서 AI 개발 API 호출 0회, GitHub Actions 신규 검증은 기존 15:00 실행 결과만 인용.
 - **16팀 별도 큐:** 정부지원·IR 공식 공고 기반 가상 신청→독립 모의 반려→보완→재심사→대표 승인 직전 패키지의 새 완료 증거 미확인. 14팀 재무·15팀 증빙 연계를 유지하며 대외 연락·신청·투자·자금 집행은 하지 않는다.
+
+
+## 2026-10-29 15:30 — 전수 지시서 기반 READY=0 후보 6건 조사
+
+- 교차 판독: 다른 예약 작업 15:24~15:26 저장 보고 직접 조회. GitHub 증거 장부 CODE_VERIFIED 13/160, 최종 승인 0, READY 0; 10:03 이후 6팀 신규 AI 개발 확인되지 않음. 동적 READY CI #40826563226 PASS는 합성 라우팅 검증이며 실전 bot 개발이 아니다.
+- 실행: 160개 팀별 소유권 확인 후 #11/#45/#23/#101/#9/#143의 실제 소스·기존 테스트·차단 근거를 분리 실험 브랜치의 계약표·기계판독 후보 장부·독립 경로 회귀·읽기 전용 CI로 연결. 15팀 독립 의미 감사 전이므로 READY 0, 신규 기능/AI 봇 커밋 0, 최종 승인 증가 0.
+- 공식 방법: https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop 의 trace→feedback→eval→implementation handoff. 가설: 팀별 실제 경로/차단 근거 검사가 WAIT 반복을 줄일 것. 검증 기준: 160 소유권, 후보 6개 경로, #22/#47 차단, #45 해설 0/1758, #143 8개 언어와 과다 언어 목록 충돌. 후보 경로 검사는 기능 테스트·READY 심사를 대신하지 않는다.
+- 안전/비용: CI read-only, Python 표준 라이브러리, AI API 0회, main/운영 DB/실결제/공개 배포/외부 제출 불변. 16팀 정부지원/IR 모의 심사는 별도 큐 유지. 후속: 15팀 의미 감사 및 누락 기능 회귀→READY 후보 승격→격리 bot 호출→새 diff/CI/다음 과제 승계 확인.

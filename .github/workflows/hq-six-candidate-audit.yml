@@ -1,0 +1,33 @@
+name: HQ six-team candidate intake (isolated)
+on:
+  push:
+    branches: [automation/hq-six-candidate-contracts-20261029]
+    paths:
+      - 'automation/hq_six_candidate_audit.json'
+      - 'automation/test_hq_six_candidate_audit.py'
+      - 'docs/HQ_160_DEVELOPMENT_CONTRACTS_20261029.md'
+      - '.github/workflows/hq-six-candidate-audit.yml'
+permissions:
+  contents: read
+jobs:
+  candidate-intake:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check real paths and all 160 owner assignments
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_six_candidate_audit.py' -v
+          python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+      - name: Print READY state without dispatch or secrets
+        run: |
+          python automation/hq_traffic_lights.py --output /tmp/hq-six-candidate-queue.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/hq-six-candidate-queue.json'))
+          print('CANDIDATE-only audit; no AI call, READY promotion or final completion.')
+          print('Readiness:',x.get('dispatch_readiness',{}))
+          PY
