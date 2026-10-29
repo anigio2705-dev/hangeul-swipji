@@ -14,9 +14,15 @@ PINNED_RUNNER = re.compile(r"(?m)^    runs-on:\s*ubuntu-24\.04\s*(?:#.*)?$")
 
 def validate_workflow(text: str) -> list[str]:
     failures = []
-    if not re.search(r"(?m)^  validate:\s*$", text):
+    validate_job = re.search(r"(?m)^  validate:[ \\t]*$", text)
+    if not validate_job:
         failures.append("INTEGRATION_VALIDATE_JOB_MISSING")
-    if not PINNED_RUNNER.search(text):
+        job_body = ""
+    else:
+        remainder = text[validate_job.end():]
+        next_job = re.search(r"(?m)^  [A-Za-z0-9_-]+:[ \\t]*$", remainder)
+        job_body = remainder[:next_job.start()] if next_job else remainder
+    if not PINNED_RUNNER.search(job_body):
         failures.append("PLAYWRIGHT_RUNNER_MUST_BE_UBUNTU_24_04")
     if "npm ci --prefix phase3 --ignore-scripts" not in text:
         failures.append("PINNED_NODE_DEPENDENCIES_INSTALL_MISSING")
