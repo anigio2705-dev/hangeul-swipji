@@ -136,6 +136,8 @@ class HQ160TaskCycleTests(unittest.TestCase):
                     self.assertEqual("code_verified", evidence[raw_number]["status"])
                     self.assertTrue(item.get("evidence_run"))
         self.assertEqual("BLOCKED", mapping["items"]["47"]["state"])
+        self.assertIn("오답", " ".join(mapping["items"]["47"]["unmet"]))
+        self.assertIn("즐겨찾기", " ".join(mapping["items"]["47"]["unmet"]))
         self.assertNotIn(mapping["items"]["47"]["forbidden_mapping"], mapping["items"]["47"]["source_paths"])
         self.assertIn("phase3/learning.py", mapping["items"]["49"]["source_paths"])
         self.assertEqual("BLOCKED", mapping["items"]["22"]["state"])
