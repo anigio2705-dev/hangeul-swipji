@@ -68,7 +68,7 @@ for t in audio.get('targets', []):
     if not recording_available:
         # exact suspicious labels as literals, no decoding
         suspicious_labels = ['\x7f\x7f\x7f', '\x7f\x7f', '\x7f\x7f\x7f\x7f \x7f\x7f\x7f']
-        korean_labels_utf8 = ['자음 이름', '모음', '글자팥 음절']
+        korean_labels_utf8 = ['자음 이름', '모음', '글자판 음절']
 
         # Defensive: reject if any group string matches suspicious labels or decoded Korean labels
         def to_lower_set(strings):
@@ -109,9 +109,17 @@ def valid_word(word):
         return False
     if len(word) > 255:
         return False
-    # Allow only ASCII alnum and - _ . explicitly; reject other chars
-    allowed_chars = set('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.')
-    return all(c in allowed_chars for c in word)
+    # Commons Ko- filenames contain Hangul syllables and compatibility jamo.
+    # Reject path separators, pipes, whitespace and unrelated scripts, while
+    # preserving exact Korean learning targets such as 가, ㄱ and ㅏ.
+    def allowed(ch):
+        code = ord(ch)
+        return (('a' <= ch <= 'z') or ('A' <= ch <= 'Z')
+                or ('0' <= ch <= '9') or ch in '-_.'
+                or 0xAC00 <= code <= 0xD7A3
+                or 0x3130 <= code <= 0x318F
+                or 0x1100 <= code <= 0x11FF)
+    return all(allowed(ch) for ch in word)
 
 titles = []
 for word in missing:
