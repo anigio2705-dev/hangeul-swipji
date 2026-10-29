@@ -118,6 +118,44 @@ def readiness(catalog, ledger, registry, root=Path(".")):
                 "task": number,
                 "reason": "exclusive_file_collision: " + ", ".join(sorted(conflicts[number])),
             })
+    # READY=0 must produce an actionable six-team intake report rather than
+    # an empty WAIT. This is diagnostic only: no CANDIDATE is promoted here.
+    # In particular, the current AI patch verifier accepts exactly one source
+    # file; multi-file candidates need a separate reviewed execution path.
+    supply = {team: [] for team in TEAMS}
+    for number in result["candidates"]:
+        entry = entries[str(number)]
+        task = catalog[number]
+        source = entry.get("source_paths", [])
+        tests = entry.get("test_paths", [])
+        blockers = []
+        if entry.get("owner") != task["owner"]:
+            blockers.append("owner_mismatch")
+        if not isinstance(source, list) or not source or not all(valid_path(p) for p in source):
+            blockers.append("missing_or_invalid_source_path")
+        elif len(source) != 1:
+            blockers.append("single_file_runner_limit")
+        if not isinstance(tests, list) or not tests or not all(valid_path(p) for p in tests):
+            blockers.append("missing_or_invalid_test_path")
+        if entry.get("independent_team15") != "PASS":
+            blockers.append("team15_independent_review_pending")
+        if any(ledger.get(str(dep), {}).get("status") != "complete"
+               for dep in task["dependencies"]):
+            blockers.append("dependencies_not_complete")
+        supply[task["owner"]].append({
+            "task": number,
+            "source_paths": source if isinstance(source, list) else [],
+            "test_paths": tests if isinstance(tests, list) else [],
+            "blockers": blockers,
+            "unmet_acceptance": entry.get("unmet", []),
+            "state": "CANDIDATE",
+        })
+    for team in TEAMS:
+        supply[team].sort(key=lambda item: (len(item["blockers"]), item["task"]))
+    result["candidate_supply"] = supply
+    result["candidate_supply_next"] = {
+        team: (items[0]["task"] if items else None) for team, items in supply.items()
+    }
     result["dispatchable_total"] = len(result["dispatchable"])
     result["rule"] = ("READY is a static queue candidate only; exact SHA, live CI and "
                       "independent task regression must be revalidated before promotion.")
