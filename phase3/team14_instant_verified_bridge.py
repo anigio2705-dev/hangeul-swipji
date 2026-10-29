@@ -32,6 +32,9 @@ def settle_verified_instant_event(server_db, settlement_store, referral_store, e
     # Team13 product snapshots must be verified at the product-aware binding boundary.
     # Legacy instant bookings without snapshots remain eligible for the older
     # verified-event simulation path; do not infer or rewrite their product codes.
+    if verified.get('productCode'):
+        from team14_initial_products import verify_server_product_contract
+        verify_server_product_contract(server_db,booking_id,verified)
     month_id=ident(binding['month_id'])
     lesson_id=ident(binding['id'])
     # Stable transaction/event identifiers.  Both are constrained by the
