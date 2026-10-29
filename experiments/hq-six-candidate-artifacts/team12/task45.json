@@ -1,0 +1,21 @@
+{
+  "team": "12",
+  "task_number": 45,
+  "items": [
+    {
+      "id": "basic_greeting_meaning",
+      "text": "What is the correct meaning of the Korean greeting '안녕하세요'?",
+      "expected": "'안녕하세요' means 'Hello' or 'Hi' in English. It is a polite way to greet someone in Korean."
+    },
+    {
+      "id": "korean_number_one",
+      "text": "What is the Korean word for the number 'one'?",
+      "expected": "The Korean word for 'one' is '하나'. It is used in native Korean counting."
+    },
+    {
+      "id": "basic_particle_usage",
+      "text": "Which particle is used to indicate the subject in the sentence: '저는 학생입니다'?",
+      "expected": "The particle '는' is used to mark the subject here. '저는 학생입니다' means 'I am a student.' This particle emphasizes the subject of the sentence."
+    }
+  ]
+}
