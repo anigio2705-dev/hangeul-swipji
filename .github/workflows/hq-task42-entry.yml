@@ -1,0 +1,32 @@
+name: HQ task42 seven-level entry semantic gate (isolated)
+on:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - 'learn.html'
+      - 'automation/verify_task42.cjs'
+      - '.github/workflows/hq-task42-entry.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  task42-entry:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Independently exercise task42 contracts and negative fixtures
+        run: node automation/verify_task42.cjs
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Preserve canonical 160-task assignment guards
+        run: python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+      - name: Record bounded evidence
+        run: |
+          echo 'Task #42: seven free routes and bilingual prerequisites checked in Node.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Not verified: beginner comprehension, all translations, browser/mobile, public deployment, representative approval.' >> "$GITHUB_STEP_SUMMARY"
