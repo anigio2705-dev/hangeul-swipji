@@ -155,6 +155,36 @@
       "dependencies": [],
       "evidence_run": 40746321354
     },
+    "54": {
+      "owner": "12",
+      "support": [
+        "11",
+        "15",
+        "16"
+      ],
+      "state": "CANDIDATE",
+      "source_paths": [
+        "hangul-core.js",
+        "hangul-audio-manifest.json",
+        "docs/team12/recording-plan-399.json",
+        "docs/team12/consonant-name-plan-19.json",
+        "docs/team12/missing-recording-script-359.json"
+      ],
+      "test_paths": [
+        "scripts/team12_missing_recording_script.py",
+        "automation/verify_task54.py"
+      ],
+      "acceptance": "현재 누락된 필수 음원 대상 359개(399 음절 중 354개, 자음 이름 19개 중 5개)를 실제 코드·manifest로 재확인하고 대상별 인간 녹음 대본을 생성·검증한다",
+      "unmet": [
+        "독립 CI 성공과 15팀 의미 검증 대기",
+        "실제 녹음 제작·청취 검수는 후속 #57·#58 범위"
+      ],
+      "independent_team15": "PENDING",
+      "dependencies": [
+        51
+      ],
+      "note": "#54의 대본 생성·검증은 실제 음원 제작이 아니다. 51 전체 승인과 별도로 안전한 인벤토리 하위 과제로 진행하되 READY는 15팀 검증 후."
+    },
     "55": {
       "owner": "12",
       "support": [

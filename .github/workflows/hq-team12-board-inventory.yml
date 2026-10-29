@@ -8,6 +8,9 @@ on:
       - docs/team12/recording-plan-399.json
       - docs/team12/consonant-name-plan-19.json
       - scripts/team12_consonant_names.py
+      - scripts/team12_missing_recording_script.py
+      - docs/team12/missing-recording-script-359.json
+      - automation/verify_task54.py
       - hangul-core.js
       - hangul-board.js
       - hangul-audio-manifest.json
@@ -42,6 +45,10 @@ jobs:
         run: python scripts/team12_recording_plan.py --check
       - name: Verify all 19 consonant-name buttons against actual manifest
         run: python scripts/team12_consonant_names.py --check
+      - name: Reconcile missing 359 human recording prompts
+        run: python scripts/team12_missing_recording_script.py --check
+      - name: Independently verify task 54 semantics against live board
+        run: python automation/verify_task54.py
       - name: Run existing education and audio inventory regression
         run: python scripts/team12_content_regression.py
       - name: Validate numbered contracts remain unchanged

@@ -1,0 +1,3244 @@
+{
+  "schema": 1,
+  "purpose": "Human-only recording script for 359 currently missing targets; no audio files created",
+  "source_manifest_version": "20261026-human-only",
+  "counts": {
+    "syllables": 354,
+    "consonant_names": 5,
+    "total": 359
+  },
+  "protocol": "Human speaker reads spoken_text twice with a short pause; review pronunciation, rights, noise and file quality separately.",
+  "targets": [
+    {
+      "id": "syllable:갸",
+      "kind": "syllable",
+      "text": "갸",
+      "spoken_text": "갸",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄱ + ㅑ = 갸"
+    },
+    {
+      "id": "syllable:겨",
+      "kind": "syllable",
+      "text": "겨",
+      "spoken_text": "겨",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄱ + ㅕ = 겨"
+    },
+    {
+      "id": "syllable:고",
+      "kind": "syllable",
+      "text": "고",
+      "spoken_text": "고",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄱ + ㅗ = 고"
+    },
+    {
+      "id": "syllable:교",
+      "kind": "syllable",
+      "text": "교",
+      "spoken_text": "교",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄱ + ㅛ = 교"
+    },
+    {
+      "id": "syllable:규",
+      "kind": "syllable",
+      "text": "규",
+      "spoken_text": "규",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄱ + ㅠ = 규"
+    },
+    {
+      "id": "syllable:기",
+      "kind": "syllable",
+      "text": "기",
+      "spoken_text": "기",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄱ + ㅣ = 기"
+    },
+    {
+      "id": "syllable:걔",
+      "kind": "syllable",
+      "text": "걔",
+      "spoken_text": "걔",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄱ + ㅒ = 걔"
+    },
+    {
+      "id": "syllable:괘",
+      "kind": "syllable",
+      "text": "괘",
+      "spoken_text": "괘",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄱ + ㅙ = 괘"
+    },
+    {
+      "id": "syllable:궈",
+      "kind": "syllable",
+      "text": "궈",
+      "spoken_text": "궈",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄱ + ㅝ = 궈"
+    },
+    {
+      "id": "syllable:궤",
+      "kind": "syllable",
+      "text": "궤",
+      "spoken_text": "궤",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄱ + ㅞ = 궤"
+    },
+    {
+      "id": "syllable:귀",
+      "kind": "syllable",
+      "text": "귀",
+      "spoken_text": "귀",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄱ + ㅟ = 귀"
+    },
+    {
+      "id": "syllable:긔",
+      "kind": "syllable",
+      "text": "긔",
+      "spoken_text": "긔",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄱ + ㅢ = 긔"
+    },
+    {
+      "id": "syllable:냐",
+      "kind": "syllable",
+      "text": "냐",
+      "spoken_text": "냐",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄴ + ㅑ = 냐"
+    },
+    {
+      "id": "syllable:녀",
+      "kind": "syllable",
+      "text": "녀",
+      "spoken_text": "녀",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄴ + ㅕ = 녀"
+    },
+    {
+      "id": "syllable:노",
+      "kind": "syllable",
+      "text": "노",
+      "spoken_text": "노",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄴ + ㅗ = 노"
+    },
+    {
+      "id": "syllable:뇨",
+      "kind": "syllable",
+      "text": "뇨",
+      "spoken_text": "뇨",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄴ + ㅛ = 뇨"
+    },
+    {
+      "id": "syllable:누",
+      "kind": "syllable",
+      "text": "누",
+      "spoken_text": "누",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄴ + ㅜ = 누"
+    },
+    {
+      "id": "syllable:뉴",
+      "kind": "syllable",
+      "text": "뉴",
+      "spoken_text": "뉴",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄴ + ㅠ = 뉴"
+    },
+    {
+      "id": "syllable:느",
+      "kind": "syllable",
+      "text": "느",
+      "spoken_text": "느",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄴ + ㅡ = 느"
+    },
+    {
+      "id": "syllable:니",
+      "kind": "syllable",
+      "text": "니",
+      "spoken_text": "니",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄴ + ㅣ = 니"
+    },
+    {
+      "id": "syllable:내",
+      "kind": "syllable",
+      "text": "내",
+      "spoken_text": "내",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄴ + ㅐ = 내"
+    },
+    {
+      "id": "syllable:냬",
+      "kind": "syllable",
+      "text": "냬",
+      "spoken_text": "냬",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄴ + ㅒ = 냬"
+    },
+    {
+      "id": "syllable:네",
+      "kind": "syllable",
+      "text": "네",
+      "spoken_text": "네",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄴ + ㅔ = 네"
+    },
+    {
+      "id": "syllable:녜",
+      "kind": "syllable",
+      "text": "녜",
+      "spoken_text": "녜",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄴ + ㅖ = 녜"
+    },
+    {
+      "id": "syllable:놔",
+      "kind": "syllable",
+      "text": "놔",
+      "spoken_text": "놔",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄴ + ㅘ = 놔"
+    },
+    {
+      "id": "syllable:놰",
+      "kind": "syllable",
+      "text": "놰",
+      "spoken_text": "놰",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄴ + ㅙ = 놰"
+    },
+    {
+      "id": "syllable:뇌",
+      "kind": "syllable",
+      "text": "뇌",
+      "spoken_text": "뇌",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄴ + ㅚ = 뇌"
+    },
+    {
+      "id": "syllable:눠",
+      "kind": "syllable",
+      "text": "눠",
+      "spoken_text": "눠",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄴ + ㅝ = 눠"
+    },
+    {
+      "id": "syllable:눼",
+      "kind": "syllable",
+      "text": "눼",
+      "spoken_text": "눼",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄴ + ㅞ = 눼"
+    },
+    {
+      "id": "syllable:뉘",
+      "kind": "syllable",
+      "text": "뉘",
+      "spoken_text": "뉘",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄴ + ㅟ = 뉘"
+    },
+    {
+      "id": "syllable:늬",
+      "kind": "syllable",
+      "text": "늬",
+      "spoken_text": "늬",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄴ + ㅢ = 늬"
+    },
+    {
+      "id": "syllable:댜",
+      "kind": "syllable",
+      "text": "댜",
+      "spoken_text": "댜",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄷ + ㅑ = 댜"
+    },
+    {
+      "id": "syllable:뎌",
+      "kind": "syllable",
+      "text": "뎌",
+      "spoken_text": "뎌",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄷ + ㅕ = 뎌"
+    },
+    {
+      "id": "syllable:도",
+      "kind": "syllable",
+      "text": "도",
+      "spoken_text": "도",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄷ + ㅗ = 도"
+    },
+    {
+      "id": "syllable:됴",
+      "kind": "syllable",
+      "text": "됴",
+      "spoken_text": "됴",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄷ + ㅛ = 됴"
+    },
+    {
+      "id": "syllable:듀",
+      "kind": "syllable",
+      "text": "듀",
+      "spoken_text": "듀",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄷ + ㅠ = 듀"
+    },
+    {
+      "id": "syllable:드",
+      "kind": "syllable",
+      "text": "드",
+      "spoken_text": "드",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄷ + ㅡ = 드"
+    },
+    {
+      "id": "syllable:디",
+      "kind": "syllable",
+      "text": "디",
+      "spoken_text": "디",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄷ + ㅣ = 디"
+    },
+    {
+      "id": "syllable:대",
+      "kind": "syllable",
+      "text": "대",
+      "spoken_text": "대",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄷ + ㅐ = 대"
+    },
+    {
+      "id": "syllable:댸",
+      "kind": "syllable",
+      "text": "댸",
+      "spoken_text": "댸",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄷ + ㅒ = 댸"
+    },
+    {
+      "id": "syllable:뎨",
+      "kind": "syllable",
+      "text": "뎨",
+      "spoken_text": "뎨",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄷ + ㅖ = 뎨"
+    },
+    {
+      "id": "syllable:돠",
+      "kind": "syllable",
+      "text": "돠",
+      "spoken_text": "돠",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄷ + ㅘ = 돠"
+    },
+    {
+      "id": "syllable:돼",
+      "kind": "syllable",
+      "text": "돼",
+      "spoken_text": "돼",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄷ + ㅙ = 돼"
+    },
+    {
+      "id": "syllable:되",
+      "kind": "syllable",
+      "text": "되",
+      "spoken_text": "되",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄷ + ㅚ = 되"
+    },
+    {
+      "id": "syllable:둬",
+      "kind": "syllable",
+      "text": "둬",
+      "spoken_text": "둬",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄷ + ㅝ = 둬"
+    },
+    {
+      "id": "syllable:뒈",
+      "kind": "syllable",
+      "text": "뒈",
+      "spoken_text": "뒈",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄷ + ㅞ = 뒈"
+    },
+    {
+      "id": "syllable:듸",
+      "kind": "syllable",
+      "text": "듸",
+      "spoken_text": "듸",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄷ + ㅢ = 듸"
+    },
+    {
+      "id": "syllable:라",
+      "kind": "syllable",
+      "text": "라",
+      "spoken_text": "라",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅏ = 라"
+    },
+    {
+      "id": "syllable:랴",
+      "kind": "syllable",
+      "text": "랴",
+      "spoken_text": "랴",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅑ = 랴"
+    },
+    {
+      "id": "syllable:러",
+      "kind": "syllable",
+      "text": "러",
+      "spoken_text": "러",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅓ = 러"
+    },
+    {
+      "id": "syllable:려",
+      "kind": "syllable",
+      "text": "려",
+      "spoken_text": "려",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅕ = 려"
+    },
+    {
+      "id": "syllable:로",
+      "kind": "syllable",
+      "text": "로",
+      "spoken_text": "로",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅗ = 로"
+    },
+    {
+      "id": "syllable:료",
+      "kind": "syllable",
+      "text": "료",
+      "spoken_text": "료",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅛ = 료"
+    },
+    {
+      "id": "syllable:루",
+      "kind": "syllable",
+      "text": "루",
+      "spoken_text": "루",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅜ = 루"
+    },
+    {
+      "id": "syllable:류",
+      "kind": "syllable",
+      "text": "류",
+      "spoken_text": "류",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅠ = 류"
+    },
+    {
+      "id": "syllable:르",
+      "kind": "syllable",
+      "text": "르",
+      "spoken_text": "르",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅡ = 르"
+    },
+    {
+      "id": "syllable:리",
+      "kind": "syllable",
+      "text": "리",
+      "spoken_text": "리",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅣ = 리"
+    },
+    {
+      "id": "syllable:래",
+      "kind": "syllable",
+      "text": "래",
+      "spoken_text": "래",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅐ = 래"
+    },
+    {
+      "id": "syllable:럐",
+      "kind": "syllable",
+      "text": "럐",
+      "spoken_text": "럐",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅒ = 럐"
+    },
+    {
+      "id": "syllable:레",
+      "kind": "syllable",
+      "text": "레",
+      "spoken_text": "레",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅔ = 레"
+    },
+    {
+      "id": "syllable:례",
+      "kind": "syllable",
+      "text": "례",
+      "spoken_text": "례",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅖ = 례"
+    },
+    {
+      "id": "syllable:롸",
+      "kind": "syllable",
+      "text": "롸",
+      "spoken_text": "롸",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅘ = 롸"
+    },
+    {
+      "id": "syllable:뢔",
+      "kind": "syllable",
+      "text": "뢔",
+      "spoken_text": "뢔",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅙ = 뢔"
+    },
+    {
+      "id": "syllable:뢰",
+      "kind": "syllable",
+      "text": "뢰",
+      "spoken_text": "뢰",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅚ = 뢰"
+    },
+    {
+      "id": "syllable:뤄",
+      "kind": "syllable",
+      "text": "뤄",
+      "spoken_text": "뤄",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅝ = 뤄"
+    },
+    {
+      "id": "syllable:뤠",
+      "kind": "syllable",
+      "text": "뤠",
+      "spoken_text": "뤠",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅞ = 뤠"
+    },
+    {
+      "id": "syllable:뤼",
+      "kind": "syllable",
+      "text": "뤼",
+      "spoken_text": "뤼",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅟ = 뤼"
+    },
+    {
+      "id": "syllable:릐",
+      "kind": "syllable",
+      "text": "릐",
+      "spoken_text": "릐",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄹ + ㅢ = 릐"
+    },
+    {
+      "id": "syllable:마",
+      "kind": "syllable",
+      "text": "마",
+      "spoken_text": "마",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅁ + ㅏ = 마"
+    },
+    {
+      "id": "syllable:먀",
+      "kind": "syllable",
+      "text": "먀",
+      "spoken_text": "먀",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅁ + ㅑ = 먀"
+    },
+    {
+      "id": "syllable:머",
+      "kind": "syllable",
+      "text": "머",
+      "spoken_text": "머",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅁ + ㅓ = 머"
+    },
+    {
+      "id": "syllable:며",
+      "kind": "syllable",
+      "text": "며",
+      "spoken_text": "며",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅁ + ㅕ = 며"
+    },
+    {
+      "id": "syllable:모",
+      "kind": "syllable",
+      "text": "모",
+      "spoken_text": "모",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅁ + ㅗ = 모"
+    },
+    {
+      "id": "syllable:묘",
+      "kind": "syllable",
+      "text": "묘",
+      "spoken_text": "묘",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅁ + ㅛ = 묘"
+    },
+    {
+      "id": "syllable:무",
+      "kind": "syllable",
+      "text": "무",
+      "spoken_text": "무",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅁ + ㅜ = 무"
+    },
+    {
+      "id": "syllable:뮤",
+      "kind": "syllable",
+      "text": "뮤",
+      "spoken_text": "뮤",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅁ + ㅠ = 뮤"
+    },
+    {
+      "id": "syllable:므",
+      "kind": "syllable",
+      "text": "므",
+      "spoken_text": "므",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅁ + ㅡ = 므"
+    },
+    {
+      "id": "syllable:미",
+      "kind": "syllable",
+      "text": "미",
+      "spoken_text": "미",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅁ + ㅣ = 미"
+    },
+    {
+      "id": "syllable:매",
+      "kind": "syllable",
+      "text": "매",
+      "spoken_text": "매",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅁ + ㅐ = 매"
+    },
+    {
+      "id": "syllable:먜",
+      "kind": "syllable",
+      "text": "먜",
+      "spoken_text": "먜",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅁ + ㅒ = 먜"
+    },
+    {
+      "id": "syllable:메",
+      "kind": "syllable",
+      "text": "메",
+      "spoken_text": "메",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅁ + ㅔ = 메"
+    },
+    {
+      "id": "syllable:몌",
+      "kind": "syllable",
+      "text": "몌",
+      "spoken_text": "몌",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅁ + ㅖ = 몌"
+    },
+    {
+      "id": "syllable:뫄",
+      "kind": "syllable",
+      "text": "뫄",
+      "spoken_text": "뫄",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅁ + ㅘ = 뫄"
+    },
+    {
+      "id": "syllable:뫠",
+      "kind": "syllable",
+      "text": "뫠",
+      "spoken_text": "뫠",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅁ + ㅙ = 뫠"
+    },
+    {
+      "id": "syllable:뫼",
+      "kind": "syllable",
+      "text": "뫼",
+      "spoken_text": "뫼",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅁ + ㅚ = 뫼"
+    },
+    {
+      "id": "syllable:뭬",
+      "kind": "syllable",
+      "text": "뭬",
+      "spoken_text": "뭬",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅁ + ㅞ = 뭬"
+    },
+    {
+      "id": "syllable:뮈",
+      "kind": "syllable",
+      "text": "뮈",
+      "spoken_text": "뮈",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅁ + ㅟ = 뮈"
+    },
+    {
+      "id": "syllable:믜",
+      "kind": "syllable",
+      "text": "믜",
+      "spoken_text": "믜",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅁ + ㅢ = 믜"
+    },
+    {
+      "id": "syllable:바",
+      "kind": "syllable",
+      "text": "바",
+      "spoken_text": "바",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅏ = 바"
+    },
+    {
+      "id": "syllable:뱌",
+      "kind": "syllable",
+      "text": "뱌",
+      "spoken_text": "뱌",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅑ = 뱌"
+    },
+    {
+      "id": "syllable:버",
+      "kind": "syllable",
+      "text": "버",
+      "spoken_text": "버",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅓ = 버"
+    },
+    {
+      "id": "syllable:벼",
+      "kind": "syllable",
+      "text": "벼",
+      "spoken_text": "벼",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅕ = 벼"
+    },
+    {
+      "id": "syllable:보",
+      "kind": "syllable",
+      "text": "보",
+      "spoken_text": "보",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅗ = 보"
+    },
+    {
+      "id": "syllable:뵤",
+      "kind": "syllable",
+      "text": "뵤",
+      "spoken_text": "뵤",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅛ = 뵤"
+    },
+    {
+      "id": "syllable:부",
+      "kind": "syllable",
+      "text": "부",
+      "spoken_text": "부",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅜ = 부"
+    },
+    {
+      "id": "syllable:뷰",
+      "kind": "syllable",
+      "text": "뷰",
+      "spoken_text": "뷰",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅠ = 뷰"
+    },
+    {
+      "id": "syllable:브",
+      "kind": "syllable",
+      "text": "브",
+      "spoken_text": "브",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅡ = 브"
+    },
+    {
+      "id": "syllable:비",
+      "kind": "syllable",
+      "text": "비",
+      "spoken_text": "비",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅣ = 비"
+    },
+    {
+      "id": "syllable:배",
+      "kind": "syllable",
+      "text": "배",
+      "spoken_text": "배",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅐ = 배"
+    },
+    {
+      "id": "syllable:뱨",
+      "kind": "syllable",
+      "text": "뱨",
+      "spoken_text": "뱨",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅒ = 뱨"
+    },
+    {
+      "id": "syllable:베",
+      "kind": "syllable",
+      "text": "베",
+      "spoken_text": "베",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅔ = 베"
+    },
+    {
+      "id": "syllable:볘",
+      "kind": "syllable",
+      "text": "볘",
+      "spoken_text": "볘",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅖ = 볘"
+    },
+    {
+      "id": "syllable:봐",
+      "kind": "syllable",
+      "text": "봐",
+      "spoken_text": "봐",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅘ = 봐"
+    },
+    {
+      "id": "syllable:봬",
+      "kind": "syllable",
+      "text": "봬",
+      "spoken_text": "봬",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅙ = 봬"
+    },
+    {
+      "id": "syllable:뵈",
+      "kind": "syllable",
+      "text": "뵈",
+      "spoken_text": "뵈",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅚ = 뵈"
+    },
+    {
+      "id": "syllable:붜",
+      "kind": "syllable",
+      "text": "붜",
+      "spoken_text": "붜",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅝ = 붜"
+    },
+    {
+      "id": "syllable:붸",
+      "kind": "syllable",
+      "text": "붸",
+      "spoken_text": "붸",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅞ = 붸"
+    },
+    {
+      "id": "syllable:뷔",
+      "kind": "syllable",
+      "text": "뷔",
+      "spoken_text": "뷔",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅟ = 뷔"
+    },
+    {
+      "id": "syllable:븨",
+      "kind": "syllable",
+      "text": "븨",
+      "spoken_text": "븨",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅂ + ㅢ = 븨"
+    },
+    {
+      "id": "syllable:샤",
+      "kind": "syllable",
+      "text": "샤",
+      "spoken_text": "샤",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅅ + ㅑ = 샤"
+    },
+    {
+      "id": "syllable:서",
+      "kind": "syllable",
+      "text": "서",
+      "spoken_text": "서",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅅ + ㅓ = 서"
+    },
+    {
+      "id": "syllable:셔",
+      "kind": "syllable",
+      "text": "셔",
+      "spoken_text": "셔",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅅ + ㅕ = 셔"
+    },
+    {
+      "id": "syllable:쇼",
+      "kind": "syllable",
+      "text": "쇼",
+      "spoken_text": "쇼",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅅ + ㅛ = 쇼"
+    },
+    {
+      "id": "syllable:슈",
+      "kind": "syllable",
+      "text": "슈",
+      "spoken_text": "슈",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅅ + ㅠ = 슈"
+    },
+    {
+      "id": "syllable:스",
+      "kind": "syllable",
+      "text": "스",
+      "spoken_text": "스",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅅ + ㅡ = 스"
+    },
+    {
+      "id": "syllable:새",
+      "kind": "syllable",
+      "text": "새",
+      "spoken_text": "새",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅅ + ㅐ = 새"
+    },
+    {
+      "id": "syllable:섀",
+      "kind": "syllable",
+      "text": "섀",
+      "spoken_text": "섀",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅅ + ㅒ = 섀"
+    },
+    {
+      "id": "syllable:세",
+      "kind": "syllable",
+      "text": "세",
+      "spoken_text": "세",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅅ + ㅔ = 세"
+    },
+    {
+      "id": "syllable:셰",
+      "kind": "syllable",
+      "text": "셰",
+      "spoken_text": "셰",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅅ + ㅖ = 셰"
+    },
+    {
+      "id": "syllable:솨",
+      "kind": "syllable",
+      "text": "솨",
+      "spoken_text": "솨",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅅ + ㅘ = 솨"
+    },
+    {
+      "id": "syllable:쇄",
+      "kind": "syllable",
+      "text": "쇄",
+      "spoken_text": "쇄",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅅ + ㅙ = 쇄"
+    },
+    {
+      "id": "syllable:쇠",
+      "kind": "syllable",
+      "text": "쇠",
+      "spoken_text": "쇠",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅅ + ㅚ = 쇠"
+    },
+    {
+      "id": "syllable:숴",
+      "kind": "syllable",
+      "text": "숴",
+      "spoken_text": "숴",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅅ + ㅝ = 숴"
+    },
+    {
+      "id": "syllable:쉐",
+      "kind": "syllable",
+      "text": "쉐",
+      "spoken_text": "쉐",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅅ + ㅞ = 쉐"
+    },
+    {
+      "id": "syllable:쉬",
+      "kind": "syllable",
+      "text": "쉬",
+      "spoken_text": "쉬",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅅ + ㅟ = 쉬"
+    },
+    {
+      "id": "syllable:싀",
+      "kind": "syllable",
+      "text": "싀",
+      "spoken_text": "싀",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅅ + ㅢ = 싀"
+    },
+    {
+      "id": "syllable:얘",
+      "kind": "syllable",
+      "text": "얘",
+      "spoken_text": "얘",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅇ + ㅒ = 얘"
+    },
+    {
+      "id": "syllable:워",
+      "kind": "syllable",
+      "text": "워",
+      "spoken_text": "워",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅇ + ㅝ = 워"
+    },
+    {
+      "id": "syllable:웨",
+      "kind": "syllable",
+      "text": "웨",
+      "spoken_text": "웨",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅇ + ㅞ = 웨"
+    },
+    {
+      "id": "syllable:의",
+      "kind": "syllable",
+      "text": "의",
+      "spoken_text": "의",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅇ + ㅢ = 의"
+    },
+    {
+      "id": "syllable:자",
+      "kind": "syllable",
+      "text": "자",
+      "spoken_text": "자",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅈ + ㅏ = 자"
+    },
+    {
+      "id": "syllable:쟈",
+      "kind": "syllable",
+      "text": "쟈",
+      "spoken_text": "쟈",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅈ + ㅑ = 쟈"
+    },
+    {
+      "id": "syllable:져",
+      "kind": "syllable",
+      "text": "져",
+      "spoken_text": "져",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅈ + ㅕ = 져"
+    },
+    {
+      "id": "syllable:조",
+      "kind": "syllable",
+      "text": "조",
+      "spoken_text": "조",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅈ + ㅗ = 조"
+    },
+    {
+      "id": "syllable:죠",
+      "kind": "syllable",
+      "text": "죠",
+      "spoken_text": "죠",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅈ + ㅛ = 죠"
+    },
+    {
+      "id": "syllable:주",
+      "kind": "syllable",
+      "text": "주",
+      "spoken_text": "주",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅈ + ㅜ = 주"
+    },
+    {
+      "id": "syllable:쥬",
+      "kind": "syllable",
+      "text": "쥬",
+      "spoken_text": "쥬",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅈ + ㅠ = 쥬"
+    },
+    {
+      "id": "syllable:즈",
+      "kind": "syllable",
+      "text": "즈",
+      "spoken_text": "즈",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅈ + ㅡ = 즈"
+    },
+    {
+      "id": "syllable:지",
+      "kind": "syllable",
+      "text": "지",
+      "spoken_text": "지",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅈ + ㅣ = 지"
+    },
+    {
+      "id": "syllable:재",
+      "kind": "syllable",
+      "text": "재",
+      "spoken_text": "재",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅈ + ㅐ = 재"
+    },
+    {
+      "id": "syllable:쟤",
+      "kind": "syllable",
+      "text": "쟤",
+      "spoken_text": "쟤",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅈ + ㅒ = 쟤"
+    },
+    {
+      "id": "syllable:제",
+      "kind": "syllable",
+      "text": "제",
+      "spoken_text": "제",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅈ + ㅔ = 제"
+    },
+    {
+      "id": "syllable:졔",
+      "kind": "syllable",
+      "text": "졔",
+      "spoken_text": "졔",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅈ + ㅖ = 졔"
+    },
+    {
+      "id": "syllable:좌",
+      "kind": "syllable",
+      "text": "좌",
+      "spoken_text": "좌",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅈ + ㅘ = 좌"
+    },
+    {
+      "id": "syllable:좨",
+      "kind": "syllable",
+      "text": "좨",
+      "spoken_text": "좨",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅈ + ㅙ = 좨"
+    },
+    {
+      "id": "syllable:죄",
+      "kind": "syllable",
+      "text": "죄",
+      "spoken_text": "죄",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅈ + ㅚ = 죄"
+    },
+    {
+      "id": "syllable:줘",
+      "kind": "syllable",
+      "text": "줘",
+      "spoken_text": "줘",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅈ + ㅝ = 줘"
+    },
+    {
+      "id": "syllable:줴",
+      "kind": "syllable",
+      "text": "줴",
+      "spoken_text": "줴",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅈ + ㅞ = 줴"
+    },
+    {
+      "id": "syllable:쥐",
+      "kind": "syllable",
+      "text": "쥐",
+      "spoken_text": "쥐",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅈ + ㅟ = 쥐"
+    },
+    {
+      "id": "syllable:즤",
+      "kind": "syllable",
+      "text": "즤",
+      "spoken_text": "즤",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅈ + ㅢ = 즤"
+    },
+    {
+      "id": "syllable:챠",
+      "kind": "syllable",
+      "text": "챠",
+      "spoken_text": "챠",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅊ + ㅑ = 챠"
+    },
+    {
+      "id": "syllable:처",
+      "kind": "syllable",
+      "text": "처",
+      "spoken_text": "처",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅊ + ㅓ = 처"
+    },
+    {
+      "id": "syllable:쳐",
+      "kind": "syllable",
+      "text": "쳐",
+      "spoken_text": "쳐",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅊ + ㅕ = 쳐"
+    },
+    {
+      "id": "syllable:초",
+      "kind": "syllable",
+      "text": "초",
+      "spoken_text": "초",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅊ + ㅗ = 초"
+    },
+    {
+      "id": "syllable:쵸",
+      "kind": "syllable",
+      "text": "쵸",
+      "spoken_text": "쵸",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅊ + ㅛ = 쵸"
+    },
+    {
+      "id": "syllable:추",
+      "kind": "syllable",
+      "text": "추",
+      "spoken_text": "추",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅊ + ㅜ = 추"
+    },
+    {
+      "id": "syllable:츄",
+      "kind": "syllable",
+      "text": "츄",
+      "spoken_text": "츄",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅊ + ㅠ = 츄"
+    },
+    {
+      "id": "syllable:츠",
+      "kind": "syllable",
+      "text": "츠",
+      "spoken_text": "츠",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅊ + ㅡ = 츠"
+    },
+    {
+      "id": "syllable:치",
+      "kind": "syllable",
+      "text": "치",
+      "spoken_text": "치",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅊ + ㅣ = 치"
+    },
+    {
+      "id": "syllable:챼",
+      "kind": "syllable",
+      "text": "챼",
+      "spoken_text": "챼",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅊ + ㅒ = 챼"
+    },
+    {
+      "id": "syllable:체",
+      "kind": "syllable",
+      "text": "체",
+      "spoken_text": "체",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅊ + ㅔ = 체"
+    },
+    {
+      "id": "syllable:쳬",
+      "kind": "syllable",
+      "text": "쳬",
+      "spoken_text": "쳬",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅊ + ㅖ = 쳬"
+    },
+    {
+      "id": "syllable:촤",
+      "kind": "syllable",
+      "text": "촤",
+      "spoken_text": "촤",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅊ + ㅘ = 촤"
+    },
+    {
+      "id": "syllable:쵀",
+      "kind": "syllable",
+      "text": "쵀",
+      "spoken_text": "쵀",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅊ + ㅙ = 쵀"
+    },
+    {
+      "id": "syllable:최",
+      "kind": "syllable",
+      "text": "최",
+      "spoken_text": "최",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅊ + ㅚ = 최"
+    },
+    {
+      "id": "syllable:춰",
+      "kind": "syllable",
+      "text": "춰",
+      "spoken_text": "춰",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅊ + ㅝ = 춰"
+    },
+    {
+      "id": "syllable:췌",
+      "kind": "syllable",
+      "text": "췌",
+      "spoken_text": "췌",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅊ + ㅞ = 췌"
+    },
+    {
+      "id": "syllable:취",
+      "kind": "syllable",
+      "text": "취",
+      "spoken_text": "취",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅊ + ㅟ = 취"
+    },
+    {
+      "id": "syllable:츼",
+      "kind": "syllable",
+      "text": "츼",
+      "spoken_text": "츼",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅊ + ㅢ = 츼"
+    },
+    {
+      "id": "syllable:카",
+      "kind": "syllable",
+      "text": "카",
+      "spoken_text": "카",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅏ = 카"
+    },
+    {
+      "id": "syllable:캬",
+      "kind": "syllable",
+      "text": "캬",
+      "spoken_text": "캬",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅑ = 캬"
+    },
+    {
+      "id": "syllable:커",
+      "kind": "syllable",
+      "text": "커",
+      "spoken_text": "커",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅓ = 커"
+    },
+    {
+      "id": "syllable:켜",
+      "kind": "syllable",
+      "text": "켜",
+      "spoken_text": "켜",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅕ = 켜"
+    },
+    {
+      "id": "syllable:코",
+      "kind": "syllable",
+      "text": "코",
+      "spoken_text": "코",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅗ = 코"
+    },
+    {
+      "id": "syllable:쿄",
+      "kind": "syllable",
+      "text": "쿄",
+      "spoken_text": "쿄",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅛ = 쿄"
+    },
+    {
+      "id": "syllable:쿠",
+      "kind": "syllable",
+      "text": "쿠",
+      "spoken_text": "쿠",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅜ = 쿠"
+    },
+    {
+      "id": "syllable:큐",
+      "kind": "syllable",
+      "text": "큐",
+      "spoken_text": "큐",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅠ = 큐"
+    },
+    {
+      "id": "syllable:크",
+      "kind": "syllable",
+      "text": "크",
+      "spoken_text": "크",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅡ = 크"
+    },
+    {
+      "id": "syllable:키",
+      "kind": "syllable",
+      "text": "키",
+      "spoken_text": "키",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅣ = 키"
+    },
+    {
+      "id": "syllable:캐",
+      "kind": "syllable",
+      "text": "캐",
+      "spoken_text": "캐",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅐ = 캐"
+    },
+    {
+      "id": "syllable:컈",
+      "kind": "syllable",
+      "text": "컈",
+      "spoken_text": "컈",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅒ = 컈"
+    },
+    {
+      "id": "syllable:케",
+      "kind": "syllable",
+      "text": "케",
+      "spoken_text": "케",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅔ = 케"
+    },
+    {
+      "id": "syllable:켸",
+      "kind": "syllable",
+      "text": "켸",
+      "spoken_text": "켸",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅖ = 켸"
+    },
+    {
+      "id": "syllable:콰",
+      "kind": "syllable",
+      "text": "콰",
+      "spoken_text": "콰",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅘ = 콰"
+    },
+    {
+      "id": "syllable:쾌",
+      "kind": "syllable",
+      "text": "쾌",
+      "spoken_text": "쾌",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅙ = 쾌"
+    },
+    {
+      "id": "syllable:쾨",
+      "kind": "syllable",
+      "text": "쾨",
+      "spoken_text": "쾨",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅚ = 쾨"
+    },
+    {
+      "id": "syllable:쿼",
+      "kind": "syllable",
+      "text": "쿼",
+      "spoken_text": "쿼",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅝ = 쿼"
+    },
+    {
+      "id": "syllable:퀘",
+      "kind": "syllable",
+      "text": "퀘",
+      "spoken_text": "퀘",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅞ = 퀘"
+    },
+    {
+      "id": "syllable:퀴",
+      "kind": "syllable",
+      "text": "퀴",
+      "spoken_text": "퀴",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅟ = 퀴"
+    },
+    {
+      "id": "syllable:킈",
+      "kind": "syllable",
+      "text": "킈",
+      "spoken_text": "킈",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅋ + ㅢ = 킈"
+    },
+    {
+      "id": "syllable:타",
+      "kind": "syllable",
+      "text": "타",
+      "spoken_text": "타",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅏ = 타"
+    },
+    {
+      "id": "syllable:탸",
+      "kind": "syllable",
+      "text": "탸",
+      "spoken_text": "탸",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅑ = 탸"
+    },
+    {
+      "id": "syllable:터",
+      "kind": "syllable",
+      "text": "터",
+      "spoken_text": "터",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅓ = 터"
+    },
+    {
+      "id": "syllable:텨",
+      "kind": "syllable",
+      "text": "텨",
+      "spoken_text": "텨",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅕ = 텨"
+    },
+    {
+      "id": "syllable:토",
+      "kind": "syllable",
+      "text": "토",
+      "spoken_text": "토",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅗ = 토"
+    },
+    {
+      "id": "syllable:툐",
+      "kind": "syllable",
+      "text": "툐",
+      "spoken_text": "툐",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅛ = 툐"
+    },
+    {
+      "id": "syllable:투",
+      "kind": "syllable",
+      "text": "투",
+      "spoken_text": "투",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅜ = 투"
+    },
+    {
+      "id": "syllable:튜",
+      "kind": "syllable",
+      "text": "튜",
+      "spoken_text": "튜",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅠ = 튜"
+    },
+    {
+      "id": "syllable:트",
+      "kind": "syllable",
+      "text": "트",
+      "spoken_text": "트",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅡ = 트"
+    },
+    {
+      "id": "syllable:티",
+      "kind": "syllable",
+      "text": "티",
+      "spoken_text": "티",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅣ = 티"
+    },
+    {
+      "id": "syllable:태",
+      "kind": "syllable",
+      "text": "태",
+      "spoken_text": "태",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅐ = 태"
+    },
+    {
+      "id": "syllable:턔",
+      "kind": "syllable",
+      "text": "턔",
+      "spoken_text": "턔",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅒ = 턔"
+    },
+    {
+      "id": "syllable:테",
+      "kind": "syllable",
+      "text": "테",
+      "spoken_text": "테",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅔ = 테"
+    },
+    {
+      "id": "syllable:톄",
+      "kind": "syllable",
+      "text": "톄",
+      "spoken_text": "톄",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅖ = 톄"
+    },
+    {
+      "id": "syllable:톼",
+      "kind": "syllable",
+      "text": "톼",
+      "spoken_text": "톼",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅘ = 톼"
+    },
+    {
+      "id": "syllable:퇘",
+      "kind": "syllable",
+      "text": "퇘",
+      "spoken_text": "퇘",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅙ = 퇘"
+    },
+    {
+      "id": "syllable:퇴",
+      "kind": "syllable",
+      "text": "퇴",
+      "spoken_text": "퇴",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅚ = 퇴"
+    },
+    {
+      "id": "syllable:퉈",
+      "kind": "syllable",
+      "text": "퉈",
+      "spoken_text": "퉈",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅝ = 퉈"
+    },
+    {
+      "id": "syllable:퉤",
+      "kind": "syllable",
+      "text": "퉤",
+      "spoken_text": "퉤",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅞ = 퉤"
+    },
+    {
+      "id": "syllable:튀",
+      "kind": "syllable",
+      "text": "튀",
+      "spoken_text": "튀",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅟ = 튀"
+    },
+    {
+      "id": "syllable:틔",
+      "kind": "syllable",
+      "text": "틔",
+      "spoken_text": "틔",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅌ + ㅢ = 틔"
+    },
+    {
+      "id": "syllable:파",
+      "kind": "syllable",
+      "text": "파",
+      "spoken_text": "파",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅏ = 파"
+    },
+    {
+      "id": "syllable:퍄",
+      "kind": "syllable",
+      "text": "퍄",
+      "spoken_text": "퍄",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅑ = 퍄"
+    },
+    {
+      "id": "syllable:퍼",
+      "kind": "syllable",
+      "text": "퍼",
+      "spoken_text": "퍼",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅓ = 퍼"
+    },
+    {
+      "id": "syllable:펴",
+      "kind": "syllable",
+      "text": "펴",
+      "spoken_text": "펴",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅕ = 펴"
+    },
+    {
+      "id": "syllable:포",
+      "kind": "syllable",
+      "text": "포",
+      "spoken_text": "포",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅗ = 포"
+    },
+    {
+      "id": "syllable:표",
+      "kind": "syllable",
+      "text": "표",
+      "spoken_text": "표",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅛ = 표"
+    },
+    {
+      "id": "syllable:푸",
+      "kind": "syllable",
+      "text": "푸",
+      "spoken_text": "푸",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅜ = 푸"
+    },
+    {
+      "id": "syllable:퓨",
+      "kind": "syllable",
+      "text": "퓨",
+      "spoken_text": "퓨",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅠ = 퓨"
+    },
+    {
+      "id": "syllable:프",
+      "kind": "syllable",
+      "text": "프",
+      "spoken_text": "프",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅡ = 프"
+    },
+    {
+      "id": "syllable:피",
+      "kind": "syllable",
+      "text": "피",
+      "spoken_text": "피",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅣ = 피"
+    },
+    {
+      "id": "syllable:패",
+      "kind": "syllable",
+      "text": "패",
+      "spoken_text": "패",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅐ = 패"
+    },
+    {
+      "id": "syllable:퍠",
+      "kind": "syllable",
+      "text": "퍠",
+      "spoken_text": "퍠",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅒ = 퍠"
+    },
+    {
+      "id": "syllable:페",
+      "kind": "syllable",
+      "text": "페",
+      "spoken_text": "페",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅔ = 페"
+    },
+    {
+      "id": "syllable:폐",
+      "kind": "syllable",
+      "text": "폐",
+      "spoken_text": "폐",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅖ = 폐"
+    },
+    {
+      "id": "syllable:퐈",
+      "kind": "syllable",
+      "text": "퐈",
+      "spoken_text": "퐈",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅘ = 퐈"
+    },
+    {
+      "id": "syllable:퐤",
+      "kind": "syllable",
+      "text": "퐤",
+      "spoken_text": "퐤",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅙ = 퐤"
+    },
+    {
+      "id": "syllable:푀",
+      "kind": "syllable",
+      "text": "푀",
+      "spoken_text": "푀",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅚ = 푀"
+    },
+    {
+      "id": "syllable:풔",
+      "kind": "syllable",
+      "text": "풔",
+      "spoken_text": "풔",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅝ = 풔"
+    },
+    {
+      "id": "syllable:풰",
+      "kind": "syllable",
+      "text": "풰",
+      "spoken_text": "풰",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅞ = 풰"
+    },
+    {
+      "id": "syllable:퓌",
+      "kind": "syllable",
+      "text": "퓌",
+      "spoken_text": "퓌",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅟ = 퓌"
+    },
+    {
+      "id": "syllable:픠",
+      "kind": "syllable",
+      "text": "픠",
+      "spoken_text": "픠",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅍ + ㅢ = 픠"
+    },
+    {
+      "id": "syllable:하",
+      "kind": "syllable",
+      "text": "하",
+      "spoken_text": "하",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅎ + ㅏ = 하"
+    },
+    {
+      "id": "syllable:햐",
+      "kind": "syllable",
+      "text": "햐",
+      "spoken_text": "햐",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅎ + ㅑ = 햐"
+    },
+    {
+      "id": "syllable:허",
+      "kind": "syllable",
+      "text": "허",
+      "spoken_text": "허",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅎ + ㅓ = 허"
+    },
+    {
+      "id": "syllable:혀",
+      "kind": "syllable",
+      "text": "혀",
+      "spoken_text": "혀",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅎ + ㅕ = 혀"
+    },
+    {
+      "id": "syllable:호",
+      "kind": "syllable",
+      "text": "호",
+      "spoken_text": "호",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅎ + ㅗ = 호"
+    },
+    {
+      "id": "syllable:효",
+      "kind": "syllable",
+      "text": "효",
+      "spoken_text": "효",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅎ + ㅛ = 효"
+    },
+    {
+      "id": "syllable:휴",
+      "kind": "syllable",
+      "text": "휴",
+      "spoken_text": "휴",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅎ + ㅠ = 휴"
+    },
+    {
+      "id": "syllable:흐",
+      "kind": "syllable",
+      "text": "흐",
+      "spoken_text": "흐",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅎ + ㅡ = 흐"
+    },
+    {
+      "id": "syllable:히",
+      "kind": "syllable",
+      "text": "히",
+      "spoken_text": "히",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅎ + ㅣ = 히"
+    },
+    {
+      "id": "syllable:해",
+      "kind": "syllable",
+      "text": "해",
+      "spoken_text": "해",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅎ + ㅐ = 해"
+    },
+    {
+      "id": "syllable:햬",
+      "kind": "syllable",
+      "text": "햬",
+      "spoken_text": "햬",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅎ + ㅒ = 햬"
+    },
+    {
+      "id": "syllable:헤",
+      "kind": "syllable",
+      "text": "헤",
+      "spoken_text": "헤",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅎ + ㅔ = 헤"
+    },
+    {
+      "id": "syllable:혜",
+      "kind": "syllable",
+      "text": "혜",
+      "spoken_text": "혜",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅎ + ㅖ = 혜"
+    },
+    {
+      "id": "syllable:화",
+      "kind": "syllable",
+      "text": "화",
+      "spoken_text": "화",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅎ + ㅘ = 화"
+    },
+    {
+      "id": "syllable:홰",
+      "kind": "syllable",
+      "text": "홰",
+      "spoken_text": "홰",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅎ + ㅙ = 홰"
+    },
+    {
+      "id": "syllable:회",
+      "kind": "syllable",
+      "text": "회",
+      "spoken_text": "회",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅎ + ㅚ = 회"
+    },
+    {
+      "id": "syllable:훠",
+      "kind": "syllable",
+      "text": "훠",
+      "spoken_text": "훠",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅎ + ㅝ = 훠"
+    },
+    {
+      "id": "syllable:훼",
+      "kind": "syllable",
+      "text": "훼",
+      "spoken_text": "훼",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅎ + ㅞ = 훼"
+    },
+    {
+      "id": "syllable:휘",
+      "kind": "syllable",
+      "text": "휘",
+      "spoken_text": "휘",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅎ + ㅟ = 휘"
+    },
+    {
+      "id": "syllable:희",
+      "kind": "syllable",
+      "text": "희",
+      "spoken_text": "희",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅎ + ㅢ = 희"
+    },
+    {
+      "id": "syllable:까",
+      "kind": "syllable",
+      "text": "까",
+      "spoken_text": "까",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅏ = 까"
+    },
+    {
+      "id": "syllable:꺄",
+      "kind": "syllable",
+      "text": "꺄",
+      "spoken_text": "꺄",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅑ = 꺄"
+    },
+    {
+      "id": "syllable:꺼",
+      "kind": "syllable",
+      "text": "꺼",
+      "spoken_text": "꺼",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅓ = 꺼"
+    },
+    {
+      "id": "syllable:껴",
+      "kind": "syllable",
+      "text": "껴",
+      "spoken_text": "껴",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅕ = 껴"
+    },
+    {
+      "id": "syllable:꼬",
+      "kind": "syllable",
+      "text": "꼬",
+      "spoken_text": "꼬",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅗ = 꼬"
+    },
+    {
+      "id": "syllable:꾜",
+      "kind": "syllable",
+      "text": "꾜",
+      "spoken_text": "꾜",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅛ = 꾜"
+    },
+    {
+      "id": "syllable:꾸",
+      "kind": "syllable",
+      "text": "꾸",
+      "spoken_text": "꾸",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅜ = 꾸"
+    },
+    {
+      "id": "syllable:뀨",
+      "kind": "syllable",
+      "text": "뀨",
+      "spoken_text": "뀨",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅠ = 뀨"
+    },
+    {
+      "id": "syllable:끄",
+      "kind": "syllable",
+      "text": "끄",
+      "spoken_text": "끄",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅡ = 끄"
+    },
+    {
+      "id": "syllable:끼",
+      "kind": "syllable",
+      "text": "끼",
+      "spoken_text": "끼",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅣ = 끼"
+    },
+    {
+      "id": "syllable:깨",
+      "kind": "syllable",
+      "text": "깨",
+      "spoken_text": "깨",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅐ = 깨"
+    },
+    {
+      "id": "syllable:꺠",
+      "kind": "syllable",
+      "text": "꺠",
+      "spoken_text": "꺠",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅒ = 꺠"
+    },
+    {
+      "id": "syllable:께",
+      "kind": "syllable",
+      "text": "께",
+      "spoken_text": "께",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅔ = 께"
+    },
+    {
+      "id": "syllable:꼐",
+      "kind": "syllable",
+      "text": "꼐",
+      "spoken_text": "꼐",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅖ = 꼐"
+    },
+    {
+      "id": "syllable:꽈",
+      "kind": "syllable",
+      "text": "꽈",
+      "spoken_text": "꽈",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅘ = 꽈"
+    },
+    {
+      "id": "syllable:꽤",
+      "kind": "syllable",
+      "text": "꽤",
+      "spoken_text": "꽤",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅙ = 꽤"
+    },
+    {
+      "id": "syllable:꾀",
+      "kind": "syllable",
+      "text": "꾀",
+      "spoken_text": "꾀",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅚ = 꾀"
+    },
+    {
+      "id": "syllable:꿔",
+      "kind": "syllable",
+      "text": "꿔",
+      "spoken_text": "꿔",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅝ = 꿔"
+    },
+    {
+      "id": "syllable:꿰",
+      "kind": "syllable",
+      "text": "꿰",
+      "spoken_text": "꿰",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅞ = 꿰"
+    },
+    {
+      "id": "syllable:뀌",
+      "kind": "syllable",
+      "text": "뀌",
+      "spoken_text": "뀌",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅟ = 뀌"
+    },
+    {
+      "id": "syllable:끠",
+      "kind": "syllable",
+      "text": "끠",
+      "spoken_text": "끠",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ + ㅢ = 끠"
+    },
+    {
+      "id": "syllable:따",
+      "kind": "syllable",
+      "text": "따",
+      "spoken_text": "따",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄸ + ㅏ = 따"
+    },
+    {
+      "id": "syllable:땨",
+      "kind": "syllable",
+      "text": "땨",
+      "spoken_text": "땨",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄸ + ㅑ = 땨"
+    },
+    {
+      "id": "syllable:떠",
+      "kind": "syllable",
+      "text": "떠",
+      "spoken_text": "떠",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄸ + ㅓ = 떠"
+    },
+    {
+      "id": "syllable:뗘",
+      "kind": "syllable",
+      "text": "뗘",
+      "spoken_text": "뗘",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄸ + ㅕ = 뗘"
+    },
+    {
+      "id": "syllable:뚀",
+      "kind": "syllable",
+      "text": "뚀",
+      "spoken_text": "뚀",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄸ + ㅛ = 뚀"
+    },
+    {
+      "id": "syllable:뚜",
+      "kind": "syllable",
+      "text": "뚜",
+      "spoken_text": "뚜",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄸ + ㅜ = 뚜"
+    },
+    {
+      "id": "syllable:뜌",
+      "kind": "syllable",
+      "text": "뜌",
+      "spoken_text": "뜌",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄸ + ㅠ = 뜌"
+    },
+    {
+      "id": "syllable:뜨",
+      "kind": "syllable",
+      "text": "뜨",
+      "spoken_text": "뜨",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄸ + ㅡ = 뜨"
+    },
+    {
+      "id": "syllable:띠",
+      "kind": "syllable",
+      "text": "띠",
+      "spoken_text": "띠",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄸ + ㅣ = 띠"
+    },
+    {
+      "id": "syllable:떄",
+      "kind": "syllable",
+      "text": "떄",
+      "spoken_text": "떄",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄸ + ㅒ = 떄"
+    },
+    {
+      "id": "syllable:떼",
+      "kind": "syllable",
+      "text": "떼",
+      "spoken_text": "떼",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄸ + ㅔ = 떼"
+    },
+    {
+      "id": "syllable:뗴",
+      "kind": "syllable",
+      "text": "뗴",
+      "spoken_text": "뗴",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄸ + ㅖ = 뗴"
+    },
+    {
+      "id": "syllable:똬",
+      "kind": "syllable",
+      "text": "똬",
+      "spoken_text": "똬",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄸ + ㅘ = 똬"
+    },
+    {
+      "id": "syllable:뙈",
+      "kind": "syllable",
+      "text": "뙈",
+      "spoken_text": "뙈",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄸ + ㅙ = 뙈"
+    },
+    {
+      "id": "syllable:뙤",
+      "kind": "syllable",
+      "text": "뙤",
+      "spoken_text": "뙤",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄸ + ㅚ = 뙤"
+    },
+    {
+      "id": "syllable:뚸",
+      "kind": "syllable",
+      "text": "뚸",
+      "spoken_text": "뚸",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄸ + ㅝ = 뚸"
+    },
+    {
+      "id": "syllable:뛔",
+      "kind": "syllable",
+      "text": "뛔",
+      "spoken_text": "뛔",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄸ + ㅞ = 뛔"
+    },
+    {
+      "id": "syllable:뛰",
+      "kind": "syllable",
+      "text": "뛰",
+      "spoken_text": "뛰",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄸ + ㅟ = 뛰"
+    },
+    {
+      "id": "syllable:띄",
+      "kind": "syllable",
+      "text": "띄",
+      "spoken_text": "띄",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄸ + ㅢ = 띄"
+    },
+    {
+      "id": "syllable:빠",
+      "kind": "syllable",
+      "text": "빠",
+      "spoken_text": "빠",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅏ = 빠"
+    },
+    {
+      "id": "syllable:뺘",
+      "kind": "syllable",
+      "text": "뺘",
+      "spoken_text": "뺘",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅑ = 뺘"
+    },
+    {
+      "id": "syllable:뻐",
+      "kind": "syllable",
+      "text": "뻐",
+      "spoken_text": "뻐",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅓ = 뻐"
+    },
+    {
+      "id": "syllable:뼈",
+      "kind": "syllable",
+      "text": "뼈",
+      "spoken_text": "뼈",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅕ = 뼈"
+    },
+    {
+      "id": "syllable:뽀",
+      "kind": "syllable",
+      "text": "뽀",
+      "spoken_text": "뽀",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅗ = 뽀"
+    },
+    {
+      "id": "syllable:뾰",
+      "kind": "syllable",
+      "text": "뾰",
+      "spoken_text": "뾰",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅛ = 뾰"
+    },
+    {
+      "id": "syllable:뿌",
+      "kind": "syllable",
+      "text": "뿌",
+      "spoken_text": "뿌",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅜ = 뿌"
+    },
+    {
+      "id": "syllable:쀼",
+      "kind": "syllable",
+      "text": "쀼",
+      "spoken_text": "쀼",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅠ = 쀼"
+    },
+    {
+      "id": "syllable:쁘",
+      "kind": "syllable",
+      "text": "쁘",
+      "spoken_text": "쁘",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅡ = 쁘"
+    },
+    {
+      "id": "syllable:삐",
+      "kind": "syllable",
+      "text": "삐",
+      "spoken_text": "삐",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅣ = 삐"
+    },
+    {
+      "id": "syllable:빼",
+      "kind": "syllable",
+      "text": "빼",
+      "spoken_text": "빼",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅐ = 빼"
+    },
+    {
+      "id": "syllable:뺴",
+      "kind": "syllable",
+      "text": "뺴",
+      "spoken_text": "뺴",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅒ = 뺴"
+    },
+    {
+      "id": "syllable:뻬",
+      "kind": "syllable",
+      "text": "뻬",
+      "spoken_text": "뻬",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅔ = 뻬"
+    },
+    {
+      "id": "syllable:뼤",
+      "kind": "syllable",
+      "text": "뼤",
+      "spoken_text": "뼤",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅖ = 뼤"
+    },
+    {
+      "id": "syllable:뽜",
+      "kind": "syllable",
+      "text": "뽜",
+      "spoken_text": "뽜",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅘ = 뽜"
+    },
+    {
+      "id": "syllable:뽸",
+      "kind": "syllable",
+      "text": "뽸",
+      "spoken_text": "뽸",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅙ = 뽸"
+    },
+    {
+      "id": "syllable:뾔",
+      "kind": "syllable",
+      "text": "뾔",
+      "spoken_text": "뾔",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅚ = 뾔"
+    },
+    {
+      "id": "syllable:뿨",
+      "kind": "syllable",
+      "text": "뿨",
+      "spoken_text": "뿨",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅝ = 뿨"
+    },
+    {
+      "id": "syllable:쀄",
+      "kind": "syllable",
+      "text": "쀄",
+      "spoken_text": "쀄",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅞ = 쀄"
+    },
+    {
+      "id": "syllable:쀠",
+      "kind": "syllable",
+      "text": "쀠",
+      "spoken_text": "쀠",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅟ = 쀠"
+    },
+    {
+      "id": "syllable:쁴",
+      "kind": "syllable",
+      "text": "쁴",
+      "spoken_text": "쁴",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ + ㅢ = 쁴"
+    },
+    {
+      "id": "syllable:싸",
+      "kind": "syllable",
+      "text": "싸",
+      "spoken_text": "싸",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ + ㅏ = 싸"
+    },
+    {
+      "id": "syllable:쌰",
+      "kind": "syllable",
+      "text": "쌰",
+      "spoken_text": "쌰",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ + ㅑ = 쌰"
+    },
+    {
+      "id": "syllable:써",
+      "kind": "syllable",
+      "text": "써",
+      "spoken_text": "써",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ + ㅓ = 써"
+    },
+    {
+      "id": "syllable:쎠",
+      "kind": "syllable",
+      "text": "쎠",
+      "spoken_text": "쎠",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ + ㅕ = 쎠"
+    },
+    {
+      "id": "syllable:쏘",
+      "kind": "syllable",
+      "text": "쏘",
+      "spoken_text": "쏘",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ + ㅗ = 쏘"
+    },
+    {
+      "id": "syllable:쑈",
+      "kind": "syllable",
+      "text": "쑈",
+      "spoken_text": "쑈",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ + ㅛ = 쑈"
+    },
+    {
+      "id": "syllable:쑤",
+      "kind": "syllable",
+      "text": "쑤",
+      "spoken_text": "쑤",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ + ㅜ = 쑤"
+    },
+    {
+      "id": "syllable:쓔",
+      "kind": "syllable",
+      "text": "쓔",
+      "spoken_text": "쓔",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ + ㅠ = 쓔"
+    },
+    {
+      "id": "syllable:쓰",
+      "kind": "syllable",
+      "text": "쓰",
+      "spoken_text": "쓰",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ + ㅡ = 쓰"
+    },
+    {
+      "id": "syllable:쌔",
+      "kind": "syllable",
+      "text": "쌔",
+      "spoken_text": "쌔",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ + ㅐ = 쌔"
+    },
+    {
+      "id": "syllable:썌",
+      "kind": "syllable",
+      "text": "썌",
+      "spoken_text": "썌",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ + ㅒ = 썌"
+    },
+    {
+      "id": "syllable:쎄",
+      "kind": "syllable",
+      "text": "쎄",
+      "spoken_text": "쎄",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ + ㅔ = 쎄"
+    },
+    {
+      "id": "syllable:쎼",
+      "kind": "syllable",
+      "text": "쎼",
+      "spoken_text": "쎼",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ + ㅖ = 쎼"
+    },
+    {
+      "id": "syllable:쏴",
+      "kind": "syllable",
+      "text": "쏴",
+      "spoken_text": "쏴",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ + ㅘ = 쏴"
+    },
+    {
+      "id": "syllable:쐐",
+      "kind": "syllable",
+      "text": "쐐",
+      "spoken_text": "쐐",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ + ㅙ = 쐐"
+    },
+    {
+      "id": "syllable:쐬",
+      "kind": "syllable",
+      "text": "쐬",
+      "spoken_text": "쐬",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ + ㅚ = 쐬"
+    },
+    {
+      "id": "syllable:쒀",
+      "kind": "syllable",
+      "text": "쒀",
+      "spoken_text": "쒀",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ + ㅝ = 쒀"
+    },
+    {
+      "id": "syllable:쒜",
+      "kind": "syllable",
+      "text": "쒜",
+      "spoken_text": "쒜",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ + ㅞ = 쒜"
+    },
+    {
+      "id": "syllable:쒸",
+      "kind": "syllable",
+      "text": "쒸",
+      "spoken_text": "쒸",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ + ㅟ = 쒸"
+    },
+    {
+      "id": "syllable:씌",
+      "kind": "syllable",
+      "text": "씌",
+      "spoken_text": "씌",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ + ㅢ = 씌"
+    },
+    {
+      "id": "syllable:짜",
+      "kind": "syllable",
+      "text": "짜",
+      "spoken_text": "짜",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅏ = 짜"
+    },
+    {
+      "id": "syllable:쨔",
+      "kind": "syllable",
+      "text": "쨔",
+      "spoken_text": "쨔",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅑ = 쨔"
+    },
+    {
+      "id": "syllable:쩌",
+      "kind": "syllable",
+      "text": "쩌",
+      "spoken_text": "쩌",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅓ = 쩌"
+    },
+    {
+      "id": "syllable:쪄",
+      "kind": "syllable",
+      "text": "쪄",
+      "spoken_text": "쪄",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅕ = 쪄"
+    },
+    {
+      "id": "syllable:쪼",
+      "kind": "syllable",
+      "text": "쪼",
+      "spoken_text": "쪼",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅗ = 쪼"
+    },
+    {
+      "id": "syllable:쬬",
+      "kind": "syllable",
+      "text": "쬬",
+      "spoken_text": "쬬",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅛ = 쬬"
+    },
+    {
+      "id": "syllable:쭈",
+      "kind": "syllable",
+      "text": "쭈",
+      "spoken_text": "쭈",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅜ = 쭈"
+    },
+    {
+      "id": "syllable:쮸",
+      "kind": "syllable",
+      "text": "쮸",
+      "spoken_text": "쮸",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅠ = 쮸"
+    },
+    {
+      "id": "syllable:쯔",
+      "kind": "syllable",
+      "text": "쯔",
+      "spoken_text": "쯔",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅡ = 쯔"
+    },
+    {
+      "id": "syllable:찌",
+      "kind": "syllable",
+      "text": "찌",
+      "spoken_text": "찌",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅣ = 찌"
+    },
+    {
+      "id": "syllable:째",
+      "kind": "syllable",
+      "text": "째",
+      "spoken_text": "째",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅐ = 째"
+    },
+    {
+      "id": "syllable:쨰",
+      "kind": "syllable",
+      "text": "쨰",
+      "spoken_text": "쨰",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅒ = 쨰"
+    },
+    {
+      "id": "syllable:쩨",
+      "kind": "syllable",
+      "text": "쩨",
+      "spoken_text": "쩨",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅔ = 쩨"
+    },
+    {
+      "id": "syllable:쪠",
+      "kind": "syllable",
+      "text": "쪠",
+      "spoken_text": "쪠",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅖ = 쪠"
+    },
+    {
+      "id": "syllable:쫘",
+      "kind": "syllable",
+      "text": "쫘",
+      "spoken_text": "쫘",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅘ = 쫘"
+    },
+    {
+      "id": "syllable:쫴",
+      "kind": "syllable",
+      "text": "쫴",
+      "spoken_text": "쫴",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅙ = 쫴"
+    },
+    {
+      "id": "syllable:쬐",
+      "kind": "syllable",
+      "text": "쬐",
+      "spoken_text": "쬐",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅚ = 쬐"
+    },
+    {
+      "id": "syllable:쭤",
+      "kind": "syllable",
+      "text": "쭤",
+      "spoken_text": "쭤",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅝ = 쭤"
+    },
+    {
+      "id": "syllable:쮀",
+      "kind": "syllable",
+      "text": "쮀",
+      "spoken_text": "쮀",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅞ = 쮀"
+    },
+    {
+      "id": "syllable:쮜",
+      "kind": "syllable",
+      "text": "쮜",
+      "spoken_text": "쮜",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅟ = 쮜"
+    },
+    {
+      "id": "syllable:쯰",
+      "kind": "syllable",
+      "text": "쯰",
+      "spoken_text": "쯰",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ + ㅢ = 쯰"
+    },
+    {
+      "id": "consonant_name:쌍기역",
+      "kind": "consonant_name",
+      "text": "쌍기역",
+      "spoken_text": "쌍기역",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄲ 자음의 이름"
+    },
+    {
+      "id": "consonant_name:쌍디귿",
+      "kind": "consonant_name",
+      "text": "쌍디귿",
+      "spoken_text": "쌍디귿",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㄸ 자음의 이름"
+    },
+    {
+      "id": "consonant_name:쌍비읍",
+      "kind": "consonant_name",
+      "text": "쌍비읍",
+      "spoken_text": "쌍비읍",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅃ 자음의 이름"
+    },
+    {
+      "id": "consonant_name:쌍시옷",
+      "kind": "consonant_name",
+      "text": "쌍시옷",
+      "spoken_text": "쌍시옷",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅆ 자음의 이름"
+    },
+    {
+      "id": "consonant_name:쌍지읒",
+      "kind": "consonant_name",
+      "text": "쌍지읒",
+      "spoken_text": "쌍지읒",
+      "repeat": 2,
+      "pause_ms": 700,
+      "context": "ㅉ 자음의 이름"
+    }
+  ]
+}
