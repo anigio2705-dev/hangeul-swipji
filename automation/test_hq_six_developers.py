@@ -35,6 +35,35 @@ class BoundedPatchTests(unittest.TestCase):
             blocked = choose_work_items("12", c, {}, {}, reg, root)
             self.assertIn("non-Python", blocked[0]["unsupported_reason"])
 
+    def test_unsupported_ready_does_not_starve_next_safe_ready(self):
+        c = contracts("\\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "page.html").write_text("<html><body>lesson</body></html>")
+            (root / "feature.py").write_text("def feature(): return True\\n")
+            (root / "test_feature.py").write_text(
+                "import unittest\\nclass TestFeature(unittest.TestCase):\\n"
+                " def test_feature(self): self.assertTrue(True)\\n")
+            def entry(path):
+                return {"owner": "12", "state": "READY",
+                        "source_paths": [path], "test_paths": ["test_feature.py"],
+                        "independent_team15": "PASS",
+                        "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"}
+            reg = {"schema": 1, "items": {"45": entry("page.html"),
+                                          "46": entry("feature.py")}}
+            chosen = choose_work_items("12", c, {}, {}, reg, root)
+            self.assertEqual(chosen[0]["number"], 46)
+            self.assertEqual(chosen[0]["path"], "feature.py")
+            self.assertEqual(chosen[0]["unsupported_reason"], "")
+            self.assertEqual(reg["items"]["45"]["state"], "READY",
+                             "The original independently reviewed registry must remain immutable")
+            # When no Python READY exists, preserve a truthful unsupported
+            # diagnostic rather than fabricating an AI call.
+            del reg["items"]["46"]
+            blocked = choose_work_items("12", c, {}, {}, reg, root)
+            self.assertEqual(blocked[0]["number"], 45)
+            self.assertIn("non-Python", blocked[0]["unsupported_reason"])
+
     def test_ready_task_specific_unittest_cannot_pass_with_zero_tests(self):
         fake = SimpleNamespace(returncode=0, stdout="", stderr="Ran 0 tests in 0.000s\nOK\n")
         with patch("hq_six_developers.shell", return_value=fake):
