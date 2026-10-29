@@ -33,6 +33,74 @@ def evaluate(catalog, ledger, active_runs=0, failure_runs=0):
         "active_runs": active_runs, "recent_failed_runs": failure_runs,
         "teams": result, "rule": "Green team status is not final backlog completion."}
 
+
+def readiness(catalog, ledger, registry, root=Path(".")):
+    """Conservative contract queue: no guessed paths or self-approved READY.
+
+    This checks local source/test paths and recorded independent review. A CI
+    URL alone is NOT a live CI verification; the dispatch supervisor must
+    recheck its conclusion and the exact commit before accepting any patch.
+    """
+    import re
+    if registry.get("schema") != 1 or not isinstance(registry.get("items"), dict):
+        raise ValueError("Invalid HQ semantic registry")
+    entries = registry["items"]
+    unknown = set(entries) - {str(n) for n in catalog}
+    if unknown:
+        raise ValueError("Unknown semantic contract IDs: " + ", ".join(sorted(unknown)))
+    result = {"mapped_total": len(entries), "unmapped_total": len(catalog) - len(entries),
+              "dispatchable_total": 0, "dispatchable": [], "candidates": [],
+              "blocked": [], "invalid_ready": [], "already_verified": [],
+              "unmapped_unverified": []}
+    base = Path(root).resolve()
+    def valid_path(raw):
+        if not isinstance(raw, str) or not raw or raw.startswith("/"):
+            return False
+        p = (base / raw).resolve()
+        return p.is_relative_to(base) and p.is_file()
+    for number, task in catalog.items():
+        key = str(number)
+        state = ledger.get(key, {}).get("status", "unverified")
+        entry = entries.get(key)
+        if state in VERIFIED:
+            result["already_verified"].append(number)
+            continue
+        if not entry:
+            result["unmapped_unverified"].append(number)
+            continue
+        if state == "blocked" or entry.get("state") == "BLOCKED":
+            result["blocked"].append(number)
+            continue
+        if entry.get("state") == "CANDIDATE":
+            result["candidates"].append(number)
+            continue
+        if entry.get("state") != "READY":
+            result["invalid_ready"].append({"task": number, "reason": "No approved READY state"})
+            continue
+        source = entry.get("source_paths")
+        tests = entry.get("test_paths")
+        ci = entry.get("independent_ci_url", "")
+        authorized = entry.get("owner") == task["owner"] and set(entry.get("support", [])) <= set(task["support"])
+        reviewed = entry.get("independent_team15") == "PASS"
+        ci_ref = isinstance(ci, str) and bool(re.fullmatch(
+            r"https://github\.com/anigio2705-dev/hangeul-swipji/actions/runs/[0-9]+", ci))
+        paths = (isinstance(source, list) and bool(source)
+                 and isinstance(tests, list) and bool(tests)
+                 and all(valid_path(p) for p in source + tests))
+        deps = all(ledger.get(str(d), {}).get("status") == "complete"
+                   for d in task["dependencies"])
+        if not (authorized and reviewed and ci_ref and paths and deps):
+            missing = [name for name, ok in (("owner", authorized), ("independent_review", reviewed),
+                ("ci_reference", ci_ref), ("real_paths", paths), ("dependencies", deps)) if not ok]
+            result["invalid_ready"].append({"task": number, "reason": ", ".join(missing)})
+            continue
+        result["dispatchable"].append({"task": number, "owner": task["owner"],
+                                       "source_paths": source})
+    result["dispatchable_total"] = len(result["dispatchable"])
+    result["rule"] = ("READY is a static queue candidate only; exact SHA, live CI and "
+                      "independent task regression must be revalidated before promotion.")
+    return result
+
 def main():
     from hq_160_task_cycle import load_catalog
     import argparse
@@ -42,7 +110,10 @@ def main():
     parser.add_argument("--output", default="automation/hq-traffic-lights.json")
     args = parser.parse_args()
     ledger = json.loads(Path(args.ledger).read_text())
-    report = evaluate(load_catalog(args.catalog), ledger)
+    catalog = load_catalog(args.catalog)
+    report = evaluate(catalog, ledger)
+    registry = json.loads(Path("automation/hq_semantic_contract_paths.json").read_text(encoding="utf-8"))
+    report["dispatch_readiness"] = readiness(catalog, ledger, registry)
     assert report["final_complete"] <= report["code_verified"] <= 160
     Path(args.output).write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
     print(json.dumps({"final_complete": report["final_complete"],
