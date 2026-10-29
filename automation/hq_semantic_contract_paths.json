@@ -300,7 +300,8 @@
       "independent_source_regression": "automation/verify_task56_source.py",
       "source_regression_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40809915915",
       "integration_commit": "4b90f8ed765ad2dbc79dcafd8d5b5303673eac8e",
-      "integration_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40813120338"
+      "integration_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40813120338",
+      "evidence_run": 40813120338
     },
     "109": {
       "owner": "14",
