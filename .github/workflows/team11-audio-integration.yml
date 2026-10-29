@@ -10,6 +10,7 @@ on:
       - 'hangul-week.js'
       - 'hangul-week.html'
       - 'tests/team11_audio_user_activation.test.cjs'
+      - 'tests/team11_audio_surface_integration.test.cjs'
       - 'scripts/check-audio-runtime.cjs'
       - 'scripts/check-foundations.cjs'
       - '.github/workflows/team11-audio-integration.yml'
@@ -33,8 +34,9 @@ jobs:
           node --check hangul-board.js
           node --check hangul-week.js
           node --check tests/team11_audio_user_activation.test.cjs
+          node --check tests/team11_audio_surface_integration.test.cjs
       - name: Run 11-team opt-in and user gesture tests
-        run: node --test tests/team11_audio_user_activation.test.cjs
+        run: node --test tests/team11_audio_user_activation.test.cjs tests/team11_audio_surface_integration.test.cjs
       - name: Run legacy human audio runtime regression
         run: node scripts/check-audio-runtime.cjs
       - name: Run course and physical inventory regression
