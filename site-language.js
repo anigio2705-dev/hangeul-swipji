@@ -28,6 +28,7 @@ var existingSelect=document.getElementById('language')||document.getElementById(
 // All supported languages, including English, use full-page translation.
 // Preserve the language being studied when translating the surrounding interface.
 document.querySelectorAll('#consonants,#vowels,#syllables,.board,[data-sound],#selected-syllable,#selected-formula').forEach(function(el){el.classList.add('notranslate');el.setAttribute('translate','no')});if(existingSelect){bar.style.setProperty('display','none','important');var headerStatus=document.createElement('p');headerStatus.id='hs-header-language-status';headerStatus.setAttribute('role','status');headerStatus.className='notranslate';headerStatus.style.cssText='margin:0;padding:0 16px;font-size:12px;color:#795322;max-width:100%';(existingSelect.closest('header')||existingSelect.parentElement).appendChild(headerStatus)}
+var labels={ko:'언어',en:'Language',ja:'言語',es:'Idioma','zh-CN':'语言',ru:'Язык',mn:'Хэл',vi:'Ngôn ngữ'};var label=bar.querySelector('label');if(label)label.textContent='🌐 '+labels[lang];
 var select=document.getElementById('hs-site-language-select');select.replaceChildren();languages.forEach(function(x){var o=document.createElement('option');o.value=x[0];o.textContent=x[1];select.appendChild(o)});select.value=lang;
 function go(code){if(!valid.has(code))return;store(code);cookie(code);var url=new URL(location.href);url.searchParams.set('lang',code);url.searchParams.set('translate_version','4');location.assign(url.toString())}
 select.addEventListener('change',function(){go(select.value)});
