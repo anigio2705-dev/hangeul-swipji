@@ -41,8 +41,10 @@ jobs:
               # repeated workflow run or a previously blocked backlog item.
               if len(teams) != 1 or repairs != {}:
                   raise SystemExit("Advance requires exactly one team and no repairs")
-              if request.get("source_run_id") != 40795966081:
-                  raise SystemExit("Expected prior successful HQ controller gate")
+              source_by_task = {41: 40795966081, 49: 40797462981}
+              expected_task = request.get("expected_next_task")
+              if expected_task not in source_by_task or request.get("source_run_id") != source_by_task[expected_task]:
+                  raise SystemExit("Missing verified predecessor run for this exact task")
               import sys, subprocess
               sys.path.insert(0, "automation")
               from hq_160_task_cycle import load_catalog, next_assignment
@@ -51,8 +53,10 @@ jobs:
               selected = next_assignment(teams[0], catalog, ledger)
               if selected is None or selected["task_number"] != request.get("expected_next_task"):
                   raise SystemExit("No matching safe next assignment; refuse dispatch")
-              if selected["task_number"] != 41 or teams != ["12"]:
-                  raise SystemExit("This one-shot pilot permits only team12 task #41")
+              if selected["task_number"] not in (41, 49) or teams != ["12"]:
+                  raise SystemExit("This one-shot pilot permits only team12 tasks #41 or #49")
+              if selected["task_number"] == 49 and ledger.get("41", {}).get("status") != "code_verified":
+                  raise SystemExit("Task #41 must have independently verified CI before #49")
               expected = request.get("expected_team_commit")
               if not isinstance(expected, str) or len(expected) != 40:
                   raise SystemExit("Missing exact candidate commit")
