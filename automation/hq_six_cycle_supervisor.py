@@ -100,6 +100,14 @@ def independent_check(team, task, token, catalog):
     if not isinstance(sha, str) or not re.fullmatch(r"[a-f0-9]{40}", sha):
         return "RETRY", "Missing valid commit SHA", {}
     contract = catalog[number]
+    # Backlog #47 is progress, mistakes, bookmarks and resume. The old team13
+    # mapping to learning.py only changes placement grading; even a green
+    # learning suite cannot prove the actual #47 acceptance criterion.
+    if (team, number, path) == ("13", 47, "phase3/learning.py"):
+        return "RETRY", ("Wrong task/file mapping: #47 requires progress, mistakes, "
+                         "bookmarks and resume persistence; placement stages in "
+                         "learning.py are unrelated. Reassign to the progress owner "
+                         "and require progress-specific integration tests."), {}
     if team != contract["owner"] and team not in contract["support"]:
         return "RETRY", "Team is not assigned to this numbered item", {}
     branch = "automation/hq-team-" + team + "-autodev-20261029"
