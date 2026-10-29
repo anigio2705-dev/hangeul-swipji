@@ -1,0 +1,32 @@
+name: HQ2 #101 immutable-source and mock-refund independent proof
+on:
+  push:
+    branches:
+      - audit/hq2-101-ci-phase3-fix-20261030-0558
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independently verify exact preserved sources, terminal refund, and four referral roles
+        env:
+          PYTHONPATH: phase3
+        run: |
+          python -m unittest -v \
+            test_standards96.Standards96Tests.test_original_24_source_materials_preserved_exactly \
+            test_team14_crash_recovery.RecoveryCrashTests.test_reject_and_cancel_are_terminal \
+            test_team14_referral_scenarios test_team14_referral_store
+      - name: Preserve READY semantic safety gate
+        run: python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+      - name: No promotion or deployment
+        if: always()
+        run: echo 'Independent mock-only proof. No READY promotion, no production deployment or payment.' >> "$GITHUB_STEP_SUMMARY"
