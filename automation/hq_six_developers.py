@@ -55,6 +55,14 @@ def shell(*args, timeout=120):
                  if k not in ("GITHUB_TOKEN", "OPENAI_API_KEY")}
     return subprocess.run(args, capture_output=True, text=True,
                           timeout=timeout, env=clean_env)
+def require_task_owner(team, contract):
+    """Only the canonical owner can autonomously implement a numbered task.
+
+    Support-team status authorizes collaboration, never an AI patch.
+    """
+    if team != contract["owner"]:
+        raise RuntimeError("Task requires sole owner; support is not implementation authorization")
+
 def validate_ownership():
     all_paths = [p for _, tasks in TASKS.values() for p, _ in tasks]
     if len(all_paths) != len(set(all_paths)):
@@ -179,7 +187,8 @@ def choose_work_items(team, catalog, evidence, repairs, registry, root):
     return [{"path": path, "number": number, "dynamic": False, "tests": [],
              "unsupported_reason": ""}
             for path, _ in TASKS[team][1]
-            for number, target in CURATED_TARGETS[team] if target == path]
+            for number, target in CURATED_TARGETS[team]
+            if target == path and catalog[number]["owner"] == team]
 
 def verify_ready_provenance(item, registry, root=Path(".")):
     """Fail closed before OpenAI spend: live CI and exact tested source/test blobs.
@@ -288,8 +297,7 @@ def main():
                            "status": "semantic_contract_not_ready"})
             continue
         contract = catalog[number]
-        if team != contract["owner"] and team not in contract["support"]:
-            raise RuntimeError("Unauthorized task assignment")
+        require_task_owner(team, contract)
         if evidence.get(str(number), {}).get("status") in ("code_verified", "complete", "blocked"):
             report.append({"task_number": number, "path": path, "status": "already_verified_or_blocked"})
             continue
