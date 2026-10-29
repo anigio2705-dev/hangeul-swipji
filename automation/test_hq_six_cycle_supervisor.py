@@ -12,15 +12,21 @@ def sample():
     return "\n".join(f"{n}. [ ] Acceptance criterion {n}" for n in range(1, 161))
 
 class SixTeamSupervisorTests(unittest.TestCase):
-    def run_cycle(self, committed=False, verdict="TEST_PASS_PENDING_CI", depth=0, repairs=None):
+    def run_cycle(self, committed=False, verdict="TEST_PASS_PENDING_CI", depth=0,
+                  repairs=None, team="14", task_number=109, task_status="committed",
+                  feedback=None):
+        self._selected_team = team
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "artifacts"
             for team in CURATED_TARGETS:
                 target = root / ("team-" + team + "-development")
                 target.mkdir(parents=True)
-                tasks = ([{"task_number": 109, "path": "phase3/team14_referral_store.py",
-                           "status": "committed", "commit": "a" * 40}]
-                         if team == "14" and committed else [])
+                path = {"13": "phase3/instant_matching.py",
+                        "14": "phase3/team14_referral_store.py"}[team]
+                tasks = ([{"task_number": task_number, "path": path,
+                           "status": task_status, "commit": "a" * 40,
+                           "feedback": feedback}]
+                         if team == self._selected_team and committed else [])
                 (target / "team-result.json").write_text(
                     json.dumps({"team": team, "tasks": tasks}), encoding="utf-8")
             output = Path(directory) / "report.json"
@@ -45,10 +51,12 @@ class SixTeamSupervisorTests(unittest.TestCase):
         api.assert_not_called()
 
     def test_independently_tested_commit_dispatches_next_bounded_round(self):
-        report, api = self.run_cycle(committed=True)
+        report, api = self.run_cycle(committed=True, team="13", task_number=22)
         self.assertTrue(report["dispatched_next"])
         self.assertEqual(report["verified_new_functional_code"], 1)
-        self.assertEqual(api.call_args.kwargs["payload"]["inputs"]["chain_depth"], "1")
+        inputs = api.call_args.kwargs["payload"]["inputs"]
+        self.assertEqual(inputs["chain_depth"], "1")
+        self.assertEqual(json.loads(inputs["teams_json"]), ["13"])
 
     def test_precise_failure_retries_once_then_stops(self):
         report, api = self.run_cycle(committed=True, verdict="RETRY")
@@ -60,6 +68,31 @@ class SixTeamSupervisorTests(unittest.TestCase):
             repairs={"14": {"109": {"attempts": 1, "repair_instruction": "first failure"}}})
         self.assertFalse(again["dispatched_next"])
         api_again.assert_not_called()
+
+    def test_failed_patch_receives_precise_one_time_repair_for_only_failed_team(self):
+        report, api = self.run_cycle(
+            committed=True, team="13", task_number=22, task_status="blocked",
+            feedback="Patch must make one unambiguous real change")
+        self.assertEqual(report["verified_new_functional_code"], 0)
+        self.assertEqual(report["team_verdicts"]["13"][0]["verdict"], "RETRY")
+        self.assertTrue(report["dispatched_next"])
+        inputs = api.call_args.kwargs["payload"]["inputs"]
+        self.assertEqual(json.loads(inputs["teams_json"]), ["13"])
+        repair = json.loads(inputs["repair_instructions_json"])["13"]["22"]
+        self.assertEqual(repair["attempts"], 1)
+        self.assertIn("exact unique", repair["repair_instruction"])
+        again, api_again = self.run_cycle(
+            committed=True, team="13", task_number=22, task_status="blocked",
+            feedback="Patch must make one unambiguous real change",
+            depth=1, repairs={"13": {"22": repair}})
+        self.assertFalse(again["dispatched_next"])
+        api_again.assert_not_called()
+
+    def test_success_without_next_safe_task_does_not_repeat_dispatch(self):
+        report, api = self.run_cycle(committed=True, team="14", task_number=109)
+        self.assertFalse(report["dispatched_next"])
+        self.assertEqual(report["verified_new_functional_code"], 1)
+        api.assert_not_called()
 
     def test_pending_ci_is_not_promoted_until_run_completes_successfully(self):
         url = "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"
@@ -76,7 +109,7 @@ class SixTeamSupervisorTests(unittest.TestCase):
             self.assertEqual(ledger["109"]["ci_result"], "success")
 
     def test_budget_caps_successful_chains(self):
-        report, api = self.run_cycle(committed=True, depth=2)
+        report, api = self.run_cycle(committed=True, depth=2, team="13", task_number=22)
         self.assertFalse(report["dispatched_next"])
         api.assert_not_called()
 
