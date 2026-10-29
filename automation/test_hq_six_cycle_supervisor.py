@@ -22,7 +22,7 @@ class SixTeamSupervisorTests(unittest.TestCase):
                 target = root / ("team-" + team + "-development")
                 target.mkdir(parents=True)
                 path = {"13": "phase3/instant_matching.py",
-                        "14": "phase3/team14_referral_store.py"}[team]
+                        "14": "phase3/team14_referral_store.py"}[self._selected_team]
                 tasks = ([{"task_number": task_number, "path": path,
                            "status": task_status, "commit": "a" * 40,
                            "feedback": feedback}]
