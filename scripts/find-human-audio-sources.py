@@ -121,6 +121,9 @@ def valid_word(word):
                 or 0x1100 <= code <= 0x11FF)
     return all(allowed(ch) for ch in word)
 
+# Count only safe, queryable targets; invalid input is not an audio gap.
+missing = [word for word in missing if valid_word(safe_str(word))]
+
 titles = []
 for word in missing:
     word = safe_str(word)

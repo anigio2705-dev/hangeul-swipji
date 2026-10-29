@@ -59,6 +59,8 @@ def check(source, allow_unsafe_baseline=False):
             raise AssertionError("Task #56 report must preserve all six candidates without approving audio")
         if report.get("failedBatches"):
             raise AssertionError("Mocked source lookup should not have failed")
+        if not allow_unsafe_baseline and report.get("missingTargets") != 3:
+            raise AssertionError("Invalid path-like target must not inflate real missing-audio count")
         if not allow_unsafe_baseline:
             reviews = report.get("candidateReview", [])
             if len(reviews) != 1 or reviews[0].get("title") != "File:Ko-가.ogg":
