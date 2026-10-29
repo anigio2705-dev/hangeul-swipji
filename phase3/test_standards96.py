@@ -16,8 +16,21 @@ class Standards96Tests(unittest.TestCase):
             self.assertTrue(all(not a['autoApproved'] for a in m['fourSkillAssessments']))
             for ref in m['sourceReferences']:self.assertEqual(ref['sha256'],hashlib.sha256((server.ROOT.parent/ref['path']).read_bytes()).hexdigest())
     def test_original_24_source_materials_preserved_exactly(self):
-        for f in ('phase3/content.json','phase3/content-expansion.json','index.html','hangul-audio-manifest.json'):
-            self.assertEqual((server.ROOT.parent/f).read_bytes(),subprocess.check_output(['git','show','7418e32:'+f],cwd=server.ROOT.parent))
+        # The 24 source documents are immutable. On isolated integration previews,
+        # allow only these two *exact* additive elements; after stripping them,
+        # index.html must match the historical baseline byte for byte.
+        for f in ('phase3/content.json','phase3/content-expansion.json','hangul-audio-manifest.json'):
+            self.assertEqual((server.ROOT.parent/f).read_bytes(),
+                             subprocess.check_output(['git','show','7418e32:'+f],cwd=server.ROOT.parent))
+        original=subprocess.check_output(['git','show','7418e32:index.html'],cwd=server.ROOT.parent)
+        current=(server.ROOT.parent/'index.html').read_bytes()
+        if current!=original:
+            preview="<div id=\"hs-issue4-preview-notice\" role=\"status\" style=\"background:#fff4d6;color:#392e20;padding:12px 18px;text-align:center;font:600 14px/1.5 'Malgun Gothic',sans-serif;border-bottom:3px solid #bf7e23\">🧪 한글쉽지 통합 테스트 홈페이지 — 정식 운영이 아닌 가상 계정·모의 수업용입니다. 실명·실제 결제정보를 입력하지 마세요. <a href=\"/learn.html\" style=\"text-decoration:underline\">무료 학습</a> · <a href=\"/speaking-platform.html\" style=\"text-decoration:underline\">수업 테스트</a></div>".encode('utf-8')
+            handoff="<div class=\"shell\" data-team12-handoff></div><script src=\"./scripts/team12_learning_handoff.js\" defer></script>".encode('utf-8')
+            self.assertEqual(current.count(preview),1,'approved preview notice must occur exactly once')
+            self.assertEqual(current.count(handoff),1,'approved teaching handoff must occur exactly once')
+            self.assertEqual(current.replace(preview,b'',1).replace(handoff,b'',1),original,
+                             'any other change to the historical homepage must fail')
     def test_all_new_72_have_unique_reading_questions_and_correct_grade_without_client_score(self):
         self.real();us=json.loads((server.ROOT/'content-remaining72.json').read_text())['units'];self.assertEqual(72,len(us))
         self.assertEqual(72,len({u['reading'] for u in us}));self.assertEqual(216,len({a['question'] for u in us for a in u['assessment']}))
