@@ -51,6 +51,10 @@ def acceptance_gate(evidence, desired_sha):
         failures.append("STATIC_ISOLATION_UNVERIFIED")
     if evidence.get("health_status") != 200 or evidence.get("health_mode") != "test" or evidence.get("health_scope") != "isolated-staging":
         failures.append("HOSTED_HEALTH_UNVERIFIED")
+    if evidence.get("health_origin_matches") is not True:
+        failures.append("HOSTED_ORIGIN_UNVERIFIED")
+    if evidence.get("unauthenticated_home_status") != 401:
+        failures.append("PRIVATE_GATE_UNVERIFIED")
     if evidence.get("hosted_source_sha256") != evidence.get("local_staging_source_sha256"):
         failures.append("HOSTED_SOURCE_MISMATCH_OR_UNKNOWN")
     if not desired_sha or evidence.get("verified_deploy_sha") != desired_sha:
