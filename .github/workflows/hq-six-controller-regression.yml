@@ -35,6 +35,39 @@ jobs:
       - name: Verify bounded AI patch safety
         run: python -m unittest discover -s automation -p 'test_hq_six_developers.py' -v
 
+      - name: Independently verify team15 gate rejects every cross-team overlap
+        run: |
+          git fetch --depth=1 origin refs/heads/automation/hq-team-15-autodev-20261029
+          git show FETCH_HEAD:scripts/team15_independent_gate.py > /tmp/team15_independent_gate.py
+          python -m py_compile /tmp/team15_independent_gate.py
+          python - <<'PY'
+          import ast
+          from pathlib import Path
+          source = Path("/tmp/team15_independent_gate.py").read_text()
+          tree = ast.parse(source)
+          checks = [n for n in ast.walk(tree) if isinstance(n, ast.If)
+                    and isinstance(n.test, ast.Name) and n.test.id == "common"]
+          if len(checks) != 1:
+              raise SystemExit("Expected exactly one overlap decision")
+          body = checks[0].body
+          direct_failure = any(
+              isinstance(n, ast.Expr) and isinstance(n.value, ast.Call)
+              and isinstance(n.value.func, ast.Attribute)
+              and isinstance(n.value.func.value, ast.Name)
+              and n.value.func.value.id == "failures"
+              and n.value.func.attr == "append"
+              for n in body)
+          if not direct_failure:
+              raise SystemExit("FAIL: overlap detection can be bypassed by an inner filter")
+          snippet = ast.fix_missing_locations(ast.Module(body=[checks[0]], type_ignores=[]))
+          for files, expected in [(["unlisted/shared.py"], 1), ([], 0)]:
+              scope = {"common": files, "left": "11", "right": "13", "failures": []}
+              exec(compile(snippet, "<team15-overlap>", "exec"), scope)
+              if len(scope["failures"]) != expected:
+                  raise SystemExit("FAIL: overlapping edits were not rejected")
+          print("PASS: all overlapping changes rejected, including unlisted files")
+          PY
+
       - name: Publish actual controller test verdict to isolated branch
         if: always()
         env:
