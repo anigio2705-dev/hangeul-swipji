@@ -671,6 +671,12 @@
     "launch_pr": 65,
     "verified_preflight_ci": 40941758948,
     "verified_schema_ci": 40941758913,
-    "launched_at_utc": "2026-10-29T19:40:00Z"
+    "launched_at_utc": "2026-10-29T19:40:00Z",
+    "retry_number": 1,
+    "previous_run_id": 40941856144,
+    "previous_failure": "All six candidate steps blocked before API by untracked Python bytecode created by pre-call tests; no real model call",
+    "safe_repair_pr": 67,
+    "safe_repair_ci": 40942014542,
+    "safe_repair_sha": "530f2372e73a1bd655bbb157b5ce609a48cef9b0"
   }
 }
