@@ -1,0 +1,27 @@
+name: HQ team11 audio activation independent QA (isolated)
+on:
+  push:
+    branches:
+      - audit/hq-six-team11-activation-ci-20261030-0738
+    paths:
+      - hangul-core.js
+      - tests/team11_audio_user_activation.test.cjs
+      - .github/workflows/hq-team11-activation-qa.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audio-user-activation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Hangul audio JavaScript
+        run: node --check hangul-core.js
+      - name: Execute team11 mobile click activation and missing audio tests
+        run: node --test tests/team11_audio_user_activation.test.cjs
