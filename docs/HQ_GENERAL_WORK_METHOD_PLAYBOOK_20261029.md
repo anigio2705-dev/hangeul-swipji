@@ -317,3 +317,18 @@
 - After #56 exact source and queue CI, selected #44 (seven-course lesson continuity) as the next non-conflicting task. Created `automation/verify_task44.cjs` to execute the actual seven course inline scripts in a deterministic Node DOM, exercise wrong answers, persisted mistakes, correction, full score, next-unit navigation and reload. Dedicated CI runs on the isolated branch without model calls or deployment. This is a real regression implementation, not a claim of real browser verification. Keep #44 CANDIDATE until CI and 15-team meaning check pass.
 
 - **12:42 KST #44 closed-loop verification:** newly built seven-course DOM regression initially failed CI #40813392401 because the first HTML script tag was an empty external script. Exact source selection fix a848d8b1 passed #40813475520. Expanded the independent test to **all 350 existing lesson quiz completion flows** and persistent reload (with wrong-answer/review/next-unit checks in each course); commit db439031, exact CI #40813528164 PASS. Promoted #44 CANDIDATE→CODE_VERIFIED only after independent CI and original task-path alignment. This is a verification of existing lessons, not 350 newly developed lessons; no real browser/mobile, speech, server cross-device sync, or representative approval. Code-verified count 10→11, final 0/160. No new six-team AI bot call was made in this HQ run.
+
+## 2026-10-29 — 대표 최종 목표 명시: AGI 구현
+**최종 연구 목표는 AGI(범용인공지능)의 구현**이다. 현재 다중 에이전트 자율 개발 시스템은 AGI 그 자체가 아니라 연구·실험·검증을 위한 첫 번째 기반이며, 한글쉽지 160개 과제는 실제 세계의 장기 개발 시험 환경이다. 기존 160개 개발 계약·6팀 책임·승인 경계는 그대로 유지한다.
+
+### AGI 연구 트랙 (별도 평가, 기존 과제 완료율에 합산 금지)
+1. **범용성·전이:** 학습하지 않은 유형의 과제, 다른 저장소와 비개발 분야의 문제로 전이되는지 평가한다.
+2. **장기 계획·기억:** 여러 실행·세션에 걸쳐 목표·실패·검증 근거를 유지하고 계획을 수정하는지 평가한다.
+3. **자기교정·학습:** 오류를 스스로 발견하고 외부 문서·실험 결과를 반영해 다음 시도에서 개선되는지 비교 실험한다.
+4. **도구·환경 적응:** 새로운 도구와 제약 아래 작업을 수행하되 승인 경계·보안·비용 제한을 지킨다.
+5. **독립 평가:** 과제 성공률, 인간 개입 횟수, 회귀 오류, 새로운 문제 일반화, 연속 수행 기간, 자원 비용을 기록한다. 기존 스크립트 반복·여러 모델 병렬 호출을 AGI 증거로 계산하지 않는다.
+
+### 운영 규칙
+- 목표는 AGI 구현으로 고정하되, **현재 AGI 달성 또는 결점 없음은 주장하지 않는다.** 연구 성과와 소프트웨어 개발 성과를 별도 장부로 관리한다.
+- 160개 계약의 정상 개발을 방해하지 않도록 격리된 연구 브랜치·실험·평가로 진행한다. 실제 운영 배포·실결제·대외 접촉·고위험 변경은 기존 대표 승인 경계를 지킨다.
+- 총괄본부는 공식 연구·검증 사례를 조사하고, 측정 가능한 가설→실험→반례→수정→재검증을 축적한다. 다음 자동 보고에서 AGI 연구 성과는 확인된 실험 증거가 있을 때만 기재한다.
