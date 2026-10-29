@@ -50,3 +50,9 @@
 - 작업 #47과 무관한 `test_instant_matching.py`가 녹색이더라도 학습 배치 기능 검증으로 인정하지 않는다. 증거 장부는 #47을 `in_progress`, `task_specific_verified=false`로 유지한다. `#22`는 기존 403/200 오류로 `blocked` 유지.
 - 총괄팀은 과제별 정확한 회귀 검사를 요구하고, [수정 커밋 `e18a2cb315`](https://github.com/anigio2705-dev/hangeul-swipji/commit/e18a2cb3150336f40837bb8d57c7cfc3e8a631b3)에서 점수 17→stage5, 18·20→stage6 경계를 독립 검증하도록 추가했다. [제어 회귀 #40795739110](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40795739110)은 성공했으나 실제 #47 AI 패치의 합격을 뜻하지 않는다.
 - **재사용 규칙:** (1) 과제 번호와 테스트 명령을 1:1 매핑 (2) 성공 CI가 해당 변경의 핵심 경계조건을 실제 검사했는지 확인 (3) 검증 실패한 bot 커밋은 생산적 완료로 집계하지 않음 (4) 자동 후속 개발이 실제 실행되는지 job과 커밋으로 확인. 새로운 후속 실행 #40795768625는 09:42 시점 waiting이므로 성공 여부 미확인.
+
+### 09:43 KST 후속 확인 — 실제 후속 실행과 #47 독립 검증
+- [후속 6팀 워크플로 #40795768625](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40795768625)는 09:42:08 시작, 09:42:47 종료, GitHub Actions 결과 success. 실제 job은 `develop (13)`과 `supervise`만 존재하며 6개 팀 모두 개발한 것이 아니다.
+- 팀13 격리 브랜치에 #47의 18~20점 stage 6 경계를 복원한 실제 코드 커밋 [`9cff0b099a9c3ca4e465c29639518d03cf638ed0`](https://github.com/anigio2705-dev/hangeul-swipji/commit/9cff0b099a9c3ca4e465c29639518d03cf638ed0) 확인. 커밋 시각은 09:41:35이므로 09:42 후속 실행에서 *새로 작성된 커밋*이라고 주장하지 않는다. 후속 실행은 기존 수정 커밋의 독립 검증을 수행했다.
+- 현재 장부 #47: `in_progress`, `independent_review=pass`, `task_specific_verified=true`, 학습 전용 테스트 `test_global_learning.py` 사용, `ci_result=pending`. 따라서 과제 코드 검증 및 최종 완료 수에 아직 산입하지 않는다. #22는 여전히 blocked. 전체 최종 완료 0/160.
+- **개선 확인:** 잘못된 검사로 발생한 가짜 녹색 판정을 차단하고, 실제 해당 과제 검사를 실행해 후속 검증을 진행했다. 다만 성공한 워크플로와 완료 승인 사이의 비동기 CI/장부 갱신 관문은 여전히 분리하여 감시한다.
