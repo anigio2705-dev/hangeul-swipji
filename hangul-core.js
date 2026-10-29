@@ -108,7 +108,12 @@
     // reject with NotAllowedError despite a valid human recording.
     // The first tap may occur while the manifest is still loading. Never
     // fabricate audio; tell the learner to tap again after the list is ready.
-    if(!manifestLoaded)await (manifestError?loadManifest():(loading||ready));
+    if(!manifestLoaded){
+      // A pending fetch consumes the current user gesture. Do not start a
+      // browser-blocked playback later and claim the click was successful.
+      status('음원 목록을 준비하고 있습니다. 준비되면 글자를 다시 눌러 주세요. / Audio list loading; tap again when ready.');
+      return {status:'loading'};
+    }
     if(token!==run)return {status:'cancelled'};
     if(manifestError){status('음성 목록을 불러오지 못했습니다. 글자를 다시 누르면 재시도합니다. / Audio list unavailable; click again to retry.');return {status:'manifest-error'}}
     const words=Array.isArray(value)?value:[value];
