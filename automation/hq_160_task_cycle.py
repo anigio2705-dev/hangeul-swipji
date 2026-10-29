@@ -96,6 +96,10 @@ def next_assignment(team, catalog, evidence=None, failures=None):
             raise ValueError("Invalid task state")
         if state in ("code_verified", "complete", "blocked"):
             continue
+        # A separately reviewed commit is awaiting its own CI; do not spend
+        # another AI call rewriting it while that exact verification is pending.
+        if state == "in_progress" and evidence.get(str(number), {}).get("independent_review") == "pass":
+            continue
         if any(evidence.get(str(dep), {}).get("status") != "complete"
                for dep in task["dependencies"]):
             continue
