@@ -81,5 +81,17 @@
     "scope": "Independent source diff and functional regression passed; final CI run and public site still pending",
     "owner": "14",
     "path": "phase3/team14_referral_store.py"
+  },
+  "49": {
+    "status": "in_progress",
+    "commit": "a61974ef90ed9355977eedcb71a523f20f47cbd6",
+    "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797620270",
+    "ci_result": "pending",
+    "independent_review": "pass",
+    "task_specific_verified": true,
+    "test_command": "python -m unittest discover -s phase3 -p test_global_learning.py",
+    "scope": "Independent source diff and task-specific functional regression passed; final CI run and public site still pending",
+    "owner": "12",
+    "path": "phase3/learning.py"
   }
 }
