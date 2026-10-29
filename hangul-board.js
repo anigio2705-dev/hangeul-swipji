@@ -35,10 +35,14 @@
   for(const [, ,word] of H.consonants.slice(0,14))$('practice').append(H.soundButton(word));
   $('play-basic-sequence').onclick=async()=>{
     await H.ready;
-    const available=H.consonants.slice(0,14).map(([, ,word])=>word)
-      .filter(word=>H.availability(word).state==='ready');
+    const basic=H.consonants.slice(0,14).map(([, ,word])=>word);
+    const available=basic.filter(word=>H.availability(word).state==='ready');
     if(!available.length){H.status('재생 가능한 사람 녹음이 없습니다. 음원 목록을 확인해 주세요.');return}
-    await H.play(available);
+    const result=await H.play(available);
+    if(result.status==='played' && available.length<basic.length){
+      const omitted=basic.filter(word=>!available.includes(word));
+      H.status('가나다 연속 듣기: '+available.length+'/'+basic.length+'개 재생. 녹음 없음·검수 보류: '+omitted.join(' · ')+'. / Only available human recordings played.');
+    }
   };
   $('repeat-selected').onclick=()=>H.play(selected);$('stop-audio').onclick=()=>{H.stop();H.status('재생을 멈췄습니다.')};
   H.ready.then(()=>{H.refreshBadges();$('selected-help').textContent=H.availability(selected).label});select('ㄱ','ㅏ',false);
