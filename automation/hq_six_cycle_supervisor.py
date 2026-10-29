@@ -157,7 +157,7 @@ def independent_check(team, task, token, catalog, ledger=None, registry=None, ro
                 output = checked.stdout + checked.stderr
                 # A zero-exit process is not evidence that unittest ran any tests.
                 # Require the standard positive unittest summary for every command.
-                count = re.search(r"\\bRan\\s+([0-9]+)\\s+tests?\\s+in\\b", output)
+                count = re.search(r"\bRan\s+([0-9]+)\s+tests?\s+in\b", output)
                 if checked.returncode or not count or int(count.group(1)) < 1:
                     return "RETRY", "Independent regression failed or ran zero tests: " + output[-500:], {}
             if (team, number) == ("12", 41):
