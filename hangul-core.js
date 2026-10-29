@@ -133,7 +133,7 @@
     // reject with NotAllowedError despite a valid human recording.
     if(!manifestLoaded)await (manifestError?loadManifest():(loading||ready));
     if(token!==run)return {status:'cancelled'};
-    if(manifestError){status('음성 목록을 불러오지 못했습니다. 글자를 다시 누르면 재시도합니다. / Audio list unavailable; click again to retry.');return {status:'manifest-error'}}
+    if(manifestError){status('음성 목록 연결 실패 · 사람 녹음 상태를 확인할 수 없습니다. 음원 목록을 다시 확인해 주세요.');return {status:'manifest-error'}}
     const words=Array.isArray(value)?value:[value];
     if(!words.length||words.some(w=>typeof w!=='string'||!w.trim()))return {status:'invalid'};
     const missing=words.filter(word=>!records[word]);
