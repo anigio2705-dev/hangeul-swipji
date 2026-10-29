@@ -7,7 +7,10 @@ class Standards96Tests(unittest.TestCase):
     setUp=fixtures.PlatformTests.setUp
     tearDown=fixtures.PlatformTests.tearDown
     register=fixtures.PlatformTests.register
-    def real(self):self.units_patch.stop();return server.units()
+    def real(self):
+        self.units_patch.stop()
+        self.addCleanup(self.units_patch.stop)
+        return server.units()
     def test_all_96_link_four_skills_five_phases_and_exact_five_reference_documents(self):
         for u in self.real():
             m=u['teacherStandards'];self.assertEqual(5,len(m['sourceReferences']));self.assertEqual(5,len(m['flow']));self.assertEqual(3,len(m['prompts']));self.assertEqual(3,len(m['anticipatedErrors']))
