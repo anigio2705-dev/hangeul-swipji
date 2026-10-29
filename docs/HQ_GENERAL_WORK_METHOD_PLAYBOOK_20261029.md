@@ -434,3 +434,12 @@
 - 6개 팀 브랜치의 최근 8개 커밋을 GitHub commits API로 조회하고 **작성자 계정**과 커밋 메시지, UTC 시간을 교차 확인했다. 최신 브랜치 HEAD가 반드시 `github-actions[bot]`의 새 개발 커밋은 아니다. 예: 11팀 HEAD `b22380cd`(작성자 anigio2705-dev), 12팀 HEAD `9fb8a54b`(동일), 13팀 HEAD `9cff0b09`는 메시지에 `bot(team13)`가 있지만 실제 작성자 계정은 anigio2705-dev, 15팀 HEAD `d1f592e9`(동일). 이 네 HEAD는 **봇 신규 개발로 집계 금지**.
 - 최근 확인된 실제 `github-actions[bot]` 작성 커밋: 11팀 `f7b52ebf`(2026-10-29 08:50:08 KST, #56), 12팀 `a61974ef`(10:00:09, #49), 13팀 `cbf75b2c`(09:35:39, #47 오배정·오류 포함), 14팀 `e75d948d`(08:44:39, #109), 15팀 `2760c9c7`(09:07:28, #8 위험 수정 이후 복구 필요), 16팀 `ccac78a7`(08:43:31, #55). **최신 실제 bot 커밋 시각은 10:00:09 KST**. #47 오배정과 #8 위험 수정을 성과로 계산하지 않는다.
 - 운영 규칙: 보고 표에 '팀 브랜치 HEAD(사람/복구 포함)'와 '최근 실제 github-actions[bot] SHA'를 분리하고, 작업 번호와 코드 diff/정확한 독립 CI까지 확인한 경우만 개발 실적으로 인정한다. 작성자 문자열만으로 자동 개발의 독립 기능 완료를 증명하지 않는다.
+
+
+## 2026-10-29 15:40 KST — #11 실제 작업 트리·HEAD 경합 차단 실험
+- **교차 판독:** 6팀 정기 보고의 15:35 KST 저장 결과 직접 조회. GitHub 원장의 CODE_VERIFIED 13/160, READY 0, 최종 승인 0, 마지막 실제 bot 개발 10:00:09(#49)와 일치. 보고 수락/CI 성공/실제 신규 AI 개발은 서로 다른 성과다.
+- **공식 방법 참고:** OpenAI의 CI autofix Cookbook(https://developers.openai.com/cookbook/examples/codex/autofix-github-actions)은 현재 *archived*이고, 동일 작업에 API 비밀값과 저장소 쓰기 권한을 결합하는 예제는 복제하지 말라고 명시한다. 따라서 이번에는 모델 호출 전 안전한 git HEAD/dirty 검사와 읽기 전용 별도 CI를 선택했다.
+- **가설/실제 수정:** 기존 11팀 #11 후보는 원격 HQ HEAD·로컬 HEAD 경합, 미커밋·미추적 작업 트리, 팀 브랜치 fetch 후 HEAD 변경을 차단하는 전용 반례가 없었다. 별도 격리 브랜치 `automation/hq-team11-preflight-20261029`에서 `automation/hq_six_developers.py`에 fail-closed 사전 검사 두 개를 연결하고 `automation/test_hq_six_developers.py`에 정상·dirty/untracked·wrong ref·stale remote·git failure·팀 checkout 경합 검사를 추가했다.
+- **검증:** 실제 코드 변경 `373ed581bdf19e94c76f541fa432d09418c5ab38`, 테스트 `cc5cc7b88e8eea1764490a88944786f797ce9266`; 격리 CI #40830454401 SUCCESS, 팀 개발기 테스트 12개(기존 7 + 신규 5), 160계약 테스트 13개, 합계 25개 PASS. PR https://github.com/anigio2705-dev/hangeul-swipji/pull/24 (draft). 후속 실제 git checkout 통합검사 커밋 `8930f39dc622ae3d053ab4ee8fe360d6fe001a0a`은 이 기록 시점에 CI 결과 미확정이다.
+- **한계/판정:** #11은 15팀의 별도 의미 검증 및 최신 CI 확인·HQ 통합 전이므로 CANDIDATE 유지, READY/새 CODE_VERIFIED/실제 6팀 AI 호출 0건. 6팀 하위 AI 실제 호출도 미확인. PR #23의 기존 충돌을 임의 병합하지 않았다. 승인된 HQ 격리 브랜치와 신규 실험 브랜치 외 main·운영 DB·결제·공개 배포·외부 제출은 건드리지 않았다.
+- **다음 자동 안전 작업:** #11 PR의 정확한 SHA CI 및 독립 검토 후 HQ 통합; #9의 실경로/차단 증거를 기존 PR #23과 중복 없이 합치고 15팀 의미 검증으로 READY 공급. READY=0인 동안 동일 AI 호출 반복 금지.
