@@ -29,7 +29,7 @@
     "41": {
       "owner": "12",
       "support": [
-        "15"
+        "13"
       ],
       "state": "CODE_VERIFIED",
       "source_paths": [
@@ -50,8 +50,7 @@
     "47": {
       "owner": "12",
       "support": [
-        "13",
-        "15"
+        "13"
       ],
       "state": "BLOCKED",
       "source_paths": [
@@ -81,7 +80,7 @@
     "49": {
       "owner": "12",
       "support": [
-        "15"
+        "13"
       ],
       "state": "CODE_VERIFIED",
       "source_paths": [
