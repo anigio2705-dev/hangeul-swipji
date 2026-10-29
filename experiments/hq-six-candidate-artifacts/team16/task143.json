@@ -1,0 +1,46 @@
+{
+  "team": "16",
+  "task_number": 143,
+  "items": [
+    {
+      "id": "ko",
+      "text": "Check that the Korean UI label shows '배우기', '시청하기', and '말하기' for Learn, Watch, and Speak buttons respectively.",
+      "expected": "The UI renders exactly '배우기', '시청하기', and '말하기' for the respective buttons, ensuring correct Korean localization."
+    },
+    {
+      "id": "en",
+      "text": "Verify the English UI label displays 'Learn', 'Watch', and 'Speak' on the appropriate frontend buttons.",
+      "expected": "The buttons are labeled 'Learn', 'Watch', and 'Speak' correctly, confirming English localization."
+    },
+    {
+      "id": "ja",
+      "text": "Validate the Japanese UI label text is '学ぶ', '視聴', and '話す' for Learn, Watch, and Speak buttons.",
+      "expected": "Japanese labels show '学ぶ', '視聴', and '話す' accurately, supporting proper Japanese localization."
+    },
+    {
+      "id": "es",
+      "text": "Confirm that the Spanish UI labels read 'Aprender', 'Ver', and 'Hablar' on Learn, Watch, and Speak controls.",
+      "expected": "Spanish labels 'Aprender', 'Ver', and 'Hablar' appear on the interface as expected for localization correctness."
+    },
+    {
+      "id": "zh",
+      "text": "Ensure Chinese UI buttons are labeled with '学习', '观看', and '说' for Learn, Watch, and Speak features.",
+      "expected": "Chinese labels '学习', '观看', and '说' are displayed precisely, fulfilling Chinese localization requirements."
+    },
+    {
+      "id": "ru",
+      "text": "Check that Russian UI label buttons say 'Учить', 'Смотреть', and 'Говорить' respectively.",
+      "expected": "Russian text 'Учить', 'Смотреть', and 'Говорить' is shown exactly on the respective UI buttons, confirming localization."
+    },
+    {
+      "id": "mn",
+      "text": "Test Mongolian UI button labels are 'Суралцах', 'Үзэх', and 'Ярих' for Learn, Watch, Speak.",
+      "expected": "Mongolian labels 'Суралцах', 'Үзэх', and 'Ярих' appear correctly, indicating proper localization."
+    },
+    {
+      "id": "vi",
+      "text": "Verify Vietnamese UI shows 'Học', 'Xem', 'Nói' on Learn, Watch, and Speak buttons.",
+      "expected": "Vietnamese labels are presented as 'Học', 'Xem', 'Nói' correctly to meet localization standards."
+    }
+  ]
+}
