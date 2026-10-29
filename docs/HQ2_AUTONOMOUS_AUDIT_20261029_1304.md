@@ -28,3 +28,8 @@
 ## 금지 경계 및 최종 수치
 main, 운영 DB, 실결제, 공개 배포, 정부기관 신청, 투자자 접촉, 계약·송금은 변경/실행하지 않았다.
 **코드 검증 11/160, 최종 승인 0/160, 계약 경로 13/160, READY 0, 공개 홈페이지 실사용 미검증.**
+
+## 13:08 KST 추가 후속 실제 작업
+- #45의 실제 학습 화면 동적 회귀검사를 기존 #44 DOM 실행기에 추가했다. 7개 과정의 전체 오답 점수 0/N 및 재도전 버튼이 원래 문항을 복원하는지 검사한다. 코드 커밋 8526fefca6f58cd73bc0cb3a7140639f6a7700a4.
+- 독립 CI https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40815975914 — **SUCCESS**. 1758개 정답 인덱스·중복 보기 데이터 CI https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40815818683 역시 SUCCESS.
+- #45는 여전히 해설 0/1758, 교육적 정답 의미 및 혼합 점수 검증 미완료이므로 CANDIDATE. 계약 기록 커밋 909d05be. CODE_VERIFIED는 11/160으로 유지, READY 0, 최종 승인 0.
