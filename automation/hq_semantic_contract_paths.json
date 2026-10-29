@@ -30,6 +30,56 @@
       "pilot_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40830582694",
       "pilot_ci_scope": "12 runner tests (5 new preflight cases), 13 task-cycle regressions, real isolated checkout clean+remote HEAD check. Pilot branch only; not merged into HQ."
     },
+    "13": {
+      "owner": "11",
+      "support": [
+        "15"
+      ],
+      "state": "CANDIDATE",
+      "source_paths": [
+        "deploy/render-staging.yaml",
+        "deploy/STAGING99.md",
+        "phase3/staging_server.py"
+      ],
+      "test_paths": [
+        "phase3/test_staging.py"
+      ],
+      "acceptance": "기존 Render 테스트99 서비스의 실제 배포 브랜치·무료 요금·자동배포 Off·격리 DB/비밀값 설정을 서비스 실행 증거로 확인",
+      "dependencies": [],
+      "unmet": [
+        "GitHub Blueprint의 제안 브랜치가 실제 Render 설정과 일치하는지 관리자 API/배포 기록 미확인",
+        "Render 현재 실행 SHA와 테스트 전용 DB/비밀값 존재 여부 실측 미확인",
+        "15팀 독립 검토와 테스트99 실사용 검증 미완료"
+      ],
+      "independent_team15": "PENDING",
+      "note": "2026-10-29 15:57+ KST: docs/audit/team11-99-gap.md and deploy/STAGING99.md confirm service URL and historical ad5757d deploy. Blueprint has autoDeployTrigger off and branch integration/phase2-phase3-20261027; this is only a proposal, not verified live service configuration. No new deployment."
+    },
+    "16": {
+      "owner": "11",
+      "support": [
+        "15"
+      ],
+      "state": "CANDIDATE",
+      "source_paths": [
+        "phase3/staging_server.py",
+        "phase3/app.js"
+      ],
+      "test_paths": [
+        "phase3/test_staging.py"
+      ],
+      "acceptance": "테스트99 /healthz의 실제 HTTPS·격리 scope·배포 커밋·서버/app SHA256을 승인된 후보 코드와 대조하고 불일치 시 최종 완료 차단",
+      "dependencies": [
+        15
+      ],
+      "unmet": [
+        "Render 실제 최신 배포 SHA 미확인(문서상 2026-10-27 ad5757d 기록만 존재)",
+        "외부 테스트99 /healthz 요청 도구 접근 실패; 실제 HTTP 결과 미확인",
+        "신규 deployedCommit 검증 회귀 CI 결과 미확인 및 테스트99 실제 배포 미실행",
+        "15팀 독립 의미 검증·대표 승인 미완료"
+      ],
+      "independent_team15": "PENDING",
+      "note": "2026-10-29 15:57+ KST: HQ isolated branch code/test commits b9018e65,f94a4503 and read-only provenance workflow b5f1382e. Code exists in HQ branch only, not in Render. The health endpoint now reports a validated full RENDER_GIT_COMMIT or null; no claimed live deployment."
+    },
     "22": {
       "owner": "13",
       "support": [
