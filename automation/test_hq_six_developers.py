@@ -3,10 +3,44 @@ import tempfile
 from pathlib import Path
 from unittest.mock import patch
 from types import SimpleNamespace
-from hq_six_developers import apply_patch, validate_candidate, choose_work_items, run_checks
+from hq_six_developers import apply_patch, validate_candidate, choose_work_items, run_checks, ready_branch_path_gaps
 from hq_160_task_cycle import _semantic_dispatch_gate, contracts
 
 class BoundedPatchTests(unittest.TestCase):
+    def test_ready_branch_preflight_reports_stale_source_and_test_without_promotion(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "existing.py").write_text("def ok(): return True\n")
+            approved = {"owner": "12", "state": "READY",
+                        "independent_team15": "PASS",
+                        "independent_ci_url": "https://github.com/example/actions/runs/123",
+                        "source_paths": ["existing.py", "new_source.py"],
+                        "test_paths": ["test_missing.py"]}
+            registry = {"items": {"45": approved}}
+            gaps = ready_branch_path_gaps("12", registry, root)
+            self.assertEqual([(g["task_number"], g["path"], g["reason"]) for g in gaps],
+                             [(45, "new_source.py", "missing_on_existing_team_branch"),
+                              (45, "test_missing.py", "missing_on_existing_team_branch")])
+            self.assertEqual(approved["state"], "READY", "Preflight must never change registry")
+            self.assertEqual(ready_branch_path_gaps("13", registry, root), [])
+            (root / "new_source.py").write_text("def new(): return True\n")
+            (root / "test_missing.py").write_text("def test_new(): return True\n")
+            self.assertEqual(ready_branch_path_gaps("12", registry, root), [])
+
+    def test_ready_branch_preflight_ignores_unapproved_and_rejects_path_escape(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            base = {"owner": "11", "state": "READY",
+                    "independent_team15": "PASS",
+                    "independent_ci_url": "https://github.com/example/actions/runs/123",
+                    "source_paths": ["../outside.py"], "test_paths": []}
+            registry = {"items": {"11": base, "13": dict(base, state="CANDIDATE"),
+                                  "16": dict(base, independent_team15="PENDING")}}
+            gaps = ready_branch_path_gaps("11", registry, root)
+            self.assertEqual(len(gaps), 1)
+            self.assertEqual(gaps[0]["task_number"], 11)
+            self.assertEqual(gaps[0]["reason"], "invalid_contract_path")
+
     def test_runner_must_reject_unreviewed_semantic_task_even_if_ledger_is_stale(self):
         self.assertFalse(_semantic_dispatch_gate(51, 'scripts/audit-hangul-audio.py'))
         self.assertFalse(_semantic_dispatch_gate(22, 'phase3/instant_matching.py'))
