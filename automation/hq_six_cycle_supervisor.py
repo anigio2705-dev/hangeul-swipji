@@ -16,12 +16,28 @@ from urllib.error import HTTPError
 from urllib.parse import urlsplit
 from urllib.request import Request, urlopen, build_opener, HTTPRedirectHandler
 
-from hq_160_task_cycle import CURATED_TARGETS, load_catalog
+from hq_160_task_cycle import CURATED_TARGETS, load_catalog, next_assignment
 
 REPO = "anigio2705-dev/hangeul-swipji"
 HQ_REF = "automation/hq-pilot-13-14-15-20261029"
 WORKFLOW = "hq-six-developers.yml"
 FOUR_REVIEW_RUN = 40782295178
+# Only known, concrete patch-format failures qualify for one additional
+# AI attempt. Unknown failures stop rather than endlessly dispatching teams.
+PATCH_REPAIR_HINTS = {
+    "Patch must make one unambiguous real change":
+        "The previous old text did not occur exactly once, or old == new. "
+        "Copy an exact unique 12-2400 character substring from the provided source "
+        "and replace it with a genuinely different, meaningful 12-3200 character fix.",
+    "Patch too small or large":
+        "Your old text must be 12-2400 characters and new text 12-3200 characters. "
+        "Select one focused, unique source fragment; do not return the entire file.",
+    "New imports are forbidden":
+        "Do not add imports; implement a focused fix using existing imports.",
+    "Regression or unexpected changes":
+        "Preserve existing tests and all other files; fix the precise regression "
+        "shown in the developer feedback before proposing another patch.",
+}
 REGRESSIONS = {
     "13": ["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_instant_matching.py"],
     "14": ["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_team14_referral_store.py"],
@@ -205,6 +221,7 @@ def supervise(root, token, depth, repairs, output):
     teams = load_team_results(root)
     verdicts, next_repairs = {}, json.loads(json.dumps(repairs))
     passed, repairable, staged = 0, 0, []
+    progress_teams, repair_teams = set(), set()
     for team, result in teams.items():
         verdicts[team] = []
         for task in result["tasks"]:
@@ -228,6 +245,7 @@ def supervise(root, token, depth, repairs, output):
                         staged.append(number)
                     if status == "committed":
                         passed += 1
+                        progress_teams.add(team)
                 elif verdict == "RETRY" and isinstance(number, int):
                     prev = next_repairs.setdefault(team, {}).get(str(number), {})
                     attempts = prev.get("attempts", 0) + 1
@@ -235,9 +253,30 @@ def supervise(root, token, depth, repairs, output):
                         "attempts": attempts, "repair_instruction": reason[:1200]}
                     if attempts < 2:
                         repairable += 1
+                        repair_teams.add(team)
             elif status in ("blocked", "retry", "baseline_failed", "unavailable", "no_change"):
-                verdicts[team].append({"task_number": number, "verdict": "BLOCKED",
-                                       "reason": task.get("feedback", task.get("error", status))})
+                detail = str(task.get("feedback", task.get("error", status)))[:700]
+                hint = next((guidance for error, guidance in PATCH_REPAIR_HINTS.items()
+                             if error in detail), None)
+                # A failed AI patch is not a verified change. One *different*,
+                # specifically instructed repair is permitted, then stop.
+                allowed = (status in ("blocked", "retry") and hint is not None
+                           and isinstance(number, int)
+                           and (number, task.get("path")) in CURATED_TARGETS[team])
+                previous = next_repairs.get(team, {}).get(str(number), {}) if allowed else {}
+                attempts = previous.get("attempts", 0) if isinstance(previous, dict) else 2
+                if allowed and isinstance(attempts, int) and 0 <= attempts < 1:
+                    next_repairs.setdefault(team, {})[str(number)] = {
+                        "attempts": attempts + 1,
+                        "repair_instruction": (hint + " Previous failure: " + detail)[:1200],
+                    }
+                    repairable += 1
+                    repair_teams.add(team)
+                    verdicts[team].append({"task_number": number, "verdict": "RETRY",
+                                           "reason": hint})
+                else:
+                    verdicts[team].append({"task_number": number, "verdict": "BLOCKED",
+                                           "reason": detail})
             elif status in ("already_verified_or_blocked", "dependency_blocked", "awaiting_independent_verification"):
                 verdicts[team].append({"task_number": number, "verdict": "WAIT",
                                        "reason": status})
@@ -251,20 +290,33 @@ def supervise(root, token, depth, repairs, output):
               "independent_review": review,
               "completed_160": "not established; never inferred from CI",
               "test_site_verified": False, "dispatched_next": False}
-    # No progress and no precise fix -> do not repeat identical six-team calls.
-    if depth < 2 and (passed > 0 or repairable > 0 or promoted or staged):
+    # Dispatch only teams with an actual safe next assignment. This prevents
+    # six repeated AI calls after a team has no remaining eligible work.
+    for number in promoted:
+        owner = ledger.get(str(number), {}).get("owner")
+        if owner in CURATED_TARGETS:
+            progress_teams.add(owner)
+    candidates = sorted(progress_teams | repair_teams)
+    eligible = [team for team in candidates
+                if next_assignment(team, catalog, ledger, next_repairs) is not None]
+    report["dispatched_teams"] = []
+    if depth < 2 and eligible:
         try:
             api("/actions/workflows/" + WORKFLOW + "/dispatches", token, method="POST",
                 payload={"ref": HQ_REF, "inputs": {
                     "chain_depth": str(depth + 1),
-                    "repair_instructions_json": json.dumps(next_repairs, ensure_ascii=False)}})
+                    "repair_instructions_json": json.dumps(next_repairs, ensure_ascii=False),
+                    "teams_json": json.dumps(eligible)}})
             report["dispatched_next"] = True
-            report["next_reason"] = ("independently tested code or prior CI promotion" if (passed or promoted or staged) else "specific bounded repair")
+            report["dispatched_teams"] = eligible
+            report["next_reason"] = ("targeted bounded repair" if repair_teams else
+                                     "next safe backlog assignment after independent verification")
         except Exception as exc:
             report["next_reason"] = "DISPATCH_FAILED: " + type(exc).__name__
             report["dispatch_error"] = str(exc)[:240]
     else:
-        report["next_reason"] = "STOP: no independently tested progress or bounded depth reached"
+        report["next_reason"] = ("STOP: bounded depth reached" if depth >= 2 else
+                                 "STOP: no safe new assignment or actionable one-time repair")
     Path(output).write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({k: v for k, v in report.items() if k != "independent_review"}, ensure_ascii=False))
     return report
