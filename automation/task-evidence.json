@@ -17,16 +17,20 @@
     "scope": "Needs a different, regression-preserving #22 fix. Do not repeat rejected patch; next independent safe team13 task may proceed. Not a final completion."
   },
   "47": {
-    "status": "in_progress",
-    "commit": "9cff0b099a9c3ca4e465c29639518d03cf638ed0",
-    "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40795768625",
-    "ci_result": "pending",
-    "independent_review": "pass",
-    "task_specific_verified": true,
-    "test_command": "python -m unittest discover -s phase3 -p test_global_learning.py",
-    "scope": "Independent source diff and task-specific functional regression passed; final CI run and public site still pending",
-    "owner": "13",
-    "path": "phase3/learning.py"
+    "status": "blocked",
+    "owner": "12",
+    "support": [
+      "13"
+    ],
+    "invalid_assignment": {
+      "team": "13",
+      "path": "phase3/learning.py",
+      "rejected_commit": "cbf75b2c0b6a1415419e8c6b6e2e790cc279b84c",
+      "safety_repair_commit": "9cff0b099a9c3ca4e465c29639518d03cf638ed0"
+    },
+    "block_reason": "Backlog #47 requires free-study progress, mistakes, bookmarks and resume persistence. Team13 changed placement stage in phase3/learning.py, which is unrelated; previous matching test was also the wrong regression. Do not promote or redispatch this mapping. Team12 scripts/team12_server_progress.js contains relevant prior partial work; require task-specific progress/resume tests and correct ownership mapping.",
+    "task_specific_verified": false,
+    "scope": "Wrong task/file mapping rejected; 160-item final completion unchanged. Team13 placement boundary bug was repaired as a separate safety correction, not #47 completion."
   },
   "52": {
     "status": "code_verified",
