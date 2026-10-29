@@ -482,3 +482,5 @@
 - [격리 PR #91](https://github.com/anigio2705-dev/hangeul-swipji/pull/91)은 `integration-validation.yml`을 `ubuntu-24.04`로 고정했다. [격리 PR #95](https://github.com/anigio2705-dev/hangeul-swipji/pull/95)는 `scripts/ci_runner_pin_guard.py`와 7개 정상/부정 회귀 테스트 및 CI 실행 관문을 추가했다. 두 PR은 별도 CI 및 통합 검증이 끝나기 전에는 완료로 계산하지 않는다.
 - OpenAI [Codex CI autofix 사례](https://developers.openai.com/cookbook/examples/codex/autofix-github-actions)의 로그→원인 분류→최소 수정→반례 테스트→동일 검사 반복을 적용했다. 이번 독립 감사에서 신규 AI API 호출이나 외부 지출 없음; CI 비용 미확인.
 - 테스트99의 SQLite 영속성·독립 백업/복구·실제 배포 SHA는 미확인. 읽기 전용 `automation/staging99_redeploy_guard.py`가 PASS하는 것은 안전한 배포 승인과 다르다. Render 재배포·운영 변경 금지.
+
+- 후속 독립 검사: [PR #91 CI #40973414294](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40973414294)에서 `playwright install --with-deps chromium`은 SUCCESS로 바뀌었다. 그러나 **전체 CI는 여전히 FAIL**: `phase3/test_standards96.py::test_original_24_source_materials_preserved_exactly`가 원본 HTML의 `hs-issue4-preview-notice` 변경을 탐지했다. 따라서 러너 복구 PASS와 원본 자료 보존 FAIL을 분리한다. 회귀 테스트를 약화하지 말고 스테이징 프리뷰 UI를 원본 24개 HTML 밖으로 분리해야 한다. [PR #91 검증 의견](https://github.com/anigio2705-dev/hangeul-swipji/pull/91#issuecomment-6510994655).
