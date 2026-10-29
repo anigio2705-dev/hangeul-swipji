@@ -1,0 +1,34 @@
+name: HQ source preservation triage (diagnostic only, isolated)
+on:
+  push:
+    branches:
+      - audit/hq-six-preservation-triage-20261030-0612
+permissions:
+  contents: read
+jobs:
+  read-only-triage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run fail-closed negative and positive unit cases
+        env:
+          PYTHONPATH: automation
+        run: python -m unittest -v test_hq_ci_preservation_triage
+      - name: Report source drift without modifying files or weakening existing blocking CI
+        run: |
+          python automation/hq_ci_preservation_triage.py > /tmp/hq-original-source-triage.json
+          cat /tmp/hq-original-source-triage.json
+          python - <<'PY'
+          import json
+          report=json.load(open('/tmp/hq-original-source-triage.json'))
+          assert report['checked']==14
+          assert len(report['files'])==14
+          assert all(row['status'] in ('PRESERVED','MODIFIED','MISSING','BASE_UNAVAILABLE') for row in report['files'])
+          print('Diagnostic only; any drift still blocks the original professional96 acceptance CI.')
+          PY
