@@ -295,6 +295,17 @@ class StagingTests(unittest.TestCase):
         self.assertEqual(hashlib.sha256((server.ROOT/'app.js').read_bytes()).hexdigest(),health['appSHA256'])
         self.assertEqual(self.settings.origin,health['configuredOrigin'])
         self.assertEqual(hashlib.sha256(Path(staging.__file__).read_bytes()).hexdigest(),health['sourceSHA256'])
+        # The deployment identifier must be absent unless Render provides a
+        # valid full commit SHA. Never confuse local source hashes with a deploy.
+        with patch.dict(staging.os.environ, {'RENDER_GIT_COMMIT': 'a'*40}):
+            status, _, body = self.request('/healthz', authenticated=False)
+            self.assertEqual(200, status)
+            self.assertEqual('a'*40, json.loads(body)['deployedCommit'])
+        for invalid in ('', 'not-a-commit', 'b'*39, 'z'*40):
+            with self.subTest(invalid=invalid), patch.dict(staging.os.environ, {'RENDER_GIT_COMMIT': invalid}):
+                status, _, body = self.request('/healthz', authenticated=False)
+                self.assertEqual(200, status)
+                self.assertIsNone(json.loads(body)['deployedCommit'])
         with patch.object(server, 'connect', side_effect=RuntimeError('private failure')):
             status, _, body = self.request('/healthz', authenticated=False)
         self.assertEqual(503, status)
