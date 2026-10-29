@@ -1,0 +1,34 @@
+name: HQ task 41 independent curriculum audit (isolated)
+on:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - '.github/workflows/hq-task41-audit.yml'
+      - 'automation/verify_task41.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Copy trusted independent verifier before candidate checkout
+        run: cp automation/verify_task41.py /tmp/hq-trusted-task41.py
+      - name: Check exact isolated candidate branch
+        run: |
+          git fetch --depth=1 origin refs/heads/automation/hq-team-12-autodev-20261029
+          git checkout --detach FETCH_HEAD
+          git log -1 --format='%H %s'
+      - name: Verify team12 task 41 candidate regression
+        run: python scripts/team12_content_regression.py -v
+      - name: Independently verify source totals and answer indices
+        run: python /tmp/hq-trusted-task41.py "$PWD"
