@@ -1,0 +1,26 @@
+{
+  "team": "14",
+  "task_number": 101,
+  "items": [
+    {
+      "id": "teacher_teacher",
+      "text": "Test role permission when a teacher tries to introduce another teacher to themselves as a teacher.",
+      "expected": "The system rejects the self-introduction because the introducer and introduced roles are the same teacher role, preventing cyclic self-payouts."
+    },
+    {
+      "id": "teacher_student",
+      "text": "Verify behavior when a teacher attempts to introduce a student to themselves as a teacher-student introduction.",
+      "expected": "The system disallows a teacher introducing a student if it results in a self-reference cycle, ensuring no self-payout occurs."
+    },
+    {
+      "id": "student_teacher",
+      "text": "Evaluate the handling when a student introduces a teacher to themselves as a student-teacher introduction.",
+      "expected": "Self-introduction cycles where the introducer and introduced form a student-teacher pair to themselves are rejected to prevent invalid payouts."
+    },
+    {
+      "id": "student_student",
+      "text": "Check the system response when a student tries to introduce another student to themselves in a student-student introduction.",
+      "expected": "The system denies the cyclic self-introduction to avoid self-payout situations within the student-student role pair."
+    }
+  ]
+}
