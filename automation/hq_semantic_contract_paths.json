@@ -242,7 +242,7 @@
         "15",
         "16"
       ],
-      "state": "CANDIDATE",
+      "state": "READY",
       "source_paths": [
         "scripts/find-human-audio-sources.py"
       ],
@@ -255,10 +255,12 @@
         "15팀 독립 의미 검증 및 정확한 CI 성공 확인",
         "실제 사람 음원 청취·사용권·브라우저 검수"
       ],
-      "independent_team15": "PENDING",
+      "independent_team15": "PASS",
       "dependencies": [],
       "standards_path": "docs/team11/human-audio-acceptance-standards.md",
-      "note": "11팀은 12팀 소관 #56의 지원 개발팀. READY 전환 전 독립 15팀 계약·CI 검증 필수. 사람 녹음 승인 아님."
+      "note": "11팀은 12팀 소관 #56의 지원 개발팀. READY 전환 전 독립 15팀 계약·CI 검증 필수. 사람 녹음 승인 아님. Independent semantic regression and 160-contract CI passed at dfb0ab6211908e9ed4c18f393398b0113a759fde; task #56 source improvements remain to implement.",
+      "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40809517831",
+      "review_scope": "Independent task56 source/standards/owner/acceptance mapping audit only; not audio approval and not proof that candidate source satisfies all remaining implementation requirements."
     },
     "109": {
       "owner": "14",
