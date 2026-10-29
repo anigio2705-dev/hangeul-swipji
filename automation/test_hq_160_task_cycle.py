@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 from hq_160_task_cycle import (
@@ -27,22 +28,15 @@ class HQ160TaskCycleTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "160"):
             contracts(sample().replace("4. [ ]", "5. [ ]"))
 
-    def test_each_team_gets_a_real_scoped_task_and_no_fake_completion(self):
+    def test_empty_unreviewed_queue_does_not_dispatch_curated_targets(self):
         report = make_report(sample())
         self.assertEqual(report["final_complete"], 0)
         self.assertEqual(len(report["assignments"]), 6)
-        for team, assignment in report["assignments"].items():
-            if team in ("11", "13") and assignment is None:
-                # Team 11 #56 is intentionally quarantined while CANDIDATE;
-                # team 13 #22 remains blocked. Do not demand unsafe work.
-                continue
-            self.assertIsNotNone(assignment)
-            self.assertEqual(assignment["team"], team)
-            self.assertIn(team, [assignment["owner"]] + assignment["support"])
-            self.assertIn((assignment["task_number"], assignment["path"]), CURATED_TARGETS[team])
-            self.assertEqual(assignment["attempt"], 1)
+        self.assertTrue(all(assignment is None for assignment in report["assignments"].values()),
+                        "No independently READY item exists; old curated IDs are not authorization")
 
-    def test_code_verified_skips_reimplementation_and_assigns_next(self):
+    @patch("hq_160_task_cycle._semantic_dispatch_gate", return_value=True)
+    def test_code_verified_skips_reimplementation_and_assigns_next(self, _legacy_gate):
         catalog = contracts(sample())
         task = next_assignment("12", catalog, {"41": {"status": "code_verified"}})
         self.assertEqual(task["task_number"], 52)
@@ -54,7 +48,8 @@ class HQ160TaskCycleTests(unittest.TestCase):
             "49": {"status": "code_verified"},
         }))
 
-    def test_pending_independent_ci_is_not_assigned_again(self):
+    @patch("hq_160_task_cycle._semantic_dispatch_gate", return_value=True)
+    def test_pending_independent_ci_is_not_assigned_again(self, _legacy_gate):
         catalog = contracts(sample())
         pending = {"41": {"status": "in_progress", "independent_review": "pass"}}
         self.assertEqual(next_assignment("12", catalog, pending)["task_number"], 52)
@@ -81,7 +76,8 @@ class HQ160TaskCycleTests(unittest.TestCase):
         self.assertIsNone(next_assignment("13", catalog, ledger))
         self.assertEqual(catalog[47]["owner"], "12")
 
-    def test_failure_feedback_is_specific_and_retry_is_bounded(self):
+    @patch("hq_160_task_cycle._semantic_dispatch_gate", return_value=True)
+    def test_failure_feedback_is_specific_and_retry_is_bounded(self, _legacy_gate):
         catalog = contracts(sample())
         failure = {"8": {"attempts": 1, "repair_instruction": "Fix failed assertion 42"}}
         task = next_assignment("15", catalog, failures=failure)
@@ -89,11 +85,12 @@ class HQ160TaskCycleTests(unittest.TestCase):
         self.assertEqual(task["mode"], "repair")
         self.assertEqual(task["attempt"], 2)
         self.assertIn("assertion 42", task["repair_instruction"])
-        next_task = next_assignment("15", catalog, failures={"8": {"attempts": 2}})
-        # An unreviewed #151 CANDIDATE is never a safe fallback.
-        self.assertIsNone(next_task, "Unreviewed CANDIDATE #151 cannot bypass independent QA")
+        next_task = next_assignment("15", catalog, failures={"8": {"attempts": 2}, "151": {"attempts": 2}})
+        # This test mocks the old gate to isolate bounded retry logic; both candidates exhausted.
+        self.assertIsNone(next_task)
 
-    def test_independent_verification_not_developer_self_report(self):
+    @patch("hq_160_task_cycle._semantic_dispatch_gate", return_value=True)
+    def test_independent_verification_not_developer_self_report(self, _legacy_gate):
         assignment = next_assignment("15", contracts(sample()))
         sha = "a" * 40
         submission = {"commit": sha, "developer_says_passed": True}
@@ -209,14 +206,14 @@ class HQ160TaskCycleTests(unittest.TestCase):
             self.assertIsNone(next_assignment("13", c, {}, registry=registry, root=root))
             # Never reimplement a commit pending independent CI.
             pending = {"45": {"status": "in_progress", "independent_review": "pass"}}
-            self.assertNotEqual(next_assignment("12", c, pending, registry=registry, root=root)["task_number"], 45)
+            self.assertNotEqual((next_assignment("12", c, pending, registry=registry, root=root) or {}).get("task_number"), 45)
             verified = {"45": {"status": "code_verified"}}
-            self.assertNotEqual(next_assignment("12", c, verified, registry=registry, root=root)["task_number"], 45)
+            self.assertNotEqual((next_assignment("12", c, verified, registry=registry, root=root) or {}).get("task_number"), 45)
             record["independent_team15"] = "PENDING"
-            self.assertNotEqual(next_assignment("12", c, {}, registry=registry, root=root)["task_number"], 45)
+            self.assertNotEqual((next_assignment("12", c, {}, registry=registry, root=root) or {}).get("task_number"), 45)
             record["independent_team15"] = "PASS"
             record["source_paths"] = ["../outside.py"]
-            self.assertNotEqual(next_assignment("12", c, {}, registry=registry, root=root)["task_number"], 45)
+            self.assertNotEqual((next_assignment("12", c, {}, registry=registry, root=root) or {}).get("task_number"), 45)
 
     def test_reviewed_ready_collision_and_retry_limit_are_fail_closed(self):
         import tempfile
@@ -233,15 +230,15 @@ class HQ160TaskCycleTests(unittest.TestCase):
                         "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"}
             reg = {"schema": 1, "items": {"45": item(45, "shared.py"),
                                           "46": item(46, "shared.py")}}
-            self.assertNotEqual(next_assignment("12", c, {}, registry=reg, root=root)["task_number"], 45)
+            self.assertNotEqual((next_assignment("12", c, {}, registry=reg, root=root) or {}).get("task_number"), 45)
             reg["items"]["46"]["source_paths"] = ["other.py"]
             self.assertEqual(next_assignment("12", c, {}, registry=reg, root=root)["task_number"], 45)
-            self.assertNotEqual(next_assignment("12", c, {}, failures={"45": {"attempts": 2}},
-                                                registry=reg, root=root)["task_number"], 45)
+            self.assertNotEqual((next_assignment("12", c, {}, failures={"45": {"attempts": 2}},
+                                                registry=reg, root=root) or {}).get("task_number"), 45)
             # A multi-file READY is not yet compatible with single-file patch verification.
             reg["items"]["45"]["source_paths"] = ["shared.py", "other.py"]
             reg["items"]["46"]["source_paths"] = ["shared.py"]
-            self.assertNotEqual(next_assignment("12", c, {}, registry=reg, root=root)["task_number"], 45)
+            self.assertNotEqual((next_assignment("12", c, {}, registry=reg, root=root) or {}).get("task_number"), 45)
 
 if __name__ == "__main__":
     unittest.main()
