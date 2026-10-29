@@ -26,6 +26,18 @@ class ReferralScenariosTests(unittest.TestCase):
    with self.subTest(edges=edges),self.assertRaises(SimError):
     simulate_referral(10000,edges)
   with self.assertRaises(SimError):simulate_referral(10000,[('a','b')]*10001)
+ def test_large_graph_and_cycle_fail_closed(self):
+  # Regression for the 10,000-edge contract: unrelated ancestry must not
+  # trigger quadratic scans, and cycles remain rejected even off the payout path.
+  edges=[('node'+str(i),'node'+str(i+1)) for i in range(7000)]
+  result=simulate_referral(10000,edges)
+  self.assertEqual(result['gross'],10000)
+  self.assertFalse(result['real_money'])
+  self.assertFalse(result['payment_enabled'])
+  self.assertFalse(result['policy_approved'])
+  with self.assertRaises(SimError) as ctx:
+   simulate_referral(10000,edges+[('node7000','node0')])
+  self.assertEqual(ctx.exception.code,'CONFLICT')
  def test_rounding_conservation(self):
   x=simulate_referral(1,[],(300,100))
   self.assertEqual(x['gross'],x['teacher']+x['platform']+sum(x['rewards']))
