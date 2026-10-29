@@ -131,9 +131,19 @@ def choose_work_items(team, catalog, evidence, repairs, registry, root):
     supports single-file Python changes and executable unittest regressions.
     Unsupported READY work is reported, never silently assigned or counted.
     """
-    reviewed = next_assignment(team, catalog, evidence, repairs.get(team, {}),
-                               registry=registry, root=root)
-    if reviewed and reviewed.get("source") == "independently_reviewed_READY_registry":
+    # A reviewed HTML/JS task must not starve another independently reviewed,
+    # executable Python task owned by the same team. Never alter the registry
+    # on disk, change a READY verdict, or fall back to an unreviewed task.
+    excluded = set()
+    unsupported = []
+    while True:
+        visible = {"schema": registry["schema"], "items": {
+            number: entry for number, entry in registry["items"].items()
+            if number not in excluded}}
+        reviewed = next_assignment(team, catalog, evidence, repairs.get(team, {}),
+                                   registry=visible, root=root)
+        if not reviewed or reviewed.get("source") != "independently_reviewed_READY_registry":
+            break
         path = reviewed["path"]
         tests = reviewed["independent_test_paths"]
         other_team_paths = {p for other, (_, work) in TASKS.items()
@@ -142,9 +152,15 @@ def choose_work_items(team, catalog, evidence, repairs, registry, root):
                 and ".." not in Path(path).parts and path not in other_team_paths
                 and bool(tests) and all(p.endswith(".py") and Path(p).name.startswith("test_")
                                         and ".." not in Path(p).parts for p in tests))
-        return [{"path": path, "number": reviewed["task_number"],
-                 "dynamic": True, "tests": tests,
-                 "unsupported_reason": "" if safe else "READY target requires non-Python or non-unittest executor"}]
+        candidate = {"path": path, "number": reviewed["task_number"],
+                     "dynamic": True, "tests": tests,
+                     "unsupported_reason": "" if safe else "READY target requires non-Python or non-unittest executor"}
+        if safe:
+            return [candidate]
+        unsupported.append(candidate)
+        excluded.add(str(reviewed["task_number"]))
+    if unsupported:
+        return unsupported[:1]
     return [{"path": path, "number": number, "dynamic": False, "tests": [],
              "unsupported_reason": ""}
             for path, _ in TASKS[team][1]
