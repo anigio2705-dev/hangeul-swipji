@@ -20,6 +20,22 @@ class BoundedPatchTests(unittest.TestCase):
             apply_patch(original, {"old": "def a():\n    return 123",
                                    "new": "def a():\n    return '" + chr(0) + "'"})
 
+    def test_team15_collision_gate_cannot_be_weakened_by_ai(self):
+        original = ("changes = {'11': {'shared.py'}, '13': {'shared.py'}}\\n"
+                    "failures = []\\n"
+                    "common = ['shared.py']\\n"
+                    "if common:\\n"
+                    "    failures.append('overlap')\\n"
+                    "# preserve existing verification\\n")
+        weakened = original.replace(
+            "    failures.append('overlap')",
+            "    if 'shared.py' in []:\\n        failures.append('overlap')")
+        with self.assertRaisesRegex(ValueError, "Collision gate weakening forbidden"):
+            validate_candidate(original, weakened, "scripts/team15_independent_gate.py")
+        safe = original.replace("# preserve existing verification",
+                                "# preserve existing verification and audit every collision")
+        validate_candidate(original, safe, "scripts/team15_independent_gate.py")
+
     def test_truncated_or_whole_file_patch_rejected(self):
         with self.assertRaisesRegex(ValueError, "large"):
             apply_patch("x" * 10000, {"old": "x" * 5000, "new": "y" * 5000})
