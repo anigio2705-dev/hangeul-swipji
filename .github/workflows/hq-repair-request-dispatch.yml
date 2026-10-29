@@ -35,22 +35,43 @@ jobs:
               raise SystemExit("Repair dispatch allows 1-2 selected teams only")
           if sorted(set(teams)) != sorted(teams) or not set(teams) <= {"13", "15"}:
               raise SystemExit("Repair dispatch restricted to teams 13 and 15")
-          if not isinstance(repairs, dict) or set(repairs) != set(teams):
-              raise SystemExit("Repair payload must match selected teams")
-          for team in teams:
-              entries = repairs[team]
-              if not isinstance(entries, dict) or len(entries) != 1:
-                  raise SystemExit("Exactly one numbered repair per selected team")
-              for number, detail in entries.items():
-                  if number != {"13": "22", "15": "8"}[team]:
-                      raise SystemExit("Unexpected backlog item")
-                  if not isinstance(detail, dict) or detail.get("attempts") != 1:
-                      raise SystemExit("One bounded repair attempt required")
-                  instruction = detail.get("repair_instruction", "")
-                  if not isinstance(instruction, str) or not 30 <= len(instruction) <= 1200:
-                      raise SystemExit("Missing actionable repair instruction")
-          if request.get("source_run_id") != 40790018384:
-              raise SystemExit("Source run evidence mismatch; do not replay blindly")
+          mode = request.get("mode", "repair")
+          if mode == "advance":
+              # Only one independently safe next item after a documented
+              # exhausted regression. Never replay #22 or an arbitrary team.
+              if teams != ["13"] or repairs != {}:
+                  raise SystemExit("Next-safe dispatch must target only team13 with no repairs")
+              if request.get("source_run_id") != 40791928076:
+                  raise SystemExit("Next-safe source evidence mismatch")
+              import sys
+              sys.path.insert(0, "automation")
+              from hq_160_task_cycle import load_catalog, next_assignment
+              catalog = load_catalog("automation/hq_backlog_160.md")
+              ledger = json.loads(Path("automation/task-evidence.json").read_text())
+              if ledger.get("22", {}).get("status") != "blocked":
+                  raise SystemExit("Prior #22 failure must be persisted before advancing")
+              selected = next_assignment("13", catalog, ledger)
+              if selected is None or selected["task_number"] != 47:
+                  raise SystemExit("Expected independent safe next task #47; refuse dispatch")
+          elif mode == "repair":
+              if not isinstance(repairs, dict) or set(repairs) != set(teams):
+                  raise SystemExit("Repair payload must match selected teams")
+              for team in teams:
+                  entries = repairs[team]
+                  if not isinstance(entries, dict) or len(entries) != 1:
+                      raise SystemExit("Exactly one numbered repair per selected team")
+                  for number, detail in entries.items():
+                      if number != {"13": "22", "15": "8"}[team]:
+                          raise SystemExit("Unexpected backlog item")
+                      if not isinstance(detail, dict) or detail.get("attempts") != 1:
+                          raise SystemExit("One bounded repair attempt required")
+                      instruction = detail.get("repair_instruction", "")
+                      if not isinstance(instruction, str) or not 30 <= len(instruction) <= 1200:
+                          raise SystemExit("Missing actionable repair instruction")
+              if request.get("source_run_id") != 40790018384:
+                  raise SystemExit("Source run evidence mismatch; do not replay blindly")
+          else:
+              raise SystemExit("Unknown dispatch mode")
           payload = {
               "ref": "automation/hq-pilot-13-14-15-20261029",
               "inputs": {
