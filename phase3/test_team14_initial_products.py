@@ -1,10 +1,11 @@
 """D1 regression for explicit 75/25 simulated products; no real PG."""
 import os
+import sqlite3
 import tempfile
 import unittest
 from team14_persistent import MonthlyStore, SimError
 from team14_initial_products import (validate_product,create_simulated_package,
-                                     expected_split)
+                                     expected_split,verify_server_product_contract)
 
 class InitialProductTests(unittest.TestCase):
     def setUp(self):
@@ -46,6 +47,34 @@ class InitialProductTests(unittest.TestCase):
         with self.assertRaises(SimError):
             create_simulated_package(self.store,'mdup',['b','b','c','d'],25,10000)
         self.assertEqual(self.store.db.execute('SELECT COUNT(*) FROM months').fetchone()[0],0)
+    def test_server_product_contract_rejects_unverified_and_wrong_role(self):
+        db=sqlite3.connect(':memory:')
+        db.row_factory=sqlite3.Row
+        db.executescript("""
+          CREATE TABLE users(id TEXT PRIMARY KEY,role TEXT,approved INTEGER);
+          CREATE TABLE bookings(id TEXT PRIMARY KEY,teacher_id TEXT,price INTEGER);
+          CREATE TABLE booking_product_snapshots(
+            booking_id TEXT PRIMARY KEY,product_code TEXT,
+            duration_minutes INTEGER,price_krw INTEGER,currency TEXT);
+          INSERT INTO users VALUES('t','partner',1);
+          INSERT INTO bookings VALUES('b','t',10000);
+          INSERT INTO booking_product_snapshots VALUES('b','partner_25',25,10000,'KRW');
+        """)
+        verified=dict(verifiedByServer=True,type='lesson.completed',status='completed',
+                      bookingId='b',amount=10000)
+        self.assertEqual('partner_25',verify_server_product_contract(db,'b',verified)['product_code'])
+        for event in (dict(verified,verifiedByServer=False),
+                      dict(verified,type='lesson.started'),
+                      dict(verified,status='cancelled'),
+                      dict(verified,amount=20000)):
+            with self.subTest(event=event),self.assertRaises(SimError):
+                verify_server_product_contract(db,'b',event)
+        db.execute("UPDATE booking_product_snapshots SET product_code='professional_25',price_krw=15000 WHERE booking_id='b'")
+        db.execute("UPDATE bookings SET price=15000 WHERE id='b'")
+        with self.assertRaises(SimError):
+            verify_server_product_contract(db,'b',dict(verified,amount=15000))
+        db.close()
+
     def test_integer_split_conservation(self):
         for total in (1,3,101,10000,99999):
             for bps in (0,300,2500):
