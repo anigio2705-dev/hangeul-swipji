@@ -94,10 +94,43 @@ def load_team_results(root):
         result[team] = record
     return result
 
+def reviewed_dynamic_tests(team, number, path, catalog, root=Path(".")):
+    """Read trusted HQ READY evidence; never accept a developer's own claim.
+
+    The dynamic runner edits one Python source. Its supervisor must independently
+    run the exact preapproved Python regressions, not silently classify the
+    submission as an unknown curated target or syntax-only success.
+    """
+    from hq_traffic_lights import readiness
+
+    if (team not in CURATED_TARGETS or not isinstance(number, int)
+            or number not in catalog or catalog[number]["owner"] != team
+            or not isinstance(path, str)):
+        return []
+    base = Path(root).resolve()
+    try:
+        registry = json.loads((base / "automation/hq_semantic_contract_paths.json").read_text(encoding="utf-8"))
+        ledger = json.loads((base / "automation/task-evidence.json").read_text(encoding="utf-8"))
+        eligible = readiness(catalog, ledger, registry, base)["dispatchable"]
+    except (OSError, ValueError, KeyError, TypeError):
+        return []  # missing or invalid HQ evidence must fail closed
+    if not any(item["task"] == number and item["owner"] == team
+               and item["source_paths"] == [path] for item in eligible):
+        return []
+    tests = registry["items"][str(number)].get("test_paths", [])
+    if not tests or any(not isinstance(t, str) or not t.endswith(".py")
+                        or not Path(t).name.startswith("test_") for t in tests):
+        return []  # non-unittest work needs a separately approved executor
+    return tests
+
+
 def independent_check(team, task, token, catalog):
     number, path, sha = task.get("task_number"), task.get("path"), task.get("commit", "")
-    if not isinstance(number, int) or (number, path) not in CURATED_TARGETS[team]:
-        return "RETRY", "Commit lacks a valid assigned backlog number and owned path", {}
+    curated = (team in CURATED_TARGETS and isinstance(number, int)
+               and (number, path) in CURATED_TARGETS[team])
+    dynamic_tests = [] if curated else reviewed_dynamic_tests(team, number, path, catalog)
+    if not curated and not dynamic_tests:
+        return "RETRY", "Commit lacks a valid assigned backlog number and owned path or independently approved READY contract", {}
     if not isinstance(sha, str) or not re.fullmatch(r"[a-f0-9]{40}", sha):
         return "RETRY", "Missing valid commit SHA", {}
     contract = catalog[number]
@@ -124,13 +157,29 @@ def independent_check(team, task, token, catalog):
             syntax = cmd(["python", "-m", "py_compile", path], cwd=temp)
             if syntax.returncode:
                 return "RETRY", "Independent syntax check failed: " + syntax.stderr[-350:], {}
+            # The candidate may only change its assigned source, never the
+            # trusted HQ test. Reject an older team branch with divergent tests
+            # even when the test suite happens to report green.
+            for trusted_test in dynamic_tests:
+                try:
+                    if (Path(temp) / trusted_test).read_bytes() != Path(trusted_test).read_bytes():
+                        return "RETRY", "Dynamic regression differs from trusted HQ test: " + trusted_test, {}
+                except OSError:
+                    return "RETRY", "Trusted dynamic regression missing: " + trusted_test, {}
             command = REGRESSIONS.get((team, number))
-            if not command:
+            commands = ([command] if command else []) + [
+                ["python", "-m", "unittest", "discover", "-s", str(Path(t).parent), "-p", Path(t).name]
+                for t in dynamic_tests
+            ]
+            if not commands:
                 return "PROVISIONAL", "Syntax verified; independent functional regression not configured", {
                     "commit": sha, "changed_files": files, "syntax": "success"}
-            checked = cmd(command, cwd=temp, timeout=180)
-            if checked.returncode:
-                return "RETRY", "Independent regression failed: " + (checked.stdout + checked.stderr)[-500:], {}
+            for check_command in commands:
+                checked = cmd(check_command, cwd=temp, timeout=180)
+                output = checked.stdout + checked.stderr
+                if checked.returncode or (dynamic_tests and
+                                          ("Ran 0 tests" in output or "Ran 0 test" in output)):
+                    return "RETRY", "Independent regression failed or ran zero tests: " + output[-500:], {}
             if (team, number) == ("12", 41):
                 # The AI may edit its own regression file. Run an immutable HQ
                 # verifier OUTSIDE the candidate worktree as an independent gate.
@@ -157,7 +206,7 @@ def independent_check(team, task, token, catalog):
                     return "RETRY", "Audio attribution rows do not match manifest", {}
             return "TEST_PASS_PENDING_CI", "Independent diff and functional regression passed; final backlog gate remains", {
                 "commit": sha, "changed_files": files, "independent_test": "success",
-                "test_command": " ".join(command) + (
+                "test_command": " && ".join(" ".join(c) for c in commands) + (
                     " + trusted automation/verify_task41.py" if (team, number) == ("12", 41) else
                     " + trusted automation/verify_task49.py" if (team, number) == ("12", 49) else "")}
         finally:
