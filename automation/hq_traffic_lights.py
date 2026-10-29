@@ -94,6 +94,10 @@ def readiness(catalog, ledger, registry, root=Path(".")):
         ci_ref = isinstance(ci, str) and bool(re.fullmatch(
             r"https://github\.com/anigio2705-dev/hangeul-swipji/actions/runs/[0-9]+", ci))
         ci_sha_ok = isinstance(ci_sha, str) and bool(re.fullmatch(r"[0-9a-f]{40}", ci_sha))
+        # Independent review must explicitly close every acceptance gap.
+        # A READY label with unresolved or malformed unmet evidence is not safe.
+        unmet = entry.get("unmet")
+        acceptance_ok = isinstance(unmet, list) and len(unmet) == 0
         paths = (isinstance(source, list) and bool(source)
                  and isinstance(tests, list) and bool(tests)
                  and len(source) == len(set(source))
@@ -102,9 +106,10 @@ def readiness(catalog, ledger, registry, root=Path(".")):
                  and all(valid_path(p) for p in source + tests))
         deps = all(ledger.get(str(d), {}).get("status") == "complete"
                    for d in task["dependencies"])
-        if not (authorized and reviewed and ci_ref and ci_sha_ok and paths and deps and editable_ok):
+        if not (authorized and reviewed and ci_ref and ci_sha_ok and acceptance_ok and paths and deps and editable_ok):
             missing = [name for name, ok in (("owner", authorized), ("independent_review", reviewed),
-                ("ci_reference", ci_ref), ("exact_ci_sha", ci_sha_ok), ("real_paths", paths),
+                ("ci_reference", ci_ref), ("exact_ci_sha", ci_sha_ok),
+                ("unmet_acceptance", acceptance_ok), ("real_paths", paths),
                 ("single_editable_path", editable_ok), ("dependencies", deps)) if not ok]
             result["invalid_ready"].append({"task": number, "reason": ", ".join(missing)})
             continue
