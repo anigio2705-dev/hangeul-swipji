@@ -243,6 +243,13 @@ def make_report(backlog_text, evidence=None, failures=None):
                 and bool(re.fullmatch(r"[a-f0-9]{40}", record["commit"]))
                 and record.get("ci_conclusion") == "success"
                 and record.get("independent_review") == "pass"
+                # The representative's final acceptance is mandatory for ALL
+                # 160 tasks, not only tasks with extra business-policy gates.
+                # These fields are an evidence *claim*, not proof of identity;
+                # the independent auditor must verify the cited record.
+                and record.get("representative_approval") is True
+                and isinstance(record.get("representative_approval_evidence"), str)
+                and bool(record["representative_approval_evidence"].strip())
                 and bool(re.fullmatch(
                     r"https://github\.com/anigio2705-dev/hangeul-swipji/actions/runs/[0-9]+",
                     record.get("ci_url", "")))
