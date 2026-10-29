@@ -7,7 +7,7 @@
     $('selected-help').textContent=H.availability(selected).label;
     document.querySelectorAll('.board [data-sound]').forEach(b=>b.classList.toggle('focus',b.dataset.sound===selected));
     const requested=selected;
-    if(play)H.play(requested).then(result=>{if(selected!==requested)return;if(result.status==='played')$('selected-help').textContent=H.availability(selected).label;else if(result.status==='error')$('selected-help').textContent=result.message;else $('selected-help').textContent=H.availability(selected).label});
+    if(play)H.play(requested).then(result=>{if(selected!==requested)return;if(result.status==='error')$('selected-help').textContent=result.message;else if(result.status==='missing')$('selected-help').textContent='이 글자의 사람 녹음이 아직 없습니다.';else if(result.status==='held')$('selected-help').textContent='이 글자의 녹음은 검수 보류 중입니다.';else if(result.status==='manifest-error')$('selected-help').textContent='음원 목록 연결 실패 · 다시 확인 버튼을 눌러 주세요.';else $('selected-help').textContent=H.availability(selected).label});
   }
   for(const [c,name,word] of H.consonants){
     const b=H.soundButton(name);b.replaceChildren(H.el('b','',c),H.el('small','',name));
