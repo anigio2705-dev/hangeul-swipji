@@ -2,7 +2,7 @@
   "schema": 1,
   "source": "docs/HQ_160_DEVELOPMENT_CONTRACTS_20261029.md",
   "source_branch": "automation/hq-pilot-13-14-15-20261029",
-  "policy": "Mapped paths are observed in this isolated branch. CODE_VERIFIED reflects existing evidence, never final approval; READY requires independent 15-team semantic review and relevant CI. CANDIDATE/BLOCKED are not dispatchable.",
+  "policy": "Mapped paths are observed in this isolated branch. CODE_VERIFIED reflects existing evidence, never final approval; READY requires independent 15-team semantic review and relevant CI. CANDIDATE/BLOCKED are not dispatchable. Six-team isolated push smoke is allowed on registry changes; zero READY or zero API calls must remain BLOCKED, never counted as team development.",
   "items": {
     "11": {
       "owner": "11",
