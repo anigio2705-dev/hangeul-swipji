@@ -56,11 +56,12 @@ class SixTeamSupervisorTests(unittest.TestCase):
         self.assertEqual(report["verified_new_functional_code"], 1)
         api.assert_not_called()
 
-    def test_precise_failure_retries_once_then_stops(self):
+    def test_precise_failure_without_independent_ready_stops_safely(self):
         report, api = self.run_cycle(committed=True, verdict="RETRY")
-        self.assertTrue(report["dispatched_next"])
-        repair_json = api.call_args.kwargs["payload"]["inputs"]["repair_instructions_json"]
-        self.assertIn("assertion 7", json.loads(repair_json)["14"]["109"]["repair_instruction"])
+        self.assertFalse(report["dispatched_next"])
+        self.assertEqual(report["team_verdicts"]["14"][0]["verdict"], "RETRY")
+        self.assertIn("no safe new assignment", report["next_reason"])
+        api.assert_not_called()
         again, api_again = self.run_cycle(
             committed=True, verdict="RETRY", depth=1,
             repairs={"14": {"109": {"attempts": 1, "repair_instruction": "first failure"}}})
@@ -73,12 +74,12 @@ class SixTeamSupervisorTests(unittest.TestCase):
             feedback="Patch must make one unambiguous real change")
         self.assertEqual(report["verified_new_functional_code"], 0)
         self.assertEqual(report["team_verdicts"]["13"][0]["verdict"], "RETRY")
-        self.assertTrue(report["dispatched_next"])
-        inputs = api.call_args.kwargs["payload"]["inputs"]
-        self.assertEqual(json.loads(inputs["teams_json"]), ["13"])
-        repair = json.loads(inputs["repair_instructions_json"])["13"]["22"]
-        self.assertEqual(repair["attempts"], 1)
-        self.assertIn("exact unique", repair["repair_instruction"])
+        # The failure is diagnosed, but the historical curated target cannot
+        # bypass the independent READY registry just to spend another API call.
+        self.assertFalse(report["dispatched_next"])
+        api.assert_not_called()
+        repair = {"attempts": 1, "repair_instruction":
+                  "Copy an exact unique source fragment; previous patch was rejected"}
         ledger = {}
         again, api_again = self.run_cycle(
             committed=True, team="13", task_number=22, task_status="blocked",
