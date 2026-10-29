@@ -276,7 +276,7 @@ console.log(JSON.stringify({courses:courses.length,units,quizzes,passages,readin
         self.assertIn("state.team12ProviderRole=role", app)
         self.assertIn("sessionStorage.getItem('hs-team12-provider-intent')", app)
         self.assertIn("sessionStorage.removeItem('hs-team12-provider-intent')", app)
-        self.assertIn("field('\uc0c8\uc5ec \uc720\ud615','role',state.team12ProviderRole||''", app)
+        self.assertIn("field('\ucc38\uc5ec \uc720\ud615','role',state.team12ProviderRole||''", app)
         self.assertIn("state.view='discover'", app)
         self.assertIn("data-team12-handoff", home)
         self.assertIn("scripts/team12_learning_handoff.js", home)
@@ -301,7 +301,7 @@ console.log(JSON.stringify({courses:courses.length,units,quizzes,passages,readin
         self.assertIn('scripts/team12_provider_links.js', learn)
         self.assertIn("sessionStorage.setItem('hs-team12-provider-intent', role)", links)
         self.assertIn("sessionStorage.getItem('hs-team12-provider-intent')", app)
-        self.assertIn("field('\uc0c8\uc5ec \uc720\ud615','role',state.team12ProviderRole||''", app)
+        self.assertIn("field('\ucc38\uc5ec \uc720\ud615','role',state.team12ProviderRole||''", app)
 
     def test_dashboard_to_provider_booking_discovery_contract(self):
         dashboard_file = ROOT / "dashboard.html"
