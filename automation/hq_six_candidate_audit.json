@@ -1,0 +1,138 @@
+{
+  "schema": 1,
+  "source_orders": "docs/HQ_SIX_TEAM_FULL_WORK_ORDERS_20261029.md",
+  "source_backlog": "automation/hq_backlog_160.md",
+  "scope": "CANDIDATE intake only; no READY, CODE_VERIFIED, owner approval or AI dispatch",
+  "candidates": {
+    "11": {
+      "task": 11,
+      "source_paths": [
+        "automation/hq_six_developers.py",
+        ".github/workflows/hq-six-developers.yml"
+      ],
+      "test_paths": [
+        "automation/test_hq_six_developers.py"
+      ],
+      "acceptance": "작업 직전 통합 HEAD·dirty tree·격리 브랜치를 검증하고 충돌 차단",
+      "blockers": [
+        "HEAD 불일치/dirty worktree 전용 반례·독립 CI 미확인"
+      ],
+      "next_action": "11팀: HEAD 및 dirty-worktree 반례 테스트 작성",
+      "owner": "11",
+      "support": [],
+      "state": "CANDIDATE",
+      "independent_team15": "PENDING",
+      "development_dispatched": false
+    },
+    "12": {
+      "task": 45,
+      "source_paths": [
+        "intro.html",
+        "beginner1.html",
+        "beginner2.html",
+        "intermediate1.html",
+        "intermediate2.html",
+        "advanced1.html",
+        "advanced2.html"
+      ],
+      "test_paths": [
+        "automation/verify_task45_quiz_integrity.cjs",
+        "automation/verify_task44.cjs"
+      ],
+      "acceptance": "1758개 퀴즈의 정답 유일성·해설·점수·재도전 검증",
+      "blockers": [
+        "명시적 해설 0/1758",
+        "교육적 정답 유일성·전 단원 회귀 미검증"
+      ],
+      "next_action": "12팀: 해설 스키마·렌더링·정답 의미 반례부터 구현",
+      "owner": "12",
+      "support": [],
+      "state": "CANDIDATE",
+      "independent_team15": "PENDING",
+      "development_dispatched": false
+    },
+    "13": {
+      "task": 23,
+      "source_paths": [
+        "speaking-platform.html",
+        "phase3/instant_matching.py"
+      ],
+      "test_paths": [
+        "phase3/test_instant_matching.py"
+      ],
+      "acceptance": "Jitsi 진행자·강사·학습자·테스트 입장 인증 경계 분리",
+      "blockers": [
+        "기존 HTTP 매칭 테스트는 Jitsi 진행자 인증을 증명하지 않음",
+        "실제 브라우저·권한 거부 E2E 미검증"
+      ],
+      "next_action": "13팀: 진행자 권한과 제3자 입장 차단 전용 회귀 작성",
+      "owner": "13",
+      "support": [],
+      "state": "CANDIDATE",
+      "independent_team15": "PENDING",
+      "development_dispatched": false
+    },
+    "14": {
+      "task": 101,
+      "source_paths": [
+        "phase3/team14_referral_scenarios.py"
+      ],
+      "test_paths": [
+        "phase3/test_team14_referral_scenarios.py"
+      ],
+      "acceptance": "강사/학습자 각각의 강사/학습자 소개 4방향을 모의 정책·반례로 검증",
+      "blockers": [
+        "현재 그래프 테스트는 이용자 역할별 정책을 입증하지 않음",
+        "실결제 금지·정책 승인 미확정"
+      ],
+      "next_action": "14팀: 네 방향별 역할 정책 및 모의 계산 회귀 작성",
+      "owner": "14",
+      "support": [],
+      "state": "CANDIDATE",
+      "independent_team15": "PENDING",
+      "development_dispatched": false
+    },
+    "15": {
+      "task": 9,
+      "source_paths": [
+        "automation/hq_160_task_cycle.py",
+        "automation/task-evidence.json"
+      ],
+      "test_paths": [
+        "automation/test_hq_160_task_cycle.py"
+      ],
+      "acceptance": "160개 모든 번호의 담당·수락·근거·차단·다음 행동 연결",
+      "blockers": [
+        "160개 전수 실제 경로와 테스트 미확정",
+        "팀별 AI 실행→diff→CI→다음 작업 실증 부족"
+      ],
+      "next_action": "15팀: 미매핑 과제 의미 검증과 READY 공급 차단 원인 테스트",
+      "owner": "15",
+      "support": [],
+      "state": "CANDIDATE",
+      "independent_team15": "PENDING",
+      "development_dispatched": false
+    },
+    "16": {
+      "task": 143,
+      "source_paths": [
+        "site-language.js",
+        "global-language.js"
+      ],
+      "test_paths": [
+        "automation/test_hq_six_candidate_audit.py"
+      ],
+      "acceptance": "핵심 화면에서 8개 언어 동시 전환·상하단 메뉴 일치",
+      "blockers": [
+        "site-language.js는 8개, global-language.js는 더 많은 언어를 제공",
+        "실제 페이지·모바일 번역 동기화 E2E 미검증"
+      ],
+      "next_action": "16팀: 스크립트 언어 목록 통일 및 전환 E2E 검증",
+      "owner": "16",
+      "support": [],
+      "state": "CANDIDATE",
+      "independent_team15": "PENDING",
+      "development_dispatched": false
+    }
+  }
+}
