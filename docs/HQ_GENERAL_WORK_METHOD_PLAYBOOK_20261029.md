@@ -446,3 +446,7 @@
 - **실패와 자기교정:** 최초 CI [#40830403731](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40830403731)은 8개 중 2개 FAIL. GitHub Actions URL 정규표현식의 과잉 이스케이프가 원인이었고 `17957122c23a1a6506eee66830b2a90f47b01f0f`에서 수정, [재검증 #40830423183](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40830423183) 요청. CI가 실제 성공하기 전에는 통과를 선언하지 않는다.
 - **안전/비용:** 실제 모델 API 호출·하위 에이전트 생성 없음, 읽기 전용 5분 상한 CI, `contents: read`, 운영 DB/결제/배포/main/대외 제출 변경 없음. 별도 격리 브랜치로만 기록하며 정본 병합은 충돌 해소와 독립 승인 이후.
 - **남은 핵심 관문:** 팀별 실제 하위 AI 호출 0→증거 생성, 15팀이 GitHub run/job/commit을 독립 조회하여 호출 ID를 확정, 실패 시 재현·수정·동일 테스트 재실행, 다음 번호 자동 승계. 이 검증기 자체의 통과는 AGI나 6팀 실행 성공을 의미하지 않는다.
+
+- **15:39 KST 후속 확인:** [#40830423183](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40830423183) SUCCESS. 최초 실패 2개는 URL 정규표현식 수정 후 8개 반례 검사 통과. 이는 검증기 자체의 테스트이지 하위 AI 실제 호출·제품 기능 완료가 아니다.
+- **원장 범위 차이:** `automation/task-evidence.json` CODE_VERIFIED 13건, `automation/hq_semantic_contract_paths.json` CODE_VERIFIED 11건. #10·#59는 전자에만 존재하므로 15팀이 실제 파일/테스트 경로를 추적해야 한다. 누적 최종 승인 0/160.
+- **동시 진행 분리:** [팀11 사전검사 CI #40830454401](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40830454401)의 성공은 별도 격리 브랜치의 개발자 작성 검사다. 팀11 하위 AI 호출 또는 신규 6팀 bot 커밋으로 계산 금지.
