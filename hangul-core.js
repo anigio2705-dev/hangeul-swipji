@@ -111,7 +111,12 @@
     if(!words.length||words.some(w=>typeof w!=='string'||!w.trim()))return {status:'invalid'};
     // A device TTS click must not wait for a failing manifest request: some
     // mobile browsers lose user activation after an await, even if it resolves.
-    if(manifestError&&syntheticEnabled)return fallback(words,token);
+    // Fail closed: without the manifest we cannot know whether a recording
+    // is deliberately held for teacher review, even with explicit TTS opt-in.
+    if(manifestError){
+      status('음성 목록을 확인할 수 없습니다. 합성음으로 검수 보류를 우회하지 않습니다.');
+      return {status:'manifest-error'};
+    }
     // Same for available human recordings: start Audio.play synchronously in
     // the user gesture when the manifest has already been loaded.
     if(!manifestLoaded)await (manifestError?loadManifest():(loading||ready));
@@ -121,6 +126,13 @@
       return {status:'manifest-error'};
     }
     const missing=words.filter(word=>!records[word]);
+    // A held recording is a review prohibition, not merely a missing file.
+    // Reject the whole sequence before any human or synthetic audio starts.
+    const held=missing.filter(word=>holds[word]);
+    if(held.length){
+      status('재생 보류: '+held.map(w=>w+' · '+holds[w].holdReason).join(' / '));
+      return {status:'held',missing};
+    }
     // Without explicit opt-in, never play a partial sequence or silently
     // replace an unavailable human recording with a synthetic voice.
     if(missing.length&&!syntheticEnabled){
