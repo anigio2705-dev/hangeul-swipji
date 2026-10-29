@@ -35,10 +35,13 @@
   for(const [, ,word] of H.consonants.slice(0,14))$('practice').append(H.soundButton(word));
   $('play-basic-sequence').onclick=async()=>{
     await H.ready;
-    const available=H.consonants.slice(0,14).map(([, ,word])=>word)
-      .filter(word=>H.availability(word).state==='ready');
-    if(!available.length){H.status('재생 가능한 사람 녹음이 없습니다. 음원 목록을 확인해 주세요.');return}
-    await H.play(available);
+    const targets=H.consonants.slice(0,14).map(([, ,word])=>word);
+    const available=targets.filter(word=>H.availability(word).state==='ready');
+    const skipped=targets.filter(word=>H.availability(word).state!=='ready');
+    if(!available.length){H.status('기본 14음절 중 재생 가능한 사람 녹음이 0개입니다. 누락·검수 보류 음원을 확인해 주세요.');return}
+    const result=await H.play(available);
+    // Do not overwrite a newer click/stop or an audio error with a stale summary.
+    if(result.status==='played' && skipped.length)H.status('기본 14음절 중 '+available.length+'개 사람 녹음만 재생했습니다. 미재생: '+skipped.join(' · ')+'. 누락·검수 보류 음원은 재생하지 않았습니다. 청취 정확성 검수 전입니다.');
   };
   $('repeat-selected').onclick=()=>H.play(selected);$('stop-audio').onclick=()=>{H.stop();H.status('재생을 멈췄습니다.')};
   H.ready.then(()=>{H.refreshBadges();$('selected-help').textContent=H.availability(selected).label});select('ㄱ','ㅏ',false);
