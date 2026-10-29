@@ -81,3 +81,22 @@ test('TTS is opt-in, human-first, and never plays a held human asset',async()=>{
   H.setSyntheticEnabled(false);
   assert.equal((await H.play('다')).status,'held');
 });
+
+test('first tap while manifest is pending returns loading without starting audio',async()=>{
+  let resolveFetch;
+  const fetchPromise=new Promise(resolve=>{resolveFetch=resolve});
+  let audioStarts=0;
+  const context={
+    document:{baseURI:'https://example.test/',addEventListener(){},dispatchEvent(){},querySelectorAll:()=>[],querySelector:()=>null},
+    window:{addEventListener(){},speechSynthesis:{cancel(){}}},
+    Event:class{},URL,setTimeout,clearTimeout,
+    Audio:class{play(){audioStarts++;return Promise.resolve()}pause(){}},
+    fetch:()=>fetchPromise
+  };
+  vm.runInNewContext(source,context);
+  assert.equal((await context.window.HSHangul.play('가')).status,'loading');
+  assert.equal(audioStarts,0);
+  resolveFetch({ok:true,json:async()=>({recordings:{}})});
+  await context.window.HSHangul.ready;
+  assert.equal((await context.window.HSHangul.play('가')).status,'missing');
+});
