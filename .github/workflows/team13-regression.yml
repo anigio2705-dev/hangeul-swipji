@@ -33,6 +33,33 @@ jobs:
         with:
           name: team13-python-log
           path: team13-python.log
+  original-source-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Diagnose baseline differences without weakening preservation gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import subprocess, hashlib, json, pathlib
+          base='7418e325f0833604249e5170c2531a103b31ff1c'
+          paths=['intro.html','beginner1.html','beginner2.html','intermediate1.html','intermediate2.html','advanced1.html','advanced2.html','reading.html','reading-curriculum.js','reading-alternates.js','hangul-audio-manifest.json','index.html','phase3/content.json','phase3/content-expansion.json']
+          result=[]
+          for p in paths:
+              before=subprocess.check_output(['git','show',base+':'+p])
+              after=pathlib.Path(p).read_bytes()
+              result.append({'path':p,'preserved':before==after,'baseline_sha256':hashlib.sha256(before).hexdigest(),'current_sha256':hashlib.sha256(after).hexdigest()})
+          pathlib.Path('original-source-audit.json').write_text(json.dumps(result,indent=2)+'\\n')
+          print(json.dumps(result,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: team13-original-source-diff
+          path: original-source-audit.json
   browser-regression:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
