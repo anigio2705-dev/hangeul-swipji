@@ -1,0 +1,64 @@
+name: HQ isolated additive page preservation proof
+on:
+  push:
+    branches:
+      - audit/hq-six-additive-preservation-20261030-0634
+  pull_request:
+    paths:
+      - 'site-language.js'
+      - 'scripts/hq_preserved_page_enhancements.js'
+      - 'scripts/test_hq_preserved_page_enhancements.cjs'
+      - 'intro.html'
+      - 'beginner1.html'
+      - 'beginner2.html'
+      - 'intermediate1.html'
+      - 'intermediate2.html'
+      - 'advanced1.html'
+      - 'advanced2.html'
+      - 'reading.html'
+permissions:
+  contents: read
+jobs:
+  independent-additive-proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check new reading and course behaviors without modifying lesson HTML
+        run: |
+          node scripts/test_hq_preserved_page_enhancements.cjs
+          node scripts/team12_server_progress.test.js
+      - name: Check all eight original pages byte-for-byte by Git blob SHA
+        run: |
+          python - <<'PY'
+          import subprocess
+          expected = {
+            'intro.html': 'c97615859937253c6c9028b4b33a16d8a36169c7',
+            'beginner1.html': 'dd1cfdd150d58304de6b9bfe2fd7d9f4aaf4a0bd',
+            'beginner2.html': '25fd5e52f175fc6788f562caf6928709aa5cb60a',
+            'intermediate1.html': '263d1cb93be8b764e498b848fab16dc73fc6b1c4',
+            'intermediate2.html': 'ed5921842110e5e5a0424cbae011ec4c336aaad2',
+            'advanced1.html': '12ff98757e5cd026a4a8bcc116f40d5b71aea86a',
+            'advanced2.html': '7fb840cb4de3585eb7f19c3eb1ea80f882c92635',
+            'reading.html': 'c1b45b78e3318798ec98d77dd16232c120d96f8f',
+          }
+          for path, sha in expected.items():
+            got = subprocess.check_output(['git','hash-object',path],text=True).strip()
+            assert got == sha, f'{path}: original changed'
+          print('Eight immutable source HTML blobs preserved exactly')
+          PY
+      - name: Browser-test all 600 reading entries and 375px mobile level switching
+        run: |
+          npm ci --prefix phase3 --ignore-scripts
+          ./phase3/node_modules/.bin/playwright install --with-deps chromium
+          NODE_PATH="$PWD/phase3/node_modules" node scripts/browser-audit-reading-600.cjs
+      - name: Audit 96 lessons and original-source policy
+        run: python scripts/audit-professional-96.py
+      - name: Evidence scope
+        if: always()
+        run: echo 'Isolated source/Node proof only. No live website, webcam, API billing, READY promotion, or deployment.' >> "$GITHUB_STEP_SUMMARY"

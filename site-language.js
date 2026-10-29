@@ -31,3 +31,11 @@ var script=document.createElement('script');script.src='https://translate.google
 store(lang);document.documentElement.lang=lang;document.documentElement.dir=['ar','ur','fa','he'].includes(lang)?'rtl':'ltr';
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',attach,{once:true});else attach();
 })();
+/* Additive course progress and reading navigation: original lesson HTML is immutable. */
+(function () {
+  var page = (location.pathname.split('/').pop() || '').toLowerCase();
+  if (!/^(intro|beginner1|beginner2|intermediate1|intermediate2|advanced1|advanced2|reading)\.html$/.test(page)) return;
+  var script = document.createElement('script');
+  script.src = './scripts/hq_preserved_page_enhancements.js';
+  document.head.appendChild(script);
+})();
