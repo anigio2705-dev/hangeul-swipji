@@ -1,0 +1,44 @@
+name: HQ2 test99 read-only live health and provenance probe
+on:
+  push:
+    branches:
+      - automation/hq2-task22-readonly-bridge-20261029
+    paths:
+      - .github/workflows/hq2-test99-readonly-health.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test99-readonly:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Inspect public test99 health without mutation or credentials
+        run: |
+          python - <<'PY'
+          import json, re
+          from urllib.request import Request, urlopen
+          url = 'https://hangeul-swipji99-test.onrender.com/healthz'
+          try:
+              with urlopen(Request(url, headers={'Accept':'application/json'}), timeout=30) as r:
+                  if r.status != 200 or r.geturl() != url:
+                      raise RuntimeError('unexpected status or redirect')
+                  data = r.read(8193)
+              if len(data) > 8192:
+                  raise RuntimeError('oversized response')
+              obj = json.loads(data)
+              if not isinstance(obj, dict) or obj.get('ok') is not True:
+                  raise RuntimeError('not a healthy staging response')
+              scope = obj.get('scope')
+              if scope != 'isolated-staging':
+                  raise RuntimeError('isolation scope not verified')
+              commit = obj.get('deployedCommit')
+              if not isinstance(commit, str) or not re.fullmatch(r'[0-9a-f]{40}', commit):
+                  commit = 'UNKNOWN (server has no verified 40-character SHA)'
+              print('TEST99 HEALTH: HTTP 200; isolated scope confirmed; deployed SHA:', commit)
+              print('Source hash present:', bool(re.fullmatch(r'[0-9a-f]{64}', str(obj.get('sourceSHA256','')))))
+              print('App hash present:', bool(re.fullmatch(r'[0-9a-f]{64}', str(obj.get('appSHA256','')))))
+              print('READ ONLY: no booking, database, payment, deploy, or POST operation')
+          except Exception as e:
+              raise SystemExit('TEST99 HEALTH UNVERIFIED; DO NOT DEPLOY: '+str(e))
+          PY
