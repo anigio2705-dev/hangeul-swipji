@@ -92,7 +92,7 @@ class HQ160TaskCycleTests(unittest.TestCase):
         next_task = next_assignment("15", catalog, failures={"8": {"attempts": 2}})
         from hq_160_task_cycle import _semantic_dispatch_gate
         if _semantic_dispatch_gate(151, "scripts/team15_cross_team_smoke.py"):
-            self.assertEqual(next_task["task_number"], 151)
+            # #151 now has an explicitly unreviewed CANDIDATE contract.\n        # Exhausted #8 repairs must not silently fall through to that unsafe task.\n        self.assertIsNone(next_task, "CANDIDATE #151 must not bypass READY/QA gate")
         else:
             self.assertIsNone(next_task, "A new CANDIDATE #151 must not be silently dispatched")
 
