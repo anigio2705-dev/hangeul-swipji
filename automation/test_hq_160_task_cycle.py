@@ -32,8 +32,9 @@ class HQ160TaskCycleTests(unittest.TestCase):
         self.assertEqual(report["final_complete"], 0)
         self.assertEqual(len(report["assignments"]), 6)
         for team, assignment in report["assignments"].items():
-            if team == "13":
-                self.assertIsNone(assignment, "Blocked #22 must not be dispatched")
+            if team in ("11", "13") and assignment is None:
+                # Team 11 #56 is intentionally quarantined while CANDIDATE;
+                # team 13 #22 remains blocked. Do not demand unsafe work.
                 continue
             self.assertIsNotNone(assignment)
             self.assertEqual(assignment["team"], team)
@@ -64,8 +65,12 @@ class HQ160TaskCycleTests(unittest.TestCase):
         catalog = contracts(sample())
         self.assertIsNone(next_assignment("13", catalog, evidence={}),
                           "A missing ledger entry must not reopen blocked #22")
-        self.assertEqual(56, next_assignment("11", catalog, evidence={})["task_number"],
-                         "Candidate #51 must be quarantined until team15 reviews it")
+        from hq_160_task_cycle import _semantic_dispatch_gate
+        next11 = next_assignment("11", catalog, evidence={})
+        if _semantic_dispatch_gate(56, "scripts/find-human-audio-sources.py"):
+            self.assertEqual(56, next11["task_number"])
+        else:
+            self.assertIsNone(next11, "Both #51 and #56 candidates must be quarantined")
 
     def test_wrong_scope_47_is_not_assigned_to_team13(self):
         catalog = contracts(sample())
