@@ -483,3 +483,8 @@
 - #59 경로 장부에 격리 PR #32에만 존재하는 `automation/verify_task59_missing_audio.cjs`를 중앙 브랜치의 로컬 `test_paths`로 기록하자 [CI #40848831040](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40848831040)이 **의도대로 FAIL**했다: `Missing real mapped path for #59`. 160개 경로 실재 검사 자체는 약화하지 않았다.
 - `test_paths`는 중앙 브랜치에 실제 존재하는 `scripts/check-audio-runtime.cjs`만 유지하고, 별도 `pilot_test_paths`에 PR #32의 신규 테스트를 분리한 SHA `e5f2f3bb1f1f94f034325e61634758ef886073d7`. 정확한 SHA의 [재검증 #40848910330](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40848910330) SUCCESS.
 - **새 재사용 규칙:** 계약의 실제 경로는 해당 계약이 실행되는 브랜치에 존재해야 한다. 다른 브랜치에서만 검증한 파일은 `pilot_test_paths`와 검증 SHA/CI로 분리한다. CI 경로 검사 실패는 잘못된 장부를 수정해 해결하고 검사를 약화하지 않는다.
+
+### 18:23 KST 상태 정합성 교정 — 과거 녹색 증거와 새 반례가 충돌할 때
+- 과거 `automation/task-evidence.json`의 #59는 `code_verified`였으나 검증 범위는 사람 녹음 전용 코어의 누락·보류·오류 표시뿐이었다. 이번 실제 글자판의 `모` 재생 컨트롤 반례는 기존 #59 수락 기준을 충족하지 못함을 입증했다. 과거 녹색 CI를 삭제하지 않고 역사적 부분 검증으로 보존하되, 전체 #59 상태를 `blocked`로 재판정했다(장부 SHA `30a44bfd`, registry SHA `c86be86c`).
+- 새 격리 수정의 CI PASS는 현재 배포 코드의 PASS가 아니다. 팀15 독립 의미 검증, 실제 파일 오류 재시도, 테스트99 배포 보호·브라우저 실사용까지 #59 승격 금지.
+- **재사용 규칙:** 새 반례가 기존 '코드 검증' 범위를 넘어선 수락 기준의 실패를 증명하면 기존 PASS를 그대로 집계하지 않는다. 검증 범위를 명시하고 장부 상태를 보수적으로 낮추며 후속 재검증 조건을 남긴다.
