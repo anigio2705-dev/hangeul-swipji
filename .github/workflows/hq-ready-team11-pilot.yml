@@ -69,6 +69,7 @@ jobs:
         run: |
           cp automation/hq_six_developers.py /tmp/hq_six_developers.py
           cp automation/hq_160_task_cycle.py /tmp/hq_160_task_cycle.py
+          cp automation/hq_traffic_lights.py /tmp/hq_traffic_lights.py
           cp automation/hq_semantic_contract_paths.json /tmp/hq_semantic_contract_paths.json
           cp automation/hq_backlog_160.md /tmp/hq_backlog_160.md
           cp automation/task-evidence.json /tmp/hq-task-evidence.json
