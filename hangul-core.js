@@ -112,12 +112,24 @@
     const words=Array.isArray(value)?value:[value];
     if(!words.length||words.some(w=>typeof w!=='string'||!w.trim()))return {status:'invalid'};
     const missing=words.filter(word=>!records[word]);
-    if(missing.some(w=>holds[w])){status('재생 보류: '+missing.filter(w=>holds[w]).map(w=>w+' · '+holds[w].holdReason).join(' / '));return {status:'held',missing}}
-    if(missing.length){status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요.');return {status:'missing',missing}}
+    // Recordings on hold are NEVER decoded or played. Optional TTS is separately
+    // labeled, device-generated, and only used after the learner actively opts in.
+    if(!syntheticEnabled&&missing.some(w=>holds[w])){status('재생 보류: '+missing.filter(w=>holds[w]).map(w=>w+' · '+holds[w].holdReason).join(' / '));return {status:'held',missing}}
+    if(!syntheticEnabled&&missing.length){status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요.');return {status:'missing',missing}}
     try{
-      for(const word of words){if(token!==run)return {status:'cancelled'};await recording(word,token)}
-      if(token===run)status('재생 완료 · 청취 정확성 미검증 / Playback ended; listening review pending.');
-      return {status:token===run?'played':'cancelled',words};
+      let usedSynthetic=false;
+      for(const word of words){
+        if(token!==run)return {status:'cancelled'};
+        if(records[word]){await recording(word,token);continue}
+        const result=await synthesize(word,token);
+        if(result.status!=='tts-played'){
+          if(token===run)status('기기 한국어 합성음 재생 불가: '+word+' · '+result.status+' / Synthetic voice unavailable');
+          return {status:result.status,word,missing};
+        }
+        usedSynthetic=true;
+      }
+      if(token===run)status(usedSynthetic?'재생 완료 · 기기 합성음 사용 · 사람 녹음 아님':'사람 녹음 재생 완료 · 청취 정확성 미검증');
+      return {status:token===run?(usedSynthetic?'tts-played':'played'):'cancelled',words};
     }catch(e){if(token===run){stop();status(e.message)}return {status:'error',message:e.message}}
   }
   // Optional Korean device TTS: never impersonates a human recording.
