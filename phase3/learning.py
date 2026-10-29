@@ -85,7 +85,21 @@ def save_placement(db,uid,groups):
     if not isinstance(groups,list) or len(groups)!=4 or any(isinstance(n,bool) or not isinstance(n,int) or not 0<=n<=5 for n in groups):
         raise ValueError('\ub124 \uc601\uc5ed\uc758 \uc815\ub2f5 \uc218\ub294 \uac01\uac01 0~5 \uc815\uc218\uc5ec\uc57c \ud569\ub2c8\ub2e4')
     score=sum(groups)
-    stage=0 if score<=3 else 1 if score<=6 else 2 if score<=9 else 3 if score<=12 else 4 if score<=15 else 5 if score<=17 else 6
+    # Fix backlog 47: correct the placement stage calculation to allow up to 20 total score for groups sum since max 4*5=20
+    if score<=3:
+        stage=0
+    elif score<=6:
+        stage=1
+    elif score<=9:
+        stage=2
+    elif score<=12:
+        stage=3
+    elif score<=15:
+        stage=4
+    elif score<=20:
+        stage=5
+    else:
+        stage=6
     db.execute('INSERT INTO learning_placements VALUES(?,?,?,?,?) ON CONFLICT(user_id) DO UPDATE SET stage=excluded.stage,groups_json=excluded.groups_json,source=excluded.source,created_at=excluded.created_at',
                (uid,stage,json.dumps(groups),'voluntary-browser-summary-unverified',time.time()))
     return dict(stage=stage,score=score,verified=False)
