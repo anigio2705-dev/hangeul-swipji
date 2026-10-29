@@ -21,7 +21,7 @@ class Standards96Tests(unittest.TestCase):
         # The integration preview intentionally adds a staging notice to index.html.
         # Preserve the approved staging baseline byte-for-byte, rather than the older production index.
         f='index.html'
-        self.assertEqual((server.ROOT.parent/f).read_bytes(),subprocess.check_output(['git','show','0d746eaee4716896b9ecaa2836f7d01f350abf00:'+f],cwd=server.ROOT.parent))
+        self.assertEqual((server.ROOT.parent/f).read_bytes(),subprocess.check_output(['git','show','0d746eaee4716896b9ecaa2836f7d01f350abf00:'+f],cwd=server.ROOT.parent), msg='Staging preview index.html must match the approved baseline commit byte-for-byte')
     def test_all_new_72_have_unique_reading_questions_and_correct_grade_without_client_score(self):
         self.real();us=json.loads((server.ROOT/'content-remaining72.json').read_text())['units'];self.assertEqual(72,len(us))
         self.assertEqual(72,len({u['reading'] for u in us}));self.assertEqual(216,len({a['question'] for u in us for a in u['assessment']}))
