@@ -72,6 +72,36 @@
       "evidence_run": 40807293449,
       "note": "기존 구현을 새로 만든 것이 아니라 실 코드 실행을 모사한 독립 #43 회귀를 신규 추가. CI 40807293449 exact head 20f812c82707bb09950bfe6bbc2b6048f711690a PASS. 실제 음성 파일·브라우저 재생·공개 배포 완료로 해석 금지."
     },
+    "44": {
+      "owner": "12",
+      "support": [
+        "13"
+      ],
+      "state": "CANDIDATE",
+      "source_paths": [
+        "learn.html",
+        "intro.html",
+        "beginner1.html",
+        "beginner2.html",
+        "intermediate1.html",
+        "intermediate2.html",
+        "advanced1.html",
+        "advanced2.html"
+      ],
+      "test_paths": [
+        "scripts/team12_content_regression.py"
+      ],
+      "acceptance": "무료 7과정 350단원에서 단원 선택→어휘·문장·문법 설명·예시→연습문제 채점→오답 복습→다음 단원으로의 이동이 끊기지 않고, 단원별 상태가 의도대로 유지됨",
+      "unmet": [
+        "7개 과정 각각에서 단원 선택·탭 전환·정답/오답 채점·오답 복습·다음 단원으로의 end-to-end 독립 실행 테스트 부재",
+        "현재 scripts/team12_content_regression.py는 주로 딥링크·진도 재개와 콘텐츠 보존을 검사하므로 전체 #44 흐름 통과 증거가 아님",
+        "15팀 독립 의미 검증 및 해당 정확한 SHA의 CI 필요",
+        "실제 PC/모바일 브라우저 사용 검증 및 대표 승인 미완료"
+      ],
+      "independent_team15": "PENDING",
+      "dependencies": [],
+      "note": "2026-10-29 12:27 KST: 7개 과정의 실제 HTML, learn.html과 기존 team12 딥링크 회귀 경로를 조회해 경로만 상세화. CANDIDATE이며 READY/기능 완료로 인정하지 않음."
+    },
     "47": {
       "owner": "12",
       "support": [
