@@ -469,3 +469,12 @@
 - **채택 범위/남은 병목:** 격리 브랜치에서만 PASS. 160개 기능 완료 증가 0, 신규 6팀 AI 개발 0. `READY=0`의 원인은 이 패치만으로 해결되지 않으며, #9는 CANDIDATE로 상세화했을 뿐이다. 중앙 HQ 수정은 6팀 bot 실적으로 계산하지 않는다. 15팀 독립 QA와 실제 READY 후보 공급 후 별도 제한 호출·새 diff·CI·후속 승계 검증이 필요하다.
 - **재사용 규칙:** 과거 고정 작업 목록은 탐색 힌트로만 사용한다. 실제 dispatch는 단일 독립 승인 큐로 제한한다. 검증은 '오류 재현 RED → 동일 반례 GREEN → 기존 회귀 GREEN'을 필수로 하며, 코드만 고친 것을 실서비스 성공으로 보고하지 않는다.
 - **OpenAI 공식 사례:** [Agent Improvement Loop](https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop)의 실제 실패→재사용 가능한 eval→검증된 변경 패턴을 한 건에 적용. 모델 자율성·AGI 성취의 증거가 아니다.
+
+## 2026-10-29 18:19 KST — #59 모 무음: 실제 누락을 가짜 음성으로 숨기지 않는 UI 회귀
+
+- **문제/가설:** 운영 사이트 원본 `hangul-audio-manifest.json`에는 단독 음절 `모` 녹음이 없다(`모자` 후보는 다른 발음이고 청취 보류). `hangul-board.js`에서 `모`를 클릭해도 재생 버튼과 '다시 듣기'가 활성처럼 보여 학습자가 고장으로 오해한다. 실제 녹음 없는 음절은 '재생 불가'로 표시하고 반복 버튼을 막되, 확보된 `가`의 사람 녹음은 유지해야 한다.
+- **독립 재현 RED:** 테스트만 먼저 격리 브랜치에 추가한 SHA `669911ffc27f19d51398c3a4277e3f43d1af72e7`; [Actions #40848633295](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40848633295)에서 'Reproduce missing human recording' 단계 실패. 로컬 동일 테스트도 기존 코드에서는 `Missing 모 must not show a usable repeat-audio control`로 실패.
+- **실제 변경/검증 GREEN:** `hangul-board.js`에서 선택 음절의 `H.records` 실재 여부를 기준으로 안내문·반복 버튼 상태를 갱신하고, 없는 음절을 `H.play`에 전달하지 않도록 수정. SHA `f0e8fd4d090adf4e6b1ba788f8ed030f983bfcac`; [Actions #40848693610](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40848693610) SUCCESS: Node 구문, 실제 글자판 DOM 시뮬레이션, 기존 사람 녹음 전용 런타임 회귀 3단계 PASS. [격리 Draft PR #32](https://github.com/anigio2705-dev/hangeul-swipji/pull/32).
+- **선택한 공식 방법:** OpenAI [Codex CI autofix 예시](https://developers.openai.com/cookbook/examples/codex/autofix-github-actions)는 실패 테스트→격리 수정→CI→검토 PR 패턴을 제공하지만 예시는 아카이브 상태이고 비밀키/쓰기 권한을 한 job에 합치는 방식이 위험하다고 명시한다. 여기서는 **AI 비밀키 없이 읽기 전용 CI + 격리 브랜치 + Draft PR**로 적용했다. 재현 가능성은 검증됐고 API 비용 0, 운영/DB/Render 변경 0.
+- **한계/판정:** 소리가 실제로 나오게 만든 것은 아니다. `모` 사람 녹음은 여전히 없고, #53/#57 실제 음원 확보·청취, #59 전체 파일 오류 재시도, 15팀 독립 의미 검토, 테스트99 브라우저·모바일 확인, 대표 승인 모두 미완료. 따라서 **#59 CANDIDATE**, 신규 12팀 AI 개발 0, 최종 완료 증가 0. 테스트99는 임시 SQLite 보존 여부 미확인으로 재배포 금지.
+- **재사용 규칙:** 실재하지 않는 파일을 무음 성공 또는 TTS 대체로 위장하지 않는다. 실제 사용자 고장 제보에는 (1) 원본 자산 확인 (2) 실패를 재현하는 UI/기능 테스트를 먼저 RED (3) 정확한 SHA에서 GREEN 및 기존 회귀 통과 (4) 실제 자산 확보/브라우저 실사용/대표 승인을 별도 단계로 유지한다.
