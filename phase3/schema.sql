@@ -36,3 +36,6 @@ CREATE INDEX IF NOT EXISTS learning_checks_owner ON learning_checks(user_id,crea
 CREATE INDEX IF NOT EXISTS learning_checks_booking ON learning_checks(booking_id);
 CREATE INDEX IF NOT EXISTS providers_search ON users(approved,role,price,nickname,id);
 CREATE INDEX IF NOT EXISTS provider_future_slots ON slots(teacher_id,start,end);
+
+-- Persist authenticated seven-stage free-course completion independently of browser cache.
+CREATE TABLE IF NOT EXISTS free_lesson_progress(user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,stage INTEGER NOT NULL CHECK(stage BETWEEN 1 AND 7),lesson INTEGER NOT NULL CHECK(lesson BETWEEN 1 AND 50),completed_at REAL NOT NULL,PRIMARY KEY(user_id,stage,lesson));
