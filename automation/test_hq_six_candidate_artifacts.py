@@ -1,6 +1,6 @@
 """Offline safety tests for six-team candidate artifact generation."""
 import unittest
-from hq_six_candidate_artifacts import TEAM_TASKS, validate_artifact
+from hq_six_candidate_artifacts import TEAM_TASKS, validate_artifact, generated_python_cache
 
 
 class CandidateArtifactTests(unittest.TestCase):
@@ -19,6 +19,14 @@ class CandidateArtifactTests(unittest.TestCase):
         for team in TEAM_TASKS:
             with self.subTest(team=team):
                 self.assertTrue(validate_artifact(self.sample(team), team))
+
+    def test_only_untracked_python_cache_paths_are_eligible(self):
+        self.assertTrue(generated_python_cache("automation/__pycache__/runner.cpython-311.pyc"))
+        self.assertTrue(generated_python_cache("phase3/__pycache__/test_a.pyc"))
+        self.assertFalse(generated_python_cache("phase3/booking.py"))
+        self.assertFalse(generated_python_cache("../__pycache__/runner.pyc"))
+        self.assertFalse(generated_python_cache("/tmp/__pycache__/runner.pyc"))
+        self.assertFalse(generated_python_cache("phase3/__pycache__/private.txt"))
 
     def test_wrong_team_rejected(self):
         data = self.sample("12")
