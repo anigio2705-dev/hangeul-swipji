@@ -94,12 +94,54 @@ def load_team_results(root):
         result[team] = record
     return result
 
-def independent_check(team, task, token, catalog):
+def independent_check(team, task, token, catalog, registry=None, root=Path("."), ledger=None):
     number, path, sha = task.get("task_number"), task.get("path"), task.get("commit", "")
-    if not isinstance(number, int) or (number, path) not in CURATED_TARGETS[team]:
+    if (not isinstance(number, int) or number not in catalog
+            or team not in CURATED_TARGETS):
         return "RETRY", "Commit lacks a valid assigned backlog number and owned path", {}
     if not isinstance(sha, str) or not re.fullmatch(r"[a-f0-9]{40}", sha):
         return "RETRY", "Missing valid commit SHA", {}
+    # Supporting teams may review, but only the canonical owner can submit a
+    # newly READY dynamic development commit. Preserve wrong-scope rejection.
+    if (number, path) not in CURATED_TARGETS[team] and catalog[number]["owner"] != team:
+        return "RETRY", "Commit lacks a valid assigned backlog number and owned path", {}
+    dynamic_tests = []
+    if (number, path) not in CURATED_TARGETS[team]:
+        # A legitimate newly reviewed READY task must not be rejected merely
+        # because it is absent from the historical hardcoded task list.
+        # Re-run the canonical semantic/path/ownership/collision gate here.
+        from hq_traffic_lights import readiness
+        try:
+            if registry is None:
+                registry = json.loads(Path("automation/hq_semantic_contract_paths.json").read_text())
+            allowed = readiness(catalog, ledger or {}, registry, root)["dispatchable"]
+            reviewed = next((x for x in allowed
+                             if x["task"] == number and x["owner"] == team
+                             and (x.get("editable_path") or x["source_paths"][0]) == path), None)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            return "RETRY", "READY contract cannot be independently verified: " + type(exc).__name__, {}
+        if reviewed is None:
+            return "RETRY", "READY contract missing independent approval, paths, ownership or dependency gate", {}
+        entry = registry["items"][str(number)]
+        baseline_sha = entry.get("independent_ci_sha")
+        match = re.fullmatch(
+            r"https://github\.com/anigio2705-dev/hangeul-swipji/actions/runs/([0-9]+)",
+            entry.get("independent_ci_url", ""))
+        if not isinstance(baseline_sha, str) or not re.fullmatch(r"[a-f0-9]{40}", baseline_sha) or not match:
+            return "RETRY", "READY independent CI requires exact 40-character SHA and run URL", {}
+        try:
+            run = api("/actions/runs/" + match.group(1), token)
+        except Exception as exc:
+            return "RETRY", "READY independent CI lookup failed: " + type(exc).__name__, {}
+        if (run.get("head_sha") != baseline_sha or run.get("status") != "completed"
+                or run.get("conclusion") != "success"):
+            return "RETRY", "READY independent CI SHA/status/conclusion mismatch", {}
+        dynamic_tests = entry["test_paths"]
+        if (not path.endswith(".py") or path.startswith(("automation/", ".github/"))
+                or not dynamic_tests or any(
+                    not isinstance(t, str) or not t.endswith(".py")
+                    or not Path(t).name.startswith("test_") for t in dynamic_tests)):
+            return "RETRY", "READY target requires bounded Python and executable unittest regression", {}
     contract = catalog[number]
     if team != contract["owner"] and team not in contract["support"]:
         return "RETRY", "Team is not assigned to this numbered item", {}
@@ -125,6 +167,19 @@ def independent_check(team, task, token, catalog):
             if syntax.returncode:
                 return "RETRY", "Independent syntax check failed: " + syntax.stderr[-350:], {}
             command = REGRESSIONS.get((team, number))
+            if not command and dynamic_tests:
+                commands = []
+                for test in dynamic_tests:
+                    test_command = ["python", "-m", "unittest", "discover",
+                                    "-s", str(Path(test).parent), "-p", Path(test).name]
+                    checked = cmd(test_command, cwd=temp, timeout=180)
+                    output = checked.stdout + checked.stderr
+                    if checked.returncode or not re.search(r"Ran [1-9][0-9]* tests?", output):
+                        return "RETRY", "READY independent regression failed or ran zero tests: " + output[-450:], {}
+                    commands.append(" ".join(test_command))
+                return "TEST_PASS_PENDING_CI", "READY exact CI provenance, diff and independent regressions passed", {
+                    "commit": sha, "changed_files": files, "independent_test": "success",
+                    "test_command": " && ".join(commands)}
             if not command:
                 return "PROVISIONAL", "Syntax verified; independent functional regression not configured", {
                     "commit": sha, "changed_files": files, "syntax": "success"}
@@ -253,7 +308,7 @@ def supervise(root, token, depth, repairs, output):
             status = task.get("status")
             if status in ("committed", "verification_requested"):
                 try:
-                    verdict, reason, evidence = independent_check(team, task, token, catalog)
+                    verdict, reason, evidence = independent_check(team, task, token, catalog, ledger=ledger)
                 except Exception as exc:
                     verdict, reason, evidence = "RETRY", "Independent verification error: " + type(exc).__name__, {}
                 verdicts[team].append({"task_number": number, "verdict": verdict,

@@ -178,5 +178,68 @@ class SixTeamSupervisorTests(unittest.TestCase):
         self.assertFalse(report["dispatched_next"])
         api.assert_not_called()
 
+    def test_reviewed_dynamic_ready_requires_live_exact_sha_and_real_regression(self):
+        """A reviewed #101 READY patch must reach independent tests, not the curated-only rejection."""
+        from types import SimpleNamespace
+        c = contracts(sample())
+        target = "phase3/team14_referral_scenarios.py"
+        regression = "phase3/test_team14_referral_scenarios.py"
+        new_sha, baseline_sha = "a" * 40, "b" * 40
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "phase3").mkdir()
+            (root / target).write_text("def review(): return True\n")
+            (root / regression).write_text(
+                "import unittest\nclass TestReview(unittest.TestCase):\n"
+                " def test_review(self): self.assertTrue(True)\n")
+            entry = {"owner": "14", "support": ["15"], "state": "READY",
+                     "source_paths": [target], "test_paths": [regression],
+                     "independent_team15": "PASS",
+                     "independent_ci_url":
+                         "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123",
+                     "independent_ci_sha": baseline_sha}
+            registry = {"schema": 1, "items": {"101": entry}}
+            paths = []
+            def fake_api(path, token, method="GET", payload=None, raw=False):
+                paths.append(path)
+                if path.startswith("/actions/runs/"):
+                    return {"head_sha": baseline_sha, "status": "completed",
+                            "conclusion": "success"}
+                if path.startswith("/branches/"):
+                    return {"commit": {"sha": new_sha}}
+                if path.startswith("/commits/"):
+                    return {"files": [{"filename": target}],
+                            "commit": {"message": "bot(team14): task #101 tested isolated fix"}}
+                raise AssertionError("Unexpected API path: " + path)
+            checked_commands = []
+            def fake_cmd(args, cwd=None, timeout=120):
+                checked_commands.append(args)
+                return SimpleNamespace(returncode=0,
+                                       stdout="Ran 1 test in 0.001s\nOK\n",
+                                       stderr="")
+            task = {"task_number": 101, "path": target, "commit": new_sha}
+            with patch("hq_six_cycle_supervisor.api", side_effect=fake_api), \
+                 patch("hq_six_cycle_supervisor.cmd", side_effect=fake_cmd):
+                verdict, reason, evidence = independent_check(
+                    "14", task, "token", c, registry=registry, root=root)
+                self.assertEqual(verdict, "TEST_PASS_PENDING_CI", reason)
+                self.assertIn(Path(regression).name, evidence["test_command"])
+                self.assertIn(str(Path(regression).parent), evidence["test_command"])
+                self.assertTrue(any(Path(regression).name in cmd and
+                                    str(Path(regression).parent) in cmd
+                                    for cmd in checked_commands))
+                self.assertTrue(any(p.startswith("/actions/runs/") for p in paths))
+                entry["independent_ci_sha"] = "c" * 40
+                verdict, reason, _ = independent_check(
+                    "14", task, "token", c, registry=registry, root=root)
+                self.assertEqual(verdict, "RETRY")
+                self.assertIn("CI", reason)
+                entry["independent_ci_sha"] = baseline_sha
+                entry["independent_team15"] = "PENDING"
+                verdict, reason, _ = independent_check(
+                    "14", task, "token", c, registry=registry, root=root)
+                self.assertEqual(verdict, "RETRY")
+                self.assertIn("READY", reason)
+
 if __name__ == "__main__":
     unittest.main()
