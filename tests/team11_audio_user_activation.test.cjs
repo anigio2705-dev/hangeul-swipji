@@ -80,4 +80,8 @@ test('TTS is opt-in, human-first, and never plays a held human asset',async()=>{
   assert.equal(calls.audio.length,1,'held audio URL must never be created');
   H.setSyntheticEnabled(false);
   assert.equal((await H.play('다')).status,'held');
+  const cancelsBefore=calls.cancel;
+  H.setSyntheticEnabled(true);
+  assert.ok(calls.cancel>cancelsBefore,'enabling TTS also cancels an older playback');
+  H.setSyntheticEnabled(false);
 });
