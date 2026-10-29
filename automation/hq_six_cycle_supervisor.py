@@ -348,6 +348,12 @@ def supervise(root, token, depth, repairs, output):
               "evidence_commit": ledger_commit,
               "independent_review": review,
               "completed_160": "not established; never inferred from CI",
+              "code_verified_count": sum(record.get("status") == "code_verified" for record in ledger.values()),
+              "team_runner_elapsed_seconds": {
+                  team: result.get("team_runner_elapsed_seconds") for team, result in teams.items()},
+              "manual_site_review_seconds": None,
+              "representative_review_seconds": None,
+              "time_measurement_note": "Runner elapsed time is measured; site/manual review is separate and not yet measured.",
               "test_site_verified": False, "dispatched_next": False}
     # Dispatch only teams with an actual safe next assignment. This prevents
     # six repeated AI calls after a team has no remaining eligible work.
