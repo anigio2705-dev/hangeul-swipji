@@ -6,7 +6,9 @@
   ],
   "repairs": {},
   "expected_next_task": 47,
-  "reason": "2026-10-29 09:35 KST: #22 exhausted a bounded repair and failed regression (expected HTTP 403, got 200). #22 is persistently blocked; dispatch only team13 to next independent safe #47. One AI call; no duplicate retry.",
+  "reason": "2026-10-29 09:40 KST: #22 blocked; #47 previously tested against wrong matching suite and its team13 code incorrectly mapped scores 18-20 to stage 5. Team branch now has corrective commit 9cff0b099a9c3ca4e465c29639518d03cf638ed0. Verify existing #47 commit using independent test_global_learning.py plus explicit 17/18/20 placement boundary assertions. Do not spend AI tokens rewriting already corrected code. Treat dispatch acceptance separately from verified development.",
   "scope": "approved isolated branch only",
-  "final_completion_claim": false
+  "final_completion_claim": false,
+  "expected_team_commit": "9cff0b099a9c3ca4e465c29639518d03cf638ed0",
+  "expected_regression": "python -m unittest discover -s phase3 -p test_global_learning.py; 17->5,18->6,20->6"
 }
