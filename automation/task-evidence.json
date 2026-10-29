@@ -16,6 +16,22 @@
     "source_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40791928076",
     "scope": "Needs a different, regression-preserving #22 fix. Do not repeat rejected patch; next independent safe team13 task may proceed. Not a final completion."
   },
+  "41": {
+    "status": "code_verified",
+    "commit": "635aef9507f0cf908d4382a4be5f5d3e12975607",
+    "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797462981",
+    "ci_result": "success",
+    "independent_review": "pass",
+    "task_specific_verified": true,
+    "test_command": "python scripts/team12_content_regression.py + trusted automation/verify_task41.py",
+    "scope": "Source preservation inventory and regression implementation: 350 lessons, 1758 lesson quizzes, 600 reading entries, 1800 reading questions; trusted independent source/answer-index audit and 11 candidate regressions passed in #40797443716 and #40797462981. Full legacy-text preservation, browser/mobile behavior, and representative review not established.",
+    "owner": "12",
+    "path": "scripts/team12_content_regression.py",
+    "ci_conclusion": "success",
+    "implementation_verified": true,
+    "final_approved": false,
+    "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797443716"
+  },
   "47": {
     "status": "blocked",
     "owner": "12",
@@ -65,17 +81,5 @@
     "scope": "Independent source diff and functional regression passed; final CI run and public site still pending",
     "owner": "14",
     "path": "phase3/team14_referral_store.py"
-  },
-  "41": {
-    "status": "in_progress",
-    "commit": "635aef9507f0cf908d4382a4be5f5d3e12975607",
-    "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797462981",
-    "ci_result": "pending",
-    "independent_review": "pass",
-    "task_specific_verified": true,
-    "test_command": "python scripts/team12_content_regression.py + trusted automation/verify_task41.py",
-    "scope": "Independent source diff and task-specific functional regression passed; final CI run and public site still pending",
-    "owner": "12",
-    "path": "scripts/team12_content_regression.py"
   }
 }
