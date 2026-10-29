@@ -7,7 +7,7 @@
     $('selected-help').textContent=H.availability(selected).label;
     document.querySelectorAll('.board [data-sound]').forEach(b=>b.classList.toggle('focus',b.dataset.sound===selected));
     const requested=selected;
-    if(play)H.play(requested).then(result=>{if(selected!==requested)return;if(result.status==='played')$('selected-help').textContent=H.availability(selected).label;else if(result.status==='error')$('selected-help').textContent=result.message;else $('selected-help').textContent=H.availability(selected).label});
+    if(play)H.play(requested).then(result=>{if(selected!==requested)return;if(result.status==='played'||result.status==='synthetic')$('selected-help').textContent=H.availability(selected).label;else if(result.status==='error')$('selected-help').textContent=result.message;else $('selected-help').textContent=H.availability(selected).label});
   }
   for(const [c,name,word] of H.consonants){
     const b=H.soundButton(name);b.replaceChildren(H.el('b','',c),H.el('small','',name));
@@ -33,6 +33,8 @@
   $('builder-play').onclick=()=>select($('builder-c').value,$('builder-v').value);
   for(const word of ['국','산','옷','달','밤','밥','강'])$('finals').append(H.soundButton(word));
   for(const [, ,word] of H.consonants.slice(0,14))$('practice').append(H.soundButton(word));
+  const syntheticToggle=$('allow-synthetic');
+  if(syntheticToggle){syntheticToggle.disabled=!H.canSynthesize();syntheticToggle.onchange=()=>H.setSyntheticEnabled(syntheticToggle.checked);if(syntheticToggle.disabled)syntheticToggle.title='이 기기는 합성음 기능을 지원하지 않습니다.';}
   $('repeat-selected').onclick=()=>H.play(selected);$('stop-audio').onclick=()=>{H.stop();H.status('재생을 멈췄습니다.')};
   H.ready.then(()=>{H.refreshBadges();$('selected-help').textContent=H.availability(selected).label});select('ㄱ','ㅏ',false);
 })();
