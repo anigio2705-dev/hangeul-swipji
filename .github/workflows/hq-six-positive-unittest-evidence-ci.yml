@@ -6,6 +6,7 @@ on:
     paths:
       - 'automation/hq_six_developers.py'
       - 'automation/test_hq_six_developers.py'
+      - 'docs/HQ_GENERAL_WORK_METHOD_PLAYBOOK_20261029.md'
       - '.github/workflows/hq-six-positive-unittest-evidence-ci.yml'
 permissions:
   contents: read
