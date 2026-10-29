@@ -130,6 +130,26 @@ def independent_check(team, task, token, catalog):
             checked = cmd(command, cwd=temp, timeout=180)
             if checked.returncode:
                 return "RETRY", "Independent regression failed: " + (checked.stdout + checked.stderr)[-500:], {}
+            if (team, number) == ("13", 47):
+                # The old matching suite missed a real learning regression:
+                # scores 18-20 incorrectly fell into stage 5, making stage 6
+                # unreachable. Independently exercise all upper boundaries
+                # against the committed isolated branch, not the AI's claims.
+                placement_check = (
+                    "import sqlite3,sys;sys.path.insert(0,'phase3');import learning;"
+                    "db=sqlite3.connect(':memory:');"
+                    "db.execute('CREATE TABLE learning_placements ('"
+                    "'user_id TEXT PRIMARY KEY,stage INTEGER,groups_json TEXT,'"
+                    "'source TEXT,created_at REAL)');"
+                    "cases=[([5,5,5,2],5),([5,5,5,3],6),([5,5,5,5],6)];"
+                    "results=[(sum(g),learning.save_placement(db,'test',g)['stage'],e) "
+                    "for g,e in cases];"
+                    "assert all(actual==expected for _,actual,expected in results),results"
+                )
+                boundary = cmd(["python", "-c", placement_check], cwd=temp, timeout=30)
+                if boundary.returncode:
+                    return "RETRY", ("Learning placement boundary regression failed: " +
+                                     (boundary.stdout + boundary.stderr)[-500:]), {}
             if team == "16":
                 rendered = Path(temp) / "hangul-audio-credits.html"
                 manifest = Path(temp) / "hangul-audio-manifest.json"
