@@ -175,5 +175,66 @@ class HQ160TaskCycleTests(unittest.TestCase):
         dispatched = {x["task"] for x in actual["dispatchable"]}
         self.assertEqual(declared, dispatched, actual["invalid_ready"])
 
+
+    def test_new_reviewed_ready_task_reaches_real_dispatch_without_curated_id(self):
+        import tempfile
+        from pathlib import Path
+        c = contracts(sample())
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "new-feature.py").write_text("pass\n")
+            (root / "test-new-feature.py").write_text("pass\n")
+            record = {
+                "owner": "12", "support": ["13"], "state": "READY",
+                "source_paths": ["new-feature.py"],
+                "test_paths": ["test-new-feature.py"],
+                "independent_team15": "PASS",
+                "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123",
+            }
+            registry = {"schema": 1, "items": {"45": record}}
+            assignment = next_assignment("12", c, {}, registry=registry, root=root)
+            self.assertEqual(assignment["task_number"], 45)
+            self.assertEqual(assignment["path"], "new-feature.py")
+            self.assertEqual(assignment["source"], "independently_reviewed_READY_registry")
+            self.assertEqual(assignment["independent_test_paths"], ["test-new-feature.py"])
+            self.assertEqual(assignment["mode"], "develop")
+            self.assertNotIn((45, "new-feature.py"), CURATED_TARGETS["12"])
+            self.assertIsNone(next_assignment("13", c, {}, registry=registry, root=root))
+            # Never reimplement a commit pending independent CI.
+            pending = {"45": {"status": "in_progress", "independent_review": "pass"}}
+            self.assertNotEqual(next_assignment("12", c, pending, registry=registry, root=root)["task_number"], 45)
+            verified = {"45": {"status": "code_verified"}}
+            self.assertNotEqual(next_assignment("12", c, verified, registry=registry, root=root)["task_number"], 45)
+            record["independent_team15"] = "PENDING"
+            self.assertNotEqual(next_assignment("12", c, {}, registry=registry, root=root)["task_number"], 45)
+            record["independent_team15"] = "PASS"
+            record["source_paths"] = ["../outside.py"]
+            self.assertNotEqual(next_assignment("12", c, {}, registry=registry, root=root)["task_number"], 45)
+
+    def test_reviewed_ready_collision_and_retry_limit_are_fail_closed(self):
+        import tempfile
+        from pathlib import Path
+        c = contracts(sample())
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            for name in ("shared.py", "other.py", "test.py"):
+                (root / name).write_text("pass\n")
+            def item(number, path):
+                return {"owner": "12", "support": ["13"], "state": "READY",
+                        "source_paths": [path], "test_paths": ["test.py"],
+                        "independent_team15": "PASS",
+                        "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"}
+            reg = {"schema": 1, "items": {"45": item(45, "shared.py"),
+                                          "46": item(46, "shared.py")}}
+            self.assertNotEqual(next_assignment("12", c, {}, registry=reg, root=root)["task_number"], 45)
+            reg["items"]["46"]["source_paths"] = ["other.py"]
+            self.assertEqual(next_assignment("12", c, {}, registry=reg, root=root)["task_number"], 45)
+            self.assertNotEqual(next_assignment("12", c, {}, failures={"45": {"attempts": 2}},
+                                                registry=reg, root=root)["task_number"], 45)
+            # A multi-file READY is not yet compatible with single-file patch verification.
+            reg["items"]["45"]["source_paths"] = ["shared.py", "other.py"]
+            reg["items"]["46"]["source_paths"] = ["shared.py"]
+            self.assertNotEqual(next_assignment("12", c, {}, registry=reg, root=root)["task_number"], 45)
+
 if __name__ == "__main__":
     unittest.main()
