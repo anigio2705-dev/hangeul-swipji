@@ -94,6 +94,19 @@ class SixTeamSupervisorTests(unittest.TestCase):
         # The exhausted #22 is skipped; the next independent team13 task is #47.
         self.assertNotIn("22", str(again["staged_pending_CI"]))
 
+    def test_replayed_exhausted_block_does_not_trigger_next_dispatch_again(self):
+        ledger = {"22": {"status": "blocked", "owner": "13",
+                         "block_reason": "Previously exhausted repair"}}
+        report, api = self.run_cycle(
+            committed=True, team="13", task_number=22, task_status="blocked",
+            feedback="Patch must make one unambiguous real change",
+            repairs={"13": {"22": {"attempts": 1,
+                                    "repair_instruction": "Already retried"}}},
+            ledger=ledger)
+        self.assertFalse(report["dispatched_next"])
+        self.assertEqual(ledger["22"]["block_reason"], "Previously exhausted repair")
+        api.assert_not_called()
+
     def test_exhausted_repair_without_safe_followup_stops_and_persists_block(self):
         ledger = {}
         report, api = self.run_cycle(
