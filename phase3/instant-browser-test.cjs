@@ -41,6 +41,14 @@ check('pagehide/pageshow restarts status polling and allows a fresh queue join')
 await p.reload();
 await p.locator('#status').filter({hasText:'접속 중인 상대'}).waitFor();
 check('reload restores the existing waiting state without an extra join');
+assert.equal(await p.locator('#fallback').isVisible(),false);
+await p.evaluate(()=>{const realNow=Date.now;Date.now=()=>realNow()+31000;dispatchEvent(new Event('pageshow'));});
+await p.locator('#fallback').waitFor({state:'visible',timeout:10000});
+assert.match(await p.locator('#fallback a').getAttribute('href'),/^\/index\.html#teaching-platform$/);
+assert.equal(await p.locator('#stop').isVisible(),true);
+assert.equal(await p.locator('#status').textContent().then(t=>t.includes('접속 중인 상대')),true);
+check('30-second wait offers real reservation navigation while automatic queue stays active');
+
 await p.locator('#stop').click();
 await p.locator('#queue').waitFor();
 check('explicit leave clears waiting state after reload');
