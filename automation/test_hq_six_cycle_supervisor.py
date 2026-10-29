@@ -188,10 +188,10 @@ class SixTeamSupervisorTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "phase3").mkdir()
-            (root / target).write_text("def review(): return True\\n")
+            (root / target).write_text("def review(): return True\n")
             (root / regression).write_text(
-                "import unittest\\nclass TestReview(unittest.TestCase):\\n"
-                " def test_review(self): self.assertTrue(True)\\n")
+                "import unittest\nclass TestReview(unittest.TestCase):\n"
+                " def test_review(self): self.assertTrue(True)\n")
             entry = {"owner": "14", "support": ["15"], "state": "READY",
                      "source_paths": [target], "test_paths": [regression],
                      "independent_team15": "PASS",
@@ -215,10 +215,10 @@ class SixTeamSupervisorTests(unittest.TestCase):
             def fake_cmd(args, cwd=None, timeout=120):
                 checked_commands.append(args)
                 return SimpleNamespace(returncode=0,
-                                       stdout="Ran 1 test in 0.001s\\nOK\\n",
+                                       stdout="Ran 1 test in 0.001s\nOK\n",
                                        stderr="")
             task = {"task_number": 101, "path": target, "commit": new_sha}
-            with patch("hq_six_cycle_supervisor.api", side_effect=fake_api), \\
+            with patch("hq_six_cycle_supervisor.api", side_effect=fake_api), \
                  patch("hq_six_cycle_supervisor.cmd", side_effect=fake_cmd):
                 verdict, reason, evidence = independent_check(
                     "14", task, "token", c, registry=registry, root=root)
