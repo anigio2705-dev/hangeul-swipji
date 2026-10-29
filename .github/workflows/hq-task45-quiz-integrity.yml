@@ -28,4 +28,5 @@ jobs:
         run: node automation/verify_task45_quiz_integrity.cjs
       - name: Preserve strict task45 scope
         if: always()
-        run: echo 'Data integrity only; answer meaning, pedagogical explanations, scoring/retry UI, browser and owner review remain unverified. Do not count #45 as CODE_VERIFIED.' >> "$GITHUB_STEP_SUMMARY"
+        run: |
+          echo 'Data integrity only; answer meaning, pedagogical explanations, scoring/retry UI, browser and owner review remain unverified. Do not count task 45 as CODE_VERIFIED.' >> "$GITHUB_STEP_SUMMARY"
