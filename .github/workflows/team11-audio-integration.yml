@@ -1,0 +1,45 @@
+name: Team11 audio integration regression (isolated)
+on:
+  push:
+    branches:
+      - team11/audio-gesture-20261030
+    paths:
+      - 'hangul-core.js'
+      - 'hangul-board.js'
+      - 'hangul-basics.html'
+      - 'hangul-week.js'
+      - 'hangul-week.html'
+      - 'tests/team11_audio_user_activation.test.cjs'
+      - 'scripts/check-audio-runtime.cjs'
+      - 'scripts/check-foundations.cjs'
+      - '.github/workflows/team11-audio-integration.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audio-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate JavaScript syntax
+        run: |
+          node --check hangul-core.js
+          node --check hangul-board.js
+          node --check hangul-week.js
+          node --check tests/team11_audio_user_activation.test.cjs
+      - name: Run 11-team opt-in and user gesture tests
+        run: node --test tests/team11_audio_user_activation.test.cjs
+      - name: Run legacy human audio runtime regression
+        run: node scripts/check-audio-runtime.cjs
+      - name: Run course and physical inventory regression
+        run: node scripts/check-foundations.cjs
+      - name: Save verification limitations
+        if: always()
+        run: |
+          echo 'CI does not certify human pronunciation quality, real-device sound output, or staging99 deployment.' >> "$GITHUB_STEP_SUMMARY"
