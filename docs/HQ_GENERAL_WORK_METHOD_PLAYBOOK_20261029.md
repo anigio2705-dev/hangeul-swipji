@@ -474,3 +474,12 @@
 ### 18:24 KST 교차 감사 정정 — #59 상태와 장부 브랜치 불일치
 
 다른 예약 실행 「한글쉽지 무인 개발」의 **18:24 최신 완료 보고**는 경로 등록 26, CODE_VERIFIED 12, BLOCKED 3이라고 기록했다. 특히 #59의 기존 부분 검증이 새로 발견된 '모' UI 오류를 놓쳤으므로 BLOCKED로 정정했다고 설명한다. 반면 이 문서가 위치한 중앙 격리 브랜치 `automation/hq-pilot-13-14-15-20261029`를 직접 재조회하면 `automation/hq_semantic_contract_paths.json` blob `f9391842`는 24개(CANDIDATE 11/BLOCKED 2/CODE_VERIFIED 11), `automation/task-evidence.json` blob `bb3d03a1`는 CODE_VERIFIED 13(#59 포함), BLOCKED 2(#22/#47)다. **서로 다른 브랜치·스냅샷의 수치를 합치거나 중앙 장부를 검증 없이 자동 덮어쓰지 않는다.** #59 오류·수정·정확한 CI를 검토하고 중앙 계약/증거 원장에 적절한 상태 정정을 별도 독립 감사로 통합해야 한다. 최종 승인 0/160은 두 보고에서 동일하다.
+
+
+## 2026-10-29 22:14 KST — #9/#151 등록 경로와 단일 소유권의 실재성 검사 (격리 감사)
+
+- **교차 판독:** 다른 예약 실행 「한글쉽지 무인 개발」의 21:38 저장 보고를 직접 조회했다. 실제 6팀 [#40867289818](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40867289818)은 job 6개 SUCCESS이지만 각 팀 `calls=0`, 신규 bot diff 0, `semantic_contract_not_ready`. 별도 중앙 통합 `37de8416`은 6팀 신규 개발이 아니다. 최신 22:03 격리 [READY intake #40878530074](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40878530074)는 24개 매핑·READY 0·팀별 후보 #11/#45/#23/#101/#151/#143을 확인했다.
+- **검증 가설:** Markdown 160개 소유권 검사만으로는 JSON의 등록 파일·테스트 경로가 삭제되거나 잘못된 팀에 귀속되는 회귀를 탐지하지 못한다. 실제 24개 매핑의 경로 존재·단일 책임팀을 함께 검증하고 잘못된 팀, 없는 테스트 파일, 경로 탈출, 빈 테스트 경로를 반례로 거부하면 계약 공급의 증거 신뢰도가 높아진다.
+- **실제 변경:** 별도 `audit/hq-six-2210-registry-path-evidence-20261029` 브랜치에서 `automation/test_hq_contract_owner_consistency.py`에 JSON 경로/소유권 검증과 3개 새 테스트를 추가하고 #9 개발 계약의 실제 파일·선행·수락 기준을 상세화했다. 코드 `de97aedf`, 계약 `05db0fd2`, [독립 CI #40879949381](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40879949381)는 정확한 SHA `05db0fd2fde160ced48bcbddf9bf30ab3286b943`에서 **7 tests PASS**. [PR #41](https://github.com/anigio2705-dev/hangeul-swipji/pull/41)은 초안이며 중앙 브랜치에 미병합.
+- **범위·안전·비용:** CI PASS는 24개 등록 경로의 존재와 160개 소유권만 입증한다. 미등록 136개 실제 경로, 기능 의미·정답 유일성·READY 독립 심사·팀15 자기 승인 문제·테스트99 현 서버 SHA·SQLite 백업·PC/모바일 E2E·대표 승인은 미확인이다. AI API 호출 0, 팀 bot 신규 커밋 0, CI 시간 비용은 별도 계측 필요. main·운영 DB·실결제·운영/테스트99 배포 변경 없음.
+- **공식 방법:** [OpenAI Agent Improvement Loop](https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop)의 관측→실패 반례→재사용 가능한 eval→독립 재검증을 좁은 범위에 적용했다. 다음에는 15팀 외부 독립 QA 후 #9의 정확한 CI·소유권·경로 증거를 중앙 계약에 통합하고, 여섯 팀 각 1개 후보의 실제 editable_path와 독립 테스트를 지정해 READY 공급을 검토한다. **검사 강화만으로 160개 과제 완료/6팀 AI 개발 성공을 주장하지 않는다.**
