@@ -1,8 +1,8 @@
-name: HQ six #101 mock review matrix independent QA (isolated)
+name: HQ #101 duplicate/cycle mock review QA (isolated)
 on:
   push:
     branches:
-      - audit/hq-six-101-mock-review-matrix-20261030-0040
+      - audit/hq-six-101-cycle-guard-20261030-0141
     paths:
       - 'phase3/team14_referral_scenarios.py'
       - 'phase3/test_team14_referral_scenarios.py'

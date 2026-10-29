@@ -17,12 +17,13 @@ def simulate_introduction(introducer_role, introduced_role):
              payment_enabled=False,policy_approved=False)
 
 def simulate_introduction_review(introducer_id, introducer_role,
-                                 introduced_id, introduced_role, decision):
- """Model a mock accept/reject outcome for any of the four role pairs.
+                                 introduced_id, introduced_role, decision,
+                                 existing_edges=()):
+ """Pure mock accept/reject of a role pair with duplicate/cycle preflight.
 
- No identities, account roles, consent or permissions are verified here.
- This MUST NOT write a referral link, grant a benefit, or be used as a
- real authorization or commercial-policy decision.
+ Existing edges point from introducer to introduced person. This function
+ never verifies identities or consent and NEVER writes a referral, grants
+ authorization, or pays an award. An accept outcome is simulation only.
  """
  ident(introducer_id)
  ident(introduced_id)
@@ -31,6 +32,34 @@ def simulate_introduction_review(introducer_id, introducer_role,
  if type(decision) is not str or decision not in ('accept', 'reject'):
   raise SimError('VALIDATION_ERROR', 'mock decision must be accept or reject')
  scenario = simulate_introduction(introducer_role, introduced_role)
+ if not isinstance(existing_edges, (tuple, list)) or len(existing_edges)>10000:
+  raise SimError('VALIDATION_ERROR', 'mock edges must be a bounded list')
+ graph = {}
+ for edge in existing_edges:
+  if not isinstance(edge, (tuple, list)) or len(edge)!=2:
+   raise SimError('VALIDATION_ERROR', 'mock edge must contain two IDs')
+  source, target = edge
+  ident(source)
+  ident(target)
+  if source == target or source in graph:
+   raise SimError('CONFLICT', 'self or duplicate introduction')
+  graph[source] = target
+ if introducer_id in graph:
+  raise SimError('CONFLICT', 'introduction already exists')
+ graph[introducer_id] = introduced_id
+ # Reject both a new cycle and an unrelated pre-existing cycle in O(E).
+ resolved = set()
+ for node in graph:
+  if node in resolved:
+   continue
+  visiting = set()
+  current = node
+  while current in graph and current not in resolved:
+   if current in visiting:
+    raise SimError('CONFLICT', 'mock introduction cycle')
+   visiting.add(current)
+   current = graph[current]
+  resolved.update(visiting)
  scenario.update(introducer_id=introducer_id, introduced_id=introduced_id,
                  review_decision=decision, review_mode='mock_only',
                  identity_verified=False, role_verified=False,
