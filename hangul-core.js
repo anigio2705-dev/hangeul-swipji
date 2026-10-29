@@ -19,7 +19,7 @@
     if(a<0||b<0)throw new Error('Invalid Hangul letters');
     return String.fromCharCode(0xac00+(a*21+b)*28);
   }
-  const records=Object.create(null),holds=Object.create(null);let current=null,run=0,release=null,manifestError=false;
+  const records=Object.create(null),holds=Object.create(null);let current=null,run=0,release=null,manifestError=false,manifestLoaded=false;
   const schedule=typeof setTimeout==='function'?setTimeout:null,cancelTimer=typeof clearTimeout==='function'?clearTimeout:()=>{};
   let loading=null;
   function loadManifest(){
@@ -44,8 +44,8 @@
         for(const key of Object.keys(holds))delete holds[key];
         Object.assign(records,Object.fromEntries(human.filter(([,a])=>!a.disabled)));
         Object.assign(holds,Object.fromEntries(human.filter(([,a])=>a.disabled)));
-        manifestError=false;document.dispatchEvent(new Event('hs-audio-ready'))})
-      .catch(()=>{manifestError=true;document.dispatchEvent(new Event('hs-audio-ready'))})
+        manifestError=false;manifestLoaded=true;document.dispatchEvent(new Event('hs-audio-ready'))})
+      .catch(()=>{manifestError=true;manifestLoaded=false;document.dispatchEvent(new Event('hs-audio-ready'))})
       .finally(()=>{if(timer!==null)cancelTimer(timer);loading=null});
     return loading;
   }
@@ -103,7 +103,11 @@
   }
   async function play(value){
     stop();const token=run;
-    await (manifestError?loadManifest():(loading||ready));if(token!==run)return {status:'cancelled'};
+    // Do not await an already loaded manifest: even a resolved await yields the
+    // user click activation on some mobile browsers, causing Audio.play() to
+    // reject with NotAllowedError despite a valid human recording.
+    if(!manifestLoaded)await (manifestError?loadManifest():(loading||ready));
+    if(token!==run)return {status:'cancelled'};
     if(manifestError){status('음성 목록을 불러오지 못했습니다. 글자를 다시 누르면 재시도합니다. / Audio list unavailable; click again to retry.');return {status:'manifest-error'}}
     const words=Array.isArray(value)?value:[value];
     if(!words.length||words.some(w=>typeof w!=='string'||!w.trim()))return {status:'invalid'};
