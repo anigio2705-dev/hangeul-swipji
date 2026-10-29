@@ -110,21 +110,24 @@
         "hangul-core.js",
         "hangul-board.js",
         "hangul-basics.html",
-        "hangul-audio-manifest.json"
+        "hangul-audio-manifest.json",
+        "docs/team12/recording-plan-399.json"
       ],
       "test_paths": [
         "scripts/team12_content_regression.py",
-        "scripts/audit-hangul-audio.py"
+        "scripts/audit-hangul-audio.py",
+        "scripts/team12_recording_plan.py"
       ],
       "acceptance": "19 자음 ×21 모음 = 399 글자판 조합과 자음 19개를 포함한 418 대상 정의를 실제 화면·필수 음원 목록과 대조",
       "unmet": [
-        "418 범위에 자음 이름·모음 발음·중복 음절 포함 여부 원본과 일치 검증",
-        "실제 화면 전체 클릭/표시 검사",
-        "15팀 의미 검증"
+        "독립 CI의 실제 성공 결과 확인",
+        "418 범위의 자음 이름·모음 발음·중복 음절 원본 일치 검증",
+        "실제 화면 전체 클릭·표시·재생 검사",
+        "15팀 독립 의미 검증"
       ],
       "independent_team15": "PENDING",
       "dependencies": [],
-      "note": "399 글자판 조합과 418 음원 범위는 서로 다른 집합; 무조건 동일하다고 주장 금지"
+      "note": "399개 조합의 실제 hangul-core.js 및 음원 manifest 기반 재생성 파일과 --check 검사를 추가. 19개 자음 이름은 별도 목표이며 녹음 승인 아님. CI/15팀 검증 전 READY 금지."
     },
     "52": {
       "owner": "12",
