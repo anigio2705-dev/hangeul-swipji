@@ -104,7 +104,7 @@ def build_report(backlog_text, evidence=None, branch_heads=None, timestamp=None,
         "counts": counts,
         "branch_heads": branch_heads or {},
         "next_queue": queue,
-        "review_queue": review_queue[:limit],
+        "review_queue": review_queue,
         "tasks": entries,
         "safety": {
             "write_scope": "isolated branches only",
