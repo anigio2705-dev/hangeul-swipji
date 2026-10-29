@@ -10,6 +10,8 @@ on:
       - hangul-board.js
       - hangul-audio-manifest.json
       - scripts/team12_content_regression.py
+      - automation/hq_semantic_contract_paths.json
+      - docs/HQ_160_DEVELOPMENT_CONTRACTS_20261029.md
       - .github/workflows/hq-team12-board-inventory.yml
   workflow_dispatch:
 permissions:
