@@ -223,3 +223,14 @@
 - 수정 커밋 `1452373f069d80f86eff41cc1b96c2f90faf293d`. 해당 정확한 SHA의 [음원/계약 CI #40801992829](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801992829), [총괄 제어 회귀 #40801992951](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801992951), [160개 큐 감사 #40801992568](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40801992568) 모두 **SUCCESS**.
 - **새 재사용 규칙:** 테스트는 단일 임시 상태를 영구 고정하지 않고 허용된 상태 전이와 필수 증거를 함께 검증한다. 테스트를 삭제·완화하지 않고 #54 CODE_VERIFIED에 대해 장부 status와 CI 증거가 모두 존재하는지 추가 확인했다.
 - 실제 6팀 AI 개발 dispatch는 이번 구간에 새로 발생하지 않았다. 총괄의 직접 구현 1개(#54)와 검증 통과는 확인했지만, 무인 6팀 연속 실행이 완성됐다는 뜻은 아니다. 최종 승인 0/160, 실제 홈페이지 시연 미검증.
+
+
+## 2026-10-29 11:10 KST — 감사팀 독립 교차 판독: 6팀 성공 표시와 개발 0건 분리
+
+- **독립 증거:** [최신 six parallel 실행 #40797947894](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40797947894)는 10:02:36~10:03:17 KST에 `completed/success`로 종료했지만 실제 실행된 개발 job은 `develop (12)` 하나였다. 11·13·14·15·16팀 job은 생성되지 않았다. 해당 job 로그에 `calls=0`, `committed=0`, `No verified progress; stop this team`가 명시돼 있다. 따라서 **6개 팀 동시 개발 성공도, 신규 bot 커밋도 아니다.**
+- **실제 마지막 bot 커밋:** 12팀 [`a61974ef`](https://github.com/anigio2705-dev/hangeul-swipji/commit/a61974ef90ed9355977eedcb71a523f20f47cbd6), 10:00:09 KST, #49. 뒤이어 [`9fb8a54b`](https://github.com/anigio2705-dev/hangeul-swipji/commit/9fb8a54b1cc183bd30ca47deab99cd1c76c0a40f), 10:01:30 KST에 #49 안전 수정. 최신 six parallel에서는 0건. 11·13·14·15·16팀 새 bot 커밋 없음.
+- **상태 교차:** #40797947894의 당시 감독 로그는 #49를 `TEST_PASS_PENDING_CI`, 코드 검증 6, 최종 0으로 표시했다. 이후 같은 과제의 독립 검증이 반영되고 #54의 359개 녹음 대본이 별도 개발·검증돼, 최신 `automation/task-evidence.json`에서 **CODE_VERIFIED 8건 (#10,#41,#49,#52,#54,#55,#59,#109)**, **최종 승인 0/160**으로 확인된다. 이는 보고 시점 차이이며, #54를 six parallel bot 성과로 계산하지 않는다.
+- **bounded 대조:** [#40774360174](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40774360174) 이후 해당 워크플로 신규 실행은 조회된 최근 Actions 목록에서 확인되지 않았다. 기존 success는 현재 자동 연속 개발 증거가 아니다.
+- **새 운영 교훈:** GitHub Actions 성공/팀별 job 성공/AI 모델 호출/신규 bot SHA/과제별 독립 CI/최종 승인 6단계를 분리하여 보고한다. 6팀 워크플로에서 **한 팀만 생성되고 calls=0·committed=0이면 무조건 개발 0건**으로 집계한다. 마지막 실제 bot 커밋 이후 1시간 이상 신규 six parallel 실행이 없으면 **연속 개발 공백 경고**를 낸다. 다만 READY 0일 때 무작정 재실행하지 않고, 15팀 의미 검증과 계약 상세화를 먼저 진행한다.
+- **원인·해제 조건:** [10:58 총괄본부 2 감사](https://github.com/anigio2705-dev/hangeul-swipji/blob/automation/hq-pilot-13-14-15-20261029/docs/HQ2_AUTONOMOUS_AUDIT_20261029_1058.md)는 READY 0건과 레거시 CURATED_TARGETS/READY 정책 불일치를 지적했다. 우선 `#22` 403 회귀, `#47` 저장 기능 의미 일치, `#51` 실제 재생 검증을 안전하게 재현하고 독립 15팀 승인된 계약만 배정해야 한다. 10:58 파일 충돌 방지 CI [#40803545943](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40803545943)는 PASS이나 신규 홈페이지 기능 개발이 아니다.
+- **방법론:** OpenAI Agent Improvement Loop의 관찰→실패 분류→재현 가능한 eval→수정 후 동일 eval 재검증 원칙을 운영 성과 지표에도 적용한다. 'workflow success + zero model calls' 반례를 이후 감독 테스트에 고정할 대상이다. 이번 감사에서는 안전을 위해 문서 기록만 수정했고 main·운영 DB·실결제·배포·외부 제출은 변경하지 않았다.
