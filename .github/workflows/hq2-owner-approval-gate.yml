@@ -1,0 +1,29 @@
+name: HQ2 representative approval gate regression (isolated)
+on:
+  push:
+    branches:
+      - automation/hq2-owner-approval-20261029-1755
+    paths:
+      - 'automation/hq_160_task_cycle.py'
+      - 'automation/test_hq_owner_approval_gate.py'
+      - 'automation/test_hq_160_task_cycle.py'
+      - '.github/workflows/hq2-owner-approval-gate.yml'
+permissions:
+  contents: read
+jobs:
+  approval-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independent synthetic representative-approval regression
+        run: python -m unittest discover -s automation -p 'test_hq_owner_approval_gate.py' -v
+      - name: Existing 160-contract controller regressions
+        run: python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+      - name: Do not claim owner approval or test99 deployment
+        if: always()
+        run: |
+          echo 'Synthetic approval gate only. No representative approved a real item; no Render deployment; no six-team bot call.' >> "$GITHUB_STEP_SUMMARY"
