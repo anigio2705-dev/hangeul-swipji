@@ -10,7 +10,7 @@ class BoundedPatchTests(unittest.TestCase):
     def test_ready_branch_preflight_reports_stale_source_and_test_without_promotion(self):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
-            (root / "existing.py").write_text("def ok(): return True\\n")
+            (root / "existing.py").write_text("def ok(): return True\n")
             approved = {"owner": "12", "state": "READY",
                         "independent_team15": "PASS",
                         "independent_ci_url": "https://github.com/example/actions/runs/123",
@@ -23,8 +23,8 @@ class BoundedPatchTests(unittest.TestCase):
                               (45, "test_missing.py", "missing_on_existing_team_branch")])
             self.assertEqual(approved["state"], "READY", "Preflight must never change registry")
             self.assertEqual(ready_branch_path_gaps("13", registry, root), [])
-            (root / "new_source.py").write_text("def new(): return True\\n")
-            (root / "test_missing.py").write_text("def test_new(): return True\\n")
+            (root / "new_source.py").write_text("def new(): return True\n")
+            (root / "test_missing.py").write_text("def test_new(): return True\n")
             self.assertEqual(ready_branch_path_gaps("12", registry, root), [])
 
     def test_ready_branch_preflight_ignores_unapproved_and_rejects_path_escape(self):
