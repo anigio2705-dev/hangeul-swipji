@@ -140,7 +140,9 @@ def verify_server_product_contract(server_db, booking_id, trusted_event=None):
     if product_code=='partner_25' and booking['role']!='partner':
         raise SimError('FORBIDDEN','partner product requires partner')
     if trusted_event is not None:
-        if not isinstance(trusted_event,dict) or trusted_event.get('verifiedByServer') is not True:
+        if not isinstance(trusted_event,dict):
+            raise SimError('FORBIDDEN','trusted event must be a server record')
+        if trusted_event.get('verifiedByServer') is not True:
             raise SimError('FORBIDDEN','unverified server event')
         if trusted_event.get('type')!='lesson.completed' or trusted_event.get('status') not in ('completed','test_settled'):
             raise SimError('INVALID_STATE','not a completed lesson event')
