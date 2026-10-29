@@ -1,0 +1,23 @@
+name: HQ2 team12 audio syntax and held-recording gate (isolated)
+on:
+  push:
+    branches:
+      - audit/hq2-team12-audio-syntax-hold-20261030-0802
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audio-safety-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check production JS syntax
+        run: node --check hangul-core.js
+      - name: Verify held, opt-in and manifest-error policy
+        run: node --test tests/hq2_team12_audio_syntax_hold.test.cjs
