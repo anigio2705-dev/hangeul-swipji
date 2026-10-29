@@ -92,6 +92,9 @@ jobs:
               "rounds": history,
               "tasks": [t for x in history for t in x.get("tasks", [])],
               "calls": sum(x.get("calls", 0) for x in history),
+              "team_runner_elapsed_seconds": round(sum(float(x.get("elapsed_seconds", 0)) for x in history), 1),
+              "manual_site_review_seconds": None,
+              "manual_representative_review_seconds": None,
               "committed": sum(t.get("status") == "committed" for x in history for t in x.get("tasks", []))
           }, indent=2))
           PY
