@@ -61,23 +61,14 @@ STATES = frozenset({"unverified", "in_progress", "blocked", "retry", "code_verif
 # an old or incomplete evidence snapshot accidentally labels them unverified.
 # Only the HQ-owned contract can change this; an AI team patch cannot.
 def _semantic_dispatch_gate(number, path, failures=None):
-    registry = Path(__file__).with_name("hq_semantic_contract_paths.json")
-    if not registry.is_file():
-        return False  # fail closed if the approved contract registry disappears
-    item = json.loads(registry.read_text(encoding="utf-8")).get("items", {}).get(str(number))
-    if item is None:
-        return True  # legacy curated targets remain, pending independent expansion
-    if item.get("state") == "CANDIDATE":
-        return False
-    if item.get("state") == "BLOCKED":
-        # A specific one-time repair is permitted; an unverified snapshot or
-        # generic retry may never silently reopen the blocked task.
-        repair = (failures or {}).get(str(number), {})
-        return (path in item.get("source_paths", [])
-                and repair.get("attempts") == 1
-                and isinstance(repair.get("repair_instruction"), str)
-                and bool(repair["repair_instruction"].strip()))
-    return path in item.get("source_paths", [])
+    """Never dispatch from historical curated IDs alone.
+
+    A previous implementation allowed missing registry entries and even
+    CANDIDATE/BLOCKED repair instructions to bypass the independent READY
+    gate. Those IDs are retained only for legacy tests and reporting.
+    """
+    return False
+
 
 def contracts(backlog_text):
     matches = [(int(n), flag.lower() == "x", title.strip())
