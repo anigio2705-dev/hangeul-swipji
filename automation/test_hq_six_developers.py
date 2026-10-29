@@ -13,7 +13,7 @@ class BoundedPatchTests(unittest.TestCase):
 
     def test_support_only_legacy_work_is_not_autonomously_assigned_after_continuation(self):
         # Team 11 supports #51/#56 and team 16 supports #55, but team12 owns all.
-        c = contracts("\\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
+        c = contracts("\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
         with tempfile.TemporaryDirectory() as d:
             reg = {"schema": 1, "items": {}}
             self.assertEqual(choose_work_items("11", c, {}, {}, reg, Path(d)), [])
@@ -22,7 +22,7 @@ class BoundedPatchTests(unittest.TestCase):
                                 for item in choose_work_items("12", c, {}, {}, reg, Path(d))))
 
     def test_support_is_never_owner_authorization_even_for_reviewed_ready(self):
-        c = contracts("\\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
+        c = contracts("\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
         self.assertIn("11", c[56]["support"])
         self.assertIn("16", c[55]["support"])
         with self.assertRaisesRegex(RuntimeError, "sole owner"):
