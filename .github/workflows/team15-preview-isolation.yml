@@ -1,0 +1,29 @@
+name: Team15 independent protected-home and Chromium runner QA
+on:
+  push:
+    branches:
+      - integration/team15-qa-team16-runner-20261030
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate independent QA script syntax
+        run: |
+          node --check scripts/test_team15_ci_runner_compat.cjs
+          node --check scripts/test_team15_preview_isolation.cjs
+      - name: Reject unsupported Playwright runners and skipped browser install
+        run: node scripts/test_team15_ci_runner_compat.cjs
+      - name: Verify protected homepage exact bytes and separate preview
+        run: node scripts/test_team15_preview_isolation.cjs
+      - name: Explicitly exclude deployment and representative approval
+        run: echo 'Isolated QA only. No Render deployment, mobile listening or representative approval.'

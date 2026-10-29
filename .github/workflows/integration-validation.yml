@@ -19,6 +19,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Team15 independent Chromium runner compatibility guard
+        run: node scripts/test_team15_ci_runner_compat.cjs
+      - name: Team15 independent original-home and preview separation guard
+        run: node scripts/test_team15_preview_isolation.cjs
       - run: npm ci --prefix phase3 --ignore-scripts
       - name: Install Chromium with retries and actionable diagnostics
         run: |
