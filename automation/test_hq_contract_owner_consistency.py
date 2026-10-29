@@ -35,7 +35,7 @@ def parse_contract_owners(source):
         number, cell = int(match.group(1)), match.group(2)
         if number in found:
             raise AssertionError(f"duplicate contract #{number}")
-        owner = re.search(r"\b(11|12|13|14|15|16)\b", cell)
+        owner = re.search(r"(?<![0-9])(11|12|13|14|15|16)(?![0-9])", cell)
         if not owner:
             raise AssertionError(f"missing team owner #{number}: {cell!r}")
         found[number] = int(owner.group(1))
