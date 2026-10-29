@@ -16,3 +16,6 @@ jobs:
           node-version: '22'
       - run: node --check site-language.js
       - run: node growth/team16/test-site-language.cjs
+      - name: Verify translated pages load the shared language script
+        run: |
+          node -e "const fs=require('fs');const p=['index.html','learn.html'];for(const f of p){if(!fs.existsSync(f))continue;const s=fs.readFileSync(f,'utf8');if(!s.includes('site-language.js'))throw Error(f+' does not load site-language.js');console.log(f+' language script wired')}"
