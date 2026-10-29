@@ -14,7 +14,7 @@ permissions:
 jobs:
   task46-browser:
     if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 18
     steps:
       - uses: actions/checkout@v4
