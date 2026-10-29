@@ -142,6 +142,10 @@ def choose_work_items(team, catalog, evidence, repairs, registry, root):
     # on disk, change a READY verdict, or fall back to an unreviewed task.
     excluded = set()
     unsupported = []
+    # The caller has a strict time/call budget. Collect a bounded set of
+    # independently reviewed tasks so a successful first patch can be followed
+    # by the next safe task without waiting for another scheduled run.
+    selected = []
     while True:
         visible = {"schema": registry["schema"], "items": {
             number: entry for number, entry in registry["items"].items()
@@ -161,10 +165,15 @@ def choose_work_items(team, catalog, evidence, repairs, registry, root):
         candidate = {"path": path, "number": reviewed["task_number"],
                      "dynamic": True, "tests": tests,
                      "unsupported_reason": "" if safe else "READY target requires non-Python or non-unittest executor"}
-        if safe:
-            return [candidate]
-        unsupported.append(candidate)
         excluded.add(str(reviewed["task_number"]))
+        if safe:
+            selected.append(candidate)
+            if len(selected) >= 8:
+                break
+            continue
+        unsupported.append(candidate)
+    if selected:
+        return selected
     if unsupported:
         return unsupported[:1]
     return [{"path": path, "number": number, "dynamic": False, "tests": [],
