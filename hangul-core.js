@@ -146,11 +146,19 @@
       return {status:token===run?(ttsUsed?'tts-played':'played'):'cancelled',words};
     }catch(e){if(token===run){stop();status(e.message)}return {status:'error',message:e.message}}
   }
-  // Existing callers use the same opt-in API; one implementation only.
+  // Optional device TTS is never a bypass for an explicit recording hold.
+  // A failed/unloaded manifest must not be treated as permission to synthesize.
   async function optionalSynthetic(word){
     stop();const token=run;
     if(!syntheticEnabled)return {status:'tts-disabled',word};
-    // Never play a held or non-reviewed human recording. TTS remains labeled.
+    if(typeof word!=='string'||!word.trim())return {status:'invalid',word};
+    if(!manifestLoaded)await (manifestError?loadManifest():(loading||ready));
+    if(token!==run)return {status:'cancelled',word};
+    if(manifestError)return {status:'manifest-error',word};
+    if(holds[word]){
+      status('재생 보류: '+word+' · '+(holds[word].holdReason||'청취 검수 대기'));
+      return {status:'held',word};
+    }
     return synthesized(word,token);
   }
   const el=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!==undefined)x.textContent=text;return x};
