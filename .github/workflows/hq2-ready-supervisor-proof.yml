@@ -1,0 +1,24 @@
+name: HQ2 isolated READY supervisor regression proof
+on:
+  push:
+    branches:
+      - audit/hq2-ready-supervisor-20261030-0303
+    paths:
+      - 'automation/hq_six_cycle_supervisor.py'
+      - 'automation/test_hq_six_cycle_supervisor.py'
+      - '.github/workflows/hq2-ready-supervisor-proof.yml'
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test actual supervisor and independent READY gates
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_six_cycle_supervisor.py' -v
+          python -m unittest discover -s automation -p 'test_hq_traffic_lights.py' -v
+          python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
