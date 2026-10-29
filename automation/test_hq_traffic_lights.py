@@ -163,5 +163,30 @@ class ReadinessTests(unittest.TestCase):
             self.assertIsNone(next_assignment("12", c,
                               {"41": {"status": "code_verified"}}, registry=reg, root=root))
 
+    def test_shared_readonly_context_does_not_block_distinct_editable_targets(self):
+        """Two teams may read the same context, but cannot edit the same file."""
+        c = catalog()
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            for name in ("shared_context.py", "edit_41.py", "edit_49.py", "test_41.py", "test_49.py"):
+                (root / name).write_text("pass\n")
+            def record(number):
+                target = f"edit_{number}.py"
+                return {"owner": "12", "state": "READY",
+                        "source_paths": ["shared_context.py", target],
+                        "editable_path": target, "test_paths": [f"test_{number}.py"],
+                        "independent_team15": "PASS",
+                        "independent_ci_url":
+                            "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"}
+            reg = {"schema": 1, "items": {"41": record(41), "49": record(49)}}
+            result = readiness(c, {}, reg, root)
+            self.assertEqual(result["dispatchable_total"], 2)
+            self.assertEqual(result["invalid_ready"], [])
+            reg["items"]["49"]["editable_path"] = "edit_41.py"
+            reg["items"]["49"]["source_paths"].append("edit_41.py")
+            collision = readiness(c, {}, reg, root)
+            self.assertEqual(collision["dispatchable_total"], 0)
+            self.assertEqual({x["task"] for x in collision["invalid_ready"]}, {41, 49})
+
 if __name__ == "__main__":
     unittest.main()
