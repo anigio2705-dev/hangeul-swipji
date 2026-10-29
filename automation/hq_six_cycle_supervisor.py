@@ -40,6 +40,7 @@ PATCH_REPAIR_HINTS = {
 }
 REGRESSIONS = {
     ("12", 41): ["python", "scripts/team12_content_regression.py"],
+    ("12", 49): ["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_global_learning.py"],
     ("13", 22): ["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_instant_matching.py"],
     ("14", 109): ["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_team14_referral_store.py"],
     ("16", 55): ["python", "scripts/render-audio-credits.py"],
@@ -268,10 +269,23 @@ def supervise(root, token, depth, repairs, output):
                             "scope": "Independent source diff and task-specific functional regression passed; final CI run and public site still pending",
                             "owner": team, "path": task["path"]}
                         staged.append(number)
-                    if new_commit and status == "committed":
-                        passed += 1
+                    if new_commit:
+                        # A newly verified pre-existing candidate also unlocks
+                        # the next safe item, but is NOT a new code commit in
+                        # this workflow (avoid inflating throughput).
                         progress_teams.add(team)
+                        if status == "committed":
+                            passed += 1
                 elif verdict == "RETRY" and isinstance(number, int):
+                    # A previously submitted test-file commit that fails its
+                    # own regression needs diagnosis, not an AI rewriting the
+                    # failing test to green. No blind repair dispatch.
+                    if status == "verification_requested" and task.get("path", "").startswith("scripts/team12_content_regression"):
+                        verdicts[team][-1]["verdict"] = "BLOCKED"
+                        verdicts[team][-1]["reason"] = (
+                            "Existing #41 candidate regression failed; inspect full test log "
+                            "and fix the actual assertion/source mismatch before redispatch.")
+                        continue
                     prev = next_repairs.setdefault(team, {}).get(str(number), {})
                     attempts = prev.get("attempts", 0) + 1
                     next_repairs[team][str(number)] = {
