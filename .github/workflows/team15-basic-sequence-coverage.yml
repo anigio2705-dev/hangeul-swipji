@@ -1,0 +1,31 @@
+name: Team15 independent Hangul 14-syllable coverage QA
+on:
+  push:
+    branches:
+      - audit/team15-basic-sequence-coverage-20261030-0833
+  pull_request:
+    paths:
+      - hangul-board.js
+      - hangul-core.js
+      - scripts/test-hangul-board-sequence.js
+      - scripts/test-hangul-partial-playback.js
+      - .github/workflows/team15-basic-sequence-coverage.yml
+permissions:
+  contents: read
+jobs:
+  independent-audio:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test actual Hangul board sequence including omitted and held sounds
+        run: node scripts/test-hangul-board-sequence.js
+      - name: Test partial playback, missing, held, cancellation
+        run: node scripts/test-hangul-partial-playback.js
+      - name: Verify baseline human-only audio runtime
+        run: node scripts/check-audio-runtime.cjs
+      - name: Syntax checks
+        run: node --check hangul-board.js && node --check hangul-core.js
