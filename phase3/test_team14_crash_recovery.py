@@ -87,6 +87,19 @@ class RecoveryCrashTests(unittest.TestCase):
   self.restart()
   self.assertEqual(applied,apply_approved_refund(self.server,self.s,'refund1'))
   with self.assertRaises(SimError):decide_refund(self.s,'refund1','cancelled','test_reviewer')
+ def test_refund_reason_is_persisted_and_idempotent(self):
+  self.run_event()
+  reason='Video disconnected after lesson'
+  first=request_refund(self.server,self.s,'booking','reason1','student',2500,reason)
+  self.assertEqual(reason,first['reason'])
+  self.restart()
+  self.assertEqual(reason,request_refund(self.server,self.s,'booking','reason1','student',2500,reason)['reason'])
+  with self.assertRaises(SimError) as changed:
+   request_refund(self.server,self.s,'booking','reason1','student',2500,'Different reason')
+  self.assertEqual('CONFLICT',changed.exception.code)
+  with self.assertRaises(SimError):
+   request_refund(self.server,self.s,'booking','reason2','student',2500,'x'*2001)
+  self.assertEqual(1,self.s.db.execute('SELECT COUNT(*) FROM refund_requests').fetchone()[0])
  def test_reject_and_cancel_are_terminal(self):
   for suffix,choice in (('reject','rejected'),('cancel','cancelled')):
    rid='refund_'+suffix
