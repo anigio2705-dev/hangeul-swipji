@@ -8,21 +8,220 @@ from pathlib import Path
 import urllib.parse
 import urllib.request
 
-ROOT=Path(__file__).resolve().parents[1]
-audio=json.loads((ROOT/'hangul-audio-audit.json').read_text())
-missing=[t['text'] for t in audio['targets'] if not t['recordingAvailable'] and any(g in t['groups'] for g in ['자음 이름','모음','글자판 음절'])]
-titles=[f'File:Ko-{word}.{ext}' for word in missing for ext in ['ogg','oga']]
-batches=[titles[i:i+50] for i in range(0,len(titles),50)]
+ROOT = Path(__file__).resolve().parents[1]
+audio_path = ROOT / 'hangul-audio-audit.json'
+if not audio_path.is_file():
+    raise FileNotFoundError(f'Missing expected input file: {audio_path}')
+audio_text = audio_path.read_text(encoding='utf-8')
+try:
+    audio = json.loads(audio_text)
+except Exception as e:
+    raise ValueError(f'Failed to parse JSON from {audio_path}: {e}')
+
+# Validate entries in audio['targets'] before use
+missing = []
+for t in audio.get('targets', []):
+    if not isinstance(t, dict):
+        continue
+    recording_available = t.get('recordingAvailable')
+    groups = t.get('groups')
+    text = t.get('text')
+
+    # Validate types strictly
+    if not (text is not None and isinstance(text, str)):
+        continue
+    if not (isinstance(recording_available, bool)):
+        continue
+    if not (isinstance(groups, list) and groups):
+        continue
+
+    # Defensive: filter groups to str and check contents
+    groups_str = [g for g in groups if isinstance(g, str)]
+    if not groups_str:
+        continue
+
+    # Validate groups_str elements contents for safety
+    # Nonempty, length limits, no control chars
+    def valid_group_label(g):
+        if not g:
+            return False
+        if not isinstance(g, str):
+            return False
+        if len(g) > 100:
+            return False
+        # Reject if contains control characters (code points < 32 or = 127)
+        if any(ord(ch) < 32 or ord(ch) == 127 for ch in g):
+            return False
+        # Reject if whitespace-only after stripping
+        if g.strip() == '':
+            return False
+        # Also reject if contains suspicious sequence of backslash+escape, to avoid labels with literal \u or \x
+        # Prevent accidental acceptance of literal escape sequences
+        if '\\u' in g or '\\x' in g:
+            return False
+        return True
+
+    if not all(valid_group_label(g) for g in groups_str):
+        continue
+
+    # Defensive: reject certain suspicious labels if recording not available
+    if not recording_available:
+        # exact suspicious labels as literals, no decoding
+        suspicious_labels = ['\x7f\x7f\x7f', '\x7f\x7f', '\x7f\x7f\x7f\x7f \x7f\x7f\x7f']
+        korean_labels_utf8 = ['자음 이름', '모음', '글자판 음절']
+
+        # Defensive: reject if any group string matches suspicious labels or decoded Korean labels
+        def to_lower_set(strings):
+            return set(s.lower() for s in strings if isinstance(s, str) and s)
+
+        groups_lower_set = to_lower_set(groups_str)
+        suspicious_labels_lower = to_lower_set(suspicious_labels)
+        korean_labels_lower = to_lower_set(korean_labels_utf8)
+
+        if groups_lower_set.intersection(suspicious_labels_lower) or groups_lower_set.intersection(korean_labels_lower):
+            missing.append(text)
+            continue
+
+# Using safe filtering to ensure titles are safe strings
+def safe_str(s):
+    if not isinstance(s, str):
+        return ''
+    # Strip leading/trailing whitespace
+    s = s.strip()
+    if not s:
+        return ''
+    # Remove pipe and control characters
+    s = s.replace('|', '')
+    s = s.replace('\n', '').replace('\r', '')
+    # Remove any control characters (non-printable)
+    s = ''.join(ch for ch in s if ch.isprintable())
+    # Defensive length limit
+    if len(s) > 255:
+        return ''
+    # Reject strings with suspicious sequences that might cause issues
+    if '\\' in s:  # any literal backslash
+        return ''
+    return s
+
+# Additional stricter validation on word
+def valid_word(word):
+    if not word:
+        return False
+    if len(word) > 255:
+        return False
+    # Commons Ko- filenames contain Hangul syllables and compatibility jamo.
+    # Reject path separators, pipes, whitespace and unrelated scripts, while
+    # preserving exact Korean learning targets such as 가, ㄱ and ㅏ.
+    def allowed(ch):
+        code = ord(ch)
+        return (('a' <= ch <= 'z') or ('A' <= ch <= 'Z')
+                or ('0' <= ch <= '9') or ch in '-_.'
+                or 0xAC00 <= code <= 0xD7A3
+                or 0x3130 <= code <= 0x318F
+                or 0x1100 <= code <= 0x11FF)
+    return all(allowed(ch) for ch in word)
+
+titles = []
+for word in missing:
+    word = safe_str(word)
+    if not valid_word(word):
+        continue
+    for ext in ['ogg', 'oga']:
+        title = f'File:Ko-{word}.{ext}'
+        titles.append(title)
+
+batches = [titles[i:i + 50] for i in range(0, len(titles), 50)]
+
 def query(batch):
-    url='https://commons.wikimedia.org/w/api.php?'+urllib.parse.urlencode({'action':'query','format':'json','prop':'imageinfo','iiprop':'url|extmetadata','titles':'|'.join(batch)})
+    # Validate batch entries strictly
+    filtered_batch = []
+    for t in batch:
+        if not isinstance(t, str):
+            continue
+        if not t.startswith('File:Ko-'):
+            continue
+        name_part = t[8:]  # 'word.ext'
+        if '.' not in name_part:
+            continue
+        word_part, ext = name_part.rsplit('.', 1)
+        if ext not in ['ogg', 'oga']:
+            continue
+        if not valid_word(word_part):
+            continue
+        filtered_batch.append(t)
+
+    if not filtered_batch:
+        return {'error': 'empty or invalid batch', 'titles': batch}
+
+    url = 'https://commons.wikimedia.org/w/api.php?' + urllib.parse.urlencode({
+        'action': 'query',
+        'format': 'json',
+        'prop': 'imageinfo',
+        'iiprop': 'url|extmetadata',
+        'titles': '|'.join(filtered_batch),
+    })
+
     try:
-        req=urllib.request.Request(url,headers={'User-Agent':'HangeulSwipjiAudioAudit/1.0 (source inventory)'})
-        with urllib.request.urlopen(req,timeout=25) as response:data=json.load(response)
-        if 'error' in data:return {'error':data['error'],'titles':batch}
-        return {'pages':list(data['query']['pages'].values())}
-    except Exception as error:return {'error':str(error),'titles':batch}
-with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:results=list(pool.map(query,batches))
-pages=[p for r in results for p in r.get('pages',[])]
-report={'queriedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'scope':'Exact Ko-<target>.ogg/.oga filename inventory only; absence is not proof that no other recording exists','missingTargets':len(missing),'titlesQueried':len(titles),'responses':len(pages),'failedBatches':[r for r in results if 'error' in r],'candidates':[p for p in pages if p.get('imageinfo')],'notFoundTitles':sum('missing' in p for p in pages),'listeningApproved':False}
-(ROOT/'audit/audio-source-search.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
-print(json.dumps({'targets':len(missing),'queries':len(titles),'failedBatches':len(report['failedBatches']),'candidates':[p['title'] for p in report['candidates']]},ensure_ascii=False))
+        req = urllib.request.Request(url, headers={'User-Agent': 'HangeulSwipjiAudioAudit/1.0 (source inventory)'})
+        with urllib.request.urlopen(req, timeout=25) as response:
+            data = json.load(response)
+    except Exception as error:
+        return {'error': str(error), 'titles': filtered_batch}
+
+    if 'error' in data:
+        return {'error': data['error'], 'titles': filtered_batch}
+    if 'query' not in data or 'pages' not in data['query']:
+        return {'error': 'Malformed response', 'titles': filtered_batch}
+
+    return {'pages': list(data['query']['pages'].values())}
+
+
+with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+    results = list(pool.map(query, batches))
+
+pages = [p for r in results if isinstance(r, dict) for p in r.get('pages', []) if isinstance(p, dict)]
+
+def review_candidate(page):
+    """Expose metadata presence for human review, never auto-grant rights."""
+    images = page.get('imageinfo') if isinstance(page, dict) else None
+    info = images[0] if isinstance(images, list) and images and isinstance(images[0], dict) else {}
+    metadata = info.get('extmetadata')
+    if not isinstance(metadata, dict):
+        metadata = {}
+    def has_field(key):
+        field = metadata.get(key)
+        return (isinstance(field, dict) and isinstance(field.get('value'), str)
+                and bool(field['value'].strip()))
+    return {
+        'title': page.get('title', ''),
+        'has_license_name': has_field('LicenseShortName'),
+        'has_license_url': has_field('LicenseUrl'),
+        'has_author': has_field('Artist'),
+        'review_status': 'pending_independent_license_and_listening_review',
+        'rightsApproved': False,
+        'listeningApproved':False,
+    }
+
+report = {
+    'queriedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    'scope': 'Exact Ko-<target>.ogg/.oga filename inventory only; absence is not proof that no other recording exists',
+    'missingTargets': len(missing),
+    'titlesQueried': len(titles),
+    'responses': len(pages),
+    'failedBatches': [r for r in results if isinstance(r, dict) and 'error' in r],
+    'candidates': [p for p in pages if p.get('imageinfo')],
+    'candidateReview': [review_candidate(p) for p in pages if p.get('imageinfo')],
+    'notFoundTitles': sum('missing' in p for p in pages),
+    'listeningApproved':False
+}
+
+audit_dir = ROOT / 'audit'
+audit_dir.mkdir(parents=True, exist_ok=True)
+(audit_dir / 'audio-source-search.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+print(json.dumps({
+    'targets': len(missing),
+    'queries': len(titles),
+    'failedBatches': len(report['failedBatches']),
+    'candidates': [p['title'] for p in report['candidates'] if 'title' in p]
+}, ensure_ascii=False))

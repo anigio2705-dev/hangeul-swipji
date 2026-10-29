@@ -3,10 +3,15 @@ on:
   push:
     branches: [automation/hq-pilot-13-14-15-20261029]
     paths:
+      - 'scripts/find-human-audio-sources.py'
       - 'automation/verify_task56_source.py'
+      - 'automation/test_task56_audio_contract.py'
       - '.github/workflows/hq-task56-source-gate.yml'
 permissions:
   contents: read
+concurrency:
+  group: hq-task56-independent-source
+  cancel-in-progress: false
 jobs:
   team15-source-review:
     if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
@@ -17,18 +22,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Verify trusted baseline catches only actual candidate bugs
-        run: python automation/verify_task56_source.py --source scripts/find-human-audio-sources.py --allow-unsafe-baseline
-      - name: Fetch exact team11 isolated branch source
-        run: |
-          git fetch --depth=1 origin automation/hq-team-11-autodev-20261029
-          git rev-parse FETCH_HEAD > "$RUNNER_TEMP/task56-team11-sha.txt"
-          git show FETCH_HEAD:scripts/find-human-audio-sources.py > "$RUNNER_TEMP/task56-source.py"
-      - name: Independent real source regression (no network)
-        run: python automation/verify_task56_source.py --source "$RUNNER_TEMP/task56-source.py"
-      - name: Record exact reviewed commit and limits
+      - name: Independent exact-HEAD source regression with mocked Commons API
+        run: python automation/verify_task56_source.py --source scripts/find-human-audio-sources.py
+      - name: Verify #56 canonical contract and owner/support mapping
+        run: python -m unittest discover -s automation -p 'test_task56_audio_contract.py' -v
+      - name: Verify 160-item task dispatch remains fail-closed
+        run: python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+      - name: Record exact tested commit and remaining human gates
         if: always()
         run: |
-          echo '## Task #56 independent source review' >> "$GITHUB_STEP_SUMMARY"
-          echo "Team11 branch SHA: $(cat "$RUNNER_TEMP/task56-team11-sha.txt" 2>/dev/null || echo unavailable)" >> "$GITHUB_STEP_SUMMARY"
-          echo 'Only mocked candidate search was tested; no human audio, license, listening or public site approved.' >> "$GITHUB_STEP_SUMMARY"
+          echo '## Task #56 integrated independent source review' >> "$GITHUB_STEP_SUMMARY"
+          echo "Exact HQ commit: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo 'Tests use mocked Commons metadata. No recording was downloaded, licensed, listened to, or approved.' >> "$GITHUB_STEP_SUMMARY"
