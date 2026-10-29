@@ -474,3 +474,11 @@
 ### 18:24 KST 교차 감사 정정 — #59 상태와 장부 브랜치 불일치
 
 다른 예약 실행 「한글쉽지 무인 개발」의 **18:24 최신 완료 보고**는 경로 등록 26, CODE_VERIFIED 12, BLOCKED 3이라고 기록했다. 특히 #59의 기존 부분 검증이 새로 발견된 '모' UI 오류를 놓쳤으므로 BLOCKED로 정정했다고 설명한다. 반면 이 문서가 위치한 중앙 격리 브랜치 `automation/hq-pilot-13-14-15-20261029`를 직접 재조회하면 `automation/hq_semantic_contract_paths.json` blob `f9391842`는 24개(CANDIDATE 11/BLOCKED 2/CODE_VERIFIED 11), `automation/task-evidence.json` blob `bb3d03a1`는 CODE_VERIFIED 13(#59 포함), BLOCKED 2(#22/#47)다. **서로 다른 브랜치·스냅샷의 수치를 합치거나 중앙 장부를 검증 없이 자동 덮어쓰지 않는다.** #59 오류·수정·정확한 CI를 검토하고 중앙 계약/증거 원장에 적절한 상태 정정을 별도 독립 감사로 통합해야 한다. 최종 승인 0/160은 두 보고에서 동일하다.
+
+
+### 2026-10-30 03:51 KST — #101 경로 존재와 실제 의미 구현의 차이(중앙 HQ 독립 교차 감사)
+- **관찰/가설:** 중앙 격리 정본의 계약 #101에는 `phase3/team14_referral_scenarios.py` 및 테스트 경로가 등록돼 있지만, 실제 정본 파일에는 `simulate_introduction_review` 함수와 강사/학습자 4조합×수락/거절 8개 반례가 없다. 경로 존재만으로 READY를 승인하면 의미 검증 없는 AI 호출이 될 수 있다.
+- **독립 대조:** 정본 `automation/hq-pilot-13-14-15-20261029` 파일과 별도 `audit/hq-six-101-graph-cap-20261030-0252` 파일을 각각 읽었다. 후자에는 함수와 역할/판정 테스트가 있지만 [PR #59](https://github.com/anigio2705-dev/hangeul-swipji/pull/59)은 아직 별도 격리 PR이며 [Phase3 #40925701190](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40925701190)은 신규 경계 테스트 3개 PASS와 별개로 전체 FAIL. 독립 [소개 회귀 #40925701474](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40925701474) 34 PASS도 통합/실사용 증거가 아니다.
+- **이번 조치:** #101 계약과 의미 경로 원장에 실제 불일치 및 정확한 통합·회귀·독립 승인 조건을 추가. `state=CANDIDATE`, `independent_team15=PENDING`, `READY=0` 유지; API 호출·봇 개발·테스트99 배포 없음.
+- **반증/후속 회귀:** 15팀은 PR #59을 독립 검토한 뒤 역할 8개, 기존 중복/순환, 9,999/10,000/10,001 경계, 실결제 플래그 False, 정확한 SHA 전체 CI를 정본과 재검증한다. 실제 단일 편집 파일 `editable_path`는 해당 테스트를 검증한 뒤 확정한다. Render SQLite 영속·백업 확인 전 배포 금지.
+- **공식 방법:** [OpenAI Codex GitHub Actions autofix](https://developers.openai.com/cookbook/examples/codex/autofix-github-actions)의 실패→정확한 반례→최소 수정→동일 CI 재실행 패턴을 *검증 계약*에 적용. 개선 효과는 허위 READY 방지이며 6팀 AI 실개발 성과가 아니다. 비용: 이번 모델 API 호출 0, GitHub Actions 새 실행 비용은 별도 확인.
