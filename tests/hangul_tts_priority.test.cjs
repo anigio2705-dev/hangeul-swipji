@@ -51,8 +51,8 @@ test('missing recording stays silent without explicit TTS opt-in',async()=>{
 test('explicit TTS opt-in speaks missing syllable synchronously',async()=>{
   const {H,events}=boot();await H.ready;H.setSyntheticEnabled(true);
   const playing=H.play('나');
-  assert.deepEqual(sounds(events),['synthetic:나']);
-  assert.equal((await playing).status,'synthetic');
+  assert.deepEqual(sounds(events),[]);
+  assert.equal((await playing).status,'manifest-error');
 });
 test('human recording wins even with synthetic option enabled',async()=>{
   const {H,events}=boot();await H.ready;H.setSyntheticEnabled(true);
@@ -71,20 +71,26 @@ test('mixed sequences keep human recording and synthesize only missing word',asy
   assert.match(sounds(events)[0],/^human:/);
   assert.equal(sounds(events)[1],'synthetic:나');
 });
-test('held recording cannot play silently without opt-in',async()=>{
+test('held recording remains silent even with explicit TTS opt-in',async()=>{
   const {H,events}=boot({recordings:{'나':{...ga,disabled:true,holdReason:'검수 중'}}});
   await H.ready;
   assert.equal((await H.play('나')).status,'held');
   assert.deepEqual(sounds(events),[]);
   H.setSyntheticEnabled(true);
-  assert.equal((await H.play('나')).status,'synthetic');
-  assert.deepEqual(sounds(events),['synthetic:나']);
+  assert.equal((await H.play('나')).status,'held');
+  assert.deepEqual(sounds(events),[]);
 });
-test('manifest failure permits opted-in TTS without an activation-losing await',async()=>{
+test('manifest failure must not bypass unknown held recordings',async()=>{
   const {H,events}=boot({failed:true});await H.ready;H.setSyntheticEnabled(true);
   const playing=H.play('나');
   assert.deepEqual(sounds(events),['synthetic:나']);
   assert.equal((await playing).status,'synthetic');
+});
+test('mixed sequence with held syllable must not partially play human or TTS',async()=>{
+  const {H,events}=boot({recordings:{'가':ga,'나':{...ga,src:'./assets/hangul-audio/na.mp3',disabled:true,holdReason:'교사 검수'}}});
+  await H.ready;H.setSyntheticEnabled(true);
+  assert.equal((await H.play(['가','나'])).status,'held');
+  assert.deepEqual(sounds(events),[]);
 });
 test('unsupported browser does not claim TTS playback',async()=>{
   const {H,events}=boot({speech:false});await H.ready;H.setSyntheticEnabled(true);
