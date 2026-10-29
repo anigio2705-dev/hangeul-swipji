@@ -11,7 +11,7 @@ from pathlib import Path
 import subprocess
 import time
 from urllib.request import Request, urlopen
-from hq_160_task_cycle import CURATED_TARGETS, load_catalog, _semantic_dispatch_gate
+from hq_160_task_cycle import CURATED_TARGETS, load_catalog, _semantic_dispatch_gate, next_assignment
 
 HQ_REF = "automation/hq-pilot-13-14-15-20261029"
 # Distinct files across ALL six teams; no team may edit another team's source.
@@ -124,11 +124,43 @@ def propose(path, goal, source, feedback, task_number, repair_instruction):
         raise ValueError("Empty AI patch")
     patch = json.loads(message)
     return apply_patch(source, patch)
-def run_checks(team, path):
-    for command in [["python", "-m", "py_compile", path]] + CHECKS[team]:
+def choose_work_items(team, catalog, evidence, repairs, registry, root):
+    """Prefer independently reviewed READY work over the legacy fixed queue.
+
+    A READY contract is not sufficient by itself: the bounded patch runner only
+    supports single-file Python changes and executable unittest regressions.
+    Unsupported READY work is reported, never silently assigned or counted.
+    """
+    reviewed = next_assignment(team, catalog, evidence, repairs.get(team, {}),
+                               registry=registry, root=root)
+    if reviewed and reviewed.get("source") == "independently_reviewed_READY_registry":
+        path = reviewed["path"]
+        tests = reviewed["independent_test_paths"]
+        other_team_paths = {p for other, (_, work) in TASKS.items()
+                            if other != team for p, _ in work}
+        safe = (path.endswith(".py") and not path.startswith(("automation/", ".github/"))
+                and ".." not in Path(path).parts and path not in other_team_paths
+                and bool(tests) and all(p.endswith(".py") and Path(p).name.startswith("test_")
+                                        and ".." not in Path(p).parts for p in tests))
+        return [{"path": path, "number": reviewed["task_number"],
+                 "dynamic": True, "tests": tests,
+                 "unsupported_reason": "" if safe else "READY target requires non-Python or non-unittest executor"}]
+    return [{"path": path, "number": number, "dynamic": False, "tests": [],
+             "unsupported_reason": ""}
+            for path, _ in TASKS[team][1]
+            for number, target in CURATED_TARGETS[team] if target == path]
+
+def run_checks(team, path, extra_tests=()):
+    commands = [["python", "-m", "py_compile", path]] + CHECKS[team]
+    for test in extra_tests:
+        commands.append(["python", "-m", "unittest", "discover",
+                         "-s", str(Path(test).parent), "-p", Path(test).name])
+    for command in commands:
         result = shell(*command, timeout=120)
-        if result.returncode:
-            return False, (result.stdout + result.stderr)[-2000:]
+        output = result.stdout + result.stderr
+        if result.returncode or (extra_tests and command[-4:-3] == ["discover"]
+                                 and ("Ran 0 tests" in output or "Ran 0 test" in output)):
+            return False, output[-2000:] or "Task-specific regression ran zero tests"
     return True, ""
 def main():
     validate_ownership()
@@ -157,11 +189,19 @@ def main():
         raise RuntimeError("Fetch failed")
     if shell("git", "checkout", "-B", output_branch, "FETCH_HEAD").returncode:
         raise RuntimeError("Checkout failed")
+    # Trusted READY registry is copied by the workflow before branch checkout.
+    registry = json.loads(Path("/tmp/hq_semantic_contract_paths.json").read_text(encoding="utf-8"))
+    work_items = choose_work_items(team, catalog, evidence, repairs, registry, Path.cwd())
     started, calls, report = time.monotonic(), 0, []
-    for path, _legacy_goal in work:
+    for item in work_items:
         if calls >= max_calls or time.monotonic()-started >= max_seconds-250: break
-        number = mapped_paths[path]
-        if not _semantic_dispatch_gate(number, path, repairs.get(team, {})):
+        path, number = item["path"], item["number"]
+        if item["unsupported_reason"]:
+            report.append({"task_number": number, "path": path,
+                           "status": "ready_unsupported_target",
+                           "reason": item["unsupported_reason"]})
+            continue
+        if not item["dynamic"] and not _semantic_dispatch_gate(number, path, repairs.get(team, {})):
             report.append({"task_number": number, "path": path,
                            "status": "semantic_contract_not_ready"})
             continue
@@ -201,7 +241,7 @@ def main():
         if not file.is_file() or file.stat().st_size > 35000:
             report.append({"task_number": number, "path": path, "status": "unavailable"}); continue
         original = file.read_text()
-        baseline, feedback = run_checks(team, path)
+        baseline, feedback = run_checks(team, path, item["tests"])
         if not baseline:
             report.append({"task_number": number, "path": path, "status": "baseline_failed", "error": feedback[-300:]})
             continue
@@ -214,7 +254,7 @@ def main():
                 if candidate == original:
                     report.append({"task_number": number, "path": path, "status": "no_change"}); break
                 file.write_text(candidate)
-                passed, feedback = run_checks(team, path)
+                passed, feedback = run_checks(team, path, item["tests"])
                 changed = shell("git", "diff", "--name-only").stdout.strip().splitlines()
                 if not passed or changed != [path]:
                     raise ValueError("Regression or unexpected changes: " + feedback[-600:])
@@ -227,9 +267,12 @@ def main():
                 if head.returncode or len(head.stdout.strip()) != 40:
                     raise RuntimeError("Commit SHA unavailable")
                 report.append({"task_number": number, "path": path, "status": "committed",
+                               "assignment_source": "reviewed_READY" if item["dynamic"] else "curated",
                                "commit": head.stdout.strip(), "acceptance_criterion": goal,
                                "checks": ["python -m py_compile " + path] +
-                                         [" ".join(cmd) for cmd in CHECKS[team]],
+                                         [" ".join(cmd) for cmd in CHECKS[team]] +
+                                         ["python -m unittest discover -s " + str(Path(t).parent) +
+                                          " -p " + Path(t).name for t in item["tests"]],
                                "next_instruction": "Independent CI review required; no final completion credit"})
                 break
             except Exception as exc:
