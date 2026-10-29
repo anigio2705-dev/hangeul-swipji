@@ -19,6 +19,7 @@ jobs:
       - name: Validate full 160-item contracts and traffic decisions
         run: |
           python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+          python -m unittest discover -s automation -p 'test_hq_traffic_lights.py' -v
           python automation/hq_traffic_lights.py
           python - <<'PY'
           import json
