@@ -19,7 +19,7 @@ OWNERS = {
 }
 ROLES = {"discovery", "implementation", "qa", "repair", "queue"}
 SHA = re.compile(r"^[0-9a-f]{40}$")
-RUN = re.compile(r"^https://github\\.com/[^/]+/[^/]+/actions/runs/[0-9]+$")
+RUN = re.compile(r"^https://github\.com/[^/]+/[^/]+/actions/runs/[0-9]+$")
 
 
 def owned(team, task):
