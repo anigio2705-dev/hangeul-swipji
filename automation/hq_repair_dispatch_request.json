@@ -1,24 +1,12 @@
 {
-  "source_run_id": 40790018384,
+  "mode": "advance",
+  "source_run_id": 40791928076,
   "teams": [
-    "13",
-    "15"
+    "13"
   ],
-  "repairs": {
-    "13": {
-      "22": {
-        "attempts": 1,
-        "repair_instruction": "Patch must make one unambiguous real change. The previous old text was not unique or made no change. Copy a verbatim unique 12-2400 character substring from the supplied source, and replace it with one meaningful, distinct 12-3200 character fix. Preserve all imports, tests and safety gates. Do not repeat the rejected patch."
-      }
-    },
-    "15": {
-      "8": {
-        "attempts": 1,
-        "repair_instruction": "Patch must make one unambiguous real change. The previous old text was not unique or made no change. Copy a verbatim unique 12-2400 character substring from the supplied source, and replace it with one meaningful, distinct 12-3200 character fix. Preserve all imports, tests and safety gates. Do not repeat the rejected patch."
-      }
-    }
-  },
-  "reason": "2026-10-29 09:02 KST: prior 6-team run blocked #22 and #8 on ambiguous patches; one targeted repair each; no main, payment, deployment or production DB access.",
+  "repairs": {},
+  "expected_next_task": 47,
+  "reason": "2026-10-29 09:35 KST: #22 exhausted a bounded repair and failed regression (expected HTTP 403, got 200). #22 is persistently blocked; dispatch only team13 to next independent safe #47. One AI call; no duplicate retry.",
   "scope": "approved isolated branch only",
   "final_completion_claim": false
 }
