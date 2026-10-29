@@ -6,6 +6,7 @@ on:
       - 'automation/hq_six_developers.py'
       - 'automation/test_hq_six_developers.py'
       - '.github/workflows/hq-team11-preflight.yml'
+      - '.gitignore'
 permissions:
   contents: read
 jobs:
@@ -25,6 +26,7 @@ jobs:
         run: python -m py_compile automation/hq_six_developers.py
       - name: Verify real isolated checkout HEAD and clean worktree
         run: |
+          git status --short --untracked-files=all
           python - <<'PY'
           import sys
           sys.path.insert(0, "automation")
