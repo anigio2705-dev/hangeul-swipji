@@ -80,6 +80,14 @@ def readiness(catalog, ledger, registry, root=Path(".")):
         source = entry.get("source_paths")
         tests = entry.get("test_paths")
         ci = entry.get("independent_ci_url", "")
+        # Multiple observed files are allowed as read-only context only when
+        # a single, explicit editable file is independently authorized.
+        editable = entry.get("editable_path")
+        source_list = isinstance(source, list) and bool(source)
+        editable_ok = source_list and (
+            (len(source) == 1 and (editable is None or editable == source[0]))
+            or (len(source) > 1 and isinstance(editable, str) and editable in source)
+        )
         authorized = entry.get("owner") == task["owner"] and set(entry.get("support", [])) <= set(task["support"])
         reviewed = entry.get("independent_team15") == "PASS"
         ci_ref = isinstance(ci, str) and bool(re.fullmatch(
@@ -92,13 +100,17 @@ def readiness(catalog, ledger, registry, root=Path(".")):
                  and all(valid_path(p) for p in source + tests))
         deps = all(ledger.get(str(d), {}).get("status") == "complete"
                    for d in task["dependencies"])
-        if not (authorized and reviewed and ci_ref and paths and deps):
+        if not (authorized and reviewed and ci_ref and paths and deps and editable_ok):
             missing = [name for name, ok in (("owner", authorized), ("independent_review", reviewed),
-                ("ci_reference", ci_ref), ("real_paths", paths), ("dependencies", deps)) if not ok]
+                ("ci_reference", ci_ref), ("real_paths", paths),
+                ("single_editable_path", editable_ok), ("dependencies", deps)) if not ok]
             result["invalid_ready"].append({"task": number, "reason": ", ".join(missing)})
             continue
-        result["dispatchable"].append({"task": number, "owner": task["owner"],
-                                       "source_paths": source})
+        assignment = {"task": number, "owner": task["owner"],
+                      "source_paths": source}
+        if editable is not None:
+            assignment["editable_path"] = editable
+        result["dispatchable"].append(assignment)
     # A file cannot be owned by two parallel READY assignments. Reject both
     # rather than silently letting iteration order choose an unsafe winner.
     owners_by_path = {}
@@ -133,8 +145,8 @@ def readiness(catalog, ledger, registry, root=Path(".")):
             blockers.append("owner_mismatch")
         if not isinstance(source, list) or not source or not all(valid_path(p) for p in source):
             blockers.append("missing_or_invalid_source_path")
-        elif len(source) != 1:
-            blockers.append("single_file_runner_limit")
+        elif len(source) != 1 and entry.get("editable_path") not in source:
+            blockers.append("explicit_single_editable_path_required")
         if not isinstance(tests, list) or not tests or not all(valid_path(p) for p in tests):
             blockers.append("missing_or_invalid_test_path")
         if entry.get("independent_team15") != "PASS":
