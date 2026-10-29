@@ -229,8 +229,8 @@ def verify_submission(assignment, submission, trusted):
         return {"number": number, "verdict": "RETRY", "repair_instruction": "Limit change to assigned file; independently inspect git diff."}
     if trusted.get("independent_test") != "success":
         return {"number": number, "verdict": "RETRY", "repair_instruction": "Fix independent regression failure: " + str(trusted.get("test_error", "unknown"))[:400]}
-    if trusted.get("ci_conclusion") != "success":
-        return {"number": number, "verdict": "RETRY", "repair_instruction": "Obtain successful relevant CI for exact commit; do not reuse older green runs."}
+    if trusted.get("ci_conclusion") != "success" or trusted.get("ci_head_sha") != sha:
+        return {"number": number, "verdict": "RETRY", "repair_instruction": "Obtain successful relevant CI whose verified head SHA matches this exact commit; do not reuse older green runs."}
     if not trusted.get("ci_url", "").startswith("https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/"):
         return {"number": number, "verdict": "RETRY", "repair_instruction": "Supply verified GitHub Actions run URL."}
     return {"number": number, "verdict": "CODE_VERIFIED",
