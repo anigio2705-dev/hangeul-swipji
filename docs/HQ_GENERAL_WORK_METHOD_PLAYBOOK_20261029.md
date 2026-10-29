@@ -478,3 +478,8 @@
 - **선택한 공식 방법:** OpenAI [Codex CI autofix 예시](https://developers.openai.com/cookbook/examples/codex/autofix-github-actions)는 실패 테스트→격리 수정→CI→검토 PR 패턴을 제공하지만 예시는 아카이브 상태이고 비밀키/쓰기 권한을 한 job에 합치는 방식이 위험하다고 명시한다. 여기서는 **AI 비밀키 없이 읽기 전용 CI + 격리 브랜치 + Draft PR**로 적용했다. 재현 가능성은 검증됐고 API 비용 0, 운영/DB/Render 변경 0.
 - **한계/판정:** 소리가 실제로 나오게 만든 것은 아니다. `모` 사람 녹음은 여전히 없고, #53/#57 실제 음원 확보·청취, #59 전체 파일 오류 재시도, 15팀 독립 의미 검토, 테스트99 브라우저·모바일 확인, 대표 승인 모두 미완료. 따라서 **#59 CANDIDATE**, 신규 12팀 AI 개발 0, 최종 완료 증가 0. 테스트99는 임시 SQLite 보존 여부 미확인으로 재배포 금지.
 - **재사용 규칙:** 실재하지 않는 파일을 무음 성공 또는 TTS 대체로 위장하지 않는다. 실제 사용자 고장 제보에는 (1) 원본 자산 확인 (2) 실패를 재현하는 UI/기능 테스트를 먼저 RED (3) 정확한 SHA에서 GREEN 및 기존 회귀 통과 (4) 실제 자산 확보/브라우저 실사용/대표 승인을 별도 단계로 유지한다.
+
+### 18:21 KST 후속 교정 — 격리 테스트 경로를 중앙 저장소에 존재한다고 표시한 계약 오류
+- #59 경로 장부에 격리 PR #32에만 존재하는 `automation/verify_task59_missing_audio.cjs`를 중앙 브랜치의 로컬 `test_paths`로 기록하자 [CI #40848831040](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40848831040)이 **의도대로 FAIL**했다: `Missing real mapped path for #59`. 160개 경로 실재 검사 자체는 약화하지 않았다.
+- `test_paths`는 중앙 브랜치에 실제 존재하는 `scripts/check-audio-runtime.cjs`만 유지하고, 별도 `pilot_test_paths`에 PR #32의 신규 테스트를 분리한 SHA `e5f2f3bb1f1f94f034325e61634758ef886073d7`. 정확한 SHA의 [재검증 #40848910330](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40848910330) SUCCESS.
+- **새 재사용 규칙:** 계약의 실제 경로는 해당 계약이 실행되는 브랜치에 존재해야 한다. 다른 브랜치에서만 검증한 파일은 `pilot_test_paths`와 검증 SHA/CI로 분리한다. CI 경로 검사 실패는 잘못된 장부를 수정해 해결하고 검사를 약화하지 않는다.
