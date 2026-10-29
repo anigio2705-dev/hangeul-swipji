@@ -53,20 +53,14 @@ class HQ160TaskCycleTests(unittest.TestCase):
         pending["52"] = {"status": "code_verified"}
         self.assertIsNone(next_assignment("12", catalog, pending))
 
-    def test_wrong_task_regression_must_be_reverified_without_duplicate_development(self):
+    def test_wrong_scope_47_is_not_assigned_to_team13(self):
         catalog = contracts(sample())
-        ledger = {
-            "22": {"status": "blocked"},
-            "47": {"status": "in_progress", "commit": "a" * 40,
-                   "independent_review": "pass", "task_specific_verified": False,
-                   "test_command": "python -m unittest discover -s phase3 -p test_instant_matching.py"},
-        }
-        selected = next_assignment("13", catalog, ledger)
-        self.assertEqual(selected["task_number"], 47)
-        self.assertEqual(selected["mode"], "verify_existing")
-        # Once the learning-specific test passes, do not reassign while CI is pending.
-        ledger["47"]["task_specific_verified"] = True
+        ledger = {"22": {"status": "blocked"},
+                  "47": {"status": "in_progress", "independent_review": "pass",
+                         "task_specific_verified": False}}
+        self.assertNotIn((47, "phase3/learning.py"), CURATED_TARGETS["13"])
         self.assertIsNone(next_assignment("13", catalog, ledger))
+        self.assertEqual(catalog[47]["owner"], "12")
 
     def test_failure_feedback_is_specific_and_retry_is_bounded(self):
         catalog = contracts(sample())
