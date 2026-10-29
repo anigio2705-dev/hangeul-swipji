@@ -16,7 +16,7 @@ TEAM_TASKS = {
     "11": (11, 3, "Create three precise clean/dirty/stale-checkout preflight cases, with expected blocking behavior."),
     "12": (45, 3, "Create three original beginner Korean quiz questions. Each expected field must include the correct answer and an educational explanation."),
     "13": (22, 3, "Create three booking-to-video authorization scenarios, including existing-booking instant-join denial and a legitimate participant case. No real room tokens."),
-    "14": (101, 4, "Create four simulated referral role-pair cases: teacher_teacher, teacher_student, student_teacher, student_student. Explain rejection of self/cyclic referrals without real payouts."),
+    "14": (101, 4, "Return exactly FOUR items. Their id fields MUST be exactly teacher_teacher, teacher_student, student_teacher, student_student (one each, no aliases, no extra IDs). Each text must explicitly name its matching introducer and introduced roles; expected explains self/cyclic rejection without real payouts."),
     "15": (151, 5, "Create five concrete independent user-journey QA cases covering learner, tutor, speaking partner, admin, and unauthorized visitor."),
     "16": (143, 8, "Create eight locale-specific UI label checks with ids ko,en,ja,es,zh,ru,mn,vi; include localized Learn/Watch/Speak labels in text."),
 }
@@ -123,6 +123,8 @@ def main():
                 "Each item has exactly id (lowercase snake_case), text (concrete original "
                 "feature/content/test case), expected (specific correct outcome and rationale). "
                 "No code execution, deployment, API calls, personal data, payment, secrets, "
+                "For team 14, use exactly these four literal id strings: teacher_teacher, teacher_student, student_teacher, student_student. "
+                "Do not change underscores or add prefixes. "
                 "or claims of testing. These are experimental candidate artifacts, NOT "
                 "approved production changes or a claim of backlog completion.")},
             {"role": "user", "content": json.dumps({
