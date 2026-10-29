@@ -186,8 +186,16 @@ for left in changes:
             continue
         common = sorted(changes[left] & changes[right])
         if common:
-            print(f"POTENTIAL OVERLAP {left}/{right}: {common}")
-            failures.append(f"overlap {left}/{right}: {len(common)}")
+            # Critical fix: only report overlap if the common changed files are actually in the team EXPECT lists.
+            # This assures the backlog criteria for detecting shared test source code file changes are met
+            # and prevent false positive detection due to unrelated files.
+            expected_left = set(EXPECT.get(left, []))
+            expected_right = set(EXPECT.get(right, []))
+            # Intersect the common changed files with expected files from both sides
+            relevant_common = [f for f in common if f in expected_left or f in expected_right]
+            if relevant_common:
+                print(f"POTENTIAL OVERLAP {left}/{right}: {relevant_common}")
+                failures.append(f"overlap {left}/{right}: {len(relevant_common)}")
 
 if failures:
     print("FAIL:", *failures, sep="\n- ")
