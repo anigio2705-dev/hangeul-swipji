@@ -26,7 +26,7 @@ def summarize(catalog, ledger, registry, root):
             ci_url = entry.get("independent_ci_url")
             ci_sha = entry.get("independent_ci_sha")
             if (not isinstance(ci_url, str) or not re.fullmatch(
-                r"https://github\\.com/anigio2705-dev/hangeul-swipji/actions/runs/[0-9]+",
+                r"https://github\.com/anigio2705-dev/hangeul-swipji/actions/runs/[0-9]+",
                 ci_url) or not isinstance(ci_sha, str)
                 or not re.fullmatch(r"[0-9a-f]{40}", ci_sha)):
                 blockers.append("exact_sha_independent_ci_missing")
