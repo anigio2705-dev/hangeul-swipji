@@ -9,9 +9,13 @@ permissions:
   contents: read
 jobs:
   test:
-    runs-on: ubuntu-latest
+    # Playwright 1.51.1 cannot install Chromium dependencies on ubuntu-26.04.
+    runs-on: ubuntu-24.04
     steps:
+      # Source-preservation tests inspect historical commit 7418e32.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'

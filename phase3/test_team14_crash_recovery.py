@@ -88,11 +88,16 @@ class RecoveryCrashTests(unittest.TestCase):
   self.assertEqual(applied,apply_approved_refund(self.server,self.s,'refund1'))
   with self.assertRaises(SimError):decide_refund(self.s,'refund1','cancelled','test_reviewer')
  def test_reject_and_cancel_are_terminal(self):
+  # Refund requests require a completed settlement; the test fixture must
+  # satisfy the real state gate, not weaken production refund authorization.
+  self.run_event()
+  before=self.balances()
   for suffix,choice in (('reject','rejected'),('cancel','cancelled')):
    rid='refund_'+suffix
    request_refund(self.server,self.s,'booking',rid,'student',1000)
    self.assertEqual(decide_refund(self.s,rid,choice,'test_reviewer')['state'],choice)
    with self.assertRaises(SimError):apply_approved_refund(self.server,self.s,rid)
    with self.assertRaises(SimError):decide_refund(self.s,rid,'approved','test_reviewer')
+   self.assertEqual(self.balances(),before,'terminal refund review must not mutate the ledger')
 
 if __name__=='__main__':unittest.main(verbosity=2)
