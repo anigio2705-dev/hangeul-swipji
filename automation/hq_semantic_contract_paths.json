@@ -655,5 +655,22 @@
       "dependencies": [],
       "note": "2026-10-29 15:28+ KST six-team full-order source/path audit; only observed paths. Candidate is NOT READY or CODE_VERIFIED."
     }
+  },
+  "candidate_bootstrap": {
+    "purpose": "One bounded actual AI candidate artifact per independent team while READY=0; experimental only, not production implementation or 160-task approval",
+    "review_gate": "15-team independent semantic review and exact-SHA CI still mandatory; no automatic READY promotion",
+    "team_task_ids": {
+      "11": 11,
+      "12": 45,
+      "13": 22,
+      "14": 101,
+      "15": 151,
+      "16": 143
+    },
+    "artifact_scope": "experiments/hq-six-candidate-artifacts/teamXX/taskNN.json on six isolated team branches",
+    "launch_pr": 65,
+    "verified_preflight_ci": 40941758948,
+    "verified_schema_ci": 40941758913,
+    "launched_at_utc": "2026-10-29T19:40:00Z"
   }
 }
