@@ -6,7 +6,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from hq_160_task_cycle import CURATED_TARGETS, contracts
-from hq_six_cycle_supervisor import supervise, promote_prior
+from hq_six_cycle_supervisor import supervise, promote_prior, REGRESSIONS
 
 def sample():
     return "\n".join(f"{n}. [ ] Acceptance criterion {n}" for n in range(1, 161))
@@ -33,7 +33,7 @@ class SixTeamSupervisorTests(unittest.TestCase):
             with patch.dict(os.environ, {"GITHUB_REF_NAME": "automation/hq-pilot-13-14-15-20261029", "GITHUB_RUN_ID": "123"}), \
                  patch("hq_six_cycle_supervisor.load_catalog", return_value=contracts(sample())), \
                  patch("hq_six_cycle_supervisor.independent_check",
-                       return_value=(verdict, "Precise fix: assertion 7", {"commit": "a" * 40})), \
+                       return_value=(verdict, "Precise fix: assertion 7", {"commit": "a" * 40, "test_command": "python -m unittest discover -s phase3 -p test_global_learning.py"})), \
                  patch("hq_six_cycle_supervisor.load_ledger", return_value=(ledger if ledger is not None else {}, "a" * 40)), \
                  patch("hq_six_cycle_supervisor.save_ledger", return_value=None), \
                  patch("hq_six_cycle_supervisor.promote_prior", return_value=[]), \
@@ -141,6 +141,7 @@ class SixTeamSupervisorTests(unittest.TestCase):
     def test_pending_ci_is_not_promoted_until_run_completes_successfully(self):
         url = "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"
         ledger = {"109": {"status": "in_progress", "independent_review": "pass",
+                          "task_specific_verified": True,
                           "ci_url": url, "ci_result": "pending"}}
         with patch("hq_six_cycle_supervisor.api", return_value={
             "status": "in_progress", "conclusion": None}):
@@ -151,6 +152,20 @@ class SixTeamSupervisorTests(unittest.TestCase):
             self.assertEqual(promote_prior(ledger, "dummy"), [109])
             self.assertEqual(ledger["109"]["status"], "code_verified")
             self.assertEqual(ledger["109"]["ci_result"], "success")
+
+    def test_learning_item_47_uses_learning_regression_not_matching(self):
+        self.assertIn("test_global_learning.py", REGRESSIONS[("13", 47)])
+        self.assertIn("test_instant_matching.py", REGRESSIONS[("13", 22)])
+        self.assertNotEqual(REGRESSIONS[("13", 47)], REGRESSIONS[("13", 22)])
+
+    def test_unrelated_green_ci_never_promotes_task_without_specific_test(self):
+        ledger = {"47": {"status": "in_progress", "independent_review": "pass",
+                         "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123",
+                         "ci_result": "pending"}}
+        with patch("hq_six_cycle_supervisor.api") as api:
+            self.assertEqual(promote_prior(ledger, "dummy"), [])
+            api.assert_not_called()
+        self.assertEqual(ledger["47"]["status"], "in_progress")
 
     def test_budget_caps_successful_chains(self):
         report, api = self.run_cycle(committed=True, depth=2, team="13", task_number=22)
