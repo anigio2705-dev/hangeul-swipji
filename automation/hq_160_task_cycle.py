@@ -43,8 +43,9 @@ CURATED_TARGETS = {
            (56, "scripts/find-human-audio-sources.py")),
     "12": ((41, "scripts/team12_content_regression.py"),
            (52, "scripts/team12_audio_inventory.py")),
-    "13": ((22, "phase3/instant_matching.py"),
-           (47, "phase3/learning.py")),
+    # #47 concerns free-course progress/resume, not placement in learning.py.
+    # The former team13 mapping was rejected; do not dispatch it again.
+    "13": ((22, "phase3/instant_matching.py"),),
     "14": ((109, "phase3/team14_referral_store.py"),
            (115, "phase3/team14_refund_workflow.py")),
     "15": ((8, "scripts/team15_independent_gate.py"),
