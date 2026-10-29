@@ -64,7 +64,7 @@ def inspect_registry_mappings(registry, root):
             if not isinstance(values, list) or not values:
                 failures.append(f"task #{key} has no {field}")
                 continue
-            for value in values:
+                        or "\\" in value
                 if (not isinstance(value, str) or not value
                         or PurePosixPath(value).is_absolute()
                         or ".." in PurePosixPath(value).parts
@@ -99,6 +99,15 @@ class ContractOwnerConsistency(unittest.TestCase):
             failures = inspect_registry_mappings(registry, Path(folder))
             self.assertTrue(any("outside.js" in x for x in failures))
             self.assertTrue(any("no test_paths" in x for x in failures))
+
+    def test_registry_rejects_windows_style_path_separator(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as folder:
+            registry = {"items": {"22": {"owner": "13",
+                "source_paths": ["phase3\\\\instant_matching.py"],
+                "test_paths": ["phase3/test_instant_matching.py"]}}}
+            failures = inspect_registry_mappings(registry, Path(folder))
+            self.assertTrue(any("invalid or absent source_paths" in x for x in failures))
 
     def test_exactly_160_unique_contracts_with_canonical_owner(self):
         owners = parse_contract_owners(CONTRACTS.read_text(encoding="utf-8"))
