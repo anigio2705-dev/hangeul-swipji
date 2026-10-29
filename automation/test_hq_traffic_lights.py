@@ -191,5 +191,15 @@ class ReadinessTests(unittest.TestCase):
             self.assertTrue(all("exclusive_file_collision" in item["reason"]
                                 for item in collision["invalid_ready"]))
 
+            # Read/write overlap is unsafe even with different editable targets.
+            # Task 41 reads shared_context.py; task 49 now writes it.
+            reg["items"]["49"]["source_paths"] = ["shared_context.py", "edit_b.py"]
+            reg["items"]["49"]["editable_path"] = "shared_context.py"
+            read_write = readiness(c, {}, reg, root)
+            self.assertEqual(read_write["dispatchable_total"], 0)
+            self.assertEqual({item["task"] for item in read_write["invalid_ready"]}, {41, 49})
+            self.assertTrue(all("exclusive_file_collision" in item["reason"]
+                                for item in read_write["invalid_ready"]))
+
 if __name__ == "__main__":
     unittest.main()
