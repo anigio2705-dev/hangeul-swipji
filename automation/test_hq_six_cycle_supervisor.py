@@ -225,7 +225,9 @@ class SixTeamSupervisorTests(unittest.TestCase):
                 self.assertEqual(verdict, "TEST_PASS_PENDING_CI", reason)
                 self.assertIn(Path(regression).name, evidence["test_command"])
                 self.assertIn(str(Path(regression).parent), evidence["test_command"])
-                self.assertTrue(any(regression in cmd for cmd in checked_commands))
+                self.assertTrue(any(Path(regression).name in cmd and
+                                    str(Path(regression).parent) in cmd
+                                    for cmd in checked_commands))
                 self.assertTrue(any(p.startswith("/actions/runs/") for p in paths))
                 entry["independent_ci_sha"] = "c" * 40
                 verdict, reason, _ = independent_check(
