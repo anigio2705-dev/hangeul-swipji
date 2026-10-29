@@ -105,6 +105,38 @@
       "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40813528164",
       "review_scope": "Independent Node DOM simulation of actual seven course scripts; no real browser/mobile/server/audio testing."
     },
+    "45": {
+      "owner": "12",
+      "support": [
+        "13"
+      ],
+      "state": "CANDIDATE",
+      "source_paths": [
+        "intro.html",
+        "beginner1.html",
+        "beginner2.html",
+        "intermediate1.html",
+        "intermediate2.html",
+        "advanced1.html",
+        "advanced2.html"
+      ],
+      "test_paths": [
+        "automation/verify_task45_quiz_integrity.cjs",
+        "automation/verify_task44.cjs"
+      ],
+      "acceptance": "7개 과정 350단원 1758개 퀴즈의 정답 유일성·의미 정확성·해설·점수 계산·재도전 및 저장 동작을 독립 검증",
+      "unmet": [
+        "1758개 데이터 항목의 보기 중복·정답 인덱스 검사는 작성됐으나 신규 CI 결과 확인 필요",
+        "정답 의미의 교육적 정확성 검증 미완료",
+        "문항별 실제 해설 0/1758: 해설 콘텐츠·화면 제공 미완료",
+        "부분 점수 계산과 재도전의 독립 동적 UI 검사 미완료",
+        "실제 PC/모바일 브라우저·대표 검수 미완료",
+        "15팀 독립 의미 검증 미완료"
+      ],
+      "independent_team15": "PENDING",
+      "dependencies": [],
+      "note": "2026-10-29 13:04 KST HQ2 direct audit: 7 actual course HTML files parsed, 350 units and 1758 quizzes; no duplicate option strings, no invalid correct-answer indices, and 0 explicit per-question explanations. Negative fixtures verify the detector rejects duplicates, invalid indices, missing units. Partial audit only, never count as READY or CODE_VERIFIED before independent CI and explanation/scoring/retry validation."
+    },
     "47": {
       "owner": "12",
       "support": [
