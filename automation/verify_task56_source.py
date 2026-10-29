@@ -15,7 +15,7 @@ import urllib.request
 from pathlib import Path
 from unittest.mock import patch
 
-def check(source):
+def check(source, allow_unsafe_baseline=False):
     with tempfile.TemporaryDirectory(prefix="hq56-") as temp:
         root = Path(temp)
         (root / "scripts").mkdir()
@@ -43,10 +43,12 @@ def check(source):
             names += urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)["titles"][0].split("|")
         expected = {"File:Ko-" + word + "." + ext
                     for word in ("가", "ㄱ", "ㅏ") for ext in ("ogg", "oga")}
-        if set(names) != expected or len(names) != 6:
+        if (not expected.issubset(set(names)) if allow_unsafe_baseline
+            else set(names) != expected or len(names) != 6):
             raise AssertionError("Task #56 regression: Korean Hangul targets dropped or invalid titles queried; "
                                  + repr({"actual": names, "expected": sorted(expected)}))
-        if report.get("titlesQueried") != 6 or report.get("listeningApproved") is not False:
+        if (report.get("titlesQueried") != len(names) or report.get("listeningApproved") is not False
+            or (not allow_unsafe_baseline and len(names) != 6)):
             raise AssertionError("Task #56 report must preserve all six candidates without approving audio")
         if report.get("failedBatches"):
             raise AssertionError("Mocked source lookup should not have failed")
@@ -55,5 +57,6 @@ def check(source):
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--source", required=True)
+    p.add_argument("--allow-unsafe-baseline", action="store_true")
     args = p.parse_args()
-    check(Path(args.source).resolve())
+    check(Path(args.source).resolve(), args.allow_unsafe_baseline)
