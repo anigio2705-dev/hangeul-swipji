@@ -3,6 +3,13 @@ on:
   push:
     branches:
       - audit/hq-six-owner-only-dispatch-20261030-0334
+  pull_request:
+    branches:
+      - automation/hq-pilot-13-14-15-20261029
+    paths:
+      - 'automation/hq_six_developers.py'
+      - 'automation/test_hq_six_developers.py'
+      - '.github/workflows/hq-six-owner-only-audit.yml'
   workflow_dispatch:
 permissions:
   contents: read
