@@ -35,7 +35,7 @@
   for(const [, ,word] of H.consonants.slice(0,14))$('practice').append(H.soundButton(word));
   $('repeat-selected').onclick=()=>H.play(selected);
   $('refresh-audio').onclick=()=>H.reloadManifest().then(()=>$('selected-help').textContent=H.availability(selected).label);
-  if($('tts-opt-in'))$('tts-opt-in').onchange=()=>H.setSyntheticEnabled($('tts-opt-in').checked);
+  if($('tts-opt-in'))$('tts-opt-in').onchange=()=>{H.setSyntheticEnabled($('tts-opt-in').checked);H.refreshBadges()};
   $('stop-audio').onclick=()=>{H.stop();H.status('재생을 멈췄습니다.')};
   H.ready.then(()=>{H.refreshBadges();$('selected-help').textContent=H.availability(selected).label});select('ㄱ','ㅏ',false);
 })();
