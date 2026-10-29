@@ -23,8 +23,7 @@ TASKS = {
         ("scripts/team12_audio_inventory.py", "Harden education audio inventory validation"),
         ("scripts/team12_content_regression.py", "Improve education content regression evidence handling")]),
     "13": ("team13/platform-bfcache-reconnect-20261028", [
-        ("phase3/instant_matching.py", "Harden matching error handling without changing match policy"),
-        ("phase3/learning.py", "Improve malformed learning data handling without changing policy")]),
+        ("phase3/instant_matching.py", "Harden matching error handling without changing match policy")]),
     "14": ("team14/business-systems-audit-20261028", [
         ("phase3/team14_referral_store.py", "Harden invalid referral input rejection without changing financial rules"),
         ("phase3/team14_refund_workflow.py", "Improve refund event validation without changing payment rules")]),
