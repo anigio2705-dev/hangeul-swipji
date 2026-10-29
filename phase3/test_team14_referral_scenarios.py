@@ -44,4 +44,28 @@ class ReferralScenariosTests(unittest.TestCase):
  def test_rounding_conservation(self):
   x=simulate_referral(1,[],(300,100))
   self.assertEqual(x['gross'],x['teacher']+x['platform']+sum(x['rewards']))
+ def test_all_four_introduction_directions_are_distinct_and_mock_only(self):
+  from team14_referral_scenarios import simulate_introduction
+  seen=set()
+  for introducer in ('teacher','student'):
+   for introduced in ('teacher','student'):
+    with self.subTest(introducer=introducer,introduced=introduced):
+     scenario=simulate_introduction(introducer,introduced)
+     self.assertEqual(scenario['introducer_role'],introducer)
+     self.assertEqual(scenario['introduced_role'],introduced)
+     self.assertEqual(scenario['status'],'simulation_only')
+     self.assertFalse(scenario['real_money'])
+     self.assertFalse(scenario['payment_enabled'])
+     self.assertFalse(scenario['policy_approved'])
+     seen.add(scenario['scenario_id'])
+  self.assertEqual(len(seen),4)
+ def test_introduction_roles_fail_closed_for_invalid_inputs(self):
+  from team14_referral_scenarios import simulate_introduction
+  for invalid in (None,True,0,'admin','partner','Teacher','',[],{}):
+   with self.subTest(invalid=invalid):
+    with self.assertRaises(SimError) as ctx:
+     simulate_introduction(invalid,'student')
+    self.assertEqual(ctx.exception.code,'VALIDATION_ERROR')
+    with self.assertRaises(SimError):
+     simulate_introduction('teacher',invalid)
 if __name__=='__main__':unittest.main()
