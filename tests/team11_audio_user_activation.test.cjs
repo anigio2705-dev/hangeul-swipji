@@ -45,3 +45,39 @@ test('missing human recording does not synthesize or create Audio',async()=>{
   const result=await context.window.HSHangul.play('기역');
   assert.equal(result.status,'missing');
 });
+
+test('TTS is opt-in, human-first, and never plays a held human asset',async()=>{
+  const calls={audio:[],speak:[],cancel:0};
+  const records={
+    '가':{kind:'human',src:'./assets/hangul-audio/ac00-r2.mp3',sha256:'a'.repeat(64),sourceUrl:'https://commons.wikimedia.org/wiki/File:A',author:'speaker',license:'CC-BY'},
+    '다':{kind:'human',disabled:true,holdReason:'발음 검수 보류',src:'./assets/hangul-audio/b2e4.mp3',sha256:'b'.repeat(64),sourceUrl:'https://commons.wikimedia.org/wiki/File:B',author:'speaker2',license:'CC-BY'},
+  };
+  class AudioMock{
+    constructor(src){calls.audio.push(src)}
+    play(){this.onplaying?.();this.onended?.();return Promise.resolve()}
+    pause(){}
+  }
+  class UtteranceMock{constructor(text){this.text=text}}
+  const synth={cancel(){calls.cancel++},speak(u){calls.speak.push({word:u.text,lang:u.lang});u.onstart?.();u.onend?.()}};
+  const document={baseURI:'https://example.test/hangul-basics.html',addEventListener(){},dispatchEvent(){},
+    querySelectorAll:()=>[],querySelector:()=>null};
+  const context={document,URL,Audio:AudioMock,Event:class{},setTimeout,clearTimeout,
+    window:{addEventListener(){},speechSynthesis:synth,SpeechSynthesisUtterance:UtteranceMock},
+    fetch:async()=>({ok:true,json:async()=>({recordings:records})})};
+  vm.runInNewContext(source,context);
+  const H=context.window.HSHangul;
+  await H.ready;
+  assert.equal((await H.play('나')).status,'missing','without explicit consent no synthesis');
+  assert.equal(calls.speak.length,0);
+  H.setSyntheticEnabled(true);
+  assert.equal((await H.play('나')).status,'tts-played','missing sound can use opt-in device voice');
+  assert.equal(calls.speak[0].word,'나');
+  assert.equal(calls.speak[0].lang,'ko-KR');
+  assert.equal((await H.play('가')).status,'played','human recording wins over synthetic');
+  assert.equal(calls.audio.length,1);
+  assert.match(calls.audio[0],/ac00-r2\.mp3/);
+  assert.equal((await H.play('다')).status,'tts-played','held recording is never played');
+  assert.equal(calls.audio.length,1,'held audio URL must never be created');
+  H.setSyntheticEnabled(false);
+  assert.equal((await H.play('다')).status,'held');
+});
