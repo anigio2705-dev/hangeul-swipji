@@ -12,7 +12,7 @@ def _init(store):
 def request_refund(server_db,store,booking_id,request_id,actor_id,amount_krw,reason=''):
     for value in (booking_id,request_id,actor_id):ident(value)
     amount(amount_krw,True)
-    if not isinstance(reason,str) or len(reason)>2000 or any(ord(c)<32 and c not in '\\n\\t' for c in reason):
+    if not isinstance(reason,str) or len(reason)>2000 or any(ord(c)<32 and ord(c) not in (9,10) for c in reason):
         raise SimError('VALIDATION_ERROR','invalid refund reason')
     booking=server_db.execute(
         'SELECT learner_id,teacher_id,price,status FROM bookings WHERE id=?',
