@@ -7,6 +7,7 @@ No main, deployment, production database or real-payment changes.
 import ast
 import json
 import os
+import re
 from pathlib import Path
 import subprocess
 import time
@@ -166,6 +167,57 @@ def choose_work_items(team, catalog, evidence, repairs, registry, root):
             for path, _ in TASKS[team][1]
             for number, target in CURATED_TARGETS[team] if target == path]
 
+def verify_ready_provenance(item, registry, root=Path(".")):
+    """Fail closed before OpenAI spend: live CI and exact tested source/test blobs.
+
+    The independently approved baseline must be the code actually checked out
+    by this team, not merely a successful CI URL from a different revision.
+    """
+    number = str(item["number"])
+    entry = registry.get("items", {}).get(number, {})
+    sha = entry.get("independent_ci_sha", "")
+    url = entry.get("independent_ci_url", "")
+    token = os.environ.get("GITHUB_TOKEN", "")
+    match = re.fullmatch(
+        r"https://github\\.com/anigio2705-dev/hangeul-swipji/actions/runs/([0-9]+)",
+        url) if isinstance(url, str) else None
+    if (entry.get("state") != "READY" or entry.get("independent_team15") != "PASS"
+            or not isinstance(sha, str) or not re.fullmatch(r"[a-f0-9]{40}", sha)
+            or not match or not token):
+        raise ValueError("READY_PROVENANCE_MISSING")
+    request = Request(
+        "https://api.github.com/repos/anigio2705-dev/hangeul-swipji/actions/runs/" + match.group(1),
+        headers={"Authorization": "Bearer " + token,
+                 "Accept": "application/vnd.github+json"})
+    try:
+        with urlopen(request, timeout=20) as response:
+            run = json.load(response)
+    except Exception as exc:
+        raise ValueError("READY_CI_LOOKUP_FAILED") from exc
+    if (run.get("head_sha") != sha or run.get("status") != "completed"
+            or run.get("conclusion") != "success"
+            or run.get("repository", {}).get("full_name") != "anigio2705-dev/hangeul-swipji"):
+        raise ValueError("READY_CI_SHA_OR_STATUS_MISMATCH")
+    paths = entry.get("source_paths", []) + entry.get("test_paths", [])
+    if not paths or not all(isinstance(p, str) for p in paths):
+        raise ValueError("READY_PATHS_INVALID")
+    base = Path(root).resolve()
+    fetched = shell("git", "fetch", "--depth=1", "origin", sha, timeout=80)
+    if fetched.returncode:
+        raise ValueError("READY_BASELINE_FETCH_FAILED")
+    for path in paths:
+        file = (base / path).resolve()
+        if not file.is_relative_to(base) or not file.is_file():
+            raise ValueError("READY_FILE_MISSING")
+        baseline = shell("git", "rev-parse", "FETCH_HEAD:" + path)
+        current = shell("git", "hash-object", "--", path)
+        if (baseline.returncode or current.returncode
+                or not re.fullmatch(r"[a-f0-9]{40}", baseline.stdout.strip())
+                or baseline.stdout.strip() != current.stdout.strip()):
+            raise ValueError("READY_BASELINE_BLOB_MISMATCH")
+    return True
+
+
 def run_checks(team, path, extra_tests=()):
     commands = [["python", "-m", "py_compile", path]] + CHECKS[team]
     for test in extra_tests:
@@ -256,6 +308,16 @@ def main():
         file = Path(path)
         if not file.is_file() or file.stat().st_size > 35000:
             report.append({"task_number": number, "path": path, "status": "unavailable"}); continue
+        # No model call until the reviewed CI run and every tested file match
+        # the actual isolated team checkout. Never auto-sync or overwrite work.
+        if item["dynamic"]:
+            try:
+                verify_ready_provenance(item, registry, Path.cwd())
+            except ValueError as exc:
+                report.append({"task_number": number, "path": path,
+                               "status": "ready_provenance_blocked",
+                               "reason": str(exc)})
+                continue
         original = file.read_text()
         baseline, feedback = run_checks(team, path, item["tests"])
         if not baseline:
