@@ -7,6 +7,9 @@ on:
       - automation/hq_traffic_lights.py
       - automation/test_hq_traffic_lights.py
       - automation/hq_160_task_cycle.py
+      - automation/hq_semantic_contract_paths.json
+      - docs/HQ_160_DEVELOPMENT_CONTRACTS_20261029.md
+      - docs/HQ_GENERAL_WORK_METHOD_PLAYBOOK_20261029.md
       - .github/workflows/hq-ready-editable-collision-audit.yml
   workflow_dispatch:
 permissions:
@@ -25,3 +28,5 @@ jobs:
         run: |
           python -m unittest discover -s automation -p test_hq_traffic_lights.py -v
           python -m unittest discover -s automation -p test_hq_160_task_cycle.py -v
+          python -m unittest discover -s automation -p test_hq_contract_owner_consistency.py -v
+          python -c 'import json; from pathlib import Path; r=json.loads(Path("automation/hq_semantic_contract_paths.json").read_text()); assert r["items"]["9"]["state"]=="CANDIDATE"; assert r["items"]["9"]["independent_team15"]=="PENDING"; print("Task 9 remains non-dispatchable")'
