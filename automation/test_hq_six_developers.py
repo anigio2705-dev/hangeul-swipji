@@ -36,14 +36,14 @@ class BoundedPatchTests(unittest.TestCase):
             self.assertIn("non-Python", blocked[0]["unsupported_reason"])
 
     def test_unsupported_ready_does_not_starve_next_safe_ready(self):
-        c = contracts("\\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
+        c = contracts("\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
             (root / "page.html").write_text("<html><body>lesson</body></html>")
-            (root / "feature.py").write_text("def feature(): return True\\n")
+            (root / "feature.py").write_text("def feature(): return True\n")
             (root / "test_feature.py").write_text(
-                "import unittest\\nclass TestFeature(unittest.TestCase):\\n"
-                " def test_feature(self): self.assertTrue(True)\\n")
+                "import unittest\nclass TestFeature(unittest.TestCase):\n"
+                " def test_feature(self): self.assertTrue(True)\n")
             def entry(path):
                 return {"owner": "12", "state": "READY",
                         "source_paths": [path], "test_paths": ["test_feature.py"],
