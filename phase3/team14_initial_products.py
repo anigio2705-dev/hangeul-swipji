@@ -130,9 +130,15 @@ def verify_server_product_contract(server_db, booking_id, trusted_event=None):
     if (row['duration_minutes']!=duration or row['price_krw']!=price
             or row['currency']!='KRW'):
         raise SimError('CONFLICT','server product snapshot differs from catalog')
-    booking=server_db.execute('SELECT price FROM bookings WHERE id=?',(booking_id,)).fetchone()
+    booking=server_db.execute('SELECT b.price,u.role,u.approved FROM bookings b JOIN users u ON u.id=b.teacher_id WHERE b.id=?',(booking_id,)).fetchone()
     if booking is None or booking['price']!=price:
         raise SimError('CONFLICT','server booking price differs from product snapshot')
+    if booking['approved']!=1 or booking['role'] not in ('teacher','partner'):
+        raise SimError('FORBIDDEN','booking teacher is not approved')
+    if product_code=='professional_25' and booking['role']!='teacher':
+        raise SimError('FORBIDDEN','professional product requires teacher')
+    if product_code=='partner_25' and booking['role']!='partner':
+        raise SimError('FORBIDDEN','partner product requires partner')
     if trusted_event is not None:
         if trusted_event.get('bookingId')!=booking_id or trusted_event.get('amount')!=price:
             raise SimError('CONFLICT','verified completion amount differs from snapshot')
