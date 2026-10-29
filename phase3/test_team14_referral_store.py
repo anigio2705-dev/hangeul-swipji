@@ -99,4 +99,26 @@ class ReferralStoreTests(unittest.TestCase):
   self.s.award('event1','student','lesson1',10000)
   self.s.award('event2','student','lesson2',10000)
   self.assertEqual(self.s.db.execute('SELECT COUNT(*) FROM referral_awards').fetchone()[0],2)
+ def test_four_role_label_pairs_are_simulation_only(self):
+  """Four identity-label pairings must remain mock-only, not role authorization.
+
+  ReferralStore accepts trusted IDs, not authenticated user roles. This test
+  deliberately does NOT approve any teacher/learner eligibility policy.
+  """
+  cases=(('learner_a','learner_b'),('learner_c','teacher_a'),
+         ('teacher_b','learner_d'),('teacher_c','teacher_d'))
+  for index,(child,parent) in enumerate(cases):
+   with self.subTest(pair=(child,parent)):
+    event='role_event_'+str(index);lesson='role_lesson_'+str(index)
+    self.assertTrue(self.s.link(child,parent))
+    result=self.s.award(event,child,lesson,10000)
+    self.assertEqual(result['recipients'],[{'user_id':parent,'amount_krw':300}])
+    self.assertEqual(result['teacher_krw']+result['platform_krw']+
+                     sum(x['amount_krw'] for x in result['recipients']),10000)
+    self.assertIs(result['real_money'],False)
+    self.assertIs(result['policy_approved'],False)
+    self.assertIs(result['payment_enabled'],False)
+    self.assertEqual(self.s.awards_for_lesson(lesson),result)
+    self.assertEqual(self.s.award(event,child,lesson,10000),result)
+  self.assertEqual(self.s.db.execute('SELECT COUNT(*) FROM referral_awards').fetchone()[0],4)
 if __name__=='__main__':unittest.main()
