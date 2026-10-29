@@ -79,6 +79,18 @@ for(const course of courses){
   assert.ok(q.length>=1,course+': missing exercises');
   const wrong=q.map(x=>(x[3]+1)%x[2].length);
   chooseAndSubmit(view,wrong);
+  // #45 partial-score and retry regression against the real course script.
+  const firstFeedback=get('content').children.find(x=>x.className==='feedback');
+  assert.ok(firstFeedback,course+': score feedback missing');
+  assert.equal(firstFeedback.textContent,view.ui.ko.result+': 0 / '+q.length,
+    course+': all-wrong score miscalculated');
+  const retryRow=get('content').children.find(x=>x.className==='row');
+  assert.ok(retryRow,course+': retry controls missing');
+  const retryButton=retryRow.children.find(x=>x.tagName==='button'&&x.textContent===view.ui.ko.retry);
+  assert.ok(retryButton,course+': retry button missing');
+  retryButton.onclick();
+  assert.equal(get('content').children.filter(x=>x.className==='mistake').length,q.length,
+    course+': retry did not restore quiz');
   const key='hs-'+course+'-v1';
   let saved=JSON.parse(store.get(key));
   assert.equal(Object.keys(saved.mistakes).length,q.length,course+': wrong answers not saved');
