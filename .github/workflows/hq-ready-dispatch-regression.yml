@@ -6,6 +6,7 @@ on:
       - 'automation/hq_160_task_cycle.py'
       - 'automation/hq_traffic_lights.py'
       - 'automation/test_hq_160_task_cycle.py'
+      - 'automation/test_hq_traffic_lights.py'
       - 'automation/test_task143_language_contract.py'
       - 'automation/test_hq_traffic_lights.py'
       - 'automation/hq_semantic_contract_paths.json'
