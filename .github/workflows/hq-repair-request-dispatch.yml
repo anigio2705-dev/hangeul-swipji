@@ -1,0 +1,72 @@
+name: HQ isolated repair request dispatch
+on:
+  push:
+    branches:
+      - automation/hq-pilot-13-14-15-20261029
+    paths:
+      - automation/hq_repair_dispatch_request.json
+permissions:
+  contents: read
+  actions: write
+concurrency:
+  group: hq-isolated-repair-dispatch
+  cancel-in-progress: false
+jobs:
+  dispatch:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate one-shot scoped repair and dispatch existing HQ workflow
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+
+          source = Path("automation/hq_repair_dispatch_request.json")
+          request = json.loads(source.read_text(encoding="utf-8"))
+          teams = request.get("teams")
+          repairs = request.get("repairs")
+          if not isinstance(teams, list) or not teams or len(teams) > 2:
+              raise SystemExit("Repair dispatch allows 1-2 selected teams only")
+          if sorted(set(teams)) != sorted(teams) or not set(teams) <= {"13", "15"}:
+              raise SystemExit("Repair dispatch restricted to teams 13 and 15")
+          if not isinstance(repairs, dict) or set(repairs) != set(teams):
+              raise SystemExit("Repair payload must match selected teams")
+          for team in teams:
+              entries = repairs[team]
+              if not isinstance(entries, dict) or len(entries) != 1:
+                  raise SystemExit("Exactly one numbered repair per selected team")
+              for number, detail in entries.items():
+                  if number != {"13": "22", "15": "8"}[team]:
+                      raise SystemExit("Unexpected backlog item")
+                  if not isinstance(detail, dict) or detail.get("attempts") != 1:
+                      raise SystemExit("One bounded repair attempt required")
+                  instruction = detail.get("repair_instruction", "")
+                  if not isinstance(instruction, str) or not 30 <= len(instruction) <= 1200:
+                      raise SystemExit("Missing actionable repair instruction")
+          if request.get("source_run_id") != 40790018384:
+              raise SystemExit("Source run evidence mismatch; do not replay blindly")
+          payload = {
+              "ref": "automation/hq-pilot-13-14-15-20261029",
+              "inputs": {
+                  "chain_depth": "0",
+                  "teams_json": json.dumps(teams),
+                  "repair_instructions_json": json.dumps(repairs),
+              },
+          }
+          url = "https://api.github.com/repos/anigio2705-dev/hangeul-swipji/actions/workflows/hq-six-developers.yml/dispatches"
+          req = Request(url, method="POST", data=json.dumps(payload).encode(),
+                        headers={"Authorization": "Bearer " + os.environ["GITHUB_TOKEN"],
+                                 "Accept": "application/vnd.github+json",
+                                 "Content-Type": "application/json"})
+          with urlopen(req, timeout=30) as response:
+              if response.status != 204:
+                  raise SystemExit("GitHub did not accept repair dispatch")
+          print("Accepted scoped dispatch for teams " + ",".join(teams) +
+                "; this is not proof of successful development.")
+          PY
