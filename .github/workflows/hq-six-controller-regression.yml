@@ -1,0 +1,36 @@
+name: HQ six-team controller regression (isolated)
+on:
+  push:
+    branches:
+      - automation/hq-pilot-13-14-15-20261029
+    paths:
+      - automation/hq_160_task_cycle.py
+      - automation/hq_six_cycle_supervisor.py
+      - automation/test_hq_160_task_cycle.py
+      - automation/test_hq_six_cycle_supervisor.py
+      - .github/workflows/hq-six-developers.yml
+      - .github/workflows/hq-six-controller-regression.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: hq-six-controller-regression-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  controller-tests:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile controller modules
+        run: python -m py_compile automation/hq_160_task_cycle.py automation/hq_six_cycle_supervisor.py automation/hq_six_developers.py
+      - name: Verify all 160 contracts and pending CI guard
+        run: python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+      - name: Verify six-team targeted retry and dispatch gates
+        run: python -m unittest discover -s automation -p 'test_hq_six_cycle_supervisor.py' -v
+      - name: Verify bounded AI patch safety
+        run: python -m unittest discover -s automation -p 'test_hq_six_developers.py' -v
