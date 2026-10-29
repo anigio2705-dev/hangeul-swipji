@@ -39,7 +39,7 @@
       "13"
     ],
     "path": "hangul-board.js",
-    "commit": "a68975a66ee0b7ef6a5b7af0acb7a251749de5b3",
+    "commit": "d7fcf36f838497f45741256ccdcedaf5304f894f",
     "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40807293449",
     "ci_result": "success",
     "ci_conclusion": "success",
@@ -49,8 +49,9 @@
     "implementation_verified": true,
     "final_approved": false,
     "test_command": "node automation/verify_task43.cjs",
-    "scope": "Pre-existing #43 alphabet board independently exercised in Node DOM simulation: 19 consonants, 21 vowels, 399 unique clickable syllables, basic/extended selections, formula and repeat controls. Actual browser/mobile, pronunciation listening and representative review remain unverified.",
-    "review_scope": "Automated semantic regression only; 15-team integration review and public usability pending."
+    "scope": "Pre-existing #43 alphabet board independently exercised in Node DOM simulation: 19 consonants, 21 vowels, 399 unique clickable syllables, basic/extended selections, formula and repeat controls. Actual browser/mobile, pronunciation listening and representative review remain unverified. Last source change to hangul-board.js was d7fcf36f; this run adds only independent verification.",
+    "review_scope": "Automated semantic regression only; 15-team integration review and public usability pending.",
+    "verification_commit": "a68975a66ee0b7ef6a5b7af0acb7a251749de5b3"
   },
   "47": {
     "status": "blocked",
