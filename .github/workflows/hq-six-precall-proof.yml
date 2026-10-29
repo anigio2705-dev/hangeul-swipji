@@ -32,3 +32,5 @@ jobs:
           python -m unittest discover -s automation -p 'test_hq_traffic_lights.py' -v
           python -m unittest discover -s automation -p 'test_hq_six_cycle_supervisor.py' -v
           python -m py_compile automation/hq_six_developers.py
+          python -m unittest discover -s automation -p 'test_hq_six_candidate_artifacts.py' -v
+          python -m py_compile automation/hq_six_candidate_artifacts.py
