@@ -285,6 +285,26 @@ def supervise(root, token, depth, repairs, output):
                 else:
                     verdicts[team].append({"task_number": number, "verdict": "BLOCKED",
                                            "reason": detail})
+                    # A deterministic patch/regression failure after its one
+                    # permitted repair must persist across hourly invocations.
+                    # Otherwise every new workflow forgets the failure and
+                    # spends API budget on the same rejected backlog number.
+                    exhausted = (
+                        status in ("blocked", "retry")
+                        and hint is not None and isinstance(number, int)
+                        and (number, task.get("path")) in CURATED_TARGETS[team]
+                        and isinstance(attempts, int) and attempts >= 1
+                    )
+                    if exhausted and ledger.get(str(number), {}).get("status") not in ("complete", "code_verified"):
+                        ledger[str(number)] = {
+                            "status": "blocked", "owner": team,
+                            "path": task["path"], "block_reason": detail,
+                            "repair_attempts": attempts,
+                            "scope": "Exhausted deterministic repair; requires distinct root-cause fix before retry"
+                        }
+                        # A newly blocked item releases the team to its next
+                        # independent safe assignment, not the same failed item.
+                        progress_teams.add(team)
             elif status in ("already_verified_or_blocked", "dependency_blocked", "awaiting_independent_verification"):
                 verdicts[team].append({"task_number": number, "verdict": "WAIT",
                                        "reason": status})
