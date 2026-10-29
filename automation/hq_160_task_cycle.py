@@ -138,8 +138,15 @@ def _reviewed_ready_assignment(team, catalog, evidence, failures, registry=None,
         if state not in ("unverified", "retry"):
             continue  # no duplicate AI calls for pending CI or verified work
         source_paths = candidate["source_paths"]
-        if len(source_paths) != 1:
-            continue  # existing verify_submission permits one changed file
+        # Read-only source context may span files, but the developer may edit
+        # exactly one explicitly reviewed file. Never infer a target from order.
+        editable = candidate.get("editable_path")
+        if editable is None:
+            if len(source_paths) != 1:
+                continue
+            editable = source_paths[0]
+        if editable not in source_paths:
+            continue
         retry = failures.get(str(number), {})
         attempts = retry.get("attempts", 0)
         if not isinstance(attempts, int) or attempts < 0:
@@ -150,7 +157,7 @@ def _reviewed_ready_assignment(team, catalog, evidence, failures, registry=None,
         if not isinstance(instruction, str) or len(instruction) > 1200:
             raise ValueError("Invalid repair instruction")
         return {
-            "team": team, "task_number": number, "path": source_paths[0],
+            "team": team, "task_number": number, "path": editable,
             "owner": task["owner"], "support": task["support"],
             "acceptance_criterion": task["criterion"],
             "required_evidence": task["evidence_required"],
