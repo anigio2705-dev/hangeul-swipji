@@ -6,8 +6,8 @@
   ],
   "repairs": {},
   "expected_next_task": 49,
-  "expected_team_commit": "635aef9507f0cf908d4382a4be5f5d3e12975607",
-  "reason": "Task #41 has independent source-count and regression CI success and is code_verified (not final). Assign next semantically matched independent #49: team12 phase3/learning.py must recommend weak areas and next learning without representing placement as official certification. Run test_global_learning.py; single bounded AI patch attempt, independently inspect diff and CI. Do not rework #41, #47, or blocked #22.",
+  "expected_team_commit": "9fb8a54b1cc183bd30ca47deab99cd1c76c0a40f",
+  "reason": "Reverify corrected #49 commit 9fb8a54b. Prior AI commit a619 failed immutable semantic gate #40797781568 and was blocked; corrected candidate passed trusted semantic gate and 6 learning tests in #40797845758. Team12 should emit verification_requested with zero API calls. Supervisor must use updated trusted verify_task49.py, inspect exact diff and stage only after independent pass. No blind AI rewrite.",
   "scope": "approved isolated branch only; no main, live database, real payments or public deployment",
   "final_completion_claim": false
 }
