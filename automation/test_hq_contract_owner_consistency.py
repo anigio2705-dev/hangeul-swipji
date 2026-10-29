@@ -64,11 +64,11 @@ def inspect_registry_mappings(registry, root):
             if not isinstance(values, list) or not values:
                 failures.append(f"task #{key} has no {field}")
                 continue
-                        or "\\" in value
+            for value in values:
                 if (not isinstance(value, str) or not value
                         or PurePosixPath(value).is_absolute()
                         or ".." in PurePosixPath(value).parts
-                        or "\\\\" in value
+                        or "\\" in value
                         or not (root / value).is_file()):
                     failures.append(f"task #{key} invalid or absent {field}: {value!r}")
     return failures
