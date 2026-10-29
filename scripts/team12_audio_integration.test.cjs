@@ -1,0 +1,21 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+const source=fs.readFileSync('hangul-core.js','utf8');
+let manifest={recordings:{'가':{kind:'human',src:'./assets/hangul-audio/ac00-r2.mp3',sha256:'a'.repeat(64),sourceUrl:'https://example.org/audio',author:'Recorder',license:'CC BY-SA 4.0'},'나':{kind:'human',disabled:true,holdReason:'teacher review',src:'./assets/hangul-audio/b098-r2.mp3',sha256:'b'.repeat(64),sourceUrl:'https://example.org/audio',author:'Recorder',license:'CC BY-SA 4.0'}}};
+let audioCalls=0,ttsCalls=0,statusText='';
+const doc={baseURI:'https://example.org/',hidden:false,querySelectorAll:()=>[],querySelector:()=>null,dispatchEvent:()=>{},addEventListener:()=>{}};
+class AudioMock{constructor(){this.paused=false;}play(){audioCalls++;queueMicrotask(()=>this.onplaying?.());queueMicrotask(()=>this.onended?.());return Promise.resolve()}pause(){this.paused=true}}
+class SpeechMock{constructor(word){this.text=word;}};
+const speech={cancel(){},speak(u){ttsCalls++;queueMicrotask(()=>u.onstart?.());queueMicrotask(()=>u.onend?.())}};
+const ctx={window:{speechSynthesis:speech,SpeechSynthesisUtterance:SpeechMock,addEventListener:()=>{}},SpeechSynthesisUtterance:SpeechMock,document:doc,fetch:async()=>({ok:true,json:async()=>manifest}),Audio:AudioMock,URL,Event:class{},setTimeout,clearTimeout,console};
+vm.createContext(ctx);vm.runInContext(source,ctx);const H=ctx.window.HSHangul;
+(async()=>{await H.ready;assert.equal(H.consonants.length,19);assert.equal(H.vowels.length,21);assert.equal(new Set(H.consonants.flatMap(c=>H.vowels.map(v=>H.compose(c[0],v[0])))).size,399);
+assert.equal(H.availability('나').state,'held');assert.equal(H.availability('가').state,'ready');
+assert.equal((await H.play('가')).status,'played');assert.equal(audioCalls,1);
+assert.equal((await H.play('나')).status,'held');assert.equal(ttsCalls,0);
+assert.equal((await H.play('다')).status,'missing');assert.equal(ttsCalls,0);
+assert.equal(H.setSyntheticEnabled(true),true);
+assert.equal((await H.play('나')).status,'tts-played');assert.equal(ttsCalls,1);assert.equal(audioCalls,1);
+assert.equal((await H.play('다')).status,'tts-played');assert.equal(ttsCalls,2);
+H.setSyntheticEnabled(false);assert.equal((await H.play('나')).status,'held');
+console.log('PASS: 19 consonants, 21 vowels, 399 syllables; human priority, held isolation, explicit TTS consent, missing states');
+})().catch(e=>{console.error(e);process.exitCode=1});
