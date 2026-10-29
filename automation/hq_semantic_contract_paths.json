@@ -568,7 +568,7 @@
         "15",
         "16"
       ],
-      "state": "CANDIDATE",
+      "state": "BLOCKED",
       "source_paths": [
         "hangul-board.js",
         "hangul-core.js",
@@ -584,7 +584,8 @@
         "파일 네트워크 실패 시 UI에서 재시도 버튼을 제공하는 동작과 전체 399 음절의 동일 상태 검증 미완료",
         "15팀 독립 의미 검증, PC/모바일 실제 브라우저 및 테스트99 배포·대표 승인 미완료",
         "신규 테스트 파일은 pilot branch에만 존재; 중앙 계약 브랜치에 병합/재검증 전 READY 금지",
-        "중앙 계약 브랜치의 테스트 경로는 기존 런타임 검사만 존재; 신규 UI 회귀 테스트는 PR #32의 격리 브랜치에 있으며 아직 통합되지 않음"
+        "중앙 계약 브랜치의 테스트 경로는 기존 런타임 검사만 존재; 신규 UI 회귀 테스트는 PR #32의 격리 브랜치에 있으며 아직 통합되지 않음",
+        "과거 task-evidence #59 code_verified는 코어 런타임만 검증했으며 UI RED CI #40848633295 반례를 통과하지 못해 blocked로 재판정; 격리 수정은 15팀 QA 전"
       ],
       "independent_team15": "PENDING",
       "pilot_branch": "automation/hq-task59-audio-ui-20261029",
@@ -592,7 +593,7 @@
       "pilot_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40848693610",
       "red_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40848633295",
       "pilot_pr": "https://github.com/anigio2705-dev/hangeul-swipji/pull/32",
-      "note": "2026-10-29 18:19 KST central HQ isolated code, not team12 bot: real board DOM red->green; human-only audio runtime remains green. CANDIDATE, not READY or CODE_VERIFIED for full #59; no sound supplied and no test99 deployment. 18:20 KST contract path regression #40848831040 failed because pilot-only test was incorrectly listed as local; corrected without bypassing existence assertion.",
+      "note": "2026-10-29 18:19 KST central HQ isolated code, not team12 bot: real board DOM red->green; human-only audio runtime remains green. CANDIDATE, not READY or CODE_VERIFIED for full #59; no sound supplied and no test99 deployment. 18:20 KST contract path regression #40848831040 failed because pilot-only test was incorrectly listed as local; corrected without bypassing existence assertion. 18:22 KST ledger downgraded from code_verified to blocked on verified UI regression; existing historic CI retained as scoped evidence.",
       "pilot_test_paths": [
         "automation/verify_task59_missing_audio.cjs"
       ]
