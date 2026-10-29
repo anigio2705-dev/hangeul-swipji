@@ -109,5 +109,38 @@ class HQ160TaskCycleTests(unittest.TestCase):
                  "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"}
         self.assertEqual(make_report(checked, {"9": proof})["final_complete"], 1)
 
+    def test_semantic_contract_paths_and_wrong_scope_regressions(self):
+        import json
+        root = Path(__file__).resolve().parents[1]
+        mapping = json.loads((root / "automation/hq_semantic_contract_paths.json").read_text(encoding="utf-8"))
+        tasks = contracts((root / "automation/hq_backlog_160.md").read_text(encoding="utf-8"))
+        evidence = json.loads((root / "automation/task-evidence.json").read_text(encoding="utf-8"))
+        self.assertEqual(1, mapping["schema"])
+        self.assertEqual({22, 41, 47, 49, 51, 52, 55, 109}, {int(n) for n in mapping["items"]})
+        for raw_number, item in mapping["items"].items():
+            number = int(raw_number)
+            with self.subTest(task=number):
+                self.assertEqual(tasks[number]["owner"], item["owner"])
+                self.assertNotIn(item["owner"], item["support"])
+                self.assertTrue(set(item["support"]) - set(tasks[number]["support"]) == set(),
+                                "Supporting team must be authorized in canonical contract")
+                self.assertTrue(item["acceptance"] and item["unmet"])
+                self.assertTrue(item["source_paths"] and item["test_paths"])
+                for path in item["source_paths"] + item["test_paths"]:
+                    self.assertTrue((root / path).is_file(), f"Missing real mapped path for #{number}: {path}")
+                self.assertIn(item["state"], {"CANDIDATE", "BLOCKED", "CODE_VERIFIED", "READY"})
+                if item["state"] == "READY":
+                    self.assertEqual("PASS", item["independent_team15"])
+                    self.assertTrue(item.get("independent_ci_url"), "READY requires exact CI proof")
+                if item["state"] == "CODE_VERIFIED":
+                    self.assertEqual("code_verified", evidence[raw_number]["status"])
+                    self.assertTrue(item.get("evidence_run"))
+        self.assertEqual("BLOCKED", mapping["items"]["47"]["state"])
+        self.assertNotIn(mapping["items"]["47"]["forbidden_mapping"], mapping["items"]["47"]["source_paths"])
+        self.assertIn("phase3/learning.py", mapping["items"]["49"]["source_paths"])
+        self.assertEqual("BLOCKED", mapping["items"]["22"]["state"])
+        self.assertEqual("CANDIDATE", mapping["items"]["51"]["state"])
+        self.assertFalse(any(x["state"] == "READY" for x in mapping["items"].values()))
+
 if __name__ == "__main__":
     unittest.main()
