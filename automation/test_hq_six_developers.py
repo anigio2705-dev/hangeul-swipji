@@ -1,11 +1,46 @@
 import unittest
-from hq_six_developers import apply_patch, validate_candidate
-from hq_160_task_cycle import _semantic_dispatch_gate
+import tempfile
+from pathlib import Path
+from unittest.mock import patch
+from types import SimpleNamespace
+from hq_six_developers import apply_patch, validate_candidate, choose_work_items, run_checks
+from hq_160_task_cycle import _semantic_dispatch_gate, contracts
 
 class BoundedPatchTests(unittest.TestCase):
     def test_runner_must_reject_unreviewed_semantic_task_even_if_ledger_is_stale(self):
         self.assertFalse(_semantic_dispatch_gate(51, 'scripts/audit-hangul-audio.py'))
         self.assertFalse(_semantic_dispatch_gate(22, 'phase3/instant_matching.py'))
+
+    def test_reviewed_ready_reaches_actual_six_team_runner(self):
+        c = contracts("\\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "feature.py").write_text("def feature(): return True\\n")
+            (root / "test_feature.py").write_text("import unittest\\nclass TestFeature(unittest.TestCase):\\n def test_feature(self): self.assertTrue(True)\\n")
+            record = {"owner": "12", "state": "READY",
+                      "source_paths": ["feature.py"], "test_paths": ["test_feature.py"],
+                      "independent_team15": "PASS",
+                      "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"}
+            reg = {"schema": 1, "items": {"45": record}}
+            chosen = choose_work_items("12", c, {}, {}, reg, root)
+            self.assertEqual(len(chosen), 1)
+            self.assertEqual(chosen[0]["number"], 45)
+            self.assertTrue(chosen[0]["dynamic"])
+            self.assertEqual(chosen[0]["tests"], ["test_feature.py"])
+            self.assertEqual(chosen[0]["unsupported_reason"], "")
+            self.assertFalse(any(x["dynamic"] for x in choose_work_items("13", c, {}, {}, reg, root)))
+            # HTML tasks must never be passed to the Python AST patch runner.
+            (root / "feature.html").write_text("<html></html>")
+            record["source_paths"] = ["feature.html"]
+            blocked = choose_work_items("12", c, {}, {}, reg, root)
+            self.assertIn("non-Python", blocked[0]["unsupported_reason"])
+
+    def test_ready_task_specific_unittest_cannot_pass_with_zero_tests(self):
+        fake = SimpleNamespace(returncode=0, stdout="", stderr="Ran 0 tests in 0.000s\\nOK\\n")
+        with patch("hq_six_developers.shell", return_value=fake):
+            ok, message = run_checks("12", "feature.py", ["test_feature.py"])
+        self.assertFalse(ok)
+        self.assertIn("Ran 0 tests", message)
 
     def test_single_unique_patch_and_valid_python(self):
         original = "def calculate_total(value):\n    return value + 1\n" + ("# meaningful existing code context\n" * 5)
