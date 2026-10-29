@@ -242,5 +242,31 @@ class SixTeamSupervisorTests(unittest.TestCase):
         self.assertIn("zero tests", reason)
         self.assertEqual(evidence, {})
 
+
+    def test_dynamic_ready_silent_success_is_not_test_evidence(self):
+        """A zero-exit command with no unittest count must not pass independent QA."""
+        from types import SimpleNamespace
+        catalog = contracts(sample())
+        assignment = {"source": "independently_reviewed_READY_registry",
+                      "task_number": 143, "path": "scripts/team16_locale.py",
+                      "independent_test_paths": ["scripts/test_team16_locale.py"]}
+        commit = "d" * 40
+        def github_response(endpoint, _token):
+            if endpoint.startswith("/branches/"):
+                return {"commit": {"sha": commit}}
+            return {"files": [{"filename": "scripts/team16_locale.py"}],
+                    "commit": {"message": "bot(team16): task #143 isolated regression"}}
+        silent_success = SimpleNamespace(returncode=0, stdout="", stderr="")
+        with patch("hq_six_cycle_supervisor.next_assignment", return_value=assignment), \
+             patch("hq_six_cycle_supervisor.api", side_effect=github_response), \
+             patch("hq_six_cycle_supervisor.cmd", return_value=silent_success):
+            verdict, reason, evidence = independent_check(
+                "16", {"task_number": 143, "path": "scripts/team16_locale.py",
+                       "assignment_source": "reviewed_READY", "commit": commit},
+                "token", catalog)
+        self.assertEqual(verdict, "RETRY")
+        self.assertIn("zero tests", reason)
+        self.assertEqual(evidence, {})
+
 if __name__ == "__main__":
     unittest.main()
