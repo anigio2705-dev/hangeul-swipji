@@ -104,4 +104,36 @@ class ReferralScenariosTests(unittest.TestCase):
     simulate_introduction_review('user_a',bad_role,'user_b','student','accept')
    with self.subTest(role=bad_role),self.assertRaises(SimError):
     simulate_introduction_review('user_a','teacher','user_b',bad_role,'reject')
+ def test_mock_review_detects_duplicate_and_cycles_without_writing(self):
+  from team14_referral_scenarios import simulate_introduction_review
+  def review(edges):
+   return simulate_introduction_review('alice','teacher','bob','student',
+                                       'accept',existing_edges=edges)
+  with self.assertRaises(SimError) as ctx:
+   review([('alice','bob')])
+  self.assertEqual(ctx.exception.code,'CONFLICT')
+  for edges in ([('bob','alice')], [('bob','carol'),('carol','alice')],
+                [('x','y'),('y','x')], [('x','y'),('x','z')]):
+   with self.subTest(edges=edges),self.assertRaises(SimError) as ctx:
+    review(edges)
+   self.assertEqual(ctx.exception.code,'CONFLICT')
+  result=review([('bob','carol'),('x','y')])
+  self.assertEqual(result['review_decision'],'accept')
+  self.assertFalse(result['authorization_granted'])
+  self.assertFalse(result['reward_eligible'])
+  self.assertFalse(result['payment_enabled'])
+  self.assertFalse(result['identity_verified'])
+ def test_mock_review_rejects_malformed_existing_edges(self):
+  from team14_referral_scenarios import simulate_introduction_review
+  def review(edges):
+   return simulate_introduction_review('alice','teacher','bob','student',
+                                       'reject',existing_edges=edges)
+  for bad in (None, 'abc', {}, [('a',)], [('a','b','c')],
+              [[None,'b']], [('a',True)], [('x','x')],
+              [('x','y')]*2, [('a','b')]*10001):
+   with self.subTest(bad=str(bad)[:50]),self.assertRaises(SimError):
+    review(bad)
+  result=review([])
+  self.assertEqual(result['review_mode'],'mock_only')
+  self.assertFalse(result['policy_approved'])
 if __name__=='__main__':unittest.main()
