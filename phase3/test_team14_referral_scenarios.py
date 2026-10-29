@@ -136,4 +136,17 @@ class ReferralScenariosTests(unittest.TestCase):
   result=review([])
   self.assertEqual(result['review_mode'],'mock_only')
   self.assertFalse(result['policy_approved'])
+ def test_mock_rejection_never_adds_proposed_edge(self):
+  from team14_referral_scenarios import simulate_introduction_review
+  # A declined introduction must not be added to the existing graph:
+  # it can be declined even when acceptance would form a cycle or duplicate.
+  for edges in ([('bob','alice')], [('alice','carol')], [('alice','bob')]):
+   with self.subTest(edges=edges):
+    result=simulate_introduction_review('alice','teacher','bob','student',
+                                         'reject',existing_edges=edges)
+    self.assertEqual(result['review_decision'],'reject')
+    self.assertEqual(result['review_mode'],'mock_only')
+    for flag in ('identity_verified','authorization_granted',
+                 'reward_eligible','payment_enabled','policy_approved'):
+     self.assertIs(result[flag],False)
 if __name__=='__main__':unittest.main()

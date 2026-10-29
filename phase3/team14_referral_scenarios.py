@@ -44,9 +44,13 @@ def simulate_introduction_review(introducer_id, introducer_role,
   if source == target or source in graph:
    raise SimError('CONFLICT', 'self or duplicate introduction')
   graph[source] = target
- if introducer_id in graph:
-  raise SimError('CONFLICT', 'introduction already exists')
- graph[introducer_id] = introduced_id
+ # A rejected mock proposal never becomes an edge. Validate the
+ # existing graph in both cases, but only an accepted proposal can collide
+ # with an existing introducer or create a new cycle.
+ if decision == 'accept':
+  if introducer_id in graph:
+   raise SimError('CONFLICT', 'introduction already exists')
+  graph[introducer_id] = introduced_id
  # Reject both a new cycle and an unrelated pre-existing cycle in O(E).
  resolved = set()
  for node in graph:
