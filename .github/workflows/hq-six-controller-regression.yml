@@ -12,7 +12,7 @@ on:
       - .github/workflows/hq-six-controller-regression.yml
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 concurrency:
   group: hq-six-controller-regression-${{ github.ref }}
   cancel-in-progress: true
@@ -34,3 +34,49 @@ jobs:
         run: python -m unittest discover -s automation -p 'test_hq_six_cycle_supervisor.py' -v
       - name: Verify bounded AI patch safety
         run: python -m unittest discover -s automation -p 'test_hq_six_developers.py' -v
+
+      - name: Publish actual controller test verdict to isolated branch
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          HQ_JOB_STATUS: ${{ job.status }}
+        run: |
+          python - <<'PY'
+          import base64, datetime, json, os
+          from urllib.error import HTTPError
+          from urllib.request import Request, urlopen
+
+          url = "https://api.github.com/repos/anigio2705-dev/hangeul-swipji/contents/automation/hq-controller-regression-result.json"
+          headers = {"Authorization": "Bearer " + os.environ["GITHUB_TOKEN"],
+                     "Accept": "application/vnd.github+json",
+                     "Content-Type": "application/json"}
+          ref = "automation/hq-pilot-13-14-15-20261029"
+          result = {
+              "run_id": int(os.environ["GITHUB_RUN_ID"]),
+              "run_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/" + os.environ["GITHUB_RUN_ID"],
+              "source_sha": os.environ["GITHUB_SHA"],
+              "test_status": os.environ["HQ_JOB_STATUS"],
+              "checked_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              "note": "Controller unit/compile tests only; not real website verification or 160-item completion"
+          }
+          for attempt in range(3):
+              try:
+                  with urlopen(Request(url + "?ref=" + ref.replace("/", "%2F"), headers=headers), timeout=20) as response:
+                      existing = json.load(response)
+                  sha = existing["sha"]
+              except HTTPError as exc:
+                  if exc.code != 404:
+                      raise
+                  sha = None
+              payload = {"branch": ref, "message": "ci(hq): record isolated controller regression verdict",
+                         "content": base64.b64encode((json.dumps(result, indent=2) + "\\n").encode()).decode()}
+              if sha:
+                  payload["sha"] = sha
+              try:
+                  with urlopen(Request(url, data=json.dumps(payload).encode(), method="PUT", headers=headers), timeout=30):
+                      print("Published controller test status and run ID")
+                  break
+              except HTTPError as exc:
+                  if exc.code not in (409, 422) or attempt == 2:
+                      raise
+          PY
