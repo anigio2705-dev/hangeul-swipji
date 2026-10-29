@@ -16,7 +16,7 @@ function element(id) {
     setAttribute() {}
   };
 }
-async function exercise(recorded) {
+async function exercise(recorded, held = [], playbackStatus = 'played') {
   const nodes = new Map(), calls = [], statuses = [];
   const get = id => { if (!nodes.has(id)) nodes.set(id, element(id)); return nodes.get(id); };
   const consonants = [
@@ -30,10 +30,10 @@ async function exercise(recorded) {
     consonants, vowels: [['ㅏ', '아']], ready: Promise.resolve(),
     el: (tag, cls, text) => { const e = element(tag); e.textContent = text || ''; return e; },
     compose: () => '가', soundButton: () => element('sound'),
-    availability: word => ({ state: recorded.includes(word) ? 'ready' : 'missing', label: 'test' }),
+    availability: word => ({ state: held.includes(word) ? 'held' : recorded.includes(word) ? 'ready' : 'missing', label: 'test' }),
     refreshBadges() {}, stop() {},
     status: message => statuses.push(message),
-    play: async value => { calls.push(value); return { status: 'played' }; }
+    play: async value => { calls.push(value); return { status: playbackStatus }; }
   };
   const document = {
     getElementById: get, createElement: tag => element(tag), querySelectorAll: () => []
@@ -50,9 +50,16 @@ async function main() {
   const some = await exercise(['가', '나']);
   assert.equal(some.calls.length, 1);
   assert.deepEqual(Array.from(some.calls[0]), ['가', '나']);
+  assert.match(some.statuses.at(-1), /14음절 중 2개.*미재생:/);
+  assert.match(some.statuses.at(-1), /누락·검수 보류/);
   const none = await exercise([]);
   assert.equal(none.calls.length, 0);
-  assert.match(none.statuses.at(-1), /재생 가능한 사람 녹음이 없습니다/);
+  assert.match(none.statuses.at(-1), /14음절 중 재생 가능한 사람 녹음이 0개/);
+  const held = await exercise(['가', '나'], ['다']);
+  assert.deepEqual(Array.from(held.calls[0]), ['가', '나'], 'held recordings must not be played');
+  assert.match(held.statuses.at(-1), /미재생:.*다/);
+  const error = await exercise(['가'], [], 'error');
+  assert.equal(error.statuses.length, 0, 'playback failure must not be overwritten by coverage summary');
   console.log('PASS: board listening button, available-only playback and no-audio fallback');
 }
 main().catch(error => { console.error(error); process.exitCode = 1; });
