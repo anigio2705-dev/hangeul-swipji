@@ -1,0 +1,46 @@
+name: HQ team12 board inventory independent gate
+on:
+  push:
+    branches:
+      - automation/hq-pilot-13-14-15-20261029
+    paths:
+      - scripts/team12_recording_plan.py
+      - docs/team12/recording-plan-399.json
+      - hangul-core.js
+      - hangul-board.js
+      - hangul-audio-manifest.json
+      - scripts/team12_content_regression.py
+      - .github/workflows/hq-team12-board-inventory.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: hq-team12-board-inventory-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  independent-board-audit:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check actual Hangul code syntax
+        run: |
+          node --check hangul-core.js
+          node --check hangul-board.js
+      - name: Independently reconcile live board and manifest
+        run: python scripts/team12_recording_plan.py --check
+      - name: Run existing education and audio inventory regression
+        run: python scripts/team12_content_regression.py
+      - name: Validate numbered contracts remain unchanged
+        run: python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+      - name: Distinguish code checks from listening approval
+        if: always()
+        run: |
+          echo 'Board inventory CI is NOT human listening approval, mobile playback, public deployment, or 160-item final approval.' >> "$GITHUB_STEP_SUMMARY"
