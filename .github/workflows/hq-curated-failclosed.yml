@@ -7,6 +7,9 @@ on:
       - automation/hq_160_task_cycle.py
       - automation/test_hq_curated_failclosed.py
       - automation/test_hq_160_task_cycle.py
+      - automation/hq_semantic_contract_paths.json
+      - docs/HQ_160_DEVELOPMENT_CONTRACTS_20261029.md
+      - docs/HQ_GENERAL_WORK_METHOD_PLAYBOOK_20261029.md
       - .github/workflows/hq-curated-failclosed.yml
   workflow_dispatch:
 permissions:
