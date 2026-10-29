@@ -22,12 +22,12 @@ permissions:
   actions: write
 jobs:
   develop:
-    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029' && contains(fromJSON(inputs.teams_json || '["11","12","13","14","15","16"]'), matrix.team)
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
     strategy:
       fail-fast: false
       max-parallel: 6
       matrix:
-        team: ['11','12','13','14','15','16']
+        team: ${{ fromJSON(inputs.teams_json || '["11","12","13","14","15","16"]') }}
     runs-on: ubuntu-latest
     timeout-minutes: 55
     environment: hq-ai-pilot
