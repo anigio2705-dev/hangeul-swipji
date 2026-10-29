@@ -98,7 +98,7 @@ class HQ160TaskCycleTests(unittest.TestCase):
             "branch_head": sha, "changed_files": [assignment["path"]],
             "independent_test": "failure", "test_error": "assertion 42",
             "ci_conclusion": "success",
-            "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123",
+            "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123", "independent_ci_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         }
         failure = verify_submission(assignment, submission, trusted)
         self.assertEqual(failure["verdict"], "RETRY")
@@ -119,7 +119,7 @@ class HQ160TaskCycleTests(unittest.TestCase):
         self.assertEqual(make_report(checked, {"9": {"status": "complete"}})["final_complete"], 0)
         proof = {"status": "complete", "commit": "a" * 40,
                  "ci_conclusion": "success", "independent_review": "pass",
-                 "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"}
+                 "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123", "independent_ci_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
         self.assertEqual(make_report(checked, {"9": proof})["final_complete"], 1)
 
     def test_semantic_contract_paths_and_wrong_scope_regressions(self):
@@ -155,6 +155,7 @@ class HQ160TaskCycleTests(unittest.TestCase):
                 if item["state"] == "READY":
                     self.assertEqual("PASS", item["independent_team15"])
                     self.assertTrue(item.get("independent_ci_url"), "READY requires exact CI proof")
+                    self.assertRegex(item.get("independent_ci_sha", ""), r"^[0-9a-f]{40}$")
                 if item["state"] == "CODE_VERIFIED":
                     self.assertEqual("code_verified", evidence[raw_number]["status"])
                     self.assertTrue(item.get("evidence_run"))
@@ -193,7 +194,7 @@ class HQ160TaskCycleTests(unittest.TestCase):
                 "source_paths": ["new-feature.py"],
                 "test_paths": ["test-new-feature.py"],
                 "independent_team15": "PASS",
-                "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123",
+                "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123", "independent_ci_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
             }
             registry = {"schema": 1, "items": {"45": record}}
             assignment = next_assignment("12", c, {}, registry=registry, root=root)
@@ -227,7 +228,7 @@ class HQ160TaskCycleTests(unittest.TestCase):
                 return {"owner": "12", "support": ["13"], "state": "READY",
                         "source_paths": [path], "test_paths": ["test.py"],
                         "independent_team15": "PASS",
-                        "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123"}
+                        "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123", "independent_ci_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
             reg = {"schema": 1, "items": {"45": item(45, "shared.py"),
                                           "46": item(46, "shared.py")}}
             self.assertNotEqual((next_assignment("12", c, {}, registry=reg, root=root) or {}).get("task_number"), 45)
