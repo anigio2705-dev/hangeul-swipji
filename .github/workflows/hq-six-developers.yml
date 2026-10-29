@@ -10,6 +10,10 @@ on:
         description: 'Bounded team-specific repair feedback JSON'
         required: false
         default: '{}'
+      teams_json:
+        description: 'Only run eligible team IDs; avoid repeat spending on idle teams'
+        required: false
+        default: '["11","12","13","14","15","16"]'
 concurrency:
   group: hq-160-single-dispatch-lane
   cancel-in-progress: false
@@ -18,7 +22,7 @@ permissions:
   actions: write
 jobs:
   develop:
-    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029' && contains(fromJSON(inputs.teams_json || '["11","12","13","14","15","16"]'), matrix.team)
     strategy:
       fail-fast: false
       max-parallel: 6
