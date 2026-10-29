@@ -387,3 +387,12 @@
 - **검증:** 실제 코드 SHA [`5f06aa657b48`](https://github.com/anigio2705-dev/hangeul-swipji/commit/5f06aa657b489bbaf443fac88ca47eab77b8f1e1), 정확한 SHA [CI #40824395587](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40824395587) SUCCESS. 로그 'PASS #42 seven course routes...'와 canonical 160-task queue 회귀 11개 OK. 독립 의미 검증은 자동 경로·문구 수준이며 실제 학습자 이해도·모바일 브라우저·모든 지원 언어 번역·대표 승인과 구분한다. #42 CODE_VERIFIED(기본 자동 검증)로만 기록, 최종 승인 0/160.
 - **공식 방법:** [OpenAI Agent Improvement Loop](https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop)의 trace→실패 피드백→재사용 가능한 eval 패턴. 적용 전 #42 권장 선행 표시 부재, 적용 후 7개 경로·선행 관계 검증 PASS 및 잘못된 선행/경로 반례 거절. API 모델 호출 0, 추가 외부 배포/운영DB/실결제/대외 접촉 0. CI 11개 회귀 유지, 정확한 순수 개발시간 미계측.
 - **남은 생산성 장애:** 6팀 bot 연속 실행 여전히 BLOCKED; 고정 `CURATED_TARGETS`·한 팀당 1라운드·READY 0 문제는 이번 #42 UI/테스트 변경만으로 해결되지 않았다. 다음 안전한 작업은 #48의 실제 7과정 이동·건너뛰기 코드와 회귀 경로를 찾아 계약화하고 15팀 독립 의미 검증을 거친 READY 공급을 만드는 것이다. #22/#47 기존 차단과 16팀 모의 지원사업/IR 별도 큐 유지.
+
+
+## 2026-10-29 14:39 KST — #42 통과 후 #48 자동 후속 직접 검증
+- #42 새 선행 안내 SHA `5f06aa65`의 CI #40824395587 PASS 이후, 같은 실행에서 #48 기존 학습 단원 이동을 별도 안전 과제로 선택했다. **총괄본부 직접 실행**이며 신규 6팀 AI bot dispatch는 아니다.
+- #48 원문은 미학습 단원 건너뛰기와 이전 단계 복귀. 실제 7과정 JS의 50개 단원 선택 버튼을 확인하고 `automation/verify_task44.cjs`에 미완료 1→50→25→1 이동과 이동만으로 완료 저장되지 않는 회귀를 추가했다.
+- 정확한 수정 SHA `e01dad81b0ffe6b89fc0681a9e124d6437224e16`; 독립 team15-lesson-flow CI #40824601123 **SUCCESS**. 로그는 7과정 #48 이동 검사 PASS 및 기존 #44 350단원 회귀 PASS. #48은 기존 구현의 독립 검증이므로 신규 기능 구현 수는 늘리지 않고 신규 코드 검증 과제 1개로만 계산한다.
+- 새 증거를 `automation/task-evidence.json`, `automation/hq_semantic_contract_paths.json`, 160개 계약 원장에 반영했다. CODE_VERIFIED는 기본 자동 검증 단계이며 실제 PC·모바일 브라우저, 키보드 접근성, 학습자 이해도, 15팀 별도 의미 검증과 대표 최종 승인은 남는다.
+- 공식 OpenAI Agent Improvement Loop의 실패 피드백→반례 회귀 재사용 원칙을 적용했다. 이번 테스트는 실사용을 가정하지 않고 미완료 상태에서도 임의 이동을 허용하는 경계 조건을 검증한다. AI 모델 API 호출 0, main/운영DB/실결제/공개배포 변경 0. 순수 개발시간은 정확히 측정되지 않았으며 CI/대표 검수시간을 개발 속도에 합산하지 않는다.
+- **남은 구조적 차단:** CURATED_TARGETS 소수 고정, READY 0, 6팀 workflow 새 dispatch 없음. #22 권한 오류·#47 잘못된 매핑은 반복 호출 금지. 다음 안전 작업은 의미적으로 올바른 새 READY 과제 공급과 실제 봇 실행을 연결하는 것이다. 16팀 정부지원/IR 가상 심사 별도 큐 유지.
