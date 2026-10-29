@@ -101,6 +101,10 @@ def independent_check(team, task, token, catalog, registry=None, root=Path("."),
         return "RETRY", "Commit lacks a valid assigned backlog number and owned path", {}
     if not isinstance(sha, str) or not re.fullmatch(r"[a-f0-9]{40}", sha):
         return "RETRY", "Missing valid commit SHA", {}
+    # Supporting teams may review, but only the canonical owner can submit a
+    # newly READY dynamic development commit. Preserve wrong-scope rejection.
+    if (number, path) not in CURATED_TARGETS[team] and catalog[number]["owner"] != team:
+        return "RETRY", "Commit lacks a valid assigned backlog number and owned path", {}
     dynamic_tests = []
     if (number, path) not in CURATED_TARGETS[team]:
         # A legitimate newly reviewed READY task must not be rejected merely
