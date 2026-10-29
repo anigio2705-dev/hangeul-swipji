@@ -21,7 +21,8 @@ TASKS = {
         ("scripts/find-human-audio-sources.py", "Harden candidate audio source validation")]),
     "12": ("team12/education-audit-20261028", [
         ("scripts/team12_audio_inventory.py", "Harden education audio inventory validation"),
-        ("scripts/team12_content_regression.py", "Improve education content regression evidence handling")]),
+        ("scripts/team12_content_regression.py", "Verify preservation of 350 lessons and 600 reading entries"),
+        ("phase3/learning.py", "Task #49: recommend weak areas and next learning without claiming certified placement")]),
     "13": ("team13/platform-bfcache-reconnect-20261028", [
         ("phase3/instant_matching.py", "Harden matching error handling without changing match policy")]),
     "14": ("team14/business-systems-audit-20261028", [
@@ -37,7 +38,8 @@ TASKS = {
 CHECKS = {
     "11": [["python", "-m", "py_compile", "scripts/audit-hangul-audio.py"]],
     "12": [["python", "-m", "py_compile", "scripts/team12_audio_inventory.py"],
-           ["python", "scripts/team12_content_regression.py"]],
+           ["python", "scripts/team12_content_regression.py"],
+           ["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_global_learning.py"]],
     "13": [["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_instant_matching.py"]],
     "14": [["python", "-m", "unittest", "discover", "-s", "phase3", "-p", "test_team14_referral_store.py"]],
     "15": [["python", "-m", "py_compile", "scripts/team15_independent_gate.py"]],
