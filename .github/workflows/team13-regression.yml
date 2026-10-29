@@ -1,0 +1,60 @@
+name: Team13 integration branch regression verification
+on:
+  push:
+    branches:
+      - integration/team13-instant-entry-20261030
+    paths:
+      - '.github/workflows/team13-regression.yml'
+      - 'phase3/**'
+      - 'index.html'
+      - 'docs/team13/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  python-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify original content commit is available
+        run: git cat-file -e 7418e32^{commit} && git cat-file -e 7418e32:phase3/content.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run actual checkout Python tests
+        run: |
+          set -o pipefail
+          python3 -m unittest discover -s phase3 -p 'test_*.py' -q 2>&1 | tee team13-python.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: team13-python-log
+          path: team13-python.log
+  browser-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install pinned browser dependencies
+        working-directory: phase3
+        run: npm ci
+      - name: Install Chromium
+        working-directory: phase3
+        run: npx playwright install --with-deps chromium
+      - name: Run actual checkout instant browser tests
+        run: |
+          set -o pipefail
+          node phase3/instant-browser-test.cjs 2>&1 | tee team13-browser.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: team13-browser-log
+          path: |
+            team13-browser.log
+            audit/staging9-instant-results.json
