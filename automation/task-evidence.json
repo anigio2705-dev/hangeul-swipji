@@ -53,6 +53,29 @@
     "review_scope": "Automated semantic regression only; 15-team integration review and public usability pending.",
     "verification_commit": "a68975a66ee0b7ef6a5b7af0acb7a251749de5b3"
   },
+  "44": {
+    "status": "code_verified",
+    "owner": "12",
+    "support": [
+      "13"
+    ],
+    "path": "intro.html;beginner1.html;beginner2.html;intermediate1.html;intermediate2.html;advanced1.html;advanced2.html",
+    "commit": "db439031b90d1914dc20355b426ed410ff221561",
+    "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40813528164",
+    "evidence_run": 40813528164,
+    "ci_result": "success",
+    "ci_conclusion": "success",
+    "ci_head_sha": "db439031b90d1914dc20355b426ed410ff221561",
+    "independent_review": "pass",
+    "task_specific_verified": true,
+    "implementation_verified": true,
+    "final_approved": false,
+    "test_command": "node automation/verify_task44.cjs",
+    "scope": "Existing seven course-page scripts (7×50 lessons) independently executed in deterministic Node DOM: every lesson's quiz correct-answer flow and persistent completion, wrong-answer storage and correction/review on representative first unit of each course, next lesson navigation and reload. 350 quiz flows passed exact SHA CI 40813528164. This adds regression verification, not 350 newly implemented lessons. Real browser/mobile, server cross-device sync, accessibility, audio and representative review remain unverified.",
+    "review_scope": "Automated semantic DOM simulation only; not real browser/real user final approval",
+    "verification_commit": "db439031b90d1914dc20355b426ed410ff221561",
+    "source_implementation": "pre-existing seven course HTML pages"
+  },
   "47": {
     "status": "blocked",
     "owner": "12",
