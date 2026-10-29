@@ -50,13 +50,11 @@ class SixTeamSupervisorTests(unittest.TestCase):
         self.assertEqual(report["verified_new_functional_code"], 0)
         api.assert_not_called()
 
-    def test_independently_tested_commit_dispatches_next_bounded_round(self):
+    def test_independently_tested_commit_stops_if_no_next_safe_task(self):
         report, api = self.run_cycle(committed=True, team="13", task_number=22)
-        self.assertTrue(report["dispatched_next"])
+        self.assertFalse(report["dispatched_next"])
         self.assertEqual(report["verified_new_functional_code"], 1)
-        inputs = api.call_args.kwargs["payload"]["inputs"]
-        self.assertEqual(inputs["chain_depth"], "1")
-        self.assertEqual(json.loads(inputs["teams_json"]), ["13"])
+        api.assert_not_called()
 
     def test_precise_failure_retries_once_then_stops(self):
         report, api = self.run_cycle(committed=True, verdict="RETRY")
@@ -88,10 +86,10 @@ class SixTeamSupervisorTests(unittest.TestCase):
             depth=1, repairs={"13": {"22": repair}}, ledger=ledger)
         self.assertEqual(ledger["22"]["status"], "blocked")
         self.assertEqual(ledger["22"]["repair_attempts"], 1)
-        self.assertTrue(again["dispatched_next"])
-        self.assertEqual(again["dispatched_teams"], ["13"])
-        self.assertEqual(json.loads(api_again.call_args.kwargs["payload"]["inputs"]["teams_json"]), ["13"])
-        # The exhausted #22 is skipped; the next independent team13 task is #47.
+        self.assertFalse(again["dispatched_next"])
+        self.assertEqual(again["dispatched_teams"], [])
+        api_again.assert_not_called()
+        # #47 was a wrong-file mapping and must not be the next AI assignment.
         self.assertNotIn("22", str(again["staged_pending_CI"]))
 
     def test_replayed_exhausted_block_does_not_trigger_next_dispatch_again(self):
@@ -158,13 +156,12 @@ class SixTeamSupervisorTests(unittest.TestCase):
             "13", {"task_number": 47, "path": "phase3/learning.py",
                    "commit": "a" * 40}, "unused", contracts(sample()))
         self.assertEqual(verdict, "RETRY")
-        self.assertIn("Wrong task/file mapping", reason)
+        self.assertIn("valid assigned backlog number", reason)
         self.assertEqual(evidence, {})
 
-    def test_learning_item_47_uses_learning_regression_not_matching(self):
-        self.assertIn("test_global_learning.py", REGRESSIONS[("13", 47)])
+    def test_wrong_scope_47_not_available_for_team13_dispatch(self):
+        self.assertNotIn((47, "phase3/learning.py"), CURATED_TARGETS["13"])
         self.assertIn("test_instant_matching.py", REGRESSIONS[("13", 22)])
-        self.assertNotEqual(REGRESSIONS[("13", 47)], REGRESSIONS[("13", 22)])
 
     def test_unrelated_green_ci_never_promotes_task_without_specific_test(self):
         ledger = {"47": {"status": "in_progress", "independent_review": "pass",
