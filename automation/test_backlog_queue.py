@@ -25,9 +25,15 @@ class BacklogQueueTests(unittest.TestCase):
         ledger = json.loads((Path(__file__).parent / "task-evidence.json").read_text(encoding="utf-8"))
         report = build_report(sample(), ledger)
         self.assertEqual(report["counts"]["complete"], 0)
-        self.assertEqual(report["counts"]["code_verified"], len(ledger))
-        self.assertEqual({x["number"] for x in report["review_queue"]}, {10, 52, 59})
-        self.assertFalse({10, 52, 59} & {x["number"] for x in report["next_queue"]})
+        verified_numbers = {int(n) for n, record in ledger.items()
+                            if record["status"] == "code_verified"}
+        blocked_numbers = {int(n) for n, record in ledger.items()
+                           if record["status"] == "blocked"}
+        self.assertEqual(report["counts"]["code_verified"], len(verified_numbers))
+        self.assertEqual(report["counts"]["blocked"], len(blocked_numbers))
+        self.assertEqual({x["number"] for x in report["review_queue"]}, verified_numbers)
+        queue_numbers = {x["number"] for x in report["next_queue"]}
+        self.assertFalse((verified_numbers | blocked_numbers) & queue_numbers)
 
     def test_exactly_160_and_unique(self):
         self.assertEqual(len(parse_backlog(sample())), 160)
