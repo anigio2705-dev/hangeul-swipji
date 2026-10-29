@@ -1,0 +1,31 @@
+name: HQ task 49 independent semantic audit (isolated)
+on:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - '.github/workflows/hq-task49-audit.yml'
+      - 'automation/verify_task49.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Preserve trusted HQ semantic checker
+        run: cp automation/verify_task49.py /tmp/hq-trusted-task49.py
+      - name: Inspect exact team12 isolated candidate
+        run: |
+          git fetch --depth=1 origin refs/heads/automation/hq-team-12-autodev-20261029
+          git checkout --detach FETCH_HEAD
+          git log -1 --format='%H %s'
+      - name: Trusted weak-skill and next-unit recommendation gate
+        run: python /tmp/hq-trusted-task49.py "$PWD"
+      - name: Existing full learning regressions
+        run: python -m unittest discover -s phase3 -p 'test_global_learning.py' -v
