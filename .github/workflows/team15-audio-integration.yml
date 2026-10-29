@@ -1,0 +1,32 @@
+name: Team15 integration independent audio regression
+on:
+  push:
+    branches:
+      - integration/team15-audio-qa-20261030
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-audio:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check JS syntax before audio behavior
+        run: |
+          node --check hangul-core.js
+          node --check hangul-board.js
+      - name: Check 11+12 mobile/human/opt-in audio integration
+        run: node scripts/test_team15_audio_integration.cjs
+      - name: Existing 12-team board audio and human runtime regression
+        run: |
+          if test -f scripts/test_hq_hangul_human_audio_runtime.cjs; then node scripts/test_hq_hangul_human_audio_runtime.cjs; fi
+      - name: Check original Hangul assets preserved
+        run: |
+          test -f hangul-audio-manifest.json
+          test -f hangul-basics.html
+          test -f hangul-board.js
+          echo 'CI-only staging, no deployment or human-listening claim.'
