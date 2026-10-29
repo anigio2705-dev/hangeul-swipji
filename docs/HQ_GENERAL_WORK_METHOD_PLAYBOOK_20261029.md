@@ -312,3 +312,6 @@
 - **증거 단계 C(연속 자율 운영):** 대표의 추가 지시 없이 여러 번 연속으로 A→B→독립 QA→차기 과제 배정이 이어졌음을 시간순 실행 ID와 커밋으로 증명한다. 최소 3회 연속 사이클 및 2개 이상 서로 다른 개발팀의 실제 AI 호출·코드 변경을 검증 전에는 '6팀 자율 개발 성공' 판정 금지. 이 수치는 내부 검증 관문이지 AGI 인정 기준이 아니다.
 - 팀별 격리 브랜치가 존재한다는 사실은 실제 팀별 개발 활동의 충분조건이 아니다. 성공 CI만으로 실패 원인을 AI가 판단해 수정했다고 추론하지 않는다. 독립 검증팀은 A/B/C 각각 PASS/FAIL/UNKNOWN으로 판정한다.
 - 현재 기준(2026-10-29 12:28 KST): 코드 검증 9/160, 최종 승인 0/160, READY 1, 여섯 팀 연속 개발 미입증. 숫자는 새 근거로 갱신한다.
+
+## 2026-10-29 12:40 KST — #44 next independent development candidate
+- After #56 exact source and queue CI, selected #44 (seven-course lesson continuity) as the next non-conflicting task. Created `automation/verify_task44.cjs` to execute the actual seven course inline scripts in a deterministic Node DOM, exercise wrong answers, persisted mistakes, correction, full score, next-unit navigation and reload. Dedicated CI runs on the isolated branch without model calls or deployment. This is a real regression implementation, not a claim of real browser verification. Keep #44 CANDIDATE until CI and 15-team meaning check pass.

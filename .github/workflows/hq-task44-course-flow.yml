@@ -1,0 +1,31 @@
+name: HQ task44 seven-course lesson flow independent regression
+on:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - 'automation/verify_task44.cjs'
+      - 'intro.html'
+      - 'beginner1.html'
+      - 'beginner2.html'
+      - 'intermediate1.html'
+      - 'intermediate2.html'
+      - 'advanced1.html'
+      - 'advanced2.html'
+      - '.github/workflows/hq-task44-course-flow.yml'
+permissions:
+  contents: read
+jobs:
+  team15-lesson-flow:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Execute seven actual course scripts in deterministic DOM
+        run: node automation/verify_task44.cjs
+      - name: Preserve manual-review boundary
+        if: always()
+        run: echo 'Simulated DOM test is not a real browser, audio, multi-device, or representative approval.' >> "$GITHUB_STEP_SUMMARY"

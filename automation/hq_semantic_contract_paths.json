@@ -89,18 +89,19 @@
         "advanced2.html"
       ],
       "test_paths": [
-        "scripts/team12_content_regression.py"
+        "scripts/team12_content_regression.py",
+        "automation/verify_task44.cjs"
       ],
       "acceptance": "무료 7과정 350단원에서 단원 선택→어휘·문장·문법 설명·예시→연습문제 채점→오답 복습→다음 단원으로의 이동이 끊기지 않고, 단원별 상태가 의도대로 유지됨",
       "unmet": [
-        "7개 과정 각각에서 단원 선택·탭 전환·정답/오답 채점·오답 복습·다음 단원으로의 end-to-end 독립 실행 테스트 부재",
         "현재 scripts/team12_content_regression.py는 주로 딥링크·진도 재개와 콘텐츠 보존을 검사하므로 전체 #44 흐름 통과 증거가 아님",
         "15팀 독립 의미 검증 및 해당 정확한 SHA의 CI 필요",
-        "실제 PC/모바일 브라우저 사용 검증 및 대표 승인 미완료"
+        "실제 PC/모바일 브라우저 사용 검증 및 대표 승인 미완료",
+        "새 DOM 시뮬레이션 CI의 실제 통과 여부 및 테스트 범위 확인 필요"
       ],
       "independent_team15": "PENDING",
       "dependencies": [],
-      "note": "2026-10-29 12:27 KST: 7개 과정의 실제 HTML, learn.html과 기존 team12 딥링크 회귀 경로를 조회해 경로만 상세화. CANDIDATE이며 READY/기능 완료로 인정하지 않음."
+      "note": "2026-10-29 12:27 KST: 7개 과정의 실제 HTML, learn.html과 기존 team12 딥링크 회귀 경로를 조회해 경로만 상세화. CANDIDATE이며 READY/기능 완료로 인정하지 않음. 12:40 KST: seven-course deterministic DOM regression submitted; CI result not yet known. CANDIDATE unchanged."
     },
     "47": {
       "owner": "12",
