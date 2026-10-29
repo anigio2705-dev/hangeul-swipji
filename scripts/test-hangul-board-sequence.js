@@ -60,7 +60,7 @@ async function main() {
   const recovered = await exercise([], { manifestFailed: true, recoverTo: ['가', '나'] });
   assert.equal(recovered.retries, 1, 'failed manifest must retry once on sequence click');
   assert.deepEqual(Array.from(recovered.calls[0]), ['가', '나']);
-  assert.match(recovered.statuses.at(-1), /2\\/14개 재생/);
+  assert.match(recovered.statuses.at(-1), /2\/14개 재생/);
   const stillOffline = await exercise([], { manifestFailed: true });
   assert.equal(stillOffline.retries, 1);
   assert.equal(stillOffline.calls.length, 0);
