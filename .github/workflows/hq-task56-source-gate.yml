@@ -1,0 +1,34 @@
+name: HQ task56 independent Hangul source regression
+on:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - 'automation/verify_task56_source.py'
+      - '.github/workflows/hq-task56-source-gate.yml'
+permissions:
+  contents: read
+jobs:
+  team15-source-review:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify trusted baseline catches only actual candidate bugs
+        run: python automation/verify_task56_source.py --source scripts/find-human-audio-sources.py
+      - name: Fetch exact team11 isolated branch source
+        run: |
+          git fetch --depth=1 origin automation/hq-team-11-autodev-20261029
+          git rev-parse FETCH_HEAD > "$RUNNER_TEMP/task56-team11-sha.txt"
+          git show FETCH_HEAD:scripts/find-human-audio-sources.py > "$RUNNER_TEMP/task56-source.py"
+      - name: Independent real source regression (no network)
+        run: python automation/verify_task56_source.py --source "$RUNNER_TEMP/task56-source.py"
+      - name: Record exact reviewed commit and limits
+        if: always()
+        run: |
+          echo '## Task #56 independent source review' >> "$GITHUB_STEP_SUMMARY"
+          echo "Team11 branch SHA: $(cat "$RUNNER_TEMP/task56-team11-sha.txt" 2>/dev/null || echo unavailable)" >> "$GITHUB_STEP_SUMMARY"
+          echo 'Only mocked candidate search was tested; no human audio, license, listening or public site approved.' >> "$GITHUB_STEP_SUMMARY"
