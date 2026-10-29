@@ -474,3 +474,12 @@
 ### 18:24 KST 교차 감사 정정 — #59 상태와 장부 브랜치 불일치
 
 다른 예약 실행 「한글쉽지 무인 개발」의 **18:24 최신 완료 보고**는 경로 등록 26, CODE_VERIFIED 12, BLOCKED 3이라고 기록했다. 특히 #59의 기존 부분 검증이 새로 발견된 '모' UI 오류를 놓쳤으므로 BLOCKED로 정정했다고 설명한다. 반면 이 문서가 위치한 중앙 격리 브랜치 `automation/hq-pilot-13-14-15-20261029`를 직접 재조회하면 `automation/hq_semantic_contract_paths.json` blob `f9391842`는 24개(CANDIDATE 11/BLOCKED 2/CODE_VERIFIED 11), `automation/task-evidence.json` blob `bb3d03a1`는 CODE_VERIFIED 13(#59 포함), BLOCKED 2(#22/#47)다. **서로 다른 브랜치·스냅샷의 수치를 합치거나 중앙 장부를 검증 없이 자동 덮어쓰지 않는다.** #59 오류·수정·정확한 CI를 검토하고 중앙 계약/증거 원장에 적절한 상태 정정을 별도 독립 감사로 통합해야 한다. 최종 승인 0/160은 두 보고에서 동일하다.
+
+
+## 2026-10-30 ~07:01 KST — #47 실패한 계정 전환의 원자성 회귀(격리 중앙 QA)
+
+- **교차 판독:** 「한글쉽지 무인 개발」의 06:43 KST 저장 결과를 직접 조회. [PR #75](https://github.com/anigio2705-dev/hangeul-swipji/pull/75)의 제품 소스 `adc39d83`와 최종 검증 SHA `ab673c7b`를 구분했고, [전체 통합 CI #40959428019](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40959428019) SUCCESS 및 [브라우저 CI #40959546947](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40959546947) SUCCESS를 확인. **PR #75는 OPEN/미병합, 테스트99 미배포.** 여섯 팀 신규 AI 제품 호출/봇 소스 커밋은 해당 보고 기준 0; READY 0, 최종 0/160.
+- **새로운 결함 가설:** `scripts/team12_server_progress.js`의 `client.pull()`은 `/api/me`가 다른 사용자로 바뀌면 **`/api/free-progress` 조회 성공 전에** 로컬 소유자와 7개 학습 진도 저장소를 이동·삭제했다. 조회가 네트워크 실패/5xx/유효하지 않은 데이터로 종료되면 `pull()===false`인데도 기존 계정 진도가 화면 저장소에서 사라지는 부분 커밋 위험이 있다.
+- **RED→GREEN 재현:** [격리 PR #77](https://github.com/anigio2705-dev/hangeul-swipji/pull/77), 최초 테스트 SHA `9fd66e6e`, [실패 CI #40962529325](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40962529325)에서 `failed server read must not commit an owner change` assertion FAIL. 제품 수정 SHA `b598d0bf`: 원격 진도 응답의 구조 검증을 **소유자 로컬 저장소 변경 전에** 수행. 동일 테스트와 기존 `team12_server_progress.test.js`를 [재검증 CI #40962569783](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40962569783) SUCCESS로 확인.
+- **가설·안전·비용:** 전에는 실패한 원격 GET이 로컬 계정 전환을 일부 확정했고, 이후에는 성공/검증된 응답이 있어야 전환한다. 기존 오프라인 진도는 보존하고 서로 다른 계정의 진도 혼합을 차단하는 최소 수정. 외부 모델 API 호출 0; GitHub Actions Node 테스트 2개 실행(사용 시간/금액은 별도 확인). [OpenAI Agent Improvement Loop](https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop)의 실제 실패→재현 가능한 eval→수정→동일 eval 재실행 원칙을 적용.
+- **경계:** 이 수정은 **중앙 HQ가 격리 브랜치에서 수행한 #47 QA/소스 수정**이지 12팀 AI 봇 실적이 아니다. 15팀의 별도 의미 검증, 오답/즐겨찾기/이어 배우기 통합, 실제 테스트99 계정 교체 및 모바일 E2E, 대표 승인이 남아 **#47 BLOCKED, READY 0, 최종 완료 0/160** 유지. PR #75/#77 모두 미병합. 운영 홈페이지/main/운영 DB/실결제/Render 재배포 금지.

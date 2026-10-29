@@ -1,0 +1,28 @@
+name: HQ task47 atomic account-switch regression (isolated)
+on:
+  push:
+    branches:
+      - audit/hq-six-task47-atomic-switch-20261030-0658
+  pull_request:
+    paths:
+      - 'scripts/team12_server_progress.js'
+      - 'scripts/test_hq_task47_atomic_account_switch.cjs'
+      - '.github/workflows/hq-task47-atomic-account-switch-20261030.yml'
+permissions:
+  contents: read
+jobs:
+  task47-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Verify existing account progress tests
+        run: node scripts/team12_server_progress.test.js
+      - name: Verify atomic account switch after failed server read
+        run: node scripts/test_hq_task47_atomic_account_switch.cjs
+      - name: Scope boundary
+        if: always()
+        run: echo 'Isolated Node regression only; no READY promotion, deploy, production DB, or payment.' >> "$GITHUB_STEP_SUMMARY"
