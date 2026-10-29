@@ -51,6 +51,10 @@ def simulate_introduction_review(introducer_id, introducer_role,
  if decision == 'accept':
   if introduced_id in graph:
    raise SimError('CONFLICT', 'introduced person already has an introducer')
+  # The accepted proposal is an additional edge; keep the resulting mock
+  # graph within the same 10,000-edge limit as existing_edges.
+  if len(graph) >= 10000:
+   raise SimError('VALIDATION_ERROR', 'mock introduction graph limit reached')
   graph[introduced_id] = introducer_id
  # Reject both a new cycle and an unrelated pre-existing cycle in O(E).
  resolved = set()
