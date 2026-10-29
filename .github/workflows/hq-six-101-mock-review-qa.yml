@@ -1,0 +1,33 @@
+name: HQ six #101 mock review matrix independent QA (isolated)
+on:
+  push:
+    branches:
+      - audit/hq-six-101-mock-review-matrix-20261030-0040
+    paths:
+      - 'phase3/team14_referral_scenarios.py'
+      - 'phase3/test_team14_referral_scenarios.py'
+      - '.github/workflows/hq-six-101-mock-review-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test-only-matrix:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile test-only referral source
+        run: python -m py_compile phase3/team14_referral_scenarios.py phase3/test_team14_referral_scenarios.py
+      - name: Run real nonempty scenario and store tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s phase3 -p 'test_team14_referral_scenarios.py' -v 2>&1 | tee /tmp/scenario-tests.log
+          grep -Eq 'Ran [1-9][0-9]* tests' /tmp/scenario-tests.log
+          python -m unittest discover -s phase3 -p 'test_team14_referral_store.py' -v 2>&1 | tee /tmp/store-tests.log
+          grep -Eq 'Ran [1-9][0-9]* tests' /tmp/store-tests.log
+      - name: Confirm this is mock-only (no real money or deployment)
+        run: echo 'No external payment, no deployment, no production DB; only simulated role decisions.'

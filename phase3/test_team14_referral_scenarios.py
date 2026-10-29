@@ -68,4 +68,40 @@ class ReferralScenariosTests(unittest.TestCase):
     self.assertEqual(ctx.exception.code,'VALIDATION_ERROR')
     with self.assertRaises(SimError):
      simulate_introduction('teacher',invalid)
+ def test_mock_review_all_four_roles_both_outcomes_without_authorization(self):
+  from team14_referral_scenarios import simulate_introduction_review
+  seen=set()
+  for from_role in ('teacher','student'):
+   for to_role in ('teacher','student'):
+    for decision in ('accept','reject'):
+     with self.subTest(from_role=from_role,to_role=to_role,decision=decision):
+      result=simulate_introduction_review('user_a',from_role,'user_b',to_role,decision)
+      self.assertEqual(result['review_decision'],decision)
+      self.assertEqual(result['scenario_id'],from_role+'_introduces_'+to_role)
+      self.assertEqual(result['status'],'simulation_only')
+      self.assertEqual(result['review_mode'],'mock_only')
+      for flag in ('identity_verified','role_verified','authorization_granted',
+                   'reward_eligible','real_money','payment_enabled','policy_approved'):
+       self.assertIs(result[flag],False)
+      seen.add((result['scenario_id'],decision))
+  self.assertEqual(len(seen),8)
+ def test_mock_review_rejects_self_spoofed_ids_and_unapproved_decisions(self):
+  from team14_referral_scenarios import simulate_introduction_review
+  for bad_id in (None,True,0,'', 'bad space', [], {},'a'*129):
+   with self.subTest(bad_id=bad_id),self.assertRaises(SimError):
+    simulate_introduction_review(bad_id,'teacher','user_b','student','accept')
+   with self.subTest(bad_id=bad_id),self.assertRaises(SimError):
+    simulate_introduction_review('user_a','teacher',bad_id,'student','reject')
+  with self.assertRaises(SimError) as ctx:
+   simulate_introduction_review('same','teacher','same','student','accept')
+  self.assertEqual(ctx.exception.code,'CONFLICT')
+  for bad_decision in ('approve','accepted','paid','',None,True,0,[],{}):
+   with self.subTest(decision=bad_decision),self.assertRaises(SimError) as ctx:
+    simulate_introduction_review('user_a','teacher','user_b','student',bad_decision)
+   self.assertEqual(ctx.exception.code,'VALIDATION_ERROR')
+  for bad_role in ('admin','partner','Teacher',None,True):
+   with self.subTest(role=bad_role),self.assertRaises(SimError):
+    simulate_introduction_review('user_a',bad_role,'user_b','student','accept')
+   with self.subTest(role=bad_role),self.assertRaises(SimError):
+    simulate_introduction_review('user_a','teacher','user_b',bad_role,'reject')
 if __name__=='__main__':unittest.main()
