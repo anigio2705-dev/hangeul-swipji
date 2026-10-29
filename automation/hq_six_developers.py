@@ -158,7 +158,7 @@ def run_checks(team, path, extra_tests=()):
     for command in commands:
         result = shell(*command, timeout=120)
         output = result.stdout + result.stderr
-        if result.returncode or (extra_tests and command[-4:-3] == ["discover"]
+        if result.returncode or (extra_tests and "discover" in command
                                  and ("Ran 0 tests" in output or "Ran 0 test" in output)):
             return False, output[-2000:] or "Task-specific regression ran zero tests"
     return True, ""
