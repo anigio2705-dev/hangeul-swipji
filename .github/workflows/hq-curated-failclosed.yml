@@ -1,0 +1,32 @@
+name: HQ curated fallback fail-closed regression (isolated)
+on:
+  push:
+    branches:
+      - automation/hq-failclosed-curated-20261029-1733
+    paths:
+      - automation/hq_160_task_cycle.py
+      - automation/test_hq_curated_failclosed.py
+      - automation/test_hq_160_task_cycle.py
+      - .github/workflows/hq-curated-failclosed.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  curated-failclosed:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prove unreviewed legacy assignments cannot bypass semantic gate
+        run: python -m unittest discover -s automation -p test_hq_curated_failclosed.py -v
+      - name: Run task-cycle regression suite
+        run: python -m unittest discover -s automation -p test_hq_160_task_cycle.py -v
+      - name: State acceptance limits
+        if: always()
+        run: |
+          echo 'This CI verifies HQ queue safety only; no team AI call, test99 deployment, or 160-item final acceptance.' >> "$GITHUB_STEP_SUMMARY"
