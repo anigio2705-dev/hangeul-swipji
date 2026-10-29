@@ -179,7 +179,7 @@ def verify_ready_provenance(item, registry, root=Path(".")):
     url = entry.get("independent_ci_url", "")
     token = os.environ.get("GITHUB_TOKEN", "")
     match = re.fullmatch(
-        r"https://github\\.com/anigio2705-dev/hangeul-swipji/actions/runs/([0-9]+)",
+        r"https://github\.com/anigio2705-dev/hangeul-swipji/actions/runs/([0-9]+)",
         url) if isinstance(url, str) else None
     if (entry.get("state") != "READY" or entry.get("independent_team15") != "PASS"
             or not isinstance(sha, str) or not re.fullmatch(r"[a-f0-9]{40}", sha)
