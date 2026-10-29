@@ -7,12 +7,19 @@ on:
       - 'global-language.js'
       - 'automation/test_task143_global_language_contract.cjs'
       - '.github/workflows/hq-task143-global-language-regression.yml'
+  pull_request:
+    branches:
+      - 'automation/hq-pilot-13-14-15-20261029'
+    paths:
+      - 'global-language.js'
+      - 'automation/test_task143_global_language_contract.cjs'
+      - '.github/workflows/hq-task143-global-language-regression.yml'
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
   verify:
-    if: github.ref == 'refs/heads/audit/hq2-task143-global-language-20261029-2000'
+    if: github.ref == 'refs/heads/audit/hq2-task143-global-language-20261029-2000' || (github.event_name == 'pull_request' && github.head_ref == 'audit/hq2-task143-global-language-20261029-2000')
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
