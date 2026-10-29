@@ -1,0 +1,31 @@
+name: HQ task45 independent quiz data integrity audit
+on:
+  push:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - 'automation/verify_task45_quiz_integrity.cjs'
+      - 'intro.html'
+      - 'beginner1.html'
+      - 'beginner2.html'
+      - 'intermediate1.html'
+      - 'intermediate2.html'
+      - 'advanced1.html'
+      - 'advanced2.html'
+      - '.github/workflows/hq-task45-quiz-integrity.yml'
+permissions:
+  contents: read
+jobs:
+  independent-task45-data-audit:
+    if: github.ref == 'refs/heads/automation/hq-pilot-13-14-15-20261029'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate all 1758 actual quiz records and negative fixtures
+        run: node automation/verify_task45_quiz_integrity.cjs
+      - name: Preserve strict task45 scope
+        if: always()
+        run: echo 'Data integrity only; answer meaning, pedagogical explanations, scoring/retry UI, browser and owner review remain unverified. Do not count #45 as CODE_VERIFIED.' >> "$GITHUB_STEP_SUMMARY"
