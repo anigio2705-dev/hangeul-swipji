@@ -233,5 +233,37 @@ class ReadinessTests(unittest.TestCase):
             record["independent_ci_sha"] = "a" * 40
             self.assertEqual(readiness(c, {}, registry, root)["dispatchable_total"], 1)
 
+
+    def test_ready_with_unmet_acceptance_is_blocked_even_if_ci_and_review_are_green(self):
+        """A READY label must never override unresolved acceptance evidence."""
+        c = catalog()
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "feature.py").write_text("def feature(): return True\\n")
+            (root / "test_feature.py").write_text(
+                "import unittest\\nclass TestFeature(unittest.TestCase):\\n"
+                " def test_feature(self): self.assertTrue(True)\\n")
+            record = {
+                "owner": "14", "state": "READY",
+                "source_paths": ["feature.py"], "test_paths": ["test_feature.py"],
+                "independent_team15": "PASS",
+                "independent_ci_url":
+                    "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123",
+                "independent_ci_sha": "a" * 40,
+                "unmet": ["Test99 browser replay not verified"],
+            }
+            registry = {"schema": 1, "items": {"101": record}}
+            result = readiness(c, {}, registry, root)
+            self.assertEqual(result["dispatchable_total"], 0)
+            self.assertIn("unmet_acceptance", result["invalid_ready"][0]["reason"])
+            # The acceptance gate opens only when the independently reviewed
+            # registry explicitly records no remaining unmet criteria.
+            record["unmet"] = []
+            self.assertEqual(readiness(c, {}, registry, root)["dispatchable_total"], 1)
+            record["unmet"] = "not checked"
+            result = readiness(c, {}, registry, root)
+            self.assertEqual(result["dispatchable_total"], 0)
+            self.assertIn("unmet_acceptance", result["invalid_ready"][0]["reason"])
+
 if __name__ == "__main__":
     unittest.main()
