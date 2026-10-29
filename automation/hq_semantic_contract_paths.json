@@ -272,7 +272,7 @@
         "15",
         "16"
       ],
-      "state": "READY",
+      "state": "CODE_VERIFIED",
       "source_paths": [
         "scripts/find-human-audio-sources.py"
       ],
@@ -282,23 +282,25 @@
       ],
       "acceptance": "사람 녹음 화자·발음·속도·무음·파일 형식·확보 방법의 수락 기준을 문서화하고 출처 후보 검색 프로그램이 청취·라이선스 승인과 구분되도록 독립 검증",
       "unmet": [
-        "팀11 격리 브랜치 수정 b22380cd의 HQ 통합 적합성 및 정확한 CI SHA 대조",
-        "출처 후보 메타데이터의 사용권·화자 정보는 참고값으로만 분류하고 실제 사용권/청취 승인은 별도 검증",
-        "팀12 책임/팀11 지원의 실제 구현 검수, 15팀 구현 독립 검증, 브라우저 실사용 및 대표 승인"
+        "실제 녹음 출처 후보의 사용권·화자 정보는 참고값이며 실제 라이선스/청취 승인은 미확인",
+        "실제 녹음 확보 및 PC/모바일 브라우저 청취 검수",
+        "팀12 실사용 통합 검토 및 대표 최종 승인"
       ],
       "independent_team15": "PASS",
       "dependencies": [],
       "standards_path": "docs/team11/human-audio-acceptance-standards.md",
-      "note": "READY is contract/dispatch readiness only. 15-team PASS and CI 40809517831 validate mapping/standards, not final implementation. Separate source CI 40809800997 and 40809915915 passed after team11 isolated corrections; no bot call/commit in bounded workflow 40809565361. No HQ integration, real audio rights, listening, or final approval established.",
+      "note": "2026-10-29 12:37 KST: team11 isolated candidate merged into HQ source at b3a78ce6; invalid title counted as missing was fixed at 4b90f8ed. Exact HEAD independent CI #40813120338 PASS: 6 Hangul titles, invalid path excluded, 3 contract and 11 queue tests. CODE_VERIFIED means source/standards automation only; no actual audio rights/listening/public verification or final approval.",
       "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40809517831",
-      "review_scope": "Independent task56 source/standards/owner/acceptance mapping audit only; not audio approval and not proof that candidate source satisfies all remaining implementation requirements.",
+      "review_scope": "Exact-HQ-SHA automated source/contract/queue independent checks only; no human listening, rights or production approval.",
       "implementation_branch": "automation/hq-team-11-autodev-20261029",
       "candidate_source_commits": [
         "9854ca055dedf7972d74d304a7b1fde4942fb35e",
         "b22380cda770f811e217b39f20312d052586602b"
       ],
       "independent_source_regression": "automation/verify_task56_source.py",
-      "source_regression_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40809915915"
+      "source_regression_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40809915915",
+      "integration_commit": "4b90f8ed765ad2dbc79dcafd8d5b5303673eac8e",
+      "integration_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40813120338"
     },
     "109": {
       "owner": "14",

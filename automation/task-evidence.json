@@ -157,6 +157,30 @@
     "owner": "16",
     "path": "scripts/render-audio-credits.py"
   },
+  "56": {
+    "status": "code_verified",
+    "owner": "12",
+    "support": [
+      "11",
+      "15",
+      "16"
+    ],
+    "path": "scripts/find-human-audio-sources.py",
+    "commit": "4b90f8ed765ad2dbc79dcafd8d5b5303673eac8e",
+    "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40813120338",
+    "ci_result": "success",
+    "ci_conclusion": "success",
+    "ci_head_sha": "4b90f8ed765ad2dbc79dcafd8d5b5303673eac8e",
+    "independent_review": "pass",
+    "task_specific_verified": true,
+    "implementation_verified": true,
+    "final_approved": false,
+    "test_command": "python automation/verify_task56_source.py --source scripts/find-human-audio-sources.py && python -m unittest discover -s automation -p test_task56_audio_contract.py -v && python -m unittest discover -s automation -p test_hq_160_task_cycle.py -v",
+    "scope": "Task #56: team11 isolated candidate integrated into HQ isolated source; six exact mocked Hangul titles, invalid title excluded from missing count, Commons provenance metadata preserved, license and listening unapproved. Exact SHA CI 40813120338: source regression + 3 contract tests + 11 task-queue tests PASS. Recording, rights, real browser, team12 real-use review and representative approval remain pending.",
+    "review_scope": "Independent automated team15-style source/contract/queue CI, not real human audio rights/listening approval",
+    "source_integration_commit": "b3a78ce60c9252f8287cb015b18129aa72468f1f",
+    "negative_regression_commit": "4b90f8ed765ad2dbc79dcafd8d5b5303673eac8e"
+  },
   "59": {
     "status": "code_verified",
     "commit": "f5afd95a2c1b2c2205f6f195ef68e7af2c3641a0",
