@@ -28,7 +28,7 @@ jobs:
           git fetch --depth=1 origin refs/heads/automation/hq-team-12-autodev-20261029
           git checkout --detach FETCH_HEAD
           git log -1 --format='%H %s'
-      - name: Verify team12 task 41 candidate regression
-        run: python scripts/team12_content_regression.py -v
       - name: Independently verify source totals and answer indices
         run: python /tmp/hq-trusted-task41.py "$PWD"
+      - name: Verify team12 task 41 candidate regression
+        run: python scripts/team12_content_regression.py -v
