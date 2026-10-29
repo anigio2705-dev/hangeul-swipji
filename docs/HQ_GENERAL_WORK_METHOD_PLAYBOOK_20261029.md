@@ -396,3 +396,11 @@
 - 새 증거를 `automation/task-evidence.json`, `automation/hq_semantic_contract_paths.json`, 160개 계약 원장에 반영했다. CODE_VERIFIED는 기본 자동 검증 단계이며 실제 PC·모바일 브라우저, 키보드 접근성, 학습자 이해도, 15팀 별도 의미 검증과 대표 최종 승인은 남는다.
 - 공식 OpenAI Agent Improvement Loop의 실패 피드백→반례 회귀 재사용 원칙을 적용했다. 이번 테스트는 실사용을 가정하지 않고 미완료 상태에서도 임의 이동을 허용하는 경계 조건을 검증한다. AI 모델 API 호출 0, main/운영DB/실결제/공개배포 변경 0. 순수 개발시간은 정확히 측정되지 않았으며 CI/대표 검수시간을 개발 속도에 합산하지 않는다.
 - **남은 구조적 차단:** CURATED_TARGETS 소수 고정, READY 0, 6팀 workflow 새 dispatch 없음. #22 권한 오류·#47 잘못된 매핑은 반복 호출 금지. 다음 안전 작업은 의미적으로 올바른 새 READY 과제 공급과 실제 봇 실행을 연결하는 것이다. 16팀 정부지원/IR 가상 심사 별도 큐 유지.
+
+
+## 2026-10-29 14:41 KST — 13번째 코드 검증으로 발견된 검토 큐 누락 오류 수정
+- #48 검증 증거를 추가한 SHA `f78cd7d9`에서 HQ queue CI #40824705443 **FAIL**. `test_checked_in_evidence_is_code_only_not_final_completion`은 새 CODE_VERIFIED #48을 포함한 13개를 기대했으나 검토 목록에서 #56이 누락됐음을 발견했다. 연속성 테스트도 같은 실패를 전파했다. 기능 코드/정답 오류가 아니라 총괄 검토 장부의 잘림 오류였다.
+- **재현 원인:** `automation/backlog_queue.py`가 구현 작업용 `limit=12`를 `review_queue[:limit]`에도 잘못 적용해, 검증된 13번째 이후 과제를 감사에서 숨겼다. 이 상태로는 신규 검증 수가 증가할수록 기존 완료 후보가 검토 대상에서 사라지는 생산성·감사 결함이다.
+- **수정:** 개발 대기열 `next_queue`의 비용 제한은 유지하고, 검토 목록 `review_queue`는 160개 범위 내 검증 과제를 전부 반환하도록 분리했다. 코드 수정 SHA `256ac09be`, 회귀 추가 SHA `16a02d423dde548c3478d989b5628f1fb49f8962`. 새 테스트는 15개 CODE_VERIFIED와 구현 batch limit=3을 입력해 검토 15개 보존·개발 배정 3개 제한·중복 배정 0을 확인한다.
+- **독립 CI:** 정확한 SHA [#40824806387](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40824806387) **SUCCESS**, 로그에서 새 회귀 PASS, 총 64개 테스트 OK. 기존 실패 #40824705443과 비교해 기준을 완화하지 않고 오류 원인만 수정했다.
+- **공식 방법:** OpenAI Agent Improvement Loop의 실패 로그→구체적 반례→수정→재검증을 적용했다. 모델 API 호출 0, 운영 DB/실결제/main/공개 배포 변경 0. 이 수정은 새로운 사업 기능이나 신규 백로그 검증으로 계산하지 않는다. 6팀 신규 AI bot dispatch는 여전히 미실행, READY 0.
