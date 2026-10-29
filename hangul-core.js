@@ -100,5 +100,5 @@
   document.addEventListener('hs-audio-ready',refreshBadges);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});
   window.addEventListener('pagehide',stop);
-  window.HSHangul={consonants,vowels,compose,records,ready,availability,play,stop,status,el,soundButton,refreshBadges};
+  window.HSHangul={consonants,vowels,compose,records,ready,retryManifest:loadManifest,availability,play,stop,status,el,soundButton,refreshBadges};
 })();

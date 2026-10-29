@@ -36,8 +36,20 @@
   $('play-basic-sequence').onclick=async()=>{
     await H.ready;
     const basic=H.consonants.slice(0,14).map(([, ,word])=>word);
-    const available=basic.filter(word=>H.availability(word).state==='ready');
-    if(!available.length){H.status('재생 가능한 사람 녹음이 없습니다. 음원 목록을 확인해 주세요.');return}
+    let available=basic.filter(word=>H.availability(word).state==='ready');
+    // A transient manifest failure must not permanently disable this button.
+    // Single-letter play already retries; the full sequence needs the same path.
+    if(!available.length && H.availability(basic[0]).state==='unavailable'){
+      H.status('음성 목록 연결을 다시 시도하고 있습니다.');
+      await H.retryManifest();
+      available=basic.filter(word=>H.availability(word).state==='ready');
+    }
+    if(!available.length){
+      H.status(H.availability(basic[0]).state==='unavailable'
+        ?'음성 목록 연결 실패 · 다시 눌러 재시도해 주세요.'
+        :'재생 가능한 사람 녹음이 없습니다. 음원 목록을 확인해 주세요.');
+      return;
+    }
     const result=await H.play(available);
     if(result.status==='played' && available.length<basic.length){
       const omitted=basic.filter(word=>!available.includes(word));
