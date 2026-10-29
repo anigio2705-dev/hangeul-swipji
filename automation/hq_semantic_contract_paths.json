@@ -672,11 +672,15 @@
     "verified_preflight_ci": 40941758948,
     "verified_schema_ci": 40941758913,
     "launched_at_utc": "2026-10-29T19:40:00Z",
-    "retry_number": 1,
-    "previous_run_id": 40941856144,
+    "retry_number": 2,
+    "previous_run_id": 40942082940,
     "previous_failure": "All six candidate steps blocked before API by untracked Python bytecode created by pre-call tests; no real model call",
     "safe_repair_pr": 67,
     "safe_repair_ci": 40942014542,
-    "safe_repair_sha": "530f2372e73a1bd655bbb157b5ce609a48cef9b0"
+    "safe_repair_sha": "530f2372e73a1bd655bbb157b5ce609a48cef9b0",
+    "previous_result": "six actual model API attempts; five candidate artifact bot commits; team14 rejected by four referral role IDs missing",
+    "team14_repair_pr": 68,
+    "team14_repair_ci": 40942292435,
+    "next_action": "One bounded team14 candidate regeneration only; five existing artifacts must not incur repeat API cost"
   }
 }
