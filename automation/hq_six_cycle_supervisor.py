@@ -94,10 +94,31 @@ def load_team_results(root):
         result[team] = record
     return result
 
-def independent_check(team, task, token, catalog):
+def independent_check(team, task, token, catalog, ledger=None, registry=None, root=None):
+    """Accept only curated or independently reviewed READY task/file contracts.
+
+    A developer's assignment_source flag is untrusted: the HQ-owned registry
+    must independently resolve the same owner, number, editable file and tests.
+    """
     number, path, sha = task.get("task_number"), task.get("path"), task.get("commit", "")
-    if not isinstance(number, int) or (number, path) not in CURATED_TARGETS[team]:
+    if team not in CURATED_TARGETS or not isinstance(number, int) or number not in catalog:
         return "RETRY", "Commit lacks a valid assigned backlog number and owned path", {}
+    reviewed_tests = []
+    if (number, path) not in CURATED_TARGETS[team]:
+        if task.get("assignment_source") != "reviewed_READY":
+            return "RETRY", "Commit lacks a valid assigned backlog number and owned path", {}
+        assignment = next_assignment(team, catalog, ledger or {}, {},
+                                     registry=registry, root=root)
+        if (not assignment or assignment.get("source") != "independently_reviewed_READY_registry"
+                or assignment.get("task_number") != number or assignment.get("path") != path):
+            return "RETRY", "Unreviewed or mismatched READY task/file contract", {}
+        reviewed_tests = assignment.get("independent_test_paths", [])
+        if (not reviewed_tests or not all(
+                isinstance(p, str) and p.endswith(".py")
+                and Path(p).name.startswith("test_")
+                and ".." not in Path(p).parts and not Path(p).is_absolute()
+                for p in reviewed_tests)):
+            return "RETRY", "READY requires independently reviewed Python unittest paths", {}
     if not isinstance(sha, str) or not re.fullmatch(r"[a-f0-9]{40}", sha):
         return "RETRY", "Missing valid commit SHA", {}
     contract = catalog[number]
@@ -125,12 +146,17 @@ def independent_check(team, task, token, catalog):
             if syntax.returncode:
                 return "RETRY", "Independent syntax check failed: " + syntax.stderr[-350:], {}
             command = REGRESSIONS.get((team, number))
-            if not command:
+            commands = ([command] if command else [
+                ["python", "-m", "unittest", "discover", "-s", str(Path(p).parent),
+                 "-p", Path(p).name] for p in reviewed_tests])
+            if not commands:
                 return "PROVISIONAL", "Syntax verified; independent functional regression not configured", {
                     "commit": sha, "changed_files": files, "syntax": "success"}
-            checked = cmd(command, cwd=temp, timeout=180)
-            if checked.returncode:
-                return "RETRY", "Independent regression failed: " + (checked.stdout + checked.stderr)[-500:], {}
+            for check_command in commands:
+                checked = cmd(check_command, cwd=temp, timeout=180)
+                output = checked.stdout + checked.stderr
+                if checked.returncode or ("Ran 0 tests" in output or "Ran 0 test " in output):
+                    return "RETRY", "Independent regression failed or ran zero tests: " + output[-500:], {}
             if (team, number) == ("12", 41):
                 # The AI may edit its own regression file. Run an immutable HQ
                 # verifier OUTSIDE the candidate worktree as an independent gate.
@@ -147,7 +173,7 @@ def independent_check(team, task, token, catalog):
                 if trusted_check.returncode:
                     return "RETRY", "Trusted #49 recommendation semantics failed: " + (
                         trusted_check.stdout + trusted_check.stderr)[-500:], {}
-            if team == "16":
+            if (team, number) == ("16", 55):
                 rendered = Path(temp) / "hangul-audio-credits.html"
                 manifest = Path(temp) / "hangul-audio-manifest.json"
                 if not rendered.is_file() or not manifest.is_file():
@@ -157,7 +183,7 @@ def independent_check(team, task, token, catalog):
                     return "RETRY", "Audio attribution rows do not match manifest", {}
             return "TEST_PASS_PENDING_CI", "Independent diff and functional regression passed; final backlog gate remains", {
                 "commit": sha, "changed_files": files, "independent_test": "success",
-                "test_command": " ".join(command) + (
+                "test_command": " && ".join(" ".join(c) for c in commands) + (
                     " + trusted automation/verify_task41.py" if (team, number) == ("12", 41) else
                     " + trusted automation/verify_task49.py" if (team, number) == ("12", 49) else "")}
         finally:
@@ -253,7 +279,7 @@ def supervise(root, token, depth, repairs, output):
             status = task.get("status")
             if status in ("committed", "verification_requested"):
                 try:
-                    verdict, reason, evidence = independent_check(team, task, token, catalog)
+                    verdict, reason, evidence = independent_check(team, task, token, catalog, ledger=ledger)
                 except Exception as exc:
                     verdict, reason, evidence = "RETRY", "Independent verification error: " + type(exc).__name__, {}
                 verdicts[team].append({"task_number": number, "verdict": verdict,
