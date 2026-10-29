@@ -1,0 +1,26 @@
+name: HQ six-runner artifact fail-closed audit (isolated)
+on:
+  push:
+    branches:
+      - audit/hq-six-runner-artifact-failclosed-20261029-1949
+    paths:
+      - automation/test_hq_six_workflow_failure.py
+      - .github/workflows/hq-six-developers.yml
+      - .github/workflows/hq-six-runner-artifact-audit.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  runner-artifact-regression:
+    if: github.ref == 'refs/heads/audit/hq-six-runner-artifact-failclosed-20261029-1949'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Execute exact embedded runner with simulated failures
+        run: python -m unittest discover -s automation -p 'test_hq_six_workflow_failure.py' -v
+      - name: Verify controller safety regressions remain intact
+        run: python -m unittest discover -s automation -p 'test_hq_six_cycle_supervisor.py' -v

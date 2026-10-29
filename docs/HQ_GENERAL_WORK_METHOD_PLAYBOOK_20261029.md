@@ -474,3 +474,11 @@
 ### 18:24 KST 교차 감사 정정 — #59 상태와 장부 브랜치 불일치
 
 다른 예약 실행 「한글쉽지 무인 개발」의 **18:24 최신 완료 보고**는 경로 등록 26, CODE_VERIFIED 12, BLOCKED 3이라고 기록했다. 특히 #59의 기존 부분 검증이 새로 발견된 '모' UI 오류를 놓쳤으므로 BLOCKED로 정정했다고 설명한다. 반면 이 문서가 위치한 중앙 격리 브랜치 `automation/hq-pilot-13-14-15-20261029`를 직접 재조회하면 `automation/hq_semantic_contract_paths.json` blob `f9391842`는 24개(CANDIDATE 11/BLOCKED 2/CODE_VERIFIED 11), `automation/task-evidence.json` blob `bb3d03a1`는 CODE_VERIFIED 13(#59 포함), BLOCKED 2(#22/#47)다. **서로 다른 브랜치·스냅샷의 수치를 합치거나 중앙 장부를 검증 없이 자동 덮어쓰지 않는다.** #59 오류·수정·정확한 CI를 검토하고 중앙 계약/증거 원장에 적절한 상태 정정을 별도 독립 감사로 통합해야 한다. 최종 승인 0/160은 두 보고에서 동일하다.
+
+## 2026-10-29 19:52 KST — 6팀 실패 결과 유실 및 이전 회차 결과 재사용 방지 (격리 감사)
+
+- **문제/가설:** 19:49 직전 중앙 제어 CI [#40860514024](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40860514024)는 성공했지만, `.github/workflows/hq-six-developers.yml`의 인라인 Python은 실패 분기에서 `os.environ`을 사용하면서 `os`를 import하지 않았다. 또한 회차 시작 전 `/tmp/team-result.json`을 지우지 않아 두 번째 호출이 결과를 생성하지 않으면 직전 회차의 `committed` 결과를 다시 집계할 위험이 있었다. 이는 중앙 제어 PASS와 실제 6팀 실행 가능성이 다르다는 반례다.
+- **재현/반례:** 격리 브랜치 `audit/hq-six-runner-artifact-failclosed-20261029-1949`에 인라인 스크립트를 직접 추출·실행하는 `automation/test_hq_six_workflow_failure.py` 2개 회귀 테스트 추가. 실패 CI [#40860785780](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40860785780)에서 실패 경로 `NameError: os is not defined`와 오래된 결과의 재집계가 각각 검출됨(1 ERROR, 1 FAIL).
+- **수정:** `os` import 및 매 회차 시작 직전 `result_file.unlink(missing_ok=True)` 적용. 코드 SHA [`8389af63`](https://github.com/anigio2705-dev/hangeul-swipji/commit/8389af63db559dc7eec7dea0c61a7aabd080ec9c). 동일 2개 회귀와 기존 감독 프로그램 검증이 독립 CI [#40860836255](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40860836255)에서 PASS.
+- **방법/검증:** OpenAI 공식 [Agent Improvement Loop](https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop)의 실행 trace→반례 eval→하네스 수정→재검증 방식을 적용. 이전: 실패 기록 누락·과거 결과 재사용 가능. 이후: 오류 또는 결과 누락은 `BLOCKED`, 신규 커밋 0으로 보존. 단일 실패 모의실행으로 API 호출 없음, 격리 CI만 사용. 운영/DB/결제/테스트99 배포 변경 없음.
+- **판정/남은 조건:** 격리 제어 코드 PASS이지만 15팀 독립 리뷰와 중앙 통합 전 **CANDIDATE**. 실제 6팀 AI 호출·새 bot 기능 커밋·READY 승격·테스트99 실사용 검증은 입증되지 않았으므로 최종 완료 0/160 유지. 다음에는 승인된 격리 HQ에 통합한 뒤 실제 실패 job artifact와 다음 번호 승계를 별도 검증한다.
