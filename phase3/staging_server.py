@@ -195,6 +195,9 @@ class StagingHandler(server.Handler):
                     'videoUIVersion': 'embedded-preview-v1',
                     'appSHA256': hashlib.sha256((server.ROOT/'app.js').read_bytes()).hexdigest(),
                     'configuredOrigin': self.server.staging.origin,
+                    'deployedCommit': (os.environ.get('RENDER_GIT_COMMIT', '').lower()
+                                       if re.fullmatch(r'[0-9a-fA-F]{40}', os.environ.get('RENDER_GIT_COMMIT', ''))
+                                       else None),
                     'sourceSHA256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()})
             except Exception:
                 return self.send(503, {'ok': False})
