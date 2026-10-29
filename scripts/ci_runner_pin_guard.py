@@ -14,13 +14,13 @@ PINNED_RUNNER = re.compile(r"(?m)^    runs-on:\s*ubuntu-24\.04\s*(?:#.*)?$")
 
 def validate_workflow(text: str) -> list[str]:
     failures = []
-    validate_job = re.search(r"(?m)^  validate:[ \\t]*$", text)
+    validate_job = re.search(r"(?m)^  validate:[ ]*$", text)
     if not validate_job:
         failures.append("INTEGRATION_VALIDATE_JOB_MISSING")
         job_body = ""
     else:
         remainder = text[validate_job.end():]
-        next_job = re.search(r"(?m)^  [A-Za-z0-9_-]+:[ \\t]*$", remainder)
+        next_job = re.search(r"(?m)^  [A-Za-z0-9_-]+:[ ]*$", remainder)
         job_body = remainder[:next_job.start()] if next_job else remainder
     if not PINNED_RUNNER.search(job_body):
         failures.append("PLAYWRIGHT_RUNNER_MUST_BE_UBUNTU_24_04")
