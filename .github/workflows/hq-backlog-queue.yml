@@ -9,6 +9,8 @@ on:
       - 'automation/task-evidence.json'
       - 'automation/hq_160_task_cycle.py'
       - 'automation/test_hq_160_task_cycle.py'
+      - 'automation/test_hq_six_cycle_supervisor.py'
+      - 'automation/test_hq_traffic_lights.py'
       - 'automation/hq_backlog_160.md'
   workflow_dispatch:
 permissions:
