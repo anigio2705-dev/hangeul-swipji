@@ -1,0 +1,33 @@
+name: HQ2 task22 read-only booking bridge regression (isolated)
+on:
+  push:
+    branches:
+      - automation/hq2-task22-readonly-bridge-20261029
+    paths:
+      - phase3/instant_matching.py
+      - phase3/test_instant_matching.py
+      - .github/workflows/hq2-task22-readonly-bridge.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  booking-bridge-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: phase3
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify real HTTP matching and read-only reservation bridge
+        run: python -m unittest discover -s phase3 -p test_instant_matching.py -v
+      - name: Verify independent matching event security contract
+        run: python -m unittest discover -s phase3 -p test_hq_matching_contract.py -v
+      - name: Explain acceptance limits
+        if: always()
+        run: |
+          echo 'This isolated CI does not deploy test99 or prove Jitsi media/representative approval.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'A read-only reservation endpoint must not expire unrelated instant sessions.' >> "$GITHUB_STEP_SUMMARY"
