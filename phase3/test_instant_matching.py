@@ -110,6 +110,29 @@ class InstantMatchingTests(unittest.TestCase):
             self.assertEqual(before,dict(db.execute('SELECT * FROM bookings').fetchone()))
 
 
+    def test_reservation_list_does_not_mutate_stale_instant_match(self):
+        """A read-only booking list must not end an unrelated instant session.
+
+        The next instant status/join action still performs normal TTL cleanup.
+        """
+        learner, learner_id = self.account('readonly-learner@example.test')
+        partner, _ = self.account('readonly-partner@example.test', 'partner', True)
+        self.assertEqual('waiting', self.call(learner, 'join')['state'])
+        offered = self.call(partner, 'join')
+        self.assertEqual('offered', offered['state'])
+        match_id = offered['matchId']
+        with server.connect() as db:
+            db.execute('UPDATE instant_queue SET seen=seen-? WHERE user_id=?',
+                       (matching.TTL + 10, learner_id))
+            self.assertEqual(2, db.execute('SELECT count(*) FROM instant_queue').fetchone()[0])
+        self.assertEqual([], self.call(partner, 'reservations')['reservations'])
+        with server.connect() as db:
+            match = db.execute('SELECT state FROM instant_matches WHERE id=?', (match_id,)).fetchone()
+            self.assertEqual('offered', match['state'],
+                             'Read-only reservation listing must not expire instant matches')
+            self.assertEqual(2, db.execute('SELECT count(*) FROM instant_queue').fetchone()[0])
+        self.assertEqual('idle', self.call(partner, 'status')['state'])
+
     def test_unapproved_partner_cannot_join_or_obtain_room(self):
         learner,_=self.account('learner@example.test')
         unapproved,_=self.account('unapproved@example.test','partner')
