@@ -25,7 +25,10 @@ function addStyle(){if(document.getElementById('hs-site-language-css'))return;va
 function attach(){
 addStyle();var bar=document.getElementById('hs-site-language-bar');if(!bar){bar=document.createElement('div');bar.id='hs-site-language-bar';bar.className='notranslate';bar.setAttribute('translate','no');bar.innerHTML='<label for="hs-site-language-select">🌐 언어 / Language</label><select id="hs-site-language-select" aria-label="Website language"></select><div id="hs-language-status" role="status"></div>';document.body.appendChild(bar)}
 var existingSelect=document.getElementById('language')||document.getElementById('lang');
-// All supported languages, including English, use full-page translation.
+// Some course pages have a complete, native Korean/English renderer. Keep it
+// authoritative for those two languages instead of overriding its state.
+var nativeBilingual=!!(existingSelect&&typeof existingSelect.onchange==='function'&&Array.from(existingSelect.options||[]).some(function(o){return o.value==='en'}));
+// Other supported languages use explicitly labelled machine translation.
 // Preserve the language being studied when translating the surrounding interface.
 document.querySelectorAll('#consonants,#vowels,#syllables,.board,[data-sound],#selected-syllable,#selected-formula').forEach(function(el){el.classList.add('notranslate');el.setAttribute('translate','no')});if(existingSelect){bar.style.setProperty('display','none','important');var headerStatus=document.createElement('p');headerStatus.id='hs-header-language-status';headerStatus.setAttribute('role','status');headerStatus.className='notranslate';headerStatus.style.cssText='margin:0;padding:0 16px;font-size:12px;color:#795322;max-width:100%';(existingSelect.closest('header')||existingSelect.parentElement).appendChild(headerStatus)}
 var labels={ko:'언어',en:'Language',ja:'言語',es:'Idioma','zh-CN':'语言',ru:'Язык',mn:'Хэл',vi:'Ngôn ngữ'};var label=bar.querySelector('label');if(label)label.textContent='🌐 '+labels[lang];
@@ -33,9 +36,15 @@ var select=document.getElementById('hs-site-language-select');select.replaceChil
 function go(code){if(!valid.has(code))return;store(code);cookie(code);var url=new URL(location.href);url.searchParams.set('lang',code);url.searchParams.set('translate_version','4');location.assign(url.toString())}
 select.addEventListener('change',function(){go(select.value)});
 var desktop=document.getElementById('language')||document.getElementById('lang');
-if(desktop){var nativeOptions=Array.from(desktop.options||[]);if(nativeOptions.length){languages.forEach(function(x){if(!nativeOptions.some(function(o){return o.value===x[0]})){var opt=document.createElement('option');opt.value=x[0];opt.textContent=x[1];desktop.appendChild(opt)}});Array.from(desktop.options).forEach(function(o){if(!valid.has(o.value))o.remove()});desktop.value=lang;desktop.addEventListener('change',function(e){var code=desktop.value;if(!valid.has(code))return;e.stopImmediatePropagation();go(code)},true)}}
+if(desktop){var nativeOptions=Array.from(desktop.options||[]);if(nativeOptions.length){languages.forEach(function(x){if(!nativeOptions.some(function(o){return o.value===x[0]})){var opt=document.createElement('option');opt.value=x[0];opt.textContent=x[1];desktop.appendChild(opt)}});Array.from(desktop.options).forEach(function(o){if(!valid.has(o.value))o.remove()});desktop.value=lang;desktop.addEventListener('change',function(e){var code=desktop.value;if(!valid.has(code))return;
+if(nativeBilingual&&(code==='ko'||code==='en')&&(lang==='ko'||lang==='en')){lang=code;store(code);cookie(code);select.value=code;return}
+e.stopImmediatePropagation();go(code)},true)}}
 document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(!a)return;try{var u=new URL(a.href,location.href);if(u.origin===location.origin&&(u.pathname.endsWith('.html')||u.pathname.endsWith('/'))){u.searchParams.set('lang',lang);a.href=u.href}}catch(err){}},true);
 document.querySelectorAll('a[href]').forEach(function(a){var raw=a.getAttribute('href');if(!raw||raw[0]==='#'||/^(mailto:|tel:|javascript:)/i.test(raw))return;try{var u=new URL(raw,location.href);if(u.origin===location.origin&&(u.pathname.endsWith('.html')||u.pathname.endsWith('/'))){u.searchParams.set('lang',lang);a.href=u.href}}catch(e){}});
+if(nativeBilingual&&(lang==='ko'||lang==='en')){
+  existingSelect.value=lang;existingSelect.onchange({target:existingSelect});
+  cookie(lang);status('');return;
+}
 if(lang==='ko'){cookie('ko');status('');return}
 cookie(lang);status(message('loading'));
 var host=document.createElement('div');host.id='hs-google-translate-host';host.className='notranslate';document.body.appendChild(host);
