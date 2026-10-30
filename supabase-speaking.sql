@@ -16,12 +16,15 @@ create table if not exists public.matches (
  id uuid primary key default gen_random_uuid(),
  learner_id uuid not null references public.profiles(id),
  partner_id uuid not null references public.profiles(id),
- status text not null default 'requested' check (status in ('requested','accepted','rejected','finished')),
+ status text not null default 'requested' check (status in ('requested','accepted','rejected','cancelled','finished')),
  room_code text unique,
  created_at timestamptz not null default now(),
  updated_at timestamptz not null default now(),
  check(learner_id<>partner_id)
 );
+-- Upgrade existing pilot databases so learners can cancel a pending request.
+alter table public.matches drop constraint if exists matches_status_check;
+alter table public.matches add constraint matches_status_check check (status in ('requested','accepted','rejected','cancelled','finished'));
 create unique index if not exists one_open_learner on public.matches(learner_id) where status in ('requested','accepted');
 create unique index if not exists one_open_partner on public.matches(partner_id) where status='accepted';
 alter table public.profiles enable row level security;
@@ -109,6 +112,15 @@ begin
  update public.matches set status='finished',updated_at=now() where id=match_id and status='accepted' and (learner_id=auth.uid() or partner_id=auth.uid());
  if not found then raise exception '종료할 수업이 없습니다';end if;
 end $$;
+-- A learner may cancel only their own still-pending request; accepted calls must use finish_match.
+create or replace function public.cancel_match(match_id uuid) returns void language plpgsql security definer set search_path='' as $
+begin
+ update public.matches set status='cancelled',updated_at=now()
+ where id=match_id and learner_id=auth.uid() and status='requested';
+ if not found then raise exception '취소할 대화 요청이 없습니다';end if;
+end $;
+revoke all on function public.cancel_match(uuid) from public, anon, authenticated;
+grant execute on function public.cancel_match(uuid) to authenticated;
 revoke all on function public.set_availability(boolean) from public, anon, authenticated;
 revoke all on function public.request_match(uuid) from public, anon, authenticated;
 revoke all on function public.respond_match(uuid,boolean) from public, anon, authenticated;
