@@ -3,6 +3,18 @@ CREATE TABLE IF NOT EXISTS users(id TEXT PRIMARY KEY,email TEXT UNIQUE NOT NULL,
 CREATE TABLE IF NOT EXISTS sessions(token TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),expires REAL NOT NULL);
 CREATE TABLE IF NOT EXISTS slots(id TEXT PRIMARY KEY,teacher_id TEXT NOT NULL REFERENCES users(id),start REAL NOT NULL,end REAL NOT NULL,CHECK(end>start));
 CREATE TABLE IF NOT EXISTS bookings(id TEXT PRIMARY KEY,learner_id TEXT NOT NULL REFERENCES users(id),teacher_id TEXT NOT NULL REFERENCES users(id),slot_id TEXT NOT NULL REFERENCES slots(id),unit_id TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'reserved',price INTEGER NOT NULL,referrer_id TEXT REFERENCES users(id),room TEXT NOT NULL UNIQUE,created_at REAL NOT NULL,evidence TEXT NOT NULL DEFAULT '',homework TEXT NOT NULL DEFAULT '',feedback TEXT NOT NULL DEFAULT '',score INTEGER,review TEXT NOT NULL DEFAULT '',rating INTEGER,CHECK(learner_id<>teacher_id));
+-- Immutable, server-selected TEST catalog product at booking creation.
+-- Historical bookings are deliberately not backfilled from mutable user prices.
+CREATE TABLE IF NOT EXISTS booking_product_snapshots(
+ booking_id TEXT PRIMARY KEY REFERENCES bookings(id),
+ product_code TEXT NOT NULL CHECK(product_code IN ('trial_15','partner_25','professional_25')),
+ duration_minutes INTEGER NOT NULL CHECK(duration_minutes IN (15,25)),
+ price_krw INTEGER NOT NULL CHECK(price_krw IN (6000,10000,15000)),
+ currency TEXT NOT NULL DEFAULT 'KRW' CHECK(currency='KRW'));
+CREATE TRIGGER IF NOT EXISTS booking_product_no_update BEFORE UPDATE ON booking_product_snapshots
+ BEGIN SELECT RAISE(ABORT,'immutable booking product snapshot'); END;
+CREATE TRIGGER IF NOT EXISTS booking_product_no_delete BEFORE DELETE ON booking_product_snapshots
+ BEGIN SELECT RAISE(ABORT,'immutable booking product snapshot'); END;
 CREATE TABLE IF NOT EXISTS rate_snapshots(booking_id TEXT PRIMARY KEY REFERENCES bookings(id),commission_bps INTEGER NOT NULL,referral_bps INTEGER NOT NULL,processor_bps INTEGER NOT NULL,refund_bps INTEGER NOT NULL,tax_bps INTEGER NOT NULL,policy TEXT NOT NULL DEFAULT 'illustrative-test-v1');
 CREATE TABLE IF NOT EXISTS unit_snapshots(booking_id TEXT PRIMARY KEY REFERENCES bookings(id),content TEXT NOT NULL,sha256 TEXT NOT NULL);
 CREATE TRIGGER IF NOT EXISTS unit_no_update BEFORE UPDATE ON unit_snapshots BEGIN SELECT RAISE(ABORT,'immutable unit snapshot'); END;
