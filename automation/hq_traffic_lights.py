@@ -188,6 +188,39 @@ def readiness(catalog, ledger, registry, root=Path(".")):
     result["candidate_supply_next"] = {
         team: (items[0]["task"] if items else None) for team, items in supply.items()
     }
+    # BLOCKED is not READY, but blocked tasks still require an owner-specific
+    # evidence-repair intake. Otherwise #22/#47 vanish from the six-team queue
+    # and the supervisor can incorrectly report that no team has work.
+    # This lane is read-only: it NEVER dispatches AI or changes approval state.
+    repair_supply = {team: [] for team in TEAMS}
+    for number in result["blocked"]:
+        task = catalog[number]
+        entry = entries[str(number)]
+        source = entry.get("source_paths", [])
+        tests = entry.get("test_paths", [])
+        repair_supply[task["owner"]].append({
+            "task": number, "owner": task["owner"],
+            "source_paths": source if isinstance(source, list) else [],
+            "test_paths": tests if isinstance(tests, list) else [],
+            "unmet": entry.get("unmet", []),
+            "independent_review": entry.get("independent_team15", "PENDING"),
+            "lane": "BLOCKED_REPAIR",
+        })
+    for team in TEAMS:
+        repair_supply[team].sort(key=lambda item: item["task"])
+    result["blocked_repair_supply"] = repair_supply
+    result["blocked_repair_next"] = {
+        team: (items[0]["task"] if items else None)
+        for team, items in repair_supply.items()
+    }
+    result["intake_next"] = {
+        team: ({"task": result["blocked_repair_next"][team], "lane": "BLOCKED_REPAIR"}
+               if result["blocked_repair_next"][team] is not None
+               else {"task": result["candidate_supply_next"][team], "lane": "CANDIDATE_REVIEW"}
+               if result["candidate_supply_next"][team] is not None
+               else None)
+        for team in TEAMS
+    }
     result["dispatchable_total"] = len(result["dispatchable"])
     result["rule"] = ("READY is a static queue candidate only; exact SHA, live CI and "
                       "independent task regression must be revalidated before promotion.")
