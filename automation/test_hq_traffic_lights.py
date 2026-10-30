@@ -246,6 +246,38 @@ class ReadinessTests(unittest.TestCase):
                     self.assertIn("unsupported_python_unittest_runner",
                                   verdict["invalid_ready"][0]["reason"])
 
+    def test_ready_symlink_alias_must_not_edit_protected_or_alias_test(self):
+        """READY paths cannot use in-repo symlinks to hide protected targets."""
+        c = catalog()
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "automation").mkdir()
+            (root / "automation" / "protected.py").write_text("pass\n")
+            (root / "automation" / "test_protected.py").write_text("pass\n")
+            (root / "feature.py").write_text("pass\n")
+            (root / "test_feature.py").write_text("pass\n")
+            record = {"owner": "16", "state": "READY",
+                      "source_paths": ["feature.py"],
+                      "test_paths": ["test_feature.py"],
+                      "independent_team15": "PASS",
+                      "independent_ci_url":
+                          "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123",
+                      "independent_ci_sha": "a" * 40}
+            registry = {"schema": 1, "items": {"143": record}}
+            self.assertEqual(readiness(c, {}, registry, root)["dispatchable_total"], 1)
+            for alias, target in (("feature.py", "automation/protected.py"),
+                                  ("test_feature.py", "automation/test_protected.py")):
+                with self.subTest(alias=alias):
+                    path = root / alias
+                    path.unlink()
+                    path.symlink_to(target)
+                    verdict = readiness(c, {}, registry, root)
+                    self.assertEqual(verdict["dispatchable_total"], 0)
+                    self.assertIn("symlink_or_aliased_path",
+                                  verdict["invalid_ready"][0]["reason"])
+                    path.unlink()
+                    path.write_text("pass\n")
+
     def test_ready_must_have_exact_ci_sha_not_only_green_url(self):
         c = catalog()
         with tempfile.TemporaryDirectory() as d:

@@ -102,6 +102,14 @@ def readiness(catalog, ledger, registry, root=Path(".")):
                  and len(tests) == len(set(tests))
                  and not set(source).intersection(tests)
                  and all(valid_path(p) for p in source + tests))
+        # GitHub contents may contain an in-repo symlink. A seemingly harmless
+        # feature.py alias could actually target automation/protected.py; the
+        # string-only executor allowlist would then patch a protected file.
+        # Reject all aliased source/test paths before dispatch or AI spending.
+        alias_safe = (isinstance(source, list) and isinstance(tests, list)
+                      and all(isinstance(p, str)
+                              and (base / p).resolve() == base / p
+                              for p in source + tests))
         # The bounded developer can execute only a single non-protected Python
         # source and Python unittest test_*.py files. Static READY eligibility
         # must agree with the executor; otherwise an unsupported JS/HTML or
@@ -116,11 +124,12 @@ def readiness(catalog, ledger, registry, root=Path(".")):
                                     and Path(p).name.startswith("test_") for p in tests))
         deps = all(ledger.get(str(d), {}).get("status") == "complete"
                    for d in task["dependencies"])
-        if not (authorized and reviewed and ci_ref and ci_sha_ok and paths and deps and editable_ok and runner_supported):
+        if not (authorized and reviewed and ci_ref and ci_sha_ok and paths and deps and editable_ok and runner_supported and alias_safe):
             missing = [name for name, ok in (("owner", authorized), ("independent_review", reviewed),
                 ("ci_reference", ci_ref), ("exact_ci_sha", ci_sha_ok), ("real_paths", paths),
                 ("single_editable_path", editable_ok), ("dependencies", deps),
-                ("unsupported_python_unittest_runner", runner_supported)) if not ok]
+                ("unsupported_python_unittest_runner", runner_supported),
+                ("symlink_or_aliased_path", alias_safe)) if not ok]
             result["invalid_ready"].append({"task": number, "reason": ", ".join(missing)})
             continue
         assignment = {"task": number, "owner": task["owner"],
