@@ -233,5 +233,39 @@ class ReadinessTests(unittest.TestCase):
             record["independent_ci_sha"] = "a" * 40
             self.assertEqual(readiness(c, {}, registry, root)["dispatchable_total"], 1)
 
+    def test_blocked_owners_receive_repair_intake_without_ready_promotion(self):
+        """#22/#47 must be routed for evidence repair even when READY=0."""
+        c = catalog()
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            for path in ("instant.py", "test_instant.py", "progress.js", "test_progress.js"):
+                (root / path).write_text("placeholder\\n")
+            registry = {"schema": 1, "items": {
+                "22": {"owner": "13", "state": "BLOCKED",
+                       "source_paths": ["instant.py"], "test_paths": ["test_instant.py"],
+                       "unmet": ["403 unauthorized participant regression"]},
+                "47": {"owner": "12", "state": "BLOCKED",
+                       "source_paths": ["progress.js"], "test_paths": ["test_progress.js"],
+                       "unmet": ["cross-account progress restoration"]},
+                "101": {"owner": "14", "state": "CANDIDATE",
+                        "source_paths": ["instant.py"], "test_paths": ["test_instant.py"],
+                        "unmet": ["independent QA"]},
+            }}
+            out = readiness(c, {}, registry, root)
+            self.assertEqual(out["dispatchable_total"], 0)
+            self.assertEqual(out["blocked_repair_next"]["13"], 22)
+            self.assertEqual(out["blocked_repair_next"]["12"], 47)
+            self.assertEqual(out["intake_next"]["13"], {"task": 22, "lane": "BLOCKED_REPAIR"})
+            self.assertEqual(out["intake_next"]["12"], {"task": 47, "lane": "BLOCKED_REPAIR"})
+            self.assertEqual(out["intake_next"]["14"], {"task": 101, "lane": "CANDIDATE_REVIEW"})
+            self.assertIsNone(out["intake_next"]["11"])
+            repair = out["blocked_repair_supply"]["13"][0]
+            self.assertEqual(repair["owner"], "13")
+            self.assertEqual(repair["source_paths"], ["instant.py"])
+            self.assertEqual(repair["test_paths"], ["test_instant.py"])
+            self.assertEqual(repair["unmet"], ["403 unauthorized participant regression"])
+            self.assertEqual(out["candidate_supply"]["13"], [])
+            self.assertEqual(out["blocked"], [22, 47])
+
 if __name__ == "__main__":
     unittest.main()
