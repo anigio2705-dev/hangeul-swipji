@@ -71,6 +71,13 @@ def cleanup(db, now):
 
 
 def end(db, m):
+    # Closing an instant room must also revoke the linked booking-room endpoint.
+    # Preserve the booking and slot for an auditable history; never delete them
+    # just to satisfy a stale privacy test. A verified session-finish already
+    # moved its booking to completed and is deliberately left unchanged.
+    db.execute("""UPDATE bookings SET status='cancelled'
+      WHERE id IN (SELECT booking_id FROM instant_booking_links WHERE match_id=?)
+      AND status='in_class'""", (m['id'],))
     db.execute("UPDATE instant_matches SET state='ended' WHERE id=?", (m['id'],))
     db.execute('DELETE FROM instant_queue WHERE user_id IN (?,?)', (m['learner_id'], m['partner_id']))
 
@@ -184,8 +191,33 @@ def create_instant_booking(db, m, now):
       VALUES(?,?,?,?,?,?,?,?,?)""",
       (booking_id,m['learner_id'],m['partner_id'],slot_id,
        'instant-simulated-session','in_class',partner['price'],m['room'],now))
+    # The outer HTTP BEGIN IMMEDIATE transaction commits booking and snapshot
+    # together; a failed insert rolls both back. No actual money is involved.
+    product = server_test_product_choice(partner)
+    if product:
+        db.execute('''INSERT INTO booking_product_snapshots
+          (booking_id,product_code,duration_minutes,price_krw,currency)
+          VALUES(?,?,?,?,?)''', (booking_id,*product,'KRW'))
     db.execute('INSERT INTO instant_booking_links VALUES(?,?)',(m['id'],booking_id))
     return linked_booking(db,m['id'])
+
+
+def server_test_product_choice(partner):
+    """Select only a verified, exact test catalog contract at booking creation.
+
+    Never trust browser price/product claims or infer a product at settlement.
+    Non-catalog conversational sessions remain usable, but cannot be bound to
+    a simulated paid product without a committed snapshot.
+    """
+    if not partner or partner['approved'] != 1:
+        return None
+    products = {
+        ('partner', 6000): ('trial_15', 15, 6000),
+        ('teacher', 6000): ('trial_15', 15, 6000),
+        ('partner', 10000): ('partner_25', 25, 10000),
+        ('teacher', 15000): ('professional_25', 25, 15000),
+    }
+    return products.get((partner['role'], partner['price']))
 
 
 def instant_session(db, u, match_id):
