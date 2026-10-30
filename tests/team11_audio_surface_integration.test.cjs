@@ -23,3 +23,16 @@ test('shared engine is human-first and synthetic speech defaults off',()=>{
   assert.match(core,/if\(!syntheticEnabled&&missing\.length\)/);
   assert.match(core,/utterance\.lang='ko-KR'/);
 });
+
+
+test('mobile audio resume fix is cache-busted on both learner surfaces',()=>{
+  for(const page of ['hangul-basics.html','hangul-week.html']){
+    assert.match(read(page),/hangul-core\\.js\\?v=20261030-team11-foreground3/,
+      page+' must not serve an older cached core after mobile background resume');
+  }
+});
+test('seven-day learner UI does not falsely claim pronunciation was reviewed',()=>{
+  const page=read('hangul-week.html');
+  assert.doesNotMatch(page,/♪ 표시는 검수된 사람 녹음입니다/);
+  assert.match(page,/청취 검수 전/);
+});
