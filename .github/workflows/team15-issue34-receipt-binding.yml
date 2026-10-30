@@ -1,0 +1,35 @@
+name: Team15 independent Issue34 receiver receipt-binding security
+on:
+  push:
+    branches:
+      - audit/team15-issue34-receipt-binding-20261030-1740
+    paths:
+      - 'automation/hq_issue34_receiver.py'
+      - 'automation/test_hq_issue34_receiver.py'
+      - 'automation/test_hq_issue34_receipt_binding.py'
+      - '.github/workflows/team15-issue34-receipt-binding.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-receiver-security:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Existing receiver contract and new receipt-binding regressions
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_issue34_receiver.py' -v
+          python -m unittest discover -s automation -p 'test_hq_issue34_receipt_binding.py' -v
+      - name: Verify no issue-write or AI secrets granted
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          workflow=Path('.github/workflows/team15-issue34-receipt-binding.yml').read_text()
+          assert 'issues: write' not in workflow
+          assert 'OPENAI_API_KEY' not in workflow
+          print('Independent CI read-only; no model dispatch, READY promotion or deploy')
+          PY
