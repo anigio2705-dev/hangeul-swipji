@@ -189,7 +189,8 @@
       const done=(result)=>{if(finished)return;finished=true;if(timer!==null)cancelTimer(timer);if(release===cancelSynthetic)release=null;resolve(result)};
       const cancelSynthetic=()=>done({status:'cancelled'});
       release=cancelSynthetic;
-      if(schedule)timer=schedule(()=>{window.speechSynthesis.cancel();done({status:'tts-timeout'})},12000);
+      // The browser may synchronously emit onend inside cancel(). Settle timeout first.
+      if(schedule)timer=schedule(()=>{done({status:'tts-timeout'});try{window.speechSynthesis.cancel()}catch(_){}},12000);
       utterance.onstart=()=>{if(token===run)status('기기 한국어 합성음 재생 중: '+word+' · 사람 녹음 아님')};
       utterance.onend=()=>done({status:'tts-played'});
       utterance.onerror=()=>done({status:'tts-error'});
