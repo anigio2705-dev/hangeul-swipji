@@ -31,7 +31,7 @@ const server=http.createServer((req,res)=>{
       const errors=[];page.on('pageerror',e=>errors.push(e.message));
       await page.route('https://translate.google.com/**',r=>r.abort());
       await page.goto(base+'/index.html?lang=unsupported',{waitUntil:'domcontentloaded'});
-      await page.locator('#language option[value="vi"]').waitFor();
+      await page.locator('#language option[value="vi"]').waitFor({state:'attached'});
       const options=await page.locator('#language option').evaluateAll(els=>els.map(e=>e.value));
       assert.deepEqual(options,expected,profile.name+' language menu');
       assert.equal(await page.locator('#language').inputValue(),'ko',profile.name+' invalid query fallback');
@@ -39,17 +39,17 @@ const server=http.createServer((req,res)=>{
       await page.waitForURL(url=>url.searchParams.get('lang')==='es');
       assert.equal(await page.evaluate(()=>localStorage.getItem('hs-site-language')),'es',profile.name+' saved locale');
       await page.goto(base+'/index.html?lang=unsupported',{waitUntil:'domcontentloaded'});
-      await page.locator('#language option[value="vi"]').waitFor();
+      await page.locator('#language option[value="vi"]').waitFor({state:'attached'});
       assert.equal(await page.locator('#language').inputValue(),'es',profile.name+' valid saved fallback');
       await page.evaluate(()=>{
         localStorage.setItem('hs-site-language','fr');
         localStorage.setItem('hs-language','de');
       });
       await page.goto(base+'/index.html?lang=unsupported',{waitUntil:'domcontentloaded'});
-      await page.locator('#language option[value="vi"]').waitFor();
+      await page.locator('#language option[value="vi"]').waitFor({state:'attached'});
       assert.equal(await page.locator('#language').inputValue(),'ko',profile.name+' invalid saved fallback');
       await page.goto(base+'/global-language.html?lang=ko',{waitUntil:'domcontentloaded'});
-      await page.locator('#from option[value="vi"]').waitFor();
+      await page.locator('#from option[value="vi"]').waitFor({state:'attached'});
       for(const id of ['from','to']){
         const labOptions=await page.locator('#'+id+' option').evaluateAll(els=>els.map(e=>e.value));
         assert.deepEqual(labOptions,expected,profile.name+' translator '+id+' options');
