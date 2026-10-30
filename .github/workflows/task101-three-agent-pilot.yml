@@ -7,6 +7,13 @@ on:
       - 'automation/task101_three_agent_pilot.py'
       - 'automation/test_task101_three_agent_pilot.py'
       - '.github/workflows/task101-three-agent-pilot.yml'
+  pull_request:
+    branches:
+      - support/task101-four-pair-acceptance-20261030-2139
+    paths:
+      - 'automation/task101_three_agent_pilot.py'
+      - 'automation/test_task101_three_agent_pilot.py'
+      - '.github/workflows/task101-three-agent-pilot.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -15,7 +22,11 @@ concurrency:
   cancel-in-progress: false
 jobs:
   team11:
-    if: github.ref == 'refs/heads/support/task101-three-agent-handoff-pilot-20261030'
+    if: >-
+      (github.event_name == 'push' && github.ref == 'refs/heads/support/task101-three-agent-handoff-pilot-20261030') ||
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/support/task101-three-agent-handoff-pilot-20261030') ||
+      (github.event_name == 'pull_request' && github.head_ref == 'support/task101-three-agent-handoff-pilot-20261030' &&
+       github.event.pull_request.head.repo.full_name == github.repository && github.actor == 'anigio2705-dev')
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     environment: hq-ai-pilot
