@@ -1,0 +1,26 @@
+name: HQ2 Team13-Team14 exact booking status contract
+on:
+  push:
+    branches:
+      - integration/hq2-team14-partial-booking-status-20261030
+  pull_request:
+    paths:
+      - phase3/team14_booking_events.py
+      - phase3/team14_persistent.py
+      - phase3/test_team14_booking_events.py
+      - .github/workflows/hq2-team14-booking-status.yml
+permissions:
+  contents: read
+jobs:
+  exact-status:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Python syntax validation
+        run: python -m py_compile phase3/team14_booking_events.py phase3/team14_persistent.py phase3/test_team14_booking_events.py
+      - name: Independent exact-status and idempotency regression
+        run: python -m unittest discover -s phase3 -p 'test_team14_booking_events.py' -v
