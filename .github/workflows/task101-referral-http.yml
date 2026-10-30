@@ -6,6 +6,7 @@ on:
       - support/team14-task101-signup-referrer-policy-20261030-2038
       - support/task101-revoked-existing-referrer-20261030-2123
       - support/task101-four-pair-acceptance-20261030-2139
+      - support/task101-referral-reward-split-20261030
     paths:
       - 'phase3/server.py'
       - 'phase3/test_team14_referral_http.py'
