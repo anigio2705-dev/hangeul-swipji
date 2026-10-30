@@ -258,8 +258,11 @@ class Handler(BaseHTTPRequestHandler):
             if not re.fullmatch(r'[^\s@]+@[^\s@]+\.[^\s@]+',email) or not isinstance(password,str) or not 12<=len(password)<=128 or len(nickname)<2 or role not in ('learner','partner','teacher') or d.get('adultConsent') is not True: raise Error('이메일·12자 이상 비밀번호·이름·성인 동의를 확인하세요')
             rid=None
             if d.get('referralCode'):
-                ref=db.execute('SELECT id FROM users WHERE referral_code=?',(text(d['referralCode'],40),)).fetchone()
-                if not ref: raise Error('추천코드가 없습니다')
+                # Registration and authenticated referral linking share one
+                # trusted inviter-role policy; admin/revoked users cannot invite.
+                ref=db.execute('SELECT id,role FROM users WHERE referral_code=?',(text(d['referralCode'],40),)).fetchone()
+                if not ref or ref['role'] not in ('learner','partner','teacher'):
+                    raise Error('추천코드가 없습니다')
                 rid=ref['id']
             uid=ident(); code=secrets.token_hex(5)
             db.execute('INSERT INTO users(id,email,password,nickname,role,referral_code,referred_by,created_at) VALUES(?,?,?,?,?,?,?,?)',(uid,email,hash_password(password),nickname,role,code,rid,time.time()))
@@ -494,12 +497,24 @@ class Handler(BaseHTTPRequestHandler):
                 if db.execute("SELECT 1 FROM bookings b JOIN slots s ON s.id=b.slot_id WHERE b.learner_id=? AND b.status NOT IN ('cancelled','refunded','expired') AND s.start<? AND s.end>?",(uid,slot['end'],slot['start'])).fetchone(): raise Error('학습자 일정이 겹칩니다',409)
                 ref=u['referred_by']
                 if d.get('referralCode'):
-                    r=db.execute('SELECT id FROM users WHERE referral_code=?',(text(d['referralCode'],40),)).fetchone()
-                    if not r: raise Error('추천코드가 없습니다')
+                    r=db.execute('SELECT id,role FROM users WHERE referral_code=?',(text(d['referralCode'],40),)).fetchone()
+                    if not r or r['role'] not in ('learner','partner','teacher'):
+                        raise Error('추천코드가 없습니다')
                     if ref and ref!=r['id']: raise Error('가입 시 추천인을 변경할 수 없습니다')
                     ref=r['id']
                 if ref in (uid,slot['teacher_id']): raise Error('본인 또는 거래 상대 추천은 보상 대상이 아닙니다')
                 if ref and not u['referred_by']:
+                    # Booking may bind the same permanent parent as /api/referrals/link.
+                    # Check the full ancestry first so this alternate entry point
+                    # cannot create a cycle that the direct link API rejects.
+                    visited={uid}
+                    current=ref
+                    while current:
+                        if current in visited: raise Error('순환 소개 관계는 허용되지 않습니다',409)
+                        visited.add(current)
+                        ancestor=db.execute('SELECT referred_by FROM users WHERE id=?',(current,)).fetchone()
+                        if not ancestor: raise Error('소개 관계의 계정이 없습니다',409)
+                        current=ancestor['referred_by']
                     db.execute('UPDATE users SET referred_by=? WHERE id=? AND referred_by IS NULL',(ref,uid))
                     audit(db,uid,'direct_referrer_bound',uid,ref)
                 bid=ident(); db.execute('INSERT INTO bookings(id,learner_id,teacher_id,slot_id,unit_id,price,referrer_id,room,created_at) VALUES(?,?,?,?,?,?,?,?,?)',(bid,uid,slot['teacher_id'],slot['id'],str(unit['id']),slot['price'],ref,'hs-test-'+secrets.token_urlsafe(24),time.time())); audit(db,uid,'booking',bid)
