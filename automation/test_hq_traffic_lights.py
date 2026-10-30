@@ -216,6 +216,36 @@ class ReadinessTests(unittest.TestCase):
             self.assertIn("independent_ci_sha_missing",
                           blocked["candidate_supply"]["14"][0]["blockers"])
 
+    def test_ready_must_reject_unsupported_executor_before_dispatch(self):
+        """A signed READY registry cannot assign JS, workflow, or non-unittest patches to the Python-only runner."""
+        c = catalog()
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            for name in ("global-language.js", "test_language.cjs",
+                         "feature.py", "spec_feature.py", "test_feature.py"):
+                (root / name).write_text("pass\\n")
+            (root / "automation").mkdir()
+            (root / "automation" / "protected.py").write_text("pass\\n")
+            record = {"owner": "16", "state": "READY",
+                      "source_paths": ["feature.py"], "test_paths": ["test_feature.py"],
+                      "independent_team15": "PASS",
+                      "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123",
+                      "independent_ci_sha": "a" * 40}
+            registry = {"schema": 1, "items": {"143": record}}
+            self.assertEqual(readiness(c, {}, registry, root)["dispatchable_total"], 1)
+            for source, test in (
+                ("global-language.js", "test_language.cjs"),
+                ("feature.py", "spec_feature.py"),
+                ("automation/protected.py", "test_feature.py"),
+            ):
+                with self.subTest(source=source, test=test):
+                    record["source_paths"] = [source]
+                    record["test_paths"] = [test]
+                    verdict = readiness(c, {}, registry, root)
+                    self.assertEqual(verdict["dispatchable_total"], 0)
+                    self.assertIn("unsupported_python_unittest_runner",
+                                  verdict["invalid_ready"][0]["reason"])
+
     def test_ready_must_have_exact_ci_sha_not_only_green_url(self):
         c = catalog()
         with tempfile.TemporaryDirectory() as d:
