@@ -109,8 +109,49 @@ def inspect(comments):
                           and valid_turn(data, round_no, turn_no, previous_id,
                                          seen_hypotheses)), None)
         if candidate is None:
-            return report(round_no, turn_no, "AWAIT_TEAM_COMMENT",
-                          previous_id, history, len(comments))
+            # Only the trusted central owner may explicitly skip a missing
+            # turn after a deadline. Missing is never interpreted as consent.
+            skip = next(((sid, value) for sid, marker, value in parsed
+                         if sid > previous_id and sid not in consumed
+                         and marker == "HQ_TURN_SKIP_V1"
+                         and set(value) == {"round", "turn", "read_previous",
+                                            "reason"}
+                         and type(value["round"]) is int
+                         and type(value["turn"]) is int
+                         and value["round"] == round_no
+                         and value["turn"] == turn_no
+                         and value["read_previous"] ==
+                             REPO + "/issues/34#issuecomment-" + str(previous_id)
+                         and isinstance(value["reason"], str)
+                         and value["reason"].startswith("deadline_passed:")
+                         and len(value["reason"]) >= 25), None)
+            if skip is None:
+                return report(round_no, turn_no, "AWAIT_TEAM_COMMENT",
+                              previous_id, history, len(comments))
+            sid, value = skip
+            consumed.add(sid)
+            history.append({"round": round_no, "turn": turn_no,
+                            "team": TEAM_BY_TURN[turn_no], "comment_id": None,
+                            "decision_id": sid, "decision": "NO_RESPONSE_SKIP",
+                            "evidence_status": "NO_TEAM_EVIDENCE"})
+            previous_id = sid
+            if turn_no < 6:
+                turn_no += 1
+                continue
+            summary = next(((mid, val) for mid, mark, val in parsed
+                            if mid > sid and mark == "HQ_ROUND_SUMMARY_V1"
+                            and set(val) == {"round", "last_comment_id", "summary"}
+                            and val["round"] == round_no
+                            and val["last_comment_id"] == sid
+                            and isinstance(val["summary"], str)
+                            and len(val["summary"].strip()) >= 12), None)
+            if summary is None:
+                return report(round_no, turn_no, "AWAIT_CENTRAL_SUMMARY",
+                              previous_id, history, len(comments))
+            previous_id = summary[0]
+            consumed.add(previous_id)
+            round_no, turn_no = round_no + 1, 1
+            continue
         cid, data = candidate
         consumed.add(cid)
         acceptance = next(((aid, marker, value) for aid, marker, value in parsed
