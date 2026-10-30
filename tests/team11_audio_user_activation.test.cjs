@@ -361,3 +361,34 @@ test('direct optional TTS reports cancelled when mobile pagehide cancels speech 
     'browser onend emitted by cancel() must not report synthetic playback success');
   assert.equal(cancellations>=2,true);
 });
+
+
+test('backgrounded mobile page rejects new human and optional TTS playback until restored',async()=>{
+  const handlers={};let audioStarts=0,ttsStarts=0;
+  const human={kind:'human',src:'./assets/hangul-audio/ac00-r2.mp3',
+    sha256:'a'.repeat(64),sourceUrl:'https://example.test/recording',
+    author:'speaker',license:'CC-BY'};
+  const document={baseURI:'https://example.test/hangul-basics.html',hidden:false,
+    addEventListener(){},dispatchEvent(){},querySelectorAll:()=>[],querySelector:()=>null};
+  const context={
+    document,URL,Event:class{},setTimeout,clearTimeout,
+    window:{addEventListener(name,fn){handlers[name]=fn},
+      SpeechSynthesisUtterance:class{constructor(text){this.text=text}},
+      speechSynthesis:{cancel(){},speak(u){ttsStarts++;u.onend?.()}}},
+    Audio:class{play(){audioStarts++;this.onended?.();return Promise.resolve()}pause(){}},
+    fetch:async()=>({ok:true,json:async()=>({recordings:{'가':human}})})
+  };
+  vm.runInNewContext(source,context);
+  const H=context.window.HSHangul;await H.ready;
+  handlers.pagehide();
+  assert.equal((await H.play('가')).status,'cancelled',
+    'a stale tap handler must not start human audio after pagehide');
+  H.setSyntheticEnabled(true);
+  assert.equal((await H.optionalSynthetic('나')).status,'cancelled',
+    'optional TTS must not start after pagehide');
+  assert.equal(audioStarts,0);
+  assert.equal(ttsStarts,0);
+  document.hidden=true;
+  assert.equal((await H.play('가')).status,'cancelled',
+    'hidden document must not start audio even without a pagehide event');
+});
