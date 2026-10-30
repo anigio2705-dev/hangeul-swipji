@@ -28,4 +28,14 @@ uid='student-B';
 assert.equal(await c.pull(),true);
 assert.equal(JSON.parse(storage.getItem(api.keys[1])).done[3],true,'student B local progress restored');
 assert.equal(JSON.parse(storage.getItem(api.keys[1])).done[5],true,'student B offline completion retained');
+// #47 red-case: completed server sync is not a substitute for syncing mistakes
+// and bookmarks. This test documents the missing multi-device feature without
+// pretending it is ready for dispatch. A second device needs a server-backed
+// representation for these fields; the current API only exposes 'completed'.
+const progressResponse=await fetcher('/api/free-progress');
+assert.equal(Array.isArray(progressResponse.completed),true);
+assert.equal(Object.prototype.hasOwnProperty.call(progressResponse,'mistakes'),true,
+  '#47 blocked: server API must include account-scoped mistakes for cross-device restore');
+assert.equal(Object.prototype.hasOwnProperty.call(progressResponse,'bookmarks'),true,
+  '#47 blocked: server API must include account-scoped bookmarks for cross-device restore');
 console.log('team12 server progress integration tests passed');})().catch(e=>{console.error(e);process.exitCode=1});
