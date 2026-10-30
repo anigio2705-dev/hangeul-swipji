@@ -97,10 +97,33 @@ report.warnings.push('Audio: missing human recordings and listening approval rem
 report.warnings.push('Exact supported-option uniqueness is an automated property, not a proof of every possible semantic interpretation.');
 report.warnings.push('Level metrics describe this graded curriculum; no CEFR/TOPIK calibration or learner trial was performed.');
 const homepage=fs.readFileSync(path.join(root,'index.html'),'utf8'),oldHomepage=cp.execFileSync('git',['show',baseline+':index.html'],{cwd:root,encoding:'utf8'});
-const approvedHomeAdditions=['<a href="#teaching-platform">강사 수업 · 테스트</a>', "<section id=\"teaching-platform\" class=\"shell\" aria-label=\"전문 교육과 강사 수업\"><h2>혼자 배운 한국어, 함께 써 보세요.</h2><p>무료 학습부터 전문 수업, 과제와 피드백까지 한글쉽지에서 이어집니다.</p><div id=\"studio-root\"><p id=\"studio-status\" role=\"status\">수업 공간을 확인하고 있습니다…</p></div></section>", '<script src="./teaching-home.js?v=20261027-global" defer></script>'];
+// This audit's older 46745d28 baseline predates the three teaching-platform additions
+// already present in the newer 7418e32 education-source baseline. Verify both layers:
+// four exact staging UI deltas, then three exact teaching-platform additions.
+// Reject any missing, duplicated or unexpected change; never relax the byte comparison.
+const approvedHomeDeltas=[
+ ['min-height:640px','min-height:760px',2],
+ ['padding:56px clamp(28px,5vw,100px) 50px','padding:90px clamp(28px,5vw,100px) 65px',1],
+ ['.editorial-steps{margin-top:38px;padding-top','.editorial-steps{margin-top:65px;padding-top',1],
+ ['<div class="shell" data-team12-handoff></div><script src="./scripts/team12_learning_handoff.js" defer></script>','',1]
+];
+let revertedHomepage=homepage,approvedDeltaCountsMatch=true;
+for(const [from,to,count] of approvedHomeDeltas){
+ if(revertedHomepage.split(from).length-1!==count){approvedDeltaCountsMatch=false;break;}
+ revertedHomepage=revertedHomepage.split(from).join(to);
+}
+const approvedTeachingAdditions=[
+ '<a href="#teaching-platform">강사 수업 · 테스트</a>',
+ '<section id="teaching-platform" class="shell" aria-label="전문 교육과 강사 수업"><h2>혼자 배운 한국어, 함께 써 보세요.</h2><p>무료 학습부터 전문 수업, 과제와 피드백까지 한글쉽지에서 이어집니다.</p><div id="studio-root"><p id="studio-status" role="status">수업 공간을 확인하고 있습니다…</p></div></section>',
+ '<script src="./teaching-home.js?v=20261027-global" defer></script>'
+];
+for(const approved of approvedTeachingAdditions){
+ if(revertedHomepage.split(approved).length-1!==1){approvedDeltaCountsMatch=false;break;}
+ revertedHomepage=revertedHomepage.replace(approved,'');
+}
 report.preservation.homepageUnchanged=homepage===oldHomepage;
-report.preservation.homepageOnlyApprovedIntegration=approvedHomeAdditions.every(x=>homepage.split(x).length===2)&&approvedHomeAdditions.reduce((s,x)=>s.replace(x,''),homepage)===oldHomepage;
-check(report.preservation.homepageUnchanged||report.preservation.homepageOnlyApprovedIntegration,'Homepage changed beyond exact approved inline integration additions');
+report.preservation.homepageOnlyApprovedIntegration=approvedDeltaCountsMatch&&revertedHomepage===oldHomepage;
+check(report.preservation.homepageUnchanged||report.preservation.homepageOnlyApprovedIntegration,'Homepage changed beyond exact approved staging UI deltas');
 report.completion={sourceChecksPassed:report.errors.length===0,complete:report.errors.length===0&&report.audio.requiredHangul.missing===0&&report.audio.requiredHangul.listeningApproved===report.audio.requiredHangul.uniqueTargets,blockers:[report.audio.requiredHangul.missing?'Required Hangul human recordings missing: '+report.audio.requiredHangul.missing:null,report.audio.requiredHangul.listeningApproved<report.audio.requiredHangul.uniqueTargets?'Actual pronunciation listening approvals incomplete.':null].filter(Boolean),limits:['AI source review does not establish learning effectiveness.','Browser mobile emulation does not establish iPhone/Android physical-device compatibility.']};
 fs.mkdirSync(path.join(root,'audit'),{recursive:true});fs.writeFileSync(path.join(root,'audit/phase2-content.json'),JSON.stringify(report,null,2)+'\n');
 const csvValue=v=>'"'+String(v??'').replace(/"/g,'""')+'"';

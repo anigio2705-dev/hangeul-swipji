@@ -25,8 +25,10 @@ jobs:
       - run: python -m unittest discover -s phase3 -p 'test_*.py' -v
       - run: node phase3/postgres-test.cjs
       - run: python scripts/audit-professional-96.py
+      - run: python scripts/check-team15-source-gate.py
       - run: node scripts/audit-350-lessons.cjs
       - run: node scripts/audit-phase2-content.cjs
+      - run: node scripts/check-team15-phase2-home-gate.cjs
       - run: node scripts/check-audio-runtime.cjs
       - run: node scripts/audit-reading-similarity.cjs
       - run: node scripts/check-foundations.cjs
