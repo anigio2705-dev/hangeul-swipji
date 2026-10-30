@@ -21,12 +21,21 @@ concurrency:
   group: task101-isolated-three-agent-pilot
   cancel-in-progress: false
 jobs:
+  offline-security:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify handoff integrity and missing-key fail closed without API calls
+        run: python -m unittest discover -s automation -p 'test_task101_three_agent_pilot.py' -v
   team11:
+    needs: offline-security
     if: >-
-      (github.event_name == 'push' && github.ref == 'refs/heads/support/task101-three-agent-handoff-pilot-20261030') ||
-      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/support/task101-three-agent-handoff-pilot-20261030') ||
-      (github.event_name == 'pull_request' && github.head_ref == 'support/task101-three-agent-handoff-pilot-20261030' &&
-       github.event.pull_request.head.repo.full_name == github.repository && github.actor == 'anigio2705-dev')
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+      github.ref == 'refs/heads/support/task101-three-agent-handoff-pilot-20261030'
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     environment: hq-ai-pilot
