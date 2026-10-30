@@ -25,7 +25,7 @@ class BookingEventTests(unittest.TestCase):
   for e in (self.payload(currency="USD"),self.payload(booking_status="in_class")):
    with self.assertRaises(SimError):apply_booking_event(self.s,e)
  def test_partial_refund_then_cancel_rejected(self):
-  e=self.payload(action="refund",booking_status="refunded",amount_krw=5000)
+  e=self.payload(action="refund",booking_status="partially_refunded",amount_krw=5000)
   self.assertEqual(apply_booking_event(self.s,e)["state"],"partially_refunded")
   with self.assertRaises(SimError):apply_booking_event(self.s,self.payload(event_id="event2",transaction_id="tx2",action="cancel",booking_status="cancelled"))
  def test_cancel_and_retry(self):
@@ -37,4 +37,35 @@ class BookingEventTests(unittest.TestCase):
   with self.assertRaises(SimError):apply_booking_event(self.s,dict(self.payload(),secret="bad"))
  def test_reject_unrecognized_action(self):
   with self.assertRaises(SimError):apply_booking_event(self.s,self.payload(action="pay"))
+ def test_partial_refund_status_matches_committed_state(self):
+  # External 'refunded' is a legacy umbrella booking status, not a promise
+  # that the internal settlement ledger is already fully refunded.
+  legacy=self.payload(action="refund",booking_status="refunded",amount_krw=5000)
+  self.assertEqual(apply_booking_event(self.s,legacy)["state"],"partially_refunded")
+  self.assertEqual(apply_booking_event(self.s,legacy)["state"],"partially_refunded")
+  full=self.payload(event_id="event2",transaction_id="tx2",action="refund",booking_status="refunded",amount_krw=15000)
+  self.assertEqual(apply_booking_event(self.s,full)["state"],"refunded")
+  self.assertEqual(self.s.totals("month1")["refunded"],20000)
+ def test_explicit_partial_refund_state_must_match_result(self):
+  # Explicit internal partial status cannot be used for a full refund.
+  bad=self.payload(action="refund",booking_status="partially_refunded",amount_krw=20000)
+  with self.assertRaises(SimError) as ctx:apply_booking_event(self.s,bad)
+  self.assertEqual(ctx.exception.code,"INVALID_STATE")
+  self.assertEqual(self.s.db.execute("SELECT state FROM lessons WHERE id='lesson1'").fetchone()[0],"reserved")
+  self.assertEqual(self.s.db.execute("SELECT COUNT(*) FROM ledger").fetchone()[0],0)
+  good=self.payload(action="refund",booking_status="partially_refunded",amount_krw=5000)
+  self.assertEqual(apply_booking_event(self.s,good)["state"],"partially_refunded")
+ def test_completed_partial_refund_requires_exact_status(self):
+  apply_booking_event(self.s,self.payload())
+  # An explicit partial settlement claim is wrong if refund reaches 100%.
+  bad=self.payload(event_id="event2",transaction_id="tx2",action="refund_completed",booking_status="completed_partially_refunded",amount_krw=20000)
+  with self.assertRaises(SimError) as ctx:apply_booking_event(self.s,bad)
+  self.assertEqual(ctx.exception.code,"INVALID_STATE")
+  self.assertEqual(self.s.db.execute("SELECT state FROM lessons WHERE id='lesson1'").fetchone()[0],"completed")
+  partial=self.payload(event_id="event2",transaction_id="tx2",action="refund_completed",booking_status="completed_partially_refunded",amount_krw=5000)
+  self.assertEqual(apply_booking_event(self.s,partial)["state"],"completed_partially_refunded")
+  full=self.payload(event_id="event3",transaction_id="tx3",action="refund_completed",booking_status="refunded",amount_krw=15000)
+  self.assertEqual(apply_booking_event(self.s,full)["state"],"refunded")
+  totals=self.s.totals("month1")
+  self.assertEqual((totals["refunded"],totals["teacher"],totals["referral"],totals["platform"]),(20000,0,0,0))
 if __name__=="__main__":unittest.main()
