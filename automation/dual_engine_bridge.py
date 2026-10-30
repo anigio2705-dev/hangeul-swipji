@@ -34,14 +34,14 @@ def ingest_turn(state, comment, trusted_authors):
 
 def dispatch_approved(state, assignments):
     """Return work intents; actual execution requires a separate trusted runner."""
-    accepted = []
-    for job in assignments:
-        if not job.get("approved_by_central"):
-            raise ValueError("central approval missing")
-        if job.get("owner") not in TEAMS:
-            raise ValueError("unknown team")
-        accepted.append(queue_work(state, job))
-    return accepted
+    # The caller controls assignment dictionaries. A boolean such as
+    # approved_by_central=True is NOT a signed/verified Issue #34 command.
+    # Keep this bridge read-only until a trusted receiver binds actor, comment
+    # id, owner, SHA and replay state. Local queue_work remains a test-only
+    # intent builder; it must not be treated as actual AI dispatch.
+    if assignments:
+        raise ValueError("trusted central command provenance not verified; dispatch blocked")
+    return []
 
 def progress(state):
     discussion_done = state["turn"] == len(TEAMS)
@@ -50,6 +50,8 @@ def progress(state):
     )
     return {"discussion_complete": discussion_done,
             "development_complete": development_done,
-            "ready_complete": bool(state["ready"] and state["independent_approval"]),
+            # Mutable JSON flags are not independent GitHub/CI attestation.
+            # Only an external authenticated verifier may issue READY.
+            "ready_complete": False,
             "next_team": next_team(state),
             "queued_jobs": sum(job["status"] == "queued" for job in state["work"])}
