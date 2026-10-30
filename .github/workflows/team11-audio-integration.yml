@@ -11,6 +11,7 @@ on:
       - 'hangul-week.js'
       - 'hangul-week.html'
       - 'tests/team11_audio_user_activation.test.cjs'
+      - 'tests/team15_latest11_partial_human.test.cjs'
       - '.github/workflows/team11-audio-integration.yml'
       - 'tests/team11_audio_surface_integration.test.cjs'
       - 'tests/team11_week_progress_storage.test.cjs'
@@ -39,10 +40,13 @@ jobs:
           node --check hangul-board.js
           node --check hangul-week.js
           node --check tests/team11_audio_user_activation.test.cjs
+          node --check tests/team15_latest11_partial_human.test.cjs
           node --check tests/team11_audio_surface_integration.test.cjs
           node --check tests/team11_week_progress_storage.test.cjs
       - name: Run 11-team opt-in and user gesture tests
         run: node --test tests/team11_audio_user_activation.test.cjs tests/team11_audio_surface_integration.test.cjs
+      - name: Independently reproduce human-first partial playback on latest Team11
+        run: node --test tests/team15_latest11_partial_human.test.cjs
       - name: Verify seven-day quiz progress persistence
         run: node --test tests/team11_week_progress_storage.test.cjs
       - name: Run legacy human audio runtime regression
