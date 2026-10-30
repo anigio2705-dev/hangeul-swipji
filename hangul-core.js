@@ -66,7 +66,11 @@
   }
   async function play(value){
     stop();const token=run;
-    await (manifestError?loadManifest():(loading||ready));if(token!==run)return {status:'cancelled'};
+    // Keep a completed manifest on the synchronous click path: an unconditional
+    // await here loses the user activation required by mobile browsers for Audio.play().
+    // A pending/failed manifest still waits or retries and never plays unverified audio.
+    if(manifestError)await loadManifest();else if(loading)await loading;
+    if(token!==run)return {status:'cancelled'};
     if(manifestError){status('음성 목록을 불러오지 못했습니다. 글자를 다시 누르면 재시도합니다. / Audio list unavailable; click again to retry.');return {status:'manifest-error'}}
     const words=Array.isArray(value)?value:[value];
     if(!words.length||words.some(w=>typeof w!=='string'||!w.trim()))return {status:'invalid'};
