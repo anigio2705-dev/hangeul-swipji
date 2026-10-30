@@ -1,0 +1,24 @@
+name: Team15 withdrawn human audio fail-closed independent QA
+on:
+  push:
+    branches: ['audit/team15-held-manifest-failclosed-20261030-1433']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  held-audio-safety:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check production audio source syntax
+        run: node --check hangul-core.js
+      - name: Run current Team11 and independent Team15 P0 audio regressions
+        run: node --test tests/team15_latest11_partial_human.test.cjs tests/team11_audio_user_activation.test.cjs tests/team11_audio_surface_integration.test.cjs tests/team11_week_progress_storage.test.cjs
+      - name: Check audio runtime and source manifest
+        run: node scripts/check-audio-runtime.cjs
