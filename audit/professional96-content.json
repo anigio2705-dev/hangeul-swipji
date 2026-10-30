@@ -1,0 +1,131 @@
+{
+  "baseCommit": "7418e325f0833604249e5170c2531a103b31ff1c",
+  "units": 96,
+  "newUnits": 72,
+  "assessmentItems": 288,
+  "stages": [
+    {
+      "stage": 1,
+      "count": 24,
+      "minEojeol": 14,
+      "meanEojeol": 21.25,
+      "maxEojeol": 34,
+      "uniqueSurfaceForms": 337,
+      "longestSentenceEojeol": 8
+    },
+    {
+      "stage": 2,
+      "count": 24,
+      "minEojeol": 26,
+      "meanEojeol": 44.29,
+      "maxEojeol": 54,
+      "uniqueSurfaceForms": 745,
+      "longestSentenceEojeol": 12
+    },
+    {
+      "stage": 3,
+      "count": 24,
+      "minEojeol": 48,
+      "meanEojeol": 67.25,
+      "maxEojeol": 99,
+      "uniqueSurfaceForms": 1128,
+      "longestSentenceEojeol": 21
+    },
+    {
+      "stage": 4,
+      "count": 24,
+      "minEojeol": 68,
+      "meanEojeol": 107.46,
+      "maxEojeol": 173,
+      "uniqueSurfaceForms": 1621,
+      "longestSentenceEojeol": 23
+    }
+  ],
+  "passagePairs": 4560,
+  "exactPassageDuplicates": 0,
+  "highestSimilarityPairs": [
+    {
+      "score": 0.0091,
+      "a": "HS4-S2-10",
+      "b": "HS4-S3-17"
+    },
+    {
+      "score": 0.0087,
+      "a": "HS4-S4-04",
+      "b": "HS4-S2-17"
+    },
+    {
+      "score": 0.0078,
+      "a": "HS4-S3-17",
+      "b": "HS4-S3-21"
+    },
+    {
+      "score": 0.0071,
+      "a": "HS3-B1-01",
+      "b": "HS4-S4-04"
+    },
+    {
+      "score": 0.0068,
+      "a": "HS4-S2-17",
+      "b": "HS4-S4-14"
+    },
+    {
+      "score": 0.0067,
+      "a": "HS4-S2-17",
+      "b": "HS4-S4-12"
+    },
+    {
+      "score": 0.0059,
+      "a": "HS4-S4-04",
+      "b": "HS4-S4-06"
+    },
+    {
+      "score": 0.0058,
+      "a": "HS4-S4-04",
+      "b": "HS4-S4-14"
+    },
+    {
+      "score": 0.0058,
+      "a": "HS4-S4-03",
+      "b": "HS4-S4-15"
+    },
+    {
+      "score": 0.0058,
+      "a": "HS4-S3-17",
+      "b": "HS4-S4-22"
+    },
+    {
+      "score": 0.0057,
+      "a": "HS4-S4-04",
+      "b": "HS4-S4-12"
+    },
+    {
+      "score": 0.0057,
+      "a": "HS4-S3-13",
+      "b": "HS4-S4-22"
+    }
+  ],
+  "repeatedAssessmentStems": [],
+  "preservedSHA256": {
+    "intro.html": "c25da89d48c9bc44036afbdb6c82c8368d8195554ee04844c91860f082c688ed",
+    "beginner1.html": "5711ddb1808101b9e5b9ac08bfd2a0ee2273617025d7c9481a53f33ce5c673c9",
+    "beginner2.html": "d864182aceda52799d2f927e81a4680d0d3a7742ad0f996728b688ac023e6dde",
+    "intermediate1.html": "af62e66636606eca0a8bc3b3e44dda6a50dd6f97bfad37e3b016df1f7266f3c6",
+    "intermediate2.html": "8bdba8738a5fa539be44827184c2fa13faca406a563061f6fef8c0ce8060a256",
+    "advanced1.html": "3875c89f3ac766203943cf6b3076827fa64204166ea20d780da23fa07081fbab",
+    "advanced2.html": "cad574d0552276ea55e7a8423f6238081b1dd8b285d9e1beb343ff5a1f2e5147",
+    "reading.html": "799738bcff9d29f521852932e055653a26f24fd479ac72c117ddd5f9d2c8f497",
+    "reading-curriculum.js": "eafa9805cf70a182f5983624227009c0927a83c82fdbde4234028173db4b71da",
+    "reading-alternates.js": "74acc7ed0ff43b62bbbadbb0d889946219c5c8fdc9a67108de8cf8140e6fc4de",
+    "hangul-audio-manifest.json": "579d2c52c44a75659dfc307e8171984d361f6093e00651ba6547f0e7c8c71553",
+    "index.html": "aefb7aa998033cdcd390681a407dc73ef3160381143c767807148e5ba71933fe",
+    "phase3/content.json": "339bbaa8cb9f3c4d6d372b5930e1b8828066893620a90c753290f7b9d0972800",
+    "phase3/content-expansion.json": "68d2e26d84f2a0f4614879a86dcea8c3fb9d02058540da44428b5aba0daf81a1"
+  },
+  "errors": [],
+  "limits": [
+    "Morphological difficulty, official CEFR/TOPIK calibration and educational effectiveness are not established by length or surface forms.",
+    "Shared stage prechecks and shared lesson-flow layouts are intentional.",
+    "Answer evidence/key tests do not establish every possible semantic interpretation; author review and teacher review are distinct."
+  ]
+}

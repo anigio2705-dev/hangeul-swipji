@@ -1,0 +1,80 @@
+{
+  "checkedAt": "2026-10-27T09:31:46.643086+00:00",
+  "scope": "source comparison and local-only verification; no new deployment",
+  "baseCommit": "cabb2fe0a07c50da0d771e9d1b3249d10c97e214",
+  "previousVideoCommit": "97b3edb",
+  "preservedSHA256": {
+    "index.html": "aefb7aa998033cdcd390681a407dc73ef3160381143c767807148e5ba71933fe",
+    "intro.html": "c25da89d48c9bc44036afbdb6c82c8368d8195554ee04844c91860f082c688ed",
+    "beginner1.html": "5711ddb1808101b9e5b9ac08bfd2a0ee2273617025d7c9481a53f33ce5c673c9",
+    "beginner2.html": "d864182aceda52799d2f927e81a4680d0d3a7742ad0f996728b688ac023e6dde",
+    "intermediate1.html": "af62e66636606eca0a8bc3b3e44dda6a50dd6f97bfad37e3b016df1f7266f3c6",
+    "intermediate2.html": "8bdba8738a5fa539be44827184c2fa13faca406a563061f6fef8c0ce8060a256",
+    "advanced1.html": "3875c89f3ac766203943cf6b3076827fa64204166ea20d780da23fa07081fbab",
+    "advanced2.html": "cad574d0552276ea55e7a8423f6238081b1dd8b285d9e1beb343ff5a1f2e5147",
+    "reading.html": "799738bcff9d29f521852932e055653a26f24fd479ac72c117ddd5f9d2c8f497",
+    "reading-curriculum.js": "eafa9805cf70a182f5983624227009c0927a83c82fdbde4234028173db4b71da",
+    "reading-alternates.js": "74acc7ed0ff43b62bbbadbb0d889946219c5c8fdc9a67108de8cf8140e6fc4de",
+    "hangul-audio-manifest.json": "579d2c52c44a75659dfc307e8171984d361f6093e00651ba6547f0e7c8c71553",
+    "speaking-platform.html": "c71a7a1b92469fd730e5a8a7870b68c7267db79971fcfdd216b158e25510b987",
+    "speaking-config.js": "5ff013820c5e1245714e12a8b9fbc165b2f4324c596b166adbf76d9773c6c3a3",
+    "phase3/content.json": "339bbaa8cb9f3c4d6d372b5930e1b8828066893620a90c753290f7b9d0972800",
+    "phase3/content-expansion.json": "68d2e26d84f2a0f4614879a86dcea8c3fb9d02058540da44428b5aba0daf81a1",
+    "phase3/content-remaining72.json": "a5e0221b125588fe4f10d8a029c4b65293c6ec79f513e3490afb055a4864b08d",
+    "phase3/curriculum-96.json": "8a51a737c5e6cc4bf051a7d77c4125337a0a0a13a9d02a850177072b63268db8"
+  },
+  "preservedFiles": 18,
+  "originalVideoFilesUnchanged": true,
+  "legacyFlow": "Supabase login -> match -> embedded Jitsi; original files unchanged",
+  "stagingFlow": "isolated gate -> local app login -> approved teacher -> booking -> same Jitsi room URL; legacy route redirects to homepage",
+  "regressionFinding": "Staging routing and authentication differ from original video flow. Historical actual media success cannot be reproduced from source alone. Browser repeated prompt incident not uniquely attributed.",
+  "selfRefine": [
+    "Avoid native Basic challenges for background API/assets; signed Secure HttpOnly SameSite=Strict cookie after successful gate authentication only.",
+    "Hide successful room confirmation to prevent repeated links.",
+    "Distinguish staging gate, app login and Jitsi moderator auth."
+  ],
+  "killCritic": [
+    "Origin/Host/Referer checks run before signed-cookie authentication.",
+    "No unsigned/expired/forged cookie accepted; changing existing gate secret invalidates sessions.",
+    "Initial gate cookie does not sign in an app account; app logout does not re-prompt gate.",
+    "Handle coded gate failure separately from expected anonymous /api/me 401.",
+    "No claim that Jitsi link proves camera/microphone operation."
+  ],
+  "publicAuthenticatedFlowVerified": false,
+  "deploymentPerformed": false,
+  "deploymentBlocker": "Render dashboard session is signed out; no repeated login request made. Cloud browser public authentication previously blocked by browser policy.",
+  "officialReferences": [
+    "https://jitsi.org/security/",
+    "https://jitsi.github.io/handbook/docs/user-guide/user-guide-join-jitsi-meeting/"
+  ],
+  "publicHealth": {
+    "mode": "test",
+    "ok": true,
+    "scope": "isolated-staging",
+    "requestGuardVersion": "document-navigation-v2",
+    "configuredOrigin": "https://hangeul-swipji99-test.onrender.com",
+    "sourceSHA256": "c5e3f132fce724f4f4f069ba8039371e369243583a247d827c736d73d64dd228"
+  },
+  "python": {
+    "passed": 79,
+    "stagingBoundary": 18,
+    "seconds": 48.28,
+    "command": "python3 -m unittest discover -s phase3 -p 'test_*.py'"
+  },
+  "browser": {
+    "passed": 33,
+    "unitDialogs": 192,
+    "errors": [],
+    "mode": "local-https-staging-cookie-test-only",
+    "evidence": "phase3/staging-browser-results.json",
+    "externalVideoMediaTested": false,
+    "serverClockSimulated": true
+  },
+  "newStagingSourceSHA256": "bd288395a8b89449718261b6d09277cfc347e64a9efa6b8c6231cb2e438db0dc",
+  "integrationBaseAfterConcurrentChanges": "17da26f09911452a1433afc67651472bcfe02d87",
+  "preservedConcurrentCommits": [
+    "339b418",
+    "f47cf3e",
+    "17da26f"
+  ]
+}

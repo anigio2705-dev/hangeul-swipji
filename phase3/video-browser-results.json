@@ -1,0 +1,29 @@
+{
+  "mode": "local-https-video-development-only",
+  "checkedAt": "2026-10-27T09:55:34.358Z",
+  "checks": [
+    "HTTPS gate authenticated once per browser; all later steps use cookies without Basic header",
+    "teacher UI signup",
+    "free learning to20-question placement to studio advisory context",
+    "learner UI signup",
+    "voluntary free placement summary saved to learner only",
+    "new independent lesson and precheck UI persisted",
+    "partner UI signup",
+    "admin UI approval",
+    "teacher availability UI",
+    "learner UI search booking and test payment",
+    "same immutable content hash",
+    "teacher guide role separation",
+    "booked lesson UI",
+    "learner: synthetic camera/mic controls, mobile layout, absent second camera, permission failure, late-stream cleanup, isolated frame and reconnect",
+    "teacher: synthetic camera/mic controls, mobile layout, absent second camera, permission failure, late-stream cleanup, isolated frame and reconnect",
+    "both users same Jitsi test room URL"
+  ],
+  "errors": [],
+  "syntheticDevices": true,
+  "providerFrameMocked": true,
+  "externalJitsiAuthenticationVerified": false,
+  "actualTwoDeviceCallVerified": false,
+  "physicalMobileTested": false,
+  "realPaymentsTested": false
+}
