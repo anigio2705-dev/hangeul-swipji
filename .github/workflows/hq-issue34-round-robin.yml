@@ -7,6 +7,9 @@ on:
       - 'automation/hq_round_robin.py'
       - 'automation/test_hq_round_robin.py'
       - '.github/workflows/hq-issue34-round-robin.yml'
+  pull_request:
+    branches:
+      - audit/team15-issue34-receipt-binding-20261030-1740
   workflow_dispatch:
   # GitHub schedule only runs from the default branch. This isolated PR
   # does NOT activate periodic polling; separate HQ approval is required.
