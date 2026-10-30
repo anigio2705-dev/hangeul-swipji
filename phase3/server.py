@@ -258,7 +258,7 @@ class Handler(BaseHTTPRequestHandler):
             if not re.fullmatch(r'[^\s@]+@[^\s@]+\.[^\s@]+',email) or not isinstance(password,str) or not 12<=len(password)<=128 or len(nickname)<2 or role not in ('learner','partner','teacher') or d.get('adultConsent') is not True: raise Error('이메일·12자 이상 비밀번호·이름·성인 동의를 확인하세요')
             rid=None
             if 'referralCode' in d:
-                    if not isinstance(d['referralCode'],str) or not d['referralCode'].strip(): raise Error('추천코드 형식이 올바르지 않습니다')
+                if not isinstance(d['referralCode'],str) or not d['referralCode'].strip(): raise Error('추천코드 형식이 올바르지 않습니다')
                 # Registration and authenticated referral linking share one
                 # trusted inviter-role policy; admin/revoked users cannot invite.
                 ref=db.execute('SELECT id,role FROM users WHERE referral_code=?',(text(d['referralCode'],40),)).fetchone()
