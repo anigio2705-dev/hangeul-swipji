@@ -16,7 +16,8 @@ const path = require('node:path');
     elements[id] = { hidden: false, textContent: '', disabled: false, value: '',
                      querySelector() { return null; } };
   }
-  let now = 1_000_000, calls = 0, nextId = 1;
+  let now = 1_000_000, calls = 0, nextId = 1, hang = false;
+  const timeouts = new Map();
   let response = { user: { nickname: 'learner', role: 'learner' }, eligible: true,
                    state: 'offered', partnerName: 'partner', ready: false,
                    expiresAt: now / 1000 + 3, matchId: 'disposable-match' };
@@ -26,10 +27,17 @@ const path = require('node:path');
     document: { getElementById: id => elements[id],
                 createElement: tag => ({ tag }) },
     addEventListener: (event, fn) => { handlers[event] = fn; },
-    fetch: async () => { calls++; return { ok: true, status: 200, json: async () => response }; },
+    fetch: async (_url, options = {}) => {
+      calls++;
+      if (hang) return new Promise((_resolve, reject) => {
+        if (options.signal) options.signal.addEventListener('abort', () => reject(new Error('aborted')), { once: true });
+      });
+      return { ok: true, status: 200, json: async () => response };
+    },
     setInterval: (fn, ms) => { const id = nextId++; intervals.set(id, { fn, ms }); return id; },
     clearInterval: id => intervals.delete(id),
-    setTimeout, clearTimeout, Date: Clock,
+    setTimeout: (fn, ms) => { const id = nextId++; timeouts.set(id, { fn, ms }); return id; },
+    clearTimeout: id => timeouts.delete(id), Date: Clock,
     AbortController
   };
   vm.runInNewContext(script[1], context, { filename: 'instant-speaking.html', timeout: 1000 });
@@ -46,8 +54,21 @@ const path = require('node:path');
   await flush();
   assert.equal(elements.offerCountdown.hidden, true, 'expired offer must disappear after server idle');
   assert.equal(elements.offerCountdown.textContent, '');
+  hang = true;
+  handlers.pageshow();
+  await flush();
+  assert.equal(calls, 3, 'hung status request must begin');
+  const watchdog = [...timeouts.values()].find(t => t.ms === 12000);
+  assert.ok(watchdog, 'network request must have a 12-second abort watchdog');
+  watchdog.fn();
+  await flush();
+  assert.match(elements.error.textContent, /지연|다시 시도/, 'timeout must be visible to learner');
+  hang = false;
+  handlers.pageshow();
+  await flush();
+  assert.equal(calls, 4, 'later status request must recover after a timeout');
+  assert.equal(timeouts.size, 0, 'completed requests must clear watchdog timers');
   handlers.pagehide();
   assert.equal(intervals.size, 0, 'navigation must release countdown and polling timers');
-  assert.equal(calls, 2);
-  console.log('PASS: live offer countdown, expiry, server refresh, and cleanup');
+  console.log('PASS: countdown, server refresh, request timeout recovery, and cleanup');
 })().catch(err => { console.error(err); process.exitCode = 1; });
