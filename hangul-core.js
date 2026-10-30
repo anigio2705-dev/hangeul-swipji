@@ -203,6 +203,9 @@
     stop();const token=run;
     if(document.hidden===true||wasHidden)return {status:'cancelled'};
     if(!syntheticEnabled)return {status:'tts-disabled'};
+    // This public API must reject malformed input just like play(); otherwise
+    // browsers can speak an empty string or coerce null/arrays into speech.
+    if(typeof word!=='string'||!word.trim())return {status:'invalid'};
     // Direct TTS must obey the same refresh lock as human recordings: a
     // withdrawn/held letter may appear only in the newer pending manifest.
     if(pendingRefreshes)return {status:'loading'};
