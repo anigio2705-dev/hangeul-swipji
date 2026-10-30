@@ -160,5 +160,34 @@ class ReferralHttpContractTests(unittest.TestCase):
         # The failed booking must not consume the available slot.
         self.assertEqual(200, self.book()[0])
 
+
+    def test_existing_referrer_revocation_cannot_bypass_booking_policy(self):
+        # A referral was valid when linked, but a later admin role change
+        # must not be bypassed by omitting referralCode at booking time.
+        inviter_code = self.referral_code(self.o["id"])
+        status, response = self.learner.call("/api/referrals/link", {
+            "referralCode": inviter_code
+        })
+        self.assertEqual(200, status, response)
+        self.assertEqual(self.o["id"], self.parent_of(self.l["id"]))
+        with server.connect() as db:
+            db.execute("UPDATE users SET role='admin' WHERE id=?", (self.o["id"],))
+            before = db.execute(
+                "SELECT count(*) FROM bookings WHERE learner_id=?", (self.l["id"],)
+            ).fetchone()[0]
+        status, response = self.book()
+        self.assertEqual(409, status, response)
+        with server.connect() as db:
+            after = db.execute(
+                "SELECT count(*) FROM bookings WHERE learner_id=?", (self.l["id"],)
+            ).fetchone()[0]
+        self.assertEqual(before, after)
+        self.assertEqual(self.o["id"], self.parent_of(self.l["id"]))
+        # Restoring the eligible role permits a normal booking, proving
+        # that rejection did not consume the slot or alter the referral.
+        with server.connect() as db:
+            db.execute("UPDATE users SET role='learner' WHERE id=?", (self.o["id"],))
+        self.assertEqual(200, self.book()[0])
+
 if __name__ == "__main__":
     unittest.main()
