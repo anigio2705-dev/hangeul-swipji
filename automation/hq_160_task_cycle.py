@@ -39,8 +39,9 @@ DEPENDENCIES = {
 # Exclusive file ownership, with real backlog item numbers rather than generic
 # "hardening" requests. Team 11/16 support some education-owned items.
 CURATED_TARGETS = {
-    "11": ((51, "scripts/audit-hangul-audio.py"),
-           (56, "scripts/find-human-audio-sources.py")),
+    # No legacy curated assignments for 11: #51/#56 are owned by team 12.
+    # Team 11 may still develop independently reviewed READY items it owns.
+    "11": (),
     "12": ((41, "scripts/team12_content_regression.py"),
            (52, "scripts/team12_audio_inventory.py"),
            # #49 concerns free diagnostic recommendations, implemented in
@@ -53,7 +54,9 @@ CURATED_TARGETS = {
            (115, "phase3/team14_refund_workflow.py")),
     "15": ((8, "scripts/team15_independent_gate.py"),
            (151, "scripts/team15_cross_team_smoke.py")),
-    "16": ((55, "scripts/render-audio-credits.py"),),
+    # #55 audio attribution belongs to team 12; 16 is support only.
+    # Dynamic READY tasks owned by 16 remain eligible through the registry.
+    "16": (),
 }
 STATES = frozenset({"unverified", "in_progress", "blocked", "retry", "code_verified", "complete"})
 
