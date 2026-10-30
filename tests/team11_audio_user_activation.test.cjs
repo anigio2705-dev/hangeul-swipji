@@ -419,3 +419,23 @@ test('TTS watchdog timeout must not become tts-played when cancel emits onend sy
     'synchronous onend from watchdog cancel must not falsely report successful speech');
   assert.equal(cancels>0,true,'timed-out device speech must be cancelled');
 });
+
+
+test('direct optional TTS refuses blank and non-string input instead of speaking malformed text',async()=>{
+  const spoken=[];
+  const context={
+    document:{baseURI:'https://example.test/',hidden:false,addEventListener(){},dispatchEvent(){},querySelectorAll:()=>[],querySelector:()=>null},
+    window:{addEventListener(){},speechSynthesis:{cancel(){},speak(u){spoken.push(u.text);u.onend?.()}},
+      SpeechSynthesisUtterance:class{constructor(text){this.text=text}}},
+    Event:class{},URL,setTimeout,clearTimeout,
+    Audio:class{constructor(){throw Error('no human audio expected')}},
+    fetch:async()=>({ok:true,json:async()=>({recordings:{}})})
+  };
+  vm.runInNewContext(source,context);
+  const H=context.window.HSHangul;await H.ready;H.setSyntheticEnabled(true);
+  for(const input of ['', '   ', null, undefined, ['가']]){
+    assert.equal((await H.optionalSynthetic(input)).status,'invalid',
+      'invalid direct TTS input must match play() validation');
+  }
+  assert.equal(spoken.length,0,'invalid values must never reach device TTS');
+});
