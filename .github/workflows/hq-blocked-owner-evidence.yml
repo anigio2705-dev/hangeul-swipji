@@ -1,0 +1,27 @@
+name: HQ blocked repair owner provenance regression (isolated)
+on:
+  push:
+    branches:
+      - audit/hq-blocked-owner-evidence-20261030-1511
+    paths:
+      - automation/hq_traffic_lights.py
+      - automation/test_hq_traffic_lights.py
+      - .github/workflows/hq-blocked-owner-evidence.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  owner-provenance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify blocked repair intake never hides wrong owner or absent evidence
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_traffic_lights.py' -v
+          python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+      - name: State safety scope
+        run: echo 'Read-only HQ evidence repair. No AI dispatch, READY promotion, deployment, payment or main change.' >> "$GITHUB_STEP_SUMMARY"
