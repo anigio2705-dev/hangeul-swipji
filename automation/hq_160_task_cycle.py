@@ -251,6 +251,10 @@ def make_report(backlog_text, evidence=None, failures=None):
                 and isinstance(record.get("commit"), str)
                 and bool(re.fullmatch(r"[a-f0-9]{40}", record["commit"]))
                 and record.get("ci_conclusion") == "success"
+                # Never credit a green run from a different commit as final
+                # acceptance of this numbered task. A missing proof is FAIL.
+                and record.get("independent_ci_sha") == record.get("commit")
+                and record.get("ci_head_sha", record.get("commit")) == record.get("commit")
                 and record.get("independent_review") == "pass"
                 and bool(re.fullmatch(
                     r"https://github\.com/anigio2705-dev/hangeul-swipji/actions/runs/[0-9]+",
