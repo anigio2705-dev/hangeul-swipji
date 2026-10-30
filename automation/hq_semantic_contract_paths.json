@@ -566,22 +566,29 @@
       ],
       "source_paths": [
         "phase3/team14_referral_store.py",
-        "phase3/team14_referral_scenarios.py"
+        "phase3/team14_referral_scenarios.py",
+        "phase3/server.py"
+      ],
+      "shared_integration_paths": [
+        "phase3/server.py"
       ],
       "editable_path": "phase3/team14_referral_store.py",
       "test_paths": [
         "phase3/test_team14_referral_store.py",
-        "phase3/test_team14_referral_scenarios.py"
+        "phase3/test_team14_referral_scenarios.py",
+        "phase3/test_team14_referral_http.py",
+        "phase3/test_task101_four_pair_acceptance.py"
       ],
       "acceptance": "강사/학습자 각각의 소개 대상 강사/학습자 네 조합을 권한·중복·순환·자기소개 거부와 함께 모의 검증",
       "unmet": [
-        "역할별 네 조합 수락/거부를 1:1 매핑한 독립 회귀검사 미확인",
+        "네 조합 HTTP/SQLite 독립 회귀를 추가했으나 15팀/HQ2 동일 SHA 독립 재현·CI 검증 대기",
+        "phase3/server.py는 12/15팀 과제와 공유하므로 소유권·잠금 확인 전 AI 편집 금지",
         "정책·보상·실결제 승인 전 차단 유지"
       ],
       "state": "CANDIDATE",
       "independent_team15": "PENDING",
       "dependencies": [],
-      "note": "2026-10-29 15:28+ KST six-team full-order source/path audit; only observed paths. Candidate is NOT READY or CODE_VERIFIED."
+      "note": "2026-10-30 #101 integration audit: real Phase3 server.py and authenticated HTTP + four-role-pair tests are mapped; editable_path stays referral_store.py only. Shared server edits require HQ ownership lock. CI, business policy and independent team15/HQ2 review remain mandatory. CANDIDATE is not READY."
     },
     "109": {
       "owner": "14",

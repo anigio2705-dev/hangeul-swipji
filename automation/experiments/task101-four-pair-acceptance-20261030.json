@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "task_id": 101,
+  "owner": "14",
+  "support": [
+    "11",
+    "15"
+  ],
+  "kind": "central_support_experiment_not_team_approval",
+  "hypothesis_id": "H101-ROLE-MATRIX-EVIDENCE-04",
+  "prior_attempt_id": "H101-STALE-INVITER-03",
+  "changed_assumption": "Passing generic 3x3 role and store simulator tests does not by itself supply a named, four-direction HTTP+SQLite acceptance contract or map the shared Phase3 server into #101's evidence registry.",
+  "expected_observation": "Four distinct teacher/learner directions persist the correct parent, idempotent replay leaves it unchanged, conflicting parent and cycles fail closed, and no real-money ledger entries appear.",
+  "discriminating_test": "python -m unittest discover -s phase3 -p 'test_task101_four_pair_acceptance.py' -v",
+  "observed": {
+    "first_test_commit": "9715bc2942a097405fe4fd6c8614b26824cb421f",
+    "ci_run": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41057182607",
+    "ci_conclusion": "success",
+    "new_named_cases": 6,
+    "ci_test_steps": "23 existing HTTP, 21 four-pair step (6 new + 15 imported baseline), 9 roles, 16 store, 9 scenarios, 2 READY gates"
+  },
+  "registry_change": {
+    "shared_server": "phase3/server.py",
+    "editable_path": "phase3/team14_referral_store.py",
+    "state": "CANDIDATE",
+    "independent_team15": "PENDING",
+    "ready_count": 0
+  },
+  "prior_failures": [
+    {
+      "classification": "source_preservation",
+      "evidence": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41055324144",
+      "reason": "phase3/index.html bytes differ from protected 7418e32 baseline; not changed by this experiment"
+    }
+  ],
+  "next_action": "15/HQ2 independently rerun final exact-SHA tests and confirm canonical four-pair policy; 14 decides revoked-inviter booking vs reward-only; 11 resolves shared phase3/server.py edit lock and runner support. No READY until all gates.",
+  "api_calls_verified": 0,
+  "test99_deployed": false
+}
