@@ -136,5 +136,28 @@ class ReferralHttpContractTests(unittest.TestCase):
                 ("revoked-inviter@example.com",)
             ).fetchone()[0])
 
+    def test_booking_referral_cannot_bypass_role_or_cycle_policy(self):
+        with server.connect() as db:
+            admin_code = db.execute(
+                "SELECT referral_code FROM users WHERE email=?",
+                ("admin@example.com",)
+            ).fetchone()[0]
+        self.assertEqual(400, self.book(referral=admin_code)[0])
+        self.assertIsNone(self.parent_of(self.l["id"]))
+        # Revoked inviter must not be accepted by the older booking path.
+        with server.connect() as db:
+            db.execute("UPDATE users SET role=? WHERE id=?", ("suspended", self.o["id"]))
+        self.assertEqual(400, self.book(referral=self.referral_code(self.o["id"]))[0])
+        with server.connect() as db:
+            db.execute("UPDATE users SET role=? WHERE id=?", ("learner", self.o["id"]))
+        # Outsider -> learner is valid, but learner -> outsider would form a cycle.
+        self.assertEqual(200, self.outsider.call("/api/referrals/link", {
+            "referralCode": self.referral_code(self.l["id"])
+        })[0])
+        self.assertEqual(409, self.book(referral=self.referral_code(self.o["id"]))[0])
+        self.assertIsNone(self.parent_of(self.l["id"]))
+        # The failed booking must not consume the available slot.
+        self.assertEqual(200, self.book()[0])
+
 if __name__ == "__main__":
     unittest.main()
