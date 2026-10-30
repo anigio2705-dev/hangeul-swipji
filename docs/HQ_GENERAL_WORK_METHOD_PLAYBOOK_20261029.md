@@ -474,3 +474,11 @@
 ### 18:24 KST 교차 감사 정정 — #59 상태와 장부 브랜치 불일치
 
 다른 예약 실행 「한글쉽지 무인 개발」의 **18:24 최신 완료 보고**는 경로 등록 26, CODE_VERIFIED 12, BLOCKED 3이라고 기록했다. 특히 #59의 기존 부분 검증이 새로 발견된 '모' UI 오류를 놓쳤으므로 BLOCKED로 정정했다고 설명한다. 반면 이 문서가 위치한 중앙 격리 브랜치 `automation/hq-pilot-13-14-15-20261029`를 직접 재조회하면 `automation/hq_semantic_contract_paths.json` blob `f9391842`는 24개(CANDIDATE 11/BLOCKED 2/CODE_VERIFIED 11), `automation/task-evidence.json` blob `bb3d03a1`는 CODE_VERIFIED 13(#59 포함), BLOCKED 2(#22/#47)다. **서로 다른 브랜치·스냅샷의 수치를 합치거나 중앙 장부를 검증 없이 자동 덮어쓰지 않는다.** #59 오류·수정·정확한 CI를 검토하고 중앙 계약/증거 원장에 적절한 상태 정정을 별도 독립 감사로 통합해야 한다. 최종 승인 0/160은 두 보고에서 동일하다.
+
+
+### 2026-10-30 11:38 KST — 중앙 6팀 curated 지원팀 오배정 재현 및 격리 수정 (PR #114)
+- **관측:** `automation/hq_160_task_cycle.py`의 레거시 `CURATED_TARGETS`는 #51/#56(12팀 소유)을 11팀, #55(12팀 소유)를 16팀에 배정했다. `automation/hq_six_developers.py`의 `TASKS`도 이를 반복했다. [6팀 실행 #40973509528](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40973509528)의 11·16팀 로그는 `semantic_contract_not_ready`, `calls=0`, `committed=0`를 남겼다. 후보 산출물은 이미 존재하여 새로운 AI 호출도 생기지 않았다.
+- **반례 RED:** 기존 160개 정본의 단일 owner와 curated 배정이 동일한지 검증하는 `test_curated_dispatch_targets_are_canonical_owner_only` 추가. 테스트만 추가한 SHA `540ffff31ea3363f154a7035d33802dd19bf0e37`의 [CI #40993011254](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40993011254) FAIL: team11 #51 owner 12 != 11, team16 #55 owner 12 != 16. #56 역시 owner 12인 것으로 정본에서 확인.
+- **수정 GREEN:** 레거시 11·16 curated 항목을 비우고 대응하는 runner 고정 작업도 비움. 6개 팀의 키/격리 브랜치는 유지하며, **15팀 독립 검증을 통과한 본인 소유 READY 작업만** 동적 큐로 실행할 수 있게 한다. [동일 수정 HEAD `b088fb9d343f3e7172a38fe2c4162f0ac33c8254`의 CI #40993045386](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40993045386) SUCCESS. [데이터 손실 차단 CI #40993045363](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40993045363) SUCCESS는 **배포 가능**이 아니라 위험한 배포의 **차단 유지** 증거.
+- **적용 범위/비용/위험:** Python 두 소스와 기존 회귀 테스트만 변경. 실제 OpenAI API 호출 0회, 추가 모델 비용 0. PR은 승인된 HQ 격리 브랜치를 대상으로 한 draft이며 main·운영 DB·Render99·실결제 미변경. 중앙 READY=0 자체는 해결되지 않았고, 11·16팀의 동적 READY가 생기기 전까지 AI 호출이 0인 것은 정직한 차단 상태다.
+- **다음 실험:** 15팀이 #11 또는 #143처럼 실제 해당 팀 소유의 코드·테스트 경로와 반례·독립 CI를 확인하여 READY 후보를 판정. 이후 정확한 CI SHA를 확인하고 6개 job의 `calls>0`/제품 diff/커밋을 독립 검증한다. 지원팀 소유권을 다시 허용해 0호출 문제를 덮지 않는다.
