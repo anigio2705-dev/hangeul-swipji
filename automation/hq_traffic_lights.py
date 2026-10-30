@@ -62,14 +62,16 @@ def readiness(catalog, ledger, registry, root=Path(".")):
         key = str(number)
         state = ledger.get(key, {}).get("status", "unverified")
         entry = entries.get(key)
+        # A newer semantic rejection overrides an older ledger verification.
+        # Otherwise a blocked product regression disappears from owner repair.
+        if entry and (state == "blocked" or entry.get("state") == "BLOCKED"):
+            result["blocked"].append(number)
+            continue
         if state in VERIFIED:
             result["already_verified"].append(number)
             continue
         if not entry:
             result["unmapped_unverified"].append(number)
-            continue
-        if state == "blocked" or entry.get("state") == "BLOCKED":
-            result["blocked"].append(number)
             continue
         if entry.get("state") == "CANDIDATE":
             result["candidates"].append(number)
@@ -201,6 +203,9 @@ def readiness(catalog, ledger, registry, root=Path(".")):
         # This is an evidence-repair lane, not an executable assignment.
         # Never silently normalize a wrong registry owner into a clean handoff.
         repair_blockers = []
+        ledger_status = ledger.get(str(number), {}).get("status", "unverified")
+        if ledger_status in VERIFIED:
+            repair_blockers.append("ledger_registry_state_conflict")
         if entry.get("owner") != task["owner"]:
             repair_blockers.append("owner_mismatch")
         if not isinstance(source, list) or not source or not all(valid_path(p) for p in source):
@@ -210,6 +215,7 @@ def readiness(catalog, ledger, registry, root=Path(".")):
         repair_supply[task["owner"]].append({
             "task": number, "owner": task["owner"],
             "registry_owner": entry.get("owner"),
+            "ledger_status": ledger_status,
             "repair_blockers": repair_blockers,
             "source_paths": source if isinstance(source, list) else [],
             "test_paths": tests if isinstance(tests, list) else [],
