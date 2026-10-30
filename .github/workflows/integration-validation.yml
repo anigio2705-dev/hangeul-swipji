@@ -8,7 +8,9 @@ permissions:
   contents: read
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    # Playwright 1.51.1 Chromium install does not support ubuntu26.04-x64.
+    # Pin the runner rather than skipping browser/integration coverage.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
