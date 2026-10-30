@@ -5,12 +5,16 @@ on:
       - 'team16/**'
     paths:
       - 'site-language.js'
+      - 'global-language.js'
+      - 'global-language.html'
       - 'scripts/check-phase2-pages.cjs'
       - 'scripts/browser-team16-language.cjs'
       - '.github/workflows/team16-language-regression.yml'
   pull_request:
     paths:
       - 'site-language.js'
+      - 'global-language.js'
+      - 'global-language.html'
       - 'scripts/check-phase2-pages.cjs'
       - '.github/workflows/team16-language-regression.yml'
 permissions:
