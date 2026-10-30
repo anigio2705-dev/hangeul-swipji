@@ -21,7 +21,7 @@
   }
   const records=Object.create(null),holds=Object.create(null);let current=null,run=0,release=null,manifestError=false,manifestLoaded=false;
   const schedule=typeof setTimeout==='function'?setTimeout:null,cancelTimer=typeof clearTimeout==='function'?clearTimeout:()=>{};
-  let loading=null;
+  let loading=null, pendingRefreshes=0;
   function loadManifest(){
     if(loading)return loading;
     // A refresh must revoke the old inventory immediately. Otherwise taps during
@@ -56,23 +56,32 @@
   const ready=loadManifest();
   async function reloadManifest(){
     stop();
+    // An older in-flight manifest can complete while a refresh is queued.
+    // Keep playback blocked until EVERY queued refresh has finished, including
+    // the microtask gap between the old response and the new network request.
+    pendingRefreshes++;
     status('사람 녹음 목록을 다시 확인하고 있습니다. / Checking recordings…');
-    // A manual refresh must fetch fresh data even if the initial request is still
-    // pending. Reusing that initial promise would leave a just-uploaded file unseen.
-    if(loading)await loading;
-    const refresh=loadManifest();
-    refreshBadges(); // Remove stale playable badges while the new list is pending.
-    await refresh;
-    if(manifestError){
-      status('음원 목록 연결에 실패했습니다. 다시 확인을 눌러 주세요. / Recording list unavailable; retry.');
-      return {status:'manifest-error'};
+    try{
+      // A manual refresh must fetch fresh data even if the initial request is
+      // pending. Reusing that initial promise could retain a withdrawn file.
+      if(loading)await loading;
+      const refresh=loadManifest();
+      refreshBadges();
+      await refresh;
+      if(manifestError){
+        status('음원 목록 연결에 실패했습니다. 다시 확인을 눌러 주세요. / Recording list unavailable; retry.');
+        return {status:'manifest-error'};
+      }
+      const count=Object.keys(records).length;
+      status('음원 목록 확인 완료 · 재생 가능 '+count+'개 · 검수 대기 '+Object.keys(holds).length+'개. 없는 녹음은 재생하지 않습니다.');
+      return {status:'ready',count};
+    }finally{
+      pendingRefreshes--;
+      refreshBadges();
     }
-    refreshBadges();
-    const count=Object.keys(records).length;
-    status('음원 목록 확인 완료 · 재생 가능 '+count+'개 · 검수 대기 '+Object.keys(holds).length+'개. 없는 녹음은 재생하지 않습니다.');
-    return {status:'ready',count};
   }
   function availability(word){
+    if(pendingRefreshes)return {state:'unavailable',label:'음원 목록 재확인 중 · 준비되면 다시 눌러 주세요'};
     if(manifestError)return {state:'unavailable',label:'목록 연결 오류 · 다시 눌러 재시도'};
     if(!manifestLoaded)return {state:'unavailable',label:'음원 목록 확인 중 · 준비되면 다시 눌러 주세요'};
     if(records[word])return {state:'ready',label:'♪ 사람 녹음 듣기 · 청취 검수 전'};
@@ -113,6 +122,7 @@
     // Do not await an already loaded manifest: even a resolved await yields the
     // user click activation on some mobile browsers, causing Audio.play() to
     // reject with NotAllowedError despite a valid human recording.
+    if(pendingRefreshes){status('음원 목록 재확인 중입니다. 준비되면 다시 눌러 주세요.');return {status:'loading'}}
     if(!manifestLoaded){
       // Mobile browsers require Audio.play() during the original tap. Waiting for
       // a network manifest loses transient user activation, so ask for a fresh tap.
