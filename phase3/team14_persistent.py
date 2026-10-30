@@ -103,8 +103,12 @@ CREATE TABLE IF NOT EXISTS ledger(id INTEGER PRIMARY KEY AUTOINCREMENT,transacti
     next_state='cancelled';new_refunded=price
    # Verify the caller's *exact* resulting booking status before any ledger write.
    # A partial refund must never be reported as a fully refunded booking.
+   # 'refunded' is the existing external booking status for both partial and
+   # full refunds; exact internal settlement states are additionally supported.
+   # Never silently accept a *specific* partial status when the result differs.
    if booking_state is not None and booking_state!=next_state:
-    raise SimError('INVALID_STATE','booking state does not match settlement result')
+    if not (booking_state=='refunded' and action in ('refund','refund_completed')):
+     raise SimError('INVALID_STATE','booking state does not match settlement result')
    # Transaction ID is unique across all ledger kinds.
    if self.db.execute('SELECT 1 FROM ledger WHERE transaction_id=? LIMIT 1',(transaction_id,)).fetchone():
     raise SimError('CONFLICT','transaction reused across operations')
