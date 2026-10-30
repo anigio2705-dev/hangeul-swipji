@@ -1,0 +1,37 @@
+name: Team11 Issue34 read-only receiver security gate
+on:
+  push:
+    branches:
+      - team11/issue34-readonly-receiver-20261030-1718
+    paths:
+      - 'automation/hq_issue34_receiver.py'
+      - 'automation/test_hq_issue34_receiver.py'
+      - '.github/workflows/team11-issue34-receiver.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  receiver:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Security regression (no AI calls)
+        run: python -m unittest discover -s automation -p 'test_hq_issue34_receiver.py' -v
+      - name: Read Issue 34 and acknowledge only trusted AUDIT_READY_ONLY commands
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python automation/hq_issue34_receiver.py --ack --output /tmp/hq-issue34-receiver.json
+          cat /tmp/hq-issue34-receiver.json >> "$GITHUB_STEP_SUMMARY"
+      - name: Save read-only receiver evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: team11-issue34-receiver
+          path: /tmp/hq-issue34-receiver.json
+          if-no-files-found: warn
