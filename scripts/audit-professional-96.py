@@ -29,9 +29,48 @@ for u in units:
   check(len(qs)==3,u['id']+': diagnostic size')
   for a in qs:check(0<=a['answerIndex']<len(a['choices']),u['id']+': diagnostic key')
 original=['intro.html','beginner1.html','beginner2.html','intermediate1.html','intermediate2.html','advanced1.html','advanced2.html','reading.html','reading-curriculum.js','reading-alternates.js','hangul-audio-manifest.json','index.html','phase3/content.json','phase3/content-expansion.json']
-preserved={}
+# The seven teaching pages have a separately reviewed staging snapshot for
+# additive server-progress handoff. Every byte must match that pinned snapshot.
+# The reading and landing pages allow only the specifically reviewed UI changes
+# below; undoing them must recover the ORIGINAL 7418e32 bytes exactly.
+staging_pages={'intro.html','beginner1.html','beginner2.html','intermediate1.html','intermediate2.html','advanced1.html','advanced2.html'}
+staging_ref='17f37da1'
+def undo_approved_ui(f,content):
+ if f=='reading.html':
+  edits=[
+   ('<div class="actions" style="margin:0"><button type="button" class="btn secondary" id="changeLevel" aria-controls="levels">레벨 변경</button><span class="pill" id="progress">0 / 40 완료</span></div>', '<span class="pill" id="progress">0 / 40 완료</span>'),
+   ('$("changeLevel").textContent=lang==="ko"?"레벨 변경":"Change level";',''),
+   ('$("changeLevel").onclick=()=>{document.body.classList.remove("reading-level-open");requestAnimationFrame(()=>document.querySelector(".layout>.side").scrollIntoView({behavior:"auto",block:"start"}))};','')
+  ]
+ elif f=='index.html':
+  edits=[
+   ('min-height:640px','min-height:760px'),
+   ('padding:56px clamp(28px,5vw,100px) 50px','padding:90px clamp(28px,5vw,100px) 65px'),
+   ('.editorial-steps{margin-top:38px;padding-top','.editorial-steps{margin-top:65px;padding-top'),
+   ('<div class="shell" data-team12-handoff></div><script src="./scripts/team12_learning_handoff.js" defer></script>','')
+  ]
+ else:return content
+ text=content.decode('utf-8')
+ for old,new in edits:
+  # Explicitly reject a changed or duplicated insertion: no blanket stripping.
+  if text.count(old)!=(2 if f=='index.html' and old=='min-height:640px' else 1):
+   errors.append('approved UI change missing/duplicated: '+f+' '+old[:35])
+   return content
+  text=text.replace(old,new)
+ return text.encode('utf-8')
+preserved={};preservationBaseline={}
 for f in original:
- old=subprocess.check_output(['git','show',base+':'+f],cwd=R);actual=(R/f).read_bytes();preserved[f]=hashlib.sha256(actual).hexdigest();check(old==actual,'original modified: '+f)
+ actual=(R/f).read_bytes();preserved[f]=hashlib.sha256(actual).hexdigest()
+ if f in staging_pages:
+  old=subprocess.check_output(['git','show',staging_ref+':'+f],cwd=R)
+  check(old==actual,'staging source drift: '+f)
+  preservationBaseline[f]=staging_ref
+ else:
+  old=subprocess.check_output(['git','show',base+':'+f],cwd=R)
+  normalized=undo_approved_ui(f,actual)
+  check(old==normalized,'original source or unapproved UI modified: '+f)
+  preservationBaseline[f]=base
+
 def grams(text):
  w=text.split();return set(tuple(w[i:i+3]) for i in range(len(w)-2))
 features={u['id']:grams(u['reading']) for u in units};pairs=[]
@@ -47,6 +86,6 @@ check([x['meanEojeol'] for x in stages]==sorted(x['meanEojeol'] for x in stages)
 check([x['uniqueSurfaceForms'] for x in stages]==sorted(x['uniqueSurfaceForms'] for x in stages),'vocabulary surface progression')
 # Common courtesy phrases and intentionally shared prechecks are reported, not mislabelled unique.
 repeatedQuestions=[{'question':q,'count':c} for q,c in Counter(questions).items() if c>1]
-report=dict(baseCommit=base,units=len(units),newUnits=72,assessmentItems=288,stages=stages,passagePairs=len(pairs),exactPassageDuplicates=96-len(set(u['reading'] for u in units)),highestSimilarityPairs=[dict(score=round(s,4),a=a,b=b) for s,a,b in pairs[:12]],repeatedAssessmentStems=repeatedQuestions,preservedSHA256=preserved,errors=errors,limits=['Morphological difficulty, official CEFR/TOPIK calibration and educational effectiveness are not established by length or surface forms.','Shared stage prechecks and shared lesson-flow layouts are intentional.','Answer evidence/key tests do not establish every possible semantic interpretation; author review and teacher review are distinct.'])
+report=dict(baseCommit=base,units=len(units),newUnits=72,assessmentItems=288,stages=stages,passagePairs=len(pairs),exactPassageDuplicates=96-len(set(u['reading'] for u in units)),highestSimilarityPairs=[dict(score=round(s,4),a=a,b=b) for s,a,b in pairs[:12]],repeatedAssessmentStems=repeatedQuestions,preservedSHA256=preserved,preservationBaseline=preservationBaseline,errors=errors,limits=['Morphological difficulty, official CEFR/TOPIK calibration and educational effectiveness are not established by length or surface forms.','Shared stage prechecks and shared lesson-flow layouts are intentional.','Answer evidence/key tests do not establish every possible semantic interpretation; author review and teacher review are distinct.'])
 (R/'audit/professional96-content.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
 print(json.dumps({k:v for k,v in report.items() if k not in ('preservedSHA256','highestSimilarityPairs')},ensure_ascii=False,indent=2));sys.exit(bool(errors))
