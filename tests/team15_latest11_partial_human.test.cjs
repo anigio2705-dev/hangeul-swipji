@@ -61,3 +61,46 @@ test('opted-in mixed sequence still uses human-first and labels synthetic',async
   assert.equal(calls.audio.length,1);
   assert.deepEqual(calls.tts,['나']);
 });
+
+test('P0: withdrawn recording without valid file metadata remains held with TTS consent',async()=>{
+  const calls={audio:0,tts:0};
+  const context={
+    URL,Event:class{},setTimeout,clearTimeout,
+    document:{baseURI:'https://example.org/hangul-basics.html',hidden:false,
+      addEventListener(){},dispatchEvent(){},querySelectorAll(){return []},querySelector(){return null}},
+    window:{addEventListener(){},speechSynthesis:{cancel(){},speak(u){calls.tts++;u.onend?.()}},
+      SpeechSynthesisUtterance:class{constructor(word){this.text=word}}},
+    Audio:class{constructor(){calls.audio++}play(){throw Error('held audio must never play')}pause(){}},
+    fetch:async()=>({ok:true,json:async()=>({recordings:{
+      '가':human,
+      '다':{kind:'human',disabled:true,holdReason:'withdrawn pending review'}
+    }})})
+  };
+  vm.runInNewContext(source,context,{filename:'hangul-core.js'});
+  const h=context.window.HSHangul;await h.ready;h.setSyntheticEnabled(true);
+  assert.equal(h.availability('다').state,'held');
+  assert.equal((await h.play('다')).status,'held');
+  assert.equal((await h.optionalSynthetic('다')).status,'held');
+  assert.equal(calls.audio,0);
+  assert.equal(calls.tts,0);
+});
+test('P0: withdrawn duplicate source stays held rather than becoming synthetic-eligible',async()=>{
+  const calls={tts:0};
+  const context={
+    URL,Event:class{},setTimeout,clearTimeout,
+    document:{baseURI:'https://example.org/hangul-basics.html',hidden:false,
+      addEventListener(){},dispatchEvent(){},querySelectorAll(){return []},querySelector(){return null}},
+    window:{addEventListener(){},speechSynthesis:{cancel(){},speak(u){calls.tts++;u.onend?.()}},
+      SpeechSynthesisUtterance:class{constructor(word){this.text=word}}},
+    Audio:class{constructor(){throw Error('held recording must never load')}pause(){}},
+    fetch:async()=>({ok:true,json:async()=>({recordings:{
+      '가':human,
+      '다':{...human,disabled:true,holdReason:'duplicate provenance pending review'}
+    }})})
+  };
+  vm.runInNewContext(source,context,{filename:'hangul-core.js'});
+  const h=context.window.HSHangul;await h.ready;h.setSyntheticEnabled(true);
+  assert.equal(h.availability('다').state,'held');
+  assert.equal((await h.play('다')).status,'held');
+  assert.equal(calls.tts,0);
+});
