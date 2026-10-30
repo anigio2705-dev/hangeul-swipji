@@ -1,7 +1,7 @@
 name: Free education and teaching integration checks
 on:
   push:
-    branches: ['integration/**']
+    branches: ['integration/**', 'audit/hq2-audio-review-status-20261030-1605']
   pull_request:
     paths: ['phase3/**', '*teaching*', 'index.html', 'learn.html', 'placement.html', 'scripts/**', '.github/workflows/integration-validation.yml']
 permissions:

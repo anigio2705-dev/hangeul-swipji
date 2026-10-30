@@ -37,15 +37,23 @@
         // A withdrawn file may have no src/hash, or duplicate a quarantined
         // source. Preserve the hold BEFORE validating playable recordings.
         // Otherwise an opted-in device TTS could speak a review-held syllable.
+        // A reviewer can withdraw a recording without setting disabled:true.
+        // Treat the authoritative listeningReview status as a hard hold for
+        // human playback and opt-in TTS, even with otherwise valid MP3 metadata.
+        const reviewHeld=a=>!!(a&&typeof a==='object'&&(
+          a.disabled||['held','rejected','blocked','withdrawn'].includes(
+            String(a.listeningReview?.status||'').trim().toLowerCase()
+          )
+        ));
         const blocked=Object.entries(m.recordings).filter(([word,a])=>
           !!word.trim()&&!['__proto__','constructor','prototype'].includes(word)&&
-          a&&typeof a==='object'&&!!a.disabled
+          reviewHeld(a)
         ).map(([word,a])=>[word,{holdReason:typeof a.holdReason==='string'&&a.holdReason.trim()
           ?a.holdReason:'검수 보류 · 음원 정보 확인 필요'}]);
         const human=Object.entries(m.recordings).filter(([word,a])=>{
           // Reject reserved object property names and blank keys from untrusted manifests.
           if(!word.trim()||['__proto__','constructor','prototype'].includes(word))return false;
-          if(!a||a.disabled||a.kind!=='human'||typeof a.src!=='string'||!/^\.\/assets\/hangul-audio\/[\w-]+\.mp3$/.test(a.src)||
+          if(!a||reviewHeld(a)||a.kind!=='human'||typeof a.src!=='string'||!/^\.\/assets\/hangul-audio\/[\w-]+\.mp3$/.test(a.src)||
              !/^[a-f0-9]{64}$/i.test(a.sha256||'')||typeof a.sourceUrl!=='string'||!/^https:\/\/[^\s]+$/.test(a.sourceUrl)||
              typeof a.author!=='string'||!a.author.trim()||typeof a.license!=='string'||!a.license.trim())return false;
           // Never allow one recording file to impersonate multiple distinct letters.

@@ -1,0 +1,23 @@
+name: HQ2 held audio review status (isolated)
+on:
+  push:
+    branches:
+      - audit/hq2-audio-review-status-20261030-1605
+  pull_request:
+    paths:
+      - hangul-core.js
+      - tests/team15_education_audio_loading.test.cjs
+      - .github/workflows/hq2-held-audio-review-status.yml
+permissions:
+  contents: read
+jobs:
+  review-hold:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: node --check hangul-core.js
+      - run: node --test tests/team15_education_audio_loading.test.cjs

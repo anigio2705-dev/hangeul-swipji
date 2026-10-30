@@ -8,7 +8,7 @@ const path=require('node:path');
 const vm=require('node:vm');
 const source=fs.readFileSync(path.join(__dirname,'..','hangul-core.js'),'utf8');
 const human={kind:'human',src:'./assets/hangul-audio/human.mp3',sha256:'a'.repeat(64),sourceUrl:'https://example.org/human',author:'Human',license:'CC-BY'};
-function setup(){
+function setup(reviewStatusOnly=null){
   let completeFetch;
   const cells=['가','다'].map(sound=>({
     dataset:{sound},classList:{toggle(){}},setAttribute(){},
@@ -37,7 +37,7 @@ function setup(){
     resolve:()=>completeFetch({ok:true,json:async()=>({recordings:{
       '가':human,
       // Deliberately missing src/hash: this is a REVIEW HOLD, never TTS-eligible.
-      '다':{kind:'human',disabled:true,holdReason:'review pending'},
+      '다':reviewStatusOnly ? {...human,src:'./assets/hangul-audio/da.mp3',sha256:'b'.repeat(64),listeningReview:{status:reviewStatusOnly},holdReason:'review withdrawn'} : {kind:'human',disabled:true,holdReason:'review pending'},
     }})}),
   };
 }
@@ -63,3 +63,18 @@ test('loading-state integration never converts withdrawn audio into opted-in TTS
   assert.equal(counts.tts,0);
   assert.equal(counts.audio,0);
 });
+
+// RED regression: review status is authoritative even if disabled was omitted.
+// A valid MP3 metadata row must not override a reviewer withdrawal.
+for(const reviewStatus of ['held','rejected','blocked']){
+  test('listeningReview '+reviewStatus+' without disabled blocks human and opt-in TTS',async()=>{
+    const {h,resolve,counts}=setup(reviewStatus);
+    resolve();await h.ready;
+    h.setSyntheticEnabled(true);
+    assert.equal(h.availability('다').state,'held');
+    assert.equal((await h.play('다')).status,'held');
+    assert.equal((await h.optionalSynthetic('다')).status,'held');
+    assert.equal(counts.audio,0);
+    assert.equal(counts.tts,0);
+  });
+}
