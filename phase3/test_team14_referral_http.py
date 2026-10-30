@@ -8,6 +8,7 @@ class ReferralHttpContractTests(unittest.TestCase):
     setUp = PlatformTests.setUp
     tearDown = PlatformTests.tearDown
     register = PlatformTests.register
+    book = PlatformTests.book
 
     def referral_code(self, uid):
         with server.connect() as db:
@@ -92,6 +93,72 @@ class ReferralHttpContractTests(unittest.TestCase):
         })[0], 409)
         self.assertEqual(self.parent_of(signed["id"]), self.t["id"])
 
+
+    def test_signup_referrer_policy_matches_authenticated_link(self):
+        # An admin/unknown-role inviter must not bypass the link endpoint's
+        # trusted role boundary through the older registration path.
+        with server.connect() as db:
+            admin_code = db.execute(
+                "SELECT referral_code FROM users WHERE email=?",
+                ("admin@example.com",)
+            ).fetchone()[0]
+        for suffix, code in (("admin-inviter", admin_code),):
+            status, response = Client(self.http.server_port).call("/api/register", {
+                "email": suffix + "@example.com",
+                "password": "Password12345!",
+                "nickname": "Referral test",
+                "role": "learner",
+                "adultConsent": True,
+                "referralCode": code
+            })
+            self.assertEqual(400, status, response)
+            with server.connect() as db:
+                self.assertEqual(0, db.execute(
+                    "SELECT count(*) FROM users WHERE email=?", (suffix + "@example.com",)
+                ).fetchone()[0])
+        # A valid teacher referrer remains accepted at registration.
+        _, signed = self.register("learner", "valid-inviter", self.referral_code(self.t["id"]))
+        self.assertEqual(self.parent_of(signed["id"]), self.t["id"])
+        # A role revoked after signup is no longer a valid inviter.
+        with server.connect() as db:
+            db.execute("UPDATE users SET role=? WHERE id=?", ("admin", self.o["id"]))
+        status, response = Client(self.http.server_port).call("/api/register", {
+            "email": "revoked-inviter@example.com",
+            "password": "Password12345!",
+            "nickname": "Referral test",
+            "role": "learner",
+            "adultConsent": True,
+            "referralCode": self.referral_code(self.o["id"])
+        })
+        self.assertEqual(400, status, response)
+        with server.connect() as db:
+            self.assertEqual(0, db.execute(
+                "SELECT count(*) FROM users WHERE email=?",
+                ("revoked-inviter@example.com",)
+            ).fetchone()[0])
+
+    def test_booking_referral_cannot_bypass_role_or_cycle_policy(self):
+        with server.connect() as db:
+            admin_code = db.execute(
+                "SELECT referral_code FROM users WHERE email=?",
+                ("admin@example.com",)
+            ).fetchone()[0]
+        self.assertEqual(400, self.book(referral=admin_code)[0])
+        self.assertIsNone(self.parent_of(self.l["id"]))
+        # Role-changed inviter must not be accepted by the older booking path.
+        with server.connect() as db:
+            db.execute("UPDATE users SET role=? WHERE id=?", ("admin", self.o["id"]))
+        self.assertEqual(400, self.book(referral=self.referral_code(self.o["id"]))[0])
+        with server.connect() as db:
+            db.execute("UPDATE users SET role=? WHERE id=?", ("learner", self.o["id"]))
+        # Outsider -> learner is valid, but learner -> outsider would form a cycle.
+        self.assertEqual(200, self.outsider.call("/api/referrals/link", {
+            "referralCode": self.referral_code(self.l["id"])
+        })[0])
+        self.assertEqual(409, self.book(referral=self.referral_code(self.o["id"]))[0])
+        self.assertIsNone(self.parent_of(self.l["id"]))
+        # The failed booking must not consume the available slot.
+        self.assertEqual(200, self.book()[0])
 
 if __name__ == "__main__":
     unittest.main()
