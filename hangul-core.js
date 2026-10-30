@@ -92,7 +92,7 @@
   function availability(word){
     if(pendingRefreshes)return {state:'unavailable',label:'음원 목록 재확인 중 · 준비되면 다시 눌러 주세요'};
     if(manifestError)return {state:'unavailable',label:'목록 연결 오류 · 다시 눌러 재시도'};
-    if(!manifestLoaded)return {state:'unavailable',label:'음원 목록 확인 중 · 준비되면 다시 눌러 주세요'};
+    if(!manifestLoaded)return {state:'loading',label:'사람 녹음 목록 확인 중 · 준비되면 다시 눌러 주세요'};
     if(records[word])return {state:'ready',label:'♪ 사람 녹음 듣기 · 청취 검수 전'};
     if(holds[word])return {state:'held',label:'검수 대기 · '+holds[word].holdReason};
     return {state:'missing',label:'녹음 없음 · 실제 사람 녹음 필요'};
@@ -248,9 +248,9 @@
     const summary=document.querySelector('[data-board-audio-counts]');
     if(summary){
       const cells=[...document.querySelectorAll('.board [data-sound]')];
-      const counts={ready:0,held:0,missing:0,unavailable:0};
+      const counts={ready:0,held:0,missing:0,unavailable:0,loading:0};
       for(const cell of cells)counts[availability(cell.dataset.sound).state]++;
-      summary.textContent='글자판 '+cells.length+'칸 · 재생 가능 '+counts.ready+' · 검수 보류 '+counts.held+' · 녹음 없음 '+counts.missing+(counts.unavailable?' · 목록 오류 '+counts.unavailable:'')+' (청취 승인 전)';
+      summary.textContent='글자판 '+cells.length+'칸 · 재생 가능 '+counts.ready+' · 검수 보류 '+counts.held+' · 녹음 없음 '+counts.missing+(counts.unavailable?' · 목록 오류 '+counts.unavailable:'')+(counts.loading?' · 목록 확인 중 '+counts.loading:'')+' (청취 승인 전)';
     }
   }
   document.addEventListener('hs-audio-ready',refreshBadges);

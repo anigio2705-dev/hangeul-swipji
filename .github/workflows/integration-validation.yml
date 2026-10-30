@@ -30,6 +30,7 @@ jobs:
       - run: node scripts/audit-phase2-content.cjs
       - run: node scripts/check-team15-phase2-home-gate.cjs
       - run: node scripts/check-audio-runtime.cjs
+      - run: node --test tests/team15_education_audio_loading.test.cjs
       - run: node scripts/audit-reading-similarity.cjs
       - run: node scripts/check-foundations.cjs
       - run: node scripts/check-phase2-pages.cjs
