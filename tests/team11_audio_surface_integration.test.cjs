@@ -20,8 +20,8 @@ test('shared engine is human-first and synthetic speech defaults off',()=>{
   const core=read('hangul-core.js');
   assert.match(core,/let syntheticEnabled=false/);
   assert.match(core,/if\(records\[word\]\)\{await recording\(word,token\);continue\}/);
-  assert.match(core,/if\\(!syntheticEnabled&&missing\\.length&&\\(words\\.length===1\\|\\|missing\\.length===words\\.length\\)\\)/);
-  assert.match(core,/const playable=!syntheticEnabled&&missing\\.length\\?words\\.filter/);
+  assert.match(core,/if\(!syntheticEnabled&&missing\.length&&\(words\.length===1\|\|missing\.length===words\.length\)\)/);
+  assert.match(core,/const playable=!syntheticEnabled&&missing\.length\?words\.filter/);
   assert.match(core,/utterance\.lang='ko-KR'/);
 });
 
