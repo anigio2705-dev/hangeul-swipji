@@ -90,13 +90,13 @@ class BoundedPatchTests(unittest.TestCase):
             self.assertIn("non-Python", blocked[0]["unsupported_reason"])
 
     def test_ready_absolute_paths_are_never_dispatched(self):
-        c = contracts("\\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
+        c = contracts("\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
-            (root / "feature.py").write_text("def feature(): return True\\n")
+            (root / "feature.py").write_text("def feature(): return True\n")
             (root / "test_feature.py").write_text(
-                "import unittest\\nclass TestFeature(unittest.TestCase):\\n"
-                " def test_feature(self): self.assertTrue(True)\\n")
+                "import unittest\nclass TestFeature(unittest.TestCase):\n"
+                " def test_feature(self): self.assertTrue(True)\n")
             record = {"owner": "12", "state": "READY",
                       "source_paths": [str(root / "feature.py")],
                       "test_paths": ["test_feature.py"],
