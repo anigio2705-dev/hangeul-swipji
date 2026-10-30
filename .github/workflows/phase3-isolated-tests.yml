@@ -9,9 +9,13 @@ permissions:
   contents: read
 jobs:
   test:
-    runs-on: ubuntu-latest
+    # Pin browser-compatible runner; ubuntu-26.04 breaks Playwright 1.51.1.
+    runs-on: ubuntu-24.04
     steps:
+      # Source-preservation test uses git show 7418e32; shallow checkout is insufficient.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
