@@ -89,6 +89,28 @@ class BoundedPatchTests(unittest.TestCase):
             self.assertEqual(blocked[0]["number"], 45)
             self.assertIn("non-Python", blocked[0]["unsupported_reason"])
 
+    def test_ready_absolute_paths_are_never_dispatched(self):
+        c = contracts("\\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "feature.py").write_text("def feature(): return True\\n")
+            (root / "test_feature.py").write_text(
+                "import unittest\\nclass TestFeature(unittest.TestCase):\\n"
+                " def test_feature(self): self.assertTrue(True)\\n")
+            record = {"owner": "12", "state": "READY",
+                      "source_paths": [str(root / "feature.py")],
+                      "test_paths": ["test_feature.py"],
+                      "independent_team15": "PASS",
+                      "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123",
+                      "independent_ci_sha": "a" * 40}
+            reg = {"schema": 1, "items": {"45": record}}
+            selected = choose_work_items("12", c, {}, {}, reg, root)
+            self.assertIn("non-Python or non-unittest executor", selected[0]["unsupported_reason"])
+            record["source_paths"] = ["feature.py"]
+            record["test_paths"] = [str(root / "test_feature.py")]
+            selected = choose_work_items("12", c, {}, {}, reg, root)
+            self.assertIn("non-Python or non-unittest executor", selected[0]["unsupported_reason"])
+
     def test_ready_task_specific_unittest_cannot_pass_with_zero_tests(self):
         fake = SimpleNamespace(returncode=0, stdout="", stderr="Ran 0 tests in 0.000s\nOK\n")
         with patch("hq_six_developers.shell", return_value=fake):
