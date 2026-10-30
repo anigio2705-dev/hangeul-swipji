@@ -1,0 +1,22 @@
+name: Hangul audio manifest recovery (isolated)
+on:
+  push:
+    branches:
+      - fix/hangul-audio-retry-recovery-20261030
+  pull_request:
+    paths:
+      - hangul-core.js
+      - tests/hangul-audio-retry.test.cjs
+      - .github/workflows/hangul-audio-retry-regression.yml
+permissions:
+  contents: read
+jobs:
+  audio-recovery:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: node --test tests/hangul-audio-retry.test.cjs
