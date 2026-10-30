@@ -46,6 +46,14 @@ class CandidateArtifactTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_artifact(data, "14")
 
+    def test_extra_role_pair_rejected(self):
+        data = self.sample("14")
+        data["items"].append({"id": "unreviewed_role",
+                              "text": "An unapproved fifth introducer role",
+                              "expected": "Must be rejected rather than treated as a valid four-role contract"})
+        with self.assertRaisesRegex(ValueError, "exactly four referral role pairs"):
+            validate_artifact(data, "14")
+
     def test_duplicate_case_rejected(self):
         data = self.sample("11")
         data["items"][-1]["id"] = data["items"][0]["id"]
