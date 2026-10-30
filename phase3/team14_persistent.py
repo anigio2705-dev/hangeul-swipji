@@ -64,8 +64,8 @@ CREATE TABLE IF NOT EXISTS ledger(id INTEGER PRIMARY KEY AUTOINCREMENT,transacti
   if action not in ('complete','refund','refund_completed','cancel'): raise SimError('VALIDATION_ERROR','action')
   amount(amount_krw,action in ('refund','refund_completed'))
   if action not in ('refund','refund_completed') and amount_krw!=0: raise SimError('VALIDATION_ERROR','unexpected amount')
-  target={'complete':'completed','refund':'refunded','refund_completed':'refunded','cancel':'cancelled'}[action]
-  if booking_state is not None and booking_state!=target: raise SimError('INVALID_STATE','booking event')
+  allowed={'complete':('completed',),'refund':('partially_refunded','refunded'),'refund_completed':('completed_partially_refunded','refunded'),'cancel':('cancelled',)}[action]
+  if booking_state is not None and booking_state not in allowed: raise SimError('INVALID_STATE','booking event')
   def apply():
    row=self.db.execute('SELECT l.*,m.commission,m.referral FROM lessons l JOIN months m ON m.id=l.month_id WHERE l.id=? AND l.month_id=? AND l.booking_id=?',(lesson_id,month_id,booking_id)).fetchone()
    if row is None: raise SimError('NOT_FOUND','booking/lesson mismatch')
@@ -101,6 +101,10 @@ CREATE TABLE IF NOT EXISTS ledger(id INTEGER PRIMARY KEY AUTOINCREMENT,transacti
     if state!='reserved': raise SimError('INVALID_STATE','cancel not permitted')
     entries=[('refund_reversal',-price)]
     next_state='cancelled';new_refunded=price
+   # Verify the caller's *exact* resulting booking status before any ledger write.
+   # A partial refund must never be reported as a fully refunded booking.
+   if booking_state is not None and booking_state!=next_state:
+    raise SimError('INVALID_STATE','booking state does not match settlement result')
    # Transaction ID is unique across all ledger kinds.
    if self.db.execute('SELECT 1 FROM ledger WHERE transaction_id=? LIMIT 1',(transaction_id,)).fetchone():
     raise SimError('CONFLICT','transaction reused across operations')
