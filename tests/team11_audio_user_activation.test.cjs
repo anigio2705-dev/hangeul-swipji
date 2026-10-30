@@ -239,3 +239,42 @@ test('mobile BFCache restore revalidates audio without autoplay or duplicate ini
   assert.equal(H.availability('가').state,'missing');
   assert.equal(created,0);
 });
+
+
+test('mobile tab foreground revalidates withdrawn audio and coalesces BFCache resume',async()=>{
+  const windowHandlers={},documentHandlers={};
+  let requests=0,deliver,created=0;
+  const human={kind:'human',src:'./assets/hangul-audio/ac00-r2.mp3',sha256:'a'.repeat(64),
+    sourceUrl:'https://example.test/recording',author:'speaker',license:'CC-BY'};
+  const document={
+    baseURI:'https://example.test/hangul-basics.html',hidden:false,
+    addEventListener(name,fn){documentHandlers[name]=fn},
+    dispatchEvent(){},querySelectorAll:()=>[],querySelector:()=>null
+  };
+  const context={document,URL,Event:class{},setTimeout,clearTimeout,
+    window:{addEventListener(name,fn){windowHandlers[name]=fn},speechSynthesis:{cancel(){}}},
+    Audio:class{constructor(){created++}play(){throw Error('background audio must not autoplay')}pause(){}},
+    fetch:()=>{
+      requests++;
+      if(requests===1)return Promise.resolve({ok:true,json:async()=>({recordings:{'가':human}})});
+      return new Promise(resolve=>{deliver=resolve});
+    }
+  };
+  vm.runInNewContext(source,context);
+  const H=context.window.HSHangul;await H.ready;
+  assert.equal(H.availability('가').state,'ready');
+  document.hidden=true;
+  documentHandlers.visibilitychange();
+  document.hidden=false;
+  documentHandlers.visibilitychange();
+  assert.equal(requests,2,'foreground must revalidate stale audio even without pagehide');
+  assert.equal(H.availability('가').state,'unavailable','foreground must revoke old audio immediately');
+  assert.equal((await H.play('가')).status,'loading');
+  windowHandlers.pageshow({persisted:true});
+  assert.equal(requests,2,'BFCache pageshow must share the pending foreground refresh');
+  assert.equal(created,0,'neither foreground nor BFCache can autoplay');
+  deliver({ok:true,json:async()=>({recordings:{}})});
+  await new Promise(resolve=>setTimeout(resolve,0));
+  assert.equal(H.availability('가').state,'missing','withdrawn audio must remain blocked');
+  assert.equal(created,0);
+});
