@@ -1,0 +1,41 @@
+name: Team15 held audio fail-closed independent regression
+on:
+  push:
+    branches: ['audit/team15-held-tts-failclosed-20261030-1057']
+    paths:
+      - 'hangul-core.js'
+      - 'scripts/check-team15-held-tts.cjs'
+      - '.github/workflows/team15-held-tts-regression.yml'
+  pull_request:
+    paths:
+      - 'hangul-core.js'
+      - 'scripts/check-team15-held-tts.cjs'
+      - '.github/workflows/team15-held-tts-regression.yml'
+permissions:
+  contents: read
+jobs:
+  held-audio:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax
+        run: |
+          node --check hangul-core.js
+          node --check scripts/check-team15-held-tts.cjs
+      - name: Independent Team15 held and opt-in playback contract
+        run: node scripts/check-team15-held-tts.cjs
+      - name: Existing human recording runtime contract
+        run: node scripts/check-audio-runtime.cjs
+      - name: Team11 mobile and progress regression
+        run: node --test tests/team11_audio_user_activation.test.cjs tests/team11_audio_surface_integration.test.cjs tests/team11_week_progress_storage.test.cjs
+      - name: Course and audio inventory safety
+        run: node scripts/check-foundations.cjs
+      - name: Evidence limits
+        if: always()
+        run: echo 'Automated browser simulation does not prove physical-device audio or staging99 deployment.' >> "$GITHUB_STEP_SUMMARY"
