@@ -11,7 +11,7 @@ const layout=[
   ['.editorial-landing{position:relative;min-height:640px','.editorial-landing{position:relative;min-height:760px'],
   ['.editorial-image{position:relative;min-height:640px','.editorial-image{position:relative;min-height:760px'],
   ['.editorial-content{padding:56px clamp(28px,5vw,100px) 50px','.editorial-content{padding:90px clamp(28px,5vw,100px) 65px'],
-  ['.editorial-steps{margin-top:38px','.editorial-steps{margin-top:65px']
+  ['.editorial-steps{margin-top:38px;padding-top:24px','.editorial-steps{margin-top:65px;padding-top:24px']
 ];
 function replaceExactlyOnce(text,from,to=''){
   const first=text.indexOf(from);
