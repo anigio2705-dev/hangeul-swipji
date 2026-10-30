@@ -267,7 +267,8 @@ def run_checks(team, path, extra_tests=()):
         test_count = re.search(r"\bRan ([0-9]+) tests?\b", output) if unittest_discovery else None
         missing_or_zero_tests = unittest_discovery and (not test_count or int(test_count.group(1)) == 0)
         if result.returncode or missing_or_zero_tests:
-            return False, output[-2000:] or "Required unittest discovery had no positive test-count evidence"
+            reason = "Required unittest discovery had no positive test-count evidence" if missing_or_zero_tests else ""
+            return False, (reason + "\n" + output[-1900:]).strip()
     return True, ""
 def main():
     validate_ownership()
