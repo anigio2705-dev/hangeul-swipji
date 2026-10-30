@@ -6,6 +6,7 @@ on:
     paths:
       - 'automation/hq_round_robin.py'
       - 'automation/test_hq_round_robin.py'
+      - 'automation/experiments/task101-round-robin-20261030.json'
       - '.github/workflows/hq-issue34-round-robin.yml'
   pull_request:
     branches:
