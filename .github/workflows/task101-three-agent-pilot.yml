@@ -1,0 +1,106 @@
+name: Task101 isolated three independent AI handoff jobs (P0 pilot)
+on:
+  push:
+    branches:
+      - support/task101-three-agent-handoff-pilot-20261030
+    paths:
+      - 'automation/task101_three_agent_pilot.py'
+      - 'automation/test_task101_three_agent_pilot.py'
+      - '.github/workflows/task101-three-agent-pilot.yml'
+  pull_request:
+    branches:
+      - support/task101-four-pair-acceptance-20261030-2139
+    paths:
+      - 'automation/task101_three_agent_pilot.py'
+      - 'automation/test_task101_three_agent_pilot.py'
+      - '.github/workflows/task101-three-agent-pilot.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: task101-isolated-three-agent-pilot
+  cancel-in-progress: false
+jobs:
+  offline-security:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify handoff integrity and missing-key fail closed without API calls
+        run: python -m unittest discover -s automation -p 'test_task101_three_agent_pilot.py' -v
+  team11:
+    needs: offline-security
+    if: >-
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+      github.ref == 'refs/heads/support/task101-three-agent-handoff-pilot-20261030'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    environment: hq-ai-pilot
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Offline provenance and fail-closed tests (no model calls)
+        run: python -m unittest discover -s automation -p 'test_task101_three_agent_pilot.py' -v
+      - name: Team11 isolated model call (one bounded call)
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python automation/task101_three_agent_pilot.py --team 11 --output 11.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: task101-team11-${{ github.run_attempt }}
+          path: 11.json
+          retention-days: 3
+          if-no-files-found: error
+  team14:
+    needs: team11
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    environment: hq-ai-pilot
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        with:
+          name: task101-team11-${{ github.run_attempt }}
+          path: prior11
+      - name: Team14 independent model call consuming team11 SHA-bound artifact
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python automation/task101_three_agent_pilot.py --team 14 --prior prior11/11.json --output 14.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: task101-team14-${{ github.run_attempt }}
+          path: 14.json
+          retention-days: 3
+          if-no-files-found: error
+  team15:
+    needs: team14
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    environment: hq-ai-pilot
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        with:
+          name: task101-team14-${{ github.run_attempt }}
+          path: prior14
+      - name: Team15 independent critic model call consuming team14 SHA-bound artifact
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python automation/task101_three_agent_pilot.py --team 15 --prior prior14/14.json --output 15.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: task101-team15-${{ github.run_attempt }}
+          path: 15.json
+          retention-days: 3
+          if-no-files-found: error
