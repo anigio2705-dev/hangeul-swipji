@@ -70,6 +70,14 @@ class RootIndexAuditTests(unittest.TestCase):
         self.assertEqual((False, "baseline_anchor_missing_or_ambiguous"),
                          observed_delta(self.original + before.encode(), self.original))
 
+    def test_browser_evidence_runs_after_source_failure_without_greenwashing(self):
+        # Phase3/free integration must still report failure when the protected
+        # original differs, while collecting browser regression evidence.
+        for filename in ("phase3-isolated-tests.yml", "integration-validation.yml"):
+            workflow = (Path(__file__).resolve().parents[1] / ".github/workflows" / filename).read_text(encoding="utf-8")
+            self.assertIn("      - id: source_tests\n        continue-on-error: true\n        run: python -m unittest discover -s phase3 -p 'test_*.py' -v", workflow)
+            self.assertIn("      - name: Preserve source-test failure after browser evidence\n        if: ${{ always() && steps.source_tests.outcome != 'success' }}\n        run: exit 1", workflow)
+
 
 if __name__ == "__main__":
     unittest.main()
