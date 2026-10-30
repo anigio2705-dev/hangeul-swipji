@@ -10,6 +10,8 @@ on:
       - 'phase3/server.py'
       - 'phase3/test_team14_referral_http.py'
       - 'phase3/test_task101_four_pair_acceptance.py'
+      - 'automation/hq_semantic_contract_paths.json'
+      - 'automation/test_hq_ready101_mapping.py'
       - 'automation/experiments/task101-referral-entrypoints-20261030.json'
       - '.github/workflows/task101-referral-http.yml'
   pull_request:
