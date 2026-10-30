@@ -1,0 +1,39 @@
+name: Team14 P0 task101 trusted Phase3 session referral boundary (isolated)
+on:
+  push:
+    branches:
+      - support/team14-task101-session-role-boundary-20261030-1936
+    paths:
+      - 'phase3/team14_referral_store.py'
+      - 'phase3/test_team14_referral_roles.py'
+      - '.github/workflows/team14-task101-session-role-boundary.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  session-referral-boundary:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify real Phase3 session and account roles; reject impersonation
+        run: python -m unittest discover -s phase3 -p 'test_team14_referral_roles.py' -v
+      - name: Preserve immutable referrals and mock award arithmetic
+        run: |
+          python -m unittest discover -s phase3 -p 'test_team14_referral_store.py' -v
+          python -m unittest discover -s phase3 -p 'test_team14_referral_scenarios.py' -v
+      - name: Confirm READY is still fail-closed pending independent review
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_ready101_mapping.py' -v
+          python automation/hq_traffic_lights.py --output /tmp/task101-traffic.json
+          python - <<'PY'
+          import json
+          with open('/tmp/task101-traffic.json',encoding='utf-8') as f:
+              report=json.load(f)
+          assert report['dispatch_readiness']['dispatchable_total'] == 0
+          assert report['final_complete'] == 0
+          print('No READY promotion; no API calls; independent team15/HQ2 review required')
+          PY
