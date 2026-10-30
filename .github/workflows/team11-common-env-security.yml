@@ -5,6 +5,7 @@ on:
     paths:
       - 'automation/hq_six_developers.py'
       - 'automation/test_hq_six_developers.py'
+      - 'automation/test_hq_ready_provenance.py'
       - '.github/workflows/team11-common-env-security.yml'
   workflow_dispatch:
 permissions:
@@ -24,6 +25,8 @@ jobs:
         run: python -m py_compile automation/hq_six_developers.py
       - name: Verify worker scope, task ownership and secret isolation
         run: python -m unittest discover -s automation -p 'test_hq_six_developers.py' -v
+      - name: Verify independent READY provenance and secret-safe child environment
+        run: python -m unittest discover -s automation -p 'test_hq_ready_provenance.py' -v
       - name: Preserve validation boundary
         if: always()
         run: echo 'Unit tests do not prove actual external AI API calls, READY task assignment, or deployment.' >> "$GITHUB_STEP_SUMMARY"
