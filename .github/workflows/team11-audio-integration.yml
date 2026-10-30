@@ -4,6 +4,7 @@ on:
     branches:
       - team11/audio-gesture-20261030
     paths:
+      - 'docs/team11/AUDIO_MOBILE_FAILURE_CASES_20261030.md'
       - 'hangul-core.js'
       - 'hangul-board.js'
       - 'hangul-basics.html'
@@ -30,6 +31,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Validate 11-team persistent failure checkpoint
+        run: test -s docs/team11/AUDIO_MOBILE_FAILURE_CASES_20261030.md
       - name: Validate JavaScript syntax
         run: |
           node --check hangul-core.js
