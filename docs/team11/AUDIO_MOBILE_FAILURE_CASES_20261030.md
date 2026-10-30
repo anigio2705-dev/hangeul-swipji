@@ -34,3 +34,29 @@
 - 11팀 자체 CI: 두 RED/두 GREEN 근거 위 참조.
 - 남은 관문: 15팀 독립 실기기, 팀12 음원 정책, 전체 통합/Render99 데이터 영속성·백업·복원·롤백 및 대표 승인.
 - 다음 선택 후보: 11팀 소유 공통 기반 #38 학습 진도 다중 기기 복원/권한 계약을 기존 코드·테스트에서 조사하고 안전한 격리 수정. 중앙 READY 검증 전에는 RUNNING/DONE 선언 금지.
+
+
+## 사건 T11-TTS-WATCHDOG-20261030-03 — 15팀 반례를 11팀 제품에 인수
+- 160개 계약: #58/#59 공통 음성 엔진 지원 범위. **원장 READY=0, DONE=0 유지**; 11팀 자체 수정으로 12팀 소유 계약을 완료 처리하지 않음.
+- 교차 학습: 15팀 독립 감사 PR #119의 timeout→동기 onend 오인 사례를 확인하고, **11팀 최신 격리 HEAD에서 별도 재현**. 15팀의 선행 수정과 같은 안전 원리를 채택하되 11팀 HEAD의 새 테스트/커밋/CI로 별도 증명.
+- 원인 가설 A: watchdog의 `speechSynthesis.cancel()`이 동기 `utterance.onend`를 발생시켜 실제 timeout이 `tts-played`로 오판됨. 가설 B: 타이머 미설정/누락. 가설 C: 재생 완료 뒤 오래된 콜백. 실제 RED에서 A 확인.
+- RED: `tests/team11_audio_user_activation.test.cjs` SHA `e6cfcabcc7174fce6433cfd5b2ba635930284be0`; [Actions #40999984224](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40999984224) FAILURE, expected `tts-timeout`, actual `tts-played` (기존 18 PASS, 신규 1 FAIL).
+- FIX: `hangul-core.js` SHA `0567780e54298c5d733a202b74eaee6bb5b00b9a`; Promise timeout 결과를 먼저 확정하고 브라우저 cancel 실행. [Actions #41000021454](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41000021454) SUCCESS.
+- 재사용 규칙: 외부 API의 cancel/close가 동기 완료 이벤트를 발생시키면 내부 Promise 종료 상태를 먼저 확정해야 함.
+- 제한: iOS/Android 실제 기기 청취·12팀 원본 발음·15팀의 **최신 11팀 SHA** 독립 감사 미완료.
+
+## 사건 T11-TTS-INPUT-20261030-04 — 다음 공통 음성 결함 자체 선정
+- 현상: 공통 `play()`는 빈 값·비문자열을 `invalid`로 거부하지만 공개 `optionalSynthetic()`는 같은 값을 `SpeechSynthesisUtterance`에 전달하여 `tts-played`로 오판할 수 있었음.
+- 원인 가설 A: 직접 TTS 진입점에 입력 검증 누락. 가설 B: opt-in 체크 누락. 가설 C: 음원 목록 보류 정책 우회. RED는 A를 확정했고 기존 B/C 경로는 유지.
+- RED: 테스트 SHA `b9ad5396a9f04eea19358c23bfc868b624d98c75`, [Actions #41000056823](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41000056823) FAILURE: expected `invalid`, actual `tts-played`.
+- FIX: `hangul-core.js` SHA `86f2088575c24e35e447907a13d83641138ac6bd`; 직접 TTS에서 빈 문자열·공백·null·undefined·배열을 거부. 명시적 동의, 검수 보류 차단, 사람 녹음 우선 정책 유지.
+- GREEN: [Actions #41000097477](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41000097477) SUCCESS. 테스트 결과는 코드 기반 모의 브라우저 검사이며 실제 발음 청취를 인증하지 않음.
+- 다음 작업: 11팀 소유 #38 다중 기기 진도·인증 권한 경계의 현재 API/클라이언트 계약 조사 및 테스트 가능한 후보 분리. 중앙의 의미계약·단일 소유권·15팀 독립 감사 전 READY/DONE 승격 금지.
+
+## 2026-10-30 12:56 KST 실행 승계 체크포인트
+- 현재 마지막 제품 변경 SHA: `86f2088575c24e35e447907a13d83641138ac6bd`; 최종 문서 커밋은 별도.
+- 자체 RED→GREEN 두 건 확인. 15팀 PR #119의 timeout 반례를 11팀에 인수했으며 별도 #38 조사로 승계. 이것은 **중앙 READY 큐의 두 과제 자동 AI 호출/승계 성공이 아님**.
+- 160개 원장 `automation/hq_backlog_160.md`: [x] 0개. `automation/hq_semantic_contract_paths.json`에서 READY 0; 실제 AI 호출 6-job 증거 [#40973509528](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40973509528) 0회는 과거 실행의 실측이며 이 회차에 AI API 6팀 호출을 했다는 뜻이 아님.
+- **11팀 직접 GitHub 파일 수정 및 CI만 실증**; 6팀 AI 모델 API 호출·READY 자동 승계 미실증, 중앙/15팀에 BLOCKED로 인계.
+- 팀12 요청: 음원 출처/보류/누락/합성음 안내와 7일 학습 화면 계약 교차 확인. 팀15 요청: PR #83 최신 SHA 두 회귀 독립 검증, 실제 모바일 브라우저 청취, 15팀 PR #119과 중복 충돌 확인.
+- 테스트99 실제 배포/현재 SHA/DB 영속성·백업·복원·롤백/대표 승인 미확인. main·운영 사이트·운영 DB·실결제·실송금 미변경.
