@@ -11,6 +11,7 @@ on:
   pull_request:
     branches:
       - support/team14-task101-session-role-boundary-20261030-1936
+      - support/team11-task101-ci-env-20261030-2016
   workflow_dispatch:
 permissions:
   contents: read
