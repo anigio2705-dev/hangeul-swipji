@@ -189,6 +189,9 @@
   async function optionalSynthetic(word){
     stop();const token=run;
     if(!syntheticEnabled)return {status:'tts-disabled'};
+    // Direct TTS must obey the same refresh lock as human recordings: a
+    // withdrawn/held letter may appear only in the newer pending manifest.
+    if(pendingRefreshes)return {status:'loading'};
     if(!manifestLoaded||manifestError)return {status:'manifest-error'};
     if(holds[word]){status('재생 보류: '+word+' · '+holds[word].holdReason);return {status:'held',word}};
     if(records[word])return {status:'human-available'};
