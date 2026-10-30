@@ -1,0 +1,23 @@
+name: Team15 source-preservation fail-closed regression
+on:
+  push:
+    branches: ['audit/team15-source-contract-*']
+  pull_request:
+    paths:
+      - scripts/audit-professional-96.py
+      - scripts/check-team15-source-gate.py
+      - .github/workflows/team15-source-preservation.yml
+permissions:
+  contents: read
+jobs:
+  independent-source-gate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify immutable educational source and negative tamper cases
+        run: python scripts/check-team15-source-gate.py
