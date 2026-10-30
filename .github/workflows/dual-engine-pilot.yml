@@ -1,0 +1,21 @@
+name: Dual Engine Pilot Tests
+on:
+  push:
+    branches:
+      - automation/dual-engine-pilot-20261030
+  pull_request:
+    paths:
+      - 'automation/dual_engine.py'
+      - 'automation/test_dual_engine.py'
+      - '.github/workflows/dual-engine-pilot.yml'
+  workflow_dispatch:
+jobs:
+  dual-engine-tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run state-machine tests
+        run: python -m unittest automation.test_dual_engine -v
