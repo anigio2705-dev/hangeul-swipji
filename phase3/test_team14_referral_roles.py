@@ -96,5 +96,91 @@ class VerifiedReferralRoleTests(unittest.TestCase):
         self.assertFalse(award["payment_enabled"])
 
 
+    def test_real_phase3_roles_through_active_server_session(self):
+        import hashlib
+        import sqlite3
+        import time
+        accounts = sqlite3.connect(":memory:")
+        try:
+            accounts.execute("CREATE TABLE users(id TEXT PRIMARY KEY, role TEXT NOT NULL)")
+            accounts.execute("CREATE TABLE sessions(token TEXT PRIMARY KEY, user_id TEXT NOT NULL, expires REAL NOT NULL)")
+            # Phase3 account roles are learner/partner/teacher, NOT student.
+            for child_role in ("learner", "partner", "teacher"):
+                for inviter_role in ("learner", "partner", "teacher"):
+                    with self.subTest(child_role=child_role, inviter_role=inviter_role):
+                        child = "child_" + child_role + "_" + inviter_role
+                        inviter = "inviter_" + child_role + "_" + inviter_role
+                        token = "verified_cookie_" + child + "_long_token"
+                        accounts.execute("INSERT INTO users VALUES(?,?)", (child, child_role))
+                        accounts.execute("INSERT INTO users VALUES(?,?)", (inviter, inviter_role))
+                        accounts.execute("INSERT INTO sessions VALUES(?,?,?)", (
+                            hashlib.sha256(token.encode()).hexdigest(), child, time.time()+600))
+                        self.assertTrue(self.store.link_from_server_session(
+                            accounts, token, child, inviter))
+                        self.assertEqual(self.store.db.execute(
+                            "SELECT parent_id FROM referral_links WHERE student_id=?",
+                            (child,)).fetchone()[0], inviter)
+        finally:
+            accounts.close()
+
+    def test_server_session_impersonation_expiry_and_admin_fail_closed(self):
+        import hashlib
+        import sqlite3
+        import time
+        accounts = sqlite3.connect(":memory:")
+        try:
+            accounts.execute("CREATE TABLE users(id TEXT PRIMARY KEY, role TEXT NOT NULL)")
+            accounts.execute("CREATE TABLE sessions(token TEXT PRIMARY KEY, user_id TEXT NOT NULL, expires REAL NOT NULL)")
+            accounts.executemany("INSERT INTO users VALUES(?,?)", [
+                ("child", "learner"), ("inviter", "partner"), ("attacker", "teacher"), ("admin", "admin")])
+            token = "attacker_active_server_session_long_token"
+            expired = "expired_server_session_cookie_long_token"
+            admin = "admin_server_session_cookie_long_token"
+            for cookie, actor, expiry in [
+                (token, "attacker", time.time()+600),
+                (expired, "child", time.time()-10),
+                (admin, "admin", time.time()+600)]:
+                accounts.execute("INSERT INTO sessions VALUES(?,?,?)", (
+                    hashlib.sha256(cookie.encode()).hexdigest(), actor, expiry))
+            for cookie, child, parent in [
+                (token, "child", "inviter"), # forged client child ID
+                (expired, "child", "inviter"), # expired server session
+                (admin, "admin", "inviter"), # administrator not an eligible role
+                ("unknown_server_session_cookie_long_token", "child", "inviter"),
+                ("", "child", "inviter"),
+            ]:
+                with self.subTest(cookie=cookie):
+                    with self.assertRaises(SimError) as error:
+                        self.store.link_from_server_session(accounts, cookie, child, parent)
+                    self.assertEqual(error.exception.code, "FORBIDDEN")
+            self.assertEqual(self.store.db.execute(
+                "SELECT COUNT(*) FROM referral_links").fetchone()[0], 0)
+            accounts.execute("UPDATE users SET role='admin' WHERE id='inviter'")
+            accounts.execute("UPDATE sessions SET expires=? WHERE user_id='child'", (time.time()+600,))
+            child_token = "child_verified_session_cookie_long_token"
+            accounts.execute("INSERT INTO sessions VALUES(?,?,?)", (
+                hashlib.sha256(child_token.encode()).hexdigest(), "child", time.time()+600))
+            with self.assertRaises(SimError):
+                self.store.link_from_server_session(accounts, child_token, "child", "inviter")
+            self.assertEqual(self.store.db.execute(
+                "SELECT COUNT(*) FROM referral_links").fetchone()[0], 0)
+        finally:
+            accounts.close()
+
+    def test_server_role_lookup_failure_fails_closed(self):
+        import sqlite3
+        accounts = sqlite3.connect(":memory:")
+        try:
+            with self.assertRaises(SimError) as error:
+                self.store.link_from_server_session(
+                    accounts, "valid_looking_server_cookie_token_long", "child", "inviter")
+            self.assertEqual(error.exception.code, "FORBIDDEN")
+            self.assertEqual(self.store.db.execute(
+                "SELECT COUNT(*) FROM referral_links").fetchone()[0], 0)
+        finally:
+            accounts.close()
+
+
+
 if __name__ == "__main__":
     unittest.main()

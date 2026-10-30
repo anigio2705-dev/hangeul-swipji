@@ -109,6 +109,37 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
    raise SimError('FORBIDDEN','both account roles must be verified')
   return self.link(child_id,parent_id)
 
+
+ def link_from_server_session(self, account_db, session_token, child_id, parent_id):
+  """Accept a referral only from an active, trusted Phase3 server session.
+
+  account_db MUST be the server's own SQLite connection. session_token MUST
+  come from its HttpOnly hs3 cookie, never a JSON actor-id field. Phase3 uses
+  learner/partner/teacher while referral policy uses student/teacher. This
+  adapter bridges those vocabularies without granting admin referral rights.
+  It does not itself expose an HTTP route or enable real-money awards.
+  """
+  import hashlib
+  import time
+  if (not isinstance(account_db, sqlite3.Connection)
+      or type(session_token) is not str or not 20 <= len(session_token) <= 256):
+   raise SimError('FORBIDDEN','trusted server session required')
+  try:
+   session=account_db.execute(
+    'SELECT u.id FROM users u JOIN sessions s ON u.id=s.user_id '
+    'WHERE s.token=? AND s.expires>?',
+    (hashlib.sha256(session_token.encode()).hexdigest(),time.time())).fetchone()
+  except sqlite3.Error as exc:
+   raise SimError('FORBIDDEN','trusted session lookup failed') from exc
+  if not session:
+   raise SimError('FORBIDDEN','active server session required')
+  def server_role_lookup(user_id):
+   row=account_db.execute('SELECT role FROM users WHERE id=?',(user_id,)).fetchone()
+   if not row:
+    return None
+   return {'learner':'student','partner':'teacher','teacher':'teacher'}.get(row[0])
+  return self.link_verified(child_id,parent_id,session[0],server_role_lookup)
+
  def award(self,event_id,student_id,lesson_id,gross_krw,depth_rates_bps=(300,),commission_bps=2000):
   import json
   ident(event_id);ident(student_id);ident(lesson_id);amount(gross_krw,True)
