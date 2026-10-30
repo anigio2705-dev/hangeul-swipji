@@ -50,6 +50,18 @@ class BookingProductSnapshotTests(unittest.TestCase):
             self.assertIsNone(db.execute('SELECT * FROM booking_product_snapshots '
                                          'WHERE booking_id=?', (booking_id,)).fetchone())
 
+    def test_snapshot_schema_rejects_mismatched_catalog_tuple(self):
+        # A valid product name with the wrong duration must never be persisted.
+        # Immutable rows would otherwise lock in an invalid settlement contract.
+        booking_id = self.make_instant_booking(20000)
+        with server.connect() as db:
+            with self.assertRaises(sqlite3.IntegrityError):
+                db.execute('''INSERT INTO booking_product_snapshots
+                  (booking_id,product_code,duration_minutes,price_krw,currency)
+                  VALUES(?,?,?,?,?)''', (booking_id, 'trial_15', 25, 6000, 'KRW'))
+            self.assertIsNone(db.execute('SELECT 1 FROM booking_product_snapshots '
+                                         'WHERE booking_id=?', (booking_id,)).fetchone())
+
     def test_product_choice_requires_approved_role_and_exact_server_price(self):
         choose = instant_matching.server_test_product_choice
         self.assertIsNone(choose({'approved': 0, 'role': 'partner', 'price': 10000}))
