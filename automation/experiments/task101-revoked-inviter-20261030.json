@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "task_number": 101,
+  "owner": "14",
+  "support": [
+    "11",
+    "15"
+  ],
+  "hypothesis_id": "H101-STALE-INVITER-03",
+  "prior_attempt_id": "H101-REFERRAL-ENTRYPOINTS-20261030",
+  "changed_assumption": "A referral linked while an inviter was eligible remains usable by POST /api/bookings without referralCode even after the inviter's role is revoked to admin.",
+  "discriminating_test": "python -m unittest discover -s phase3 -p 'test_team14_referral_http.py' -v",
+  "red": {
+    "head_sha": "aa69ce3ac113ce5321f574dce4efb8383ec19d06",
+    "run_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41055166874",
+    "job_id": 124060754508,
+    "observed": "23 tests, 1 failure: expected HTTP 409, actual HTTP 200 and booking created"
+  },
+  "fix": {
+    "code_sha": "f4e62da10c9a55c0a61fa996a6f1fbcc45a2b106",
+    "file": "phase3/server.py",
+    "policy": "Before booking snapshot, recheck existing referred_by inviter current DB role; revoked/missing inviter fails closed with HTTP 409."
+  },
+  "result": "RED reproduced; GREEN same-head CI pending; no independent READY approval",
+  "next_action": "Confirm exact final HEAD CI; team15/HQ2 independent regression; assess policy impact of blocking booking vs dropping referral reward; central decides before READY.",
+  "ready": false,
+  "ai_api_calls": 0,
+  "safety": {
+    "main_unchanged": true,
+    "test99_undeployed": true,
+    "real_money_disabled": true
+  }
+}
