@@ -287,6 +287,37 @@ class Handler(BaseHTTPRequestHandler):
             if not 1000<=price<=1000000: raise Error('가격 범위를 확인하세요')
             return {'currency':'KRW','basis':'hypothetical-test-only','scenarios':[dict(commissionBps=c,referralBps=r,processorBps=300,refundReserveBps=refund,taxReserveBps=tax,**money(price,c,r,300,tax,refund)) for c in (1500,2000,2500) for r in (0,300,500)],'note':'PG 3%·환불 충당·세금 충당은 가정값입니다. 법정 세율·확정 요율·순이익이 아니며 고정비·실제 세금은 별도입니다.'},None
         u=self.user(db); uid=u['id']
+        if method=='POST' and path=='/api/referrals/link':
+            # Task #101: authenticated account consent, not client-supplied actorId.
+            # This writes the SAME persistent Phase3 users.referred_by column
+            # used by booking; no ephemeral ReferralStore and no real payment.
+            if u['role'] not in ('learner','partner','teacher'):
+                raise Error('소개 관계를 설정할 권한이 없습니다',403)
+            code=text(d.get('referralCode',''),40)
+            if not code: raise Error('추천코드가 필요합니다')
+            parent=db.execute('SELECT id,role FROM users WHERE referral_code=?',(code,)).fetchone()
+            if not parent or parent['role'] not in ('learner','partner','teacher'):
+                raise Error('유효한 소개 대상이 아닙니다',400)
+            if parent['id']==uid: raise Error('자기소개는 허용되지 않습니다',409)
+            existing=db.execute('SELECT referred_by FROM users WHERE id=?',(uid,)).fetchone()
+            if existing['referred_by']:
+                if existing['referred_by']!=parent['id']:
+                    raise Error('기존 소개 관계를 변경할 수 없습니다',409)
+                return {'linked':False,'alreadyLinked':True,'realMoney':False},None
+            # A user may later become an inviter; reject loops even if a
+            # legacy row was imported with a pre-existing broken chain.
+            visited={uid}
+            current=parent['id']
+            while current:
+                if current in visited: raise Error('순환 소개 관계는 허용되지 않습니다',409)
+                visited.add(current)
+                row=db.execute('SELECT referred_by FROM users WHERE id=?',(current,)).fetchone()
+                if not row: raise Error('소개 관계의 계정이 없습니다',409)
+                current=row['referred_by']
+            db.execute('UPDATE users SET referred_by=? WHERE id=? AND referred_by IS NULL',
+                       (parent['id'],uid))
+            audit(db,uid,'consented_referrer_bound',uid,parent['id'])
+            return {'linked':True,'alreadyLinked':False,'realMoney':False},None
         if path=='/api/free-progress':
             if u['role']!='learner': raise Error('학습자만 진도를 조회·저장할 수 있습니다',403)
             if method=='GET':
