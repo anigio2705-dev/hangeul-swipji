@@ -76,3 +76,33 @@
 - 중앙 요청: #11 READY 의미 검증/소유권 및 실제 6팀 API 호출=0 장애를 해결할 수 있는 승인된 통합 브랜치 작업 계약을 제시. 11팀은 다음 실행에서 중앙 READY·AI 호출 로그·#38 다중 기기 진도 인증 경계를 재조사한다.
 - 테스트99: 배포 0회. Render99 SQLite 영속성·백업·복원·롤백 및 대표 승인 미확인. main/운영 홈페이지/실결제/실송금 미변경.
 - 재사용 패턴: 독립 QA의 RED 테스트를 실제 제품에 인수한 다음, 해당 테스트를 제품 소유 팀의 CI 필수 게이트로 연결해야 이후 수정에서도 회귀 방지가 지속된다.
+
+
+## 2026-10-30 14:52 KST — P0 withdrawn-audio hold + worker secret isolation (11팀 연속 2개 직접 개발)
+
+### 작업 A: 검수 보류 음원 fail-closed, #58/#59 지원 (12팀 원소유)
+- 문제: disabled:true 사람 녹음이 src/sha256 누락 또는 다른 음원과 중복되면 유효 MP3 필터에서 탈락해 held가 missing으로 변함. 합성음 opt-in 시 보류 글자가 TTS로 우회될 위험.
+- 가설 A: 보류 분류를 MP3 파일 유효성 검사 이후 수행. B: 합성음 동의 체크 누락. C: 브라우저 캐시. 15팀 PR #127의 독립 반례와 11팀 신규 RED 테스트로 A 재현.
+- RED: tests/team15_latest11_partial_human.test.cjs commit 77bba30416e095f16fe3a3f9bca1e7f1a1cb0e2e, CI #41010927418 및 15팀 독립 회귀 #41010931423 FAILURE.
+- FIX: hangul-core.js commit 41777942b74cc4196e463abae714eb28b0adeb5b: disabled 항목은 파일 경로/해시 검사 이전에 별도 hold로 보존. 보류 녹음은 사람 녹음 목록에서 제외, 보류 글자 TTS 우회 차단.
+- GREEN: 11팀 CI #41010974269 SUCCESS, 15팀 회귀 #41010980916 SUCCESS.
+- 새 오류: 두 학습 HTML의 cache-bust 버전 변경 후 기존 테스트가 이전 버전 문자열을 고정해 실패. CI #41010986721 FAILURE. tests/team11_audio_surface_integration.test.cjs 버전 검증을 최신 held3로 교정(commit 168be2ff373b99f1e38c05e1cc3d1a422f6dbda7). CI #41011035751 SUCCESS, 15팀 #41011043187 SUCCESS.
+- 한계: Node/CI 기반 검증이며 iOS/Android 실제 발음 청취는 아님. 팀12 음원 검수 및 15팀 실기기 검증 필요.
+
+### 작업 B: AI 개발 하위 프로세스 환경변수 노출 방지, #11 공통 실행기 안전 지원
+- 문제: automation/hq_six_developers.py shell()이 GITHUB_TOKEN/OPENAI_API_KEY 두 키만 제외하고 나머지 CI 환경변수를 AI 변경 후보 코드의 테스트에 전달함. GH_TOKEN, Supabase/Render 키 등 다른 이름의 비밀값 전달 위험.
+- 가설 A: 두 키만 제거하는 denylist. B: 테스트 하위 프로세스가 모든 env를 필요로 함. C: GitHub Actions 자체가 이미 환경을 분리함. RED mock subprocess 테스트에서 A 확인.
+- RED: automation/test_hq_six_developers.py commit 5daa96ef79754f3f6fe4b2d1737fc114a4d2192f, 독립 Team11 env-security CI #41011100744 FAILURE.
+- FIX: automation/hq_six_developers.py commit 908565c166fd13937e1fc745db93962683de591d: PATH/HOME/locale/CI/Python 실행 설정만 명시적으로 허용. 다른 이름의 임의 비밀키도 하위 프로세스로 전달하지 않음.
+- GREEN: Team11 env-security CI #41011122760 SUCCESS.
+- 새 오류: 기존 HQ pre-call 테스트가 임의 SAFE_FLAG 전달을 요구해 CI #41011126756 FAILURE. 허용목록 계약에 맞춰 automation/test_hq_ready_provenance.py 기대값 수정(commit 66dd21c546b66695d51775bc988e1647cd6ae45f), 두 테스트를 한 workflow로 통합(commit e4f02dd38d3f5b359dc929a8befdcf71a44be3d2). env-security #41011187088 SUCCESS, HQ pre-call #41011194337 SUCCESS.
+- 한계: 하위 프로세스 환경변수 격리만 증명. 파일시스템·네트워크 샌드박스, 실제 AI 호출, 작업 큐 자동 승계는 증명하지 않음.
+
+### 중앙 READY/AI 호출/배포 상태와 다음 실행
+- 160개 원본: automation/hq_backlog_160.md (번호 유지). 중앙 의미 계약 automation/hq_semantic_contract_paths.json의 매핑 24개: CANDIDATE 11, BLOCKED 2, CODE_VERIFIED 11, READY 0. 이를 임의로 READY/DONE으로 변경하지 않음.
+- 기존 six-team 실측 Actions #40973509528에서 AI calls=0, committed=0. 이번 회차는 GitHub connector 직접 코드 수정·CI로 수행했으며 별도 OpenAI 개발 API 호출/READY→DONE 자동 승계 증거 없음.
+- 12팀 요청: 검수 보류 음원 src/hash 누락·중복 상태, 399개 조합·사람 녹음 출처·실제 발음 청취 확인.
+- 15팀 요청: 최신 11팀 HEAD의 보류→TTS 우회, 사람 녹음 우선, 모바일 캐시·iOS Safari·Android Chrome, 비밀키 환경변수 격리/독립 QA; 중앙 READY 0/실제 AI 호출 0에 대한 fail-closed 확인.
+- 중앙 요청: #11 단일 소유권·READY 의미 검증 후 승인된 AI 실행기 실제 호출 실증; 차단 시 정확한 로그·작업 후보를 남기고 #38 계정별 다중 기기 진도 복원/권한 경계와 연계.
+- 테스트99: 이 회차 배포하지 않음. Render99 DB 백업·복원·롤백과 대표 승인 미확인. main/운영 홈페이지/실결제·실송금 변경 없음.
+- 다음 실행: 중앙 #11 READY/소유권 및 AI 호출 실행기 문제 우선 점검; 독립적인 #38 학습 진도 계정 경계 분석. 실제 API 호출과 2개 READY 자동 승계 실증 전에는 자율 엔진 완료 판정 금지.
