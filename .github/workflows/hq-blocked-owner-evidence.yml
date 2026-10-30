@@ -6,6 +6,7 @@ on:
     paths:
       - automation/hq_traffic_lights.py
       - automation/test_hq_traffic_lights.py
+      - docs/HQ_GENERAL_WORK_METHOD_PLAYBOOK_20261029.md
       - .github/workflows/hq-blocked-owner-evidence.yml
   workflow_dispatch:
 permissions:
