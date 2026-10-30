@@ -78,6 +78,15 @@ class RootIndexAuditTests(unittest.TestCase):
             self.assertIn("      - id: source_tests\n        continue-on-error: true\n        run: python -m unittest discover -s phase3 -p 'test_*.py' -v", workflow)
             self.assertIn("      - name: Preserve source-test failure after browser evidence\n        if: ${{ always() && steps.source_tests.outcome != 'success' }}\n        run: exit 1", workflow)
 
+    def test_integration_browser_evidence_is_independent_of_source_audit(self):
+        workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/integration-validation.yml").read_text(encoding="utf-8")
+        # A second audit may fail after Python, but browser evidence must not
+        # be skipped; the existing validate job remains fail-closed.
+        self.assertIn("  browser-evidence:\n    runs-on: ubuntu-24.04", workflow)
+        self.assertIn("      - run: node phase3/browser-test.cjs", workflow.split("  browser-evidence:", 1)[1])
+        self.assertIn("      - run: node phase3/instant-browser-test.cjs", workflow.split("  browser-evidence:", 1)[1])
+        self.assertIn("      - name: Preserve source-test failure after browser evidence", workflow.split("  browser-evidence:", 1)[0])
+
 
 if __name__ == "__main__":
     unittest.main()
