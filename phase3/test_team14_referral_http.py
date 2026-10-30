@@ -172,6 +172,8 @@ class ReferralHttpContractTests(unittest.TestCase):
         self.assertEqual(self.o["id"], self.parent_of(self.l["id"]))
         with server.connect() as db:
             db.execute("UPDATE users SET role='admin' WHERE id=?", (self.o["id"],))
+        # Explicitly submitting a revoked code remains invalid.
+        self.assertEqual(400, self.book(referral=inviter_code)[0])
         status, response = self.book()
         self.assertEqual(200, status, response)
         first_bid = response["bookingId"]
@@ -182,8 +184,6 @@ class ReferralHttpContractTests(unittest.TestCase):
             self.assertEqual(0, snapshot["referral_bps"])
             self.assertEqual(0, db.execute("SELECT count(*) FROM ledger").fetchone()[0])
         self.assertEqual(self.o["id"], self.parent_of(self.l["id"]))
-        # An explicit revoked referral code is still rejected, never rewarded.
-        self.assertEqual(400, self.book(referral=inviter_code)[0])
         # A later restored role affects only NEW booking snapshots.
         with server.connect() as db:
             db.execute("UPDATE users SET role='learner' WHERE id=?", (self.o["id"],))
