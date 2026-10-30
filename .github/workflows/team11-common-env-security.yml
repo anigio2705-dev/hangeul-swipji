@@ -6,6 +6,7 @@ on:
       - 'automation/hq_six_developers.py'
       - 'automation/test_hq_six_developers.py'
       - 'automation/test_hq_ready_provenance.py'
+      - 'docs/team11/AUDIO_MOBILE_FAILURE_CASES_20261030.md'
       - '.github/workflows/team11-common-env-security.yml'
   workflow_dispatch:
 permissions:
