@@ -21,8 +21,15 @@ def parse_message(body, marker):
     lines = body.strip().splitlines()
     if len(lines) != 2 or lines[0] != marker:
         return None
+    def unique_keys(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError("Ambiguous duplicate JSON key")
+            result[key] = value
+        return result
     try:
-        value = json.loads(lines[1])
+        value = json.loads(lines[1], object_pairs_hook=unique_keys)
     except (ValueError, TypeError):
         return None
     return value if isinstance(value, dict) else None
@@ -32,6 +39,11 @@ def trusted_command(comment, catalog, registry):
     """Only repo owner's exact, read-only command for a canonical owned task."""
     user = comment.get("user") or {}
     if user.get("login") != OWNER or comment.get("author_association") != "OWNER":
+        return None
+    # Edited comments are not immutable commands. Reject them even if a prior
+    # ACK exists, rather than treating an edited payload as a fresh request.
+    created, updated = comment.get("created_at"), comment.get("updated_at")
+    if created and updated and created != updated:
         return None
     value = parse_message(comment.get("body"), COMMAND)
     if value is None or set(value) != {"v", "task_id", "team", "operation", "nonce"}:
@@ -71,17 +83,29 @@ def trusted_receipt(comment):
 
 def inspect(comments, catalog, registry):
     """Replays are rejected using prior bot receipts and first-seen nonce."""
+    ordered = sorted(comments, key=lambda c: c["id"])
+    commands = {comment["id"]: cmd for comment in ordered
+                if (cmd := trusted_command(comment, catalog, registry)) is not None}
     acknowledged_ids, acknowledged_nonces = set(), set()
-    for comment in comments:
+    for comment in ordered:
         receipt = trusted_receipt(comment)
-        if receipt:
-            acknowledged_ids.add(receipt["comment_id"])
-            acknowledged_nonces.add(receipt["nonce"])
+        if not receipt:
+            continue
+        cmd = commands.get(receipt["comment_id"])
+        # An authentic bot identity is necessary but insufficient: receipts
+        # must bind to a preceding, valid owner command with identical fields.
+        # Unrelated/malformed bot comments must never suppress owner commands.
+        if (cmd is None or comment["id"] <= receipt["comment_id"]
+                or any(receipt[key] != cmd[key] for key in
+                       ("nonce", "task_id", "team"))):
+            continue
+        acknowledged_ids.add(receipt["comment_id"])
+        acknowledged_nonces.add(receipt["nonce"])
     seen_nonces = set(acknowledged_nonces)
     accepted = []
-    for comment in sorted(comments, key=lambda c: c["id"]):
-        cmd = trusted_command(comment, catalog, registry)
-        if not cmd:
+    for comment in ordered:
+        cmd = commands.get(comment["id"])
+        if cmd is None:
             continue
         if comment["id"] in acknowledged_ids or cmd["nonce"] in seen_nonces:
             continue
