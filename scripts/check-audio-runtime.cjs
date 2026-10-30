@@ -14,6 +14,17 @@ function setup(mode='ended',fetchMode='ok'){
  const firstPlay=a.h.play('가');
  assert.equal(a.stats().played,1,'ready human recording must start synchronously on the click gesture');
  assert.equal((await firstPlay).status,'played');assert.equal(a.stats().synthetic,0);
+ // P0 regression: a single missing recording must not silence available human audio.
+ const beforeMixed=a.stats().played;
+ const mixed=a.h.play(['가','missing']);
+ assert.equal(a.stats().played,beforeMixed+1,'mixed human recording must start synchronously on mobile click');
+ assert.equal((await mixed).status,'partial','mixed sequence should play available human recordings');
+ assert.equal(a.stats().synthetic,0,'missing audio must never trigger automatic TTS');
+ const beforeHeld=a.stats().played;
+ assert.equal((await a.h.play(['가','아'])).status,'held','review-held audio must block sequence');
+ assert.equal(a.stats().played,beforeHeld,'review-held sequence must not start playing');
+ assert.equal((await a.h.play(['missing','machine'])).status,'missing','no playable recordings must remain missing');
+
  for(const mode of ['throw','reject','error','hang']){const x=setup(mode);await x.h.ready;assert.equal((await x.h.play('가')).status,'error',mode)}
  for(const fetchMode of ['reject','hang','json-hang']){const x=setup('ended',fetchMode);assert.equal((await x.h.play('가')).status,'manifest-error',fetchMode)}
  const retry=setup('ended','retry');await retry.h.ready;assert.equal(retry.h.availability('가').state,'unavailable');assert.equal((await retry.h.play('가')).status,'played');assert.equal(retry.h.availability('가').state,'ready');assert.equal(retry.h.availability('아').state,'held');assert.equal(retry.h.availability('missing').state,'missing');
