@@ -26,4 +26,10 @@ const locales=require('node:vm').runInNewContext(localeDeclaration[1]).map(row=>
 assert.deepEqual(Array.from(locales),['ko','en','ja','es','zh-CN','ru','mn','vi'],'Unsupported or missing site language');
 assert(siteLanguage.includes('if(!valid.has(o.value))o.remove()'),'Legacy desktop options must be removed, not re-enabled');
 assert(siteLanguage.includes('var lang=valid.has(requested)?requested:valid.has(saved)?saved:\'ko\''),'Invalid saved language must fall back to Korean');
+for(const file of ['global-language.js','global-language.html']){
+ const declaration=read(file).match(/const langs=(\[[^\n]+\]);/);
+ assert(declaration,file+': supported locale list missing');
+ const codes=require('node:vm').runInNewContext(declaration[1]).map(row=>row[0]);
+ assert.deepEqual(Array.from(codes),['ko','en','ja','es','zh-CN','ru','mn','vi'],file+': unsupported or missing language');
+}
 console.log('PASS: '+count+' pages passed source-level responsive shell checks. Real PC/mobile device testing is still required.');
