@@ -102,12 +102,25 @@ def readiness(catalog, ledger, registry, root=Path(".")):
                  and len(tests) == len(set(tests))
                  and not set(source).intersection(tests)
                  and all(valid_path(p) for p in source + tests))
+        # The bounded developer can execute only a single non-protected Python
+        # source and Python unittest test_*.py files. Static READY eligibility
+        # must agree with the executor; otherwise an unsupported JS/HTML or
+        # protected automation file appears dispatchable before the worker
+        # rejects it (and can starve valid READY tasks).
+        runner_target = editable or (source[0] if source_list and len(source) == 1 else None)
+        runner_supported = (isinstance(runner_target, str)
+                            and runner_target.endswith(".py")
+                            and not runner_target.startswith(("automation/", ".github/"))
+                            and isinstance(tests, list) and bool(tests)
+                            and all(isinstance(p, str) and p.endswith(".py")
+                                    and Path(p).name.startswith("test_") for p in tests))
         deps = all(ledger.get(str(d), {}).get("status") == "complete"
                    for d in task["dependencies"])
-        if not (authorized and reviewed and ci_ref and ci_sha_ok and paths and deps and editable_ok):
+        if not (authorized and reviewed and ci_ref and ci_sha_ok and paths and deps and editable_ok and runner_supported):
             missing = [name for name, ok in (("owner", authorized), ("independent_review", reviewed),
                 ("ci_reference", ci_ref), ("exact_ci_sha", ci_sha_ok), ("real_paths", paths),
-                ("single_editable_path", editable_ok), ("dependencies", deps)) if not ok]
+                ("single_editable_path", editable_ok), ("dependencies", deps),
+                ("unsupported_python_unittest_runner", runner_supported)) if not ok]
             result["invalid_ready"].append({"task": number, "reason": ", ".join(missing)})
             continue
         assignment = {"task": number, "owner": task["owner"],
