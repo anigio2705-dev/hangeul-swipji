@@ -56,6 +56,6 @@ test('legacy translator skips Hangul and explicitly untranslated learning contro
       return {currentNode:null,nextNode(){this.currentNode=accepted[++index];return Boolean(this.currentNode)}};
     }
   };
-  const result=vm.runInNewContext(source[0]+';nodes()', {document,NodeFilter:{SHOW_TEXT:4,FILTER_REJECT:2,FILTER_ACCEPT:1}});
+  const result=vm.runInNewContext(source[0]+';nodes()', {document,excluded:new Set(['SCRIPT','STYLE','NOSCRIPT','TEXTAREA','INPUT','OPTION','CODE','PRE','SVG']),NodeFilter:{SHOW_TEXT:4,FILTER_REJECT:2,FILTER_ACCEPT:1}});
   assert.deepEqual(Array.from(result,n=>n.nodeValue),['Learn Korean today']);
 });
