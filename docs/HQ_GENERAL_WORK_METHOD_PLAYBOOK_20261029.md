@@ -491,3 +491,5 @@
 - 소유권 주의: 정본 전수 지시에서 #51/#56/#55는 **12팀 단일 책임**이며 11팀·16팀은 지원만 한다. `automation/hq_160_task_cycle.py`의 과거 `CURATED_TARGETS`는 지원팀 항목을 포함하지만 `_semantic_dispatch_gate()`가 현재 false를 반환하여 안전하게 무호출 처리한다. 실제 READY를 만들 때 지원팀의 과제를 소유팀의 독립 개발로 계산하지 않으며, 중앙 큐는 단일 책임팀 기준으로 새로 검증해야 한다.
 - 마지막 관측 중앙 6팀 자동 실행은 2026-10-30 **08:29 KST** 생성, 11:02 KST 기준 약 2시간 32분간 신규 6팀 자동 실행이 확인되지 않았다. 반면 각 팀의 별도 격리 브랜치 제품/검증 커밋은 계속 발견된다. **자동 6팀 개발과 수동·개별 팀 브랜치 변경은 별도 실적**으로 분리한다.
 - #59 격리 후보 전용 CI [#40989119120](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40989119120)는 정확 SHA `9be638bfeffa8066281681bba8eeafb12ea65146`에서 **3개 PASS / 0개 FAIL**. 이는 음원 없음·검수 보류·목록 재시도 세 가지 VM 시나리오에 한정하며 READY·테스트99 배포·대표 승인으로 승격하지 않는다.
+
+- **별도 bounded 워크플로 검증:** [#40774360174](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40774360174)는 2026-10-29 06:43 KST 시작 이후 최신 실행이 검색되지 않았다. 당시 `automation/hq_developer.py --max-calls 2`가 AI 호출 **2건**을 수행했으나 두 후보 `queue-hardening` / `hq-triage-hardening` 모두 기존 독립 테스트 실패로 **rejected**였다. 워크플로 SUCCESS와 제품 커밋 0을 구분한다. 재개 시 동일 반례 `test_exactly_160_and_unique` 및 `test_missing_never_approves`를 보존하고 새 패치를 검증해야 한다.
