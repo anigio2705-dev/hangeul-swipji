@@ -20,6 +20,13 @@ class Task101IntakeTests(unittest.TestCase):
         self.assertIn(item["editable_path"], item["source_paths"])
         self.assertEqual(item["independent_team15"], "PENDING")
         self.assertEqual(item["state"], "CANDIDATE")
+        # The actual Phase3 HTTP implementation is shared with other owners.
+        # Map it for review, but never grant team14 an unlocked server edit.
+        self.assertIn("phase3/server.py", item["source_paths"])
+        self.assertIn("phase3/server.py", item["shared_integration_paths"])
+        self.assertNotEqual("phase3/server.py", item["editable_path"])
+        self.assertIn("phase3/test_team14_referral_http.py", item["test_paths"])
+        self.assertIn("phase3/test_task101_four_pair_acceptance.py", item["test_paths"])
         self.assertTrue(all((ROOT / p).is_file() for p in item["source_paths"] + item["test_paths"]))
         self.assertTrue(all(p.endswith(".py") and Path(p).name.startswith("test_")
                             for p in item["test_paths"]))
