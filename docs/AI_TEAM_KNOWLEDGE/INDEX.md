@@ -24,3 +24,6 @@ This is an evidence-first, cross-team knowledge base. A case is **not** a deploy
 
 ## Case template
 `ID | Team | 160 task # | Symptom | Reproduction | Initial hypothesis | Attempt/results | Root cause | Actual change/SHA | CI | Independent audit | Integration | Staging SHA/browser | Reusable lesson | Invalid conditions | Related teams | Next task`
+
+## Verified-source case additions
+- [CASE-20261030-AUDIO-VM-BASEURI](FAILURE/audio-vm-baseuri-20261030.md) — Node VM fixture missing browser `document.baseURI`; correction SHA a1d86123; cross-team 11/12/15/16; CI and staging outcomes tracked separately.
