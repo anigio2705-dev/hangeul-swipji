@@ -125,6 +125,12 @@
   }
   async function play(value){
     stop();const token=run;
+    // Stale click callbacks may run after pagehide, even if document.hidden
+    // has not yet changed. Only a foreground tap may start new playback.
+    if(document.hidden===true||wasHidden){
+      status('화면 복귀 후 글자를 다시 눌러 주세요. / Return to this page and tap again.');
+      return {status:'cancelled'};
+    }
     // Do not await an already loaded manifest: even a resolved await yields the
     // user click activation on some mobile browsers, causing Audio.play() to
     // reject with NotAllowedError despite a valid human recording.
@@ -194,6 +200,7 @@
   // Do not bypass a withdrawn/held human recording via this direct API.
   async function optionalSynthetic(word){
     stop();const token=run;
+    if(document.hidden===true||wasHidden)return {status:'cancelled'};
     if(!syntheticEnabled)return {status:'tts-disabled'};
     // Direct TTS must obey the same refresh lock as human recordings: a
     // withdrawn/held letter may appear only in the newer pending manifest.
