@@ -44,11 +44,28 @@ class InstantMatchingTests(unittest.TestCase):
         self.assertRegex(active['roomUrl'],r'^https://meet.jit.si/hs-match-[0-9a-f]{48}$')
         self.assertNotIn('email',str(first));self.assertNotIn('password',str(first))
         self.assertEqual(active['roomUrl'],self.call(a,'join')['roomUrl'])
+        # An active instant room creates a real test booking and slot. Capture
+        # its ID before leave, then prove the room is revoked without erasing
+        # the booking history or allowing a stranger to retrieve the URL.
+        status,_,raw=self.request('/api/instant/session',headers={'Cookie':a})
+        self.assertEqual(200,status,raw)
+        booking_id=json.loads(raw)['bookingId']
         self.call(b,'leave');self.assertEqual('idle',self.call(a,'status')['state'])
         self.assertEqual('idle',self.call(b,'leave')['state'])
+        self.assertEqual(409,self.request('/api/instant/booking-room',
+                         {'bookingId':booking_id},headers={'Cookie':a})[0])
+        self.assertEqual(403,self.request('/api/instant/booking-room',
+                         {'bookingId':booking_id},headers={'Cookie':stranger})[0])
         with server.connect() as db:
-            for table in ('bookings','ledger','attendance','slots'):
-                self.assertEqual(0,db.execute('SELECT count(*) FROM '+table).fetchone()[0])
+            self.assertEqual(0,db.execute('SELECT count(*) FROM ledger').fetchone()[0])
+            self.assertEqual(0,db.execute('SELECT count(*) FROM attendance').fetchone()[0])
+            self.assertEqual(0,db.execute("SELECT count(*) FROM instant_matches WHERE state<>'ended'").fetchone()[0])
+            self.assertEqual(0,db.execute('SELECT count(*) FROM instant_queue').fetchone()[0])
+            booking=db.execute('SELECT status,slot_id FROM bookings WHERE id=?',(booking_id,)).fetchone()
+            self.assertIsNotNone(booking,'legal booking history must not be deleted')
+            self.assertEqual('cancelled',booking['status'])
+            self.assertIsNotNone(db.execute('SELECT id FROM slots WHERE id=?',
+                                            (booking['slot_id'],)).fetchone())
 
     def test_expired_presence_and_offers_do_not_requeue(self):
         a,_=self.account('learner@example.test');b,_=self.account('partner@example.test','partner',True)
