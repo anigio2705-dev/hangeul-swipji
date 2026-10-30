@@ -25,7 +25,7 @@ class BookingEventTests(unittest.TestCase):
   for e in (self.payload(currency="USD"),self.payload(booking_status="in_class")):
    with self.assertRaises(SimError):apply_booking_event(self.s,e)
  def test_partial_refund_then_cancel_rejected(self):
-  e=self.payload(action="refund",booking_status="refunded",amount_krw=5000)
+  e=self.payload(action="refund",booking_status="partially_refunded",amount_krw=5000)
   self.assertEqual(apply_booking_event(self.s,e)["state"],"partially_refunded")
   with self.assertRaises(SimError):apply_booking_event(self.s,self.payload(event_id="event2",transaction_id="tx2",action="cancel",booking_status="cancelled"))
  def test_cancel_and_retry(self):
