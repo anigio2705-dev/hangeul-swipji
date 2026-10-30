@@ -12,15 +12,15 @@ class Task101CiEnvironmentTests(unittest.TestCase):
 
     def test_integration_runner_is_playwright_compatible(self):
         y = self.read('integration-validation.yml')
-        self.assertRegex(y, r'(?m)^    runs-on: ubuntu-24\\.04$')
+        self.assertRegex(y, r'(?m)^    runs-on: ubuntu-24\.04$')
         self.assertIn('playwright install --with-deps chromium', y)
         self.assertIn('fetch-depth: 0', y)
         self.assertIn('contents: read', y)
 
     def test_phase3_runner_preserves_source_history(self):
         y = self.read('phase3-isolated-tests.yml')
-        self.assertRegex(y, r'(?m)^    runs-on: ubuntu-24\\.04$')
-        self.assertRegex(y, r'(?s)actions/checkout@v4\\n        with:\\n          fetch-depth: 0')
+        self.assertRegex(y, r'(?m)^    runs-on: ubuntu-24\.04$')
+        self.assertRegex(y, r'(?s)actions/checkout@v4\n        with:\n          fetch-depth: 0')
         self.assertIn('playwright install --with-deps chromium', y)
         self.assertIn('contents: read', y)
 
