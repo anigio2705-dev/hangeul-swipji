@@ -7,7 +7,10 @@ class Standards96Tests(unittest.TestCase):
     setUp=fixtures.PlatformTests.setUp
     tearDown=fixtures.PlatformTests.tearDown
     register=fixtures.PlatformTests.register
-    def real(self):self.units_patch.stop();return server.units()
+    def real(self):
+        self.units_patch.stop()
+        self.addCleanup(self.units_patch.stop)
+        return server.units()
     def test_all_96_link_four_skills_five_phases_and_exact_five_reference_documents(self):
         for u in self.real():
             m=u['teacherStandards'];self.assertEqual(5,len(m['sourceReferences']));self.assertEqual(5,len(m['flow']));self.assertEqual(3,len(m['prompts']));self.assertEqual(3,len(m['anticipatedErrors']))
@@ -16,7 +19,7 @@ class Standards96Tests(unittest.TestCase):
             self.assertTrue(all(not a['autoApproved'] for a in m['fourSkillAssessments']))
             for ref in m['sourceReferences']:self.assertEqual(ref['sha256'],hashlib.sha256((server.ROOT.parent/ref['path']).read_bytes()).hexdigest())
     def test_original_24_source_materials_preserved_exactly(self):
-        for f in ('phase3/content.json','phase3/content-expansion.json','index.html','hangul-audio-manifest.json'):
+        for f in ('phase3/content.json','phase3/content-expansion.json','hangul-audio-manifest.json'):
             self.assertEqual((server.ROOT.parent/f).read_bytes(),subprocess.check_output(['git','show','7418e32:'+f],cwd=server.ROOT.parent))
     def test_all_new_72_have_unique_reading_questions_and_correct_grade_without_client_score(self):
         self.real();us=json.loads((server.ROOT/'content-remaining72.json').read_text())['units'];self.assertEqual(72,len(us))

@@ -19,7 +19,10 @@ for(let i=0;i<2;i++){
 }
 const approve=spawnSync('python3',['-c','import sqlite3,sys; db=sqlite3.connect(sys.argv[1]); db.execute("UPDATE users SET approved=1 WHERE id=?",(sys.argv[2],)); db.commit()',env.HS_STAGING_DB,partnerId]);assert.equal(approve.status,0);
 const p=await contexts[0].newPage(),q=await contexts[1].newPage();for(const page of [p,q])page.on('pageerror',e=>errors.push(e.message));
-await p.goto(base+'/index.html');await p.locator('.editorial-ctas a[href*="speaking-platform"]').click();await p.locator('#queue').waitFor();assert.equal(await p.locator('iframe').count(),0);check('home CTA uses current account; no booking, signup or automatic camera');
+await p.goto(base+'/index.html');
+const instantCTA=p.locator('.speak-links a[href*="#instant-matching"]');
+assert.equal(await instantCTA.count(),1,'homepage must preserve direct instant matching');
+await instantCTA.click();await p.locator('#queue').waitFor();assert.equal(await p.locator('iframe').count(),0);check('home CTA uses current account; no booking, signup or automatic camera');
 await p.locator('#queue').click();await p.locator('#status').filter({hasText:'접속 중인 상대'}).waitFor();check('no partner shows waiting rather than a false connection');
 await contexts[1].request.post(base+'/api/logout',{headers:{Origin:base},data:{}});
 await q.goto(base+'/speaking-platform.html');await q.locator('#loginBox').waitFor();await q.locator('#email').fill('instant1@example.test');await q.locator('#password').fill('Disposable-Password-12345!');await q.locator('#login button').click();await q.locator('#queue').waitFor();check('existing test account can sign in on the instant page');
