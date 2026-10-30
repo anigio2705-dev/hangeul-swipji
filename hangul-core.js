@@ -67,6 +67,9 @@
     return {status:'ready',count};
   }
   function availability(word){
+    // A pending manifest is not evidence that a human recording is missing.
+    // Keep the learner-facing board neutral until the inventory is known.
+    if(!manifestLoaded&&!manifestError)return {state:'loading',label:'사람 녹음 목록 확인 중 · 잠시 기다려 주세요'};
     if(manifestError)return {state:'unavailable',label:'목록 연결 오류 · 다시 눌러 재시도'};
     if(records[word])return {state:'ready',label:'♪ 사람 녹음 듣기 · 청취 검수 전'};
     if(holds[word])return {state:'held',label:'검수 대기 · '+holds[word].holdReason};
@@ -163,9 +166,9 @@
     const summary=document.querySelector('[data-board-audio-counts]');
     if(summary){
       const cells=[...document.querySelectorAll('.board [data-sound]')];
-      const counts={ready:0,held:0,missing:0,unavailable:0};
+      const counts={ready:0,held:0,missing:0,unavailable:0,loading:0};
       for(const cell of cells)counts[availability(cell.dataset.sound).state]++;
-      summary.textContent='글자판 '+cells.length+'칸 · 재생 가능 '+counts.ready+' · 검수 보류 '+counts.held+' · 녹음 없음 '+counts.missing+(counts.unavailable?' · 목록 오류 '+counts.unavailable:'')+' (청취 승인 전)';
+      summary.textContent='글자판 '+cells.length+'칸 · 재생 가능 '+counts.ready+' · 검수 보류 '+counts.held+' · 녹음 없음 '+counts.missing+(counts.unavailable?' · 목록 오류 '+counts.unavailable:'')+ (counts.loading?' · 목록 확인 중 '+counts.loading:'')+' (청취 승인 전)';
     }
   }
   document.addEventListener('hs-audio-ready',refreshBadges);
