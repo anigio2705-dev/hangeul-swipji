@@ -193,11 +193,11 @@ class HQ160TaskCycleTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
             (root / "new-feature.py").write_text("pass\n")
-            (root / "test-new-feature.py").write_text("pass\n")
+            (root / "test_new_feature.py").write_text("pass\n")
             record = {
                 "owner": "12", "support": ["13"], "state": "READY",
                 "source_paths": ["new-feature.py"],
-                "test_paths": ["test-new-feature.py"],
+                "test_paths": ["test_new_feature.py"],
                 "independent_team15": "PASS",
                 "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123", "independent_ci_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
             }
@@ -206,7 +206,7 @@ class HQ160TaskCycleTests(unittest.TestCase):
             self.assertEqual(assignment["task_number"], 45)
             self.assertEqual(assignment["path"], "new-feature.py")
             self.assertEqual(assignment["source"], "independently_reviewed_READY_registry")
-            self.assertEqual(assignment["independent_test_paths"], ["test-new-feature.py"])
+            self.assertEqual(assignment["independent_test_paths"], ["test_new_feature.py"])
             self.assertEqual(assignment["mode"], "develop")
             self.assertNotIn((45, "new-feature.py"), CURATED_TARGETS["12"])
             self.assertIsNone(next_assignment("13", c, {}, registry=registry, root=root))
@@ -227,11 +227,11 @@ class HQ160TaskCycleTests(unittest.TestCase):
         c = contracts(sample())
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
-            for name in ("shared.py", "other.py", "test.py"):
+            for name in ("shared.py", "other.py", "test_shared.py"):
                 (root / name).write_text("pass\n")
             def item(number, path):
                 return {"owner": "12", "support": ["13"], "state": "READY",
-                        "source_paths": [path], "test_paths": ["test.py"],
+                        "source_paths": [path], "test_paths": ["test_shared.py"],
                         "independent_team15": "PASS",
                         "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123", "independent_ci_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
             reg = {"schema": 1, "items": {"45": item(45, "shared.py"),
