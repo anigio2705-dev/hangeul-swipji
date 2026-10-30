@@ -1,0 +1,26 @@
+name: Team16 approved language lab product regression
+on:
+  push:
+    branches:
+      - team16/approved-eight-language-lab-20261030-1638
+  pull_request:
+    paths:
+      - site-language.js
+      - global-language.js
+      - global-language.html
+      - tests/team16_language_lab_contract.test.cjs
+      - .github/workflows/team16-language-lab-contract.yml
+permissions:
+  contents: read
+jobs:
+  language-lab:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: node --check global-language.js
+      - run: node --check site-language.js
+      - run: node --test tests/team16_language_lab_contract.test.cjs
