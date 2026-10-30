@@ -261,9 +261,12 @@ def run_checks(team, path, extra_tests=()):
     for command in commands:
         result = shell(*command, timeout=120)
         output = result.stdout + result.stderr
-        if result.returncode or (extra_tests and "discover" in command
-                                 and ("Ran 0 tests" in output or "Ran 0 test" in output)):
-            return False, output[-2000:] or "Task-specific regression ran zero tests"
+        # Fixed baseline suites are acceptance gates too. unittest discover
+        # exits successfully when it finds zero tests; never treat that as PASS.
+        unittest_discovery = command[:4] == ["python", "-m", "unittest", "discover"]
+        zero_tests = unittest_discovery and bool(re.search(r"\\bRan 0 tests?\\b", output))
+        if result.returncode or zero_tests:
+            return False, output[-2000:] or "Required unittest discovery ran zero tests"
     return True, ""
 def main():
     validate_ownership()
