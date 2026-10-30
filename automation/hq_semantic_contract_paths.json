@@ -534,6 +534,34 @@
       "integration_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40813120338",
       "evidence_run": 40813120338
     },
+    "59": {
+      "owner": "12",
+      "support": [
+        "11",
+        "15"
+      ],
+      "source_paths": [
+        "hangul-core.js",
+        "hangul-board.js"
+      ],
+      "test_paths": [
+        "scripts/check-human-audio.cjs",
+        "scripts/team12_audio_inventory.py",
+        "automation/verify_task59.cjs"
+      ],
+      "acceptance": "Missing and held human recordings must never claim successful playback or invoke Audio/TTS; manual manifest retry must expose newly reviewed human recordings; show a teacher-guided alternative. Mixed-sequence partial playback, browser gestures, real audio and staging99 require separate evidence.",
+      "dependencies": [
+        51
+      ],
+      "unmet": [
+        "15팀 독립 의미 검증과 exact-SHA CI PASS 미확인",
+        "혼합 글자 연속 재생에서 일부 녹음만 있는 경우 부분 재생 정책/동작 미검증",
+        "실제 모바일/PC 음성 재생 및 테스트99 배포·E2E 미검증"
+      ],
+      "state": "CANDIDATE",
+      "independent_team15": "PENDING",
+      "note": "2026-10-30 10:57 KST HQ isolated candidate; source read directly. Regression automation/verify_task59.cjs added d4919baa, workflow 050298e7. Not an independent team12 AI product commit; not READY."
+    },
     "61": {
       "owner": "12",
       "support": [

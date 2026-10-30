@@ -474,3 +474,22 @@
 ### 18:24 KST 교차 감사 정정 — #59 상태와 장부 브랜치 불일치
 
 다른 예약 실행 「한글쉽지 무인 개발」의 **18:24 최신 완료 보고**는 경로 등록 26, CODE_VERIFIED 12, BLOCKED 3이라고 기록했다. 특히 #59의 기존 부분 검증이 새로 발견된 '모' UI 오류를 놓쳤으므로 BLOCKED로 정정했다고 설명한다. 반면 이 문서가 위치한 중앙 격리 브랜치 `automation/hq-pilot-13-14-15-20261029`를 직접 재조회하면 `automation/hq_semantic_contract_paths.json` blob `f9391842`는 24개(CANDIDATE 11/BLOCKED 2/CODE_VERIFIED 11), `automation/task-evidence.json` blob `bb3d03a1`는 CODE_VERIFIED 13(#59 포함), BLOCKED 2(#22/#47)다. **서로 다른 브랜치·스냅샷의 수치를 합치거나 중앙 장부를 검증 없이 자동 덮어쓰지 않는다.** #59 오류·수정·정확한 CI를 검토하고 중앙 계약/증거 원장에 적절한 상태 정정을 별도 독립 감사로 통합해야 한다. 최종 승인 0/160은 두 보고에서 동일하다.
+
+## 2026-10-30 10:57 KST — 교차 감사: 11팀 연속 재시도와 #59 음성 대체 학습 계약 보강
+
+- **교차 근거:** 다른 자동화 「한글쉽지 무인 개발」 최신 저장 결과는 제품 PR #96의 6개 독립 발음 회귀 테스트 PASS와 테스트99 후보 PR #98의 코드 SHA `1a57eea47f6302b9998b0f6c5a5ea5fecf8bb0c7`를 보고했다. 해당 보고는 최신 통합 CI와 테스트99 배포를 완료로 주장하지 않았다. 이번 감사에서는 최신 GitHub Actions를 독립 조회했다.
+- **신규 CI 관측:** 11팀 `team11/audio-gesture-20261030`에서 2026-10-30 10:54:35~10:54:54 KST 사이 여러 SHA(`e65eb0a3a6`, `adfc60ce36`, `4625c676ff`, `b4539aeed5`)의 재시도가 확인됐다. `40988605350`은 15개 중 13개 PASS·2개 FAIL, 이후 최신 `40988614050`은 전용 음성 회귀 PASS. `40988612295` 전체 통합 FAIL 로그의 정확한 실패 원인은 `scripts/audit-professional-96.py`의 원본 보존 검사에서 `intro.html`, `beginner1.html`, `beginner2.html`, `intermediate1.html`, `intermediate2.html`, `advanced1.html`, `advanced2.html`, `reading.html`, `index.html`이 원본 기준과 달랐기 때문이다. `40988617694` 최신 SHA 통합검사는 관측 시 진행 중. 원본 보존 검사를 제거/완화하거나 무조건 재시도해 PASS로 세지 않는다. 각 변경 파일을 기준 커밋 `7418e325f0833604249e5170c2531a103b31ff1c`과 대조하여 원본 유지 또는 별도 페이지 분리로 수정해야 한다.
+- **READY=0 공급 실험:** #59(12팀 책임)의 기존 160개 원장에는 실제 경로가 미확정이었다. 실제 `hangul-core.js`에서 `loadManifest/reloadManifest/availability/play/status`, `hangul-board.js`의 상태 표시, 기존 `scripts/check-human-audio.cjs`와 `scripts/team12_audio_inventory.py`를 직접 확인했다. 격리 `audit/hq-task59-fallback-candidate-20261030-1057`에 비네트워크 VM 회귀 `automation/verify_task59.cjs`(SHA `d4919baa`)와 전용 읽기 전용 CI(워크플로 SHA `050298e7`)를 추가하고 계약 #59와 기계 판독 후보 장부를 수정했다. **상태 CANDIDATE**, 15팀 독립 의미 검증·정확 SHA CI·테스트99 브라우저·대표 승인 전에는 READY/완료가 아니다. HQ 직접 테스트/계약 변경을 12팀 신규 AI 개발 실적으로 계산하지 않는다.
+- **선택한 공식 방법:** OpenAI Codex CI autofix cookbook `https://developers.openai.com/cookbook/examples/codex/autofix-github-actions`의 실패 로그→원인→격리 패치→동일 평가 재실행을 참조했다. 해당 공식 예제는 archived이며 API 키와 쓰기 권한을 한 작업에 노출하는 구형 구성을 **복제하지 않는다**. 이번 실험은 읽기 전용 `contents: read`, 비밀키 0, 외부 배포 0으로 제한한다.
+- **검증 가능한 가설:** (전) #59는 경로 미확정이라 독립 평가가 불가능하다. (후) 음원 없음·검수 보류·목록 재시도·검수 음원 반영을 실제 공통 엔진의 비네트워크 VM에서 재현해 실패 시 해당 행동의 변경을 감지할 수 있다. 전용 CI PASS가 확인되면 *후보 QA*만 인정하며, 모바일 음성 출력·일부 글자 누락 연속 재생·합성음 정책·테스트99 실제 버전은 별도 수락 관문으로 남긴다.
+- **비용/안전:** Node 단일 읽기 전용 CI, timeout 5분, 실행 시간·과금 실측 미확인. 운영 `main`/DB/실결제/운영 배포/Render 재배포 변경 0. SQLite 영속성·백업·복구·실제 배포 SHA가 미확인이라 테스트99 배포는 BLOCKED. 새 커밋/CI 성공을 최종 완료로 계산하지 않는다.
+- **후속:** #59 후보 CI 실패 시 로그로 원인 분리·격리 수정, 15팀 독립 검토 후 READY 여부 결정. 11팀은 원본 보존 검사 실패를 기준 SHA와 대조해 제품 수정 브랜치에서 해결하고, 6팀 워크플로의 실제 `calls/committed`를 별도로 재확인한다.
+
+### 11:02 KST 추가 검증 — 중앙 6팀 자동 실행 성공 표시와 실제 무호출의 불일치
+
+- `HQ six parallel AI developers (isolated)` 최신 실행 [#40973509528](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40973509528)의 **여섯 develop job 로그를 직접 확인**했다. 11팀 #51/#56, 12팀 #52/#41/#49, 13팀 #22, 14팀 #109/#115, 15팀 #8/#151, 16팀 #55가 모두 `semantic_contract_not_ready`; 각 job `Round 1: committed=0, calls=0`이었다. 따라서 워크플로 SUCCESS는 신규 AI 개발 성공이 아니다.
+- 소유권 주의: 정본 전수 지시에서 #51/#56/#55는 **12팀 단일 책임**이며 11팀·16팀은 지원만 한다. `automation/hq_160_task_cycle.py`의 과거 `CURATED_TARGETS`는 지원팀 항목을 포함하지만 `_semantic_dispatch_gate()`가 현재 false를 반환하여 안전하게 무호출 처리한다. 실제 READY를 만들 때 지원팀의 과제를 소유팀의 독립 개발로 계산하지 않으며, 중앙 큐는 단일 책임팀 기준으로 새로 검증해야 한다.
+- 마지막 관측 중앙 6팀 자동 실행은 2026-10-30 **08:29 KST** 생성, 11:02 KST 기준 약 2시간 32분간 신규 6팀 자동 실행이 확인되지 않았다. 반면 각 팀의 별도 격리 브랜치 제품/검증 커밋은 계속 발견된다. **자동 6팀 개발과 수동·개별 팀 브랜치 변경은 별도 실적**으로 분리한다.
+- #59 격리 후보 전용 CI [#40989119120](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40989119120)는 정확 SHA `9be638bfeffa8066281681bba8eeafb12ea65146`에서 **3개 PASS / 0개 FAIL**. 이는 음원 없음·검수 보류·목록 재시도 세 가지 VM 시나리오에 한정하며 READY·테스트99 배포·대표 승인으로 승격하지 않는다.
+
+- **별도 bounded 워크플로 검증:** [#40774360174](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/40774360174)는 2026-10-29 06:43 KST 시작 이후 최신 실행이 검색되지 않았다. 당시 `automation/hq_developer.py --max-calls 2`가 AI 호출 **2건**을 수행했으나 두 후보 `queue-hardening` / `hq-triage-hardening` 모두 기존 독립 테스트 실패로 **rejected**였다. 워크플로 SUCCESS와 제품 커밋 0을 구분한다. 재개 시 동일 반례 `test_exactly_160_and_unique` 및 `test_missing_never_approves`를 보존하고 새 패치를 검증해야 한다.
