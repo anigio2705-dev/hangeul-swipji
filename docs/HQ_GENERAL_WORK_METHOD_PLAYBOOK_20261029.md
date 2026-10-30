@@ -489,3 +489,13 @@
 - **수정(GREEN):** `automation/hq_traffic_lights.py`의 수리 항목에 `registry_owner`, `repair_blockers`를 추가하여 `owner_mismatch`, `missing_or_invalid_source_path`, `missing_or_invalid_test_path`를 실제 파일 존재 검사로 노출한다. `automation/test_hq_traffic_lights.py`에 정본 팀 배정 유지·누락 경로 반례를 고정했다. 코드 SHA `69cf1be97f0d377c292db8d29bca31493d243dff`, [CI #41012798295](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41012798295) SUCCESS.
 - **공식 기법:** [OpenAI Codex CI autofix](https://developers.openai.com/cookbook/examples/codex/autofix-github-actions)의 재현 가능한 실패→범위 제한 수정→동일 SHA 독립 회귀를 참고하되 예제의 쓰기 권한/비밀키 혼용을 복제하지 않는다. 추가 모델 API 호출 0회, CI 2회와 격리 브랜치 커밋 비용만 발생. 실제 6팀 AI 호출·READY 승격·테스트99 배포는 발생하지 않았다.
 - **채택 조건:** RED/ GREEN 증거는 **수리 큐의 증빙 품질**에만 유효. 15팀이 PR을 독립 검토하고, 후보의 실제 경로·테스트·정확한 SHA CI·선행 의존성을 승인하기 전까지 READY 0을 유지한다. 테스트99 영속 DB/백업·복원/롤백/격리 E2E 미확인 시 배포 금지.
+
+
+## 2026-10-30 15:48 KST — READY 정적 검증과 실제 Python 작업기의 실행 호환성 일치 (독립 HQ 감사)
+
+- 재현: 독립 QA에 의해 READY라고 표기된 계약이더라도 JS/CJS 소스, `test_*.py`가 아닌 테스트, `automation/` 내부 보호 파일을 `automation/hq_traffic_lights.py:readiness()`가 dispatchable로 반환했다. 그러나 `automation/hq_six_developers.py:choose_work_items()`는 Python 단일 파일 + unittest만 실행할 수 있어, 정적 READY 공급과 실제 호출 가능성 사이에 불일치가 있었다.
+- RED: 격리 브랜치 `audit/hq-ready-executor-compat-20261030-1545`, 테스트 SHA `64b6b43e0706b84cc8ef0720362786cd5ca19775`, [Actions #41016063717](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41016063717)에서 JS/CJS, 잘못된 테스트 이름, 보호된 자동화 파일을 각각 거부하지 못하는 3개 실패 재현.
+- 수정: `automation/hq_traffic_lights.py` READY 검증에 `unsupported_python_unittest_runner` 안전 차단을 추가. 독립 `automation/test_hq_traffic_lights.py`에 양성 Python 및 3개 음성 반례(negative case)를 추가. 첫 수정 SHA `2fc4e18456c323b3a9175a8511003290ecee9fa5`의 [Actions #41016116561](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41016116561)은 기존 `test_hq_160_task_cycle.py`의 낡은 테스트 파일명 `test.py` / `test-new-feature.py`가 실제 unittest 계약에 어긋나 실패했다.
+- 재수정: 실제 실행 가능성을 유지하도록 양성 테스트 fixture만 `test_shared.py` / `test_new_feature.py`로 교정하고, 해당 파일 변경도 CI 트리거에 포함. [Actions #41016181563](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41016181563), SHA `deba63f88d7fa895a962d6153b8bf395cd565c4f`에서 두 회귀 스위트 PASS.
+- 적용 원칙: 승인된 READY라도 실제 runner가 실행할 수 없는 형식은 호출 이전에 차단하고 원인을 구체적으로 노출한다. 새로운 JS/HTML 전용 runner를 만들기 전에는 임의로 Python 실행기로 전환하지 않는다. RED→GREEN·동일 SHA CI는 자동화 계약 검사에만 해당하며 160개 기능 완료, 6팀 AI 호출, 실제 사이트 반영 증거가 아니다.
+- 비용/안전: 10분 상한의 읽기 전용 Ubuntu CI, AI API 호출·main 변경·Render99 재배포·운영 DB·실결제 없음. 독립 15팀 의미 검토 후에만 이 수정의 통합 승인을 판단한다. 테스트99 SQLite 영속성/백업/복원/롤백/격리 E2E 전에는 재배포 차단을 유지한다.
