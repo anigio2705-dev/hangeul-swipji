@@ -82,7 +82,8 @@ class RootIndexAuditTests(unittest.TestCase):
         workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/integration-validation.yml").read_text(encoding="utf-8")
         # A second audit may fail after Python, but browser evidence must not
         # be skipped; the existing validate job remains fail-closed.
-        self.assertIn("  browser-evidence:\n    runs-on: ubuntu-24.04", workflow)
+        self.assertIn("  browser-evidence:", workflow)
+        self.assertIn("    runs-on: ubuntu-24.04", workflow.split("  browser-evidence:", 1)[1])
         self.assertIn("      - run: node phase3/browser-test.cjs", workflow.split("  browser-evidence:", 1)[1])
         self.assertIn("      - run: node phase3/instant-browser-test.cjs", workflow.split("  browser-evidence:", 1)[1])
         self.assertIn("      - name: Preserve source-test failure after browser evidence", workflow.split("  browser-evidence:", 1)[0])
