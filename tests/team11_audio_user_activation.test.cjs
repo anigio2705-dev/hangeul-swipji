@@ -392,3 +392,41 @@ test('backgrounded mobile page rejects new human and optional TTS playback until
   assert.equal((await H.play('가')).status,'cancelled',
     'hidden document must not start audio even without a pagehide event');
 });
+
+
+test('P0 independent QA: opt-in synthetic timeout is never a successful pronunciation when browser cancel fires onend synchronously',async()=>{
+  let timeoutCallback, activeUtterance=null, speakCount=0, cancelCount=0;
+  const context={
+    document:{baseURI:'https://example.test/hangul-basics.html',hidden:false,
+      addEventListener(){},dispatchEvent(){},querySelectorAll:()=>[],querySelector:()=>null},
+    window:{addEventListener(){},
+      SpeechSynthesisUtterance:class{constructor(text){this.text=text}},
+      speechSynthesis:{
+        speak(u){speakCount++;activeUtterance=u},
+        cancel(){
+          cancelCount++;
+          if(activeUtterance){
+            const old=activeUtterance;activeUtterance=null;
+            old.onend?.(); // Safari/Chrome can deliver onend synchronously on cancel
+          }
+        }
+      }
+    },
+    Audio:class{constructor(){throw Error('no human audio expected')}},
+    URL,Event:class{},
+    setTimeout(fn,ms){if(ms===12000){timeoutCallback=fn;return 12000}return 15000},
+    clearTimeout(){},
+    fetch:async()=>({ok:true,json:async()=>({recordings:{}})})
+  };
+  vm.runInNewContext(source,context);
+  const H=context.window.HSHangul;
+  await H.ready;
+  H.setSyntheticEnabled(true);
+  const pending=H.optionalSynthetic('나');
+  assert.equal(speakCount,1,'opt-in synthetic playback must have actually started');
+  assert.equal(typeof timeoutCallback,'function','timeout protection must be installed');
+  timeoutCallback();
+  assert.equal((await pending).status,'tts-timeout',
+    'a timed-out and cancelled synthetic utterance must never be marked tts-played');
+  assert.ok(cancelCount>=2,'timed-out speech must be cancelled');
+});
