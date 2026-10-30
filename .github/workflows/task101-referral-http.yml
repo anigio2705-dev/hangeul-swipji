@@ -1,0 +1,42 @@
+name: Task101 Phase3 authenticated referral HTTP contract (isolated)
+on:
+  push:
+    branches:
+      - support/team14-task101-http-referral-20261030-1941
+    paths:
+      - 'phase3/server.py'
+      - 'phase3/test_team14_referral_http.py'
+      - '.github/workflows/task101-referral-http.yml'
+  pull_request:
+    branches:
+      - support/team14-task101-session-role-boundary-20261030-1936
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  referral-http:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Actual HTTP sessions, nine role pairs, persistent SQLite, fail closed
+        run: python -m unittest discover -s phase3 -p 'test_team14_referral_http.py' -v
+      - name: Existing Phase3 referral invariants
+        run: |
+          python -m unittest discover -s phase3 -p 'test_team14_referral_roles.py' -v
+          python -m unittest discover -s phase3 -p 'test_team14_referral_store.py' -v
+          python -m unittest discover -s phase3 -p 'test_team14_referral_scenarios.py' -v
+      - name: READY remains gated pending independent team15 HQ2 approval
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_ready101_mapping.py' -v
+          python automation/hq_traffic_lights.py --output /tmp/task101-ready.json
+          python - <<'PY'
+          import json
+          with open('/tmp/task101-ready.json', encoding='utf-8') as f:
+              result = json.load(f)
+          assert result['dispatch_readiness']['dispatchable_total'] == 0
+          print('No independent READY approval, no AI dispatch, no staging deploy')
+          PY
