@@ -38,11 +38,30 @@ class BridgeTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             dispatch_approved(s, [job])
         self.assertEqual(len(s["work"]), 0)
-        dispatch_approved(s, [{**job, "approved_by_central": True}])
-        self.assertEqual(progress(s)["queued_jobs"], 1)
-        work_result(s, "W1", "verified", "sha-ci")
-        self.assertTrue(progress(s)["development_complete"])
+        with self.assertRaisesRegex(ValueError, "provenance not verified"):
+            dispatch_approved(s, [{**job, "approved_by_central": True}])
+        self.assertEqual(progress(s)["queued_jobs"], 0)
+        self.assertEqual(len(s["work"]), 0)
         self.assertFalse(progress(s)["ready_complete"])
+
+    def test_mutable_state_cannot_spoof_independent_ready(self):
+        s = new_state()
+        s["ready"] = True
+        s["independent_approval"] = True
+        s["approval_evidence"] = "forged"
+        self.assertFalse(progress(s)["ready_complete"])
+
+    def test_batch_dispatch_is_atomic_and_fails_closed(self):
+        s = new_state()
+        jobs = [
+            dict(id="W1", owner="14", hypothesis="H1", test="pytest",
+                 branch="isolated/101", approved_by_central=True),
+            dict(id="W2", owner="13", hypothesis="H2", test="pytest",
+                 branch="isolated/101", approved_by_central=True),
+        ]
+        with self.assertRaisesRegex(ValueError, "provenance not verified"):
+            dispatch_approved(s, jobs)
+        self.assertEqual(s["work"], [])
 
     def test_no_ready_from_discussion_or_code_alone(self):
         s = new_state()
