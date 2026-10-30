@@ -76,7 +76,7 @@ test('TTS is opt-in, human-first, and never plays a held human asset',async()=>{
   assert.equal((await H.play('가')).status,'played','human recording wins over synthetic');
   assert.equal(calls.audio.length,1);
   assert.match(calls.audio[0],/ac00-r2\.mp3/);
-  assert.equal((await H.play('다')).status,'tts-played','held recording is never played');
+  assert.equal((await H.play('다')).status,'held','review-held recording cannot be bypassed even with TTS opt-in');
   assert.equal(calls.audio.length,1,'held audio URL must never be created');
   H.setSyntheticEnabled(false);
   assert.equal((await H.play('다')).status,'held');
