@@ -4,6 +4,7 @@ on:
     branches:
       - support/team14-task101-http-referral-20261030-1941
       - support/team14-task101-signup-referrer-policy-20261030-2038
+      - support/task101-revoked-existing-referrer-20261030-2123
     paths:
       - 'phase3/server.py'
       - 'phase3/test_team14_referral_http.py'
@@ -13,6 +14,7 @@ on:
     branches:
       - support/team14-task101-session-role-boundary-20261030-1936
       - support/team11-task101-ci-env-20261030-2016
+      - support/team14-task101-signup-referrer-policy-20261030-2038
   workflow_dispatch:
 permissions:
   contents: read

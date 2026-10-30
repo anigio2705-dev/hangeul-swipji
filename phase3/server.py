@@ -496,6 +496,13 @@ class Handler(BaseHTTPRequestHandler):
                 if slot['end']-slot['start'] < int(unit.get('durationMinutes',30))*60: raise Error('단원 수업시간보다 일정이 짧습니다')
                 if db.execute("SELECT 1 FROM bookings b JOIN slots s ON s.id=b.slot_id WHERE b.learner_id=? AND b.status NOT IN ('cancelled','refunded','expired') AND s.start<? AND s.end>?",(uid,slot['end'],slot['start'])).fetchone(): raise Error('학습자 일정이 겹칩니다',409)
                 ref=u['referred_by']
+                if ref:
+                    # A previously eligible inviter can later lose their role.
+                    # Never create a booking/reward snapshot from a stale link;
+                    # apply the same current DB role policy as signup and link.
+                    inviter=db.execute('SELECT role FROM users WHERE id=?',(ref,)).fetchone()
+                    if not inviter or inviter['role'] not in ('learner','partner','teacher'):
+                        raise Error('기존 소개 관계의 권한이 유효하지 않습니다',409)
                 if d.get('referralCode'):
                     r=db.execute('SELECT id,role FROM users WHERE referral_code=?',(text(d['referralCode'],40),)).fetchone()
                     if not r or r['role'] not in ('learner','partner','teacher'):
