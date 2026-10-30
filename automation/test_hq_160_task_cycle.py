@@ -146,6 +146,27 @@ class HQ160TaskCycleTests(unittest.TestCase):
                  "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123", "independent_ci_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
         self.assertEqual(make_report(checked, {"9": proof})["final_complete"], 1)
 
+    def test_final_complete_rejects_mismatched_or_missing_independent_ci_sha(self):
+        # Regression: a successful run for another commit must not certify #9.
+        checked = sample().replace("9. [ ]", "9. [x]")
+        sha = "a" * 40
+        proof = {
+            "status": "complete", "commit": sha, "ci_conclusion": "success",
+            "independent_review": "pass",
+            "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123",
+        }
+        self.assertEqual(make_report(checked, {"9": proof})["final_complete"], 0,
+                         "Missing exact independent CI SHA is not final completion")
+        proof["independent_ci_sha"] = "b" * 40
+        self.assertEqual(make_report(checked, {"9": proof})["final_complete"], 0,
+                         "A green run for a different commit is not acceptance")
+        proof["independent_ci_sha"] = sha
+        proof["ci_head_sha"] = "b" * 40
+        self.assertEqual(make_report(checked, {"9": proof})["final_complete"], 0,
+                         "Contradictory CI head SHA must fail closed")
+        proof["ci_head_sha"] = sha
+        self.assertEqual(make_report(checked, {"9": proof})["final_complete"], 1)
+
     def test_semantic_contract_paths_and_wrong_scope_regressions(self):
         import json
         root = Path(__file__).resolve().parents[1]
