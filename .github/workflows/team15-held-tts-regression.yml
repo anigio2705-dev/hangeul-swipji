@@ -4,11 +4,19 @@ on:
     branches: ['audit/team15-held-tts-failclosed-20261030-1057']
     paths:
       - 'hangul-core.js'
+      - 'hangul-basics.html'
+      - 'hangul-week.html'
+      - 'tests/team11_audio_user_activation.test.cjs'
+      - 'tests/team11_audio_surface_integration.test.cjs'
       - 'scripts/check-team15-held-tts.cjs'
       - '.github/workflows/team15-held-tts-regression.yml'
   pull_request:
     paths:
       - 'hangul-core.js'
+      - 'hangul-basics.html'
+      - 'hangul-week.html'
+      - 'tests/team11_audio_user_activation.test.cjs'
+      - 'tests/team11_audio_surface_integration.test.cjs'
       - 'scripts/check-team15-held-tts.cjs'
       - '.github/workflows/team15-held-tts-regression.yml'
 permissions:
