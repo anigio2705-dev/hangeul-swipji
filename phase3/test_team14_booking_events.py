@@ -37,4 +37,28 @@ class BookingEventTests(unittest.TestCase):
   with self.assertRaises(SimError):apply_booking_event(self.s,dict(self.payload(),secret="bad"))
  def test_reject_unrecognized_action(self):
   with self.assertRaises(SimError):apply_booking_event(self.s,self.payload(action="pay"))
+ def test_partial_refund_status_matches_committed_state(self):
+  # A 25% refund is not a fully refunded booking; a false status must fail closed.
+  bad=self.payload(action="refund",booking_status="refunded",amount_krw=5000)
+  with self.assertRaises(SimError) as ctx:apply_booking_event(self.s,bad)
+  self.assertEqual(ctx.exception.code,"INVALID_STATE")
+  self.assertEqual(self.s.db.execute("SELECT state FROM lessons WHERE id='lesson1'").fetchone()[0],"reserved")
+  self.assertEqual(self.s.db.execute("SELECT COUNT(*) FROM ledger").fetchone()[0],0)
+  partial=self.payload(booking_status="partially_refunded",action="refund",amount_krw=5000)
+  self.assertEqual(apply_booking_event(self.s,partial)["state"],"partially_refunded")
+  full=self.payload(event_id="event2",transaction_id="tx2",action="refund",booking_status="refunded",amount_krw=15000)
+  self.assertEqual(apply_booking_event(self.s,full)["state"],"refunded")
+  self.assertEqual(self.s.totals("month1")["refunded"],20000)
+ def test_completed_partial_refund_requires_exact_status(self):
+  apply_booking_event(self.s,self.payload())
+  bad=self.payload(event_id="event2",transaction_id="tx2",action="refund_completed",booking_status="refunded",amount_krw=5000)
+  with self.assertRaises(SimError) as ctx:apply_booking_event(self.s,bad)
+  self.assertEqual(ctx.exception.code,"INVALID_STATE")
+  self.assertEqual(self.s.db.execute("SELECT state FROM lessons WHERE id='lesson1'").fetchone()[0],"completed")
+  partial=self.payload(event_id="event2",transaction_id="tx2",action="refund_completed",booking_status="completed_partially_refunded",amount_krw=5000)
+  self.assertEqual(apply_booking_event(self.s,partial)["state"],"completed_partially_refunded")
+  full=self.payload(event_id="event3",transaction_id="tx3",action="refund_completed",booking_status="refunded",amount_krw=15000)
+  self.assertEqual(apply_booking_event(self.s,full)["state"],"refunded")
+  totals=self.s.totals("month1")
+  self.assertEqual((totals["refunded"],totals["teacher"],totals["referral"],totals["platform"]),(20000,0,0,0))
 if __name__=="__main__":unittest.main()
