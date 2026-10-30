@@ -113,12 +113,12 @@ begin
  if not found then raise exception '종료할 수업이 없습니다';end if;
 end $$;
 -- A learner may cancel only their own still-pending request; accepted calls must use finish_match.
-create or replace function public.cancel_match(match_id uuid) returns void language plpgsql security definer set search_path='' as $
+create or replace function public.cancel_match(match_id uuid) returns void language plpgsql security definer set search_path='' as $cancel$
 begin
  update public.matches set status='cancelled',updated_at=now()
  where id=match_id and learner_id=auth.uid() and status='requested';
  if not found then raise exception '취소할 대화 요청이 없습니다';end if;
-end $;
+end $cancel$;
 revoke all on function public.cancel_match(uuid) from public, anon, authenticated;
 grant execute on function public.cancel_match(uuid) to authenticated;
 revoke all on function public.set_availability(boolean) from public, anon, authenticated;
