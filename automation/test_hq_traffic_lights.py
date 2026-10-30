@@ -297,5 +297,30 @@ class ReadinessTests(unittest.TestCase):
             self.assertEqual(repair22["registry_owner"], "12")
             self.assertEqual(result["intake_next"]["13"]["lane"], "BLOCKED_REPAIR")
 
+
+    def test_registry_blocked_overrides_stale_code_verified_ledger(self):
+        """#59 cannot disappear from owner repair when ledger and registry disagree."""
+        c = catalog()
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            for name in ("audio.py", "test_audio.py"):
+                (root / name).write_text("pass\\n")
+            registry = {"schema": 1, "items": {
+                "59": {"owner": "12", "state": "BLOCKED",
+                       "source_paths": ["audio.py"], "test_paths": ["test_audio.py"],
+                       "unmet": ["actual UI playback regression not accepted"],
+                       "independent_team15": "PENDING"}
+            }}
+            ledger = {"59": {"status": "code_verified"}}
+            result = readiness(c, ledger, registry, root)
+            self.assertEqual(result["dispatchable_total"], 0)
+            self.assertIn(59, result["blocked"])
+            self.assertNotIn(59, result["already_verified"])
+            repair = result["blocked_repair_supply"]["12"][0]
+            self.assertEqual(repair["task"], 59)
+            self.assertIn("ledger_registry_state_conflict", repair["repair_blockers"])
+            self.assertEqual(repair["ledger_status"], "code_verified")
+            self.assertEqual(result["intake_next"]["12"], {"task": 59, "lane": "BLOCKED_REPAIR"})
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,27 @@
+name: Team15 blocked-vs-verified ledger conflict regression (isolated)
+on:
+  push:
+    branches:
+      - audit/team15-ledger-blocked-conflict-20261030-1542
+    paths:
+      - automation/hq_traffic_lights.py
+      - automation/test_hq_traffic_lights.py
+      - .github/workflows/team15-ledger-blocked-conflict.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-ledger-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify conflicting BLOCKED registry cannot be hidden by stale verified ledger
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_traffic_lights.py' -v
+          python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+      - name: Confirm no production actions
+        run: echo 'Read-only evidence QA; no AI dispatch, READY promotion, main changes, Render99 deployment, payment or transfers.' >> "$GITHUB_STEP_SUMMARY"
