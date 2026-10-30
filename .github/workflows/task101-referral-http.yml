@@ -52,6 +52,7 @@ jobs:
         run: |
           python -m json.tool automation/experiments/task101-four-pair-acceptance-20261030.json > /dev/null
           python -m json.tool automation/experiments/task101-baseline-restoration-handoff-20261031.json > /dev/null
+          python -m json.tool automation/experiments/task101-isolate-unapproved-education-20261031.json > /dev/null
       - name: Audit exact root index drift without weakening original protection
         run: |
           python -m unittest discover -s automation -p 'test_task101_root_index_audit.py' -v

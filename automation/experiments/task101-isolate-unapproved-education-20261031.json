@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "task": 101,
+  "hypothesis_id": "H101-ISOLATE-UNAPPROVED-EDUCATION-09",
+  "previous_attempt": "H101-RESTORE-ROOT-MIGRATE-HANDOFF-08",
+  "prior_observation": "At SHA c902d6e7c40fc5e0708306649b382a96331a2bb8 Phase3 full 457 PASS and dedicated PASS; free integration audit-professional-96.py FAILS eight other protected HTML files. Seven contain Team12 server progress hooks from 7cb026ebee3f45ed5a5ce9189f0be92c7fdd0c1e; reading.html contains mobile level-change UI from 09f2ffcfcbf0a6928614577b4c0a2bb51b37482f. No independent 12/15/HQ2 approval located.",
+  "changed_assumption": "These unapproved Team12 and reading UI changes are unrelated to #101 referral acceptance; keep their original commits in the existing #152 base and team branches, but exclude their protected-file edits from the isolated #101 candidate until independently reviewed.",
+  "discriminating_experiment": "Restore only eight protected HTML files byte-for-byte from 7418e32 on isolated #153; leave referral/server and original scripts intact. Run same SHA Phase3, free education 96 audit, 350/1758/600 audits and desktop/mobile Chromium smoke.",
+  "protected_files_restored": [
+    "intro.html",
+    "beginner1.html",
+    "beginner2.html",
+    "intermediate1.html",
+    "intermediate2.html",
+    "advanced1.html",
+    "advanced2.html",
+    "reading.html"
+  ],
+  "source_branch_with_additive_changes": "support/task101-four-pair-acceptance-20261030-2139",
+  "source_sha_with_additive_changes": "13f87f5410028e9e606904b901b036df6da0a1e6",
+  "independent_team12": "PENDING",
+  "independent_team15": "PENDING",
+  "hq2": "PENDING",
+  "ready": false,
+  "status": "CANDIDATE_UNVERIFIED",
+  "known_tradeoff": "This #101 candidate intentionally excludes unapproved server-side learning progress hooks and the mobile reading level selector; do not treat their integration as complete. The additive changes remain in #152/history for independent evaluation.",
+  "next_action": "Inspect raw CI and browser logs; request 12/15/HQ2 explicit adjudication of held features, shared server ownership and #101 business policy before official READY."
+}
