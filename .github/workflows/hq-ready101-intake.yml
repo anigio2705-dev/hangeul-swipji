@@ -1,0 +1,37 @@
+name: HQ task101 Python executor intake and real referral regressions
+on:
+  push:
+    branches:
+      - team11/ready101-executor-intake-20261030-1723
+    paths:
+      - 'automation/hq_semantic_contract_paths.json'
+      - 'automation/test_hq_ready101_mapping.py'
+      - '.github/workflows/hq-ready101-intake.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-intake:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Prove #101 source/test ownership and no false READY
+        run: python -m unittest discover -s automation -p 'test_hq_ready101_mapping.py' -v
+      - name: Execute actual referral storage and scenario regressions
+        run: |
+          python -m unittest discover -s phase3 -p 'test_team14_referral_store.py' -v
+          python -m unittest discover -s phase3 -p 'test_team14_referral_scenarios.py' -v
+      - name: Verify no queue promotion
+        run: |
+          python automation/hq_traffic_lights.py --output /tmp/hq-ready101.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/hq-ready101.json'))
+          assert x['dispatch_readiness']['dispatchable_total'] == 0
+          assert x['final_complete'] == 0
+          print('READY=0, final=0, #101 remains CANDIDATE pending team15')
+          PY
