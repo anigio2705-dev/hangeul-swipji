@@ -6,6 +6,31 @@ from types import SimpleNamespace
 from hq_six_developers import apply_patch, validate_candidate, choose_work_items, run_checks
 from hq_160_task_cycle import _semantic_dispatch_gate, contracts
 
+class WorkerChildEnvironmentTests(unittest.TestCase):
+    def test_child_process_does_not_inherit_nonallowlisted_secrets(self):
+        # A candidate or its tests may be AI-modified; do not pass unrelated
+        # CI credentials merely because they have a different name from GITHUB_TOKEN.
+        from hq_six_developers import shell
+        with patch.dict("os.environ", {
+            "OPENAI_API_KEY": "secret-openai",
+            "GITHUB_TOKEN": "secret-github",
+            "GH_TOKEN": "secret-gh",
+            "SUPABASE_SERVICE_ROLE_KEY": "secret-db",
+            "RENDER_API_KEY": "secret-render",
+            "CI": "true",
+            "PATH": "/usr/bin:/bin",
+            "UNRELATED_PRIVATE_VALUE": "secret-other",
+        }, clear=False), patch("hq_six_developers.subprocess.run") as runner:
+            runner.return_value = SimpleNamespace(returncode=0, stdout="", stderr="")
+            shell("python", "-V")
+            env = runner.call_args.kwargs["env"]
+        for key in ("OPENAI_API_KEY", "GITHUB_TOKEN", "GH_TOKEN",
+                    "SUPABASE_SERVICE_ROLE_KEY", "RENDER_API_KEY",
+                    "UNRELATED_PRIVATE_VALUE"):
+            self.assertNotIn(key, env)
+        self.assertEqual(env["CI"], "true")
+        self.assertEqual(env["PATH"], "/usr/bin:/bin")
+
 class BoundedPatchTests(unittest.TestCase):
     def test_runner_must_reject_unreviewed_semantic_task_even_if_ledger_is_stale(self):
         self.assertFalse(_semantic_dispatch_gate(51, 'scripts/audit-hangul-audio.py'))
