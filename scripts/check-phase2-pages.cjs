@@ -20,7 +20,7 @@ assert(read('hangul-week.js').includes('localStorage.setItem'),'Seven-day progre
 assert(read('hangul-core.js').includes('audio'),'Audio player code missing');
 // Keep the same eight approved locale choices on desktop and mobile.
 const siteLanguage=read('site-language.js');
-const localeDeclaration=siteLanguage.match(/var KEY='hs-site-language',languages=(\\[[^\\n]+\\]);/);
+const localeDeclaration=siteLanguage.match(/var KEY='hs-site-language',languages=(\[[^\n]+\]);/);
 assert(localeDeclaration,'Site language catalog missing');
 const locales=require('node:vm').runInNewContext(localeDeclaration[1]).map(row=>row[0]);
 assert.deepEqual(Array.from(locales),['ko','en','ja','es','zh-CN','ru','mn','vi'],'Unsupported or missing site language');
