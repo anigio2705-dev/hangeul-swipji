@@ -48,6 +48,12 @@ const server=http.createServer((req,res)=>{
       await page.goto(base+'/index.html?lang=unsupported',{waitUntil:'domcontentloaded'});
       await page.locator('#language option[value="vi"]').waitFor();
       assert.equal(await page.locator('#language').inputValue(),'ko',profile.name+' invalid saved fallback');
+      await page.goto(base+'/global-language.html?lang=ko',{waitUntil:'domcontentloaded'});
+      await page.locator('#from option[value="vi"]').waitFor();
+      for(const id of ['from','to']){
+        const labOptions=await page.locator('#'+id+' option').evaluateAll(els=>els.map(e=>e.value));
+        assert.deepEqual(labOptions,expected,profile.name+' translator '+id+' options');
+      }
       assert.equal(errors.length,0,profile.name+' JS errors: '+errors.join('; '));
       console.log('PASS team16',profile.name,'eight options, selection, persistence and fallback');
       await context.close();
