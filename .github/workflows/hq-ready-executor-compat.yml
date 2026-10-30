@@ -6,6 +6,7 @@ on:
     paths:
       - automation/hq_traffic_lights.py
       - automation/test_hq_traffic_lights.py
+      - automation/test_hq_160_task_cycle.py
       - .github/workflows/hq-ready-executor-compat.yml
       - docs/HQ_GENERAL_WORK_METHOD_PLAYBOOK_20261029.md
   workflow_dispatch:
