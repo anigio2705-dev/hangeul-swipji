@@ -176,6 +176,27 @@ def choose_work_items(team, catalog, evidence, repairs, registry, root):
         excluded.add(str(reviewed["task_number"]))
     if unsupported:
         return unsupported[:1]
+    # The shared readiness gate may reject a purported READY entry before
+    # next_assignment can return it. Do not silently replace that blocked
+    # assignment with a legacy curated task: preserve the actual reason.
+    from hq_traffic_lights import readiness
+    invalid = readiness(catalog, evidence, registry, root)["invalid_ready"]
+    for blocked in invalid:
+        number = blocked["task"]
+        entry = registry["items"].get(str(number), {})
+        if entry.get("state") != "READY" or catalog[number]["owner"] != team:
+            continue
+        paths = entry.get("source_paths", [])
+        tests = entry.get("test_paths", [])
+        if "real_paths" in blocked["reason"]:
+            reason = ("READY target requires non-Python or non-unittest executor: "
+                      "unsafe or missing source/test path")
+        else:
+            reason = "READY independent gate rejected: " + blocked["reason"]
+        return [{"path": paths[0] if isinstance(paths, list) and paths else "",
+                 "number": number, "dynamic": True,
+                 "tests": tests if isinstance(tests, list) else [],
+                 "unsupported_reason": reason}]
     return [{"path": path, "number": number, "dynamic": False, "tests": [],
              "unsupported_reason": ""}
             for path, _ in TASKS[team][1]
