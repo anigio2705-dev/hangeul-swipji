@@ -6,6 +6,7 @@ on:
     paths:
       - 'site-language.js'
       - 'scripts/check-phase2-pages.cjs'
+      - 'scripts/browser-team16-language.cjs'
       - '.github/workflows/team16-language-regression.yml'
   pull_request:
     paths:
@@ -27,3 +28,9 @@ jobs:
         run: node --check site-language.js
       - name: Verify eight-language product contract and preserved pages
         run: node scripts/check-phase2-pages.cjs
+      - name: Install Chromium for real desktop/mobile locale smoke test
+        run: |
+          npm install --no-save playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Exercise language menus on desktop and mobile Chromium
+        run: node scripts/browser-team16-language.cjs
