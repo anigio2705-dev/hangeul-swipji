@@ -125,9 +125,10 @@
     const words=Array.isArray(value)?value:[value];
     if(!words.length||words.some(w=>typeof w!=='string'||!w.trim()))return {status:'invalid'};
     const missing=words.filter(word=>!records[word]);
-    // Recordings on hold are NEVER decoded or played. Optional TTS is separately
-    // labeled, device-generated, and only used after the learner actively opts in.
-    if(!syntheticEnabled&&missing.some(w=>holds[w])){status('재생 보류: '+missing.filter(w=>holds[w]).map(w=>w+' · '+holds[w].holdReason).join(' / '));return {status:'held',missing}}
+    // A review hold is a hard block, including when device TTS is opted in.
+    // Only genuinely absent (not held) recordings may use optional synthetic speech.
+    const held=missing.filter(w=>holds[w]);
+    if(held.length){status('재생 보류: '+held.map(w=>w+' · '+holds[w].holdReason).join(' / '));return {status:'held',missing}}
     if(!syntheticEnabled&&missing.length){status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요.');return {status:'missing',missing}}
     try{
       let usedSynthetic=false;
@@ -173,11 +174,14 @@
       try{window.speechSynthesis.speak(utterance)}catch(_){done({status:'tts-error'})}
     });
   }
-  // For absent/held recordings, the explicit opt-in fallback runs after a user
-  // gesture; a held human file itself is never played. Human files remain first.
+  // Only absent, non-held recordings may use opt-in device synthesis.
+  // Do not bypass a withdrawn/held human recording via this direct API.
   async function optionalSynthetic(word){
     stop();const token=run;
     if(!syntheticEnabled)return {status:'tts-disabled'};
+    if(!manifestLoaded||manifestError)return {status:'manifest-error'};
+    if(holds[word]){status('재생 보류: '+word+' · '+holds[word].holdReason);return {status:'held',word}};
+    if(records[word])return {status:'human-available'};
     return synthesize(word,token);
   }
   const el=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!==undefined)x.textContent=text;return x};
