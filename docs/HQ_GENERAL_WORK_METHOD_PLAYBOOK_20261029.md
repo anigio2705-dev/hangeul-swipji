@@ -499,3 +499,10 @@
 - 재수정: 실제 실행 가능성을 유지하도록 양성 테스트 fixture만 `test_shared.py` / `test_new_feature.py`로 교정하고, 해당 파일 변경도 CI 트리거에 포함. [Actions #41016181563](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41016181563), SHA `deba63f88d7fa895a962d6153b8bf395cd565c4f`에서 두 회귀 스위트 PASS.
 - 적용 원칙: 승인된 READY라도 실제 runner가 실행할 수 없는 형식은 호출 이전에 차단하고 원인을 구체적으로 노출한다. 새로운 JS/HTML 전용 runner를 만들기 전에는 임의로 Python 실행기로 전환하지 않는다. RED→GREEN·동일 SHA CI는 자동화 계약 검사에만 해당하며 160개 기능 완료, 6팀 AI 호출, 실제 사이트 반영 증거가 아니다.
 - 비용/안전: 10분 상한의 읽기 전용 Ubuntu CI, AI API 호출·main 변경·Render99 재배포·운영 DB·실결제 없음. 독립 15팀 의미 검토 후에만 이 수정의 통합 승인을 판단한다. 테스트99 SQLite 영속성/백업/복원/롤백/격리 E2E 전에는 재배포 차단을 유지한다.
+
+### 추가 독립 QA — 정적 게이트 통과만으로 종료하지 않는다 (2026-10-30 15:50 KST)
+
+- 정적 READY 게이트 개선 후 [HQ2 독립 QA #41016308466](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41016308466)에서 실제 `hq_six_developers.py:choose_work_items()`의 기존 테스트 2개가 실패했다. 원인: 이제 HTML READY는 정적 게이트에서 거부되므로, runner가 지원 불가 이유를 반환하지 못하고 오래된 curated 항목으로 넘어갔다.
+- 수정: `automation/hq_six_developers.py`에서 정적 `invalid_ready`의 정확한 `unsupported_python_unittest_runner` 사유를 읽어 해당 팀의 **AI 호출 없는 명시적 거부 진단**으로 보존한다. 승인된 Python READY가 있으면 그것을 우선하고, 지원 불가 READY를 자동 승격하지 않는다.
+- 동일 SHA `c87e99c5787c9072bbec250fe50815494eac016f`에서 [실행기 호환성 #41016388617](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41016388617)와 [HQ2 독립 QA #41016395866](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41016395866)가 모두 SUCCESS. 이 검증은 실제 AI 호출, 신규 제품 코드, 배포 승인으로 계산하지 않는다.
+- 일반화 교훈: 사전 승인기에서 정책을 강화하면 downstream runner의 실패 설명·fallback·다음 큐 테스트까지 함께 검증해야 한다. 정적 검사만 PASS여도 통합 작업기에서는 새 오류가 발생할 수 있다.
