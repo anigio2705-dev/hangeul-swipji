@@ -113,6 +113,23 @@ class RoundRobinTests(unittest.TestCase):
                       turn(turn_no=2, prev=6522211000, hypothesis="H101-NEW-HYPOTHESIS-1"))]
         self.assertEqual(inspect(cs)["status"], "AWAIT_TEAM_COMMENT")
 
+    def test_central_deadline_skip_is_not_team_agreement(self):
+        skip = {"round": 1, "turn": 1,
+                "read_previous": REPO + "/issues/34#issuecomment-" + str(CENTRAL_ID),
+                "reason": "deadline_passed: team11 did not provide evidence"}
+        c = message(6522211100, "HQ_TURN_SKIP_V1", skip)
+        r = inspect([c])
+        self.assertEqual((r["turn"], r["team"]), (2, "12"))
+        self.assertEqual(r["history"][0]["decision"], "NO_RESPONSE_SKIP")
+        self.assertEqual(r["history"][0]["evidence_status"], "NO_TEAM_EVIDENCE")
+
+    def test_no_automatic_skip_without_central_deadline_reason(self):
+        skip = {"round": 1, "turn": 1,
+                "read_previous": REPO + "/issues/34#issuecomment-" + str(CENTRAL_ID),
+                "reason": "no"}
+        r = inspect([message(6522211100, "HQ_TURN_SKIP_V1", skip)])
+        self.assertEqual(r["status"], "AWAIT_TEAM_COMMENT")
+
 
 if __name__ == "__main__":
     unittest.main()
