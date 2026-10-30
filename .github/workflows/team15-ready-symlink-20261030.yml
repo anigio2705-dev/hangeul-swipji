@@ -1,0 +1,32 @@
+name: Team15 READY symlink fail-closed independent regression
+on:
+  push:
+    branches:
+      - audit/team15-ready-symlink-20261030-1640
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-ready-symlink:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run independent READY path, owner, and runner regressions
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_traffic_lights.py' -v
+          python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+          python -m unittest discover -s automation -p 'test_hq_six_developers.py' -v
+      - name: Audit live registry without READY promotion
+        run: |
+          python automation/hq_traffic_lights.py --output /tmp/team15-ready-symlink.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/team15-ready-symlink.json'))
+          assert x['dispatch_readiness']['dispatchable_total'] == 0
+          assert x['final_complete'] == 0
+          print('READY=0, final=0, no AI calls or deployment')
+          PY
