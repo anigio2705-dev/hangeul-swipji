@@ -29,7 +29,12 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           workflow=Path('.github/workflows/team15-issue34-receipt-binding.yml').read_text()
-          assert 'issues: write' not in workflow
+          import re
+          assert not re.search(r'(?m)^\\s+issues:\\s*write\\s*
+          assert 'OPENAI_API_KEY' not in workflow
+          print('Independent CI read-only; no model dispatch, READY promotion or deploy')
+          PY
+, workflow)
           assert 'OPENAI_API_KEY' not in workflow
           print('Independent CI read-only; no model dispatch, READY promotion or deploy')
           PY
