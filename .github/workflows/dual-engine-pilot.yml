@@ -18,4 +18,4 @@ jobs:
         with:
           python-version: '3.11'
       - name: Run state-machine tests
-        run: python -m unittest automation.test_dual_engine -v
+        run: python -m unittest automation.test_dual_engine automation.test_dual_engine_bridge -v
