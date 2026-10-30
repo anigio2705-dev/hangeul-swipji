@@ -85,6 +85,30 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_referral_award_per_lesson
    self.db.execute('COMMIT');return True
   except BaseException:
    self.db.execute('ROLLBACK');raise
+ def link_verified(self, child_id, parent_id, authenticated_actor_id, role_lookup):
+  """Record a referral only after the referred account accepts while signed in.
+
+  The caller MUST derive authenticated_actor_id from a verified server session
+  and role_lookup from its trusted account database, never from client input.
+  This storage module does not authenticate HTTP sessions or approve payments.
+  Both teacher and student accounts may refer either account type.
+  """
+  ident(child_id);ident(parent_id);ident(authenticated_actor_id)
+  if authenticated_actor_id!=child_id:
+   raise SimError('FORBIDDEN','referral must be confirmed by referred account')
+  if not callable(role_lookup):
+   raise SimError('VALIDATION_ERROR','trusted role resolver required')
+  try:
+   child_role=role_lookup(child_id)
+   parent_role=role_lookup(parent_id)
+  except Exception as exc:
+   raise SimError('FORBIDDEN','verified account role lookup failed') from exc
+  if (type(child_role) is not str or type(parent_role) is not str
+      or child_role not in ('teacher','student')
+      or parent_role not in ('teacher','student')):
+   raise SimError('FORBIDDEN','both account roles must be verified')
+  return self.link(child_id,parent_id)
+
  def award(self,event_id,student_id,lesson_id,gross_krw,depth_rates_bps=(300,),commission_bps=2000):
   import json
   ident(event_id);ident(student_id);ident(lesson_id);amount(gross_krw,True)
