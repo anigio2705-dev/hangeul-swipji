@@ -327,3 +327,37 @@ test('manual refresh queued during initial fetch must never expose the first man
   assert.equal(H.availability('가').state,'missing');
   assert.equal(created,0);
 });
+
+
+test('direct optional TTS reports cancelled when mobile pagehide cancels speech synchronously',async()=>{
+  let activeUtterance=null,spoken=0,cancellations=0;
+  const handlers={};
+  const context={
+    document:{baseURI:'https://example.test/hangul-basics.html',hidden:false,
+      addEventListener(){},dispatchEvent(){},querySelectorAll:()=>[],querySelector:()=>null},
+    window:{addEventListener(name,fn){handlers[name]=fn},
+      SpeechSynthesisUtterance:class{constructor(text){this.text=text}},
+      speechSynthesis:{
+        speak(utterance){spoken++;activeUtterance=utterance},
+        cancel(){
+          cancellations++;
+          // Some browsers synchronously emit onend during cancel().
+          // This is NOT a successful pronunciation.
+          if(activeUtterance){const u=activeUtterance;activeUtterance=null;u.onend?.()}
+        }
+      }
+    },
+    Audio:class{constructor(){throw Error('no human recording expected')}},
+    URL,Event:class{},setTimeout,clearTimeout,
+    fetch:async()=>({ok:true,json:async()=>({recordings:{}})})
+  };
+  vm.runInNewContext(source,context);
+  const H=context.window.HSHangul;await H.ready;
+  H.setSyntheticEnabled(true);
+  const pending=H.optionalSynthetic('나');
+  assert.equal(spoken,1,'TTS must actually start before cancellation');
+  handlers.pagehide();
+  assert.equal((await pending).status,'cancelled',
+    'browser onend emitted by cancel() must not report synthetic playback success');
+  assert.equal(cancellations>=2,true);
+});
