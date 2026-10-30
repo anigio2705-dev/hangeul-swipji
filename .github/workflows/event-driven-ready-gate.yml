@@ -1,0 +1,51 @@
+name: Hangeul Swipji event-driven QA gate (proposal)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - 'docs/TASK102_REFERRAL_POLICY_COMPARISON_20261031.md'
+      - 'phase3/team14_referral_eligibility.py'
+      - 'phase3/team14_referral_scenarios.py'
+      - '.github/workflows/event-driven-ready-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ready-gate-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  qa-referral-document:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check #102 referral policy document against implementation
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path("docs/TASK102_REFERRAL_POLICY_COMPARISON_20261031.md")
+          eligibility = Path("phase3/team14_referral_eligibility.py")
+          scenario = Path("phase3/team14_referral_scenarios.py")
+          if not p.exists():
+              print("SKIP: #102 document not present on this ref")
+              raise SystemExit(0)
+          assert eligibility.exists() and scenario.exists(), "Source modules missing"
+          d = p.read_text(encoding="utf-8")
+          e = eligibility.read_text(encoding="utf-8")
+          s = scenario.read_text(encoding="utf-8")
+          for phrase in ("eligible_referral", "simulate_referral", "상위 없음", "실결제", "승인 전"):
+              assert phrase in d, f"Document missing: {phrase}"
+          assert "graph.get(cur)" in e and "recipients.append" in e, "Ancestor-based eligibility changed; re-review"
+          assert "rewards=[gross_krw*r//10000 for r in depth_rates_bps]" in s, "Budget scenario changed; re-review"
+          assert "edges=[]" in d and "21,000원" in d and "20,000원" in d, "Missing explicit missing-ancestor distinction"
+          assert "READY=0" in d, "Draft policy must remain not-ready until independent review"
+          print("DOC_CONSISTENCY_PASS: static checks only; NOT 15-team independent QA or INTERNAL_READY")
+      - name: Record limited result
+        if: always()
+        shell: bash
+        run: |
+          echo 'This workflow checks #102 document invariants only.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'It does not approve business policy, authorize payouts, or mark INTERNAL_READY=1.' >> "$GITHUB_STEP_SUMMARY"
