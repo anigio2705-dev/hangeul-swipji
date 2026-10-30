@@ -1,0 +1,47 @@
+name: HQ Issue34 round-robin read-only cursor (isolated)
+on:
+  push:
+    branches:
+      - support/hq-issue34-round-robin-20261030-2103
+    paths:
+      - 'automation/hq_round_robin.py'
+      - 'automation/test_hq_round_robin.py'
+      - 'automation/experiments/task101-round-robin-20261030.json'
+      - '.github/workflows/hq-issue34-round-robin.yml'
+  pull_request:
+    branches:
+      - audit/team15-issue34-receipt-binding-20261030-1740
+  workflow_dispatch:
+  # GitHub schedule only runs from the default branch. This isolated PR
+  # does NOT activate periodic polling; separate HQ approval is required.
+  schedule:
+    - cron: '17 * * * *'
+permissions:
+  contents: read
+  issues: read
+concurrency:
+  group: hq-issue34-round-robin-readonly
+  cancel-in-progress: false
+jobs:
+  cursor:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fail-closed discussion sequencing tests
+        run: python -m unittest discover -s automation -p 'test_hq_round_robin.py' -v
+      - name: Poll Issue34 without posting, READY or AI dispatch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python automation/hq_round_robin.py --output /tmp/hq-round-robin.json
+      - name: Preserve machine-readable cursor evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue34-round-robin-cursor
+          path: /tmp/hq-round-robin.json
+          if-no-files-found: error
