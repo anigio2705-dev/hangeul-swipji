@@ -71,6 +71,13 @@ def cleanup(db, now):
 
 
 def end(db, m):
+    # Closing an instant room must also revoke the linked booking-room endpoint.
+    # Preserve the booking and slot for an auditable history; never delete them
+    # just to satisfy a stale privacy test. A verified session-finish already
+    # moved its booking to completed and is deliberately left unchanged.
+    db.execute("""UPDATE bookings SET status='cancelled'
+      WHERE id IN (SELECT booking_id FROM instant_booking_links WHERE match_id=?)
+      AND status='in_class'""", (m['id'],))
     db.execute("UPDATE instant_matches SET state='ended' WHERE id=?", (m['id'],))
     db.execute('DELETE FROM instant_queue WHERE user_id IN (?,?)', (m['learner_id'], m['partner_id']))
 
