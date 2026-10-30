@@ -151,10 +151,16 @@
     // Only genuinely absent (not held) recordings may use optional synthetic speech.
     const held=missing.filter(w=>holds[w]);
     if(held.length){status('재생 보류: '+held.map(w=>w+' · '+holds[w].holdReason).join(' / '));return {status:'held',missing}}
-    if(!syntheticEnabled&&missing.length){status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요.');return {status:'missing',missing}}
+    if(!syntheticEnabled&&missing.length&&(words.length===1||missing.length===words.length)){
+      status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요.');
+      return {status:'missing',missing};
+    }
+    // Only skip genuinely absent recordings; review-held recordings remain a
+    // hard block for the entire sequence. Never silently synthesize without opt-in.
+    const playable=!syntheticEnabled&&missing.length?words.filter(w=>records[w]):words;
     try{
       let usedSynthetic=false;
-      for(const word of words){
+      for(const word of playable){
         if(token!==run)return {status:'cancelled'};
         if(records[word]){await recording(word,token);continue}
         const result=await synthesize(word,token);
@@ -164,8 +170,11 @@
         }
         usedSynthetic=true;
       }
-      if(token===run)status(usedSynthetic?'재생 완료 · 기기 합성음 사용 · 사람 녹음 아님':'사람 녹음 재생 완료 · 청취 정확성 미검증');
-      return {status:token===run?(usedSynthetic?'tts-played':'played'):'cancelled',words};
+      if(token===run)status(usedSynthetic?'재생 완료 · 기기 합성음 사용 · 사람 녹음 아님':missing.length&&!syntheticEnabled
+        ?'일부만 재생했습니다. 녹음 준비 중: '+missing.join(' · ')+'. 나머지 글자는 선생님과 함께 읽어 주세요. / Partial human playback; recordings missing.'
+        :'사람 녹음 재생 완료 · 청취 정확성 미검증');
+      if(token!==run)return {status:'cancelled'};
+      return missing.length&&!syntheticEnabled?{status:'partial',words:playable,missing}:{status:usedSynthetic?'tts-played':'played',words};
     }catch(e){if(token===run){stop();status(e.message)}return {status:'error',message:e.message}}
   }
   // Optional Korean device TTS: never impersonates a human recording.
