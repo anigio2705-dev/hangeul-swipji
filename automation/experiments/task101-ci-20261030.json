@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "task_id": 101,
+  "owner": "14",
+  "support_team": "11",
+  "status": "EXPERIMENT_RECORDED_WITH_SOURCE_PRESERVATION_BLOCKER",
+  "baseline_sha": "5ea960bd59f272ce59ace35fb27499a208b1727c",
+  "prior_attempt_id": "41042865998+41042866006",
+  "changed_assumption": "The full-suite failures are attributable to CI image compatibility and missing git history rather than #101 HTTP referral behavior; validate without changing product code or relaxing assertions.",
+  "hypotheses": [
+    {
+      "hypothesis_id": "H101-ENV",
+      "category": "environment",
+      "expected_observation": "Chromium install succeeds on ubuntu-24.04 with Playwright 1.51.1",
+      "falsification": "Install fails on pinned runner",
+      "discriminating_test": "./phase3/node_modules/.bin/playwright install --with-deps chromium",
+      "time_limit_minutes": 20,
+      "risk": "Low: isolated CI runner pin; no production deploy",
+      "owner": "11",
+      "evidence_prior": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41042865998"
+    },
+    {
+      "hypothesis_id": "H101-HISTORY",
+      "category": "checkout",
+      "expected_observation": "git show 7418e32:phase3/content.json succeeds and original content test can compare exact bytes",
+      "falsification": "git show still cannot resolve commit after full checkout",
+      "discriminating_test": "git show 7418e32:phase3/content.json >/dev/null && python -m unittest discover -s phase3 -p 'test_standards96.py' -v",
+      "time_limit_minutes": 10,
+      "risk": "Low: fetch-depth only; preserves strict source comparison",
+      "owner": "11",
+      "evidence_prior": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41042866006"
+    },
+    {
+      "hypothesis_id": "H101-PRODUCT",
+      "category": "product",
+      "expected_observation": "If environment and history are repaired, any remaining full-suite failure isolates a product/contract issue",
+      "falsification": "All integration and Phase3 suites pass on the exact patched SHA",
+      "discriminating_test": "CI phase3-isolated-tests.yml and integration-validation.yml full suites on same PR HEAD",
+      "time_limit_minutes": 45,
+      "risk": "Medium: independent E2E may expose genuine defects; no changes to tests or product acceptance",
+      "owner": "15",
+      "evidence_prior": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41042866005"
+    }
+  ],
+  "decision_rule": "Run minimal environment/history repair first; if same signature recurs twice switch to dependency update in separate branch, not repeated identical patch. Any product failure goes to team14 with exact test/log. No READY until independent team15/HQ2 review and runner dispatch safety.",
+  "next_action": "15/HQ2 independently review full exact-SHA CI logs and index.html baseline conflict; no READY promotion or production/test99 deployment.",
+  "dispatchable_ready_promoted": false,
+  "ai_api_calls_this_experiment": 0,
+  "deploy": false,
+  "observations": [
+    {
+      "hypothesis_id": "H101-HISTORY",
+      "result": "PARTIAL_PASS",
+      "evidence_run": 41047116204,
+      "observed": "Full-history checkout resolves git show 7418e32 and 3 environment tests PASS. Strict source-preservation test then fails on byte mismatch in index.html, not missing git history.",
+      "next_action": "Do not relax strict preservation. Ask team12/15/HQ2 whether approved index.html CSS layout and team12_learning_handoff.js integration should migrate the protected baseline."
+    },
+    {
+      "hypothesis_id": "H101-ENV",
+      "result": "PENDING_FULL_SUITE",
+      "evidence_runs": [
+        41047138793,
+        41047138816
+      ],
+      "observed": "Pinned ubuntu-24.04 in both CI workflows; full integration/Phase3 PR runs launched; await raw logs to confirm Chromium install.",
+      "next_action": "If Chromium installs, separate any remaining product failures."
+    },
+    {
+      "hypothesis_id": "H101-PRODUCT",
+      "result": "UNRESOLVED",
+      "observed": "Strict baseline differs: original index.html editorial min-height 760px vs current 640px, padding and spacing changed; current adds team12_learning_handoff.js and data-team12-handoff. This PR did not change index.html.",
+      "next_action": "Require explicit source-baseline approval before adjusting source-preservation contract. Independently test #101 HTTP and booking/refund semantics."
+    }
+  ]
+}

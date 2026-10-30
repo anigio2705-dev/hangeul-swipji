@@ -1,0 +1,40 @@
+name: Task101 CI environment independent regression (isolated)
+on:
+  push:
+    branches: ['support/team11-task101-ci-env-20261030-2016']
+  pull_request:
+    paths:
+      - '.github/workflows/integration-validation.yml'
+      - '.github/workflows/phase3-isolated-tests.yml'
+      - 'automation/test_task101_ci_environment.py'
+      - '.github/workflows/task101-ci-environment.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  environment:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check runner pin, immutable source history, and read-only permission
+        run: python -m unittest discover -s automation -p 'test_task101_ci_environment.py' -v
+  
+  source-preservation:
+    # Independent strict acceptance check: a failure must remain visible.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Preserve strict original material byte comparison without waiver
+        run: python -m unittest discover -s phase3 -p 'test_standards96.py' -v
