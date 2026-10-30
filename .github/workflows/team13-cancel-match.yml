@@ -1,0 +1,21 @@
+name: Team13 pending match cancellation regression
+on:
+  pull_request:
+    paths:
+      - 'speaking-platform.html'
+      - 'supabase-speaking.sql'
+      - 'automation/test_team13_cancel_match.cjs'
+      - '.github/workflows/team13-cancel-match.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cancel-match:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Test real speaking UI module and SQL authorization contract
+        run: node automation/test_team13_cancel_match.cjs
