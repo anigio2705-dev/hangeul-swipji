@@ -7,6 +7,13 @@ on:
       - 'phase3/team14_referral_store.py'
       - 'phase3/test_team14_referral_roles.py'
       - '.github/workflows/team14-task101-session-role-boundary.yml'
+  pull_request:
+    branches:
+      - team14/task101-verified-role-referrals-20261030-1840
+    paths:
+      - 'phase3/team14_referral_store.py'
+      - 'phase3/test_team14_referral_roles.py'
+      - '.github/workflows/team14-task101-session-role-boundary.yml'
   workflow_dispatch:
 permissions:
   contents: read
