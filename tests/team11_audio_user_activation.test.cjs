@@ -392,3 +392,30 @@ test('backgrounded mobile page rejects new human and optional TTS playback until
   assert.equal((await H.play('가')).status,'cancelled',
     'hidden document must not start audio even without a pagehide event');
 });
+
+
+test('TTS watchdog timeout must not become tts-played when cancel emits onend synchronously',async()=>{
+  const timers=[];let active=null,cancels=0;
+  const speech={
+    speak(u){active=u;u.onstart?.()},
+    cancel(){cancels++;if(active){const u=active;active=null;u.onend?.()}}
+  };
+  const context={
+    document:{baseURI:'https://example.test/',hidden:false,addEventListener(){},dispatchEvent(){},querySelectorAll:()=>[],querySelector:()=>null},
+    window:{addEventListener(){},speechSynthesis:speech,SpeechSynthesisUtterance:class{constructor(text){this.text=text}}},
+    Event:class{},URL,Audio:class{constructor(){throw Error('no human audio expected')}},
+    setTimeout(fn,ms){const t={fn,ms,cleared:false};timers.push(t);return t},
+    clearTimeout(t){t.cleared=true},
+    fetch:async()=>({ok:true,json:async()=>({recordings:{}})})
+  };
+  vm.runInNewContext(source,context);
+  const H=context.window.HSHangul;await H.ready;
+  H.setSyntheticEnabled(true);
+  const pending=H.optionalSynthetic('나');
+  const watchdog=timers.find(t=>t.ms===12000&&!t.cleared);
+  assert.ok(watchdog,'pending device TTS must have a watchdog');
+  watchdog.fn();
+  assert.equal((await pending).status,'tts-timeout',
+    'synchronous onend from watchdog cancel must not falsely report successful speech');
+  assert.equal(cancels>0,true,'timed-out device speech must be cancelled');
+});
