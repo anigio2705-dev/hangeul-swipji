@@ -1,0 +1,29 @@
+name: Team11 AI worker child-process secret isolation
+on:
+  push:
+    branches: [team11/audio-gesture-20261030]
+    paths:
+      - 'automation/hq_six_developers.py'
+      - 'automation/test_hq_six_developers.py'
+      - '.github/workflows/team11-common-env-security.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  child-process-security:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile bounded six-team worker
+        run: python -m py_compile automation/hq_six_developers.py
+      - name: Verify worker scope, task ownership and secret isolation
+        run: python -m unittest discover -s automation -p 'test_hq_six_developers.py' -v
+      - name: Preserve validation boundary
+        if: always()
+        run: echo 'Unit tests do not prove actual external AI API calls, READY task assignment, or deployment.' >> "$GITHUB_STEP_SUMMARY"
