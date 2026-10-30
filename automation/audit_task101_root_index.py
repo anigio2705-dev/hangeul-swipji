@@ -1,4 +1,4 @@
-"""Read-only audit of task #101's protected ROOT index.html drift.
+"""Read-only audit of task #101's protected ROOT index.html preservation.
 
 This report does NOT authorize the drift or replace the existing byte-for-byte
 protection gate. Only 12/15/HQ2 independent review can decide an approved
@@ -35,7 +35,7 @@ def sha256(data):
 
 
 def observed_delta(baseline, candidate):
-    """Classify ONLY the five exact changes; fail closed on any other drift."""
+    """Classify ONLY the five observed changes; byte-identical roots are handled by audit()."""
     try:
         old = baseline.decode("utf-8")
         new = candidate.decode("utf-8")
@@ -56,7 +56,10 @@ def audit(root, baseline_reader):
         original = baseline_reader(path)
         actual = (root / path).read_bytes()
         equal = original == actual
-        known, classification = observed_delta(original, actual) if path == "index.html" else (False, "exact_preservation" if equal else "unexpected_change")
+        if path == "index.html":
+            known, classification = (True, "exact_preservation") if equal else observed_delta(original, actual)
+        else:
+            known, classification = (False, "exact_preservation" if equal else "unexpected_change")
         files.append({"path": path, "baseline_sha256": sha256(original),
                       "current_sha256": sha256(actual), "byte_identical": equal,
                       "observed_delta_only": known, "classification": classification})

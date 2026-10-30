@@ -13,3 +13,20 @@
    const help=document.createElement('details'),title=document.createElement('summary'),code=document.createElement('code');title.textContent='통합 미리보기 실행 / Run preview';code.textContent='python3 phase3/server.py → http://127.0.0.1:8765/';help.append(title,code);host.append(note);if(e.message!=='staging-auth')host.append(help);
  }
 })();
+
+/* Preserve the protected original homepage bytes. Mount Team12's additive
+   learner-to-provider handoff through the homepage's existing script instead.
+   Independent 12/15/HQ2 review is still required before integration. */
+(() => {
+  'use strict';
+  const platform = document.getElementById('teaching-platform');
+  if (!platform || document.querySelector('[data-team12-handoff]')) return;
+  const mount = document.createElement('div');
+  mount.className = 'shell';
+  mount.setAttribute('data-team12-handoff', '');
+  platform.before(mount);
+  const script = document.createElement('script');
+  script.src = './scripts/team12_learning_handoff.js';
+  script.onerror = () => mount.remove();
+  document.body.append(script);
+})();

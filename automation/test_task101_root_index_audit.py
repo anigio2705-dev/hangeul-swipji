@@ -40,6 +40,17 @@ class RootIndexAuditTests(unittest.TestCase):
         self.assertFalse(result["original_protection_pass"])
         self.assertEqual("PENDING_12_15_HQ2", result["baseline_review_status"])
 
+    def test_exact_restoration_passes_original_protection_but_never_grants_approval(self):
+        # Restoring the original ROOT HTML must not auto-approve the
+        # additive Team12 script or the shared booking/server contract.
+        result = audit(self.root, self.read_baseline)
+        self.assertTrue(result["original_protection_pass"])
+        self.assertTrue(result["known_delta_only"])
+        self.assertFalse(result["approved"])
+        self.assertFalse(result["ready"])
+        self.assertEqual("exact_preservation", result["files"][2]["classification"])
+        self.assertEqual("PENDING_12_15_HQ2", result["baseline_review_status"])
+
     def test_extra_unapproved_change_rejected(self):
         self.apply_observed()
         with (self.root / "index.html").open("a", encoding="utf-8") as f:
