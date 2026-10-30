@@ -33,10 +33,18 @@
       .then(r=>{if(!r.ok)throw Error('audio manifest');return r.json()});
     loading=(schedule?Promise.race([request,new Promise((_,reject)=>{timer=schedule(()=>reject(Error('audio manifest timeout')),15000)})]):request)
       .then(m=>{if(!m.recordings||typeof m.recordings!=='object'||Array.isArray(m.recordings))throw Error('invalid audio manifest');const seenSources=new Set(),seenDigests=new Set();
+        // A withdrawn recording is a review hold even when its file metadata
+        // is missing or duplicates another source. Classify holds first;
+        // otherwise an opted-in synthetic voice can bypass the review gate.
+        const blocked=Object.entries(m.recordings).filter(([word,a])=>
+          !!word.trim()&&!['__proto__','constructor','prototype'].includes(word)&&
+          a&&typeof a==='object'&&!!a.disabled
+        ).map(([word,a])=>[word,{holdReason:typeof a.holdReason==='string'&&a.holdReason.trim()
+          ?a.holdReason:'검수 보류 · 음원 정보 확인 필요'}]);
         const human=Object.entries(m.recordings).filter(([word,a])=>{
           // Reject reserved object property names and blank keys from untrusted manifests.
           if(!word.trim()||['__proto__','constructor','prototype'].includes(word))return false;
-          if(!a||a.kind!=='human'||typeof a.src!=='string'||!/^\.\/assets\/hangul-audio\/[\w-]+\.mp3$/.test(a.src)||
+          if(!a||a.disabled||a.kind!=='human'||typeof a.src!=='string'||!/^\.\/assets\/hangul-audio\/[\w-]+\.mp3$/.test(a.src)||
              !/^[a-f0-9]{64}$/i.test(a.sha256||'')||typeof a.sourceUrl!=='string'||!/^https:\/\/[^\s]+$/.test(a.sourceUrl)||
              typeof a.author!=='string'||!a.author.trim()||typeof a.license!=='string'||!a.license.trim())return false;
           // Never allow one recording file to impersonate multiple distinct letters.
@@ -46,8 +54,8 @@
         // Replace stale inventory on refresh; removed/held files must not remain playable.
         for(const key of Object.keys(records))delete records[key];
         for(const key of Object.keys(holds))delete holds[key];
-        Object.assign(records,Object.fromEntries(human.filter(([,a])=>!a.disabled)));
-        Object.assign(holds,Object.fromEntries(human.filter(([,a])=>a.disabled)));
+        Object.assign(records,Object.fromEntries(human));
+        Object.assign(holds,Object.fromEntries(blocked));
         manifestError=false;manifestLoaded=true;document.dispatchEvent(new Event('hs-audio-ready'))})
       .catch(()=>{manifestError=true;manifestLoaded=false;document.dispatchEvent(new Event('hs-audio-ready'))})
       .finally(()=>{if(timer!==null)cancelTimer(timer);loading=null});
