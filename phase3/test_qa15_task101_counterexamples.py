@@ -4,14 +4,14 @@ This file is NOT merged into PR/main and never touches production data.
 """
 import unittest
 import server
-from test_server import Client, PlatformTests
+import test_server
 
 
 class IndependentTask101Counterexamples(unittest.TestCase):
-    setUp = PlatformTests.setUp
-    tearDown = PlatformTests.tearDown
-    register = PlatformTests.register
-    book = PlatformTests.book
+    setUp = test_server.PlatformTests.setUp
+    tearDown = test_server.PlatformTests.tearDown
+    register = test_server.PlatformTests.register
+    book = test_server.PlatformTests.book
 
     def test_control_valid_referral_booking_snapshot(self):
         code = self.o["referral_code"]
@@ -42,7 +42,7 @@ class IndependentTask101Counterexamples(unittest.TestCase):
 
     def test_explicit_invalid_referral_code_false_on_signup(self):
         """A non-string explicitly supplied signup referralCode is invalid."""
-        newcomer = Client(self.http.server_port)
+        newcomer = test_server.Client(self.http.server_port)
         status, response = newcomer.call("/api/register", {
             "email": "qa15-invalid-code@example.com",
             "password": "Password12345!",
