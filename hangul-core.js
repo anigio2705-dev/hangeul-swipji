@@ -21,12 +21,29 @@
   }
   const records={},holds={};let current=null,run=0,release=null,manifestError=false;
   const schedule=typeof setTimeout==='function'?setTimeout:null,cancelTimer=typeof clearTimeout==='function'?clearTimeout:()=>{};
-  let manifestTimer=null;
-  const request=fetch('./hangul-audio-manifest.json?v=20261027-audit').then(r=>{if(!r.ok)throw Error('audio manifest');return r.json()});
-  const ready=(schedule?Promise.race([request,new Promise((_,reject)=>{manifestTimer=schedule(()=>reject(Error('audio manifest timeout')),15000)})]):request)
-    .then(m=>{if(!m.recordings||typeof m.recordings!=='object')throw Error('invalid audio manifest');const human=Object.entries(m.recordings).filter(([,a])=>a.kind==='human'&&typeof a.src==='string'&&/^\.\/assets\/hangul-audio\/[\w-]+\.mp3$/.test(a.src)&&a.sourceUrl&&a.author&&a.license);Object.assign(records,Object.fromEntries(human.filter(([,a])=>!a.disabled)));Object.assign(holds,Object.fromEntries(human.filter(([,a])=>a.disabled)));document.dispatchEvent(new Event('hs-audio-ready'))})
-    .catch(()=>{manifestError=true;document.dispatchEvent(new Event('hs-audio-ready'))})
-    .finally(()=>{if(manifestTimer!==null)cancelTimer(manifestTimer)});
+  function loadManifest(){
+    let timer=null;
+    const request=fetch('./hangul-audio-manifest.json?v=20261030-retry',{cache:'no-store'})
+      .then(r=>{if(!r.ok)throw Error('audio manifest');return r.json()});
+    const limited=schedule?Promise.race([request,new Promise((_,reject)=>{
+      timer=schedule(()=>reject(Error('audio manifest timeout')),15000);
+    })]):request;
+    return limited.then(m=>{
+      if(!m.recordings||typeof m.recordings!=='object'||Array.isArray(m.recordings))throw Error('invalid audio manifest');
+      const human=Object.entries(m.recordings).filter(([,a])=>a&&a.kind==='human'&&typeof a.src==='string'&&/^\.\/assets\/hangul-audio\/[\w-]+\.mp3$/.test(a.src)&&a.sourceUrl&&a.author&&a.license);
+      // A successful retry replaces stale entries instead of mixing inventories.
+      Object.keys(records).forEach(key=>delete records[key]);
+      Object.keys(holds).forEach(key=>delete holds[key]);
+      Object.assign(records,Object.fromEntries(human.filter(([,a])=>!a.disabled)));
+      Object.assign(holds,Object.fromEntries(human.filter(([,a])=>a.disabled)));
+      manifestError=false;
+      document.dispatchEvent(new Event('hs-audio-ready'));
+    }).catch(()=>{
+      manifestError=true;
+      document.dispatchEvent(new Event('hs-audio-ready'));
+    }).finally(()=>{if(timer!==null)cancelTimer(timer)});
+  }
+  let ready=loadManifest(),retryPending=null;
   function status(message){
     document.querySelectorAll('[data-audio-status]').forEach(x=>x.textContent=message);
   }
@@ -53,7 +70,13 @@
   async function play(value){
     stop();const token=run;
     await ready;if(token!==run)return {status:'cancelled'};
-    if(manifestError){status('음성 목록을 불러오지 못했습니다. 연결을 확인하고 새로고침해 주세요. / Audio list unavailable; reload to retry.');return {status:'manifest-error'}}
+    if(manifestError){
+      status('음성 목록 재연결 중… / Reconnecting audio list…');
+      if(!retryPending)retryPending=loadManifest().finally(()=>{retryPending=null});
+      await retryPending;
+      if(token!==run)return {status:'cancelled'};
+    }
+    if(manifestError){status('음성 목록을 불러오지 못했습니다. 글자를 다시 눌러 재시도해 주세요. / Audio list unavailable; tap again to retry.');return {status:'manifest-error'}}
     const words=Array.isArray(value)?value:[value];
     if(!words.length||words.some(w=>typeof w!=='string'||!w.trim()))return {status:'invalid'};
     const missing=words.filter(word=>!records[word]);
