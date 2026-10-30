@@ -110,7 +110,10 @@ class ReadyProvenanceTests(unittest.TestCase):
             sent = process.call_args.kwargs["env"]
             self.assertNotIn("GITHUB_TOKEN", sent)
             self.assertNotIn("OPENAI_API_KEY", sent)
-            self.assertEqual(sent["SAFE_FLAG"], "allowed")
+            # Arbitrary flags are not trusted runtime requirements; the
+            # candidate subprocess must not inherit unknown environment data.
+            self.assertNotIn("SAFE_FLAG", sent)
+            self.assertIn("PATH", sent)
 
 
 if __name__ == "__main__":
