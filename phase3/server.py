@@ -257,7 +257,8 @@ class Handler(BaseHTTPRequestHandler):
             email=text(d.get('email',''),254).lower(); password=d.get('password',''); nickname=text(d.get('nickname',''),40); role=d.get('role')
             if not re.fullmatch(r'[^\s@]+@[^\s@]+\.[^\s@]+',email) or not isinstance(password,str) or not 12<=len(password)<=128 or len(nickname)<2 or role not in ('learner','partner','teacher') or d.get('adultConsent') is not True: raise Error('이메일·12자 이상 비밀번호·이름·성인 동의를 확인하세요')
             rid=None
-            if d.get('referralCode'):
+            if 'referralCode' in d:
+                    if not isinstance(d['referralCode'],str) or not d['referralCode'].strip(): raise Error('추천코드 형식이 올바르지 않습니다')
                 # Registration and authenticated referral linking share one
                 # trusted inviter-role policy; admin/revoked users cannot invite.
                 ref=db.execute('SELECT id,role FROM users WHERE referral_code=?',(text(d['referralCode'],40),)).fetchone()
@@ -505,7 +506,8 @@ class Handler(BaseHTTPRequestHandler):
                     if not inviter or inviter['role'] not in ('learner','partner','teacher'):
                         ref=None
                         audit(db,uid,'referral_reward_ineligible',uid,'inviter_role_revoked_or_missing')
-                if d.get('referralCode'):
+                if 'referralCode' in d:
+                    if not isinstance(d['referralCode'],str) or not d['referralCode'].strip(): raise Error('추천코드 형식이 올바르지 않습니다')
                     r=db.execute('SELECT id,role FROM users WHERE referral_code=?',(text(d['referralCode'],40),)).fetchone()
                     if not r or r['role'] not in ('learner','partner','teacher'):
                         raise Error('추천코드가 없습니다')
@@ -519,6 +521,22 @@ class Handler(BaseHTTPRequestHandler):
                         audit(db,uid,'referral_reward_ineligible',uid,'self_or_counterparty')
                     else:
                         raise Error('본인 또는 거래 상대 추천은 보상 대상이 아닙니다')
+                if ref and bound_ref:
+                    # Historical cycles must not earn new referral rewards.
+                    visited={uid}
+                    current=ref
+                    while current:
+                        if current in visited:
+                            ref=None
+                            audit(db,uid,'referral_reward_ineligible',uid,'historical_cycle')
+                            break
+                        visited.add(current)
+                        ancestor=db.execute('SELECT referred_by FROM users WHERE id=?',(current,)).fetchone()
+                        if not ancestor:
+                            ref=None
+                            audit(db,uid,'referral_reward_ineligible',uid,'historical_missing_ancestor')
+                            break
+                        current=ancestor['referred_by']
                 if ref and not bound_ref:
                     # Booking may bind the same permanent parent as /api/referrals/link.
                     # Check the full ancestry first so this alternate entry point
