@@ -97,9 +97,10 @@ report.warnings.push('Audio: missing human recordings and listening approval rem
 report.warnings.push('Exact supported-option uniqueness is an automated property, not a proof of every possible semantic interpretation.');
 report.warnings.push('Level metrics describe this graded curriculum; no CEFR/TOPIK calibration or learner trial was performed.');
 const homepage=fs.readFileSync(path.join(root,'index.html'),'utf8'),oldHomepage=cp.execFileSync('git',['show',baseline+':index.html'],{cwd:root,encoding:'utf8'});
-// The 7418e32 baseline already includes the teaching-platform link, section and script.
-// Only the four separately reviewed, byte-exact staging UI deltas may differ.
-// Reverse those exact deltas; reject missing, duplicated, or unexpected changes.
+// This audit's older 46745d28 baseline predates the three teaching-platform additions
+// already present in the newer 7418e32 education-source baseline. Verify both layers:
+// four exact staging UI deltas, then three exact teaching-platform additions.
+// Reject any missing, duplicated or unexpected change; never relax the byte comparison.
 const approvedHomeDeltas=[
  ['min-height:640px','min-height:760px',2],
  ['padding:56px clamp(28px,5vw,100px) 50px','padding:90px clamp(28px,5vw,100px) 65px',1],
@@ -110,6 +111,15 @@ let revertedHomepage=homepage,approvedDeltaCountsMatch=true;
 for(const [from,to,count] of approvedHomeDeltas){
  if(revertedHomepage.split(from).length-1!==count){approvedDeltaCountsMatch=false;break;}
  revertedHomepage=revertedHomepage.split(from).join(to);
+}
+const approvedTeachingAdditions=[
+ '<a href="#teaching-platform">강사 수업 · 테스트</a>',
+ '<section id="teaching-platform" class="shell" aria-label="전문 교육과 강사 수업"><h2>혼자 배운 한국어, 함께 써 보세요.</h2><p>무료 학습부터 전문 수업, 과제와 피드백까지 한글쉽지에서 이어집니다.</p><div id="studio-root"><p id="studio-status" role="status">수업 공간을 확인하고 있습니다…</p></div></section>',
+ '<script src="./teaching-home.js?v=20261027-global" defer></script>'
+];
+for(const approved of approvedTeachingAdditions){
+ if(revertedHomepage.split(approved).length-1!==1){approvedDeltaCountsMatch=false;break;}
+ revertedHomepage=revertedHomepage.replace(approved,'');
 }
 report.preservation.homepageUnchanged=homepage===oldHomepage;
 report.preservation.homepageOnlyApprovedIntegration=approvedDeltaCountsMatch&&revertedHomepage===oldHomepage;
