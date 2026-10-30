@@ -1,0 +1,27 @@
+name: Team13 instant match offer countdown regression
+on:
+  pull_request:
+    branches: [automation/hq-pilot-13-14-15-20261029]
+    paths:
+      - 'phase3/instant-speaking.html'
+      - 'phase3/test_instant_offer_countdown.cjs'
+      - '.github/workflows/team13-offer-countdown.yml'
+  push:
+    branches: [automation/team13-offer-countdown-20261030]
+    paths:
+      - 'phase3/instant-speaking.html'
+      - 'phase3/test_instant_offer_countdown.cjs'
+      - '.github/workflows/team13-offer-countdown.yml'
+permissions:
+  contents: read
+jobs:
+  offer-countdown:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Test actual matching UI timer and cleanup
+        run: node phase3/test_instant_offer_countdown.cjs
