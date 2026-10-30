@@ -5,8 +5,10 @@ on:
       - audit/hq-ready-executor-compat-20261030-1545
     paths:
       - automation/hq_traffic_lights.py
+      - automation/hq_six_developers.py
       - automation/test_hq_traffic_lights.py
       - automation/test_hq_160_task_cycle.py
+      - automation/test_hq_six_developers.py
       - .github/workflows/hq-ready-executor-compat.yml
       - docs/HQ_GENERAL_WORK_METHOD_PLAYBOOK_20261029.md
   workflow_dispatch:
@@ -25,6 +27,7 @@ jobs:
         run: |
           python -m unittest discover -s automation -p 'test_hq_traffic_lights.py' -v
           python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+          python -m unittest discover -s automation -p 'test_hq_six_developers.py' -v
       - name: Inspect real 160-contract queue without READY promotion
         run: |
           python automation/hq_traffic_lights.py --output /tmp/hq-ready-executor-audit.json
