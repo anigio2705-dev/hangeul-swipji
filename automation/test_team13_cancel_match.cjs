@@ -12,7 +12,8 @@ assert.match(sql, /update public\.matches set status='cancelled',updated_at=now\
 assert.match(sql, /revoke all on function public\.cancel_match\(uuid\) from public, anon, authenticated;/);
 assert.match(sql, /grant execute on function public\.cancel_match\(uuid\) to authenticated;/);
 assert.match(sql, /create or replace function public\.request_match/);
-assert.match(sql, /create or replace function public\.respond_match/);
+assert.match(sql, /create or replace function public\.respond_match/i);
+assert.match(sql, /as \$cancel\$[\s\S]*?end \$cancel\$;/);
 assert.match(sql, /create or replace function public\.finish_match/);
 
 const match = html.match(/<script type="module">([\s\S]*?)<\/script>/);
