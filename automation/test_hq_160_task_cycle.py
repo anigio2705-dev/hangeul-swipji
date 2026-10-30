@@ -22,6 +22,25 @@ class HQ160TaskCycleTests(unittest.TestCase):
         self.assertIn(151, tasks[154]["dependencies"])
         self.assertEqual(tasks[9]["owner"], "15")
 
+    def test_curated_dispatch_targets_are_canonical_owner_only(self):
+        # Support teams may review education tasks but must never own AI patches.
+        # Regression: legacy team11 #51/#56 and team16 #55 caused wrong-owner
+        # assignments even though the READY gate later rejected their calls.
+        from hq_six_developers import TASKS
+        catalog = contracts(sample())
+        for team, assignments in CURATED_TARGETS.items():
+            with self.subTest(team=team):
+                self.assertEqual(
+                    {path for _, path in assignments},
+                    {path for path, _ in TASKS[team][1]},
+                    "Runner and numbered curated paths must agree",
+                )
+                for number, path in assignments:
+                    self.assertEqual(
+                        catalog[number]["owner"], team,
+                        f"#{number} {path}: supporting team must not be AI owner",
+                    )
+
     def test_reject_duplicate_or_missing_item(self):
         with self.assertRaisesRegex(ValueError, "160"):
             contracts(sample() + "\n160. [ ] duplicate")

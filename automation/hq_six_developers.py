@@ -17,9 +17,9 @@ from hq_160_task_cycle import CURATED_TARGETS, load_catalog, _semantic_dispatch_
 HQ_REF = "automation/hq-pilot-13-14-15-20261029"
 # Distinct files across ALL six teams; no team may edit another team's source.
 TASKS = {
-    "11": ("team11/common-foundation-20261028", [
-        ("scripts/audit-hangul-audio.py", "Harden malformed audio inventory handling"),
-        ("scripts/find-human-audio-sources.py", "Harden candidate audio source validation")]),
+    # #51/#56 belong to team 12; support must not masquerade as AI owner.
+    # Independently reviewed team-11 READY work still uses the dynamic queue.
+    "11": ("team11/common-foundation-20261028", []),
     "12": ("team12/education-audit-20261028", [
         ("scripts/team12_audio_inventory.py", "Harden education audio inventory validation"),
         ("scripts/team12_content_regression.py", "Verify preservation of 350 lessons and 600 reading entries"),
@@ -32,8 +32,8 @@ TASKS = {
     "15": ("team15/quality-operations-20261028", [
         ("scripts/team15_independent_gate.py", "Harden evidence gate diagnostics without weakening verification"),
         ("scripts/team15_cross_team_smoke.py", "Improve cross-team smoke-test failure reporting")]),
-    "16": ("team16/global-growth-marketing-20261028", [
-        ("scripts/render-audio-credits.py", "Improve audio attribution and license display validation")]),
+    # #55 belongs to team 12; team 16 only supports attribution review.
+    "16": ("team16/global-growth-marketing-20261028", []),
 }
 # Baseline and candidate both use same safe, read-only checks.
 CHECKS = {
