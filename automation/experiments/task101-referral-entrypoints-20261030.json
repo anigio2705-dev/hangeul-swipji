@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "task_id": 101,
+  "owner": "14",
+  "support": [
+    "11",
+    "15",
+    "HQ2"
+  ],
+  "central_issue": 34,
+  "baseline": "ebaf13768c79fcf9b133c4a4f9d40370f245fdc8",
+  "experiment_kind": "cross_entrypoint_referral_policy",
+  "status": "AWAITING_EXACT_SHA_CI_AND_INDEPENDENT_REVIEW",
+  "hypotheses": [
+    {
+      "hypothesis_id": "H101-SIGNUP",
+      "prior_attempt_id": "PR145",
+      "changed_assumption": "A secure authenticated link endpoint does not protect the older signup referralCode path.",
+      "discriminating_test": "python -m unittest discover -s phase3 -p test_team14_referral_http.py -v",
+      "counterexample": "admin/revoked inviter accepted at signup",
+      "expected_after_fix": "HTTP 400 and no inserted account",
+      "risk": "Medium: may change previously accepted invalid admin referrer behavior."
+    },
+    {
+      "hypothesis_id": "H101-BOOKING-ROLE",
+      "prior_attempt_id": "H101-SIGNUP",
+      "changed_assumption": "Booking has its own referralCode binding and lacks inviter role check.",
+      "discriminating_test": "test_booking_referral_cannot_bypass_role_or_cycle_policy",
+      "counterexample": "booking with admin/revoked inviter succeeds",
+      "expected_after_fix": "HTTP 400; no permanent parent bound; slot available",
+      "risk": "Medium: existing business rules require 14-team review."
+    },
+    {
+      "hypothesis_id": "H101-BOOKING-CYCLE",
+      "prior_attempt_id": "H101-BOOKING-ROLE",
+      "changed_assumption": "Booking can create a parent cycle even when direct link rejects it.",
+      "discriminating_test": "test_booking_referral_cannot_bypass_role_or_cycle_policy",
+      "counterexample": "A->B established then B->A via booking succeeds",
+      "expected_after_fix": "HTTP 409 and no booking or cycle",
+      "risk": "Low: preserves existing no-cycle invariant."
+    }
+  ],
+  "attempts": [
+    {
+      "id": "H101-ENTRY-RED",
+      "sha": "2f483cd75224834c732bcc581751c692a007979c",
+      "change": "Added registration and booking bypass tests before server fix",
+      "result": "CI_UNVERIFIED"
+    },
+    {
+      "id": "H101-ENTRY-GREEN-CANDIDATE",
+      "sha": "cf94129ffe663919f793ae62bc33c621d6fb54ba",
+      "change": "Server registration/booking role checks and booking ancestor-cycle guard",
+      "result": "CI_UNVERIFIED"
+    }
+  ],
+  "ready": {
+    "state": "CANDIDATE",
+    "independent_team15": "PENDING",
+    "dispatchable": false
+  },
+  "next_action": "Inspect exact SHA CI; request 14-team policy review and independent 15/HQ2 verification. Do not alter READY until approved."
+}
