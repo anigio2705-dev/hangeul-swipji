@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "task_id": 101,
+  "owner": "14",
+  "coordinator": "HQ",
+  "round": 1,
+  "turn": 1,
+  "expected_team": "11",
+  "hypothesis_id": "H101-COORDINATION-01",
+  "prior_attempt_id": "H101-ENTRYPOINT-20261030-2044",
+  "changed_assumption": "The immediate round-1 bottleneck is missing authenticated, ordered team discussion evidence rather than another product code patch.",
+  "discriminating_test": "python -m unittest discover -s automation -p test_hq_round_robin.py -v; GH_TOKEN=<read-only> python automation/hq_round_robin.py",
+  "expected_observation": "Without a trusted, unedited team11 turn and explicit HQ discussion acceptance, cursor stays ROUND=1 TURN=1, does not fabricate six team replies, and READY/API calls stay zero.",
+  "result": {
+    "status": "CURSOR_IMPLEMENTED_CI_PASS_TEAM11_REPLY_ABSENT",
+    "pr": "https://github.com/anigio2705-dev/hangeul-swipji/pull/148",
+    "ci": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41052852567",
+    "ci_job_id": 124053006216,
+    "tests_passed": 13,
+    "issue_comments_checked": 264,
+    "cursor": "AWAIT_TEAM_COMMENT",
+    "ready_approved": 0,
+    "actual_ai_calls_verified": 0
+  },
+  "failure_classification": "COORDINATION_GAP: no structured R1 T1 team11 comment after central instruction #6522210538; read-only polling does not trigger a separate team AI agent.",
+  "falsification_condition": "An independently attributable team11 structured turn with exact SHA/PR/CI, explicit HQ acceptance, and a new cursor run advancing to TURN=2.",
+  "next_action": "HQ requests genuine team11 R1 T1 response; 15/HQ2 independently review PR #148, authorize activation only after CI/security audit. Do not merge to main, post as team11, or promote READY.",
+  "safety": {
+    "main_untouched": true,
+    "test99_deployed": false,
+    "real_money_enabled": false,
+    "independent_ready_approval": false,
+    "periodic_schedule_active_on_isolated_branch": false
+  }
+}
