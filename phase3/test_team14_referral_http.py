@@ -204,6 +204,44 @@ class ReferralHttpContractTests(unittest.TestCase):
             self.assertEqual(300, snapshot["referral_bps"])
             self.assertIsNone(db.execute("SELECT referrer_id FROM bookings WHERE id=?", (first_bid,)).fetchone()["referrer_id"])
 
+    def test_referrer_restored_before_settlement_cannot_backpay_old_booking(self):
+        # Regression: an inviter's role can be restored AFTER the booking but
+        # BEFORE settlement. A booking's immutable referral snapshot must win
+        # over the inviter's current role when simulated money is allocated.
+        inviter_id = self.o["id"]
+        status, response = self.learner.call("/api/referrals/link", {
+            "referralCode": self.referral_code(inviter_id)
+        })
+        self.assertEqual(200, status, response)
+        with server.connect() as db:
+            db.execute("UPDATE users SET role='admin' WHERE id=?", (inviter_id,))
+        status, response = self.book()
+        self.assertEqual(200, status, response)
+        bid = response["bookingId"]
+        with server.connect() as db:
+            db.execute("UPDATE users SET role='learner' WHERE id=?", (inviter_id,))
+        self.finish(bid)
+        status, settled = self.admin.call("/api/admin/settle", {"bookingId": bid})
+        self.assertEqual(200, status, settled)
+        self.assertFalse(settled["realPayout"])
+        self.assertEqual(0, settled["split"]["referral"])
+        with server.connect() as db:
+            booking = db.execute(
+                "SELECT referrer_id FROM bookings WHERE id=?", (bid,)
+            ).fetchone()
+            snapshot = db.execute(
+                "SELECT referral_bps FROM rate_snapshots WHERE booking_id=?", (bid,)
+            ).fetchone()
+            accrual = db.execute(
+                "SELECT amount,beneficiary FROM ledger WHERE booking_id=? AND kind='test_referral_accrual'",
+                (bid,)
+            ).fetchone()
+            self.assertIsNone(booking["referrer_id"])
+            self.assertEqual(0, snapshot["referral_bps"])
+            self.assertEqual(0, accrual["amount"])
+            self.assertIsNone(accrual["beneficiary"])
+            self.assertEqual(inviter_id, self.parent_of(self.l["id"]))
+
     def test_revoked_referrer_settlement_and_refund_never_accrue_reward(self):
         # Task #101: eligibility is captured at booking, not recomputed on
         # settlement/refund. Exercise the full simulated attendance and ledger.
