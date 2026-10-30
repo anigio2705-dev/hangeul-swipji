@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - team11/audio-gesture-20261030
+      - audit/team15-tts-timeout-20261030-1233
     paths:
       - 'docs/team11/AUDIO_MOBILE_FAILURE_CASES_20261030.md'
       - 'hangul-core.js'
