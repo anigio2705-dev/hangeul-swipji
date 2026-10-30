@@ -1,0 +1,24 @@
+name: Team15 strict homepage source contract
+on:
+  push:
+    branches: ['audit/team15-phase2-homepage-strict-*']
+  pull_request:
+    paths:
+      - 'scripts/homepage-source-contract.cjs'
+      - 'scripts/test-team15-homepage-preservation.cjs'
+      - 'scripts/audit-phase2-content.cjs'
+      - '.github/workflows/team15-homepage-source-contract.yml'
+permissions:
+  contents: read
+jobs:
+  strict-source:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/test-team15-homepage-preservation.cjs
+      - run: node scripts/audit-phase2-content.cjs
