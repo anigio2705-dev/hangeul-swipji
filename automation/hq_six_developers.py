@@ -49,10 +49,17 @@ CHECKS = {
 FORBIDDEN_CALLS = {"eval", "exec", "compile", "__import__"}
 FORBIDDEN_IMPORTS = {"requests", "urllib", "http", "socket", "subprocess", "ctypes"}
 def shell(*args, timeout=120):
-    # Candidate source and its regression tests run in child processes. Never
-    # inherit GitHub/OpenAI bearer tokens into a potentially modified module.
-    clean_env = {k: v for k, v in os.environ.items()
-                 if k not in ("GITHUB_TOKEN", "OPENAI_API_KEY")}
+    # Candidate source and regression tests may be AI-modified. A two-token
+    # denylist leaks other credentials (GH_TOKEN, database/hosting keys, etc.).
+    # Pass only ordinary process/runtime settings. This isolates environment
+    # variables, NOT the filesystem or network; keep the sandbox gates too.
+    safe_keys = (
+        "PATH", "HOME", "LANG", "LANGUAGE", "LC_ALL", "LC_CTYPE", "TZ",
+        "TMPDIR", "TMP", "TEMP", "SYSTEMROOT", "WINDIR", "PATHEXT",
+        "VIRTUAL_ENV", "CI", "GITHUB_ACTIONS", "PYTHONIOENCODING",
+        "PYTHONUNBUFFERED", "PYTHONDONTWRITEBYTECODE", "PYTHONUTF8",
+    )
+    clean_env = {key: os.environ[key] for key in safe_keys if key in os.environ}
     return subprocess.run(args, capture_output=True, text=True,
                           timeout=timeout, env=clean_env)
 def validate_ownership():
