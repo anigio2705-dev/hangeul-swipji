@@ -11,6 +11,16 @@ CREATE TABLE IF NOT EXISTS booking_product_snapshots(
  duration_minutes INTEGER NOT NULL CHECK(duration_minutes IN (15,25)),
  price_krw INTEGER NOT NULL CHECK(price_krw IN (6000,10000,15000)),
  currency TEXT NOT NULL DEFAULT 'KRW' CHECK(currency='KRW'));
+-- Fail closed even when an existing SQLite database already has the table:
+-- a product code, duration and server price must describe the SAME product.
+CREATE TRIGGER IF NOT EXISTS booking_product_catalog_tuple_guard
+ BEFORE INSERT ON booking_product_snapshots
+ WHEN NOT (
+   (NEW.product_code='trial_15' AND NEW.duration_minutes=15 AND NEW.price_krw=6000)
+   OR (NEW.product_code='partner_25' AND NEW.duration_minutes=25 AND NEW.price_krw=10000)
+   OR (NEW.product_code='professional_25' AND NEW.duration_minutes=25 AND NEW.price_krw=15000)
+ )
+ BEGIN SELECT RAISE(ABORT,'invalid immutable booking product tuple'); END;
 CREATE TRIGGER IF NOT EXISTS booking_product_no_update BEFORE UPDATE ON booking_product_snapshots
  BEGIN SELECT RAISE(ABORT,'immutable booking product snapshot'); END;
 CREATE TRIGGER IF NOT EXISTS booking_product_no_delete BEFORE DELETE ON booking_product_snapshots
