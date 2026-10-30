@@ -8,7 +8,8 @@ permissions:
   contents: read
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    # Playwright 1.51.1 cannot install Chromium on ubuntu-26.04 (observed CI 41042865998).
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
