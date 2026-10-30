@@ -5,9 +5,11 @@ on:
       - support/team14-task101-http-referral-20261030-1941
       - support/team14-task101-signup-referrer-policy-20261030-2038
       - support/task101-revoked-existing-referrer-20261030-2123
+      - support/task101-four-pair-acceptance-20261030-2139
     paths:
       - 'phase3/server.py'
       - 'phase3/test_team14_referral_http.py'
+      - 'phase3/test_task101_four_pair_acceptance.py'
       - 'automation/experiments/task101-referral-entrypoints-20261030.json'
       - '.github/workflows/task101-referral-http.yml'
   pull_request:
@@ -15,6 +17,7 @@ on:
       - support/team14-task101-session-role-boundary-20261030-1936
       - support/team11-task101-ci-env-20261030-2016
       - support/team14-task101-signup-referrer-policy-20261030-2038
+      - support/task101-revoked-existing-referrer-20261030-2123
   workflow_dispatch:
 permissions:
   contents: read
@@ -29,6 +32,8 @@ jobs:
           python-version: '3.11'
       - name: Actual HTTP sessions, nine role pairs, persistent SQLite, fail closed
         run: python -m unittest discover -s phase3 -p 'test_team14_referral_http.py' -v
+      - name: Canonical four teacher/learner referral directions over real HTTP and SQLite
+        run: python -m unittest discover -s phase3 -p 'test_task101_four_pair_acceptance.py' -v
       - name: Existing Phase3 referral invariants
         run: |
           python -m unittest discover -s phase3 -p 'test_team14_referral_roles.py' -v
