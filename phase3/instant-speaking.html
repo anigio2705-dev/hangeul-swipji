@@ -20,6 +20,7 @@
 <button>로그인</button></form><p>이미 로그인한 계정은 그대로 사용합니다. <a href="/index.html#teaching-platform">계정·프로필 관리</a></p></section>
 <section class="card" id="matching" hidden><h2 id="who"></h2>
 <p id="status" role="status" aria-live="polite"></p>
+<p id="offerCountdown" role="timer" aria-live="off" hidden></p>
 <div class="actions"><button id="queue">대화 상대 자동 찾기</button><button id="ready" hidden>이 상대와 대화하기</button><button id="start" hidden>화상방 입장</button><button id="stop" class="secondary" hidden>대기 취소 · 대화 종료</button></div>
 <p id="notice"></p><div id="video"></div>
 <p>방을 시작하는 사람에게 Jitsi 진행자 로그인이 필요할 수 있습니다. 화면이 열렸다는 것만으로 통화 성공을 의미하지 않습니다.</p>
@@ -29,7 +30,7 @@
 (()=>{
 'use strict';
 const $=id=>document.getElementById(id);
-let state=null,timer=null,pending=false,opened=null,inFlight=Promise.resolve();
+let state=null,timer=null,offerTimer=null,pending=false,opened=null,inFlight=Promise.resolve();
 async function api(path,data){
  // An unresponsive request must not freeze every later join/leave/status action.
  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12000);
@@ -40,7 +41,16 @@ async function api(path,data){
  finally{clearTimeout(timeout);}
 }
 function closeVideo(){const f=$('video').querySelector('iframe');if(f){f.src='about:blank';f.remove();}opened=null;}
-function resetLogin(){clearInterval(timer);timer=null;state=null;closeVideo();$('loginBox').hidden=false;$('matching').hidden=true;}
+function resetLogin(){clearInterval(timer);timer=null;state=null;updateOfferCountdown();closeVideo();$('loginBox').hidden=false;$('matching').hidden=true;}
+function updateOfferCountdown(){
+ const el=$('offerCountdown');
+ if(!state||state.state!=='offered'||!Number.isFinite(state.expiresAt)){
+  el.hidden=true;el.textContent='';return;
+ }
+ const seconds=Math.max(0,Math.ceil(state.expiresAt-Date.now()/1000));
+ el.hidden=false;
+ el.textContent=seconds>0?'상대 확인까지 약 '+seconds+'초 남았습니다.':'확인 시간이 지났습니다. 서버에서 매칭 상태를 다시 확인합니다.';
+}
 function render(v){
  state=v;$('loginBox').hidden=true;$('matching').hidden=false;
  $('who').textContent=v.user.nickname+' · '+(v.user.role==='learner'?'학습자':'한국인 파트너');
@@ -48,6 +58,7 @@ function render(v){
  $('start').hidden=v.state!=='active';$('start').disabled=!!opened;$('stop').hidden=v.state==='idle';
  $('status').textContent=v.state==='waiting'?'접속 중인 상대를 찾고 있습니다. 상대가 대기를 시작하면 자동으로 연결됩니다.':v.state==='offered'?v.partnerName+'님과 매칭되었습니다. '+(v.ready?'상대방의 입장 확인을 기다립니다.':'60초 안에 대화 여부를 확인하세요.'):v.state==='active'?v.partnerName+'님과 연결 준비가 끝났습니다. 화상방에 입장하세요.':v.eligible?'대기를 시작하면 상대를 자동으로 찾습니다.':'학생 또는 승인된 파트너 계정으로 참여하세요. 예약 수업 시간에는 즉시 대기를 할 수 없습니다.';
  $('notice').textContent=(v.state==='waiting'||v.state==='offered')?'상대가 나가거나 응답하지 않으면 대기가 종료됩니다. 다시 찾기를 누를 수 있습니다.':'';
+ updateOfferCountdown();
  if(v.state!=='active'||(opened&&opened!==v.roomUrl))closeVideo();
 }
 function run(action,data={}){
@@ -60,7 +71,10 @@ function run(action,data={}){
  });
  inFlight=operation;return operation;
 }
-function poll(){if(!timer)timer=setInterval(()=>run(state&&state.state!=='idle'?'heartbeat':'status'),5000);}
+function poll(){
+ if(!timer)timer=setInterval(()=>run(state&&state.state!=='idle'?'heartbeat':'status'),5000);
+ if(!offerTimer)offerTimer=setInterval(updateOfferCountdown,1000);
+}
 $('login').onsubmit=async e=>{e.preventDefault();$('error').textContent='';try{await api('/api/login',{email:$('email').value,password:$('password').value});$('password').value='';await run('status');poll();}catch(e){$('error').textContent=e.message;}};
 $('queue').onclick=()=>run('join');$('ready').onclick=()=>run('ready',{matchId:state.matchId});
 $('stop').onclick=()=>{closeVideo();run('leave');};
@@ -72,7 +86,7 @@ $('start').onclick=()=>{
 };
 // Do not send a leave on unload: stale tabs must not cancel another tab's new match.
 // Presence expires after 45 seconds without a heartbeat.
-addEventListener('pagehide',()=>{clearInterval(timer);timer=null;closeVideo();});
+addEventListener('pagehide',()=>{clearInterval(timer);timer=null;clearInterval(offerTimer);offerTimer=null;closeVideo();});
 addEventListener('pageshow',()=>{run('status');poll();});
 run('status');poll();
 })();
