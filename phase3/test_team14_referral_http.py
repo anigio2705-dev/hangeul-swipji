@@ -162,6 +162,7 @@ class ReferralHttpContractTests(unittest.TestCase):
 
 
     def test_revoked_referrer_allows_booking_without_new_reward(self):
+        # Task #101: a historical inviter's changed role cannot veto lessons.
         # Historical referral consent remains immutable, but a later role
         # revocation must not deny a learner's otherwise valid lesson booking.
         inviter_code = self.referral_code(self.o["id"])
