@@ -32,6 +32,7 @@ jobs:
       - run: node scripts/check-foundations.cjs
       - run: node scripts/check-phase2-pages.cjs
       - run: node --check phase3/app.js
+      - run: node phase3/test_instant_offer_countdown.cjs
       - run: node phase3/browser-test.cjs
       - run: node phase3/browser-test.cjs --staging
       - run: node phase3/instant-browser-test.cjs
