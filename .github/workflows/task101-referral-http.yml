@@ -7,6 +7,7 @@ on:
     paths:
       - 'phase3/server.py'
       - 'phase3/test_team14_referral_http.py'
+      - 'automation/experiments/task101-referral-entrypoints-20261030.json'
       - '.github/workflows/task101-referral-http.yml'
   pull_request:
     branches:
