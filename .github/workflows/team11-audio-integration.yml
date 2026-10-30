@@ -7,6 +7,7 @@ on:
     paths:
       - 'docs/team11/AUDIO_MOBILE_FAILURE_CASES_20261030.md'
       - 'docs/AI_TEAM_KNOWLEDGE/FAILURE/TEAM15_TTS_TIMEOUT_20261030.md'
+      - 'docs/AI_TEAM_KNOWLEDGE/INDEX.md'
       - 'hangul-core.js'
       - 'hangul-board.js'
       - 'hangul-basics.html'
@@ -40,6 +41,7 @@ jobs:
           test -s docs/AI_TEAM_KNOWLEDGE/FAILURE/TEAM15_TTS_TIMEOUT_20261030.md
           grep -q '40998155238' docs/AI_TEAM_KNOWLEDGE/FAILURE/TEAM15_TTS_TIMEOUT_20261030.md
           grep -q '40998196056' docs/AI_TEAM_KNOWLEDGE/FAILURE/TEAM15_TTS_TIMEOUT_20261030.md
+          grep -q 'TEAM15_TTS_TIMEOUT_20261030.md' docs/AI_TEAM_KNOWLEDGE/INDEX.md
       - name: Validate JavaScript syntax
         run: |
           node --check hangul-core.js
