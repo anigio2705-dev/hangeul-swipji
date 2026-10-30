@@ -28,6 +28,7 @@ jobs:
       - run: python scripts/check-team15-source-gate.py
       - run: node scripts/audit-350-lessons.cjs
       - run: node scripts/audit-phase2-content.cjs
+      - run: node scripts/check-team15-phase2-home-gate.cjs
       - run: node scripts/check-audio-runtime.cjs
       - run: node scripts/audit-reading-similarity.cjs
       - run: node scripts/check-foundations.cjs
