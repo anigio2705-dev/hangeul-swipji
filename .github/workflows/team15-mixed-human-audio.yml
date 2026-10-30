@@ -1,0 +1,21 @@
+name: Team15 mixed human audio independent regression
+on:
+  push:
+    branches:
+      - audit/team15-mixed-human-audio-20261030-1038
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audio-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check hangul-core.js
+      - run: node scripts/check-audio-runtime.cjs
+      - run: node scripts/check-audio-runtime.cjs
+      - run: node scripts/audit-350-lessons.cjs
