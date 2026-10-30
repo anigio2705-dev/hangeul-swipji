@@ -10,6 +10,7 @@ from test_server import Client, PlatformTests
 class IndependentTask101Counterexamples(unittest.TestCase):
     setUp = PlatformTests.setUp
     tearDown = PlatformTests.tearDown
+    register = PlatformTests.register
     book = PlatformTests.book
 
     def test_control_valid_referral_booking_snapshot(self):
