@@ -7,7 +7,7 @@
     $('selected-help').textContent=H.availability(selected).label;
     document.querySelectorAll('.board [data-sound]').forEach(b=>b.classList.toggle('focus',b.dataset.sound===selected));
     const requested=selected;
-    if(play)H.play(requested).then(result=>{if(selected!==requested)return;if(result.status==='error')$('selected-help').textContent=result.message;else if(result.status==='missing')$('selected-help').textContent='이 글자의 사람 녹음이 아직 없습니다.';else if(result.status==='held')$('selected-help').textContent='이 글자의 녹음은 검수 보류 중입니다.';else if(result.status==='manifest-error')$('selected-help').textContent='음원 목록 연결 실패 · 다시 확인 버튼을 눌러 주세요.';else $('selected-help').textContent=H.availability(selected).label});
+    if(play)H.play(requested).then(result=>{if(selected!==requested)return;if(result.status==='error')$('selected-help').textContent=result.message;else if(result.status==='missing')$('selected-help').textContent='이 글자의 사람 녹음이 아직 없습니다.';else if(result.status==='held')$('selected-help').textContent='이 글자의 녹음은 검수 보류 중입니다.';else if(result.status==='tts-played')$('selected-help').textContent='기기 한국어 합성음 재생 · 사람 녹음 아님';else if(result.status?.startsWith('tts-'))$('selected-help').textContent='합성음 재생 불가 · 기기 한국어 음성 설정 확인';else if(result.status==='cancelled')$('selected-help').textContent='음성 재생 취소됨';else if(result.status==='loading')$('selected-help').textContent='음원 목록 준비 중 · 준비되면 글자를 다시 눌러 주세요.';else if(result.status==='manifest-error')$('selected-help').textContent='음원 목록 연결 실패 · 다시 확인 버튼을 눌러 주세요.';else $('selected-help').textContent=H.availability(selected).label});
   }
   for(const [c,name,word] of H.consonants){
     const b=H.soundButton(name);b.replaceChildren(H.el('b','',c),H.el('small','',name));
@@ -35,6 +35,7 @@
   for(const [, ,word] of H.consonants.slice(0,14))$('practice').append(H.soundButton(word));
   $('repeat-selected').onclick=()=>H.play(selected);
   $('refresh-audio').onclick=()=>H.reloadManifest().then(()=>$('selected-help').textContent=H.availability(selected).label);
+  if($('tts-opt-in'))$('tts-opt-in').onchange=()=>{H.setSyntheticEnabled($('tts-opt-in').checked);H.refreshBadges()};
   $('stop-audio').onclick=()=>{H.stop();H.status('재생을 멈췄습니다.')};
   H.ready.then(()=>{H.refreshBadges();$('selected-help').textContent=H.availability(selected).label});select('ㄱ','ㅏ',false);
 })();

@@ -6,6 +6,31 @@ from types import SimpleNamespace
 from hq_six_developers import apply_patch, validate_candidate, choose_work_items, run_checks
 from hq_160_task_cycle import _semantic_dispatch_gate, contracts
 
+class WorkerChildEnvironmentTests(unittest.TestCase):
+    def test_child_process_does_not_inherit_nonallowlisted_secrets(self):
+        # A candidate or its tests may be AI-modified; do not pass unrelated
+        # CI credentials merely because they have a different name from GITHUB_TOKEN.
+        from hq_six_developers import shell
+        with patch.dict("os.environ", {
+            "OPENAI_API_KEY": "secret-openai",
+            "GITHUB_TOKEN": "secret-github",
+            "GH_TOKEN": "secret-gh",
+            "SUPABASE_SERVICE_ROLE_KEY": "secret-db",
+            "RENDER_API_KEY": "secret-render",
+            "CI": "true",
+            "PATH": "/usr/bin:/bin",
+            "UNRELATED_PRIVATE_VALUE": "secret-other",
+        }, clear=False), patch("hq_six_developers.subprocess.run") as runner:
+            runner.return_value = SimpleNamespace(returncode=0, stdout="", stderr="")
+            shell("python", "-V")
+            env = runner.call_args.kwargs["env"]
+        for key in ("OPENAI_API_KEY", "GITHUB_TOKEN", "GH_TOKEN",
+                    "SUPABASE_SERVICE_ROLE_KEY", "RENDER_API_KEY",
+                    "UNRELATED_PRIVATE_VALUE"):
+            self.assertNotIn(key, env)
+        self.assertEqual(env["CI"], "true")
+        self.assertEqual(env["PATH"], "/usr/bin:/bin")
+
 class BoundedPatchTests(unittest.TestCase):
     def test_runner_must_reject_unreviewed_semantic_task_even_if_ledger_is_stale(self):
         self.assertFalse(_semantic_dispatch_gate(51, 'scripts/audit-hangul-audio.py'))
@@ -64,10 +89,41 @@ class BoundedPatchTests(unittest.TestCase):
             self.assertEqual(blocked[0]["number"], 45)
             self.assertIn("non-Python", blocked[0]["unsupported_reason"])
 
+    def test_ready_absolute_paths_are_never_dispatched(self):
+        c = contracts("\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "feature.py").write_text("def feature(): return True\n")
+            (root / "test_feature.py").write_text(
+                "import unittest\nclass TestFeature(unittest.TestCase):\n"
+                " def test_feature(self): self.assertTrue(True)\n")
+            record = {"owner": "12", "state": "READY",
+                      "source_paths": [str(root / "feature.py")],
+                      "test_paths": ["test_feature.py"],
+                      "independent_team15": "PASS",
+                      "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123",
+                      "independent_ci_sha": "a" * 40}
+            reg = {"schema": 1, "items": {"45": record}}
+            selected = choose_work_items("12", c, {}, {}, reg, root)
+            self.assertIn("non-Python or non-unittest executor", selected[0]["unsupported_reason"])
+            record["source_paths"] = ["feature.py"]
+            record["test_paths"] = [str(root / "test_feature.py")]
+            selected = choose_work_items("12", c, {}, {}, reg, root)
+            self.assertIn("non-Python or non-unittest executor", selected[0]["unsupported_reason"])
+
     def test_ready_task_specific_unittest_cannot_pass_with_zero_tests(self):
         fake = SimpleNamespace(returncode=0, stdout="", stderr="Ran 0 tests in 0.000s\nOK\n")
         with patch("hq_six_developers.shell", return_value=fake):
             ok, message = run_checks("12", "feature.py", ["test_feature.py"])
+        self.assertFalse(ok)
+        self.assertIn("Ran 0 tests", message)
+
+    def test_baseline_unittest_cannot_pass_with_zero_discovered_tests(self):
+        # Team 13/12 have fixed unittest discover checks, not extra_tests.
+        # An empty discovery must not authorize an AI patch as validated.
+        fake = SimpleNamespace(returncode=0, stdout="", stderr="Ran 0 tests in 0.000s\\nOK\\n")
+        with patch("hq_six_developers.shell", return_value=fake):
+            ok, message = run_checks("13", "phase3/instant_matching.py")
         self.assertFalse(ok)
         self.assertIn("Ran 0 tests", message)
 

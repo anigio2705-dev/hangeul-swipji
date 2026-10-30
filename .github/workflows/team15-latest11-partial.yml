@@ -1,0 +1,35 @@
+name: Team15 latest Team11 partial human audio independent regression
+on:
+  push:
+    branches:
+      - audit/team15-latest11-partial-20261030-1338
+  pull_request:
+    paths:
+      - hangul-core.js
+      - hangul-basics.html
+      - hangul-week.html
+      - tests/team15_latest11_partial_human.test.cjs
+      - tests/team11_audio_user_activation.test.cjs
+      - tests/team11_audio_surface_integration.test.cjs
+      - .github/workflows/team15-latest11-partial.yml
+permissions:
+  contents: read
+jobs:
+  independent-audio:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax and independent latest-Team11 P0 behavior
+        run: |
+          node --check hangul-core.js
+          node --test tests/team15_latest11_partial_human.test.cjs
+      - name: Existing Team11 audio and mobile progress
+        run: node --test tests/team11_audio_user_activation.test.cjs tests/team11_audio_surface_integration.test.cjs tests/team11_week_progress_storage.test.cjs
+      - name: Existing runtime audio safety
+        run: node scripts/check-audio-runtime.cjs

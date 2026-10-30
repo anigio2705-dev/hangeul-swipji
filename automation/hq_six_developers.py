@@ -49,10 +49,17 @@ CHECKS = {
 FORBIDDEN_CALLS = {"eval", "exec", "compile", "__import__"}
 FORBIDDEN_IMPORTS = {"requests", "urllib", "http", "socket", "subprocess", "ctypes"}
 def shell(*args, timeout=120):
-    # Candidate source and its regression tests run in child processes. Never
-    # inherit GitHub/OpenAI bearer tokens into a potentially modified module.
-    clean_env = {k: v for k, v in os.environ.items()
-                 if k not in ("GITHUB_TOKEN", "OPENAI_API_KEY")}
+    # Candidate source and regression tests may be AI-modified. A two-token
+    # denylist leaks other credentials (GH_TOKEN, database/hosting keys, etc.).
+    # Pass only ordinary process/runtime settings. This isolates environment
+    # variables, NOT the filesystem or network; keep the sandbox gates too.
+    safe_keys = (
+        "PATH", "HOME", "LANG", "LANGUAGE", "LC_ALL", "LC_CTYPE", "TZ",
+        "TMPDIR", "TMP", "TEMP", "SYSTEMROOT", "WINDIR", "PATHEXT",
+        "VIRTUAL_ENV", "CI", "GITHUB_ACTIONS", "PYTHONIOENCODING",
+        "PYTHONUNBUFFERED", "PYTHONDONTWRITEBYTECODE", "PYTHONUTF8",
+    )
+    clean_env = {key: os.environ[key] for key in safe_keys if key in os.environ}
     return subprocess.run(args, capture_output=True, text=True,
                           timeout=timeout, env=clean_env)
 def validate_ownership():
@@ -155,8 +162,10 @@ def choose_work_items(team, catalog, evidence, repairs, registry, root):
         other_team_paths = {p for other, (_, work) in TASKS.items()
                             if other != team for p, _ in work}
         safe = (path.endswith(".py") and not path.startswith(("automation/", ".github/"))
-                and ".." not in Path(path).parts and path not in other_team_paths
+                and not Path(path).is_absolute() and ".." not in Path(path).parts
+                and path not in other_team_paths
                 and bool(tests) and all(p.endswith(".py") and Path(p).name.startswith("test_")
+                                        and not Path(p).is_absolute()
                                         and ".." not in Path(p).parts for p in tests))
         candidate = {"path": path, "number": reviewed["task_number"],
                      "dynamic": True, "tests": tests,
@@ -167,6 +176,27 @@ def choose_work_items(team, catalog, evidence, repairs, registry, root):
         excluded.add(str(reviewed["task_number"]))
     if unsupported:
         return unsupported[:1]
+    # The shared readiness gate may reject a purported READY entry before
+    # next_assignment can return it. Do not silently replace that blocked
+    # assignment with a legacy curated task: preserve the actual reason.
+    from hq_traffic_lights import readiness
+    invalid = readiness(catalog, evidence, registry, root)["invalid_ready"]
+    for blocked in invalid:
+        number = blocked["task"]
+        entry = registry["items"].get(str(number), {})
+        if entry.get("state") != "READY" or catalog[number]["owner"] != team:
+            continue
+        paths = entry.get("source_paths", [])
+        tests = entry.get("test_paths", [])
+        if "real_paths" in blocked["reason"]:
+            reason = ("READY target requires non-Python or non-unittest executor: "
+                      "unsafe or missing source/test path")
+        else:
+            reason = "READY independent gate rejected: " + blocked["reason"]
+        return [{"path": paths[0] if isinstance(paths, list) and paths else "",
+                 "number": number, "dynamic": True,
+                 "tests": tests if isinstance(tests, list) else [],
+                 "unsupported_reason": reason}]
     return [{"path": path, "number": number, "dynamic": False, "tests": [],
              "unsupported_reason": ""}
             for path, _ in TASKS[team][1]
@@ -231,9 +261,12 @@ def run_checks(team, path, extra_tests=()):
     for command in commands:
         result = shell(*command, timeout=120)
         output = result.stdout + result.stderr
-        if result.returncode or (extra_tests and "discover" in command
-                                 and ("Ran 0 tests" in output or "Ran 0 test" in output)):
-            return False, output[-2000:] or "Task-specific regression ran zero tests"
+        # Fixed baseline suites are acceptance gates too. unittest discover
+        # exits successfully when it finds zero tests; never treat that as PASS.
+        unittest_discovery = command[:4] == ["python", "-m", "unittest", "discover"]
+        zero_tests = unittest_discovery and bool(re.search(r"\bRan 0 tests?\b", output))
+        if result.returncode or zero_tests:
+            return False, output[-2000:] or "Required unittest discovery ran zero tests"
     return True, ""
 def main():
     validate_ownership()
