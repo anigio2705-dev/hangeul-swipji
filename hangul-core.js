@@ -21,18 +21,20 @@
   }
   const records=Object.create(null),holds=Object.create(null);let current=null,run=0,release=null,manifestError=false,manifestLoaded=false;
   const schedule=typeof setTimeout==='function'?setTimeout:null,cancelTimer=typeof clearTimeout==='function'?clearTimeout:()=>{};
-  let loading=null;
+  let loading=null,manifestGeneration=0;
   function loadManifest(){
     if(loading)return loading;
     // A refresh must revoke the old inventory immediately. Otherwise taps during
     // the network request can play a recording that has just been withdrawn.
     manifestLoaded=false;
     manifestError=false;
+    const generation=++manifestGeneration;
     let timer=null;
     const request=fetch('./hangul-audio-manifest.json?v=20261027-audio-retry', {cache:'no-store'})
       .then(r=>{if(!r.ok)throw Error('audio manifest');return r.json()});
     loading=(schedule?Promise.race([request,new Promise((_,reject)=>{timer=schedule(()=>reject(Error('audio manifest timeout')),15000)})]):request)
-      .then(m=>{if(!m.recordings||typeof m.recordings!=='object'||Array.isArray(m.recordings))throw Error('invalid audio manifest');const seenSources=new Set(),seenDigests=new Set();
+      .then(m=>{if(generation!==manifestGeneration){document.dispatchEvent(new Event('hs-audio-ready'));return}
+        if(!m.recordings||typeof m.recordings!=='object'||Array.isArray(m.recordings))throw Error('invalid audio manifest');const seenSources=new Set(),seenDigests=new Set();
         const human=Object.entries(m.recordings).filter(([word,a])=>{
           // Reject reserved object property names and blank keys from untrusted manifests.
           if(!word.trim()||['__proto__','constructor','prototype'].includes(word))return false;
@@ -49,7 +51,7 @@
         Object.assign(records,Object.fromEntries(human.filter(([,a])=>!a.disabled)));
         Object.assign(holds,Object.fromEntries(human.filter(([,a])=>a.disabled)));
         manifestError=false;manifestLoaded=true;document.dispatchEvent(new Event('hs-audio-ready'))})
-      .catch(()=>{manifestError=true;manifestLoaded=false;document.dispatchEvent(new Event('hs-audio-ready'))})
+      .catch(()=>{if(generation===manifestGeneration){manifestError=true;manifestLoaded=false}document.dispatchEvent(new Event('hs-audio-ready'))})
       .finally(()=>{if(timer!==null)cancelTimer(timer);loading=null});
     return loading;
   }
@@ -59,7 +61,15 @@
     status('사람 녹음 목록을 다시 확인하고 있습니다. / Checking recordings…');
     // A manual refresh must fetch fresh data even if the initial request is still
     // pending. Reusing that initial promise would leave a just-uploaded file unseen.
-    if(loading)await loading;
+    if(loading){
+      // A queued refresh invalidates the older response before it resolves.
+      // Otherwise its ready event briefly enables a withdrawn recording.
+      manifestGeneration++;
+      manifestLoaded=false;
+      manifestError=false;
+      refreshBadges();
+      await loading;
+    }
     const refresh=loadManifest();
     refreshBadges(); // Remove stale playable badges while the new list is pending.
     await refresh;
@@ -129,10 +139,16 @@
     // Only genuinely absent (not held) recordings may use optional synthetic speech.
     const held=missing.filter(w=>holds[w]);
     if(held.length){status('재생 보류: '+held.map(w=>w+' · '+holds[w].holdReason).join(' / '));return {status:'held',missing}}
-    if(!syntheticEnabled&&missing.length){status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요.');return {status:'missing',missing}}
+    if(!syntheticEnabled&&missing.length&&(words.length===1||missing.length===words.length)){
+      status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요.');
+      return {status:'missing',missing};
+    }
+    // With TTS off, do not silence valid human recordings in a mixed sequence.
+    // Review-held items were blocked above; missing items are never synthesized.
+    const playable=!syntheticEnabled&&missing.length?words.filter(w=>records[w]):words;
     try{
       let usedSynthetic=false;
-      for(const word of words){
+      for(const word of playable){
         if(token!==run)return {status:'cancelled'};
         if(records[word]){await recording(word,token);continue}
         const result=await synthesize(word,token);
@@ -142,8 +158,11 @@
         }
         usedSynthetic=true;
       }
-      if(token===run)status(usedSynthetic?'재생 완료 · 기기 합성음 사용 · 사람 녹음 아님':'사람 녹음 재생 완료 · 청취 정확성 미검증');
-      return {status:token===run?(usedSynthetic?'tts-played':'played'):'cancelled',words};
+      if(token===run)status(usedSynthetic?'재생 완료 · 기기 합성음 사용 · 사람 녹음 아님':missing.length&&!syntheticEnabled
+        ?'일부만 재생했습니다. 녹음 준비 중: '+missing.join(' · ')+'. 나머지 글자는 선생님과 함께 읽어 주세요. / Partial human playback; recordings missing.'
+        :'사람 녹음 재생 완료 · 청취 정확성 미검증');
+      if(token!==run)return {status:'cancelled'};
+      return missing.length&&!syntheticEnabled?{status:'partial',words:playable,missing}:{status:usedSynthetic?'tts-played':'played',words};
     }catch(e){if(token===run){stop();status(e.message)}return {status:'error',message:e.message}}
   }
   // Optional Korean device TTS: never impersonates a human recording.
