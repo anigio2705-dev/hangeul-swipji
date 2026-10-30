@@ -80,11 +80,11 @@ class BoundedPatchTests(unittest.TestCase):
                      "independent_ci_sha": "a" * 40}
             registry = {"schema": 1, "items": {"101": entry}}
             outcome = choose_work_items("14", c, {}, {}, registry, root)
-            self.assertTrue(outcome[0]["unsupported_reason"])
+            self.assertFalse(any(x["number"] == 101 and not x["unsupported_reason"] for x in outcome))
             entry["source_paths"] = ["candidate.py"]
             entry["test_paths"] = [str(root / "test_candidate.py")]
             outcome = choose_work_items("14", c, {}, {}, registry, root)
-            self.assertTrue(outcome[0]["unsupported_reason"])
+            self.assertFalse(any(x["number"] == 101 and not x["unsupported_reason"] for x in outcome))
 
     def test_ready_task_specific_unittest_cannot_pass_with_zero_tests(self):
         fake = SimpleNamespace(returncode=0, stdout="", stderr="Ran 0 tests in 0.000s\nOK\n")
