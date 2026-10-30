@@ -58,6 +58,13 @@ class ReceiverSecurityTests(unittest.TestCase):
                     "team": "11", "result": "READ_ONLY_ACK_NO_DISPATCH"})}
         self.assertEqual(len(inspect([comment(1), fake], CATALOG, REGISTRY)), 1)
 
+    def test_receipt_wrong_result_cannot_suppress(self):
+        forged = {"id": 2, "user": {"login": "github-actions[bot]"},
+                  "body": "HQ_RECEIPT_V1\\n" + json.dumps({
+                      "comment_id": 1, "nonce": NONCE, "task_id": 11,
+                      "team": "11", "result": "DISPATCHED"})}
+        self.assertEqual(len(inspect([comment(1), forged], CATALOG, REGISTRY)), 1)
+
     def test_boolean_task_id_rejected(self):
         body = "HQ_COMMAND_V1\n" + json.dumps({
             "v": 1, "task_id": True, "team": "11",
