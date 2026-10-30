@@ -28,7 +28,7 @@ test('shared engine is human-first and synthetic speech defaults off',()=>{
 
 test('mobile audio resume fix is cache-busted on both learner surfaces',()=>{
   for(const page of ['hangul-basics.html','hangul-week.html']){
-    assert.match(read(page),/hangul-core\.js\?v=20261030-team15-latest11-partial1/,
+    assert.match(read(page),/hangul-core\.js\?v=20261030-team11-held3/,
       page+' must not serve an older cached core after mobile background resume');
   }
 });
