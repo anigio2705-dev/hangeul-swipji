@@ -16,8 +16,8 @@
   "test_fixup_commit": "c77dc77305f194396bbb47ee234de8e95da55705",
   "code_patch_commit": "4438cd22de67256b78f1f0c28a1e88c1009e5063",
   "red_phase3_run": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41059485150",
-  "green_phase3_run": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41059513154",
-  "green_free_run": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41059513192",
+  "candidate_phase3_run": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41059513154",
+  "candidate_free_run": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41059513192",
   "result": "CI_RUNNING_NOT_VERIFIED",
   "remaining_blockers": [
     "exact-SHA dedicated and full CI verification",
