@@ -64,6 +64,28 @@ class BoundedPatchTests(unittest.TestCase):
             self.assertEqual(blocked[0]["number"], 45)
             self.assertIn("non-Python", blocked[0]["unsupported_reason"])
 
+    def test_absolute_ready_paths_rejected_by_runner(self):
+        c = contracts("\n".join(f"{i}. [ ] Item {i}" for i in range(1, 161)))
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / "candidate.py").write_text("def candidate(): return True\n")
+            (root / "test_candidate.py").write_text(
+                "import unittest\nclass TestCandidate(unittest.TestCase):\n"
+                " def test_valid(self): self.assertTrue(True)\n")
+            entry = {"owner": "14", "state": "READY",
+                     "source_paths": [str(root / "candidate.py")],
+                     "test_paths": ["test_candidate.py"],
+                     "independent_team15": "PASS",
+                     "independent_ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123",
+                     "independent_ci_sha": "a" * 40}
+            registry = {"schema": 1, "items": {"101": entry}}
+            outcome = choose_work_items("14", c, {}, {}, registry, root)
+            self.assertTrue(outcome[0]["unsupported_reason"])
+            entry["source_paths"] = ["candidate.py"]
+            entry["test_paths"] = [str(root / "test_candidate.py")]
+            outcome = choose_work_items("14", c, {}, {}, registry, root)
+            self.assertTrue(outcome[0]["unsupported_reason"])
+
     def test_ready_task_specific_unittest_cannot_pass_with_zero_tests(self):
         fake = SimpleNamespace(returncode=0, stdout="", stderr="Ran 0 tests in 0.000s\nOK\n")
         with patch("hq_six_developers.shell", return_value=fake):
