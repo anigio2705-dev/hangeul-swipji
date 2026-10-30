@@ -1,0 +1,39 @@
+name: Team14 P0 task101 verified role referral regressions (isolated)
+on:
+  push:
+    branches:
+      - team14/task101-verified-role-referrals-20261030-1840
+    paths:
+      - 'phase3/team14_referral_store.py'
+      - 'phase3/test_team14_referral_roles.py'
+      - '.github/workflows/team14-task101-verified-roles.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  task101-roles:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify four combinations and authenticated consent (nonzero tests)
+        run: |
+          python -m unittest discover -s phase3 -p 'test_team14_referral_roles.py' -v
+      - name: Preserve referral and simulated award regressions
+        run: |
+          python -m unittest discover -s phase3 -p 'test_team14_referral_store.py' -v
+          python -m unittest discover -s phase3 -p 'test_team14_referral_scenarios.py' -v
+      - name: Preserve canonical owner and READY fail-closed
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_ready101_mapping.py' -v
+          python automation/hq_traffic_lights.py --output /tmp/hq-task101.json
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/hq-task101.json'))
+          assert r['dispatch_readiness']['dispatchable_total'] == 0
+          assert r['final_complete'] == 0
+          print('Task101 remains CANDIDATE; independent team15 approval required')
+          PY
