@@ -93,9 +93,15 @@
   }
   function stop(){
     run++;
+    // Resolve the active playback as cancelled BEFORE invoking browser stop
+    // methods. Safari/Chrome may synchronously emit onend during
+    // speechSynthesis.cancel(); if it fires first, direct optionalSynthetic()
+    // falsely reports tts-played even though the user left the page.
+    const cancelActive=release;
+    release=null;
+    if(cancelActive)cancelActive();
     if(current){current.pause();current=null}
     if(window.speechSynthesis)window.speechSynthesis.cancel();
-    if(release){release();release=null}
   }
   async function recording(word,token){
     const asset=new URL(records[word].src, document.baseURI);
