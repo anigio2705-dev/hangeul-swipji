@@ -1,0 +1,31 @@
+name: QA15 Task101 independent counterexample reproduction (isolated)
+on:
+  push:
+    branches:
+      - phase3/qa15-task101-counterexamples-20261031-0700
+    paths:
+      - 'phase3/test_qa15_task101_counterexamples.py'
+      - '.github/workflows/qa15-task101-independent.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qa15-counterexamples:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify exact product base and QA-only file delta
+        run: |
+          git merge-base --is-ancestor 92681fa1f1a6149a362b4f3408308b9e26a286e3 HEAD
+          git diff --name-only 92681fa1f1a6149a362b4f3408308b9e26a286e3 HEAD | sort > /tmp/actual-qa-files
+          printf '%s\n' '.github/workflows/qa15-task101-independent.yml' 'phase3/test_qa15_task101_counterexamples.py' | sort > /tmp/expected-qa-files
+          diff -u /tmp/expected-qa-files /tmp/actual-qa-files
+          git rev-parse HEAD
+      - name: Independent four-case HTTP SQLite regression against unmodified product code
+        run: python -m unittest discover -s phase3 -p 'test_qa15_task101_counterexamples.py' -v
