@@ -127,6 +127,14 @@ class BoundedPatchTests(unittest.TestCase):
         self.assertFalse(ok)
         self.assertIn("Ran 0 tests", message)
 
+    def test_unittest_success_without_test_count_must_fail_closed(self):
+        # A mocked or broken test command can exit 0 without running tests.
+        fake = SimpleNamespace(returncode=0, stdout="", stderr="OK\\n")
+        with patch("hq_six_developers.shell", return_value=fake):
+            ok, message = run_checks("13", "phase3/instant_matching.py")
+        self.assertFalse(ok)
+        self.assertIn("no positive test-count evidence", message)
+
     def test_single_unique_patch_and_valid_python(self):
         original = "def calculate_total(value):\n    return value + 1\n" + ("# meaningful existing code context\n" * 5)
         changed = apply_patch(original, {
