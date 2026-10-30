@@ -284,7 +284,7 @@ test('mobile tab foreground revalidates withdrawn audio and coalesces BFCache re
 test('manual refresh queued during initial fetch must never expose the first manifest to a mobile tap',async()=>{
   const human={kind:'human',src:'./assets/hangul-audio/ac00-r2.mp3',sha256:'a'.repeat(64),
     sourceUrl:'https://example.test/recording',author:'speaker',license:'CC-BY'};
-  let deliverInitial,deliverRefresh,requests=0,created=0,H,seenState,attempt;
+  let deliverInitial,deliverRefresh,requests=0,created=0,H,seenState,attempt,ttsAttempt,synthCalls=0;
   const document={
     baseURI:'https://example.test/hangul-basics.html',
     addEventListener(){},querySelectorAll:()=>[],querySelector:()=>null,
@@ -294,11 +294,12 @@ test('manual refresh queued during initial fetch must never expose the first man
       if(requests===1){
         seenState=H.availability('가').state;
         attempt=H.play('가');
+        ttsAttempt=H.optionalSynthetic('나');
       }
     }
   };
   const context={document,URL,Event:class{},setTimeout,clearTimeout,
-    window:{addEventListener(){},speechSynthesis:{cancel(){}}},
+    window:{addEventListener(){},speechSynthesis:{cancel(){},speak(u){synthCalls++;u.onend?.()}},SpeechSynthesisUtterance:class{constructor(text){this.text=text}}},
     Audio:class{constructor(){created++}play(){this.onended?.();return Promise.resolve()}pause(){}},
     fetch:()=>{
       requests++;
@@ -310,11 +311,14 @@ test('manual refresh queued during initial fetch must never expose the first man
   };
   vm.runInNewContext(source,context);
   H=context.window.HSHangul;
+  H.setSyntheticEnabled(true);
   const refresh=H.reloadManifest();
   deliverInitial({ok:true,json:async()=>({recordings:{'가':human}})});
   await H.ready;
   assert.equal(seenState,'unavailable','first manifest cannot reopen audio while manual refresh is queued');
   assert.equal((await attempt).status,'loading','tap cannot start stale recording');
+  assert.equal((await ttsAttempt).status,'loading','direct optional TTS must also wait for the new manifest');
+  assert.equal(synthCalls,0,'no device speech while a newer manifest is queued');
   assert.equal(created,0,'Audio constructor must not run during the queued refresh');
   await new Promise(resolve=>setTimeout(resolve,0));
   assert.equal(requests,2);
