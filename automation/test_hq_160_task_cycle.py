@@ -22,6 +22,25 @@ class HQ160TaskCycleTests(unittest.TestCase):
         self.assertIn(151, tasks[154]["dependencies"])
         self.assertEqual(tasks[9]["owner"], "15")
 
+    def test_curated_dispatch_targets_are_canonical_owner_only(self):
+        # Support teams may review education tasks but must never own AI patches.
+        # Regression: legacy team11 #51/#56 and team16 #55 caused wrong-owner
+        # assignments even though the READY gate later rejected their calls.
+        from hq_six_developers import TASKS
+        catalog = contracts(sample())
+        for team, assignments in CURATED_TARGETS.items():
+            with self.subTest(team=team):
+                self.assertEqual(
+                    {path for _, path in assignments},
+                    {path for path, _ in TASKS[team][1]},
+                    "Runner and numbered curated paths must agree",
+                )
+                for number, path in assignments:
+                    self.assertEqual(
+                        catalog[number]["owner"], team,
+                        f"#{number} {path}: supporting team must not be AI owner",
+                    )
+
     def test_reject_duplicate_or_missing_item(self):
         with self.assertRaisesRegex(ValueError, "160"):
             contracts(sample() + "\n160. [ ] duplicate")
@@ -125,6 +144,27 @@ class HQ160TaskCycleTests(unittest.TestCase):
         proof = {"status": "complete", "commit": "a" * 40,
                  "ci_conclusion": "success", "independent_review": "pass",
                  "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123", "independent_ci_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
+        self.assertEqual(make_report(checked, {"9": proof})["final_complete"], 1)
+
+    def test_final_complete_rejects_mismatched_or_missing_independent_ci_sha(self):
+        # Regression: a successful run for another commit must not certify #9.
+        checked = sample().replace("9. [ ]", "9. [x]")
+        sha = "a" * 40
+        proof = {
+            "status": "complete", "commit": sha, "ci_conclusion": "success",
+            "independent_review": "pass",
+            "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/123",
+        }
+        self.assertEqual(make_report(checked, {"9": proof})["final_complete"], 0,
+                         "Missing exact independent CI SHA is not final completion")
+        proof["independent_ci_sha"] = "b" * 40
+        self.assertEqual(make_report(checked, {"9": proof})["final_complete"], 0,
+                         "A green run for a different commit is not acceptance")
+        proof["independent_ci_sha"] = sha
+        proof["ci_head_sha"] = "b" * 40
+        self.assertEqual(make_report(checked, {"9": proof})["final_complete"], 0,
+                         "Contradictory CI head SHA must fail closed")
+        proof["ci_head_sha"] = sha
         self.assertEqual(make_report(checked, {"9": proof})["final_complete"], 1)
 
     def test_semantic_contract_paths_and_wrong_scope_regressions(self):
