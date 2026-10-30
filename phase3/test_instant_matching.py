@@ -89,6 +89,21 @@ class InstantMatchingTests(unittest.TestCase):
         self.assertEqual(409,self.request('/api/instant/booking-room',
                          {'bookingId':booking['id']},headers={'Cookie':learner})[0])
 
+    def test_revoked_partner_approval_hides_active_room(self):
+        learner,learner_id=self.account('approval-learner@example.test')
+        partner,partner_id=self.account('approval-partner@example.test','partner',True)
+        self.call(learner,'join')
+        offer=self.call(partner,'join')
+        self.call(learner,'ready',{'matchId':offer['matchId']})
+        self.assertIn('roomUrl',self.call(partner,'ready',{'matchId':offer['matchId']}))
+        with server.connect() as db:
+            db.execute('UPDATE users SET approved=0 WHERE id=?',(partner_id,))
+            user=db.execute('SELECT * FROM users WHERE id=?',(learner_id,)).fetchone()
+            self.assertNotIn('roomUrl',matching.snapshot(db,user))
+            matching.cleanup(db,time.time())
+            self.assertIsNone(matching.current(db,learner_id))
+        self.assertEqual('idle',self.call(learner,'status')['state'])
+
     def test_expired_presence_and_offers_do_not_requeue(self):
         a,_=self.account('learner@example.test');b,_=self.account('partner@example.test','partner',True)
         self.call(a,'join');self.call(b,'join')
