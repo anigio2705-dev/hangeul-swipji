@@ -198,8 +198,19 @@ def readiness(catalog, ledger, registry, root=Path(".")):
         entry = entries[str(number)]
         source = entry.get("source_paths", [])
         tests = entry.get("test_paths", [])
+        # This is an evidence-repair lane, not an executable assignment.
+        # Never silently normalize a wrong registry owner into a clean handoff.
+        repair_blockers = []
+        if entry.get("owner") != task["owner"]:
+            repair_blockers.append("owner_mismatch")
+        if not isinstance(source, list) or not source or not all(valid_path(p) for p in source):
+            repair_blockers.append("missing_or_invalid_source_path")
+        if not isinstance(tests, list) or not tests or not all(valid_path(p) for p in tests):
+            repair_blockers.append("missing_or_invalid_test_path")
         repair_supply[task["owner"]].append({
             "task": number, "owner": task["owner"],
+            "registry_owner": entry.get("owner"),
+            "repair_blockers": repair_blockers,
             "source_paths": source if isinstance(source, list) else [],
             "test_paths": tests if isinstance(tests, list) else [],
             "unmet": entry.get("unmet", []),

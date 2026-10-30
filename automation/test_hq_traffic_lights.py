@@ -267,5 +267,35 @@ class ReadinessTests(unittest.TestCase):
             self.assertEqual(out["candidate_supply"]["13"], [])
             self.assertEqual(out["blocked"], [22, 47])
 
+    def test_blocked_repair_must_disclose_registry_owner_and_path_mismatch(self):
+        """A wrong registry owner or missing source must not look like a clean repair handoff."""
+        c = catalog()
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "instant.py").write_text("pass\\n")
+            (root / "test_instant.py").write_text("pass\\n")
+            registry = {"schema": 1, "items": {
+                "22": {"owner": "12", "state": "BLOCKED",
+                       "source_paths": ["instant.py"],
+                       "test_paths": ["test_instant.py"],
+                       "independent_team15": "PENDING"},
+                "47": {"owner": "12", "state": "BLOCKED",
+                       "source_paths": ["missing-progress.js"],
+                       "test_paths": ["missing-test.js"],
+                       "independent_team15": "PENDING"}
+            }}
+            result = readiness(c, {}, registry, root)
+            self.assertEqual(result["dispatchable_total"], 0)
+            self.assertEqual(result["blocked_repair_next"]["13"], 22)
+            self.assertEqual(result["blocked_repair_next"]["12"], 47)
+            repair22 = result["blocked_repair_supply"]["13"][0]
+            repair47 = result["blocked_repair_supply"]["12"][0]
+            self.assertIn("owner_mismatch", repair22["repair_blockers"])
+            self.assertIn("missing_or_invalid_source_path", repair47["repair_blockers"])
+            self.assertIn("missing_or_invalid_test_path", repair47["repair_blockers"])
+            self.assertEqual(repair22["owner"], "13")
+            self.assertEqual(repair22["registry_owner"], "12")
+            self.assertEqual(result["intake_next"]["13"]["lane"], "BLOCKED_REPAIR")
+
 if __name__ == "__main__":
     unittest.main()
