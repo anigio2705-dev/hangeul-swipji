@@ -49,8 +49,8 @@ def validate_artifact(data, team):
         ids.append(item["id"])
     if len(set(ids)) != len(ids):
         raise ValueError("duplicate case id")
-    if team == "14" and not ROLE_IDS.issubset(ids):
-        raise ValueError("four referral roles missing")
+    if team == "14" and set(ids) != ROLE_IDS:
+        raise ValueError("exactly four referral role pairs required")
     if team == "16" and set(ids) != LOCALE_IDS:
         raise ValueError("eight supported locales missing")
     return True
