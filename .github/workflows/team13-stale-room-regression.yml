@@ -1,0 +1,23 @@
+name: Team13 isolated stale-room regression
+on:
+  push:
+    branches:
+      - audit/team13-revoke-stale-instant-room-20261030
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  instant-room:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify cancelled booking revokes instant room
+        working-directory: phase3
+        run: python -m unittest test_instant_matching.InstantMatchingTests.test_closed_booking_revokes_active_room -v
+      - name: Verify all instant matching regressions
+        working-directory: phase3
+        run: python -m unittest test_instant_matching -v

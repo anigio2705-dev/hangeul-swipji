@@ -66,7 +66,13 @@ def cleanup(db, now):
         roles_ok=(learner and learner['role']=='learner' and partner
                   and partner['role'] in ('partner','teacher')
                   and eligible(db,learner,now) and eligible(db,partner,now))
-        if live != 2 or not roles_ok or (m['state']=='offered' and m['created']+OFFER_TTL<=now):
+        # An active offer must never outlive its server-owned booking. A booking
+        # can be cancelled or completed by another endpoint before the next poll.
+        booking_ok=True
+        if m['state']=='active':
+            booking=linked_booking(db,m['id'])
+            booking_ok=bool(booking and booking['status']=='in_class' and booking['room']==m['room'])
+        if live != 2 or not roles_ok or not booking_ok or (m['state']=='offered' and m['created']+OFFER_TTL<=now):
             end(db, m)
 
 
@@ -110,7 +116,15 @@ def snapshot(db, u):
         value.update(state=m['state'], matchId=m['id'], partnerName=other['nickname'],
                      ready=bool(m['learner_ready'] if learner else m['partner_ready']),
                      expiresAt=m['created']+OFFER_TTL if m['state']=='offered' else None)
-        if m['state']=='active': value['roomUrl']='https://meet.jit.si/'+m['room']
+        if m['state']=='active':
+            # A stale match row is not permission to disclose a cancelled room.
+            # Reuse the same booking ownership/status gate as /booking-room.
+            booking=linked_booking(db,m['id'])
+            if booking and booking['room']==m['room']:
+                try:
+                    value['roomUrl']=authorized_booking_room(db,booking['id'],u)['roomUrl']
+                except server.Error:
+                    pass  # Fail closed; cleanup will retire the stale match.
     elif db.execute('SELECT 1 FROM instant_queue WHERE user_id=?',(u['id'],)).fetchone():
         value['state']='waiting'
     return value
