@@ -264,7 +264,7 @@ def run_checks(team, path, extra_tests=()):
         # Fixed baseline suites are acceptance gates too. unittest discover
         # exits successfully when it finds zero tests; never treat that as PASS.
         unittest_discovery = command[:4] == ["python", "-m", "unittest", "discover"]
-        zero_tests = unittest_discovery and bool(re.search(r"\\bRan 0 tests?\\b", output))
+        zero_tests = unittest_discovery and bool(re.search(r"\bRan 0 tests?\b", output))
         if result.returncode or zero_tests:
             return False, output[-2000:] or "Required unittest discovery ran zero tests"
     return True, ""
