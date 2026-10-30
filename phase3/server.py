@@ -495,22 +495,31 @@ class Handler(BaseHTTPRequestHandler):
                 if not slot or slot['teacher_id']!=d.get('teacherId') or slot['teacher_id']==uid or not slot['approved'] or slot['role'] not in ('teacher','partner') or slot['start']<=time.time(): raise Error('예약 가능한 일정이 아닙니다')
                 if slot['end']-slot['start'] < int(unit.get('durationMinutes',30))*60: raise Error('단원 수업시간보다 일정이 짧습니다')
                 if db.execute("SELECT 1 FROM bookings b JOIN slots s ON s.id=b.slot_id WHERE b.learner_id=? AND b.status NOT IN ('cancelled','refunded','expired') AND s.start<? AND s.end>?",(uid,slot['end'],slot['start'])).fetchone(): raise Error('학습자 일정이 겹칩니다',409)
-                ref=u['referred_by']
+                # Historical referral consent is immutable, but lesson access
+                # must not depend on the inviter's CURRENT reward eligibility.
+                # Only a qualified inviter enters this booking's rate snapshot.
+                bound_ref=u['referred_by']
+                ref=bound_ref
                 if ref:
-                    # A previously eligible inviter can later lose their role.
-                    # Never create a booking/reward snapshot from a stale link;
-                    # apply the same current DB role policy as signup and link.
                     inviter=db.execute('SELECT role FROM users WHERE id=?',(ref,)).fetchone()
                     if not inviter or inviter['role'] not in ('learner','partner','teacher'):
-                        raise Error('기존 소개 관계의 권한이 유효하지 않습니다',409)
+                        ref=None
+                        audit(db,uid,'referral_reward_ineligible',uid,'inviter_role_revoked_or_missing')
                 if d.get('referralCode'):
                     r=db.execute('SELECT id,role FROM users WHERE referral_code=?',(text(d['referralCode'],40),)).fetchone()
                     if not r or r['role'] not in ('learner','partner','teacher'):
                         raise Error('추천코드가 없습니다')
-                    if ref and ref!=r['id']: raise Error('가입 시 추천인을 변경할 수 없습니다')
+                    if bound_ref and bound_ref!=r['id']: raise Error('가입 시 추천인을 변경할 수 없습니다')
                     ref=r['id']
-                if ref in (uid,slot['teacher_id']): raise Error('본인 또는 거래 상대 추천은 보상 대상이 아닙니다')
-                if ref and not u['referred_by']:
+                if ref in (uid,slot['teacher_id']):
+                    if bound_ref and not d.get('referralCode'):
+                        # Imported/historical invalid links cannot block a
+                        # legitimate booking or produce a referral reward.
+                        ref=None
+                        audit(db,uid,'referral_reward_ineligible',uid,'self_or_counterparty')
+                    else:
+                        raise Error('본인 또는 거래 상대 추천은 보상 대상이 아닙니다')
+                if ref and not bound_ref:
                     # Booking may bind the same permanent parent as /api/referrals/link.
                     # Check the full ancestry first so this alternate entry point
                     # cannot create a cycle that the direct link API rejects.
