@@ -1,0 +1,18 @@
+name: HQ task59 audio fallback candidate (isolated)
+on:
+  push:
+    branches:
+      - audit/hq-task59-fallback-candidate-20261030-1057
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  candidate-audio-fallback:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify #59 missing, held and retry behavior
+        run: node --test automation/verify_task59.cjs
+      - name: Preserve separate production acceptance gate
+        run: echo 'Candidate QA only; not READY, deployed, or owner-approved.' >> "$GITHUB_STEP_SUMMARY"
