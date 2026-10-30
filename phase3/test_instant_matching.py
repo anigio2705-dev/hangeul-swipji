@@ -67,6 +67,28 @@ class InstantMatchingTests(unittest.TestCase):
             self.assertIsNotNone(db.execute('SELECT id FROM slots WHERE id=?',
                                             (booking['slot_id'],)).fetchone())
 
+    def test_closed_booking_revokes_active_room(self):
+        learner,learner_id=self.account('revoke-learner@example.test')
+        partner,_=self.account('revoke-partner@example.test','partner',True)
+        self.call(learner,'join')
+        offer=self.call(partner,'join')
+        self.call(learner,'ready',{'matchId':offer['matchId']})
+        active=self.call(partner,'ready',{'matchId':offer['matchId']})
+        self.assertIn('roomUrl',active)
+        with server.connect() as db:
+            booking=db.execute('''SELECT b.id FROM bookings b JOIN instant_booking_links l
+              ON l.booking_id=b.id WHERE l.match_id=?''',(offer['matchId'],)).fetchone()
+            self.assertIsNotNone(booking)
+            db.execute("UPDATE bookings SET status='cancelled' WHERE id=?",(booking['id'],))
+            user=db.execute('SELECT * FROM users WHERE id=?',(learner_id,)).fetchone()
+            # Even before cleanup runs, a stale match must not leak a room URL.
+            self.assertNotIn('roomUrl',matching.snapshot(db,user))
+            matching.cleanup(db,time.time())
+            self.assertIsNone(matching.current(db,learner_id))
+        self.assertEqual('idle',self.call(learner,'status')['state'])
+        self.assertEqual(409,self.request('/api/instant/booking-room',
+                         {'bookingId':booking['id']},headers={'Cookie':learner})[0])
+
     def test_expired_presence_and_offers_do_not_requeue(self):
         a,_=self.account('learner@example.test');b,_=self.account('partner@example.test','partner',True)
         self.call(a,'join');self.call(b,'join')
