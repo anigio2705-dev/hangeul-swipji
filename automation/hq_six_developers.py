@@ -165,6 +165,29 @@ def choose_work_items(team, catalog, evidence, repairs, registry, root):
             return [candidate]
         unsupported.append(candidate)
         excluded.add(str(reviewed["task_number"]))
+    if not unsupported:
+        # The static READY gate now rejects unsupported executors *before*
+        # next_assignment(). Preserve a truthful, no-AI-call diagnostic
+        # instead of silently falling back to stale curated targets.
+        from hq_traffic_lights import readiness
+        gate = readiness(catalog, evidence, registry, root)
+        for rejected in gate["invalid_ready"]:
+            if rejected["reason"] != "unsupported_python_unittest_runner":
+                continue
+            entry = registry["items"].get(str(rejected["task"]), {})
+            if entry.get("state") != "READY" or entry.get("owner") != team:
+                continue
+            sources = entry.get("source_paths", [])
+            path = entry.get("editable_path") or (
+                sources[0] if isinstance(sources, list) and len(sources) == 1 else None)
+            if not isinstance(path, str):
+                continue
+            unsupported.append({
+                "path": path, "number": rejected["task"], "dynamic": True,
+                "tests": entry.get("test_paths", []),
+                "unsupported_reason": "READY target requires non-Python or non-unittest executor",
+            })
+            break
     if unsupported:
         return unsupported[:1]
     return [{"path": path, "number": number, "dynamic": False, "tests": [],
