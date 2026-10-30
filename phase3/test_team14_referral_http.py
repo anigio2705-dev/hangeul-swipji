@@ -8,6 +8,7 @@ class ReferralHttpContractTests(unittest.TestCase):
     setUp = PlatformTests.setUp
     tearDown = PlatformTests.tearDown
     register = PlatformTests.register
+    book = PlatformTests.book
 
     def referral_code(self, uid):
         with server.connect() as db:
@@ -120,7 +121,7 @@ class ReferralHttpContractTests(unittest.TestCase):
         self.assertEqual(self.parent_of(signed["id"]), self.t["id"])
         # A role revoked after signup is no longer a valid inviter.
         with server.connect() as db:
-            db.execute("UPDATE users SET role=? WHERE id=?", ("suspended", self.o["id"]))
+            db.execute("UPDATE users SET role=? WHERE id=?", ("admin", self.o["id"]))
         status, response = Client(self.http.server_port).call("/api/register", {
             "email": "revoked-inviter@example.com",
             "password": "Password12345!",
@@ -144,9 +145,9 @@ class ReferralHttpContractTests(unittest.TestCase):
             ).fetchone()[0]
         self.assertEqual(400, self.book(referral=admin_code)[0])
         self.assertIsNone(self.parent_of(self.l["id"]))
-        # Revoked inviter must not be accepted by the older booking path.
+        # Role-changed inviter must not be accepted by the older booking path.
         with server.connect() as db:
-            db.execute("UPDATE users SET role=? WHERE id=?", ("suspended", self.o["id"]))
+            db.execute("UPDATE users SET role=? WHERE id=?", ("admin", self.o["id"]))
         self.assertEqual(400, self.book(referral=self.referral_code(self.o["id"]))[0])
         with server.connect() as db:
             db.execute("UPDATE users SET role=? WHERE id=?", ("learner", self.o["id"]))
