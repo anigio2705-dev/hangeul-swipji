@@ -6,6 +6,7 @@ on:
       - support/team14-task101-signup-referrer-policy-20261030-2038
       - support/task101-revoked-existing-referrer-20261030-2123
       - support/task101-four-pair-acceptance-20261030-2139
+      - support/task101-referral-reward-split-20261030
     paths:
       - 'phase3/server.py'
       - 'phase3/test_team14_referral_http.py'
@@ -15,12 +16,15 @@ on:
       - 'automation/experiments/task101-four-pair-acceptance-20261030.json'
       - 'automation/experiments/task101-referral-entrypoints-20261030.json'
       - '.github/workflows/task101-referral-http.yml'
+      - 'automation/audit_task101_root_index.py'
+      - 'automation/test_task101_root_index_audit.py'
   pull_request:
     branches:
       - support/team14-task101-session-role-boundary-20261030-1936
       - support/team11-task101-ci-env-20261030-2016
       - support/team14-task101-signup-referrer-policy-20261030-2038
       - support/task101-revoked-existing-referrer-20261030-2123
+      - support/task101-four-pair-acceptance-20261030-2139
   workflow_dispatch:
 permissions:
   contents: read
@@ -30,6 +34,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -43,7 +49,23 @@ jobs:
           python -m unittest discover -s phase3 -p 'test_team14_referral_store.py' -v
           python -m unittest discover -s phase3 -p 'test_team14_referral_scenarios.py' -v
       - name: Machine-readable experiment evidence parses
-        run: python -m json.tool automation/experiments/task101-four-pair-acceptance-20261030.json > /dev/null
+        run: |
+          python -m json.tool automation/experiments/task101-four-pair-acceptance-20261030.json > /dev/null
+          python -m json.tool automation/experiments/task101-baseline-restoration-handoff-20261031.json > /dev/null
+          python -m json.tool automation/experiments/task101-isolate-unapproved-education-20261031.json > /dev/null
+      - name: Audit exact root index drift without weakening original protection
+        run: |
+          python -m unittest discover -s automation -p 'test_task101_root_index_audit.py' -v
+          python automation/audit_task101_root_index.py --output /tmp/task101-root-index-audit.json
+          cat /tmp/task101-root-index-audit.json
+      - name: Upload read-only protection evidence for 12/15/HQ2
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: task101-root-index-protection-audit
+          path: /tmp/task101-root-index-audit.json
+          if-no-files-found: warn
+          retention-days: 14
       - name: READY remains gated pending independent team15 HQ2 approval
         run: |
           python -m unittest discover -s automation -p 'test_hq_ready101_mapping.py' -v

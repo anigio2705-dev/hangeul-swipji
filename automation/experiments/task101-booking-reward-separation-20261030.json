@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "task": 101,
+  "owner": "14",
+  "support": [
+    "11",
+    "15"
+  ],
+  "hypothesis_id": "H101-BOOKING-REWARD-SEPARATION-05",
+  "prior_attempt_id": "H101-ROLE-MATRIX-EVIDENCE-04",
+  "changed_assumption": "A revoked historical inviter invalidates only NEW referral rewards, not an otherwise eligible learner booking. Explicit invalid referral-code submission is still rejected.",
+  "discriminating_test": "phase3/test_team14_referral_http.py::ReferralHttpContractTests::test_revoked_referrer_allows_booking_without_new_reward",
+  "expected_before_patch": "existing booking returns 409 despite valid lesson/slot; test requires 200 and zero referral snapshot",
+  "expected_after_patch": "booking 200, immutable users.referred_by, booking referrer_id NULL, referral_bps 0, restored role affects only later booking; explicit invalid code 400",
+  "test_first_commit": "2e49eb06e75d05276097166cb305ef11995c4f99",
+  "test_fixup_commit": "c77dc77305f194396bbb47ee234de8e95da55705",
+  "code_patch_commit": "4438cd22de67256b78f1f0c28a1e88c1009e5063",
+  "red_phase3_run": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41059485150",
+  "candidate_phase3_run": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41059513154",
+  "candidate_free_run": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41059513192",
+  "result": "RED_TO_TARGETED_GREEN_FULL_CI_STILL_BLOCKED",
+  "remaining_blockers": [
+    "exact-SHA dedicated and full CI verification",
+    "original phase3/index.html protected baseline mismatch requires authorized independent decision",
+    "shared phase3/server.py owner14/HQ lock and 12/15 cross-team review before merge",
+    "independent team15/HQ2 evidence and business policy approval",
+    "no verified separate 11->14->15 AI API handoff"
+  ],
+  "ready": 0,
+  "ai_api_calls_verified": 0,
+  "next_action": "Independent owner14/HQ shared server file lock and 15/HQ2 policy verification; confirm exact SHA dedicated CI and root index approval history. Do not weaken preservation test, merge or mark READY.",
+  "red_observation": "Exact test-first SHA c77dc773: 457 tests / 2 FAIL (new policy test expected explicit 400 but got 409; pre-existing root index preservation mismatch). Run 41059485150 job 124075328491.",
+  "green_observation": "Exact product SHA 4438cd22: 457 tests / 1 FAIL; new revoked-inviter policy test PASS, only pre-existing root index preservation mismatch. Run 41059513154 job 124075424067.",
+  "protected_root_index_findings": {
+    "tested_path": "index.html (repository root), NOT phase3/index.html",
+    "test": "phase3/test_standards96.py::test_original_24_source_materials_preserved_exactly",
+    "baseline_ref": "7418e32",
+    "observed_diffs": [
+      ".editorial-landing min-height 760px -> 640px",
+      ".editorial-image min-height 760px -> 640px",
+      ".editorial-content padding 90px ... 65px -> 56px ... 50px",
+      ".editorial-steps margin-top 65px -> 38px",
+      "insertion of data-team12-handoff and scripts/team12_learning_handoff.js"
+    ],
+    "approved": null,
+    "approval_status": "PENDING_12_15_HQ2"
+  }
+}

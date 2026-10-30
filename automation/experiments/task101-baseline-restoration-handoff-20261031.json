@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "task": 101,
+  "hypothesis_id": "H101-RESTORE-ROOT-MIGRATE-HANDOFF-08",
+  "previous_attempt": "H101-BROWSER-EVIDENCE-07",
+  "prior_observation": "Same-SHA dedicated 88 PASS and browser evidence PASS, but Phase3 and free integration each fail original root index.html byte protection against 7418e32; unapproved five root deltas",
+  "changed_assumption": "The Team12 additive handoff can be preserved by the already-loaded teaching-home.js without editing protected root HTML. Four unapproved layout changes can be reverted in isolated candidate pending UI approval.",
+  "discriminating_experiment": "Restore root index.html to exact 7418e32 bytes; mount existing Team12 handoff via teaching-home.js; assert teacher intent in desktop/mobile Chromium; run same-SHA dedicated, Phase3 full, free integration and browser CI. Fail closed on unexpected drift.",
+  "expected_result": "Original source protection passes, browser handoff still works, product/referral invariants unchanged; independent 12/15/HQ2 approval still pending.",
+  "status": "CANDIDATE_UNVERIFIED",
+  "source_head_before": "14dd14e84b631ec3ba9f662aebbdd027ccb60046",
+  "independent_team15": "PENDING",
+  "hq2": "PENDING",
+  "ready": false,
+  "main_or_production_modified": false,
+  "next_action": "Inspect exact SHA raw CI and browser tests; independently review UX/layout regression and Team12 handoff, shared phase3/server.py ownership, and #101 business policy before READY."
+}
