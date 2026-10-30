@@ -161,9 +161,9 @@ class ReferralHttpContractTests(unittest.TestCase):
         self.assertEqual(200, self.book()[0])
 
 
-    def test_existing_referrer_revocation_cannot_bypass_booking_policy(self):
-        # A referral was valid when linked, but a later admin role change
-        # must not be bypassed by omitting referralCode at booking time.
+    def test_revoked_referrer_allows_booking_without_new_reward(self):
+        # Historical referral consent remains immutable, but a later role
+        # revocation must not deny a learner's otherwise valid lesson booking.
         inviter_code = self.referral_code(self.o["id"])
         status, response = self.learner.call("/api/referrals/link", {
             "referralCode": inviter_code
@@ -172,22 +172,34 @@ class ReferralHttpContractTests(unittest.TestCase):
         self.assertEqual(self.o["id"], self.parent_of(self.l["id"]))
         with server.connect() as db:
             db.execute("UPDATE users SET role='admin' WHERE id=?", (self.o["id"],))
-            before = db.execute(
-                "SELECT count(*) FROM bookings WHERE learner_id=?", (self.l["id"],)
-            ).fetchone()[0]
         status, response = self.book()
-        self.assertEqual(409, status, response)
+        self.assertEqual(200, status, response)
+        first_bid = response["bookingId"]
         with server.connect() as db:
-            after = db.execute(
-                "SELECT count(*) FROM bookings WHERE learner_id=?", (self.l["id"],)
-            ).fetchone()[0]
-        self.assertEqual(before, after)
+            booked = db.execute("SELECT referrer_id FROM bookings WHERE id=?", (first_bid,)).fetchone()
+            snapshot = db.execute("SELECT referral_bps FROM rate_snapshots WHERE booking_id=?", (first_bid,)).fetchone()
+            self.assertIsNone(booked["referrer_id"])
+            self.assertEqual(0, snapshot["referral_bps"])
+            self.assertEqual(0, db.execute("SELECT count(*) FROM ledger").fetchone()[0])
         self.assertEqual(self.o["id"], self.parent_of(self.l["id"]))
-        # Restoring the eligible role permits a normal booking, proving
-        # that rejection did not consume the slot or alter the referral.
+        # An explicit revoked referral code is still rejected, never rewarded.
+        self.assertEqual(400, self.book(referral=inviter_code)[0])
+        # A later restored role affects only NEW booking snapshots.
         with server.connect() as db:
             db.execute("UPDATE users SET role='learner' WHERE id=?", (self.o["id"],))
-        self.assertEqual(200, self.book()[0])
+        status, slot = self.teacher.call("/api/availability", {
+            "start": self.clock + 4800, "end": self.clock + 8400
+        })
+        self.assertEqual(200, status, slot)
+        status, response = self.book(slot=slot["slotId"])
+        self.assertEqual(200, status, response)
+        with server.connect() as db:
+            second_bid = response["bookingId"]
+            booked = db.execute("SELECT referrer_id FROM bookings WHERE id=?", (second_bid,)).fetchone()
+            snapshot = db.execute("SELECT referral_bps FROM rate_snapshots WHERE booking_id=?", (second_bid,)).fetchone()
+            self.assertEqual(self.o["id"], booked["referrer_id"])
+            self.assertEqual(300, snapshot["referral_bps"])
+            self.assertIsNone(db.execute("SELECT referrer_id FROM bookings WHERE id=?", (first_bid,)).fetchone()["referrer_id"])
 
 if __name__ == "__main__":
     unittest.main()
