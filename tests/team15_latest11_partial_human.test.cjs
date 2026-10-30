@@ -61,3 +61,48 @@ test('opted-in mixed sequence still uses human-first and labels synthetic',async
   assert.equal(calls.audio.length,1);
   assert.deepEqual(calls.tts,['나']);
 });
+
+test('P0: a disabled/withdrawn human entry without an audio file must stay held, never become TTS eligible',async()=>{
+  const calls={audio:0,tts:0};
+  const context={
+    URL,Event:class{},setTimeout,clearTimeout,
+    document:{baseURI:'https://example.org/hangul-basics.html',hidden:false,
+      addEventListener(){},dispatchEvent(){},querySelectorAll(){return []},querySelector(){return null}},
+    window:{addEventListener(){},speechSynthesis:{cancel(){},speak(u){calls.tts++;u.onend?.()}},
+      SpeechSynthesisUtterance:class{constructor(word){this.text=word}}},
+    Audio:class{constructor(){calls.audio++}play(){throw Error('held must never load audio')}pause(){}},
+    fetch:async()=>({ok:true,json:async()=>({recordings:{
+      '가':human,
+      // A withdrawn recording may intentionally omit its old URL/digest.
+      '다':{kind:'human',disabled:true,holdReason:'pronunciation review pending'}
+    }})})
+  };
+  vm.runInNewContext(source,context,{filename:'hangul-core.js'});
+  const h=context.window.HSHangul;await h.ready;
+  h.setSyntheticEnabled(true);
+  assert.equal(h.availability('다').state,'held','withdrawn entry must remain a hard review hold');
+  assert.equal((await h.play('다')).status,'held','consent cannot override a review hold');
+  assert.equal((await h.optionalSynthetic('다')).status,'held','direct TTS API must not bypass hold');
+  assert.equal(calls.audio,0);
+  assert.equal(calls.tts,0);
+});
+test('P0: duplicate audio provenance must not turn a disabled recording into missing/TTS-eligible',async()=>{
+  const calls={tts:0};
+  const context={
+    URL,Event:class{},setTimeout,clearTimeout,
+    document:{baseURI:'https://example.org/hangul-basics.html',hidden:false,
+      addEventListener(){},dispatchEvent(){},querySelectorAll(){return []},querySelector(){return null}},
+    window:{addEventListener(){},speechSynthesis:{cancel(){},speak(u){calls.tts++;u.onend?.()}},
+      SpeechSynthesisUtterance:class{constructor(word){this.text=word}}},
+    Audio:class{constructor(){throw Error('no human audio should be loaded')}pause(){}},
+    fetch:async()=>({ok:true,json:async()=>({recordings:{
+      '가':human,
+      '다':{...human,disabled:true,holdReason:'duplicate source under review'}
+    }})})
+  };
+  vm.runInNewContext(source,context,{filename:'hangul-core.js'});
+  const h=context.window.HSHangul;await h.ready;h.setSyntheticEnabled(true);
+  assert.equal(h.availability('다').state,'held');
+  assert.equal((await h.play('다')).status,'held');
+  assert.equal(calls.tts,0);
+});
