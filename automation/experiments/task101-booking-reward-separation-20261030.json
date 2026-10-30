@@ -42,7 +42,7 @@
       ".editorial-steps margin-top 65px -> 38px",
       "insertion of data-team12-handoff and scripts/team12_learning_handoff.js"
     ],
-    "approved": false,
+    "approved": null,
     "approval_status": "PENDING_12_15_HQ2"
   }
 }
