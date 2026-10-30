@@ -64,6 +64,13 @@ class ReceiverSecurityTests(unittest.TestCase):
             "operation": "AUDIT_READY_ONLY", "nonce": NONCE})
         self.assertIsNone(trusted_command(comment(body=body), CATALOG, REGISTRY))
 
+    def test_unexpected_schema_fields_rejected(self):
+        body = "HQ_COMMAND_V1\\n" + json.dumps({
+            "v": 1, "task_id": 11, "team": "11",
+            "operation": "AUDIT_READY_ONLY", "nonce": NONCE,
+            "unsafe_execute": True})
+        self.assertEqual(inspect([comment(body=body)], CATALOG, REGISTRY), [])
+
     def test_blocked_task_may_be_audited_but_not_promoted(self):
         r = inspect([comment(team="13", task=22)], CATALOG, REGISTRY)
         self.assertEqual(r[0]["ready_state"], "BLOCKED")
