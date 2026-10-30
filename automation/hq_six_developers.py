@@ -154,9 +154,11 @@ def choose_work_items(team, catalog, evidence, repairs, registry, root):
         tests = reviewed["independent_test_paths"]
         other_team_paths = {p for other, (_, work) in TASKS.items()
                             if other != team for p, _ in work}
-        safe = (path.endswith(".py") and not path.startswith(("automation/", ".github/"))
+        safe = (path.endswith(".py") and not Path(path).is_absolute()
+                and not path.startswith(("automation/", ".github/"))
                 and ".." not in Path(path).parts and path not in other_team_paths
                 and bool(tests) and all(p.endswith(".py") and Path(p).name.startswith("test_")
+                                        and not Path(p).is_absolute()
                                         and ".." not in Path(p).parts for p in tests))
         candidate = {"path": path, "number": reviewed["task_number"],
                      "dynamic": True, "tests": tests,

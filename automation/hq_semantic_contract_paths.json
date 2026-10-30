@@ -568,6 +568,7 @@
         "phase3/team14_referral_store.py",
         "phase3/team14_referral_scenarios.py"
       ],
+      "editable_path": "phase3/team14_referral_store.py",
       "test_paths": [
         "phase3/test_team14_referral_store.py",
         "phase3/test_team14_referral_scenarios.py"
