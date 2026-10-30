@@ -278,3 +278,47 @@ test('mobile tab foreground revalidates withdrawn audio and coalesces BFCache re
   assert.equal(H.availability('가').state,'missing','withdrawn audio must remain blocked');
   assert.equal(created,0);
 });
+
+
+test('manual refresh queued during initial fetch must never expose the first manifest to a mobile tap',async()=>{
+  const human={kind:'human',src:'./assets/hangul-audio/ac00-r2.mp3',sha256:'a'.repeat(64),
+    sourceUrl:'https://example.test/recording',author:'speaker',license:'CC-BY'};
+  let deliverInitial,deliverRefresh,requests=0,created=0,H,seenState,attempt;
+  const document={
+    baseURI:'https://example.test/hangul-basics.html',
+    addEventListener(){},querySelectorAll:()=>[],querySelector:()=>null,
+    dispatchEvent(){
+      // The first response must remain untrusted: a newer refresh was requested
+      // while it was pending. An actual mobile tap may happen in this callback.
+      if(requests===1){
+        seenState=H.availability('가').state;
+        attempt=H.play('가');
+      }
+    }
+  };
+  const context={document,URL,Event:class{},setTimeout,clearTimeout,
+    window:{addEventListener(){},speechSynthesis:{cancel(){}}},
+    Audio:class{constructor(){created++}play(){this.onended?.();return Promise.resolve()}pause(){}},
+    fetch:()=>{
+      requests++;
+      return new Promise(resolve=>{
+        if(requests===1)deliverInitial=resolve;
+        else deliverRefresh=resolve;
+      });
+    }
+  };
+  vm.runInNewContext(source,context);
+  H=context.window.HSHangul;
+  const refresh=H.reloadManifest();
+  deliverInitial({ok:true,json:async()=>({recordings:{'가':human}})});
+  await H.ready;
+  assert.equal(seenState,'unavailable','first manifest cannot reopen audio while manual refresh is queued');
+  assert.equal((await attempt).status,'loading','tap cannot start stale recording');
+  assert.equal(created,0,'Audio constructor must not run during the queued refresh');
+  await new Promise(resolve=>setTimeout(resolve,0));
+  assert.equal(requests,2);
+  deliverRefresh({ok:true,json:async()=>({recordings:{}})});
+  assert.equal((await refresh).status,'ready');
+  assert.equal(H.availability('가').state,'missing');
+  assert.equal(created,0);
+});
