@@ -58,6 +58,13 @@ class RootIndexAuditTests(unittest.TestCase):
         (self.root / "scripts/team12_learning_handoff.js").unlink()
         self.assertFalse(audit(self.root, self.read_baseline)["known_delta_only"])
 
+    def test_workflow_fetches_protected_baseline_history(self):
+        # The real audit invokes git show 7418e32:<path>. A shallow checkout
+        # hides that commit and prevents any machine-readable audit artifact.
+        workflow = (Path(__file__).resolve().parents[1]
+                    / ".github/workflows/task101-referral-http.yml").read_text(encoding="utf-8")
+        self.assertIn("      - uses: actions/checkout@v4\\n        with:\\n          fetch-depth: 0\\n".replace("\\n", "\n"), workflow)
+
     def test_ambiguous_baseline_anchor_is_rejected(self):
         before = OBSERVED[0][0]
         self.assertEqual((False, "baseline_anchor_missing_or_ambiguous"),
