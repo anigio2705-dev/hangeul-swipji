@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "task": "101",
+  "round": 1,
+  "turn": 1,
+  "team_expected": "11",
+  "hypothesis_id": "H101-AUTH-02",
+  "prior_attempt_id": "H101-COORDINATION-01",
+  "changed_assumption": "A round-robin/dual-engine state machine is not safe if a caller-supplied boolean or evidence string can forge central approval or independent READY.",
+  "discriminating_test": "python -m unittest automation.test_dual_engine automation.test_dual_engine_bridge -v",
+  "baseline": "PR #149 allowed approve(state,'15','any') to set ready=True and approved_by_central=True to enqueue without verified provenance.",
+  "fix": "No READY promotion from local strings; no dispatch from unverified boolean; progress ignores mutable JSON ready flags; pending independent review recorded only.",
+  "result": "15 tests PASS on exact SHA bdeed1489fbcbefa807028a03fcfdeb6f3924caa; final workflow SHA pending at file creation",
+  "ci_url": "https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41054289102",
+  "pr_url": "https://github.com/anigio2705-dev/hangeul-swipji/pull/150",
+  "ready": 0,
+  "verified_ai_api_calls": 0,
+  "next_action": "15/HQ2 independently validate exact HEAD and 11 bind authenticated Issue #34 actor, command id, task owner, replay state, exact SHA/CI before enabling dispatch or READY; continue R1 TURN1 team11 without impersonation.",
+  "safety": "main, 160 tasks, free content, auto matching, production DB, payments and test99 untouched"
+}

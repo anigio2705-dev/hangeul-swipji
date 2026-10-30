@@ -3,10 +3,13 @@ on:
   push:
     branches:
       - automation/dual-engine-pilot-20261030
+      - support/hq-dual-engine-failclosed-ready-20261030-2115
   pull_request:
     paths:
       - 'automation/dual_engine.py'
       - 'automation/test_dual_engine.py'
+      - 'automation/dual_engine_bridge.py'
+      - 'automation/test_dual_engine_bridge.py'
       - '.github/workflows/dual-engine-pilot.yml'
   workflow_dispatch:
 jobs:

@@ -68,9 +68,13 @@ def approve(state, approver, evidence):
         raise ValueError("independent team15 evidence required")
     if not any(j["status"] == "verified" for j in state["work"]):
         raise ValueError("no verified implementation")
-    state["independent_approval"] = True
-    state["approval_evidence"] = evidence
-    state["ready"] = True
+    # An untrusted CLI string cannot authenticate an independent reviewer or
+    # prove a CI run belongs to the exact implementation SHA. This pilot may
+    # request review, but must never mint a dispatchable READY token.
+    state["review_request"] = {"claimed_team": approver, "unverified_evidence": evidence}
+    state["independent_approval"] = False
+    state["ready"] = False
+    return "PENDING_TRUSTED_INDEPENDENT_REVIEW"
 
 def main():
     p = argparse.ArgumentParser()

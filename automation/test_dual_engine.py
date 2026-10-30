@@ -1,3 +1,5 @@
+import json
+from pathlib import Path
 import unittest
 from automation.dual_engine import new_state, speak, next_team, advance_round, queue_work, work_result, approve
 
@@ -53,8 +55,29 @@ class DualEngineTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             approve(s, "15", "ci")
         work_result(s, "W1", "verified", "sha:abc")
-        approve(s, "15", "independent-ci:abc")
-        self.assertTrue(s["ready"])
+        result = approve(s, "15", "independent-ci:abc")
+        self.assertEqual(result, "PENDING_TRUSTED_INDEPENDENT_REVIEW")
+        self.assertFalse(s["ready"])
+        self.assertFalse(s["independent_approval"])
+        self.assertEqual(s["review_request"]["claimed_team"], "15")
+
+    def test_forged_local_approval_never_sets_ready(self):
+        s = new_state()
+        queue_work(s, dict(id="W1", owner="14", hypothesis="H", test="pytest",
+                           branch="isolated/101"))
+        work_result(s, "W1", "verified", "sha:abc")
+        for forged_evidence in ("ci:success", "https://github.com/example/actions/runs/1"):
+            approve(s, "15", forged_evidence)
+            self.assertFalse(s["ready"])
+            self.assertFalse(s["independent_approval"])
+
+    def test_experiment_ledger_keeps_ready_blocked(self):
+        path = Path(__file__).resolve().parent / "experiments" / "task101-dual-engine-auth-20261030.json"
+        entry = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(entry["task"], "101")
+        self.assertEqual(entry["ready"], 0)
+        self.assertEqual(entry["verified_ai_api_calls"], 0)
+        self.assertTrue(entry["hypothesis_id"].startswith("H101-"))
 
     def test_protect_main_and_duplicate_jobs(self):
         s = new_state()
