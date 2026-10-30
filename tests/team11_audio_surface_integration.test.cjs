@@ -20,14 +20,15 @@ test('shared engine is human-first and synthetic speech defaults off',()=>{
   const core=read('hangul-core.js');
   assert.match(core,/let syntheticEnabled=false/);
   assert.match(core,/if\(records\[word\]\)\{await recording\(word,token\);continue\}/);
-  assert.match(core,/if\(!syntheticEnabled&&missing\.length\)/);
+  assert.match(core,/if\(!syntheticEnabled&&missing\.length&&\(words\.length===1\|\|missing\.length===words\.length\)\)/);
+  assert.match(core,/const playable=!syntheticEnabled&&missing\.length\?words\.filter/);
   assert.match(core,/utterance\.lang='ko-KR'/);
 });
 
 
 test('mobile audio resume fix is cache-busted on both learner surfaces',()=>{
   for(const page of ['hangul-basics.html','hangul-week.html']){
-    assert.match(read(page),/hangul-core\.js\?v=20261030-team11-foreground3/,
+    assert.match(read(page),/hangul-core\.js\?v=20261030-team15-latest11-partial1/,
       page+' must not serve an older cached core after mobile background resume');
   }
 });
