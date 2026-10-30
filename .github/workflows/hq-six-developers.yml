@@ -73,7 +73,7 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GITHUB_TOKEN: ${{ github.token }}
           HQ_TEAM: ${{ matrix.team }}
-          HQ_MAX_CALLS: '2'
+          HQ_MAX_CALLS: '6'
           HQ_REPAIR_INSTRUCTIONS: ${{ inputs.repair_instructions_json || '{}' }}
           GITHUB_REF_NAME: ${{ github.ref_name }}
         run: |
@@ -81,7 +81,7 @@ jobs:
           import json, os, pathlib, subprocess, time
           deadline = time.monotonic() + 45 * 60
           history = []
-          for round_no in range(1, 3):
+          for round_no in range(1, 7):
               if time.monotonic() >= deadline:
                   break
               result_file = pathlib.Path("/tmp/team-result.json")
@@ -99,8 +99,8 @@ jobs:
               committed = sum(t.get("status") == "committed" for t in result.get("tasks", []))
               print(f"Round {round_no}: committed={committed}, calls={result.get('calls')}", flush=True)
               if committed == 0:
-                  print("No verified progress; stop this team to prevent repeated spending", flush=True)
-                  break
+                  print("No verified progress; retain failure evidence and retry within bounded cycle", flush=True)
+                  time.sleep(min(round_no * 3, 15))
           pathlib.Path("/tmp/team-result.json").write_text(json.dumps({
               "team": history[0]["team"] if history else "unknown",
               "rounds": history,
