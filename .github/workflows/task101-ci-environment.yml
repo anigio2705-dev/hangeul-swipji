@@ -24,5 +24,17 @@ jobs:
           python-version: '3.11'
       - name: Check runner pin, immutable source history, and read-only permission
         run: python -m unittest discover -s automation -p 'test_task101_ci_environment.py' -v
-      - name: Verify original protected teaching material remains identical
+  
+  source-preservation:
+    # Independent strict acceptance check: a failure must remain visible.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Preserve strict original material byte comparison without waiver
         run: python -m unittest discover -s phase3 -p 'test_standards96.py' -v
