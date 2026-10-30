@@ -118,6 +118,15 @@ class BoundedPatchTests(unittest.TestCase):
         self.assertFalse(ok)
         self.assertIn("Ran 0 tests", message)
 
+    def test_baseline_unittest_cannot_pass_with_zero_discovered_tests(self):
+        # Team 13/12 have fixed unittest discover checks, not extra_tests.
+        # An empty discovery must not authorize an AI patch as validated.
+        fake = SimpleNamespace(returncode=0, stdout="", stderr="Ran 0 tests in 0.000s\\nOK\\n")
+        with patch("hq_six_developers.shell", return_value=fake):
+            ok, message = run_checks("13", "phase3/instant_matching.py")
+        self.assertFalse(ok)
+        self.assertIn("Ran 0 tests", message)
+
     def test_single_unique_patch_and_valid_python(self):
         original = "def calculate_total(value):\n    return value + 1\n" + ("# meaningful existing code context\n" * 5)
         changed = apply_patch(original, {
