@@ -1,0 +1,28 @@
+name: HQ READY executor compatibility regression (isolated)
+on:
+  push:
+    branches:
+      - audit/hq-ready-executor-compat-20261030-1545
+    paths:
+      - automation/hq_traffic_lights.py
+      - automation/test_hq_traffic_lights.py
+      - .github/workflows/hq-ready-executor-compat.yml
+      - docs/HQ_GENERAL_WORK_METHOD_PLAYBOOK_20261029.md
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  ready-executor-proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fail-closed READY executor compatibility and 160-item queue regression
+        run: |
+          python -m unittest discover -s automation -p 'test_hq_traffic_lights.py' -v
+          python -m unittest discover -s automation -p 'test_hq_160_task_cycle.py' -v
+      - name: No production deployment or AI spending
+        run: echo 'Isolated, read-only contract QA. No READY promotion, AI calls, main write, Render deploy, or payment.' >> "$GITHUB_STEP_SUMMARY"
