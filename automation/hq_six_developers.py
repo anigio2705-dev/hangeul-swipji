@@ -264,9 +264,10 @@ def run_checks(team, path, extra_tests=()):
         # Fixed baseline suites are acceptance gates too. unittest discover
         # exits successfully when it finds zero tests; never treat that as PASS.
         unittest_discovery = command[:4] == ["python", "-m", "unittest", "discover"]
-        zero_tests = unittest_discovery and bool(re.search(r"\bRan 0 tests?\b", output))
-        if result.returncode or zero_tests:
-            return False, output[-2000:] or "Required unittest discovery ran zero tests"
+        test_count = re.search(r"\bRan ([0-9]+) tests?\b", output) if unittest_discovery else None
+        missing_or_zero_tests = unittest_discovery and (not test_count or int(test_count.group(1)) == 0)
+        if result.returncode or missing_or_zero_tests:
+            return False, output[-2000:] or "Required unittest discovery had no positive test-count evidence"
     return True, ""
 def main():
     validate_ownership()
