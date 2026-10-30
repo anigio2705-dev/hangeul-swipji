@@ -1,0 +1,40 @@
+name: Team16 approved eight-language product regression
+on:
+  push:
+    branches:
+      - 'team16/**'
+    paths:
+      - 'site-language.js'
+      - 'global-language.js'
+      - 'global-language.html'
+      - 'scripts/check-phase2-pages.cjs'
+      - 'scripts/browser-team16-language.cjs'
+      - '.github/workflows/team16-language-regression.yml'
+  pull_request:
+    paths:
+      - 'site-language.js'
+      - 'global-language.js'
+      - 'global-language.html'
+      - 'scripts/check-phase2-pages.cjs'
+      - '.github/workflows/team16-language-regression.yml'
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse language runtime
+        run: node --check site-language.js
+      - name: Verify eight-language product contract and preserved pages
+        run: node scripts/check-phase2-pages.cjs
+      - name: Install Chromium for real desktop/mobile locale smoke test
+        run: |
+          npm install --no-save playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Exercise language menus on desktop and mobile Chromium
+        run: node scripts/browser-team16-language.cjs
