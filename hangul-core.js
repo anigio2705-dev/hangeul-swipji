@@ -202,11 +202,27 @@
     }
   }
   document.addEventListener('hs-audio-ready',refreshBadges);
-  document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});
-  window.addEventListener('pagehide',stop);
+  // Mobile browsers can keep a tab alive while it is backgrounded: unlike a
+  // BFCache restore, foregrounding it may fire only visibilitychange. A human
+  // recording may have been withdrawn in the meantime, so never trust the old
+  // manifest when a hidden tab becomes visible again.
+  let wasHidden=false,resumeRefresh=null;
+  function revalidateOnResume(){
+    // A visibilitychange followed by pageshow.persisted must share one request.
+    if(resumeRefresh)return resumeRefresh;
+    resumeRefresh=reloadManifest().finally(()=>{resumeRefresh=null});
+    return resumeRefresh;
+  }
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden){wasHidden=true;stop();return}
+    if(wasHidden){wasHidden=false;void revalidateOnResume()}
+  });
+  window.addEventListener('pagehide',()=>{wasHidden=true;stop()});
   // Safari/Chrome may restore this page from the back-forward cache without
   // running the script again. Revalidate withdrawn recordings on that return;
   // never start playback automatically (a fresh tap is still required).
-  window.addEventListener('pageshow',event=>{if(event.persisted)void reloadManifest()});
+  window.addEventListener('pageshow',event=>{
+    if(event.persisted){wasHidden=false;void revalidateOnResume()}
+  });
   window.HSHangul={consonants,vowels,compose,records,ready,reloadManifest,availability,play,stop,status,el,soundButton,refreshBadges,canSynthesize,setSyntheticEnabled,optionalSynthetic};
 })();
