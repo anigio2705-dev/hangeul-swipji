@@ -1,0 +1,25 @@
+name: Hub runner regression (isolated)
+on:
+  push:
+    branches:
+      - hub/runner-unittest-evidence-20261030
+  pull_request:
+    paths:
+      - automation/hq_six_developers.py
+      - automation/test_hq_six_developers.py
+      - .github/workflows/hub-runner-regression-20261030.yml
+permissions:
+  contents: read
+jobs:
+  runner-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify six-team runner tests
+        run: python -m unittest discover -s automation -p test_hq_six_developers.py -v
+      - name: Verify READY provenance regressions
+        run: python -m unittest discover -s automation -p test_hq_ready_provenance.py -v
