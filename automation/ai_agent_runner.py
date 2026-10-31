@@ -25,6 +25,10 @@ class DeliveryBlocked(RuntimeError):
     """Fail closed: remote side effects may have happened; do not blindly retry."""
 
 
+class AgentContainmentError(RuntimeError):
+    """A direct agent exited but observed detached work remains live."""
+
+
 def _github_json(url, token, payload=None):
     body = json.dumps(payload).encode("utf-8") if payload is not None else None
     req = urllib.request.Request(
@@ -199,7 +203,7 @@ def _run_with_lease(command, *, cwd, store, issue, owner, timeout,
                 observed_descendants.update(_proc_descendants(process.pid))
                 if any(_proc_starttime(pid) == started_at
                        for pid, started_at in observed_descendants.items()):
-                    raise subprocess.TimeoutExpired(command, timeout)
+                    raise AgentContainmentError("detached agent descendant still active")
                 return subprocess.CompletedProcess(command, process.returncode,
                                                    stdout, stderr)
             except subprocess.TimeoutExpired:
@@ -497,7 +501,8 @@ def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"),
         if not store.finish(issue, owner, proof):
             return {"status": "LEASE_LOST", "issue": issue}
         return {"status": "REPORTED_QA_PENDING", "issue": issue, "proof": proof}
-    except (subprocess.TimeoutExpired, subprocess.CalledProcessError, OSError):
+    except (subprocess.TimeoutExpired, subprocess.CalledProcessError,
+            AgentContainmentError, OSError):
         store.fail(issue, owner)
         return {"status": "AGENT_ERROR", "issue": issue}
 
