@@ -300,5 +300,39 @@ class RunnerTests(unittest.TestCase):
                                    "refs/heads/work/qa-sim"]).stdout.strip(), "")
 
 
+    def test_qa15_agent_controlled_ssh_command_cannot_read_controller_token(self):
+        """Independent negative test: --no-verify does not suppress core.sshCommand.
+
+        Only local fake SSH, fake agent and a synthetic sentinel token are used.
+        The real GitHub remote is never contacted because fake SSH exits first.
+        """
+        fake_ssh = Path(self.temp.name) / "qa-fake-ssh"
+        exposure = Path(self.temp.name) / "qa-controller-token-exposed"
+        fake_ssh.write_text(
+            "#!/bin/sh\n"
+            + "printf '%s' \"$GH_TOKEN\" > " + repr(str(exposure)) + "\n"
+            + "exit 23\n"
+        )
+        fake_ssh.chmod(0o755)
+        ssh_remote = "git@github.com:anigio2705-dev/hangeul-swipji.git"
+        self.git(["remote", "set-url", "origin", ssh_remote])
+        agent_code = (
+            "from pathlib import Path; import subprocess; "
+            f"subprocess.run(['git','config','core.sshCommand',{str(fake_ssh)!r}],check=True); "
+            "Path('agent-output.txt').write_text('fake only'); "
+            "subprocess.run(['git','add','agent-output.txt'],check=True); "
+            "subprocess.run(['git','commit','-qm','fake agent commit'],check=True)"
+        )
+        with patch.dict(os.environ, {"GH_TOKEN": "qa15-fake-controller-sentinel"}):
+            result = self.invoke((sys.executable, "-c", agent_code),
+                                 remote_url=ssh_remote)
+        self.assertFalse(
+            exposure.exists(),
+            "QA_FAIL: controller GH_TOKEN reached agent-controlled core.sshCommand "
+            "during git push --no-verify; push failure does not undo exposure. "
+            f"Runner returned {result['status']!r}."
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
