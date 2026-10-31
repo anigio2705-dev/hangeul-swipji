@@ -252,7 +252,7 @@ class SignedIssueWebhookTests(unittest.TestCase):
         db = real_connect(self.db)
         self.assertEqual(db.execute(
             "SELECT state FROM ci_qa_outbox").fetchone()[0],
-            "PENDING_B_QA_REQUEST")
+            "RETRY_WAIT")
         db.close()
 
     def test_closed_issue_cancels_existing_lease(self):
@@ -340,7 +340,7 @@ class SignedIssueWebhookTests(unittest.TestCase):
                 "SELECT run_id,state FROM ci_qa_outbox").fetchall())
             self.assertEqual(states[100], "B_QA_REQUESTED")
             self.assertEqual(states[99], "AMBIGUOUS_POST" if mode == "ambiguous"
-                             else "PENDING_B_QA_REQUEST")
+                             else "RETRY_WAIT")
         finally:
             db.close()
 
