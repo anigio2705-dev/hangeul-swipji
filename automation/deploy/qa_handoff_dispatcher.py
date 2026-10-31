@@ -69,12 +69,23 @@ def dispatch_once(db_path, *, token, repo, issue_number=34, now=None):
         db.execute("PRAGMA busy_timeout=15000")
         db.execute("BEGIN IMMEDIATE")
         try:
+            # Prioritize fresh work. A CI-pending row is cooled down, and an
+            # ambiguous POST is reconciled separately without replaying POST.
+            # Neither may starve later eligible exact-SHA handoffs.
             row = db.execute(
                 """SELECT run_id,run_attempt,pr_number,head_sha,branch,base_ref,
                           state,processing_at,ci_completed_at
                    FROM ci_qa_outbox
-                   WHERE state IN ('PENDING_B_QA_REQUEST','SENDING','AMBIGUOUS_POST')
-                   ORDER BY received_at,run_id LIMIT 1""").fetchone()
+                   WHERE (state='PENDING_B_QA_REQUEST'
+                          AND (processing_at=0 OR processing_at<=?))
+                      OR (state='SENDING' AND processing_at<=?)
+                      OR (state='AMBIGUOUS_POST' AND processing_at<=?)
+                   ORDER BY CASE state
+                         WHEN 'PENDING_B_QA_REQUEST' THEN 0
+                         WHEN 'SENDING' THEN 1 ELSE 2 END,
+                       CASE WHEN processing_at=0 THEN 0 ELSE 1 END,
+                       processing_at,received_at,run_id LIMIT 1""",
+                (now - 120, now - 120, now - 120)).fetchone()
             if row is None:
                 db.execute("COMMIT")
                 return "IDLE"
