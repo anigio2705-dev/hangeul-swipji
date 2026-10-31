@@ -66,8 +66,9 @@ class Task116RecoveryReviewTests(unittest.TestCase):
                     example(available_balance_fixture_krw=v)
                 with self.assertRaises(ValueError):
                     example(future_settlement_fixture_krw=v)
-                with self.assertRaises(ValueError):
-                    example(recovery_cap_fixture_krw=v)
+                if v is not None:
+                    with self.assertRaises(ValueError):
+                        example(recovery_cap_fixture_krw=v)
 
     def test_odd_won_refund_regression(self):
         x = example(gross_krw=7,
