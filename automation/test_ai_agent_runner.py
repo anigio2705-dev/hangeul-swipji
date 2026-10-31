@@ -8,8 +8,9 @@ import time
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+from urllib.error import HTTPError
 
-from ai_agent_runner import run_once
+from ai_agent_runner import DeliveryBlocked, ensure_draft_pr, run_once
 from continuous_dispatcher import MARKER
 from work_request_worker import DurableWorkStore
 
@@ -140,6 +141,57 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(self.store.snapshot(301)["status"], "CANCELLED")
         self.assertFalse(self.git(["ls-remote", "origin",
                                    "refs/heads/work/qa-sim"]).stdout.strip())
+
+
+    def test_existing_exact_draft_pr_is_reused(self):
+        sha = "a" * 40
+        existing = {"number": 500, "draft": True,
+                    "head": {"ref": "work/qa-sim", "sha": sha},
+                    "base": {"ref": "automation/event-driven-ready-gate-20261031"}}
+        with patch("ai_agent_runner._github_json", return_value=[existing]) as api:
+            number = ensure_draft_pr(
+                repo="anigio2705-dev/hangeul-swipji", branch="work/qa-sim",
+                base="automation/event-driven-ready-gate-20261031",
+                sha=sha, token="test-only")
+        self.assertEqual(number, 500)
+        self.assertEqual(api.call_count, 1)
+
+    def test_ambiguous_503_never_reposts(self):
+        err = HTTPError("https://api.github.com", 503, "unavailable", {}, None)
+        with patch("ai_agent_runner._github_json",
+                   side_effect=[[], err, []]) as api:
+            with self.assertRaises(DeliveryBlocked):
+                ensure_draft_pr(
+                    repo="anigio2705-dev/hangeul-swipji", branch="work/qa-sim",
+                    base="automation/event-driven-ready-gate-20261031",
+                    sha="a" * 40, token="test-only")
+        self.assertEqual(api.call_count, 3)
+        self.assertEqual(sum(call.args[0].endswith("/pulls") for call in
+                             api.call_args_list), 1)
+
+    def test_ambiguous_503_reconciles_created_pr_by_exact_sha(self):
+        sha = "b" * 40
+        existing = {"number": 501, "draft": True,
+                    "head": {"ref": "work/qa-sim", "sha": sha},
+                    "base": {"ref": "automation/event-driven-ready-gate-20261031"}}
+        err = HTTPError("https://api.github.com", 503, "unavailable", {}, None)
+        with patch("ai_agent_runner._github_json",
+                   side_effect=[[], err, [existing]]) as api:
+            number = ensure_draft_pr(
+                repo="anigio2705-dev/hangeul-swipji", branch="work/qa-sim",
+                base="automation/event-driven-ready-gate-20261031",
+                sha=sha, token="test-only")
+        self.assertEqual(number, 501)
+        self.assertEqual(sum(call.args[0].endswith("/pulls") for call in
+                             api.call_args_list), 1)
+
+    def test_pr_handoff_rejects_main_base_without_network(self):
+        with patch("ai_agent_runner._github_json") as api:
+            with self.assertRaises(DeliveryBlocked):
+                ensure_draft_pr(
+                    repo="anigio2705-dev/hangeul-swipji", branch="work/qa-sim",
+                    base="main", sha="a" * 40, token="test-only")
+            api.assert_not_called()
 
     def test_push_failure_does_not_mark_reported(self):
         self.git(["remote", "remove", "origin"])
