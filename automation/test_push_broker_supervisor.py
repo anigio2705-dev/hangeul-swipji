@@ -1,3 +1,5 @@
+import os
+import signal
 import sys
 import tempfile
 import threading
@@ -55,6 +57,36 @@ class SupervisorTests(unittest.TestCase):
                           lease_live=lambda: True, timeout=2)
             time.sleep(0.65)
             self.assertFalse(marker.exists(), "orphan child wrote after parent exit")
+
+    def test_detached_child_inheriting_pipes_cannot_stall_cleanup(self):
+        """An escaped child must not hang the broker's cleanup indefinitely.
+
+        This does NOT establish cgroup containment: a detached process can
+        still outlive its original process group. Real push stays disabled.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            pidfile = Path(tmp) / "escaped.pid"
+            parent = (
+                "import pathlib,subprocess,sys;"
+                "p=subprocess.Popen([sys.executable,'-c',"
+                "'import time;time.sleep(8)'],start_new_session=True);"
+                "pathlib.Path(sys.argv[1]).write_text(str(p.pid));"
+                "print('parent-exited')"
+            )
+            started = time.monotonic()
+            try:
+                with self.assertRaises(PushUncertain):
+                    supervise([sys.executable, "-c", parent, str(pidfile)],
+                              lease_live=lambda: True, timeout=0.2,
+                              interval=0.03)
+                self.assertLess(time.monotonic() - started, 4.5,
+                                "escaped pipe holder stalled broker cleanup")
+            finally:
+                if pidfile.exists():
+                    try:
+                        os.kill(int(pidfile.read_text()), signal.SIGKILL)
+                    except ProcessLookupError:
+                        pass
 
     def test_timeout_fail_closed(self):
         with self.assertRaises(PushUncertain):
