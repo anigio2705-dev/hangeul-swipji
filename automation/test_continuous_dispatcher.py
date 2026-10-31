@@ -157,5 +157,22 @@ class QueueTests(unittest.TestCase):
                     write.assert_not_called()
 
 
+    def test_qa15_ambiguous_post_503_must_not_replay_without_idempotency(self):
+        """A POST may have committed before a 503; replay creates a second issue."""
+        calls = []
+        def ambiguous(req, timeout):
+            calls.append(req.get_method())
+            if len(calls) == 1:
+                raise HTTPError(req.full_url, 503, "response lost after commit", {}, None)
+            return io.BytesIO(b'{"number": 999}')
+        # GET retries are fine; POST must not be blindly replayed without a
+        # server-enforced idempotency key or a transactional uniqueness guard.
+        with self.assertRaises(HTTPError):
+            request("/repos/o/r/issues", "token", "POST",
+                    {"title": MARKER + " work"}, opener=ambiguous,
+                    sleeper=lambda _: None)
+        self.assertEqual(calls, ["POST"])
+
+
 if __name__ == "__main__":
     unittest.main()
