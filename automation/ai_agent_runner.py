@@ -103,6 +103,65 @@ def ensure_draft_pr(*, repo, branch, base, sha, token):
         raise DeliveryBlocked("GitHub PR API unavailable or malformed") from exc
 
 
+def _proc_starttime(pid):
+    """Linux-only PID identity. Never signal a reused PID intentionally."""
+    try:
+        data = Path(f"/proc/{pid}/stat").read_text(encoding="ascii")
+        fields = data[data.rfind(")") + 2:].split()
+        return fields[19] if len(fields) >= 20 else None
+    except (OSError, ValueError, IndexError):
+        return None
+
+
+def _proc_descendants(root_pid):
+    """Best-effort Linux descendant snapshot, including children using setsid().
+
+    This is defense in depth for cancellation; procfs enumeration has races
+    and is NOT an OS-enforced task cgroup or permission boundary.
+    """
+    if not Path("/proc").is_dir():
+        return {}
+    children = {}
+    try:
+        entries = os.scandir("/proc")
+        with entries:
+            for entry in entries:
+                if not entry.name.isdecimal():
+                    continue
+                pid = int(entry.name)
+                try:
+                    data = Path(entry.path, "stat").read_text(encoding="ascii")
+                    fields = data[data.rfind(")") + 2:].split()
+                    if len(fields) >= 20:
+                        parent = int(fields[1])
+                        children.setdefault(parent, []).append((pid, fields[19]))
+                except (OSError, ValueError, IndexError):
+                    continue
+    except OSError:
+        return {}
+    found = {}
+    pending = [root_pid]
+    while pending:
+        parent = pending.pop()
+        for pid, starttime in children.get(parent, ()):
+            if pid not in found and pid != root_pid:
+                found[pid] = starttime
+                pending.append(pid)
+    return found
+
+
+def _kill_observed_descendants(observed):
+    """Kill known detached descendants after lease loss (not a cgroup proof)."""
+    for pid, starttime in observed.items():
+        if _proc_starttime(pid) != starttime:
+            continue
+        try:
+            os.kill(pid, signal.SIGKILL)
+        except (ProcessLookupError, PermissionError):
+            # A live host MUST use per-task cgroup containment and fail closed.
+            pass
+
+
 def _run_with_lease(command, *, cwd, store, issue, owner, timeout,
                     heartbeat_interval=5, env=None):
     """Keep the exact fencing token live while a subprocess is running.
@@ -117,9 +176,14 @@ def _run_with_lease(command, *, cwd, store, issue, owner, timeout,
     process = subprocess.Popen(command, cwd=cwd, stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE, text=True,
                                start_new_session=True, env=env)
+    observed_descendants = {}
     started = time.monotonic()
     try:
         while True:
+            # A child may call setsid() and escape the parent's process group.
+            # Snapshot descendants while the parent is still alive, not only
+            # after cancellation when they may have been reparented to PID 1.
+            observed_descendants.update(_proc_descendants(process.pid))
             remaining = timeout - (time.monotonic() - started)
             if remaining <= 0:
                 raise subprocess.TimeoutExpired(command, timeout)
@@ -134,6 +198,16 @@ def _run_with_lease(command, *, cwd, store, issue, owner, timeout,
                 if not store.heartbeat(issue, owner, lease_seconds=3600):
                     return None
     finally:
+        # Freeze the parent group first, then rescan for children that called
+        # setsid(). Procfs is inherently racy; a dedicated OS cgroup remains
+        # mandatory for real Codex, especially if the parent exited early.
+        if process.poll() is None:
+            try:
+                os.killpg(process.pid, signal.SIGSTOP)
+            except ProcessLookupError:
+                pass
+        observed_descendants.update(_proc_descendants(process.pid))
+        _kill_observed_descendants(observed_descendants)
         if process.poll() is None:
             try:
                 os.killpg(process.pid, signal.SIGKILL)
