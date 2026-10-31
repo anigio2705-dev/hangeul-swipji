@@ -14,6 +14,7 @@ import urllib.parse
 import urllib.request
 
 API = "https://api.github.com"
+DB_ROOT = "/var/lib/hangeul-swipji/"
 
 
 def _request(path, token, payload=None):
@@ -165,7 +166,7 @@ def dispatch_once(db_path, *, token, repo, issue_number=34, now=None):
     """One eligible exact-SHA handoff. Unknown POST is reconcile-only."""
     if not token or repo != "anigio2705-dev/hangeul-swipji":
         raise ValueError("missing controller token or unapproved repo")
-    if not db_path.startswith("/var/lib/hangeul-swipji/"):
+    if not db_path.startswith(DB_ROOT):
         raise ValueError("expected mounted durable database")
     now = int(time.time() if now is None else now)
     db = sqlite3.connect(db_path, timeout=15, isolation_level=None)
