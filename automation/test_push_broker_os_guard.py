@@ -76,5 +76,44 @@ class BrokerOSGuardTests(unittest.TestCase):
                                     trusted_root=str(self.root / 'different'))
 
 
+    def test_agent_writable_broker_ancestor_denied(self):
+        shared = Path(self.tmp.name) / 'shared'
+        shared.mkdir()
+        shared.chmod(0o777)
+        root = shared / 'broker'
+        root.mkdir(mode=0o700)
+        db = root / 'leases.sqlite'
+        db.write_bytes(b'fake')
+        db.chmod(0o600)
+        token = root / 'fake_token'
+        token.write_text('fake')
+        token.chmod(0o600)
+        with self.assertRaises(IsolationDenied):
+            verify_broker_isolation(db, token, agent_uid=self.uid + 1,
+                                    trusted_root=root)
+
+    def test_agent_writable_credential_ancestor_denied(self):
+        shared = Path(self.tmp.name) / 'shared_credential'
+        shared.mkdir()
+        shared.chmod(0o777)
+        token = shared / 'fake_token'
+        token.write_text('fake')
+        token.chmod(0o600)
+        with self.assertRaises(IsolationDenied):
+            verify_broker_isolation(self.db, token, agent_uid=self.uid + 1,
+                                    trusted_root=self.root)
+
+    def test_nonroot_sticky_credential_parent_denied(self):
+        shared = Path(self.tmp.name) / 'sticky_credential'
+        shared.mkdir()
+        shared.chmod(0o1777)
+        token = shared / 'fake_token'
+        token.write_text('fake')
+        token.chmod(0o600)
+        with self.assertRaises(IsolationDenied):
+            verify_broker_isolation(self.db, token, agent_uid=self.uid + 1,
+                                    trusted_root=self.root)
+
+
 if __name__ == '__main__':
     unittest.main()
