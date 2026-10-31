@@ -37,6 +37,38 @@ class EventQueueTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             advance(s, "old-qa", "QA_PASS", A)
 
+    def test_late_qa_failure_revokes_qa_pass(self):
+        s = QueueState(102, A)
+        s = advance(s, "dev", "DEV_PASS", A)
+        s = advance(s, "qa-pass", "QA_PASS", A)
+        self.assertEqual(s.phase, "REVIEW_PENDING")
+        s = advance(s, "late-fail", "QA_FAIL", A)
+        self.assertEqual((s.phase, s.qa_failures), ("REWORK", 1))
+        with self.assertRaises(ValueError):
+            advance(s, "central-should-not-pass", "CENTRAL_PASS", A)
+
+    def test_late_qa_failure_revokes_central_attestation(self):
+        s = QueueState(102, A)
+        for event_id, action in (
+            ("dev", "DEV_PASS"),
+            ("qa-pass", "QA_PASS"),
+            ("central", "CENTRAL_PASS"),
+        ):
+            s = advance(s, event_id, action, A)
+        self.assertEqual(s.phase, "ATTESTATION_PENDING")
+        s = advance(s, "late-fail", "QA_FAIL", A)
+        self.assertEqual((s.phase, s.qa_failures), ("REWORK", 1))
+        with self.assertRaises(ValueError):
+            advance(s, "another-central", "CENTRAL_PASS", A)
+
+    def test_duplicate_late_failure_does_not_double_count(self):
+        s = QueueState(102, A)
+        s = advance(s, "dev", "DEV_PASS", A)
+        s = advance(s, "qa", "QA_PASS", A)
+        s = advance(s, "fail", "QA_FAIL", A)
+        self.assertEqual(advance(s, "fail", "QA_FAIL", A), s)
+        self.assertEqual(s.qa_failures, 1)
+
     def test_max_retry_cap_blocks(self):
         s = QueueState(102, A)
         for i in range(3):
