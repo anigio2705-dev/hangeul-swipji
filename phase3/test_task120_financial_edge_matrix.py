@@ -101,7 +101,7 @@ class Task120FinancialEdgeMatrixTests(unittest.TestCase):
                 case(refunds=refunds)
 
     def test_reject_invalid_numeric_and_policy_inputs(self):
-        for value in (-1, True, 0, 1001, "1"):
+        for value in (-1, True, 71, 1001, "1"):
             with self.subTest(paid=value), self.assertRaises(ValueError):
                 case(already_paid_referral_krw=value)
         for weights in ((), (0,), (1, True), (1, -1), ("2",),
