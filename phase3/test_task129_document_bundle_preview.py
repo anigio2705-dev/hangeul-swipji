@@ -147,6 +147,11 @@ class Task129DocumentBundleTests(unittest.TestCase):
             self.assertNotIn("password", str(value).lower())
             self.assertNotIn("cvv", str(value).lower())
 
+    def test_income_document_id_changes_with_tax_country(self):
+        kr = bundle(country_code="KR")["documents"]["income_support_data"]["document_id"]
+        us = bundle(country_code="US")["documents"]["income_support_data"]["document_id"]
+        self.assertNotEqual(kr, us)
+
     def test_pending_payout_hold(self):
         result = bundle(
             payouts=[row("o1", 400, "pending")],
