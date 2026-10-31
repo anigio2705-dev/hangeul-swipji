@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>한글쉽지 | 추천 코드와 소개 관계</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;color:#17304d;background:#f3f7fc}
+*{box-sizing:border-box}body{margin:0}header{background:#113567;color:white;padding:24px max(18px,calc((100vw - 850px)/2))}
+header a{color:#fff}main{max-width:850px;margin:24px auto;padding:0 18px 40px}
+.card{background:white;border:1px solid #d7e3f0;border-radius:14px;padding:22px;margin:16px 0;box-shadow:0 4px 12px #1a35570b}
+.notice{background:#fff1d8;padding:14px;border-radius:9px}label{display:block;font-weight:650;margin:14px 0 8px}
+input{width:100%;font:inherit;padding:12px;border:1px solid #8ba2bd;border-radius:8px}
+button{font:inherit;padding:12px 16px;border:0;border-radius:8px;background:#135aa5;color:white;cursor:pointer;margin:12px 8px 4px 0}
+button:disabled{background:#b9c6d5;color:#293f58;cursor:not-allowed}
+a{color:#145a9b}#message{min-height:1.5em;font-weight:650}small{color:#435b73}
+@media(max-width:550px){.card{padding:16px}button{width:100%;margin:10px 0 0}}
+</style>
+</head>
+<body>
+<header><a href="/#teaching-platform">← 한국어 학습·강사 플랫폼</a>
+<h1>추천 코드 공유 · 소개 관계 확인</h1><p>160개 과제 #108 · 테스트 전용 · 실제 보상 지급 없음</p></header>
+<main>
+<p class="notice">소개 관계는 추천받은 회원이 직접 동의할 때 한 번 저장되며, 기존 관계는 변경할 수 없습니다. 추천 혜택·현금 지급 정책은 승인되지 않았습니다.</p>
+<section class="card" aria-labelledby="share-title">
+<h2 id="share-title">내 추천 코드</h2>
+<p id="login-note">로그인 상태를 확인하는 중입니다.</p>
+<label for="my-code">내 코드</label><input id="my-code" readonly autocomplete="off" aria-label="내 추천 코드">
+<label for="share-url">친구에게 보낼 가입 링크</label><input id="share-url" readonly autocomplete="off" aria-label="추천 가입 링크">
+<button id="copy" type="button" disabled>링크 복사</button>
+</section>
+<section class="card" aria-labelledby="link-title">
+<h2 id="link-title">소개해 준 사람 연결</h2>
+<p id="relationship">연결 상태 확인 중…</p>
+<label for="referral-code">추천받은 코드 (회원 본인만 연결 가능)</label>
+<input id="referral-code" maxlength="40" inputmode="text" autocomplete="off" spellcheck="false" placeholder="추천 코드 10자리">
+<button id="connect" type="button" disabled>이 코드로 연결 동의</button>
+<p><small>기존 회원도 최초 한 번 연결할 수 있습니다. 자기 추천, 순환 관계, 다른 추천인으로 변경, 관리자 계정 연결은 차단됩니다.</small></p>
+</section>
+<p id="message" role="status" aria-live="polite"></p>
+<p><a href="/phase3/referral-compliance-review.html">국가별 법률·세무 검토 안내</a> · <a id="join" href="/#teaching-platform">로그인/회원가입</a></p>
+</main>
+<script>
+"use strict";
+const byId=id=>document.getElementById(id);
+const codeFromLink=new URLSearchParams(location.search).get("ref")||"";
+const validCode=code=>/^[0-9a-f]{10}$/.test(code);
+if(validCode(codeFromLink))byId("referral-code").value=codeFromLink;
+byId("join").href="/"+(validCode(codeFromLink)?"?ref="+encodeURIComponent(codeFromLink):"")+"#teaching-platform";
+async function request(path,method="GET",payload){
+ const opts={method,credentials:"same-origin",cache:"no-store",headers:{}};
+ if(payload!==undefined){opts.headers["Content-Type"]="application/json";opts.body=JSON.stringify(payload);}
+ const response=await fetch(path,opts);
+ let data;try{data=await response.json();}catch{throw Error("서버 응답을 읽을 수 없습니다.");}
+ if(!response.ok)throw Error(data.error||"요청 실패 ("+response.status+")");
+ return data;
+}
+async function refresh(){
+ const state=await request("/api/referrals/status");
+ byId("my-code").value=state.referralCode;
+ const link=new URL("/",location.origin);link.searchParams.set("ref",state.referralCode);link.hash="teaching-platform";
+ byId("share-url").value=link.href;
+ byId("copy").disabled=false;
+ byId("login-note").textContent="내 코드와 공유 링크는 내 계정에서만 조회할 수 있습니다.";
+ byId("relationship").textContent=state.linked?
+   ("연결 완료 · 소개자: "+(state.inviter?.nickname||"확인할 수 없는 계정")+" · 변경 불가"):
+   "아직 소개 관계가 없습니다. 아래 코드를 확인하고 직접 연결할 수 있습니다.";
+ byId("connect").disabled=state.linked;
+ byId("referral-code").disabled=state.linked;
+}
+byId("copy").onclick=async()=>{
+ try{await navigator.clipboard.writeText(byId("share-url").value);byId("message").textContent="가입 링크를 복사했습니다.";}
+ catch{byId("share-url").focus();byId("share-url").select();byId("message").textContent="링크를 선택했습니다. 직접 복사해 주세요.";}
+};
+byId("connect").onclick=async()=>{
+ const code=byId("referral-code").value.trim();
+ if(!validCode(code)){byId("message").textContent="추천 코드는 영문 소문자와 숫자로 된 10자리여야 합니다.";return;}
+ const button=byId("connect");button.disabled=true;
+ try{
+  const result=await request("/api/referrals/link","POST",{referralCode:code});
+  byId("message").textContent=result.alreadyLinked?"이미 연결된 추천인입니다.":"소개 관계가 저장됐습니다. 실제 보상은 지급되지 않습니다.";
+  await refresh();
+ }catch(error){byId("message").textContent=error.message;button.disabled=false;}
+};
+refresh().catch(error=>{
+ byId("login-note").textContent="로그인이 필요합니다. 아래 로그인/회원가입으로 이동하세요.";
+ byId("relationship").textContent="로그인한 본인 계정만 소개 관계를 조회할 수 있습니다.";
+ byId("message").textContent=error.message;
+});
+</script>
+</body></html>
