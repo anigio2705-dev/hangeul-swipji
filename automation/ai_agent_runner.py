@@ -9,6 +9,7 @@ import os
 import re
 import signal
 import subprocess
+import tempfile
 import time
 import urllib.error
 import urllib.parse
@@ -176,11 +177,9 @@ def _controller_git_env():
     """
     env = os.environ.copy()
     for key in list(env):
-        if (key in {"GH_TOKEN", "GITHUB_TOKEN", "OPENAI_API_KEY",
-                    "GIT_ASKPASS", "SSH_ASKPASS", "SSH_AUTH_SOCK",
-                    "GIT_SSH", "GIT_SSH_COMMAND", "GIT_CONFIG_PARAMETERS",
-                    "GIT_CONFIG_COUNT"}
-                or key.startswith(("GIT_CONFIG_KEY_", "GIT_CONFIG_VALUE_"))):
+        # Remove all Git/SSH overrides, including GIT_DIR and Git executables.
+        if (key.startswith(("GIT_", "SSH_"))
+                or key in {"GH_TOKEN", "GITHUB_TOKEN", "OPENAI_API_KEY"}):
             env.pop(key, None)
     env["GIT_CONFIG_NOSYSTEM"] = "1"
     env["GIT_CONFIG_GLOBAL"] = os.devnull
@@ -208,6 +207,55 @@ def _unsafe_git_execution_config(workdir):
             return "UNSAFE_GIT_CONFIG"
         if proc.returncode == 0 and proc.stdout.strip():
             return "UNSAFE_GIT_CONFIG"
+    return None
+
+
+def _trusted_push_destination(repo):
+    """Controller-selected fixed destination; never agent-owned origin config."""
+    return f"https://github.com/{repo}.git"
+
+
+def _push_from_trusted_repo(*, workdir, branch, sha, repo, store, issue,
+                            owner, heartbeat_interval):
+    """Transport through a new bare Git database, not the agent's .git.
+
+    Defense in depth against pushurl TOCTOU. The same-UID temporary repository
+    is not a substitute for OS-separated controller credentials or a broker.
+    """
+    trusted_url = _trusted_push_destination(repo)
+    env = _controller_git_env()
+    with tempfile.TemporaryDirectory(prefix="hs-controller-transport-") as tmp:
+        subprocess.run(["git", "init", "--bare", "-q", tmp], check=True,
+                       capture_output=True, text=True, env=env)
+        subprocess.run(["git", "fetch", "--no-tags", "--no-recurse-submodules",
+                        str(Path(workdir).resolve()), branch], cwd=tmp,
+                       check=True, capture_output=True, text=True, env=env)
+        fetched = subprocess.run(["git", "rev-parse", "FETCH_HEAD"], cwd=tmp,
+                                 check=True, capture_output=True, text=True,
+                                 env=env).stdout.strip()
+        if fetched != sha:
+            return "SOURCE_SHA_CHANGED"
+        # Preserve failure on a removed origin; this does not select a remote.
+        configured = subprocess.run(["git", "remote"], cwd=workdir,
+                                    capture_output=True, text=True, env=env,
+                                    check=True).stdout.splitlines()
+        if "origin" not in configured:
+            return "PUSH_FAILED"
+        pushed = _run_with_lease(
+            ["git", "push", "--no-verify", trusted_url,
+             f"{sha}:refs/heads/{branch}"],
+            cwd=tmp, store=store, issue=issue, owner=owner, timeout=120,
+            heartbeat_interval=heartbeat_interval, env=env)
+        if pushed is None:
+            return "LEASE_LOST"
+        if pushed.returncode:
+            return "PUSH_FAILED"
+        advertised = subprocess.run(
+            ["git", "ls-remote", trusted_url, f"refs/heads/{branch}"],
+            cwd=tmp, capture_output=True, text=True, check=True,
+            timeout=60, env=env).stdout.strip()
+        if advertised.split() != [sha, f"refs/heads/{branch}"]:
+            return "REMOTE_SHA_MISMATCH"
     return None
 
 
@@ -301,30 +349,19 @@ def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"),
         if remote_status:
             store.fail(issue, owner)
             return {"status": remote_status, "issue": issue}
-        # Never run a pre-push hook from an agent-controlled .git/hooks tree:\n        # hooks inherit the controller environment (including GitHub credentials).\n        # --no-verify suppresses pre-push hooks while retaining the lease fence.\n        # Monitor the push itself; a lost lease must kill its process group.
-        # GitHub cannot guarantee rollback of a push already accepted before
-        # cancellation, so downstream delivery still needs idempotency.
+        # Never consult agent-owned Git config for the actual transport.
         try:
-            pushed = _run_with_lease(
-                ["git", "push", "--no-verify", "origin", f"HEAD:refs/heads/{branch}"],
-                cwd=workdir, store=store, issue=issue, owner=owner,
-                timeout=120, heartbeat_interval=heartbeat_interval,
-                env=_controller_git_env())
-            if pushed is None:
-                return {"status": "LEASE_LOST", "issue": issue}
-            if pushed.returncode:
+            push_status = _push_from_trusted_repo(
+                workdir=workdir, branch=branch, sha=sha, repo=expected,
+                store=store, issue=issue, owner=owner,
+                heartbeat_interval=heartbeat_interval)
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired,
+                OSError):
+            push_status = "PUSH_FAILED"
+        if push_status:
+            if push_status != "LEASE_LOST":
                 store.fail(issue, owner)
-                return {"status": "PUSH_FAILED", "issue": issue}
-            advertised = subprocess.run(
-                ["git", "ls-remote", "origin", f"refs/heads/{branch}"],
-                cwd=workdir, capture_output=True, text=True, check=True,
-                timeout=60, env=_controller_git_env()).stdout.strip()
-        except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError):
-            store.fail(issue, owner)
-            return {"status": "PUSH_FAILED", "issue": issue}
-        if advertised.split() != [sha, f"refs/heads/{branch}"]:
-            store.fail(issue, owner)
-            return {"status": "REMOTE_SHA_MISMATCH", "issue": issue}
+            return {"status": push_status, "issue": issue}
         # Optional strict PR gate for a real always-on controller. Without it
         # the queue records a push-only candidate, NEVER completed delivery.
         pr_number = None
