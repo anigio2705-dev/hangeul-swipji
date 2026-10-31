@@ -28,6 +28,14 @@ jobs:
           grep -F 'EnvironmentFile=/etc/hangeul-swipji/queue-sync.env' automation/deploy/hangeul-queue-sync.service
           grep -F 'ExecStart=/usr/bin/python3 -u /opt/hangeul-swipji-controller/automation/work_request_worker.py' automation/deploy/hangeul-queue-sync.service
           grep -F 'ExecStartPre=/usr/bin/bash /usr/local/libexec/hangeul-swipji/host-preflight.sh' automation/deploy/hangeul-ai-worker.service.d/10-host-guard.conf
+          # The controller itself must never run from the agent-editable worktree.
+          grep -Fx 'ExecStart=' automation/deploy/hangeul-ai-worker.service.d/10-host-guard.conf
+          grep -Fx 'ExecStart=/usr/bin/python3 -u /opt/hangeul-swipji-controller/automation/ai_agent_runner.py' automation/deploy/hangeul-ai-worker.service.d/10-host-guard.conf
+          grep -Fx 'WorkingDirectory=/opt/hangeul-swipji-controller' automation/deploy/hangeul-ai-worker.service.d/10-host-guard.conf
+          grep -Fx 'Environment=PYTHONPATH=/opt/hangeul-swipji-controller/automation' automation/deploy/hangeul-ai-worker.service.d/10-host-guard.conf
+          grep -F 'missing or symlinked controller path' automation/deploy/host-preflight.sh
+          grep -F 'controller path writable by non-root' automation/deploy/host-preflight.sh
+          ! grep -F 'ExecStart=/usr/bin/python3 -u /srv/hangeul-swipji/' automation/deploy/hangeul-ai-worker.service.d/10-host-guard.conf
           grep -F 'trusted=/usr/local/libexec/hangeul-swipji/host-preflight.sh' automation/deploy/host-preflight.sh
           grep -F '/usr/bin/env -u GH_TOKEN -u GITHUB_TOKEN -u OPENAI_API_KEY' automation/deploy/host-preflight.sh
           grep -F 'remote get-url --push --all origin' automation/deploy/host-preflight.sh
