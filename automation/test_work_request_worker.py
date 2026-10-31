@@ -135,5 +135,30 @@ class WorkerStoreTests(unittest.TestCase):
         self.assertNotIn("agent_invoked", self.a.snapshot(101))
 
 
+    def test_audit_stale_lease_after_restart_and_same_name_reclaim(self):
+        """A prior process must not finish, heartbeat or fail a newer lease."""
+        self.a.ingest(self.work, now=100)
+        old = self.a.claim("central", now=101, lease_seconds=30)
+        self.a.close()
+        self.a = DurableWorkStore(self.path)
+        new = self.a.claim("central", now=131, lease_seconds=30)
+        self.assertEqual(new["attempt"], 2)
+        self.assertNotEqual(old["owner"], new["owner"])
+        self.assertFalse(self.a.heartbeat(101, old["owner"], now=132))
+        self.assertFalse(self.a.fail(101, old["owner"], now=132))
+        self.assertFalse(self.a.finish(101, old["owner"], "run=old sha=old", now=132))
+        self.assertEqual(self.a.snapshot(101)["lease_owner"], new["owner"])
+        self.assertTrue(self.a.finish(101, new["owner"], "run=new sha=new", now=132))
+
+    def test_audit_closed_request_is_not_executable_after_reconciliation(self):
+        """Closing a GitHub work issue must cancel its pending execution."""
+        self.a.ingest(self.work, now=100)
+        # The next GitHub poll sees the issue closed. Current main() ingests only
+        # open issues, so the durable row must not remain executable.
+        self.assertIsNotNone(self.a.snapshot(101))
+        self.assertIsNone(self.a.claim("central", now=102),
+                          "QA safety FAIL: previously queued but now-closed issue still executable")
+
+
 if __name__ == "__main__":
     unittest.main()
