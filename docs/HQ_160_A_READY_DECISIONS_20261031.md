@@ -173,3 +173,24 @@ The #129 initial product HEAD `5aec04ee08fd23d985de125f79de192699b88e84` was sup
 ### #129 corrected exact-SHA source CI result (2026-11-01 KST)
 
 Product HEAD `8c55a12445182bf2c33962702925e6b7831ca59b`: Phase3 Actions `41239990608`, job `124651714999`, **SUCCESS 690/690**, raw `Ran 690 tests in 111.602s / OK`. All 20 #129 new product regressions passed. Integration `41239990572` browser-evidence SUCCESS; validate in progress at checkpoint. B exact-SHA QA_PENDING; **no new INTERNAL_READY**, cumulative **11/160**. Issue #34 evidence comment `6548898152`.
+
+
+## A P0 #129 original contract adjudication — 2026-11-01 06:31 KST
+
+**A INTERNAL_READY +1: original #129 is a structure-building contract, not an authorization to issue receipts or file taxes.** Original immutable 160 ledger `automation/hq_backlog_160.md` #129: `거래 명세·영수증·강사 정산서·소득 관련 자료를 제공할 구조를 만든다.` Contract `docs/HQ_160_DEVELOPMENT_CONTRACTS_20261029.md` #129 requires requirement and negative regression evidence; no operating deployment is included. A independently reviewed the product source and B-only tests at the exact immutable SHAs.
+
+| Original #129 subclause | Code evidence at exact SHA | A decision |
+|---|---|---|
+| 거래 명세 구조 | `build_document_bundle().documents.transaction_statement` provides stable transaction statement preview, gross/refund/net KRW and booking ID | **CODE_READY** |
+| 영수증 구조 | `documents.receipt_preview` with deterministic preview ID and explicit `NOT_A_FISCAL_OR_PROVIDER_RECEIPT`, null provider reference | **CODE_READY as non-issued preview** |
+| 강사 정산서 구조 | `documents.teacher_settlement` calculates fees, disbursement, due, remaining; #128 reconciliation and overpayment HOLD | **CODE_READY** |
+| 소득 관련 자료 구조 | `documents.income_support_data` binds teacher/country to stable ID, tax treatment undetermined, withholding null | **CODE_READY as data preview** |
+| 기본 보안·경계 | Strict IDs/types, actor-role view isolation, defensive copy, missing evidence/policy HOLD, no external I/O | **CODE_READY**, *not* authenticated API |
+
+**Immutable product proof:** Draft PR #228, branch `product/task129-document-bundle-20261101-a15`, exact product SHA `8c55a12445182bf2c33962702925e6b7831ca59b`, files `phase3/team14_document_bundle_preview.py` and `phase3/test_task129_document_bundle_preview.py` (20 authored tests). Source Phase3 Actions [41239990608](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41239990608) **690/690 SUCCESS**; source integration [41239990572](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41239990572) validate and browser-evidence jobs **SUCCESS**.
+
+**Independent B/15 proof:** QA-only PR #230, base exactly product SHA `8c55a12445182bf2c33962702925e6b7831ca59b`, QA SHA `d34f303b6b4098c28fe3d92738ae906e766c78c2`, sole new file `phase3/test_bqa_task129_documents_independent.py` (15 independent tests). Independent Phase3 [41240061691](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41240061691) **705/705 SUCCESS**, integration [41240061526](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41240061526) validate **705/705 SUCCESS** and browser-evidence **SUCCESS**; B explicit scoped QA_PASS in Issue #34 comment `6548934287`. Source and B CI runs are distinct and their exact SHAs remain unchanged.
+
+**A final adjudication:** #129 **INTERNAL_READY=1, limited strictly to the original requirement to *build four document data structures*.** This is NOT a production-issued receipt, authenticated learner/teacher delivery, tax certificate, country-specific tax determination, approved financial policy, real provider/ledger evidence, live payment/payout or operating deployment. Those are independent **HOLD** gates under #122/#123/#125/#126/#127/#128/#130 and a future #129 authenticated delivery/official issuance integration gate. Mock booleans do not represent policy approval. No main/operating DB/site/TEST99/real money changed.
+
+**Original 160 cumulative INTERNAL_READY: 12/160, delta +1.** Previous 11 preserved: #101, #106, #108, #111, #112, #113, #114, #115, #118, #120, #124. New #129 only. #110/#125/#128 full original contracts remain HOLD. This evidence PR is not merged into main; future product integration must pin the SHA and revalidate.
