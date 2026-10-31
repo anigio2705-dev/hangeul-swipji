@@ -57,7 +57,7 @@ class SignedIssueWebhookTests(unittest.TestCase):
             self.call(event=event)
 
     def test_other_events_not_acknowledged_as_work(self):
-        self.assertEqual(self.call(event_type="workflow_run"), (202, "ignored_event"))
+        self.assertEqual(self.call(event_type="workflow_run"), (202, "ignored_workflow"))
         self.assertFalse(Path(self.db).exists())
 
     def test_other_active_request_blocks_second(self):
