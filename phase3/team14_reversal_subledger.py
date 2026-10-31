@@ -102,12 +102,27 @@ BEGIN SELECT RAISE(ABORT,'immutable simulated reversal'); END;
                 }
                 if set(original) != set(BUCKETS) or sum(original.values()) != gross:
                     raise AssertionError("original ledger invariant violated")
-                prior = _target_buckets(original, gross, refunded)
-                after = _target_buckets(original, gross, refunded + amount)
-                increments = {bucket: after[bucket] - prior[bucket]
-                              for bucket in BUCKETS}
+                # Allocate ONLY against the remaining, nonnegative bucket
+                # balances. Subtracting independently rounded cumulative
+                # targets can produce negative deltas after a partial refund.
+                reversed_by_bucket = {
+                    r["bucket"]: r["total"] for r in self.db.execute(
+                        "SELECT e.bucket, SUM(e.reversed_krw) AS total "
+                        "FROM sim_reversal_entry e "
+                        "JOIN sim_reversal v ON v.reversal_id=e.reversal_id "
+                        "WHERE v.tx_id=? GROUP BY e.bucket", (tx_id,))
+                }
+                balances = {
+                    bucket: original[bucket] - reversed_by_bucket.get(bucket, 0)
+                    for bucket in BUCKETS
+                }
+                if min(balances.values()) < 0 or sum(balances.values()) != remaining:
+                    raise AssertionError("remaining bucket invariant violated")
+                increments = _target_buckets(balances, remaining, amount)
                 if min(increments.values()) < 0 or sum(increments.values()) != amount:
                     raise AssertionError("reversal conservation violated")
+                if any(increments[b] > balances[b] for b in BUCKETS):
+                    raise AssertionError("bucket over-reversal")
                 self.db.execute(
                     "INSERT INTO sim_reversal VALUES(?,?,?,?,?,?)",
                     (reversal_id, tx_id, evidence_id, event_kind, amount, digest))
