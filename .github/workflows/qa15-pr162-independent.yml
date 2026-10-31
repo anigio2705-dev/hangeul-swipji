@@ -1,0 +1,31 @@
+name: QA15 PR162 independent exact-SHA negative checks
+on:
+  push:
+    branches:
+      - qa15/pr162-independent-20261031-0212
+  pull_request:
+    paths:
+      - automation/qa15_pr162_independent.py
+      - .github/workflows/qa15-pr162-independent.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qa15-independent:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Record QA-only head and exact central base
+        shell: bash
+        run: |
+          echo "QA15_CENTRAL_BASE=99adfa4035fa88844524d6b1b190175b543f282c"
+          echo "QA15_QA_ONLY_HEAD=$GITHUB_SHA"
+          echo "QA15_CORRELATION_ID=QA15-20261031T0212Z-PR162-99ADFA"
+          git diff --name-only 99adfa4035fa88844524d6b1b190175b543f282c "$GITHUB_SHA"
+      - name: Independent watchdog and SQLite lease fencing counterexamples
+        shell: bash
+        run: |
+          PYTHONPATH=automation python -m unittest -v automation/qa15_pr162_independent.py
