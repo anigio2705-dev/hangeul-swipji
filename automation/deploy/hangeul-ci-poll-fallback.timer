@@ -1,0 +1,12 @@
+[Unit]
+Description=Fallback poll for missed GitHub CI events (candidate outbox only)
+
+[Timer]
+OnBootSec=60s
+OnUnitInactiveSec=60s
+AccuracySec=2s
+Persistent=true
+Unit=hangeul-ci-poll-fallback.service
+
+[Install]
+WantedBy=timers.target
