@@ -90,7 +90,7 @@ def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"), 
         except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError):
             store.fail(issue, owner)
             return {"status": "PUSH_FAILED", "issue": issue}
-        if advertised != f"{sha}\\trefs/heads/{branch}":
+        if advertised.split() != [sha, f"refs/heads/{branch}"]:
             store.fail(issue, owner)
             return {"status": "REMOTE_SHA_MISMATCH", "issue": issue}
         proof = f"issue={issue} branch={branch} remote_sha={sha} agent=codex QA_PENDING"
