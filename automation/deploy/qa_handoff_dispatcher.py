@@ -29,7 +29,7 @@ def _request(path, token, payload=None):
         return json.load(response)
 
 
-def _existing_comment(repo, issue_number, token, marker):
+def _existing_comment(repo, issue_number, token, marker, legacy_marker=None):
     # Search the full thread. Never risk an ambiguous duplicate POST because
     # the first page omitted a comment from a long-running issue.
     for page in range(1, 21):
@@ -39,7 +39,13 @@ def _existing_comment(repo, issue_number, token, marker):
         if not isinstance(rows, list):
             raise ValueError("malformed issue comments")
         for item in rows:
-            if marker in str(item.get("body", "")):
+            body = str(item.get("body", ""))
+            if marker in body:
+                return item.get("html_url", "")
+            # Before run/attempt markers existed, attempt 1 used a bare
+            # PR/SHA marker. Match the *whole line* only; never confuse a
+            # newer attempt-specific marker with the legacy form.
+            if legacy_marker and legacy_marker in body.splitlines():
                 return item.get("html_url", "")
         if len(rows) < 100:
             return None
@@ -176,7 +182,8 @@ def dispatch_once(db_path, *, token, repo, issue_number=34, now=None):
         if row is None:
             return "IDLE"
         run_id, attempt, pr, sha, branch, base, previous, ci_at, post_at, tries, lease = row
-        marker = f"HS_B_QA_HANDOFF pr={pr} sha={sha}"
+        legacy_marker = f"HS_B_QA_HANDOFF pr={pr} sha={sha}"
+        marker = f"{legacy_marker} run={run_id} attempt={attempt}"
         uncertain = bool(post_at) or previous in ("AMBIGUOUS_POST", "POST_IN_FLIGHT")
         # Validate before even reading remote data. Never post on malformed rows.
         if (type(pr) is not int or pr < 1 or type(run_id) is not int
@@ -188,7 +195,14 @@ def dispatch_once(db_path, *, token, repo, issue_number=34, now=None):
         try:
             run = _request(f"/repos/{repo}/actions/runs/{run_id}", token)
             pull = _request(f"/repos/{repo}/pulls/{pr}", token)
-            if (run.get("head_sha") != sha or run.get("run_attempt") != attempt
+            run_prs = run.get("pull_requests")
+            run_repo = run.get("head_repository")
+            if (not isinstance(run_prs, list)
+                    or not any(isinstance(item, dict)
+                               and item.get("number") == pr for item in run_prs)
+                    or not isinstance(run_repo, dict)
+                    or run_repo.get("full_name") != repo
+                    or run.get("head_sha") != sha or run.get("run_attempt") != attempt
                     or run.get("status") != "completed"
                     or run.get("conclusion") != "success"
                     or run.get("event") != "pull_request"
@@ -210,7 +224,9 @@ def dispatch_once(db_path, *, token, repo, issue_number=34, now=None):
                 _finish(db, row, lease, "RETRY_WAIT", now,
                         error="CI_NOT_COMPLETE", retry=True)
                 return "CI_NOT_COMPLETE"
-            found = _existing_comment(repo, issue_number, token, marker)
+            found = _existing_comment(
+                repo, issue_number, token, marker,
+                legacy_marker if attempt == 1 else None)
             if found is not None:
                 _finish(db, row, lease, "B_QA_REQUESTED", now, requested=True)
                 return "RECONCILED"
