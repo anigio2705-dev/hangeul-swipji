@@ -98,5 +98,35 @@ class EventQueueTest(unittest.TestCase):
             advance(QueueState(102, A), "force", "READY", A)
 
 
+    def test_qa15_failed_sha_must_not_requalify_without_new_commit(self):
+        """Independent QA regression: a FAIL requires central fix at a NEW SHA.
+
+        Same-SHA DEV_PASS must not erase a failed candidate and reach
+        ATTESTATION_PENDING without a changed commit / new QA evidence.
+        """
+        s = QueueState(102, A)
+        s = advance(s, "qa15-dev-1", "DEV_PASS", A)
+        s = advance(s, "qa15-fail-1", "QA_FAIL", A)
+        self.assertEqual(s.phase, "REWORK")
+        s = advance(s, "qa15-rework-start", "REWORK_STARTED", A)
+        # A developer merely repeating PASS on the rejected SHA is not a fix.
+        with self.assertRaises(ValueError):
+            advance(s, "qa15-same-sha-dev-pass", "DEV_PASS", A)
+
+    def test_qa15_failed_sha_cannot_reach_attestation_by_replaying_steps(self):
+        """Do not accept QA_PASS + CENTRAL_PASS on a previously failed SHA."""
+        s = QueueState(102, A)
+        s = advance(s, "qa15-dev", "DEV_PASS", A)
+        s = advance(s, "qa15-fail", "QA_FAIL", A)
+        s = advance(s, "qa15-rework", "REWORK_STARTED", A)
+        # This test intentionally exposes current missing new-SHA guard.
+        s = advance(s, "qa15-dev-repeat", "DEV_PASS", A)
+        s = advance(s, "qa15-qa-repeat", "QA_PASS", A)
+        s = advance(s, "qa15-central-repeat", "CENTRAL_PASS", A)
+        self.assertNotEqual(s.phase, "ATTESTATION_PENDING",
+                            "QA_FAIL candidate re-qualified at unchanged SHA")
+
+
+
 if __name__ == "__main__":
     unittest.main()
