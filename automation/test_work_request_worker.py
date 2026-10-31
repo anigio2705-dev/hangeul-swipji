@@ -153,8 +153,10 @@ class WorkerStoreTests(unittest.TestCase):
     def test_audit_closed_request_is_not_executable_after_reconciliation(self):
         """Closing a GitHub work issue must cancel its pending execution."""
         self.a.ingest(self.work, now=100)
-        # The next GitHub poll sees the issue closed. Current main() ingests only
-        # open issues, so the durable row must not remain executable.
+        # The next GitHub open-issue poll omits this closed request. Current
+        # main() ingests only pending(open_issues), without reconciling closures.
+        from continuous_dispatcher import pending
+        self.assertEqual(pending([{**self.work, "state": "closed"}]), [])
         self.assertIsNotNone(self.a.snapshot(101))
         self.assertIsNone(self.a.claim("central", now=102),
                           "QA safety FAIL: previously queued but now-closed issue still executable")
