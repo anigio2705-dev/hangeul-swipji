@@ -10,7 +10,8 @@ from pathlib import Path
 from unittest.mock import patch
 from urllib.error import HTTPError
 
-from ai_agent_runner import DeliveryBlocked, _origin_remote_status, ensure_draft_pr, run_once
+from ai_agent_runner import (DeliveryBlocked, _origin_remote_status, _run_with_lease,
+                             ensure_draft_pr, run_once)
 from continuous_dispatcher import MARKER
 from work_request_worker import DurableWorkStore
 
@@ -258,6 +259,27 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(self.git(["ls-remote", str(rogue),
                                    "refs/heads/work/qa-sim"]).stdout.strip(), "")
         self.assertNotEqual(self.store.snapshot(301)["status"], "REPORTED")
+
+
+    def test_qa15_lease_lost_at_push_handoff_blocks_remote_write(self):
+        """Deterministic lease-loss race at push entry, not a real Codex call."""
+        code = ('from pathlib import Path; import subprocess; '
+                'Path("agent-output.txt").write_text("fake only"); '
+                'subprocess.run(["git","add","agent-output.txt"],check=True); '
+                'subprocess.run(["git","commit","-qm","fake agent commit"],check=True)')
+
+        def expire_before_push(command, **kwargs):
+            if command[:2] == ["git", "push"]:
+                self.store.reconcile_open(set())
+            return _run_with_lease(command, **kwargs)
+
+        with patch("ai_agent_runner._run_with_lease",
+                   side_effect=expire_before_push):
+            result = self.invoke((sys.executable, "-c", code))
+        self.assertEqual(result["status"], "LEASE_LOST")
+        self.assertEqual(self.store.snapshot(301)["status"], "CANCELLED")
+        self.assertEqual(self.git(["ls-remote", "origin",
+                                   "refs/heads/work/qa-sim"]).stdout.strip(), "")
 
 
 if __name__ == "__main__":
