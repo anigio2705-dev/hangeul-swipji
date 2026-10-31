@@ -156,6 +156,13 @@ def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"),
                        f"git@github.com:{expected}", f"git@github.com:{expected}.git"}
     if remote not in allowed_remotes:
         return {"status": "UNSAFE_REMOTE"}
+    # Git may use a distinct pushURL even when the fetch URL is trusted.
+    # Resolve Git's effective push destination, including url.*.pushInsteadOf.
+    push_remote = subprocess.run(
+        ["git", "remote", "get-url", "--push", "origin"], cwd=workdir,
+        capture_output=True, text=True, check=True).stdout.strip()
+    if push_remote not in allowed_remotes or push_remote != remote:
+        return {"status": "UNSAFE_PUSH_REMOTE"}
     if subprocess.run(["git", "status", "--porcelain"], cwd=workdir,
                       capture_output=True, text=True, check=True).stdout.strip():
         return {"status": "DIRTY_WORKTREE"}
