@@ -119,7 +119,7 @@ def dispatch_once(db_path, *, token, repo, issue_number=34, now=None):
                 return "AMBIGUOUS_POST"
             message = (
                 f"[신임 C 자동 CI→B QA 요청] {marker}\n"
-                f"PR #{pr} 정확 HEAD \\u0060{sha}\\u0060 / CI run {run_id} SUCCESS. "
+                f"PR #{pr} 정확 HEAD {sha} / CI run {run_id} SUCCESS. "
                 "B/15팀은 이 SHA만 독립 QA_PASS/FAIL 검증하십시오. "
                 "CI_PASS는 QA_PASS나 A READY가 아니며 자동 병합·운영 배포 금지. "
                 f"CI completed_at={ci_at or 'UNKNOWN'}; QA request at={now} epoch."
@@ -137,13 +137,22 @@ def dispatch_once(db_path, *, token, repo, issue_number=34, now=None):
 
 
 def main():
-    for key in ("HS_DURABLE_WORKER_DB", "GH_TOKEN", "GITHUB_REPOSITORY"):
+    # systemd LoadCredential supplies the GitHub token as a protected file,
+    # never as a GH_TOKEN environment variable inherited by an AI subprocess.
+    for key in ("HS_DURABLE_WORKER_DB", "GITHUB_REPOSITORY",
+                "CREDENTIALS_DIRECTORY"):
         if not os.environ.get(key):
-            raise SystemExit("missing controller configuration")
+            raise SystemExit("missing isolated dispatcher configuration")
+    from pathlib import Path
+    credentials = Path(os.environ["CREDENTIALS_DIRECTORY"]) / "gh_token"
+    if credentials.is_symlink() or not credentials.is_file():
+        raise SystemExit("missing protected GitHub credential")
+    token = credentials.read_text(encoding="utf-8").strip()
+    if not token:
+        raise SystemExit("empty protected GitHub credential")
     result = dispatch_once(
         os.environ["HS_DURABLE_WORKER_DB"],
-        token=os.environ["GH_TOKEN"],
-        repo=os.environ["GITHUB_REPOSITORY"])
+        token=token, repo=os.environ["GITHUB_REPOSITORY"])
     print("QA_OUTBOX_RESULT=" + result)
     if result in ("AMBIGUOUS_POST", "STALE_OR_UNVERIFIED"):
         raise SystemExit(2)
