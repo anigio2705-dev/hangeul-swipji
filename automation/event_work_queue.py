@@ -64,7 +64,7 @@ def advance(state, event_id, action, sha, *, new_sha=None):
             ("REVIEW_PENDING", "CENTRAL_PASS"): "ATTESTATION_PENDING",
             ("REWORK", "REWORK_STARTED"): "DEVELOP",
         }
-        if action == "QA_FAIL" and state.phase == "QA_PENDING":
+        # A later independent QA failure must revoke an earlier PASS, even\n        # after central review; otherwise an already-attested candidate\n        # could proceed with known defects.\n        if action == "QA_FAIL" and state.phase in {\n            "QA_PENDING", "REVIEW_PENDING", "ATTESTATION_PENDING"\n        }:
             failures = state.qa_failures + 1
             result = replace(state, qa_failures=failures,
                              phase="BLOCKED" if failures >= MAX_QA_FAILURES else "REWORK")
