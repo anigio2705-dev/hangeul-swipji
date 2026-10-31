@@ -152,6 +152,40 @@ class DurableWorkStore:
             self.db.execute("ROLLBACK")
             raise
 
+    def fenced_remote_write(self, issue, owner, callback, *, minimum_seconds=150):
+        """Serialize remote side effects with durable cancellation/lease transfer.
+
+        The SQLite BEGIN IMMEDIATE transaction is the write fence: reconcile_open,
+        claim, fail, and finish cannot commit while this callback runs. A
+        cancellation committed first rejects the write. A cancellation arriving
+        during a write must wait for the write to finish before it commits.
+        Thus the ordering guarantee is by *committed* cancellation, not by
+        receipt of an asynchronous cancellation request.
+
+        Do not call other store methods inside callback (same-connection nested
+        transactions). The callback must be bounded by its own timeout; the
+        caller must provide an isolated controller process and transport.
+        This is a local SQLite fence, NOT a distributed/OS credential broker.
+        """
+        if minimum_seconds <= 0 or minimum_seconds > 3600:
+            raise ValueError("invalid remote-write budget")
+        self.db.execute("BEGIN IMMEDIATE")
+        try:
+            now = int(time.time())
+            row = self.db.execute(
+                """SELECT lease_until FROM work
+                   WHERE issue=? AND status='LEASED' AND lease_owner=?""",
+                (issue, owner)).fetchone()
+            if not row or row[0] <= now + minimum_seconds:
+                self.db.execute("COMMIT")
+                return None
+            result = callback()
+            self.db.execute("COMMIT")
+            return result
+        except BaseException:
+            self.db.execute("ROLLBACK")
+            raise
+
     def snapshot(self, issue):
         row = self.db.execute(
             "SELECT issue,status,lease_owner,lease_until,attempts,retry_after,proof FROM work WHERE issue=?",
