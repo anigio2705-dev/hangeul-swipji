@@ -97,6 +97,15 @@ class Task124WebhookInboxTests(unittest.TestCase):
             self.send(payload(card_number="4111111111111111"))
         self.assertIsNone(self.inbox.snapshot("book1"))
 
+    def test_signed_duplicate_json_members_rejected_before_state_change(self):
+        for raw in (
+            b'{"event_id":"evt1","event_id":"evt2","booking_id":"book1","sequence":1,"status":"pending"}',
+            b'{"event_id":"evt1","booking_id":"book1","sequence":99,"sequence":1,"status":"pending"}',
+        ):
+            with self.subTest(raw=raw), self.assertRaisesRegex(ValueError, "JSON"):
+                self.send(raw)
+        self.assertIsNone(self.inbox.snapshot("book1"))
+
     def test_invalid_identifiers_and_bool_sequence_rejected(self):
         for raw in (payload(event_id="../forged"),
                     payload(booking_id="bad/path"),
