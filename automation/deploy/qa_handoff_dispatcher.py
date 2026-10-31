@@ -48,7 +48,7 @@ def _mark(db, run_id, attempt, state, *, requested_at=None):
     db.execute("BEGIN IMMEDIATE")
     try:
         db.execute(
-            "UPDATE ci_qa_outbox SET state=?, received_at=COALESCE(?,received_at) "
+            "UPDATE ci_qa_outbox SET state=?, qa_requested_at=COALESCE(?,qa_requested_at) "
             "WHERE run_id=? AND run_attempt=?",
             (state, requested_at, run_id, attempt))
         db.execute("COMMIT")
@@ -71,7 +71,7 @@ def dispatch_once(db_path, *, token, repo, issue_number=34, now=None):
         try:
             row = db.execute(
                 """SELECT run_id,run_attempt,pr_number,head_sha,branch,base_ref,
-                          state,received_at,ci_completed_at
+                          state,processing_at,ci_completed_at
                    FROM ci_qa_outbox
                    WHERE state IN ('PENDING_B_QA_REQUEST','SENDING','AMBIGUOUS_POST')
                    ORDER BY received_at,run_id LIMIT 1""").fetchone()
@@ -83,7 +83,7 @@ def dispatch_once(db_path, *, token, repo, issue_number=34, now=None):
                 db.execute("COMMIT")
                 return "IN_FLIGHT"
             db.execute(
-                "UPDATE ci_qa_outbox SET state='SENDING',received_at=? "
+                "UPDATE ci_qa_outbox SET state='SENDING',processing_at=? "
                 "WHERE run_id=? AND run_attempt=?",
                 (now, run_id, attempt))
             db.execute("COMMIT")
