@@ -1,0 +1,21 @@
+[Unit]
+Description=Hangeul Swipji durable GitHub work-request ingest (pilot)
+After=network-online.target
+Wants=network-online.target
+RequiresMountsFor=/var/lib/hangeul-swipji
+AssertPathIsMountPoint=/var/lib/hangeul-swipji
+
+[Service]
+Type=oneshot
+User=hangeul-worker
+WorkingDirectory=/srv/hangeul-swipji
+EnvironmentFile=/etc/hangeul-swipji/worker.env
+Environment=PYTHONPATH=/srv/hangeul-swipji/automation
+ExecStart=/usr/bin/python3 -u /srv/hangeul-swipji/automation/work_request_worker.py
+TimeoutStartSec=120
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/hangeul-swipji
+ProtectHome=true
+UMask=0077
