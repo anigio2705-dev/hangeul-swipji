@@ -17,6 +17,28 @@ import urllib.request
 API = "https://api.github.com"
 DB_ROOT = "/var/lib/hangeul-swipji/"
 
+def _trusted_db_path(db_path, root=None):
+    """Reject traversal and symlink escapes before opening a durable DB.
+
+    This is a path-containment preflight, not an OS-level defense against
+    concurrent directory replacement; a trusted host must enforce directory
+    ownership and mount permissions independently.
+    """
+    if root is None:
+        root = DB_ROOT
+    if (not isinstance(db_path, str) or not os.path.isabs(db_path)
+            or "\\x00" in db_path or ".." in db_path.split(os.sep)):
+        raise ValueError("untrusted durable database path")
+    trusted_root = os.path.normpath(root)
+    candidate = os.path.normpath(db_path)
+    if (os.path.commonpath((trusted_root, candidate)) != trusted_root
+            or candidate == trusted_root
+            or os.path.realpath(trusted_root) != trusted_root
+            or os.path.realpath(candidate) != candidate):
+        raise ValueError("durable database outside trusted directory")
+    return candidate
+
+
 
 def _request(path, token, payload=None):
     data = json.dumps(payload).encode() if payload is not None else None
@@ -235,8 +257,7 @@ def dispatch_once(db_path, *, token, repo, issue_number=34, now=None):
     """One eligible exact-SHA handoff. Unknown POST is reconcile-only."""
     if not token or repo != "anigio2705-dev/hangeul-swipji":
         raise ValueError("missing controller token or unapproved repo")
-    if not db_path.startswith(DB_ROOT):
-        raise ValueError("expected mounted durable database")
+    db_path = _trusted_db_path(db_path)
     now = int(time.time() if now is None else now)
     db = sqlite3.connect(db_path, timeout=15, isolation_level=None)
     try:
