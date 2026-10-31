@@ -91,7 +91,8 @@ def dispatch_once(db_path, *, token, repo, issue_number=34, now=None):
             db.execute("ROLLBACK")
             raise
 
-        marker = f"HS_B_QA_HANDOFF run={run_id} attempt={attempt} sha={sha}"
+        # One B QA request per PR+SHA, even when multiple CI workflows succeed.
+        marker = f"HS_B_QA_HANDOFF pr={pr} sha={sha}"
         try:
             # Both immutable CI run identity and CURRENT PR HEAD must match.
             # A newer PR commit invalidates this old handoff.
@@ -108,6 +109,18 @@ def dispatch_once(db_path, *, token, repo, issue_number=34, now=None):
                     or not pull.get("draft")):
                 _mark(db, run_id, attempt, "STALE_OR_UNVERIFIED")
                 return "STALE_OR_UNVERIFIED"
+            checks = _request(
+                f"/repos/{repo}/commits/{sha}/check-runs?per_page=100", token)
+            rows = checks.get("check_runs") if isinstance(checks, dict) else None
+            if (not isinstance(rows, list) or not rows
+                    or type(checks.get("total_count")) is not int
+                    or checks["total_count"] != len(rows)
+                    or any(item.get("status") != "completed"
+                           or item.get("conclusion") != "success"
+                           for item in rows)):
+                # One successful workflow is NOT proof that all CI is green.
+                _mark(db, run_id, attempt, "PENDING_B_QA_REQUEST")
+                return "CI_NOT_COMPLETE"
             found = _existing_comment(repo, issue_number, token, marker)
             if found is not None:
                 _mark(db, run_id, attempt, "B_QA_REQUESTED", requested_at=now)
