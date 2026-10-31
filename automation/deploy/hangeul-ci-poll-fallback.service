@@ -1,0 +1,23 @@
+[Unit]
+Description=Hangeul Swipji read-only CI polling fallback to durable QA outbox (not a QA approval)
+After=network-online.target
+Wants=network-online.target
+RequiresMountsFor=/var/lib/hangeul-swipji
+AssertPathIsMountPoint=/var/lib/hangeul-swipji
+
+[Service]
+Type=oneshot
+User=hangeul-qa-dispatcher
+Group=hangeul-queue
+WorkingDirectory=/opt/hangeul-swipji-controller
+EnvironmentFile=/etc/hangeul-swipji/qa-dispatcher.env
+Environment=PYTHONPATH=/opt/hangeul-swipji-controller/automation/deploy
+LoadCredential=gh_token:/etc/hangeul-swipji/qa-dispatcher.token
+ExecStart=/usr/bin/python3 -u /opt/hangeul-swipji-controller/automation/deploy/ci_poll_fallback.py
+TimeoutStartSec=180
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/hangeul-swipji
+ProtectHome=true
+UMask=0077
