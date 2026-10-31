@@ -143,7 +143,9 @@ class SignedIssueWebhookTests(unittest.TestCase):
             if "/actions/runs/" in path:
                 return {"head_sha": "a" * 40, "run_attempt": 1,
                         "status": "completed", "conclusion": "success",
-                        "event": "pull_request"}
+                        "event": "pull_request",
+                        "pull_requests": [{"number": 162}],
+                        "head_repository": {"full_name": self.repo}}
             if "/check-runs?" in path:
                 return {"total_count": 1, "check_runs": [
                     {"status": "completed", "conclusion": "success"}]}
@@ -189,7 +191,9 @@ class SignedIssueWebhookTests(unittest.TestCase):
             if "/actions/runs/" in path:
                 return {"head_sha": "a" * 40, "run_attempt": 1,
                         "status": "completed", "conclusion": "success",
-                        "event": "pull_request"}
+                        "event": "pull_request",
+                        "pull_requests": [{"number": 162}],
+                        "head_repository": {"full_name": self.repo}}
             if "/check-runs?" in path:
                 return {"total_count": 1, "check_runs": [
                     {"status": "completed", "conclusion": "success"}]}
@@ -229,7 +233,9 @@ class SignedIssueWebhookTests(unittest.TestCase):
             if "/actions/runs/" in path:
                 return {"head_sha": "a" * 40, "run_attempt": 1,
                         "status": "completed", "conclusion": "success",
-                        "event": "pull_request"}
+                        "event": "pull_request",
+                        "pull_requests": [{"number": 162}],
+                        "head_repository": {"full_name": self.repo}}
             if "/pulls/" in path:
                 return {"head": {"sha": "a" * 40, "ref": "support/safe-work"},
                         "base": {"ref": "automation/isolated-base"},
@@ -295,7 +301,9 @@ class SignedIssueWebhookTests(unittest.TestCase):
                 ident = int(path.rsplit("/", 1)[-1])
                 return {"head_sha": ("a" if ident == 99 else "b") * 40,
                         "run_attempt": 1, "status": "completed",
-                        "conclusion": "success", "event": "pull_request"}
+                        "conclusion": "success", "event": "pull_request",
+                        "pull_requests": [{"number": 162 if ident == 99 else 163}],
+                        "head_repository": {"full_name": self.repo}}
             if "/pulls/" in path:
                 ident = int(path.rsplit("/", 1)[-1])
                 return {"head": {"sha": ("a" if ident == 162 else "b") * 40,
