@@ -6,7 +6,7 @@ are untrusted unless a future authenticated server adapter verifies them.
 """
 import re
 
-_ID = re.compile(r"[A-Za-z0-9_-]{1,64}\\Z")
+_ID = re.compile(r"[A-Za-z0-9_-]{1,64}\Z")
 _ALLOWED_PAYOUT_STATES = frozenset(("paid", "pending", "failed"))
 
 
