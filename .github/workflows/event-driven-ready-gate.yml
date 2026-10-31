@@ -21,6 +21,8 @@ on:
       - 'automation/test_push_broker_supervisor.py'
       - 'automation/push_broker_authority.py'
       - 'automation/test_push_broker_authority.py'
+      - 'automation/push_broker_os_guard.py'
+      - 'automation/test_push_broker_os_guard.py'
       - '.github/workflows/continuous-work-request.yml'
   workflow_dispatch:
 
@@ -66,8 +68,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m py_compile automation/push_broker_supervisor.py automation/push_broker_authority.py
-          PYTHONPATH=automation python -m unittest automation/test_push_broker_supervisor.py automation/test_push_broker_authority.py -v
+          python -m py_compile automation/push_broker_supervisor.py automation/push_broker_authority.py automation/push_broker_os_guard.py
+          PYTHONPATH=automation python -m unittest automation/test_push_broker_supervisor.py automation/test_push_broker_authority.py automation/test_push_broker_os_guard.py -v
       - name: Fail closed if candidate PR moved
         shell: bash
         env:
