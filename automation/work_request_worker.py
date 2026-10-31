@@ -9,6 +9,7 @@ import json
 import os
 import sqlite3
 import time
+import uuid
 
 from continuous_dispatcher import MARKER, QueueIntegrityError
 
@@ -55,6 +56,7 @@ class DurableWorkStore:
         if not isinstance(owner, str) or not owner.strip() or not 30 <= lease_seconds <= 3600:
             raise ValueError("invalid worker lease")
         now = int(time.time() if now is None else now)
+        lease_identity = owner + ':' + uuid.uuid4().hex
         self.db.execute("BEGIN IMMEDIATE")
         try:
             # Expired leases are eligible for redelivery, not proof of completion.
@@ -73,9 +75,9 @@ class DurableWorkStore:
             number, title, attempts = row
             self.db.execute("""UPDATE work SET status='LEASED',lease_owner=?,
                 lease_until=?,attempts=? WHERE issue=?""",
-                (owner, now + lease_seconds, attempts + 1, number))
+                (lease_identity, now + lease_seconds, attempts + 1, number))
             self.db.execute("COMMIT")
-            return {"issue": number, "title": title, "owner": owner,
+            return {"issue": number, "title": title, "owner": lease_identity,
                     "attempt": attempts + 1, "lease_until": now + lease_seconds}
         except Exception:
             self.db.execute("ROLLBACK")
