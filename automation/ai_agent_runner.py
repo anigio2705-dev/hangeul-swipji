@@ -141,6 +141,31 @@ def _run_with_lease(command, *, cwd, store, issue, owner, timeout,
             process.communicate()
 
 
+
+def _origin_remote_status(workdir, allowed_remotes):
+    """Reject Git URL rewrites and multi-push destinations before any push.
+
+    Git's --push --all resolves pushInsteadOf and all configured pushurl
+    values. A single trusted fetch URL is insufficient authorization.
+    """
+    def resolved_urls(*args):
+        proc = subprocess.run(["git", "remote", "get-url", *args, "origin"],
+                              cwd=workdir, capture_output=True, text=True,
+                              check=False)
+        if proc.returncode:
+            return []
+        return [url.strip() for url in proc.stdout.splitlines() if url.strip()]
+
+    fetch_urls = resolved_urls("--all")
+    if len(fetch_urls) != 1 or fetch_urls[0] not in allowed_remotes:
+        return "UNSAFE_REMOTE"
+    push_urls = resolved_urls("--push", "--all")
+    if (len(push_urls) != 1 or push_urls[0] not in allowed_remotes
+            or push_urls[0] != fetch_urls[0]):
+        return "UNSAFE_PUSH_REMOTE"
+    return None
+
+
 def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"),
              timeout=2400, heartbeat_interval=5):
     before = subprocess.run(["git", "branch", "--show-current"], cwd=workdir,
@@ -149,20 +174,12 @@ def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"),
     if (not re.fullmatch(r"(?:work|automation|agent)/[A-Za-z0-9][A-Za-z0-9._/-]{0,100}", before)
             or ".." in before or "//" in before or before.endswith(("/", "."))):
         return {"status": "UNSAFE_BRANCH"}
-    remote = subprocess.run(["git", "remote", "get-url", "origin"], cwd=workdir,
-                            capture_output=True, text=True, check=True).stdout.strip()
     expected = os.environ.get("GITHUB_REPOSITORY", "anigio2705-dev/hangeul-swipji")
     allowed_remotes = {f"https://github.com/{expected}", f"https://github.com/{expected}.git",
                        f"git@github.com:{expected}", f"git@github.com:{expected}.git"}
-    if remote not in allowed_remotes:
-        return {"status": "UNSAFE_REMOTE"}
-    # Git may use a distinct pushURL even when the fetch URL is trusted.
-    # Resolve Git's effective push destination, including url.*.pushInsteadOf.
-    push_remote = subprocess.run(
-        ["git", "remote", "get-url", "--push", "origin"], cwd=workdir,
-        capture_output=True, text=True, check=True).stdout.strip()
-    if push_remote not in allowed_remotes or push_remote != remote:
-        return {"status": "UNSAFE_PUSH_REMOTE"}
+    remote_status = _origin_remote_status(workdir, allowed_remotes)
+    if remote_status:
+        return {"status": remote_status}
     if subprocess.run(["git", "status", "--porcelain"], cwd=workdir,
                       capture_output=True, text=True, check=True).stdout.strip():
         return {"status": "DIRTY_WORKTREE"}
@@ -222,13 +239,12 @@ def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"),
         if ancestry.returncode:
             store.fail(issue, owner)
             return {"status": "NON_FAST_FORWARD", "issue": issue}
-        # Revalidate the remote after the agent: it may have changed config.
-        remote_after = subprocess.run(
-            ["git", "remote", "get-url", "origin"], cwd=workdir,
-            capture_output=True, text=True, check=True).stdout.strip()
-        if remote_after not in allowed_remotes:
+        # The agent may change remote.origin.pushurl or url.*.pushInsteadOf
+        # after the initial check. Re-resolve all effective destinations.
+        remote_status = _origin_remote_status(workdir, allowed_remotes)
+        if remote_status:
             store.fail(issue, owner)
-            return {"status": "UNSAFE_REMOTE", "issue": issue}
+            return {"status": remote_status, "issue": issue}
         # Monitor the push itself; a lost lease must kill its process group.
         # GitHub cannot guarantee rollback of a push already accepted before
         # cancellation, so downstream delivery still needs idempotency.
