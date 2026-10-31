@@ -72,6 +72,20 @@ class RunnerTests(unittest.TestCase):
                                     agent_command=agent_command, timeout=timeout,
                                     heartbeat_interval=heartbeat_interval)
 
+    def test_real_github_push_requires_isolated_broker(self):
+        from ai_agent_runner import _push_from_trusted_repo
+        # A successful local fake CLI is NOT permission to push to GitHub.
+        # No process, credential or network operation may start here.
+        with patch("ai_agent_runner.subprocess.run",
+                   side_effect=AssertionError("unexpected Git process")):
+            self.assertEqual(
+                _push_from_trusted_repo(
+                    workdir=str(self.workdir), branch="work/qa-sim",
+                    sha="a" * 40, repo="anigio2705-dev/hangeul-swipji",
+                    store=self.store, issue=301, owner="unused",
+                    heartbeat_interval=5),
+                "PUSH_BROKER_REQUIRED")
+
     def test_long_timeout_rejected_before_agent_call(self):
         result = self.invoke((sys.executable, "-c", "pass"), timeout=3600)
         self.assertEqual(result["status"], "UNSAFE_TIMEOUT")
