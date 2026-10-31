@@ -119,5 +119,20 @@ class WorkerStoreTests(unittest.TestCase):
         self.assertNotIn("agent_invoked", self.a.snapshot(101))
 
 
+    def test_qa15_expired_same_named_worker_cannot_finish_new_lease(self):
+        """A stale process must not complete a later attempt with the same owner label."""
+        self.a.ingest(self.work, now=100)
+        first = self.a.claim("central", now=101, lease_seconds=30)
+        self.assertEqual(first["attempt"], 1)
+        second = self.a.claim("central", now=131, lease_seconds=30)
+        self.assertEqual(second["attempt"], 2)
+        # The first process still knows the public owner string, but has lost its lease.
+        # An attempt-specific fencing token is required for safe at-least-once delivery.
+        self.assertFalse(
+            self.a.finish(101, first["owner"], "stale proof from old attempt", now=132),
+            "QA15 FAIL: stale attempt can mark the new lease REPORTED (owner ABA)",
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
