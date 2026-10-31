@@ -154,6 +154,8 @@ def _persist_ci_qa_event(event, *, db_path):
             pr_number INTEGER NOT NULL, head_sha TEXT NOT NULL,
             branch TEXT NOT NULL, base_ref TEXT NOT NULL,
             ci_completed_at TEXT NOT NULL, received_at INTEGER NOT NULL,
+            processing_at INTEGER NOT NULL DEFAULT 0,
+            qa_requested_at INTEGER NOT NULL DEFAULT 0,
             state TEXT NOT NULL DEFAULT 'PENDING_B_QA_REQUEST',
             PRIMARY KEY (run_id,run_attempt))""")
         connection.execute("BEGIN IMMEDIATE")
