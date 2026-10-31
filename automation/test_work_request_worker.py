@@ -92,6 +92,15 @@ class WorkerStoreTests(unittest.TestCase):
                              "BLOCKED" if n == 3 else "PENDING")
         self.assertIsNone(self.a.claim("central", now=10000))
 
+    def test_crash_after_third_claim_blocks_on_expiry(self):
+        self.a.ingest(self.work, now=100)
+        for n, t in enumerate((101, 162), start=1):
+            self.assertEqual(self.a.claim("central", now=t)["attempt"], n)
+            self.assertTrue(self.a.fail(101, "central", now=t + 1))
+        self.assertEqual(self.a.claim("central", now=283, lease_seconds=30)["attempt"], 3)
+        self.assertIsNone(self.a.claim("other", now=314))
+        self.assertEqual(self.a.snapshot(101)["status"], "BLOCKED")
+
     def test_invalid_worker_or_proof_rejected(self):
         self.a.ingest(self.work, now=100)
         with self.assertRaises(ValueError):
