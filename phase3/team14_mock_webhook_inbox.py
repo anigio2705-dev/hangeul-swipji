@@ -30,8 +30,17 @@ def _parse_verified(raw, signature, secret):
     expected = sign_fixture(secret, raw)
     if not isinstance(signature, str) or not hmac.compare_digest(signature, expected):
         raise ValueError("signature rejected")
+    def reject_duplicate_members(pairs):
+        item = {}
+        for name, value in pairs:
+            if name in item:
+                raise ValueError("duplicate JSON member")
+            item[name] = value
+        return item
+
     try:
-        item = json.loads(raw.decode("utf-8"))
+        item = json.loads(raw.decode("utf-8"),
+                          object_pairs_hook=reject_duplicate_members)
     except (UnicodeError, ValueError) as exc:
         raise ValueError("invalid event JSON") from exc
     if not isinstance(item, dict) or set(item) != _FIELDS:
