@@ -94,7 +94,7 @@ class IndependentWebhookInboxQA(unittest.TestCase):
         self.assertIsNone(self.inbox.snapshot("booking1"))
 
     def test_09_invalid_utf8_and_null_bytes_rejected(self):
-        for raw in (b"\\xff", b'{"event_id":"event1"}\\x00'):
+        for raw in (bytes([0xff]), b'{"event_id":"event1"}' + bytes([0])):
             with self.subTest(raw=raw), self.assertRaises(ValueError):
                 self.send(raw)
         self.assertIsNone(self.inbox.snapshot("booking1"))
