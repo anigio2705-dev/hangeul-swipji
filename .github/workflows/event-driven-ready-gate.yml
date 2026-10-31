@@ -7,6 +7,8 @@ on:
       - 'phase3/team14_referral_eligibility.py'
       - 'phase3/team14_referral_scenarios.py'
       - '.github/workflows/event-driven-ready-gate.yml'
+      - 'automation/event_ready_state.py'
+      - 'automation/test_event_ready_state.py'
   workflow_dispatch:
 
 permissions:
@@ -27,6 +29,15 @@ jobs:
       CANDIDATE_SHA: c042cf00064d0ac0e875121895a4d55c9443ddff
       CANDIDATE_PR: '156'
     steps:
+      - name: Checkout event-state contract on this PR
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Test fail-closed 3-role evidence transitions
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=automation python -m unittest discover -s automation -p 'test_event_ready_state.py' -v
       - name: Fail closed if candidate PR moved
         shell: bash
         env:
