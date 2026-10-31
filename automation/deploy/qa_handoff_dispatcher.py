@@ -179,6 +179,58 @@ def _finish_post(db, row, token, state, now, *, error="", requested=False):
         raise
 
 
+MAX_CHECK_PAGES = 20  # bounded: malformed/unbounded pagination is never QA evidence
+
+
+def _all_checks_success(repo, sha, token):
+    """Collect every check-run page; missing/duplicated pages fail closed.
+
+    GitHub caps per_page at 100. A 101st check on a healthy SHA must not
+    indefinitely block QA, but incomplete/unstable pagination is never PASS.
+    """
+    expected = None
+    seen_ids = set()
+    count = 0
+    for page in range(1, MAX_CHECK_PAGES + 1):
+        checks = _request(
+            f"/repos/{repo}/commits/{sha}/check-runs?per_page=100&page={page}",
+            token)
+        if not isinstance(checks, dict):
+            raise ValueError("malformed check-run page")
+        rows = checks.get("check_runs")
+        total = checks.get("total_count")
+        if (not isinstance(rows, list) or not rows or len(rows) > 100
+                or type(total) is not int or total <= 0):
+            raise ValueError("invalid check-run page or total")
+        if expected is None:
+            expected = total
+        elif total != expected:
+            raise ValueError("check-run total changed during pagination")
+        for item in rows:
+            if not isinstance(item, dict):
+                raise ValueError("malformed check-run entry")
+            check_id = item.get("id")
+            # Historical single-page fixtures lack IDs; GitHub's real API
+            # always supplies them. Multi-page reconciliation requires IDs.
+            if type(check_id) is int and check_id > 0:
+                if check_id in seen_ids:
+                    raise ValueError("duplicate check-run ID across pages")
+                seen_ids.add(check_id)
+            elif expected > 100:
+                raise ValueError("multi-page check-run missing ID")
+            if (item.get("status") != "completed"
+                    or item.get("conclusion") != "success"):
+                return False
+        count += len(rows)
+        if count > expected:
+            raise ValueError("more check runs than advertised")
+        if count == expected:
+            return True
+        if len(rows) < 100:
+            raise ValueError("check-run page gap")
+    raise ValueError("check-run pagination exceeds safe limit")
+
+
 def dispatch_once(db_path, *, token, repo, issue_number=34, now=None):
     """One eligible exact-SHA handoff. Unknown POST is reconcile-only."""
     if not token or repo != "anigio2705-dev/hangeul-swipji":
@@ -224,14 +276,7 @@ def dispatch_once(db_path, *, token, repo, issue_number=34, now=None):
                     or not pull.get("draft")):
                 _finish(db, row, lease, "STALE_OR_UNVERIFIED", now)
                 return "STALE_OR_UNVERIFIED"
-            checks = _request(
-                f"/repos/{repo}/commits/{sha}/check-runs?per_page=100", token)
-            rows = checks.get("check_runs") if isinstance(checks, dict) else None
-            if (not isinstance(rows, list) or not rows
-                    or type(checks.get("total_count")) is not int
-                    or checks["total_count"] != len(rows)
-                    or any(item.get("status") != "completed"
-                           or item.get("conclusion") != "success" for item in rows)):
+            if not _all_checks_success(repo, sha, token):
                 _finish(db, row, lease, "RETRY_WAIT", now,
                         error="CI_NOT_COMPLETE", retry=True)
                 return "CI_NOT_COMPLETE"
