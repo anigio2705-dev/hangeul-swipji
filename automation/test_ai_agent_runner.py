@@ -300,5 +300,56 @@ class RunnerTests(unittest.TestCase):
                                    "refs/heads/work/qa-sim"]).stdout.strip(), "")
 
 
+    def test_controller_rejects_agent_ssh_command_before_any_push(self):
+        """Reproduce independent PR #172 without leaking even a fake token."""
+        fake_ssh = Path(self.temp.name) / "qa-fake-ssh"
+        exposure = Path(self.temp.name) / "qa-controller-token-exposed"
+        fake_ssh.write_text("#!/bin/sh\\n" +
+                            "printf '%s' \\"$GH_TOKEN\\" > " + repr(str(exposure)) +
+                            "\\nexit 23\\n")
+        fake_ssh.chmod(0o755)
+        ssh_remote = "git@github.com:anigio2705-dev/hangeul-swipji.git"
+        self.git(["remote", "set-url", "origin", ssh_remote])
+        code = ('from pathlib import Path; import subprocess; '
+                f'subprocess.run(["git","config","core.sshCommand",{str(fake_ssh)!r}],check=True); '
+                'Path("agent-output.txt").write_text("fake only"); '
+                'subprocess.run(["git","add","agent-output.txt"],check=True); '
+                'subprocess.run(["git","commit","-qm","fake agent commit"],check=True)')
+        with patch.dict(os.environ, {"GH_TOKEN": "qa15-fake-controller-sentinel"}):
+            result = self.invoke((sys.executable, "-c", code),
+                                 remote_url=ssh_remote)
+        self.assertEqual(result["status"], "UNSAFE_GIT_CONFIG")
+        self.assertFalse(exposure.exists())
+        self.assertNotEqual(self.store.snapshot(301)["status"], "REPORTED")
+
+    def test_controller_rejects_agent_credential_helper(self):
+        code = ('from pathlib import Path; import subprocess; '
+                'subprocess.run(["git","config","credential.helper",'
+                '"!echo unsafe"],check=True); '
+                'Path("agent-output.txt").write_text("fake only"); '
+                'subprocess.run(["git","add","agent-output.txt"],check=True); '
+                'subprocess.run(["git","commit","-qm","fake agent commit"],check=True)')
+        result = self.invoke((sys.executable, "-c", code))
+        self.assertEqual(result["status"], "UNSAFE_GIT_CONFIG")
+        self.assertNotEqual(self.store.snapshot(301)["status"], "REPORTED")
+
+    def test_controller_git_environment_excludes_all_controller_secrets(self):
+        from ai_agent_runner import _controller_git_env
+        with patch.dict(os.environ, {
+            "GH_TOKEN": "fake-gh-token",
+            "GITHUB_TOKEN": "fake-github-token",
+            "OPENAI_API_KEY": "fake-codex-token",
+            "GIT_SSH_COMMAND": "fake-command",
+            "GIT_CONFIG_COUNT": "1",
+            "GIT_CONFIG_KEY_0": "core.sshCommand",
+            "GIT_CONFIG_VALUE_0": "fake-command",
+        }):
+            env = _controller_git_env()
+        for key in ("GH_TOKEN", "GITHUB_TOKEN", "OPENAI_API_KEY",
+                    "GIT_SSH_COMMAND", "GIT_CONFIG_COUNT",
+                    "GIT_CONFIG_KEY_0", "GIT_CONFIG_VALUE_0"):
+            self.assertNotIn(key, env)
+
+
 if __name__ == "__main__":
     unittest.main()
