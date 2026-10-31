@@ -77,7 +77,8 @@ class OutboxFairnessTests(unittest.TestCase):
             return {"total_count": 1, "check_runs": [
                 {"status": "completed", "conclusion": "success"}]}
         if "/comments?" in path:
-            return [{"body": "[legacy] HS_B_QA_HANDOFF " + marker + r"\nPR"}
+            return [{"body": "[legacy] HS_B_QA_HANDOFF " + marker + r"\nPR",
+                     "user": {"login": "anigio2705-dev"}}
                     for marker in self.markers]
         raise AssertionError("unexpected request " + path)
 
@@ -187,6 +188,33 @@ class OutboxFairnessTests(unittest.TestCase):
             self.assertEqual(handoff.dispatch_once(
                 self.db, token="t", repo=REPO, now=1000), "STALE_OR_UNVERIFIED")
         self.assertEqual(len(self.posts), 0)
+
+    def test_forged_marker_does_not_suppress_real_qa_request(self):
+        # A public GitHub comment marker is not a delivery receipt.
+        forged = f"HS_B_QA_HANDOFF pr=168 sha={SHA1} run=101 attempt=1"
+        original = self.request
+        def with_forgery(path, token, payload=None):
+            if "/comments?" in path:
+                return [{"body": forged, "user": {"login": "attacker"}}]
+            return original(path, token, payload)
+        with patch.object(handoff, "_request", side_effect=with_forgery):
+            self.assertEqual(handoff.dispatch_once(
+                self.db, token="t", repo=REPO, now=1000), "B_QA_REQUESTED")
+        self.assertEqual(len(self.posts), 1)
+
+    def test_forged_marker_never_reconciles_ambiguous_post(self):
+        self.timeout_first = True
+        self.assertEqual(self.dispatch(1000), "AMBIGUOUS_POST")
+        original = self.request
+        forged = f"HS_B_QA_HANDOFF pr=168 sha={SHA1} run=101 attempt=1"
+        def with_forgery(path, token, payload=None):
+            if "/comments?" in path:
+                return [{"body": forged, "user": {"login": "attacker"}}]
+            return original(path, token, payload)
+        with patch.object(handoff, "_request", side_effect=with_forgery):
+            self.assertEqual(handoff.dispatch_once(
+                self.db, token="t", repo=REPO, now=2000), "AMBIGUOUS_POST")
+        self.assertEqual(len(self.posts), 1)  # no duplicate POST
 
     def test_ambiguous_eventually_dead_letters_without_repost(self):
         self.fail_first = True
