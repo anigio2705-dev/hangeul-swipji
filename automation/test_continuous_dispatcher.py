@@ -68,9 +68,9 @@ class QueueTests(unittest.TestCase):
         calls = []
         def fetch(path, token):
             calls.append(path)
-            if "page=1" in path:
+            if path.endswith("&page=1"):
                 return [issue(n, title="Other") for n in range(1, 101)]
-            if "page=2" in path:
+            if path.endswith("&page=2"):
                 return [issue(101)]
             raise AssertionError("unexpected page")
         found = list_open_issues("owner/repo", "token", fetch=fetch)
@@ -80,7 +80,7 @@ class QueueTests(unittest.TestCase):
 
     def test_exactly_100_requires_next_page(self):
         def fetch(path, token):
-            return [issue(n, title="Other") for n in range(100)] if "page=1" in path else []
+            return [issue(n, title="Other") for n in range(100)] if path.endswith("&page=1") else []
         self.assertEqual(len(list_open_issues("o/r", "token", fetch=fetch)), 100)
 
     def test_pagination_failure_fails_closed(self):
