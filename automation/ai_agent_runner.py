@@ -139,7 +139,21 @@ def _run_with_lease(command, *, cwd, store, issue, owner, timeout,
                 os.killpg(process.pid, signal.SIGKILL)
             except ProcessLookupError:
                 pass
-            process.communicate()
+        # A detached grandchild may inherit stdout/stderr after the direct
+        # Codex process exits. Unbounded communicate() then waits forever for
+        # EOF, preventing the next durable task from being claimed. This is a
+        # bounded REAP, not proof of escaped-child containment: an isolated
+        # systemd cgroup is still mandatory for any live agent host.
+        try:
+            process.communicate(timeout=0.25)
+        except subprocess.TimeoutExpired:
+            for pipe in (process.stdout, process.stderr):
+                if pipe is not None:
+                    pipe.close()
+            try:
+                process.wait(timeout=0.25)
+            except subprocess.TimeoutExpired as exc:
+                raise subprocess.TimeoutExpired(command, timeout) from exc
 
 
 
