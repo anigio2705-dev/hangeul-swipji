@@ -100,6 +100,8 @@ class CountryComplianceReviewTests(unittest.TestCase):
         self.assertIn("법률·세무 검토 전", html)
         self.assertNotIn("fetch(", html)
         self.assertNotIn(".disabled = false", html)
+        shell = Path(__file__).with_name("shell.html").read_text(encoding="utf-8")
+        self.assertIn('href="/phase3/referral-compliance-review.html"', shell)
 
 
 if __name__ == "__main__":
