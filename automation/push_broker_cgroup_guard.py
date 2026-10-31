@@ -26,7 +26,7 @@ def _membership(path):
     group = unified[0]
     if (not group.startswith("/") or group == "/"
             or any(part in ("", ".", "..") for part in group[1:].split("/"))
-            or not re.fullmatch(r"/[A-Za-z0-9_.@\\/-]+", group)):
+            or not re.fullmatch(r"/[A-Za-z0-9_.@/-]+", group)):
         raise CgroupDenied("invalid cgroup path")
     return group
 
