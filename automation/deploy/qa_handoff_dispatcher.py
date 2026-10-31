@@ -47,7 +47,7 @@ def _existing_comment(repo, issue_number, token, marker, legacy_marker=None):
             # PR/SHA marker. Match the *whole line* only; never confuse a
             # newer attempt-specific marker with the legacy form.
             if legacy_marker and re.search(
-                    re.escape(legacy_marker) + r"(?![ \\t]+run=)(?=$|[\\s\\\\])",
+                    re.escape(legacy_marker) + r"(?![ \t]+run=)(?=$|[\s\\])",
                     body):
                 return item.get("html_url", "")
         if len(rows) < 100:
