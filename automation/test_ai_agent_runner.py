@@ -1,8 +1,12 @@
-"""Regression tests for the real-agent handoff; no fake AI success claims."""
+"""Isolated fake-Codex subprocess integration tests; NEVER a real API/QA approval."""
 import os
+import subprocess
+import sys
 import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import patch
+
 from ai_agent_runner import run_once
 from continuous_dispatcher import MARKER
 from work_request_worker import DurableWorkStore
@@ -11,56 +15,110 @@ from work_request_worker import DurableWorkStore
 class RunnerTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
-        self.store = DurableWorkStore(os.path.join(self.temp.name, "worker.db"))
+        root = Path(self.temp.name)
+        self.workdir = root / "worktree"
+        self.remote = root / "remote.git"
+        self.workdir.mkdir()
+        subprocess.run(["git", "init", "--bare", "-q", str(self.remote)], check=True)
+        subprocess.run(["git", "init", "-q", str(self.workdir)], check=True)
+        self.git(["config", "user.email", "fake-agent@example.invalid"])
+        self.git(["config", "user.name", "Fake QA Agent"])
+        (self.workdir / "baseline.txt").write_text("baseline")
+        self.git(["add", "baseline.txt"])
+        self.git(["commit", "-qm", "initial"])
+        self.git(["checkout", "-qb", "work/qa-sim"])
+        self.git(["remote", "add", "origin", str(self.remote)])
+        self.store = DurableWorkStore(str(root / "worker.db"))
         self.store.ingest({"number": 301, "title": MARKER + " Test task", "state": "open"})
-        self.git_sha = "a" * 40
 
     def tearDown(self):
         self.store.close()
         self.temp.cleanup()
 
-    def git(self, cmd, cwd=None, capture_output=None, text=None, check=None):
-        from subprocess import CompletedProcess
-        if cmd[-1] == "--show-current":
-            return CompletedProcess(cmd, 0, "work/isolated\n", "")
-        if cmd[-1] == "HEAD":
-            return CompletedProcess(cmd, 0, self.git_sha + "\n", "")
-        raise AssertionError(cmd)
+    def git(self, args):
+        return subprocess.run(["git", *args], cwd=self.workdir, check=True,
+                              capture_output=True, text=True)
 
-    def test_missing_auth_does_not_invoke_agent(self):
-        with patch("ai_agent_runner.subprocess.run", side_effect=self.git) as call:
-            with patch.dict(os.environ, {"OPENAI_API_KEY": ""}):
-                result = run_once(self.store, workdir=self.temp.name)
+    def invoke(self, agent_command=("missing-fake-cli-xyz",), *, auth="test-only", store=None,
+               remote_url="https://github.com/anigio2705-dev/hangeul-swipji.git"):
+        original_run = subprocess.run
+
+        def route(cmd, **kwargs):
+            if cmd == ["git", "remote", "get-url", "origin"]:
+                return subprocess.CompletedProcess(cmd, 0, remote_url + "\n", "")
+            return original_run(cmd, **kwargs)
+
+        with patch("ai_agent_runner.subprocess.run", side_effect=route):
+            with patch.dict(os.environ, {"OPENAI_API_KEY": auth,
+                                         "GITHUB_REPOSITORY": "anigio2705-dev/hangeul-swipji"}):
+                return run_once(store or self.store, workdir=str(self.workdir),
+                                agent_command=agent_command, timeout=30)
+
+    def test_missing_auth_never_invokes_cli(self):
+        result = self.invoke(auth="")
         self.assertEqual(result["status"], "BLOCKED_AUTH")
-        self.assertEqual(call.call_count, 2)
+        self.assertNotEqual(self.store.snapshot(301)["status"], "REPORTED")
 
-    def test_successful_process_without_commit_is_not_success(self):
-        def runner(cmd, **kwargs):
-            from subprocess import CompletedProcess
-            if cmd[0] == "codex":
-                return CompletedProcess(cmd, 0, "done", "")
-            return self.git(cmd, **kwargs)
-        with patch("ai_agent_runner.subprocess.run", side_effect=runner):
-            with patch.dict(os.environ, {"OPENAI_API_KEY": "test-only"}):
-                result = run_once(self.store, workdir=self.temp.name)
+    def test_missing_cli_fails_closed(self):
+        result = self.invoke()
+        self.assertEqual(result["status"], "AGENT_ERROR")
+        self.assertNotEqual(self.store.snapshot(301)["status"], "REPORTED")
+
+    def test_idle_does_not_require_auth(self):
+        other = DurableWorkStore(str(Path(self.temp.name) / "empty.db"))
+        try:
+            self.assertEqual(self.invoke(store=other, auth="")["status"], "IDLE")
+        finally:
+            other.close()
+
+    def test_zero_exit_without_commit_is_not_success(self):
+        result = self.invoke((sys.executable, "-c", "pass"))
         self.assertEqual(result["status"], "NO_COMMIT")
         self.assertNotEqual(self.store.snapshot(301)["status"], "REPORTED")
 
-    def test_commit_changes_report_qa_pending_not_ready(self):
-        calls = [0]
-        def runner(cmd, **kwargs):
-            from subprocess import CompletedProcess
-            if cmd[0] == "codex":
-                calls[0] += 1
-                return CompletedProcess(cmd, 0, "done", "")
-            if cmd[-1] == "HEAD" and calls[0]:
-                return CompletedProcess(cmd, 0, "b" * 40 + "\n", "")
-            return self.git(cmd, **kwargs)
-        with patch("ai_agent_runner.subprocess.run", side_effect=runner):
-            with patch.dict(os.environ, {"OPENAI_API_KEY": "test-only"}):
-                result = run_once(self.store, workdir=self.temp.name)
+    def test_dirty_worktree_is_rejected_before_claim(self):
+        (self.workdir / "untracked.txt").write_text("not clean")
+        self.assertEqual(self.invoke()["status"], "DIRTY_WORKTREE")
+        self.assertEqual(self.store.snapshot(301)["status"], "PENDING")
+
+    def test_main_branch_is_rejected(self):
+        self.git(["checkout", "-qb", "main"])
+        self.assertEqual(self.invoke()["status"], "UNSAFE_BRANCH")
+        self.assertEqual(self.store.snapshot(301)["status"], "PENDING")
+
+    def test_wrong_remote_is_rejected(self):
+        result = self.invoke(remote_url="https://github.com/attacker/unrelated.git")
+        self.assertEqual(result["status"], "UNSAFE_REMOTE")
+        self.assertEqual(self.store.snapshot(301)["status"], "PENDING")
+
+    def test_closed_request_not_claimed(self):
+        self.store.reconcile_open(set())
+        self.assertEqual(self.invoke()["status"], "IDLE")
+        self.assertEqual(self.store.snapshot(301)["status"], "CANCELLED")
+
+    def test_fake_cli_commit_and_verified_remote_push(self):
+        code = ('from pathlib import Path; import subprocess; '
+                'Path("agent-output.txt").write_text("fake only"); '
+                'subprocess.run(["git","add","agent-output.txt"],check=True); '
+                'subprocess.run(["git","commit","-qm","fake agent commit"],check=True)')
+        result = self.invoke((sys.executable, "-c", code))
         self.assertEqual(result["status"], "REPORTED_QA_PENDING")
         self.assertEqual(self.store.snapshot(301)["status"], "REPORTED")
+        sha = self.git(["rev-parse", "HEAD"]).stdout.strip()
+        remote_sha = self.git(["ls-remote", "origin", "refs/heads/work/qa-sim"]).stdout.split()[0]
+        self.assertEqual(sha, remote_sha)
+        self.assertIn(sha, result["proof"])
+        self.assertNotIn("READY=1", result["proof"])
+
+    def test_push_failure_does_not_mark_reported(self):
+        self.git(["remote", "remove", "origin"])
+        code = ('from pathlib import Path; import subprocess; '
+                'Path("agent-output.txt").write_text("fake only"); '
+                'subprocess.run(["git","add","agent-output.txt"],check=True); '
+                'subprocess.run(["git","commit","-qm","fake agent commit"],check=True)')
+        result = self.invoke((sys.executable, "-c", code))
+        self.assertEqual(result["status"], "PUSH_FAILED")
+        self.assertNotEqual(self.store.snapshot(301)["status"], "REPORTED")
 
 
 if __name__ == "__main__":
