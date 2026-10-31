@@ -171,6 +171,32 @@ BEGIN SELECT RAISE(ABORT,'forced reversal insert failure'); END
         self.assertEqual(dict(teacher=1, platform=1, referral=1,
                               benefit=0), reversed_buckets)
 
+    def test_independent_qa_counterexample_nonnegative_incremental_buckets(self):
+        # B/15: gross 7, [0,1,3,3], refund 3 then 1. Rounding two
+        # cumulative targets previously produced a forbidden -1 delta.
+        self.ledger.record(**transaction(
+            tx_id="qa7", evidence_id="qa_evt", gross_krw=7,
+            teacher_krw=0, platform_krw=1, referral_krw=3, benefit_krw=3))
+        results = []
+        for i, amount in enumerate((3, 1, 3)):
+            result = self.ledger.reverse(
+                reversal_id="qa_rev" + str(i), tx_id="qa7",
+                evidence_id="qa_evidence" + str(i),
+                event_kind="partial_refund" if i < 2 else "full_refund",
+                refund_krw=amount)
+            results.append(result)
+            self.assertTrue(all(e["amount_krw"] >= 0
+                                for e in result["reversed_entries"]))
+            self.assertEqual(amount, sum(e["amount_krw"]
+                                         for e in result["reversed_entries"]))
+        total = dict(teacher=0, platform=0, referral=0, benefit=0)
+        for result in results:
+            for e in result["reversed_entries"]:
+                total[e["bucket"]] += e["amount_krw"]
+        self.assertEqual(dict(teacher=0, platform=1, referral=3, benefit=3),
+                         total)
+        self.assertEqual(0, results[-1]["remaining_krw"])
+
     def test_simulation_never_authorizes_money(self):
         r = self.ledger.reverse(**reversal())
         for key in ("real_money", "policy_approved", "payment_enabled",
