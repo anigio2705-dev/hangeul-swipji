@@ -14,7 +14,10 @@ from work_request_worker import DurableWorkStore
 
 
 def run_once(store, *, workdir, agent_command=("codex", "exec"), timeout=2400):
-    before = subprocess.run(["git", "branch", "--show-current"], cwd=workdir,\n                            capture_output=True, text=True, check=True).stdout.strip()\n    if not before or before in {"main", "master"}:\n        return {"status": "UNSAFE_BRANCH"}\n    claim = store.claim("central-ai", lease_seconds=3600)
+    before = subprocess.run(["git", "branch", "--show-current"], cwd=workdir,
+                            capture_output=True, text=True, check=True).stdout.strip()
+    if not before or before in {"main", "master"}:
+        return {"status": "UNSAFE_BRANCH"}\n    claim = store.claim("central-ai", lease_seconds=3600)
     if claim is None:
         return {"status": "IDLE"}
     issue, owner = claim["issue"], claim["owner"]
@@ -63,7 +66,7 @@ def main():
     with_store = DurableWorkStore(path)
     try:
         while True:
-            print(json.dumps(run_once(with_store, workdir=str(workdir)), flush=True))
+            print(json.dumps(run_once(with_store, workdir=str(workdir))), flush=True)
             time.sleep(5)
     finally:
         with_store.close()
