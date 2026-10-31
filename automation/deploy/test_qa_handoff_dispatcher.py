@@ -77,7 +77,7 @@ class OutboxFairnessTests(unittest.TestCase):
             return {"total_count": 1, "check_runs": [
                 {"status": "completed", "conclusion": "success"}]}
         if "/comments?" in path:
-            return [{"body": "HS_B_QA_HANDOFF " + marker}
+            return [{"body": "[legacy] HS_B_QA_HANDOFF " + marker + r"\nPR"}
                     for marker in self.markers]
         raise AssertionError("unexpected request " + path)
 
