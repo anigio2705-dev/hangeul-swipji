@@ -150,5 +150,60 @@ class EventQueueTest(unittest.TestCase):
             QueueState(102, A, rejected_shas=("invalid",))
 
 
+
+class QA15IndependentRollbackRecheck(unittest.TestCase):
+    """Independent QA-only replay of the two previously failing PR #159 cases."""
+
+    def _failed_a_then_b(self):
+        s = advance(QueueState(102, A), "qa15-dev-a", "DEV_PASS", A)
+        s = advance(s, "qa15-fail-a", "QA_FAIL", A)
+        self.assertEqual(s.rejected_shas, (A,))
+        s = advance(s, "qa15-start-a", "REWORK_STARTED", A)
+        s = advance(s, "qa15-a-to-b", "SHA_CHANGED", A, new_sha=B)
+        self.assertEqual((s.sha, s.phase, s.rejected_shas), (B, "DEVELOP", (A,)))
+        return s
+
+    def test_qa15_original_fail_1_reject_a_to_b_to_a(self):
+        s = self._failed_a_then_b()
+        with self.assertRaisesRegex(ValueError, "Previously QA-rejected SHA"):
+            advance(s, "qa15-b-to-a", "SHA_CHANGED", B, new_sha=A)
+        self.assertEqual((s.sha, s.phase, s.rejected_shas), (B, "DEVELOP", (A,)))
+
+    def test_qa15_original_fail_2_never_attest_rejected_a(self):
+        s = self._failed_a_then_b()
+        with self.assertRaises(ValueError):
+            s = advance(s, "qa15-rollback-a", "SHA_CHANGED", B, new_sha=A)
+            s = advance(s, "qa15-dev-rejected-a", "DEV_PASS", A)
+            s = advance(s, "qa15-qa-rejected-a", "QA_PASS", A)
+            s = advance(s, "qa15-central-rejected-a", "CENTRAL_PASS", A)
+        self.assertNotEqual(s.phase, "ATTESTATION_PENDING")
+
+    def test_qa15_valid_b_requires_fresh_dev_qa_central(self):
+        s = self._failed_a_then_b()
+        with self.assertRaises(ValueError):
+            advance(s, "qa15-old-qa", "QA_PASS", A)
+        s = advance(s, "qa15-dev-b", "DEV_PASS", B)
+        s = advance(s, "qa15-qa-b", "QA_PASS", B)
+        s = advance(s, "qa15-central-b", "CENTRAL_PASS", B)
+        self.assertEqual((s.sha, s.phase, s.rejected_shas),
+                         (B, "ATTESTATION_PENDING", (A,)))
+
+    def test_qa15_second_failure_retains_all_rejections(self):
+        s = self._failed_a_then_b()
+        s = advance(s, "qa15-dev-b", "DEV_PASS", B)
+        s = advance(s, "qa15-fail-b", "QA_FAIL", B)
+        self.assertEqual(s.rejected_shas, (A, B))
+        c = "c" * 40
+        s = advance(s, "qa15-b-to-c", "SHA_CHANGED", B, new_sha=c)
+        for old in (A, B):
+            with self.assertRaisesRegex(ValueError, "Previously QA-rejected SHA"):
+                advance(s, "qa15-revert-" + old[0], "SHA_CHANGED", c, new_sha=old)
+
+    def test_qa15_duplicate_failure_idempotent_and_rejected_once(self):
+        s = advance(QueueState(102, A), "qa15-dev-a", "DEV_PASS", A)
+        s = advance(s, "qa15-fail-a", "QA_FAIL", A)
+        self.assertEqual(advance(s, "qa15-fail-a", "QA_FAIL", A), s)
+        self.assertEqual((s.qa_failures, s.rejected_shas), (1, (A,)))
+
 if __name__ == "__main__":
     unittest.main()
