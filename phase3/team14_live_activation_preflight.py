@@ -6,10 +6,10 @@ independently verify representative authorization, external reviews, signatures,
 revocation, provider configuration and environment before *any* live enablement.
 There is NO live enable operation in this module.
 """
-from datetime import datetime, timezone
+from datetime import datetime
 import re
 
-_ID = re.compile(r"[A-Za-z0-9_-]{1,64}\\Z")
+_ID = re.compile(r"[A-Za-z0-9_-]{1,64}\Z")
 _REQUIRED = frozenset({
     "owner_approval", "provider_review", "legal_tax_review",
     "payout_compliance", "security_qa", "reconciliation_qa",
