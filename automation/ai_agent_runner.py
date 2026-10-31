@@ -6,6 +6,7 @@ It does not deploy, merge, approve QA or touch production.
 """
 import json
 import os
+import re
 import subprocess
 import time
 from pathlib import Path
@@ -13,11 +14,23 @@ from pathlib import Path
 from work_request_worker import DurableWorkStore
 
 
-def run_once(store, *, workdir, agent_command=("codex", "exec"), timeout=2400):
+def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"), timeout=2400):
     before = subprocess.run(["git", "branch", "--show-current"], cwd=workdir,
                             capture_output=True, text=True, check=True).stdout.strip()
-    if not before or before in {"main", "master"}:
+    # No protected, user-facing, or unscoped branch may be written by the agent.
+    if (not re.fullmatch(r"(?:work|automation|agent)/[A-Za-z0-9][A-Za-z0-9._/-]{0,100}", before)
+            or ".." in before or "//" in before or before.endswith(("/", "."))):
         return {"status": "UNSAFE_BRANCH"}
+    remote = subprocess.run(["git", "remote", "get-url", "origin"], cwd=workdir,
+                            capture_output=True, text=True, check=True).stdout.strip()
+    expected = os.environ.get("GITHUB_REPOSITORY", "anigio2705-dev/hangeul-swipji")
+    allowed_remotes = {f"https://github.com/{expected}", f"https://github.com/{expected}.git",
+                       f"git@github.com:{expected}", f"git@github.com:{expected}.git"}
+    if remote not in allowed_remotes:
+        return {"status": "UNSAFE_REMOTE"}
+    if subprocess.run(["git", "status", "--porcelain"], cwd=workdir,
+                      capture_output=True, text=True, check=True).stdout.strip():
+        return {"status": "DIRTY_WORKTREE"}
     previous_sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=workdir,
                                   capture_output=True, text=True, check=True).stdout.strip()
     claim = store.claim("central-ai", lease_seconds=3600)
@@ -53,7 +66,34 @@ def run_once(store, *, workdir, agent_command=("codex", "exec"), timeout=2400):
         if sha == previous_sha:
             store.fail(issue, owner)
             return {"status": "NO_COMMIT", "issue": issue}
-        proof = f"issue={issue} branch={branch} sha={sha} agent=codex"
+        if subprocess.run(["git", "status", "--porcelain"], cwd=workdir,
+                          capture_output=True, text=True, check=True).stdout.strip():
+            store.fail(issue, owner)
+            return {"status": "UNCOMMITTED_CHANGES", "issue": issue}
+        ancestry = subprocess.run(["git", "merge-base", "--is-ancestor", previous_sha, sha],
+                                  cwd=workdir, capture_output=True, text=True, check=False)
+        if ancestry.returncode:
+            store.fail(issue, owner)
+            return {"status": "NON_FAST_FORWARD", "issue": issue}
+        # A local commit is not evidence of remote delivery. Fail closed unless
+        # the isolated branch is pushed and the remote advertises the exact SHA.
+        if not store.heartbeat(issue, owner, lease_seconds=3600):
+            return {"status": "LEASE_LOST", "issue": issue}
+        try:
+            subprocess.run(["git", "push", "origin", f"HEAD:refs/heads/{branch}"],
+                           cwd=workdir, capture_output=True, text=True, check=True,
+                           timeout=120)
+            advertised = subprocess.run(
+                ["git", "ls-remote", "origin", f"refs/heads/{branch}"],
+                cwd=workdir, capture_output=True, text=True, check=True,
+                timeout=60).stdout.strip()
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError):
+            store.fail(issue, owner)
+            return {"status": "PUSH_FAILED", "issue": issue}
+        if advertised != f"{sha}\\trefs/heads/{branch}":
+            store.fail(issue, owner)
+            return {"status": "REMOTE_SHA_MISMATCH", "issue": issue}
+        proof = f"issue={issue} branch={branch} remote_sha={sha} agent=codex QA_PENDING"
         if not store.finish(issue, owner, proof):
             return {"status": "LEASE_LOST", "issue": issue}
         return {"status": "REPORTED_QA_PENDING", "issue": issue, "proof": proof}
