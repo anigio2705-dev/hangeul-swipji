@@ -43,8 +43,6 @@ def screen_referral_risk(*, referred_id, inviter_id, stored_edges,
     if referred_id in graph:
         if graph[referred_id] != inviter_id:
             flags.add("IMMUTABLE_PARENT_CONFLICT")
-        else:
-            flags.add("EXISTING_RELATION_REPLAY")
     else:
         graph[referred_id] = inviter_id
 
