@@ -241,11 +241,19 @@ def _push_from_trusted_repo(*, workdir, branch, sha, repo, store, issue,
                                     check=True).stdout.splitlines()
         if "origin" not in configured:
             return "PUSH_FAILED"
-        pushed = _run_with_lease(
-            ["git", "push", "--no-verify", trusted_url,
-             f"{sha}:refs/heads/{branch}"],
-            cwd=tmp, store=store, issue=issue, owner=owner, timeout=120,
-            heartbeat_interval=heartbeat_interval, env=env)
+        # A heartbeat followed by Popen has a revocation TOCTOU window.
+        # Serialize the entire bounded remote write with durable cancellation
+        # using the same SQLite write fence as reconcile_open/claim/finish.
+        # This guarantees no write AFTER cancellation commits; a concurrent
+        # cancellation request waits for an in-flight push to finish.
+        pushed = store.fenced_remote_write(
+            issue, owner,
+            lambda: subprocess.run(
+                ["git", "push", "--no-verify", trusted_url,
+                 f"{sha}:refs/heads/{branch}"],
+                cwd=tmp, capture_output=True, text=True, check=False,
+                timeout=120, env=env),
+            minimum_seconds=150)
         if pushed is None:
             return "LEASE_LOST"
         if pushed.returncode:
