@@ -1,7 +1,9 @@
 """Deterministic fail-closed queue contract for isolated CI pilot.
 
 This does not run AI workers, authenticate users, persist state, or mark READY.
-A future trusted dispatcher must atomically store each transition.
+A future trusted dispatcher must atomically store each transition and rejected
+SHA history, verify Git commit ancestry/content before SHA_CHANGED, and refuse
+unverified event producers. A syntactically distinct SHA is not proof of a fix.
 """
 from dataclasses import dataclass, replace
 
@@ -20,6 +22,7 @@ class QueueState:
     phase: str = "DEVELOP"
     qa_failures: int = 0
     seen: tuple = ()
+    rejected_shas: tuple = ()
 
     def __post_init__(self):
         if type(self.task) is not int or self.task < 1 or not valid_sha(self.sha):
@@ -31,6 +34,10 @@ class QueueState:
             raise ValueError("Invalid phase")
         if not (0 <= self.qa_failures <= MAX_QA_FAILURES):
             raise ValueError("Invalid retry count")
+        if (not isinstance(self.rejected_shas, tuple)
+                or len(set(self.rejected_shas)) != len(self.rejected_shas)
+                or any(not valid_sha(s) for s in self.rejected_shas)):
+            raise ValueError("Invalid rejected SHA history")
 
 
 def advance(state, event_id, action, sha, *, new_sha=None):
@@ -54,6 +61,10 @@ def advance(state, event_id, action, sha, *, new_sha=None):
     if action == "SHA_CHANGED":
         if not valid_sha(new_sha) or new_sha == sha:
             raise ValueError("Distinct valid commit required")
+        # Independent QA failures are permanent for an exact content SHA.
+        # A->B->A must never turn a rejected A into an eligible candidate.
+        if new_sha in state.rejected_shas:
+            raise ValueError("Previously QA-rejected SHA cannot be reused")
         if state.phase not in {"DEVELOP", "REWORK", "REVIEW_PENDING", "QA_PENDING"}:
             raise ValueError("SHA change not allowed in this phase")
         result = replace(state, sha=new_sha, phase="DEVELOP")
@@ -74,6 +85,7 @@ def advance(state, event_id, action, sha, *, new_sha=None):
         }:
             failures = state.qa_failures + 1
             result = replace(state, qa_failures=failures,
+                             rejected_shas=state.rejected_shas + (sha,),
                              phase="BLOCKED" if failures >= MAX_QA_FAILURES else "REWORK")
         elif (state.phase, action) in allowed:
             result = replace(state, phase=allowed[(state.phase, action)])
