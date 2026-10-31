@@ -290,13 +290,16 @@ class RunnerTests(unittest.TestCase):
                 'subprocess.run(["git","add","agent-output.txt"],check=True); '
                 'subprocess.run(["git","commit","-qm","fake agent commit"],check=True)')
 
-        def expire_before_push(command, **kwargs):
-            if command[:2] == ["git", "push"]:
-                self.store.reconcile_open(set())
-            return _run_with_lease(command, **kwargs)
+        original_fence = self.store.fenced_remote_write
 
-        with patch("ai_agent_runner._run_with_lease",
-                   side_effect=expire_before_push):
+        def expire_before_push(issue, owner, callback, **kwargs):
+            # The new broker performs one atomic lease check + remote write.
+            # Revoke before the broker acquires its SQLite write fence.
+            self.store.reconcile_open(set())
+            return original_fence(issue, owner, callback, **kwargs)
+
+        with patch.object(self.store, "fenced_remote_write",
+                          side_effect=expire_before_push):
             result = self.invoke((sys.executable, "-c", code))
         self.assertEqual(result["status"], "LEASE_LOST")
         self.assertEqual(self.store.snapshot(301)["status"], "CANCELLED")
