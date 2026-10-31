@@ -17,10 +17,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Verify queue deduplication
-        run: PYTHONPATH=automation python -m unittest automation/test_continuous_dispatcher.py -v
+      - name: Verify watchdog and durable worker handoff contracts
+        run: PYTHONPATH=automation python -m unittest automation/test_continuous_dispatcher.py automation/test_work_request_worker.py -v
       - name: Enqueue one outstanding work request
         env:
           GH_TOKEN: ${{ github.token }}
-          APPLY_QUEUE: 'true'
+          # Manual dispatch remains dry-run. Scheduled execution only after default-branch merge.
+          APPLY_QUEUE: \${{ github.event_name == 'schedule' && 'true' || 'false' }}
         run: python automation/continuous_dispatcher.py
