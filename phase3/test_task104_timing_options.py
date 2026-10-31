@@ -68,6 +68,14 @@ class RewardTimingOptionsTest(unittest.TestCase):
         self.assertTrue(result["candidate_triggered"])
         self.assertFalse(result["payment_enabled"])
 
+    def test_scheduled_future_refund_cannot_be_marked_safe(self):
+        # A known scheduled refund remains provisional even after the test window.
+        result = sim(refund_at=200 + 9 * DAY, as_of=200 + 8 * DAY)
+        self.assertTrue(result["candidate_triggered"])
+        self.assertFalse(result["safe_to_confirm_simulated"])
+        self.assertEqual(result["state"], "PROVISIONAL_REFUND_RISK")
+        self.assert_sandbox(result)
+
     def test_no_payment_never_triggers(self):
         for policy in ("on_payment", "on_completion", "after_refund_window"):
             result = sim(policy=policy, payment_at=None)
@@ -83,7 +91,7 @@ class RewardTimingOptionsTest(unittest.TestCase):
         self.assertTrue(result["safe_to_confirm_simulated"])
 
     def test_reject_invalid_policy_and_window(self):
-        for kwargs in ({"policy": "live_payout"}, {"refund_window_seconds": -1},
+        for kwargs in ({"policy": "live_payout"}, {"policy": []}, {"policy": {}}, {"refund_window_seconds": -1},
                        {"refund_window_seconds": 91 * DAY},
                        {"refund_window_seconds": True}):
             with self.assertRaises(ValueError):
