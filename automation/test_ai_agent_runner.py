@@ -134,9 +134,9 @@ class RunnerTests(unittest.TestCase):
         """An agent may write .git/hooks/pre-push; never execute it with controller secrets."""
         hook = self.workdir / ".git" / "hooks" / "pre-push"
         marker_file = self.workdir / "hook-executed.txt"
-        hook.write_text("#!/bin/sh\\n" +
-                        "printf unsafe > " + str(marker_file) + "\\n" +
-                        "exit 23\\n")
+        hook.write_text("#!/bin/sh\n" +
+                        "printf unsafe > " + str(marker_file) + "\n" +
+                        "exit 23\n")
         hook.chmod(0o755)
         code = ('from pathlib import Path; import subprocess; '
                 'Path("agent-output.txt").write_text("fake only"); '
