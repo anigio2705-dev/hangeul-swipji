@@ -82,12 +82,28 @@ def supervise(command, *, lease_live, timeout=120, interval=0.05, cwd=None, env=
             except subprocess.TimeoutExpired:
                 continue
     except (PushRevoked, PushUncertain):
+        # Reap an already-exited parent before inspecting its former group.
+        # An escaped descendant is NOT contained by killpg; the dedicated
+        # systemd cgroup remains mandatory for any real transport.
+        proc.poll()
         _kill_group(pgid)
         raise
     finally:
         if proc.poll() is None:
             _kill_group(pgid)
-        proc.communicate()
+        try:
+            # A descendant may call setsid() and inherit stdout/stderr.
+            # Unbounded communicate() would then hang even after the direct
+            # transport exits and its original process group disappears.
+            proc.communicate(timeout=0.25)
+        except subprocess.TimeoutExpired:
+            for pipe in (proc.stdout, proc.stderr):
+                if pipe is not None:
+                    pipe.close()
+            try:
+                proc.wait(timeout=0.25)
+            except subprocess.TimeoutExpired as exc:
+                raise PushUncertain('direct transport reap timed out') from exc
 
 
 def supervise_reserved(command, *, authority, task, token, sha, branch,
