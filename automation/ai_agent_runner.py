@@ -223,6 +223,13 @@ def _push_from_trusted_repo(*, workdir, branch, sha, repo, store, issue,
     is not a substitute for OS-separated controller credentials or a broker.
     """
     trusted_url = _trusted_push_destination(repo)
+    # P0 crash-fencing quarantine: the local SQLite lock cannot revoke an
+    # orphaned Git transport after SIGKILL. No real GitHub push is authorized
+    # until a separately supervised, credential-owning OS broker with remote
+    # cancellation reconciliation has passed independent B QA.
+    # Local bare-remotes remain available for isolated regression tests.
+    if trusted_url.startswith(("https://github.com/", "git@github.com:")):
+        return "PUSH_BROKER_REQUIRED"
     env = _controller_git_env()
     with tempfile.TemporaryDirectory(prefix="hs-controller-transport-") as tmp:
         subprocess.run(["git", "init", "--bare", "-q", tmp], check=True,
