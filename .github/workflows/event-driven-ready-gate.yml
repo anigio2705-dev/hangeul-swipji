@@ -1,4 +1,4 @@
-name: Hangeul Swipji event-driven QA gate (proposal)
+name: Hangeul Swipji event-driven QA gate (isolated pilot)
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 concurrency:
   group: ready-gate-${{ github.event.pull_request.number || github.ref }}
@@ -19,33 +20,83 @@ concurrency:
 jobs:
   qa-referral-document:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 7
+    env:
+      # Pilot deliberately pins the known #102 candidate. A changed PR #156 HEAD
+      # MUST fail rather than validating a stale commit and claiming PASS.
+      CANDIDATE_SHA: c042cf00064d0ac0e875121895a4d55c9443ddff
+      CANDIDATE_PR: '156'
     steps:
-      - uses: actions/checkout@v4
-      - name: Check #102 referral policy document against implementation
-        shell: python
+      - name: Fail closed if candidate PR moved
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
+          set -euo pipefail
+          actual="$(gh api "repos/${{ github.repository }}/pulls/${CANDIDATE_PR}" --jq '.head.sha')"
+          echo "Candidate PR #${CANDIDATE_PR}: ${actual}"
+          if [[ "${actual}" != "${CANDIDATE_SHA}" ]]; then
+            echo "::error::Candidate SHA changed. Update pin after review; no stale PASS."
+            exit 1
+          fi
+      - name: Checkout exact #102 candidate (not this pilot workflow branch)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - name: Verify exact checkout and exercise referral arithmetic
+        shell: bash
+        run: |
+          set -euo pipefail
+          actual="$(git rev-parse HEAD)"
+          test "${actual}" = "${CANDIDATE_SHA}" || { echo "::error::Wrong checkout SHA"; exit 1; }
+          PYTHONPATH=phase3 python - <<'PY'
           from pathlib import Path
+          from team14_referral_eligibility import eligible_referral
+          from team14_referral_scenarios import simulate_referral
+          from team14_persistent import SimError
+
           p = Path("docs/TASK102_REFERRAL_POLICY_COMPARISON_20261031.md")
-          eligibility = Path("phase3/team14_referral_eligibility.py")
-          scenario = Path("phase3/team14_referral_scenarios.py")
-          if not p.exists():
-              print("SKIP: #102 document not present on this ref")
-              raise SystemExit(0)
-          assert eligibility.exists() and scenario.exists(), "Source modules missing"
+          if not p.is_file():
+              raise AssertionError("BLOCKED: candidate policy document absent; never SKIP=PASS")
           d = p.read_text(encoding="utf-8")
-          e = eligibility.read_text(encoding="utf-8")
-          s = scenario.read_text(encoding="utf-8")
-          for phrase in ("eligible_referral", "simulate_referral", "상위 없음", "실결제", "승인 전"):
-              assert phrase in d, f"Document missing: {phrase}"
-          assert "graph.get(cur)" in e and "recipients.append" in e, "Ancestor-based eligibility changed; re-review"
-          assert "rewards=[gross_krw*r//10000 for r in depth_rates_bps]" in s, "Budget scenario changed; re-review"
-          assert "edges=[]" in d and "21,000원" in d and "20,000원" in d, "Missing explicit missing-ancestor distinction"
-          assert "READY=0" in d, "Draft policy must remain not-ready until independent review"
-          print("DOC_CONSISTENCY_PASS: static checks only; NOT 15-team independent QA or INTERNAL_READY")
-      - name: Record limited result
+          for phrase in ("eligible_referral", "simulate_referral", "상위 없음", "edges=[]",
+                         "21,000원", "20,000원", "#102 READY=0", "실결제"):
+              assert phrase in d, f"Document contract missing: {phrase}"
+          cases = (
+              ([], [], 24000),
+              ([("student", "alice")], [("alice", 3000)], 21000),
+              ([("student", "alice"), ("alice", "bob")],
+               [("alice", 3000), ("bob", 1000)], 20000),
+          )
+          for edges, expected, platform in cases:
+              result = eligible_referral(100000, "student", edges, (300, 100), 2000)
+              assert [(r["user_id"], r["amount_krw"]) for r in result["recipients"]] == expected
+              assert (result["teacher_krw"], result["platform_krw"]) == (76000, platform)
+              assert result["teacher_krw"] + result["platform_krw"] + sum(
+                  r["amount_krw"] for r in result["recipients"]) == 100000
+              assert all(result[k] is False for k in ("real_money", "policy_approved", "payment_enabled"))
+              abstract = simulate_referral(100000, edges, (300, 100), 2000)
+              assert (abstract["teacher"], abstract["platform"], abstract["rewards"]) == (
+                  76000, 20000, [3000, 1000])
+              assert all(abstract[k] is False for k in ("real_money", "policy_approved", "payment_enabled"))
+          for f, args in (
+              (eligible_referral, (100000, "student", [("a", "b"), ("b", "a")], (300, 100), 2000)),
+              (simulate_referral, (100000, [("a", "b"), ("b", "a")], (300, 100), 2000)),
+          ):
+              try:
+                  f(*args)
+              except SimError:
+                  pass
+              else:
+                  raise AssertionError("Cycle accepted")
+          print("PINNED_CANDIDATE_QA_PASS: 3 arithmetic cases, 2 cycle cases, policy flags and document")
+          print("This is CI code QA, not a separate 15-team agent run or INTERNAL_READY.")
+          PY
+      - name: Publish explicit non-approval summary
         if: always()
         shell: bash
         run: |
-          echo 'This workflow checks #102 document invariants only.' >> "$GITHUB_STEP_SUMMARY"
-          echo 'It does not approve business policy, authorize payouts, or mark INTERNAL_READY=1.' >> "$GITHUB_STEP_SUMMARY"
+          echo "Pinned #102 candidate: PR #${CANDIDATE_PR} SHA ${CANDIDATE_SHA}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Failure is failure (including missing document or changed SHA); no skip-as-pass." >> "$GITHUB_STEP_SUMMARY"
+          echo "CI is NOT an independent 15-team agent approval, INTERNAL_READY, payout authorization or deployment." >> "$GITHUB_STEP_SUMMARY"
