@@ -25,8 +25,11 @@ jobs:
         run: |
           set -euo pipefail
           grep -F 'AssertPathIsMountPoint=/var/lib/hangeul-swipji' automation/deploy/hangeul-queue-sync.service
+          grep -F 'EnvironmentFile=/etc/hangeul-swipji/queue-sync.env' automation/deploy/hangeul-queue-sync.service
+          grep -F 'ExecStart=/usr/bin/python3 -u /opt/hangeul-swipji-controller/automation/work_request_worker.py' automation/deploy/hangeul-queue-sync.service
           grep -F 'ExecStartPre=/usr/bin/bash /usr/local/libexec/hangeul-swipji/host-preflight.sh' automation/deploy/hangeul-ai-worker.service.d/10-host-guard.conf
           grep -F 'trusted=/usr/local/libexec/hangeul-swipji/host-preflight.sh' automation/deploy/host-preflight.sh
+          grep -F '/usr/bin/env -u GH_TOKEN -u GITHUB_TOKEN -u OPENAI_API_KEY' automation/deploy/host-preflight.sh
           grep -F 'remote get-url --push --all origin' automation/deploy/host-preflight.sh
           grep -F 'remote get-url --all origin' automation/deploy/host-preflight.sh
           grep -F 'fetch_urls" == "$push_urls' automation/deploy/host-preflight.sh
