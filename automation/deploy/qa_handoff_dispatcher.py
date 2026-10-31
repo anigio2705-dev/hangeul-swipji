@@ -30,7 +30,8 @@ def _request(path, token, payload=None):
         return json.load(response)
 
 
-def _existing_comment(repo, issue_number, token, marker, legacy_marker=None):
+def _existing_comment(repo, issue_number, token, marker, legacy_marker=None,
+                      trusted_author='anigio2705-dev'):
     # Search the full thread. Never risk an ambiguous duplicate POST because
     # the first page omitted a comment from a long-running issue.
     for page in range(1, 21):
@@ -40,6 +41,11 @@ def _existing_comment(repo, issue_number, token, marker, legacy_marker=None):
         if not isinstance(rows, list):
             raise ValueError("malformed issue comments")
         for item in rows:
+            # Public marker text is forgeable by another GitHub commenter.
+            # Only the controller identity's comments prove handoff delivery.
+            author = item.get("user") if isinstance(item, dict) else None
+            if not isinstance(author, dict) or author.get("login") != trusted_author:
+                continue
             body = str(item.get("body", ""))
             if marker in body:
                 return item.get("html_url", "")
@@ -229,7 +235,8 @@ def dispatch_once(db_path, *, token, repo, issue_number=34, now=None):
                 return "CI_NOT_COMPLETE"
             found = _existing_comment(
                 repo, issue_number, token, marker,
-                legacy_marker if attempt == 1 else None)
+                legacy_marker if attempt == 1 else None,
+                trusted_author=os.environ.get("HS_QA_HANDOFF_AUTHOR", "anigio2705-dev"))
             if found is not None:
                 _finish(db, row, lease, "B_QA_REQUESTED", now, requested=True)
                 return "RECONCILED"
