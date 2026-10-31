@@ -61,9 +61,12 @@ class OutboxFairnessTests(unittest.TestCase):
             return {"id": len(self.posts)}
         if "/actions/runs/" in path:
             run = int(path.rsplit("/", 1)[1])
-            return {"head_sha": SHA1 if run == 101 else SHA2,
-                    "run_attempt": 1, "status": "completed",
-                    "conclusion": "success", "event": "pull_request"}
+            return {"head_sha": SHA1 if run in (101, 103) else SHA2,
+                    "run_attempt": 2 if run == 103 else 1,
+                    "status": "completed", "conclusion": "success",
+                    "event": "pull_request",
+                    "pull_requests": [{"number": 168 if run in (101, 103) else 169}],
+                    "head_repository": {"full_name": REPO}}
         if "/pulls/" in path:
             pr = int(path.rsplit("/", 1)[1])
             return {"head": {"sha": SHA1 if pr == 168 else SHA2,
@@ -144,6 +147,46 @@ class OutboxFairnessTests(unittest.TestCase):
                              "STALE_OR_UNVERIFIED")
         self.assertEqual(self.dispatch(1001), "B_QA_REQUESTED")
         self.assertEqual(len(self.posts), 1)
+
+    def test_rerun_attempt_same_sha_has_distinct_qa_marker(self):
+        self.assertEqual(self.dispatch(1000), "B_QA_REQUESTED")
+        with sqlite3.connect(self.db) as db:
+            db.execute("""INSERT INTO ci_qa_outbox
+                (run_id,run_attempt,pr_number,head_sha,branch,base_ref,
+                 ci_completed_at,received_at) VALUES (?,?,?,?,?,?,?,?)""",
+                (103, 2, 168, SHA1, "support/p0-test", "automation/base",
+                 "2026-10-31T09:00:00Z", 103))
+        self.assertEqual(self.dispatch(1001), "B_QA_REQUESTED")
+        self.assertEqual(self.dispatch(1002), "B_QA_REQUESTED")
+        self.assertEqual(len(self.posts), 3)
+        self.assertIn("run=101 attempt=1", self.posts[0])
+        self.assertIn("run=103 attempt=2", self.posts[1])
+        self.assertNotEqual(self.posts[0], self.posts[1])
+
+    def test_unrelated_ci_run_same_sha_is_not_qa_evidence(self):
+        original = self.request
+        def wrong_pr(path, token, payload=None):
+            result = original(path, token, payload)
+            if "/actions/runs/101" in path:
+                result["pull_requests"] = [{"number": 999}]
+            return result
+        with patch.object(handoff, "_request", side_effect=wrong_pr):
+            self.assertEqual(handoff.dispatch_once(
+                self.db, token="t", repo=REPO, now=1000), "STALE_OR_UNVERIFIED")
+        self.assertEqual(self.dispatch(1001), "B_QA_REQUESTED")
+        self.assertEqual(len(self.posts), 1)
+
+    def test_wrong_ci_repository_is_not_qa_evidence(self):
+        original = self.request
+        def wrong_repo(path, token, payload=None):
+            result = original(path, token, payload)
+            if "/actions/runs/101" in path:
+                result["head_repository"] = {"full_name": "attacker/fork"}
+            return result
+        with patch.object(handoff, "_request", side_effect=wrong_repo):
+            self.assertEqual(handoff.dispatch_once(
+                self.db, token="t", repo=REPO, now=1000), "STALE_OR_UNVERIFIED")
+        self.assertEqual(len(self.posts), 0)
 
     def test_ambiguous_eventually_dead_letters_without_repost(self):
         self.fail_first = True
