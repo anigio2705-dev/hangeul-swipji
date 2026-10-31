@@ -1,7 +1,6 @@
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import patch
 from push_broker_cgroup_guard import CgroupDenied, verify_cgroup_placement
 
 
@@ -17,7 +16,7 @@ class CgroupPlacementTests(unittest.TestCase):
         (self.cg / "system.slice" / "hangeul-ai-worker.service").mkdir(parents=True)
         (self.cg / "cgroup.controllers").write_text("cpu memory")
         (self.cg / self.broker.lstrip("/") / "cgroup.kill").write_text("")
-        (self.cg / self.broker.lstrip("/") / "cgroup.procs").write_text("111\\n")
+        (self.cg / self.broker.lstrip("/") / "cgroup.procs").write_text("111\n")
         self.set_member(111, self.broker)
         self.set_member(222, self.agent)
 
@@ -27,7 +26,7 @@ class CgroupPlacementTests(unittest.TestCase):
     def set_member(self, pid, path):
         p = self.proc / str(pid)
         p.mkdir(parents=True, exist_ok=True)
-        (p / "cgroup").write_text("0::" + path + "\\n")
+        (p / "cgroup").write_text("0::" + path + "\n")
 
     def verify(self):
         return verify_cgroup_placement(agent_pid=222, broker_pid=111,
@@ -52,7 +51,7 @@ class CgroupPlacementTests(unittest.TestCase):
             self.verify()
 
     def test_broker_not_in_procs_denied(self):
-        (self.cg / self.broker.lstrip("/") / "cgroup.procs").write_text("333\\n")
+        (self.cg / self.broker.lstrip("/") / "cgroup.procs").write_text("333\n")
         with self.assertRaises(CgroupDenied):
             self.verify()
 
