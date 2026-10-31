@@ -75,6 +75,30 @@ class TeacherAccountabilityTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             review_teacher_accountability(r)
 
+    def test_invalid_manual_operator_identity_never_confirms_fault(self):
+        for operator_id in ("", "../forged", "bad/id", " ", "x" * 129, None, True):
+            with self.subTest(operator_id=operator_id):
+                snapshot = dispute()
+                snapshot["operator_review"]["operator_id"] = operator_id
+                with self.assertRaises(ValueError):
+                    review_teacher_accountability(snapshot)
+
+    def test_invalid_manual_evidence_never_confirms_fault(self):
+        for evidence_ref in ("", "../forged", "bad/id", " ", "x" * 129, None, 7):
+            with self.subTest(evidence_ref=evidence_ref):
+                snapshot = dispute()
+                snapshot["operator_review"]["evidence_ref"] = evidence_ref
+                with self.assertRaises(ValueError):
+                    review_teacher_accountability(snapshot)
+
+    def test_invalid_manual_rationale_never_confirms_fault(self):
+        for rationale in ("", "  ", None, True, "x" * 2001):
+            with self.subTest(rationale=str(rationale)[:30]):
+                snapshot = dispute()
+                snapshot["operator_review"]["rationale"] = rationale
+                with self.assertRaises(ValueError):
+                    review_teacher_accountability(snapshot)
+
     def test_appeal_requires_confirmed_fault(self):
         with TeacherAppealReviewFixture() as a:
             with self.assertRaises(ValueError):
