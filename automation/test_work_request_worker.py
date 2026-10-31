@@ -18,6 +18,36 @@ class WorkerStoreTests(unittest.TestCase):
         self.a.close()
         self.temp.cleanup()
 
+    def test_crashed_push_is_quarantined_not_falsely_cancelled(self):
+        # Durable state survives SIGKILL/SQLite transaction rollback while an
+        # orphaned Git child may still be alive. Cancellation cannot be marked
+        # complete until a separate broker reconciles remote transport.
+        self.a.ingest(self.work)
+        claim = self.a.claim("crash-probe", lease_seconds=3600)
+        self.assertIsNotNone(claim)
+        self.a.db.execute(
+            "UPDATE work SET status='PUSH_IN_FLIGHT' WHERE issue=?",
+            (claim["issue"],))
+        other = DurableWorkStore(self.path)
+        try:
+            other.reconcile_open(set())
+            self.assertEqual(other.snapshot(101)["status"], "PUSH_UNCERTAIN")
+            self.assertIsNone(other.claim("replacement"))
+            self.assertFalse(other.finish(101, claim["owner"], "unsafe proof"))
+        finally:
+            other.close()
+
+    def test_exception_in_remote_callback_quarantines_without_retry(self):
+        self.a.ingest(self.work)
+        claim = self.a.claim("crash-probe", lease_seconds=3600)
+        def broken_transport():
+            raise OSError("ambiguous remote write")
+        with self.assertRaises(OSError):
+            self.a.fenced_remote_write(
+                claim["issue"], claim["owner"], broken_transport)
+        self.assertEqual(self.a.snapshot(101)["status"], "PUSH_UNCERTAIN")
+        self.assertIsNone(self.a.claim("replacement"))
+
     def test_persists_after_restart(self):
         self.a.ingest(self.work, now=100)
         self.a.close()
