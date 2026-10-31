@@ -377,5 +377,36 @@ exit 23
         self.assertEqual(rogue_sha, "", "untrusted remote was written")
         self.assertEqual(result["status"], "REPORTED_QA_PENDING")
 
+
+    def test_qa15_lease_revoked_after_precheck_before_push_spawn_must_not_write(self):
+        """Independent negative race: lease revoked after heartbeat but before git push starts.
+
+        Fake Codex, local bare remote only. A remote write after cancellation
+        is forbidden even when the runner later returns LEASE_LOST.
+        """
+        code = ('from pathlib import Path; import subprocess; '
+                'Path("agent-output.txt").write_text("fake only"); '
+                'subprocess.run(["git","add","agent-output.txt"],check=True); '
+                'subprocess.run(["git","commit","-qm","fake agent commit"],check=True)')
+        original_popen = subprocess.Popen
+        cancelled = [False]
+
+        def revoke_at_push_spawn(command, *args, **kwargs):
+            if command[:2] == ["git", "push"] and not cancelled[0]:
+                # _run_with_lease has already accepted the fencing heartbeat.
+                # The lease is revoked before the Git transport is spawned.
+                self.store.reconcile_open(set())
+                cancelled[0] = True
+            return original_popen(command, *args, **kwargs)
+
+        with patch("ai_agent_runner.subprocess.Popen", side_effect=revoke_at_push_spawn):
+            result = self.invoke((sys.executable, "-c", code))
+        self.assertTrue(cancelled[0], "test did not reach Git push")
+        self.assertEqual(result["status"], "LEASE_LOST")
+        remote_sha = self.git(["ls-remote", str(self.remote),
+                               "refs/heads/work/qa-sim"]).stdout.strip()
+        self.assertEqual(remote_sha, "",
+                         "remote write occurred after the lease was revoked")
+
 if __name__ == "__main__":
     unittest.main()
