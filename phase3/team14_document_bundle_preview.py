@@ -104,7 +104,7 @@ def build_document_bundle(*, booking_id, learner_id, teacher_id, country_code,
         "status": "PREVIEW_ONLY_NOT_PAYABLE",
     }
     income = {
-        "document_id": _document_id("income", teacher_base),
+        "document_id": _document_id("income", {**teacher_base, "country_code": country_code}),
         "kind": "INCOME_SUPPORT_DATA_PREVIEW",
         "booking_id": booking_id,
         "teacher_id": teacher_id,
