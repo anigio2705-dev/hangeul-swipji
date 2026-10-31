@@ -23,5 +23,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           # Manual dispatch remains dry-run. Scheduled execution only after default-branch merge.
-          APPLY_QUEUE: \${{ github.event_name == 'schedule' && 'true' || 'false' }}
+          APPLY_QUEUE: ${{ github.event_name == 'schedule' && 'true' || 'false' }}
         run: python automation/continuous_dispatcher.py
