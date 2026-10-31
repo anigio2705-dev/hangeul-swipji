@@ -48,6 +48,8 @@ def process_delivery(body, headers, *, secret, repository, db_path):
     if (not isinstance(event, dict) or not isinstance(event.get("repository"), dict)
             or event["repository"].get("full_name") != repository):
         raise InvalidDelivery("repository mismatch")
+    if headers.get("X-GitHub-Event") == "workflow_run":
+        return _persist_ci_qa_event(event, db_path=db_path)
     if headers.get("X-GitHub-Event") != "issues" or event.get("action") not in ACTIONS:
         return 202, "ignored_event"
     issue = event.get("issue")
@@ -101,6 +103,82 @@ def process_delivery(body, headers, *, secret, repository, db_path):
             store.close()
         fcntl.flock(lock_fd, fcntl.LOCK_UN)
         os.close(lock_fd)
+
+
+def _persist_ci_qa_event(event, *, db_path):
+    """Persist CI-success candidates for a separate authenticated B-QA dispatcher.
+
+    This is an OUTBOX, not a QA request, QA_PASS, READY or authorization to
+    start the next product task. The dispatcher must re-fetch PR HEAD and CI
+    status from GitHub before notifying B. No GitHub credential is needed here.
+    """
+    run = event.get("workflow_run")
+    if (event.get("action") != "completed" or not isinstance(run, dict)
+            or run.get("conclusion") != "success"
+            or run.get("event") != "pull_request"):
+        return 202, "ignored_workflow"
+    repo = event["repository"]["full_name"]
+    source = run.get("head_repository")
+    prs = run.get("pull_requests")
+    if (not isinstance(source, dict) or source.get("full_name") != repo
+            or not isinstance(prs, list) or len(prs) != 1
+            or not isinstance(prs[0], dict)):
+        return 202, "ignored_workflow"
+    pr = prs[0]
+    sha = run.get("head_sha")
+    branch = run.get("head_branch")
+    base = pr.get("base")
+    head = pr.get("head")
+    run_id = run.get("id")
+    attempt = run.get("run_attempt")
+    if (type(run_id) is not int or run_id <= 0
+            or type(attempt) is not int or attempt <= 0
+            or type(pr.get("number")) is not int or pr["number"] <= 0
+            or not isinstance(sha, str) or not re.fullmatch(r"[0-9a-f]{40}", sha)
+            or not isinstance(branch, str) or not branch.startswith(
+                ("work/", "automation/", "agent/", "support/"))
+            or not isinstance(base, dict) or not isinstance(base.get("ref"), str)
+            or base["ref"] in ("main", "master")
+            or not isinstance(head, dict)
+            or head.get("ref") != branch):
+        return 202, "ignored_workflow"
+    # Some workflow_run payloads omit the PR head SHA. If present it must
+    # agree; regardless, the downstream dispatcher MUST revalidate via API.
+    if head.get("sha") is not None and head["sha"] != sha:
+        raise InvalidDelivery("workflow PR SHA mismatch")
+    connection = sqlite3.connect(db_path, timeout=15, isolation_level=None)
+    try:
+        connection.execute("PRAGMA busy_timeout=15000")
+        connection.execute("""CREATE TABLE IF NOT EXISTS ci_qa_outbox (
+            run_id INTEGER NOT NULL, run_attempt INTEGER NOT NULL,
+            pr_number INTEGER NOT NULL, head_sha TEXT NOT NULL,
+            branch TEXT NOT NULL, base_ref TEXT NOT NULL,
+            ci_completed_at TEXT NOT NULL, received_at INTEGER NOT NULL,
+            state TEXT NOT NULL DEFAULT 'PENDING_B_QA_REQUEST',
+            PRIMARY KEY (run_id,run_attempt))""")
+        connection.execute("BEGIN IMMEDIATE")
+        try:
+            old = connection.execute(
+                "SELECT pr_number,head_sha,branch,base_ref FROM ci_qa_outbox "
+                "WHERE run_id=? AND run_attempt=?", (run_id, attempt)).fetchone()
+            record = (pr["number"], sha, branch, base["ref"])
+            if old and tuple(old) != record:
+                raise InvalidDelivery("conflicting CI event replay")
+            if not old:
+                connection.execute(
+                    """INSERT INTO ci_qa_outbox
+                    (run_id,run_attempt,pr_number,head_sha,branch,base_ref,
+                     ci_completed_at,received_at)
+                    VALUES (?,?,?,?,?,?,?,?)""",
+                    (run_id, attempt, *record,
+                     str(run.get("updated_at") or ""), int(time.time())))
+            connection.execute("COMMIT")
+            return (200, "duplicate_ci_event") if old else (200, "qa_handoff_queued")
+        except BaseException:
+            connection.execute("ROLLBACK")
+            raise
+    finally:
+        connection.close()
 
 
 class Handler(BaseHTTPRequestHandler):
