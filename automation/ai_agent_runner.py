@@ -7,6 +7,7 @@ It does not deploy, merge, approve QA or touch production.
 import json
 import os
 import re
+import signal
 import subprocess
 import time
 from pathlib import Path
@@ -14,7 +15,48 @@ from pathlib import Path
 from work_request_worker import DurableWorkStore
 
 
-def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"), timeout=2400):
+
+def _run_with_lease(command, *, cwd, store, issue, owner, timeout,
+                    heartbeat_interval=5, env=None):
+    """Keep the exact fencing token live while a subprocess is running.
+
+    Reconciliation/lease loss aborts the process group, including child tools.
+    A completed subprocess is NOT authorization for READY or a new task.
+    """
+    if heartbeat_interval <= 0:
+        raise ValueError("heartbeat interval must be positive")
+    if not store.heartbeat(issue, owner, lease_seconds=3600):
+        return None
+    process = subprocess.Popen(command, cwd=cwd, stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE, text=True,
+                               start_new_session=True, env=env)
+    started = time.monotonic()
+    try:
+        while True:
+            remaining = timeout - (time.monotonic() - started)
+            if remaining <= 0:
+                raise subprocess.TimeoutExpired(command, timeout)
+            try:
+                stdout, stderr = process.communicate(
+                    timeout=min(heartbeat_interval, remaining))
+                if not store.heartbeat(issue, owner, lease_seconds=3600):
+                    return None
+                return subprocess.CompletedProcess(command, process.returncode,
+                                                   stdout, stderr)
+            except subprocess.TimeoutExpired:
+                if not store.heartbeat(issue, owner, lease_seconds=3600):
+                    return None
+    finally:
+        if process.poll() is None:
+            try:
+                os.killpg(process.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+            process.communicate()
+
+
+def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"),
+             timeout=2400, heartbeat_interval=5):
     before = subprocess.run(["git", "branch", "--show-current"], cwd=workdir,
                             capture_output=True, text=True, check=True).stdout.strip()
     # No protected, user-facing, or unscoped branch may be written by the agent.
@@ -37,9 +79,7 @@ def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"), 
     if claim is None:
         return {"status": "IDLE"}
     issue, owner = claim["issue"], claim["owner"]
-    # Never run a coding agent when the existing lease cannot outlive the call.
-    # Long runs require a separate heartbeat loop; until then fail closed.
-    if timeout >= 3600:
+    if timeout <= 0 or timeout >= 3600 or heartbeat_interval <= 0:
         store.fail(issue, owner)
         return {"status": "UNSAFE_TIMEOUT", "issue": issue}
     if not os.environ.get("OPENAI_API_KEY"):
@@ -54,9 +94,18 @@ def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"), 
         "and CI/QA pending. Do not self-approve READY or QA."
     )
     try:
-        result = subprocess.run([*agent_command, prompt], cwd=workdir,
-                                capture_output=True, text=True, timeout=timeout,
-                                check=False)
+        # The coding agent must not inherit GitHub write credentials. The
+        # controller alone performs the separately fenced push.
+        agent_env = os.environ.copy()
+        for secret in ("GH_TOKEN", "GITHUB_TOKEN", "GIT_ASKPASS",
+                       "SSH_ASKPASS", "SSH_AUTH_SOCK"):
+            agent_env.pop(secret, None)
+        result = _run_with_lease(
+            [*agent_command, prompt], cwd=workdir, store=store,
+            issue=issue, owner=owner, timeout=timeout,
+            heartbeat_interval=heartbeat_interval, env=agent_env)
+        if result is None:
+            return {"status": "LEASE_LOST", "issue": issue}
         if result.returncode:
             store.fail(issue, owner)
             return {"status": "AGENT_FAILED", "issue": issue,
@@ -80,15 +129,26 @@ def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"), 
         if ancestry.returncode:
             store.fail(issue, owner)
             return {"status": "NON_FAST_FORWARD", "issue": issue}
-        # A local commit is not evidence of remote delivery. Fail closed unless
-        # the isolated branch is pushed and the remote advertises the exact SHA.
-        # An expired claim must never authorize remote side effects.
-        if not store.heartbeat(issue, owner, lease_seconds=3600):
-            return {"status": "LEASE_LOST", "issue": issue}
+        # Revalidate the remote after the agent: it may have changed config.
+        remote_after = subprocess.run(
+            ["git", "remote", "get-url", "origin"], cwd=workdir,
+            capture_output=True, text=True, check=True).stdout.strip()
+        if remote_after not in allowed_remotes:
+            store.fail(issue, owner)
+            return {"status": "UNSAFE_REMOTE", "issue": issue}
+        # Monitor the push itself; a lost lease must kill its process group.
+        # GitHub cannot guarantee rollback of a push already accepted before
+        # cancellation, so downstream delivery still needs idempotency.
         try:
-            subprocess.run(["git", "push", "origin", f"HEAD:refs/heads/{branch}"],
-                           cwd=workdir, capture_output=True, text=True, check=True,
-                           timeout=120)
+            pushed = _run_with_lease(
+                ["git", "push", "origin", f"HEAD:refs/heads/{branch}"],
+                cwd=workdir, store=store, issue=issue, owner=owner,
+                timeout=120, heartbeat_interval=heartbeat_interval)
+            if pushed is None:
+                return {"status": "LEASE_LOST", "issue": issue}
+            if pushed.returncode:
+                store.fail(issue, owner)
+                return {"status": "PUSH_FAILED", "issue": issue}
             advertised = subprocess.run(
                 ["git", "ls-remote", "origin", f"refs/heads/{branch}"],
                 cwd=workdir, capture_output=True, text=True, check=True,
