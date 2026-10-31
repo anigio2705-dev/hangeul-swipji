@@ -192,6 +192,14 @@ def _run_with_lease(command, *, cwd, store, issue, owner, timeout,
                     timeout=min(heartbeat_interval, remaining))
                 if not store.heartbeat(issue, owner, lease_seconds=3600):
                     return None
+                # A zero-exit direct Codex process is not a clean completion
+                # while a previously observed detached descendant remains.
+                # The finally block kills those descendants, but must NOT
+                # silently turn their interrupted work into a successful PR.
+                observed_descendants.update(_proc_descendants(process.pid))
+                if any(_proc_starttime(pid) == started_at
+                       for pid, started_at in observed_descendants.items()):
+                    raise subprocess.TimeoutExpired(command, timeout)
                 return subprocess.CompletedProcess(command, process.returncode,
                                                    stdout, stderr)
             except subprocess.TimeoutExpired:
