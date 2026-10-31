@@ -204,5 +204,24 @@ class RunnerTests(unittest.TestCase):
         self.assertNotEqual(self.store.snapshot(301)["status"], "REPORTED")
 
 
+    def test_qa15_pushurl_override_must_not_push_to_untrusted_remote(self):
+        """P0 negative: validated fetch URL does not constrain Git pushURL."""
+        rogue = Path(self.temp.name) / "rogue.git"
+        subprocess.run(["git", "init", "--bare", "-q", str(rogue)], check=True)
+        # The legitimate fetch URL is left unchanged; only pushURL is redirected.
+        self.git(["remote", "set-url", "--push", "origin", str(rogue)])
+        code = ('from pathlib import Path; import subprocess; '
+                'Path("agent-output.txt").write_text("fake only"); '
+                'subprocess.run(["git","add","agent-output.txt"],check=True); '
+                'subprocess.run(["git","commit","-qm","fake agent commit"],check=True)')
+        result = self.invoke((sys.executable, "-c", code))
+        rogue_ref = self.git(["ls-remote", str(rogue),
+                              "refs/heads/work/qa-sim"]).stdout.strip()
+        self.assertEqual(rogue_ref, "",
+                         "P0: controller pushed to untrusted pushURL despite safe fetch URL")
+        self.assertNotEqual(result["status"], "REPORTED_QA_PENDING")
+
+
+
 if __name__ == "__main__":
     unittest.main()
