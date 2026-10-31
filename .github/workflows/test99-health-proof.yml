@@ -1,0 +1,31 @@
+name: TEST99 read-only health proof
+on:
+  pull_request:
+    branches:
+      - integration/phase2-phase3-20261027
+    paths:
+      - 'phase3/verify_staging99_health.py'
+      - 'phase3/test_verify_staging99_health.py'
+      - '.github/workflows/test99-health-proof.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Offline fingerprint and fail-closed regressions (no external requests)
+        run: python3 -m unittest discover -s phase3 -p 'test_verify_staging99_health.py' -v
+      - name: Syntax
+        run: python3 -m py_compile phase3/verify_staging99_health.py phase3/test_verify_staging99_health.py
+      - name: Public TEST99 health observation only (expected mismatch until approved deploy)
+        continue-on-error: true
+        timeout-minutes: 2
+        run: python3 phase3/verify_staging99_health.py --timeout 45
