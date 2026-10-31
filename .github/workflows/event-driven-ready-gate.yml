@@ -9,6 +9,8 @@ on:
       - '.github/workflows/event-driven-ready-gate.yml'
       - 'automation/event_ready_state.py'
       - 'automation/test_event_ready_state.py'
+      - 'automation/event_work_queue.py'
+      - 'automation/test_event_work_queue.py'
   workflow_dispatch:
 
 permissions:
