@@ -10,8 +10,8 @@ import html
 import re
 from urllib.parse import urlsplit
 
-_ID = re.compile(r"[A-Za-z0-9_-]{1,64}\\Z")
-_SESSION_PATH = re.compile(r"/session/(cs_test_[A-Za-z0-9_-]{6,80})\\Z")
+_ID = re.compile(r"[A-Za-z0-9_-]{1,64}\Z")
+_SESSION_PATH = re.compile(r"/session/(cs_test_[A-Za-z0-9_-]{6,80})\Z")
 # Deliberately NON-ROUTABLE test host. Never allow a production checkout host.
 _SANDBOX_HOST = "checkout.sandbox.example.invalid"
 _FORBIDDEN_FIELDS = frozenset({
