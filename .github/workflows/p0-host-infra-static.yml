@@ -22,6 +22,8 @@ jobs:
         env:
           PYTHONPATH: automation:automation/deploy
         run: python3 -m unittest discover -s automation/deploy -p 'test_issue_webhook_ingress.py' -v
+      - name: Compile webhook and QA outbox dispatcher
+        run: python3 -m py_compile automation/deploy/issue_webhook_ingress.py automation/deploy/qa_handoff_dispatcher.py
       - name: Verify systemd units
         run: systemd-analyze verify automation/deploy/hangeul-queue-sync.service automation/deploy/hangeul-queue-sync.timer
       - name: Verify trusted guard and effective push destination checks
