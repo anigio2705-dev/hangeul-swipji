@@ -49,7 +49,7 @@ def _existing_comment(repo, issue_number, token, marker, legacy_marker=None,
             body = str(item.get("body", ""))
             # Exact token boundary: run=101 attempt=1 must NOT match
             # run=101 attempt=10 from the same trusted controller.
-            if re.search(r"(?<!\\S)" + re.escape(marker) + r"(?=$|[\\s\\\\])", body):
+            if re.search(r"(?<!\S)" + re.escape(marker) + r"(?=$|[\s\\])", body):
                 return item.get("html_url", "")
             # Before run/attempt markers existed, attempt 1 used a bare
             # PR/SHA marker. Match the *whole line* only; never confuse a
