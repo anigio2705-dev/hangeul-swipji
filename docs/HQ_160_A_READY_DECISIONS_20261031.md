@@ -132,3 +132,14 @@ Product PR #219 exact HEAD `c6a746beaf68b193e2e4a7cd99172844397069ca`: Phase3 Ac
 
 
 **#125 final product CI evidence (same immutable SHA, 2026-11-01):** product HEAD `cacfd435a14efc71eefcd67d929619cabf6437ae` Phase3 [Actions 41230456985](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41230456985), job `124623406195`, **SUCCESS** raw `Ran 672 tests ... OK`, all 18 new #125 tests `ok`; integration [Actions 41230456967](https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/41230456967), validate job `124623406277` **SUCCESS** raw 672/672, browser-evidence job `124623406525` **SUCCESS**. B independent QA remains **PENDING**, and full #125 original READY remains **HOLD** for real provider-hosted checkout, authenticated adapter, security review. Product CI success is not B QA or commercial approval. Total original READY remains 11.
+
+
+### A #125 B/15 exact-SHA QA_FAIL repair checkpoint — 2026-11-01 ~04:33 KST
+
+**Original #125 contract:** `카드 정보를 직접 저장하지 않고 제공업체의 안전한 결제 화면을 사용한다.` The current isolated non-routable `.invalid` URL mock is NOT an actual provider checkout. Original #125 **INTERNAL_READY=HOLD**, independent of mock QA outcome.
+
+**Independent failure:** B/15 QA-only PR #223, product base SHA `cacfd435a14efc71eefcd67d929619cabf6437ae`, QA SHA `4cdc0fb1dbc463565de7572e88f518765b2519f2`; Phase3 Actions `41230653902` and integration `41230653901` **FAIL** on 3 URL boundary cases: empty `?`, `#`, `?#` accepted because `urlsplit` yields empty parsed query/fragment. The old product SHA remains QA_FAIL.
+
+**A concrete repair:** product PR #221 branch `product/task125-hosted-checkout-sandbox-20261101-a13`. Code commit `d578b1decaac3e48eeb1f70ce60d15bab7bbbc1f` rejects raw `?` or `#` delimiters before parsing in `phase3/team14_hosted_checkout_sandbox.py`; HEAD `37a3ff1550b0f0adc4f7fda6e47f267257b4cd8c` adds 3 regression tests to `phase3/test_task125_hosted_checkout_sandbox.py`. Exact new SHA CI **PENDING/NOT VERIFIED** at this checkpoint; new B independent QA **REQUESTED** on PR #221 and Issue #34 comment `6548157685`. Do not carry old QA_PASS or QA_FAIL across SHAs. Keep provider sandbox adapter, trusted authenticated session creation, real provider-hosted checkout UI and external payment approval as explicit HOLD.
+
+**Original 160 cumulative INTERNAL_READY unchanged: 11** (#101,#106,#108,#111,#112,#113,#114,#115,#118,#120,#124); delta +0. No main, operating site/DB, TEST99, real payment/refund/payout or deployment change.
