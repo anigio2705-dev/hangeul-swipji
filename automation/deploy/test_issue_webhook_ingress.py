@@ -274,5 +274,83 @@ class SignedIssueWebhookTests(unittest.TestCase):
             store.close()
 
 
+    def _assert_outbox_fairness(self, mode):
+        """A poisoned or unfinished CI row cannot starve a later valid B row."""
+        import sqlite3
+        import urllib.error
+        from unittest.mock import patch
+        import qa_handoff_dispatcher as dispatcher
+        self.call(event=self.workflow_event(), event_type="workflow_run")
+        second = self.workflow_event(sha="b" * 40, run_id=100)
+        second["workflow_run"]["head_branch"] = "support/safe-work-b"
+        pr = second["workflow_run"]["pull_requests"][0]
+        pr["number"] = 163
+        pr["head"]["ref"] = "support/safe-work-b"
+        self.call(event=second, event_type="workflow_run")
+        real_connect = sqlite3.connect
+        posts = []
+
+        def fake_api(path, token, payload=None):
+            if "/actions/runs/" in path:
+                ident = int(path.rsplit("/", 1)[-1])
+                return {"head_sha": ("a" if ident == 99 else "b") * 40,
+                        "run_attempt": 1, "status": "completed",
+                        "conclusion": "success", "event": "pull_request"}
+            if "/pulls/" in path:
+                ident = int(path.rsplit("/", 1)[-1])
+                return {"head": {"sha": ("a" if ident == 162 else "b") * 40,
+                                 "ref": "support/safe-work" +
+                                 ("-b" if ident == 163 else "")},
+                        "base": {"ref": "automation/isolated-base"},
+                        "merged": False, "state": "open", "draft": True}
+            if "/check-runs?" in path:
+                incomplete = mode == "ci" and "/commits/" + "a" * 40 in path
+                return {"total_count": 1, "check_runs": [
+                    {"status": "in_progress" if incomplete else "completed",
+                     "conclusion": None if incomplete else "success"}]}
+            if "/comments?" in path:
+                return []
+            if "/comments" in path and payload:
+                posts.append(payload["body"])
+                if mode == "ambiguous" and "pr=162 " in payload["body"]:
+                    raise urllib.error.HTTPError(path, 503, "ambiguous", {}, None)
+                return {"id": 100}
+            raise AssertionError(path)
+
+        with patch.object(dispatcher.sqlite3, "connect",
+                          side_effect=lambda *a, **kw: real_connect(self.db, **kw)), \\
+             patch.object(dispatcher, "_request", side_effect=fake_api):
+            call = lambda t: dispatcher.dispatch_once(
+                "/var/lib/hangeul-swipji/test.sqlite3",
+                token="fake", repo=self.repo, now=t)
+            self.assertEqual(call(1000),
+                             "AMBIGUOUS_POST" if mode == "ambiguous"
+                             else "CI_NOT_COMPLETE")
+            # A is cooled down or isolated, so B must make progress immediately.
+            self.assertEqual(call(1001), "B_QA_REQUESTED")
+            self.assertEqual(call(1002), "IDLE")
+            if mode == "ambiguous":
+                self.assertEqual(call(1400), "AMBIGUOUS_POST")
+        self.assertEqual(sum("pr=163 " in x for x in posts), 1)
+        self.assertEqual(sum("pr=162 " in x for x in posts),
+                         1 if mode == "ambiguous" else 0)
+        db = real_connect(self.db)
+        try:
+            states = dict(db.execute(
+                "SELECT run_id,state FROM ci_qa_outbox").fetchall())
+            self.assertEqual(states[100], "B_QA_REQUESTED")
+            self.assertEqual(states[99], "AMBIGUOUS_POST" if mode == "ambiguous"
+                             else "PENDING_B_QA_REQUEST")
+        finally:
+            db.close()
+
+    def test_ambiguous_post_does_not_starve_next_qa_handoff(self):
+        self._assert_outbox_fairness("ambiguous")
+
+    def test_incomplete_ci_does_not_starve_next_qa_handoff(self):
+        self._assert_outbox_fairness("ci")
+
+
+
 if __name__ == "__main__":
     unittest.main()
