@@ -260,5 +260,88 @@ class OutboxFairnessTests(unittest.TestCase):
         self.assertEqual(len(self.posts), 2)
 
 
+    def test_101_checks_first_item_does_not_starve_second(self):
+        original = self.request
+        def paged(path, token, payload=None):
+            if "/check-runs?" in path and SHA1 in path:
+                page = int(path.rsplit("page=", 1)[1])
+                ids = range(1, 101) if page == 1 else range(101, 102)
+                return {"total_count": 101, "check_runs": [
+                    {"id": i, "status": "completed", "conclusion": "success"}
+                    for i in ids]}
+            return original(path, token, payload)
+        with patch.object(handoff, "_request", side_effect=paged):
+            self.assertEqual(handoff.dispatch_once(
+                self.db, token="t", repo=REPO, now=1000), "B_QA_REQUESTED")
+            self.assertEqual(handoff.dispatch_once(
+                self.db, token="t", repo=REPO, now=1001), "B_QA_REQUESTED")
+        self.assertEqual(len(self.posts), 2)
+        self.assertEqual(self.state(101)[0], "B_QA_REQUESTED")
+        self.assertEqual(self.state(102)[0], "B_QA_REQUESTED")
+
+
+class CheckRunPaginationTests(unittest.TestCase):
+    def make_request(self, count, *, pending_id=None, duplicate=False,
+                     drift=False, short_first=False, fail_page=None):
+        calls = []
+        def request(path, token, payload=None):
+            self.assertIn("/check-runs?per_page=100&page=", path)
+            page = int(path.rsplit("page=", 1)[1])
+            calls.append(page)
+            if page == fail_page:
+                raise urllib.error.HTTPError(path, 503, "unavailable", {}, None)
+            start = (page - 1) * 100 + 1
+            stop = min(start + 100, count + 1)
+            ids = list(range(start, stop))
+            if short_first and page == 1:
+                ids = ids[:99]
+            if duplicate and page == 2:
+                ids = [1 for _ in ids]
+            return {"total_count": count + (1 if drift and page == 2 else 0),
+                    "check_runs": [
+                        {"id": i, "status": "queued" if i == pending_id else "completed",
+                         "conclusion": None if i == pending_id else "success"}
+                        for i in ids]}
+        return request, calls
+
+    def test_99_100_101_250_success(self):
+        for count in (99, 100, 101, 250):
+            with self.subTest(count=count):
+                request, calls = self.make_request(count)
+                with patch.object(handoff, "_request", side_effect=request):
+                    self.assertTrue(handoff._all_checks_success(REPO, SHA1, "t"))
+                self.assertEqual(calls, list(range(1, (count + 99) // 100 + 1)))
+
+    def test_second_page_pending_never_requests_qa(self):
+        request, _ = self.make_request(101, pending_id=101)
+        with patch.object(handoff, "_request", side_effect=request):
+            self.assertFalse(handoff._all_checks_success(REPO, SHA1, "t"))
+
+    def test_duplicate_page_fails_closed(self):
+        request, _ = self.make_request(101, duplicate=True)
+        with patch.object(handoff, "_request", side_effect=request):
+            with self.assertRaises(ValueError):
+                handoff._all_checks_success(REPO, SHA1, "t")
+
+    def test_short_first_page_fails_closed(self):
+        request, _ = self.make_request(101, short_first=True)
+        with patch.object(handoff, "_request", side_effect=request):
+            with self.assertRaises(ValueError):
+                handoff._all_checks_success(REPO, SHA1, "t")
+
+    def test_total_count_drift_fails_closed(self):
+        request, _ = self.make_request(101, drift=True)
+        with patch.object(handoff, "_request", side_effect=request):
+            with self.assertRaises(ValueError):
+                handoff._all_checks_success(REPO, SHA1, "t")
+
+    def test_second_page_http_503_does_not_pass(self):
+        request, _ = self.make_request(101, fail_page=2)
+        with patch.object(handoff, "_request", side_effect=request):
+            with self.assertRaises(urllib.error.HTTPError):
+                handoff._all_checks_success(REPO, SHA1, "t")
+
+
+
 if __name__ == "__main__":
     unittest.main()
