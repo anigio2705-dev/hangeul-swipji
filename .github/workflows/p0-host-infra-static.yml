@@ -22,10 +22,14 @@ jobs:
         env:
           PYTHONPATH: automation:automation/deploy
         run: python3 -m unittest discover -s automation/deploy -p 'test_issue_webhook_ingress.py' -v
-      - name: Compile webhook and QA outbox dispatcher
-        run: python3 -m py_compile automation/deploy/issue_webhook_ingress.py automation/deploy/qa_handoff_dispatcher.py
+      - name: Verify fail-closed CI polling fallback regression
+        env:
+          PYTHONPATH: automation:automation/deploy
+        run: python3 -m unittest discover -s automation/deploy -p 'test_ci_poll_fallback.py' -v
+      - name: Compile webhook, QA dispatcher and CI polling fallback
+        run: python3 -m py_compile automation/deploy/issue_webhook_ingress.py automation/deploy/qa_handoff_dispatcher.py automation/deploy/ci_poll_fallback.py
       - name: Verify systemd units
-        run: systemd-analyze verify automation/deploy/hangeul-queue-sync.service automation/deploy/hangeul-queue-sync.timer automation/deploy/hangeul-qa-handoff.service automation/deploy/hangeul-qa-handoff.timer
+        run: systemd-analyze verify automation/deploy/hangeul-queue-sync.service automation/deploy/hangeul-queue-sync.timer automation/deploy/hangeul-qa-handoff.service automation/deploy/hangeul-qa-handoff.timer automation/deploy/hangeul-ci-poll-fallback.service automation/deploy/hangeul-ci-poll-fallback.timer
       - name: Verify trusted guard and effective push destination checks
         shell: bash
         run: |
@@ -47,6 +51,9 @@ jobs:
           grep -F 'remote get-url --push --all origin' automation/deploy/host-preflight.sh
           grep -F 'remote get-url --all origin' automation/deploy/host-preflight.sh
           grep -F 'fetch_urls" == "$push_urls' automation/deploy/host-preflight.sh
+          grep -F 'User=hangeul-qa-dispatcher' automation/deploy/hangeul-ci-poll-fallback.service
+          grep -F 'LoadCredential=gh_token:' automation/deploy/hangeul-ci-poll-fallback.service
+          grep -F 'AssertPathIsMountPoint=/var/lib/hangeul-swipji' automation/deploy/hangeul-ci-poll-fallback.service
           grep -F 'User=hangeul-qa-dispatcher' automation/deploy/hangeul-qa-handoff.service
           grep -F 'LoadCredential=gh_token:' automation/deploy/hangeul-qa-handoff.service
           grep -F 'AssertPathIsMountPoint=/var/lib/hangeul-swipji' automation/deploy/hangeul-qa-handoff.service
