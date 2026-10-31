@@ -205,6 +205,8 @@ class OutboxFairnessTests(unittest.TestCase):
     def test_forged_marker_never_reconciles_ambiguous_post(self):
         self.timeout_first = True
         self.assertEqual(self.dispatch(1000), "AMBIGUOUS_POST")
+        # The healthy second item must run first, without being starved.
+        self.assertEqual(self.dispatch(1001), "B_QA_REQUESTED")
         original = self.request
         forged = f"HS_B_QA_HANDOFF pr=168 sha={SHA1} run=101 attempt=1"
         def with_forgery(path, token, payload=None):
@@ -214,7 +216,7 @@ class OutboxFairnessTests(unittest.TestCase):
         with patch.object(handoff, "_request", side_effect=with_forgery):
             self.assertEqual(handoff.dispatch_once(
                 self.db, token="t", repo=REPO, now=2000), "AMBIGUOUS_POST")
-        self.assertEqual(len(self.posts), 1)  # no duplicate POST
+        self.assertEqual(len(self.posts), 2)  # only one POST per item
 
     def test_ambiguous_eventually_dead_letters_without_repost(self):
         self.fail_first = True
