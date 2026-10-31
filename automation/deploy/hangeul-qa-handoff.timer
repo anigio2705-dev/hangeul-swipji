@@ -1,0 +1,11 @@
+[Unit]
+Description=Retry verified CI-to-B QA handoffs from durable outbox (pilot, disabled until approved)
+
+[Timer]
+OnBootSec=60s
+OnUnitInactiveSec=30s
+Unit=hangeul-qa-handoff.service
+AccuracySec=5s
+
+[Install]
+WantedBy=timers.target
