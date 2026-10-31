@@ -142,30 +142,39 @@ class DurableWorkStore:
             raise ValueError("complete open issue number set required")
         self.db.execute("BEGIN IMMEDIATE")
         try:
-            rows = self.db.execute("SELECT issue FROM work WHERE status IN ('PENDING','LEASED')").fetchall()
-            for (number,) in rows:
+            rows = self.db.execute(
+                "SELECT issue,status FROM work WHERE status IN "
+                "('PENDING','LEASED','PUSH_IN_FLIGHT')").fetchall()
+            for number, status in rows:
                 if number not in open_numbers:
-                    self.db.execute("""UPDATE work SET status='CANCELLED',lease_owner=NULL,
-                        lease_until=0 WHERE issue=? AND status IN ('PENDING','LEASED')""", (number,))
+                    if status == 'PUSH_IN_FLIGHT':
+                        # A worker may have died while its Git transport survived.
+                        # Never commit CANCELLED until the remote write is proven
+                        # quiescent by an independent, credential-owning broker.
+                        self.db.execute("""UPDATE work SET status='PUSH_UNCERTAIN',
+                            lease_until=0 WHERE issue=? AND status='PUSH_IN_FLIGHT'""",
+                            (number,))
+                    else:
+                        self.db.execute("""UPDATE work SET status='CANCELLED',
+                            lease_owner=NULL,lease_until=0
+                            WHERE issue=? AND status IN ('PENDING','LEASED')""",
+                            (number,))
             self.db.execute("COMMIT")
         except Exception:
             self.db.execute("ROLLBACK")
             raise
 
     def fenced_remote_write(self, issue, owner, callback, *, minimum_seconds=150):
-        """Serialize remote side effects with durable cancellation/lease transfer.
+        """Crash-conservative remote-write fence.
 
-        The SQLite BEGIN IMMEDIATE transaction is the write fence: reconcile_open,
-        claim, fail, and finish cannot commit while this callback runs. A
-        cancellation committed first rejects the write. A cancellation arriving
-        during a write must wait for the write to finish before it commits.
-        Thus the ordering guarantee is by *committed* cancellation, not by
-        receipt of an asynchronous cancellation request.
+        Persist PUSH_IN_FLIGHT *before* spawning any transport. If the Python
+        controller is SIGKILLed, SQLite rolls back only the second transaction,
+        leaving a durable uncertainty marker. Reconciliation must never commit
+        CANCELLED while an orphaned transport may still write remotely.
 
-        Do not call other store methods inside callback (same-connection nested
-        transactions). The callback must be bounded by its own timeout; the
-        caller must provide an isolated controller process and transport.
-        This is a local SQLite fence, NOT a distributed/OS credential broker.
+        This does NOT kill an orphan child or provide server-side fencing.
+        GitHub transport is disabled in ai_agent_runner until a separate OS
+        credential broker is verified. Never treat PUSH_UNCERTAIN as success.
         """
         if minimum_seconds <= 0 or minimum_seconds > 3600:
             raise ValueError("invalid remote-write budget")
@@ -179,11 +188,47 @@ class DurableWorkStore:
             if not row or row[0] <= now + minimum_seconds:
                 self.db.execute("COMMIT")
                 return None
+            updated = self.db.execute(
+                """UPDATE work SET status='PUSH_IN_FLIGHT'
+                   WHERE issue=? AND status='LEASED' AND lease_owner=?""",
+                (issue, owner)).rowcount
+            if updated != 1:
+                raise RuntimeError("lost lease before push journal")
+            self.db.execute("COMMIT")
+        except BaseException:
+            self.db.execute("ROLLBACK")
+            raise
+
+        # A second connection can now observe the durable in-flight marker.
+        # Keep a write lock during the bounded callback to serialize cancellation.
+        self.db.execute("BEGIN IMMEDIATE")
+        try:
+            row = self.db.execute(
+                """SELECT lease_until FROM work WHERE issue=?
+                   AND status='PUSH_IN_FLIGHT' AND lease_owner=?""",
+                (issue, owner)).fetchone()
+            if not row or row[0] <= int(time.time()) + minimum_seconds:
+                self.db.execute("ROLLBACK")
+                self.db.execute(
+                    """UPDATE work SET status='PUSH_UNCERTAIN',lease_until=0
+                       WHERE issue=? AND status='PUSH_IN_FLIGHT' AND lease_owner=?""",
+                    (issue, owner))
+                return None
             result = callback()
+            self.db.execute(
+                """UPDATE work SET status='LEASED'
+                   WHERE issue=? AND status='PUSH_IN_FLIGHT' AND lease_owner=?""",
+                (issue, owner))
             self.db.execute("COMMIT")
             return result
         except BaseException:
             self.db.execute("ROLLBACK")
+            # A failed or interrupted callback may already have written remotely.
+            # Fail closed; no automatic retry or cancellation.
+            self.db.execute(
+                """UPDATE work SET status='PUSH_UNCERTAIN',lease_until=0
+                   WHERE issue=? AND status='PUSH_IN_FLIGHT' AND lease_owner=?""",
+                (issue, owner))
             raise
 
     def snapshot(self, issue):
