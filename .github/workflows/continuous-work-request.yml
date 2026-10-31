@@ -18,7 +18,9 @@ jobs:
         with:
           persist-credentials: false
       - name: Verify watchdog and durable worker handoff contracts
-        run: PYTHONPATH=automation python -m unittest automation/test_continuous_dispatcher.py automation/test_work_request_worker.py -v
+        run: PYTHONPATH=automation python -m unittest automation/test_continuous_dispatcher.py automation/test_work_request_worker.py automation/test_ai_agent_runner.py -v
+      - name: Verify agent syntax
+        run: python -m py_compile automation/ai_agent_runner.py automation/work_request_worker.py
       - name: Enqueue one outstanding work request
         env:
           GH_TOKEN: ${{ github.token }}
