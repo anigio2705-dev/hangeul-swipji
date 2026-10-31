@@ -96,12 +96,16 @@ class BQA116RecoveryIndependent(unittest.TestCase):
                 self.assert_no_real_recovery(x)
 
     def test_partial_refund_exposure_cannot_exceed_paid_amount(self):
-        for refund in (1, 2, 10, 50, 99, 100):
+        for refund in (1, 2, 10, 50, 99):
             with self.subTest(refund=refund):
                 x = review(refunds=(("partial_refund", refund),))
                 self.assertGreaterEqual(x["potential_exposure_krw"], 0)
                 self.assertLessEqual(x["potential_exposure_krw"], 12)
                 self.assert_no_real_recovery(x)
+
+    def test_full_amount_cannot_be_mislabeled_partial_refund(self):
+        with self.assertRaisesRegex(ValueError, "partial refund must leave"):
+            review(refunds=(("partial_refund", 100),))
 
     def test_odd_krw_three_then_one_then_three_refund_regression(self):
         x = review(gross_krw=7,
