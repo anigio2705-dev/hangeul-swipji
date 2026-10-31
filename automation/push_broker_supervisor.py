@@ -76,3 +76,23 @@ def supervise(command, *, lease_live, timeout=120, interval=0.05, cwd=None, env=
         if proc.poll() is None:
             _kill_group(pgid)
         proc.communicate()
+
+
+def supervise_reserved(command, *, authority, task, token, sha, branch,
+                       timeout=120, interval=0.05, cwd=None, env=None):
+    """Link broker-owned one-shot reserve to process-group supervision.
+
+    Only invoke from a dedicated broker OS account and isolated cgroup.
+    The returned result is NOT remote confirmation: the durable state stays
+    PUSH_IN_FLIGHT until a separately authenticated remote-SHA check calls
+    authority.mark_verified. Any error is quarantined as PUSH_UNCERTAIN.
+    No real GitHub push is enabled by this helper.
+    """
+    authority.reserve(task, token, sha, branch)
+    try:
+        return supervise(command, lease_live=lambda: authority.live(
+            task, token, sha, branch), timeout=timeout, interval=interval,
+            cwd=cwd, env=env)
+    except BaseException:
+        authority.revoke(task)
+        raise
