@@ -130,6 +130,24 @@ class RunnerTests(unittest.TestCase):
         self.assertNotIn("READY=1", result["proof"])
 
 
+    def test_controller_push_does_not_execute_agent_controlled_pre_push_hook(self):
+        """An agent may write .git/hooks/pre-push; never execute it with controller secrets."""
+        hook = self.workdir / ".git" / "hooks" / "pre-push"
+        marker_file = self.workdir / "hook-executed.txt"
+        hook.write_text("#!/bin/sh\\n" +
+                        "printf unsafe > " + str(marker_file) + "\\n" +
+                        "exit 23\\n")
+        hook.chmod(0o755)
+        code = ('from pathlib import Path; import subprocess; '
+                'Path("agent-output.txt").write_text("fake only"); '
+                'subprocess.run(["git","add","agent-output.txt"],check=True); '
+                'subprocess.run(["git","commit","-qm","fake agent commit"],check=True)')
+        result = self.invoke((sys.executable, "-c", code))
+        self.assertEqual(result["status"], "REPORTED_QA_PENDING")
+        self.assertFalse(marker_file.exists())
+        self.assertEqual(self.store.snapshot(301)["status"], "REPORTED")
+
+
     def test_cancel_during_running_agent_terminates_cli_and_prevents_push(self):
         db_path = str(Path(self.temp.name) / "worker.db")
         def cancel():
