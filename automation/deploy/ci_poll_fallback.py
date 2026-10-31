@@ -12,6 +12,7 @@ import urllib.request
 from pathlib import Path
 
 from issue_webhook_ingress import _persist_ci_qa_event
+from qa_handoff_dispatcher import _trusted_db_path
 
 REPO = "anigio2705-dev/hangeul-swipji"
 MAX_PAGES = 5
@@ -36,8 +37,9 @@ def github_get(path, token):
 
 
 def poll_once(db_path, *, token, repo=REPO, fetch=github_get, pages=MAX_PAGES):
-    if repo != REPO or not token or not db_path.startswith("/var/lib/hangeul-swipji/"):
+    if repo != REPO or not token or not isinstance(db_path, str):
         raise ValueError("unapproved polling environment")
+    db_path = _trusted_db_path(db_path)
     if type(pages) is not int or not 1 <= pages <= MAX_PAGES:
         raise ValueError("invalid page limit")
     accepted = duplicates = skipped = 0
