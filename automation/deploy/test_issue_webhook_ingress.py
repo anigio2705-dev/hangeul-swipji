@@ -318,7 +318,7 @@ class SignedIssueWebhookTests(unittest.TestCase):
             raise AssertionError(path)
 
         with patch.object(dispatcher.sqlite3, "connect",
-                          side_effect=lambda *a, **kw: real_connect(self.db, **kw)), \\
+                          side_effect=lambda *a, **kw: real_connect(self.db, **kw)), \
              patch.object(dispatcher, "_request", side_effect=fake_api):
             call = lambda t: dispatcher.dispatch_once(
                 "/var/lib/hangeul-swipji/test.sqlite3",
