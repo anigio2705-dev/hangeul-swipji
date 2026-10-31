@@ -17,7 +17,10 @@ def run_once(store, *, workdir, agent_command=("codex", "exec"), timeout=2400):
     before = subprocess.run(["git", "branch", "--show-current"], cwd=workdir,
                             capture_output=True, text=True, check=True).stdout.strip()
     if not before or before in {"main", "master"}:
-        return {"status": "UNSAFE_BRANCH"}\n    claim = store.claim("central-ai", lease_seconds=3600)
+        return {"status": "UNSAFE_BRANCH"}
+    previous_sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=workdir,
+                                  capture_output=True, text=True, check=True).stdout.strip()
+    claim = store.claim("central-ai", lease_seconds=3600)
     if claim is None:
         return {"status": "IDLE"}
     issue, owner = claim["issue"], claim["owner"]
@@ -47,6 +50,9 @@ def run_once(store, *, workdir, agent_command=("codex", "exec"), timeout=2400):
         if not branch or branch != before or branch in {"main", "master"}:
             store.fail(issue, owner)
             return {"status": "UNSAFE_BRANCH", "issue": issue}
+        if sha == previous_sha:
+            store.fail(issue, owner)
+            return {"status": "NO_COMMIT", "issue": issue}
         proof = f"issue={issue} branch={branch} sha={sha} agent=codex"
         if not store.finish(issue, owner, proof):
             return {"status": "LEASE_LOST", "issue": issue}
