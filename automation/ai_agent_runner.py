@@ -245,12 +245,12 @@ def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"),
         if remote_status:
             store.fail(issue, owner)
             return {"status": remote_status, "issue": issue}
-        # Monitor the push itself; a lost lease must kill its process group.
+        # Never run a pre-push hook from an agent-controlled .git/hooks tree:\n        # hooks inherit the controller environment (including GitHub credentials).\n        # --no-verify suppresses pre-push hooks while retaining the lease fence.\n        # Monitor the push itself; a lost lease must kill its process group.
         # GitHub cannot guarantee rollback of a push already accepted before
         # cancellation, so downstream delivery still needs idempotency.
         try:
             pushed = _run_with_lease(
-                ["git", "push", "origin", f"HEAD:refs/heads/{branch}"],
+                ["git", "push", "--no-verify", "origin", f"HEAD:refs/heads/{branch}"],
                 cwd=workdir, store=store, issue=issue, owner=owner,
                 timeout=120, heartbeat_interval=heartbeat_interval)
             if pushed is None:
