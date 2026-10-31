@@ -115,6 +115,27 @@ class QueueTests(unittest.TestCase):
         self.assertEqual(len(attempts), 3)
         self.assertEqual(waits, [1, 2])
 
+    def test_qa15_ambiguous_post_503_is_not_replayed(self):
+        attempts = []
+        def committed_but_response_lost(req, timeout):
+            attempts.append(req.get_method())
+            raise HTTPError(req.full_url, 503, "response lost", {}, None)
+        with self.assertRaises(HTTPError):
+            request("/repos/o/r/issues", "token", "POST",
+                    {"title": MARKER + " work"}, opener=committed_but_response_lost,
+                    sleeper=lambda _: self.fail("POST must not sleep/retry"))
+        self.assertEqual(attempts, ["POST"])
+
+    def test_get_503_remains_bounded_retry(self):
+        attempts = []
+        def always_503(req, timeout):
+            attempts.append(req.get_method())
+            raise HTTPError(req.full_url, 503, "busy", {}, None)
+        with self.assertRaises(HTTPError):
+            request("/repos/o/r/issues", "token", opener=always_503,
+                    sleeper=lambda _: None)
+        self.assertEqual(attempts, ["GET"] * 4)
+
     def test_rate_limit_403_is_retried(self):
         attempts = []
         def flaky(req, timeout):
