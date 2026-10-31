@@ -218,6 +218,36 @@ class OutboxFairnessTests(unittest.TestCase):
                 self.db, token="t", repo=REPO, now=2000), "AMBIGUOUS_POST")
         self.assertEqual(len(self.posts), 2)  # only one POST per item
 
+    def test_trusted_marker_attempt_prefix_collision_is_not_delivery(self):
+        # A genuine controller comment for attempt=10 must not count as
+        # delivery for attempt=1 on the same PR, SHA, and workflow run.
+        original = self.request
+        wrong = f"HS_B_QA_HANDOFF pr=168 sha={SHA1} run=101 attempt=10"
+        def with_wrong_attempt(path, token, payload=None):
+            if "/comments?" in path:
+                return [{"body": "[controller] " + wrong + r"\\nPR",
+                         "user": {"login": "anigio2705-dev"}}]
+            return original(path, token, payload)
+        with patch.object(handoff, "_request", side_effect=with_wrong_attempt):
+            self.assertEqual(handoff.dispatch_once(
+                self.db, token="t", repo=REPO, now=1000), "B_QA_REQUESTED")
+        self.assertEqual(len(self.posts), 1)
+
+    def test_ambiguous_post_not_reconciled_by_attempt_prefix(self):
+        self.timeout_first = True
+        self.assertEqual(self.dispatch(1000), "AMBIGUOUS_POST")
+        self.assertEqual(self.dispatch(1001), "B_QA_REQUESTED")
+        original = self.request
+        wrong = f"HS_B_QA_HANDOFF pr=168 sha={SHA1} run=101 attempt=10"
+        def with_wrong_attempt(path, token, payload=None):
+            if "/comments?" in path:
+                return [{"body": wrong, "user": {"login": "anigio2705-dev"}}]
+            return original(path, token, payload)
+        with patch.object(handoff, "_request", side_effect=with_wrong_attempt):
+            self.assertEqual(handoff.dispatch_once(
+                self.db, token="t", repo=REPO, now=2000), "AMBIGUOUS_POST")
+        self.assertEqual(len(self.posts), 2)
+
     def test_ambiguous_eventually_dead_letters_without_repost(self):
         self.fail_first = True
         self.assertEqual(self.dispatch(1000), "AMBIGUOUS_POST")
