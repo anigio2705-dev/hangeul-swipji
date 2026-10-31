@@ -17,6 +17,7 @@ on:
       - 'automation/test_work_request_worker.py'
       - 'automation/ai_agent_runner.py'
       - 'automation/test_ai_agent_runner.py'
+      - 'automation/test_bqa_pr162_containment_latest_independent.py'
       - 'automation/push_broker_supervisor.py'
       - 'automation/test_push_broker_supervisor.py'
       - 'automation/push_broker_authority.py'
@@ -64,6 +65,11 @@ jobs:
           set -euo pipefail
           python -m py_compile automation/ai_agent_runner.py automation/work_request_worker.py automation/continuous_dispatcher.py
           PYTHONPATH=automation python -m unittest automation/test_ai_agent_runner.py -v
+      - name: B15 latest exact-SHA detached-child containment regressions (fake subprocess only)
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=automation python -m unittest automation/test_bqa_pr162_containment_latest_independent.py -v
       - name: Verify broker process-group supervision in isolated fake transport
         shell: bash
         run: |
