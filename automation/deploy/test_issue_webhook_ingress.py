@@ -217,6 +217,44 @@ class SignedIssueWebhookTests(unittest.TestCase):
             self.assertEqual(call(1400), "RECONCILED")
         self.assertEqual(len(post_attempts), 1)
 
+    def test_dispatcher_waits_until_all_ci_checks_green(self):
+        import sqlite3
+        from unittest.mock import patch
+        import qa_handoff_dispatcher as dispatcher
+        self.call(event=self.workflow_event(), event_type="workflow_run")
+        real_connect = sqlite3.connect
+        posted = []
+
+        def fake_api(path, token, payload=None):
+            if "/actions/runs/" in path:
+                return {"head_sha": "a" * 40, "run_attempt": 1,
+                        "status": "completed", "conclusion": "success",
+                        "event": "pull_request"}
+            if "/pulls/" in path:
+                return {"head": {"sha": "a" * 40, "ref": "support/safe-work"},
+                        "base": {"ref": "automation/isolated-base"},
+                        "merged": False, "state": "open", "draft": True}
+            if "/check-runs?" in path:
+                return {"total_count": 2, "check_runs": [
+                    {"status": "completed", "conclusion": "success"},
+                    {"status": "in_progress", "conclusion": None}]}
+            if "/comments" in path and payload:
+                posted.append(payload)
+            return []
+
+        with patch.object(dispatcher.sqlite3, "connect",
+                          side_effect=lambda *a, **kw: real_connect(self.db, **kw)), \
+             patch.object(dispatcher, "_request", side_effect=fake_api):
+            self.assertEqual(dispatcher.dispatch_once(
+                "/var/lib/hangeul-swipji/test.sqlite3",
+                token="fake", repo=self.repo, now=1000), "CI_NOT_COMPLETE")
+        self.assertEqual(posted, [])
+        db = real_connect(self.db)
+        self.assertEqual(db.execute(
+            "SELECT state FROM ci_qa_outbox").fetchone()[0],
+            "PENDING_B_QA_REQUEST")
+        db.close()
+
     def test_closed_issue_cancels_existing_lease(self):
         self.assertEqual(self.call()[0], 200)
         store = DurableWorkStore(self.db)
