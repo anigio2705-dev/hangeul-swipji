@@ -168,3 +168,8 @@ Original #128: `결제·환불·원장·지급 명세를 대사하고 차이가 
 ### Superseding #129 product SHA (2026-11-01 KST)
 
 The #129 initial product HEAD `5aec04ee08fd23d985de125f79de192699b88e84` was superseded after A found that the income preview document identifier did not include the tax-country context. A fixed the ID derivation and added a regression, so the **only current product HEAD for independent QA is `8c55a12445182bf2c33962702925e6b7831ca59b`** (20 product tests), Draft PR #228. Fresh source CI runs `41239990572` / `41239990608` pending at checkpoint. B exact-new-SHA QA requested in PR #228 comment `6548858873`, Issue #34 comment `6548859865`. Do not use old SHA CI to approve #129. Original #129 full INTERNAL_READY remains HOLD; cumulative 11/160 unchanged.
+
+
+### #129 corrected exact-SHA source CI result (2026-11-01 KST)
+
+Product HEAD `8c55a12445182bf2c33962702925e6b7831ca59b`: Phase3 Actions `41239990608`, job `124651714999`, **SUCCESS 690/690**, raw `Ran 690 tests in 111.602s / OK`. All 20 #129 new product regressions passed. Integration `41239990572` browser-evidence SUCCESS; validate in progress at checkpoint. B exact-SHA QA_PENDING; **no new INTERNAL_READY**, cumulative **11/160**. Issue #34 evidence comment `6548898152`.
