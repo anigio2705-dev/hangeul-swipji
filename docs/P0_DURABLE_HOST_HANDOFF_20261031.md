@@ -35,3 +35,12 @@ PR #168의 queue sync는 agent-editable worktree 대신 root-owned controller sn
 PR #162 기본 `hangeul-ai-worker.service`는 `ExecStart=/usr/bin/python3 -u /srv/hangeul-swipji/automation/ai_agent_runner.py`로 AI가 편집하는 worktree 안의 **컨트롤러 자체**를 실행했다. 에이전트가 그 파일을 수정하고 서비스가 재시작되면 컨트롤러 인증정보를 가진 프로세스가 변조된 코드를 실행할 수 있다. 기존 root-owned preflight guard만으로는 방어할 수 없다.
 
 PR #168 지원 drop-in에서 `ExecStart=`를 초기화하고 root-owned `/opt/hangeul-swipji-controller/automation/ai_agent_runner.py`로 대체했으며 `PYTHONPATH`/`WorkingDirectory`도 보호된 경로로 전환했다. preflight는 컨트롤러 경로·의존 파일의 root 소유, symlink 금지, group/other 쓰기 금지를 확인한다. 격리 CI는 실행 경로가 작업자 쓰기 영역으로 되돌아가지 않았는지 검사한다. **이 변경은 실제 호스트 적용이나 동일 UID 내 credential 격리 증거가 아니다.** AI 프로세스와 GitHub 쓰기 credential을 가진 컨트롤러를 별도 OS 사용자/컨테이너 및 최소권한 broker로 분리하고 B/15팀이 실증 검증하기 전에는 AI 워커를 활성화하지 않는다.
+
+
+## 2026-10-31 16:33 KST — C팀 GitHub issues 즉시 수신기 (코드만, 미배포)
+
+- `automation/deploy/issue_webhook_ingress.py`: GitHub `issues` opened/reopened/edited/closed 서명 HMAC-SHA256 및 저장소 검증, 최대 256KiB 본문, delivery UUID 중복 억제, 기존 영속 SQLite 작업 큐에 즉시 ingest, closed 시 lease 취소 기록. 같은 호스트의 30초 polling은 백업/재조정 경로로 유지.
+- `automation/deploy/test_issue_webhook_ingress.py`: 서명 위조 차단, 다른 저장소 거부, 중복 delivery 멱등성, 영속 큐 저장, 중복 활성 요청 차단, closed 취소 등 7개 회귀 테스트. CI는 **실제 중앙 DurableWorkStore**와 함께 테스트한다. 가짜 GitHub 이벤트는 운영 실증이 아니다.
+- **절대 미완료:** HTTPS 공개 수신기·GitHub webhook 등록/전달, 수신기 서비스 별도 OS 계정과 HMAC 비밀 분리, 실제 host 재시작 복구, `workflow_run` CI→B QA 이벤트/중앙 READY→다음 과제 승계, 인증 Codex 두 과제, 24h 관측. `workflow_run`은 현재 202 ignored이며 QA 자동 승계로 보고하지 않는다.
+- **안전한 배치 선행조건:** webhook 전용 비밀을 AI 작업자/컨트롤러 자격증명과 분리한 별도 OS 사용자, 영속 큐의 명시적 최소권한 IPC/ACL, 외부 HTTPS 리버스 프록시, HMAC secret 32자 이상, GitHub `issues` 이벤트만 허용. 수신기는 `127.0.0.1:8778/github/issues`에만 bind. 공개 HTTPS, ACL, HMAC 회전, queue-sync와 동시 실행 정합성에 대한 독립 검증 전 서비스 활성화 금지.
+- **보안 경계:** signed closed 이벤트의 SQLite lease 취소는 중앙 #162의 취소↔push 원자성 문제를 해결하지 않는다. #174 QA_FAIL 유지. 실제 push broker/fencing 분리 및 15팀 exact-SHA 독립 재검증 전 워커 활성화 금지.
