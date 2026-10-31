@@ -30,7 +30,7 @@ def simulate_reward_timing(*, payment_at, completion_at, refund_at=None,
     completion_at = _timestamp(completion_at, "completion_at", optional=True)
     refund_at = _timestamp(refund_at, "refund_at", optional=True)
     as_of = _timestamp(as_of, "as_of")
-    if policy not in POLICIES:
+    if type(policy) is not str or policy not in POLICIES:
         raise ValueError("unknown hypothetical policy")
     if type(refund_window_seconds) is not int or not 0 <= refund_window_seconds <= MAX_WINDOW_SECONDS:
         raise ValueError("invalid hypothetical refund window")
@@ -50,7 +50,7 @@ def simulate_reward_timing(*, payment_at, completion_at, refund_at=None,
         trigger_at = safe_at if paid and completed else None
 
     triggered = bool(not refunded and trigger_at is not None and trigger_at <= as_of)
-    safe_to_confirm = bool(triggered and paid and completed and
+    safe_to_confirm = bool(triggered and refund_at is None and paid and completed and
                            safe_at is not None and as_of >= safe_at)
     if refunded:
         state = "VOID_REFUND"

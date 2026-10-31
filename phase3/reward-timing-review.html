@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>한글쉽지 | #104 보상 발생·확정 시점 검토</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;color:#17304d;background:#f4f8fc}
+*{box-sizing:border-box}body{margin:0}header{background:#123764;color:#fff;padding:24px max(16px,calc((100vw - 940px)/2))}
+header a{color:#fff}main{max-width:940px;margin:22px auto;padding:0 16px 40px}
+section{background:#fff;border:1px solid #d4e1ee;border-radius:12px;padding:20px;margin:16px 0}
+.alert{background:#fff0d5;border-left:5px solid #b16c00;padding:15px;border-radius:8px}
+table{width:100%;border-collapse:collapse}th,td{padding:12px;text-align:left;border-bottom:1px solid #d4e1ee;vertical-align:top}
+th{background:#eaf2fc}code{overflow-wrap:anywhere}a{color:#17609b}
+@media(max-width:650px){.scroll{overflow-x:auto}table{min-width:640px}section{padding:14px}}
+</style>
+</head>
+<body>
+<header><a href="/#teaching-platform">← 수업 플랫폼</a><h1>보상 발생·확정 시점 검토</h1><p>160개 과제 #104 · 격리 제품 후보 · 실제 지급 없음</p></header>
+<main>
+<p class="alert" role="status"><strong>정책 미승인 / 지급 불가.</strong> 아래 A·B·C는 비교안이며 채택된 보상 규칙이 아닙니다. 이 화면은 예약·결제·회원 데이터에 접근하지 않고 지급 요청을 전송하지 않습니다.</p>
+<section aria-labelledby="comparison"><h2 id="comparison">시점 비교 — 같은 가상 사례</h2>
+<p>예시: 가상 결제 D0, 수업 완료 D2, 가상 환불 가능 기간 7일. D는 경과일이며 실제 예약 기록이 아닙니다.</p>
+<div class="scroll"><table><thead><tr><th scope="col">비교안</th><th scope="col">가상 발생 후보</th><th scope="col">확정 전제</th><th scope="col">위험</th></tr></thead>
+<tbody>
+<tr><th scope="row">A · 결제 시점 <code>on_payment</code></th><td>D0</td><td>수업 완료 및 환불기간 종료 전에는 확정 금지</td><td>미이행 수업·환불 위험</td></tr>
+<tr><th scope="row">B · 수업 완료 <code>on_completion</code></th><td>D2 (결제도 완료)</td><td>환불 가능 기간 종료 전에는 확정 금지</td><td>완료 후 환불 위험</td></tr>
+<tr><th scope="row">C · 환불기간 종료 <code>after_refund_window</code></th><td>D9 (결제·완료 중 늦은 시점 + 7일)</td><td>예정·확정 환불이 없고 모든 증거 확인 필요</td><td>늦은 환불·분쟁·취소 처리 필요</td></tr>
+</tbody></table></div>
+</section>
+<section aria-labelledby="safety"><h2 id="safety">공통 차단 규칙</h2>
+<ul><li>결제 미확인 또는 수업 미완료: 확정 후보가 될 수 없음.</li>
+<li>확정 환불: 가상 후보 무효. 예정된 미래 환불: 안전 확정으로 표시 금지.</li>
+<li>보상 후보 계산과 실제 지급 권한은 분리. 정책 승인 전 실결제·실지급·포인트 적립 모두 불가.</li></ul>
+<p>기존 순수 계산 코드: <code>phase3/team14_reward_timing_sim.py</code>. 이 표는 설명용 예시이며 계산 API가 아닙니다.</p>
+</section>
+<section aria-labelledby="decision"><h2 id="decision">최종 계약 충족 전 확인 사항</h2>
+<ol><li>대표가 보상 발생 기준 A/B/C 중 하나 또는 수정안을 승인.</li>
+<li>환불 기간, 예약 취소·분쟁·차지백, 소개자 자격 변동 및 역분개 규칙 확정.</li>
+<li>실제 결제·수업 완료·환불 기록의 신뢰 가능한 서버 증거 연동과 B/15팀 독립 QA.</li></ol>
+<p><strong>현재 상태:</strong> 가상 산식 QA_PASS · 제품 검토 UI 후보 · 전체 #104 INTERNAL_READY=HOLD.</p>
+</section>
+</main></body></html>
