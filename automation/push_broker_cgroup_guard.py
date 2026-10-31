@@ -70,11 +70,15 @@ def verify_cgroup_placement(*, agent_pid, broker_pid=None,
     agent = _membership(Path(proc_root) / str(agent_pid) / "cgroup")
     if not broker.endswith("/" + unit):
         raise CgroupDenied("broker outside dedicated systemd unit")
+    if not agent.endswith("/hangeul-ai-worker.service"):
+        raise CgroupDenied("agent outside approved worker unit")
     if (broker == agent or broker.startswith(agent + "/")
             or agent.startswith(broker + "/")):
         raise CgroupDenied("agent and broker cgroup trees overlap")
     broker_dir = _cgroup_path(root, broker)
     _cgroup_path(root, agent)
+    if (broker_dir / "cgroup.kill").is_symlink() or (broker_dir / "cgroup.procs").is_symlink():
+        raise CgroupDenied("cgroup control files must not be symlinks")
     if not (broker_dir / "cgroup.kill").is_file():
         raise CgroupDenied("kernel cgroup.kill unavailable")
     try:
