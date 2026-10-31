@@ -8,6 +8,7 @@ import json
 import os
 import sqlite3
 import time
+import uuid
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -44,21 +45,124 @@ def _existing_comment(repo, issue_number, token, marker):
     raise ValueError("comment pagination exceeded safe limit")
 
 
-def _mark(db, run_id, attempt, state, *, requested_at=None):
+
+# SQLite migration is additive: existing CI webhook rows retain run/attempt/SHA.
+# Every network operation runs outside the SQLite write transaction.
+MAX_ATTEMPTS = 12
+LEASE_SECONDS = 90
+
+
+def _schema(db):
+    cols = {row[1] for row in db.execute("PRAGMA table_info(ci_qa_outbox)")}
+    if not cols:
+        raise ValueError("CI outbox missing; webhook ingestion must initialize it")
+    for name, ddl in (
+        ("next_attempt_at", "INTEGER NOT NULL DEFAULT 0"),
+        ("attempts", "INTEGER NOT NULL DEFAULT 0"),
+        ("lease_token", "TEXT NOT NULL DEFAULT ''"),
+        ("lease_until", "INTEGER NOT NULL DEFAULT 0"),
+        ("post_started_at", "INTEGER NOT NULL DEFAULT 0"),
+        ("last_error", "TEXT NOT NULL DEFAULT ''"),
+    ):
+        if name not in cols:
+            db.execute("ALTER TABLE ci_qa_outbox ADD COLUMN " + name + " " + ddl)
+    db.execute("CREATE INDEX IF NOT EXISTS ci_qa_due ON ci_qa_outbox "
+               "(state,next_attempt_at,received_at)")
+
+
+def _claim(db, now):
+    """Atomic per-item claim; delayed/ambiguous rows cannot block fresh work."""
     db.execute("BEGIN IMMEDIATE")
     try:
+        _schema(db)
+        row = db.execute(
+            """SELECT run_id,run_attempt,pr_number,head_sha,branch,base_ref,
+                      state,ci_completed_at,post_started_at,attempts
+               FROM ci_qa_outbox
+               WHERE ((state IN ('PENDING_B_QA_REQUEST','RETRY_WAIT','AMBIGUOUS_POST')
+                       AND next_attempt_at<=?)
+                   OR (state IN ('CLAIMED','POST_IN_FLIGHT') AND lease_until<=?))
+               ORDER BY next_attempt_at,received_at,run_id,run_attempt LIMIT 1""",
+            (now, now)).fetchone()
+        if row is None:
+            db.execute("COMMIT")
+            return None
+        token = uuid.uuid4().hex
         db.execute(
-            "UPDATE ci_qa_outbox SET state=?, qa_requested_at=COALESCE(?,qa_requested_at) "
-            "WHERE run_id=? AND run_attempt=?",
-            (state, requested_at, run_id, attempt))
+            """UPDATE ci_qa_outbox SET state='CLAIMED',lease_token=?,
+                   lease_until=?,processing_at=?
+               WHERE run_id=? AND run_attempt=?""",
+            (token, now + LEASE_SECONDS, now, row[0], row[1]))
         db.execute("COMMIT")
+        return (*row, token)
+    except BaseException:
+        db.execute("ROLLBACK")
+        raise
+
+
+def _finish(db, row, token, state, now, *, error="", requested=False,
+            retry=False):
+    """Fenced transition: a stale worker cannot overwrite a newer claim."""
+    run_id, attempt = row[:2]
+    attempts = row[9] + (1 if retry else 0)
+    if retry and attempts >= MAX_ATTEMPTS:
+        state = "DEAD_LETTER"
+    delay = min(3600, 15 * (2 ** min(attempts, 8))) if retry else 0
+    db.execute("BEGIN IMMEDIATE")
+    try:
+        updated = db.execute(
+            """UPDATE ci_qa_outbox SET state=?,next_attempt_at=?,
+                attempts=?,lease_token='',lease_until=0,last_error=?,
+                qa_requested_at=CASE WHEN ? THEN ? ELSE qa_requested_at END
+               WHERE run_id=? AND run_attempt=? AND lease_token=?
+                 AND state='CLAIMED'""",
+            (state, now + delay, attempts, error[:120], int(requested), now,
+             run_id, attempt, token)).rowcount
+        db.execute("COMMIT")
+        return updated == 1
+    except BaseException:
+        db.execute("ROLLBACK")
+        raise
+
+
+def _post_boundary(db, row, token, now):
+    """Persist POST_IN_FLIGHT before sending any byte; crash is ambiguous."""
+    db.execute("BEGIN IMMEDIATE")
+    try:
+        updated = db.execute(
+            """UPDATE ci_qa_outbox SET state='POST_IN_FLIGHT',
+                post_started_at=?,lease_until=?
+               WHERE run_id=? AND run_attempt=? AND lease_token=?
+                 AND state='CLAIMED' AND post_started_at=0""",
+            (now, now + LEASE_SECONDS, row[0], row[1], token)).rowcount
+        db.execute("COMMIT")
+        return updated == 1
+    except BaseException:
+        db.execute("ROLLBACK")
+        raise
+
+
+def _finish_post(db, row, token, state, now, *, error="", requested=False):
+    """Only the POST owner can complete or quarantine an uncertain send."""
+    db.execute("BEGIN IMMEDIATE")
+    try:
+        updated = db.execute(
+            """UPDATE ci_qa_outbox SET state=?,next_attempt_at=?,
+                attempts=attempts+1,lease_token='',lease_until=0,last_error=?,
+                qa_requested_at=CASE WHEN ? THEN ? ELSE qa_requested_at END
+               WHERE run_id=? AND run_attempt=? AND lease_token=?
+                 AND state='POST_IN_FLIGHT'""",
+            (state, now + (60 if state == 'AMBIGUOUS_POST' else 0),
+             error[:120], int(requested), now, row[0], row[1], token)).rowcount
+        db.execute("COMMIT")
+        return updated == 1
     except BaseException:
         db.execute("ROLLBACK")
         raise
 
 
 def dispatch_once(db_path, *, token, repo, issue_number=34, now=None):
-    """Attempt one durable handoff. Unknown POST outcome is never auto-retried."""
+    """One eligible exact-SHA handoff. Unknown POST is reconcile-only."""
     if not token or repo != "anigio2705-dev/hangeul-swipji":
         raise ValueError("missing controller token or unapproved repo")
     if not db_path.startswith("/var/lib/hangeul-swipji/"):
@@ -67,46 +171,20 @@ def dispatch_once(db_path, *, token, repo, issue_number=34, now=None):
     db = sqlite3.connect(db_path, timeout=15, isolation_level=None)
     try:
         db.execute("PRAGMA busy_timeout=15000")
-        db.execute("BEGIN IMMEDIATE")
-        try:
-            # Prioritize fresh work. A CI-pending row is cooled down, and an
-            # ambiguous POST is reconciled separately without replaying POST.
-            # Neither may starve later eligible exact-SHA handoffs.
-            row = db.execute(
-                """SELECT run_id,run_attempt,pr_number,head_sha,branch,base_ref,
-                          state,processing_at,ci_completed_at
-                   FROM ci_qa_outbox
-                   WHERE (state='PENDING_B_QA_REQUEST'
-                          AND (processing_at=0 OR processing_at<=?))
-                      OR (state='SENDING' AND processing_at<=?)
-                      OR (state='AMBIGUOUS_POST' AND processing_at<=?)
-                   ORDER BY CASE state
-                         WHEN 'PENDING_B_QA_REQUEST' THEN 0
-                         WHEN 'SENDING' THEN 1 ELSE 2 END,
-                       CASE WHEN processing_at=0 THEN 0 ELSE 1 END,
-                       processing_at,received_at,run_id LIMIT 1""",
-                (now - 120, now - 120, now - 120)).fetchone()
-            if row is None:
-                db.execute("COMMIT")
-                return "IDLE"
-            run_id, attempt, pr, sha, branch, base, state, touched, ci_at = row
-            if state == "SENDING" and now - touched < 120:
-                db.execute("COMMIT")
-                return "IN_FLIGHT"
-            db.execute(
-                "UPDATE ci_qa_outbox SET state='SENDING',processing_at=? "
-                "WHERE run_id=? AND run_attempt=?",
-                (now, run_id, attempt))
-            db.execute("COMMIT")
-        except BaseException:
-            db.execute("ROLLBACK")
-            raise
-
-        # One B QA request per PR+SHA, even when multiple CI workflows succeed.
+        row = _claim(db, now)
+        if row is None:
+            return "IDLE"
+        run_id, attempt, pr, sha, branch, base, previous, ci_at, post_at, tries, lease = row
         marker = f"HS_B_QA_HANDOFF pr={pr} sha={sha}"
+        uncertain = bool(post_at) or previous in ("AMBIGUOUS_POST", "POST_IN_FLIGHT")
+        # Validate before even reading remote data. Never post on malformed rows.
+        if (type(pr) is not int or pr < 1 or type(run_id) is not int
+                or type(attempt) is not int or attempt < 1
+                or not isinstance(sha, str) or len(sha) != 40
+                or any(c not in "0123456789abcdef" for c in sha)):
+            _finish(db, row, lease, "DEAD_LETTER", now, error="invalid identity")
+            return "DEAD_LETTER"
         try:
-            # Both immutable CI run identity and CURRENT PR HEAD must match.
-            # A newer PR commit invalidates this old handoff.
             run = _request(f"/repos/{repo}/actions/runs/{run_id}", token)
             pull = _request(f"/repos/{repo}/pulls/{pr}", token)
             if (run.get("head_sha") != sha or run.get("run_attempt") != attempt
@@ -118,7 +196,7 @@ def dispatch_once(db_path, *, token, repo, issue_number=34, now=None):
                     or pull.get("base", {}).get("ref") != base
                     or pull.get("merged") or pull.get("state") != "open"
                     or not pull.get("draft")):
-                _mark(db, run_id, attempt, "STALE_OR_UNVERIFIED")
+                _finish(db, row, lease, "STALE_OR_UNVERIFIED", now)
                 return "STALE_OR_UNVERIFIED"
             checks = _request(
                 f"/repos/{repo}/commits/{sha}/check-runs?per_page=100", token)
@@ -127,35 +205,49 @@ def dispatch_once(db_path, *, token, repo, issue_number=34, now=None):
                     or type(checks.get("total_count")) is not int
                     or checks["total_count"] != len(rows)
                     or any(item.get("status") != "completed"
-                           or item.get("conclusion") != "success"
-                           for item in rows)):
-                # One successful workflow is NOT proof that all CI is green.
-                _mark(db, run_id, attempt, "PENDING_B_QA_REQUEST")
+                           or item.get("conclusion") != "success" for item in rows)):
+                _finish(db, row, lease, "RETRY_WAIT", now,
+                        error="CI_NOT_COMPLETE", retry=True)
                 return "CI_NOT_COMPLETE"
             found = _existing_comment(repo, issue_number, token, marker)
             if found is not None:
-                _mark(db, run_id, attempt, "B_QA_REQUESTED", requested_at=now)
+                _finish(db, row, lease, "B_QA_REQUESTED", now, requested=True)
                 return "RECONCILED"
-            if state != "PENDING_B_QA_REQUEST":
-                # A crash/HTTP 503 after POST could have delivered the comment.
-                # Never blindly replay a POST even if GET cannot see it yet.
-                _mark(db, run_id, attempt, "AMBIGUOUS_POST")
+            if uncertain:
+                # A prior POST might have succeeded despite 503/timeout/crash.
+                # Reconcile by marker only. Never replay the POST automatically.
+                _finish(db, row, lease, "AMBIGUOUS_POST", now,
+                        error="POST_OUTCOME_UNKNOWN", retry=True)
                 return "AMBIGUOUS_POST"
+            if not _post_boundary(db, row, lease, now):
+                return "LEASE_LOST"
             message = (
-                f"[신임 C 자동 CI→B QA 요청] {marker}\n"
+                f"[신임 C 자동 CI→B QA 요청] {marker}\\n"
                 f"PR #{pr} 정확 HEAD {sha} / CI run {run_id} SUCCESS. "
                 "B/15팀은 이 SHA만 독립 QA_PASS/FAIL 검증하십시오. "
                 "CI_PASS는 QA_PASS나 A READY가 아니며 자동 병합·운영 배포 금지. "
                 f"CI completed_at={ci_at or 'UNKNOWN'}; QA request at={now} epoch."
             )
-            _request(f"/repos/{repo}/issues/{issue_number}/comments",
-                     token, {"body": message})
-            _mark(db, run_id, attempt, "B_QA_REQUESTED", requested_at=now)
+            try:
+                _request(f"/repos/{repo}/issues/{issue_number}/comments",
+                         token, {"body": message})
+            except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError,
+                    ValueError, KeyError, TypeError, OSError):
+                _finish_post(db, row, lease, "AMBIGUOUS_POST", now,
+                             error="POST_RESULT_UNKNOWN")
+                return "AMBIGUOUS_POST"
+            _finish_post(db, row, lease, "B_QA_REQUESTED", now, requested=True)
             return "B_QA_REQUESTED"
         except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError,
                 ValueError, KeyError, TypeError, OSError):
-            _mark(db, run_id, attempt, "AMBIGUOUS_POST")
-            return "AMBIGUOUS_POST"
+            # Read-only failure: safe retry unless an earlier POST began.
+            if uncertain:
+                _finish(db, row, lease, "AMBIGUOUS_POST", now,
+                        error="RECONCILE_GET_FAILED", retry=True)
+                return "AMBIGUOUS_POST"
+            _finish(db, row, lease, "RETRY_WAIT", now,
+                    error="PRE_POST_GET_FAILED", retry=True)
+            return "RETRY_WAIT"
     finally:
         db.close()
 
