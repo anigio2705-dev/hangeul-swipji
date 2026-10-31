@@ -136,6 +136,22 @@ class DurableWorkStore:
             self.db.execute("ROLLBACK")
             raise
 
+    def reconcile_open(self, open_numbers):
+        """Cancel queued work absent from a complete, successful GitHub open-issue scan."""
+        if not isinstance(open_numbers, set) or any(type(n) is not int for n in open_numbers):
+            raise ValueError("complete open issue number set required")
+        self.db.execute("BEGIN IMMEDIATE")
+        try:
+            rows = self.db.execute("SELECT issue FROM work WHERE status IN ('PENDING','LEASED')").fetchall()
+            for (number,) in rows:
+                if number not in open_numbers:
+                    self.db.execute("""UPDATE work SET status='CANCELLED',lease_owner=NULL,
+                        lease_until=0 WHERE issue=? AND status IN ('PENDING','LEASED')""", (number,))
+            self.db.execute("COMMIT")
+        except Exception:
+            self.db.execute("ROLLBACK")
+            raise
+
     def snapshot(self, issue):
         row = self.db.execute(
             "SELECT issue,status,lease_owner,lease_until,attempts,retry_after,proof FROM work WHERE issue=?",
@@ -155,9 +171,11 @@ def main():
         raise ValueError("invalid repository")
     store = DurableWorkStore(path)
     try:
-        items = pending(list_open_issues(repo, token))
+        all_open = list_open_issues(repo, token)
+        items = pending(all_open)
         if len(items) > 1:
             raise QueueIntegrityError("duplicate open work requests")
+        store.reconcile_open({i['number'] for i in all_open if isinstance(i, dict) and type(i.get('number')) is int})
         for item in items:
             store.ingest(item)
         print(json.dumps({"ingested": len(items), "agent_invoked": False,
