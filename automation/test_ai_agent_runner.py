@@ -62,11 +62,15 @@ class RunnerTests(unittest.TestCase):
             return original_run(cmd, **kwargs)
 
         with patch("ai_agent_runner.subprocess.run", side_effect=route):
-            with patch.dict(os.environ, {"OPENAI_API_KEY": auth,
-                                         "GITHUB_REPOSITORY": "anigio2705-dev/hangeul-swipji"}):
-                return run_once(store or self.store, workdir=str(self.workdir),
-                                agent_command=agent_command, timeout=timeout,
-                                heartbeat_interval=heartbeat_interval)
+            # Test-only fixed destination. Production never reads agent origin
+            # to decide where controller transport may push.
+            with patch("ai_agent_runner._trusted_push_destination",
+                       return_value=str(self.remote)):
+                with patch.dict(os.environ, {"OPENAI_API_KEY": auth,
+                                             "GITHUB_REPOSITORY": "anigio2705-dev/hangeul-swipji"}):
+                    return run_once(store or self.store, workdir=str(self.workdir),
+                                    agent_command=agent_command, timeout=timeout,
+                                    heartbeat_interval=heartbeat_interval)
 
     def test_long_timeout_rejected_before_agent_call(self):
         result = self.invoke((sys.executable, "-c", "pass"), timeout=3600)
@@ -351,6 +355,27 @@ exit 23
                     "GIT_CONFIG_KEY_0", "GIT_CONFIG_VALUE_0"):
             self.assertNotIn(key, env)
 
+
+
+    def test_qa15_pushurl_race_after_last_check_must_not_write_rogue(self):
+        """Regression for QA-only PR #173, no real credentials or network."""
+        rogue = Path(self.temp.name) / "qa-rogue-race.git"
+        subprocess.run(["git", "init", "--bare", "-q", str(rogue)], check=True)
+        code = ('from pathlib import Path; import subprocess; '
+                'Path("agent-output.txt").write_text("fake only"); '
+                'subprocess.run(["git","add","agent-output.txt"],check=True); '
+                'subprocess.run(["git","commit","-qm","fake agent commit"],check=True)')
+        def mutate_at_push(command, **kwargs):
+            if command[:2] == ["git", "push"]:
+                self.git(["remote", "set-url", "--push", "origin", str(rogue)])
+            return _run_with_lease(command, **kwargs)
+        with patch("ai_agent_runner._run_with_lease",
+                   side_effect=mutate_at_push):
+            result = self.invoke((sys.executable, "-c", code))
+        rogue_sha = self.git(["ls-remote", str(rogue),
+                             "refs/heads/work/qa-sim"]).stdout.strip()
+        self.assertEqual(rogue_sha, "", "untrusted remote was written")
+        self.assertEqual(result["status"], "REPORTED_QA_PENDING")
 
 if __name__ == "__main__":
     unittest.main()
