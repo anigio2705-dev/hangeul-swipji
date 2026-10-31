@@ -144,6 +144,9 @@ class SignedIssueWebhookTests(unittest.TestCase):
                 return {"head_sha": "a" * 40, "run_attempt": 1,
                         "status": "completed", "conclusion": "success",
                         "event": "pull_request"}
+            if "/check-runs?" in path:
+                return {"total_count": 1, "check_runs": [
+                    {"status": "completed", "conclusion": "success"}]}
             if "/pulls/" in path:
                 return {"head": {"sha": "a" * 40, "ref": "support/safe-work"},
                         "base": {"ref": "automation/isolated-base"},
@@ -165,7 +168,7 @@ class SignedIssueWebhookTests(unittest.TestCase):
                 "/var/lib/hangeul-swipji/test.sqlite3",
                 token="fake", repo=self.repo, now=1001), "IDLE")
         self.assertEqual(len(posted), 1)
-        self.assertIn("HS_B_QA_HANDOFF run=99 attempt=1 sha=" + "a" * 40,
+        self.assertIn("HS_B_QA_HANDOFF pr=162 sha=" + "a" * 40,
                       posted[0])
         db = real_connect(self.db)
         self.assertEqual(db.execute(
@@ -187,6 +190,9 @@ class SignedIssueWebhookTests(unittest.TestCase):
                 return {"head_sha": "a" * 40, "run_attempt": 1,
                         "status": "completed", "conclusion": "success",
                         "event": "pull_request"}
+            if "/check-runs?" in path:
+                return {"total_count": 1, "check_runs": [
+                    {"status": "completed", "conclusion": "success"}]}
             if "/pulls/" in path:
                 return {"head": {"sha": "a" * 40, "ref": "support/safe-work"},
                         "base": {"ref": "automation/isolated-base"},
