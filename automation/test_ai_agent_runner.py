@@ -288,7 +288,7 @@ class RunnerTests(unittest.TestCase):
                 return True
 
         try:
-            with self.assertRaises(subprocess.TimeoutExpired):
+            with self.assertRaisesRegex(RuntimeError, "detached agent descendant"):
                 _run_with_lease(
                     [sys.executable, "-c", parent, str(pidfile),
                      str(marker), child],
