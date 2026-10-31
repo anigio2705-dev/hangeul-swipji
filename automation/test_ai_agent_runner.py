@@ -10,7 +10,7 @@ from pathlib import Path
 from unittest.mock import patch
 from urllib.error import HTTPError
 
-from ai_agent_runner import DeliveryBlocked, ensure_draft_pr, run_once
+from ai_agent_runner import DeliveryBlocked, _origin_remote_status, ensure_draft_pr, run_once
 from continuous_dispatcher import MARKER
 from work_request_worker import DurableWorkStore
 
@@ -48,7 +48,15 @@ class RunnerTests(unittest.TestCase):
         original_run = subprocess.run
 
         def route(cmd, **kwargs):
-            if cmd == ["git", "remote", "get-url", "origin"]:
+            if cmd in (["git", "remote", "get-url", "origin"],
+                       ["git", "remote", "get-url", "--all", "origin"]):
+                return subprocess.CompletedProcess(cmd, 0, remote_url + "\n", "")
+            if cmd == ["git", "remote", "get-url", "--push", "--all", "origin"]:
+                configured = original_run(
+                    ["git", "config", "--get-all", "remote.origin.pushurl"],
+                    cwd=self.workdir, capture_output=True, text=True)
+                if configured.returncode == 0:
+                    return original_run(cmd, **kwargs)
                 return subprocess.CompletedProcess(cmd, 0, remote_url + "\n", "")
             return original_run(cmd, **kwargs)
 
@@ -201,6 +209,54 @@ class RunnerTests(unittest.TestCase):
                 'subprocess.run(["git","commit","-qm","fake agent commit"],check=True)')
         result = self.invoke((sys.executable, "-c", code))
         self.assertEqual(result["status"], "PUSH_FAILED")
+        self.assertNotEqual(self.store.snapshot(301)["status"], "REPORTED")
+
+
+    def test_qa15_pushurl_override_cannot_push_to_rogue(self):
+        rogue = Path(self.temp.name) / "rogue.git"
+        subprocess.run(["git", "init", "--bare", "-q", str(rogue)], check=True)
+        self.git(["remote", "set-url", "--push", "origin", str(rogue)])
+        code = ('from pathlib import Path; import subprocess; '
+                'Path("agent-output.txt").write_text("fake only"); '
+                'subprocess.run(["git","add","agent-output.txt"],check=True); '
+                'subprocess.run(["git","commit","-qm","fake agent commit"],check=True)')
+        result = self.invoke((sys.executable, "-c", code))
+        self.assertEqual(result["status"], "UNSAFE_PUSH_REMOTE")
+        self.assertEqual(self.git(["ls-remote", str(rogue),
+                                   "refs/heads/work/qa-sim"]).stdout.strip(), "")
+        self.assertEqual(self.store.snapshot(301)["status"], "PENDING")
+
+    def test_qa15_pushinstead_of_rewrite_is_blocked(self):
+        rogue = Path(self.temp.name) / "rogue.git"
+        self.git(["remote", "set-url", "origin",
+                  "https://github.com/anigio2705-dev/hangeul-swipji.git"])
+        self.git(["config", "url." + str(rogue) + ".pushInsteadOf",
+                  "https://github.com/anigio2705-dev/hangeul-swipji.git"])
+        allowed = {"https://github.com/anigio2705-dev/hangeul-swipji.git"}
+        self.assertEqual(_origin_remote_status(str(self.workdir), allowed),
+                         "UNSAFE_PUSH_REMOTE")
+
+    def test_qa15_multiple_push_urls_are_blocked(self):
+        safe = "https://github.com/anigio2705-dev/hangeul-swipji.git"
+        self.git(["remote", "set-url", "origin", safe])
+        self.git(["config", "--add", "remote.origin.pushurl", safe])
+        self.git(["config", "--add", "remote.origin.pushurl", safe])
+        self.assertEqual(_origin_remote_status(str(self.workdir), {safe}),
+                         "UNSAFE_PUSH_REMOTE")
+
+    def test_qa15_agent_changes_pushurl_after_initial_check(self):
+        rogue = Path(self.temp.name) / "rogue.git"
+        subprocess.run(["git", "init", "--bare", "-q", str(rogue)], check=True)
+        code = ('from pathlib import Path; import subprocess; '
+                'subprocess.run(["git","config","remote.origin.pushurl",'
+                f'{str(rogue)!r}],check=True); '
+                'Path("agent-output.txt").write_text("fake only"); '
+                'subprocess.run(["git","add","agent-output.txt"],check=True); '
+                'subprocess.run(["git","commit","-qm","fake agent commit"],check=True)')
+        result = self.invoke((sys.executable, "-c", code))
+        self.assertEqual(result["status"], "UNSAFE_PUSH_REMOTE")
+        self.assertEqual(self.git(["ls-remote", str(rogue),
+                                   "refs/heads/work/qa-sim"]).stdout.strip(), "")
         self.assertNotEqual(self.store.snapshot(301)["status"], "REPORTED")
 
 
