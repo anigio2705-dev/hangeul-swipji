@@ -5,6 +5,7 @@ requests QA; it NEVER represents QA_PASS, A READY, or next-task authorization.
 No secrets are printed or passed to an AI-controlled subprocess.
 """
 import json
+import re
 import os
 import sqlite3
 import time
@@ -45,7 +46,9 @@ def _existing_comment(repo, issue_number, token, marker, legacy_marker=None):
             # Before run/attempt markers existed, attempt 1 used a bare
             # PR/SHA marker. Match the *whole line* only; never confuse a
             # newer attempt-specific marker with the legacy form.
-            if legacy_marker and legacy_marker in body.splitlines():
+            if legacy_marker and re.search(
+                    re.escape(legacy_marker) + r"(?![ \\t]+run=)(?=$|[\\s\\\\])",
+                    body):
                 return item.get("html_url", "")
         if len(rows) < 100:
             return None
