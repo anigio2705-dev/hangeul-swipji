@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>한글쉽지 · 국가별 소개 보상 검토 미리보기</title>
+  <style>
+    :root{color-scheme:light;font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;background:#f5f8fc;color:#14223d}
+    *{box-sizing:border-box}body{margin:0}header{background:#112b56;color:#fff;padding:28px max(20px,calc((100vw - 900px)/2))}
+    header a{color:#e6f2ff}h1{font-size:clamp(1.4rem,3vw,2rem);margin:.6rem 0}
+    main{max-width:900px;margin:24px auto;padding:0 18px 40px}
+    .card{background:white;border:1px solid #d9e3ef;border-radius:16px;padding:24px;margin:16px 0;box-shadow:0 4px 16px #1d34540d}
+    .warning{background:#fff3d8;border-left:5px solid #bf7b13;padding:16px;border-radius:8px}
+    label{display:block;font-weight:650;margin:16px 0 7px}
+    select,input{display:block;width:100%;font:inherit;border:1px solid #8999b2;border-radius:8px;padding:12px;background:white}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+    button{font:inherit;border-radius:8px;border:0;padding:12px 18px;cursor:pointer;background:#154f9b;color:white;margin-top:18px}
+    button:disabled{background:#d9e0e9;color:#48576b;cursor:not-allowed}
+    #status{font-weight:700;font-size:1.15rem;color:#8b321b}small{color:#52617b}
+    @media(max-width:650px){.grid{grid-template-columns:1fr}.card{padding:18px}}
+  </style>
+</head>
+<body>
+<header>
+  <a href="../index.html#teaching-platform">← 한글쉽지 학습·강사 플랫폼</a>
+  <h1>국가별 소개 보상 정책 검토</h1>
+  <p>160개 과제 #107 · 격리된 정책 검토 화면 · 실제 지급 기능 없음</p>
+</header>
+<main>
+  <section class="warning" role="alert">
+    <strong>법률·세무 검토 전: 모든 국가의 보상 활성화가 차단되어 있습니다.</strong>
+    <p>아래 국가는 서비스 검토 대상 예시이며 해당 국가에서 보상이 합법이거나 승인되었다는 뜻이 아닙니다.
+    소개·다단계 보상·세금·현금성 혜택은 국가별 전문가 검토와 대표 승인 전까지 실제 적용하지 않습니다.</p>
+  </section>
+  <section class="card" aria-labelledby="form-heading">
+    <h2 id="form-heading">검토할 가상 조건</h2>
+    <div class="grid">
+      <div><label for="country">검토 대상 국가</label>
+        <select id="country">
+          <option value="KR">대한민국</option><option value="US">미국</option>
+          <option value="JP">일본</option><option value="CN">중국</option>
+          <option value="ES">스페인</option><option value="RU">러시아</option>
+          <option value="MN">몽골</option><option value="VN">베트남</option>
+        </select>
+      </div>
+      <div><label for="reward">가상 보상 형태</label>
+        <select id="reward">
+          <option value="discount">할인</option><option value="points">포인트</option>
+          <option value="cash_equivalent">현금성 혜택</option><option value="cash_payout">현금 지급</option>
+        </select>
+      </div>
+      <div><label for="depth">소개 관계 단계</label>
+        <select id="depth">
+          <option value="1">직접 소개 1단계</option><option value="2">2단계</option>
+          <option value="3">3단계 이상 검토 예시</option>
+        </select>
+      </div>
+    </div>
+    <button id="inspect" type="button">검토 조건 확인</button>
+    <button id="payout" type="button" disabled aria-disabled="true">실제 지급 불가</button>
+    <p><small>이 화면은 서버·DB·결제 시스템에 연결되지 않은 읽기 전용 데모입니다.</small></p>
+  </section>
+  <section class="card" aria-live="polite">
+    <h2>검토 결과</h2>
+    <p id="status">법률·세무 검토 필요 / 지급 차단</p>
+    <p id="details">국가와 보상 형태를 선택해 검토할 항목을 확인하세요.</p>
+    <h3>필수 검토 항목</h3>
+    <ul>
+      <li>현지 소개·다단계 판매·광고 규제 및 소비자 보호</li>
+      <li>세무 신고·원천징수·현금성 포인트 및 국경 간 지급</li>
+      <li>개인정보·연령·강사 계약·환불 및 차지백</li>
+      <li>독립 법률·세무 검토 증빙, 정책 버전 및 대표 승인</li>
+    </ul>
+  </section>
+</main>
+<script>
+  "use strict";
+  const country = document.getElementById("country");
+  const reward = document.getElementById("reward");
+  const depth = document.getElementById("depth");
+  const status = document.getElementById("status");
+  const details = document.getElementById("details");
+  function inspect() {
+    const warnings = [];
+    if (Number(depth.value) > 1) warnings.push("다단계 소개 구조의 추가 규제 검토");
+    if (reward.value === "cash_equivalent" || reward.value === "cash_payout") {
+      warnings.push("현금성 혜택·지급 관련 세무 및 지급 규제 검토");
+    }
+    warnings.push("현지 법률·세무 전문가의 독립 검토 및 대표 정책 승인");
+    status.textContent = country.selectedOptions[0].textContent + " · 정책 미승인 / 실제 지급 차단";
+    details.textContent = "필수 검토: " + warnings.join(" · ") + ". 실제 결제·포인트 적립·지급은 수행하지 않습니다.";
+  }
+  document.getElementById("inspect").addEventListener("click", inspect);
+  inspect();
+</script>
+</body>
+</html>
