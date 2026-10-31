@@ -27,7 +27,7 @@ def _trusted_db_path(db_path, root=None):
     if root is None:
         root = DB_ROOT
     if (not isinstance(db_path, str) or not os.path.isabs(db_path)
-            or "\\x00" in db_path or ".." in db_path.split(os.sep)):
+            or "\x00" in db_path or ".." in db_path.split(os.sep)):
         raise ValueError("untrusted durable database path")
     trusted_root = os.path.normpath(root)
     candidate = os.path.normpath(db_path)
