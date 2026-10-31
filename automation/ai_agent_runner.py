@@ -10,10 +10,96 @@ import re
 import signal
 import subprocess
 import time
+import urllib.error
+import urllib.parse
+import urllib.request
 from pathlib import Path
 
 from work_request_worker import DurableWorkStore
 
+
+
+
+class DeliveryBlocked(RuntimeError):
+    """Fail closed: remote side effects may have happened; do not blindly retry."""
+
+
+def _github_json(url, token, payload=None):
+    body = json.dumps(payload).encode("utf-8") if payload is not None else None
+    req = urllib.request.Request(
+        url, data=body, headers={
+            "Authorization": "Bearer " + token,
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+            "Content-Type": "application/json",
+        }, method="POST" if body is not None else "GET")
+    with urllib.request.urlopen(req, timeout=20) as response:
+        return json.load(response)
+
+
+def ensure_draft_pr(*, repo, branch, base, sha, token):
+    """Idempotent draft PR handoff; never replay an ambiguous GitHub POST.
+
+    PR creation is only a request for CI/independent QA, not QA_PASS/READY.
+    A caller must supply a separate, least-privilege controller token.
+    """
+    if not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", repo):
+        raise DeliveryBlocked("invalid repository")
+    if not re.fullmatch(r"[A-Za-z0-9._/-]+", branch) or not branch.startswith(
+            ("work/", "automation/", "agent/")):
+        raise DeliveryBlocked("invalid isolated head")
+    if not re.fullmatch(r"[A-Za-z0-9._/-]+", base) or base in {"main", "master"}:
+        raise DeliveryBlocked("use an isolated PR base, not main")
+    if not re.fullmatch(r"[0-9a-f]{40}", sha) or not token:
+        raise DeliveryBlocked("missing verified SHA or controller credential")
+    api = f"https://api.github.com/repos/{repo}/pulls"
+    owner = repo.split("/", 1)[0]
+    query = urllib.parse.urlencode({
+        "state": "open", "head": f"{owner}:{branch}", "base": base,
+        "per_page": 100})
+
+    def existing():
+        rows = _github_json(api + "?" + query, token)
+        matches = [p for p in rows
+                   if p.get("head", {}).get("ref") == branch
+                   and p.get("base", {}).get("ref") == base]
+        if len(matches) > 1:
+            raise DeliveryBlocked("duplicate PRs require manual reconciliation")
+        if not matches:
+            return None
+        pr = matches[0]
+        if pr.get("head", {}).get("sha") != sha or not pr.get("draft"):
+            raise DeliveryBlocked("existing PR SHA/draft mismatch")
+        return pr["number"]
+
+    try:
+        found = existing()
+        if found is not None:
+            return found
+        try:
+            created = _github_json(api, token, {
+                "title": f"Draft: AI work on {branch}",
+                "head": branch, "base": base, "draft": True,
+                "body": (f"Automated isolated candidate; exact SHA {sha}. "
+                         "CI and independent 15-team QA pending. "
+                         "No auto-merge, no READY, no production changes.")})
+        except urllib.error.HTTPError as exc:
+            # 503/429/403/422 may be ambiguous. Reconcile by GET exactly once;
+            # do NOT replay POST when GitHub may already have created a PR.
+            if exc.code not in (403, 422, 429, 500, 502, 503, 504):
+                raise DeliveryBlocked(f"PR POST HTTP {exc.code}") from exc
+            found = existing()
+            if found is not None:
+                return found
+            raise DeliveryBlocked(f"ambiguous PR POST HTTP {exc.code}") from exc
+        if (created.get("head", {}).get("sha") != sha
+                or not created.get("draft")
+                or created.get("base", {}).get("ref") != base):
+            raise DeliveryBlocked("new PR SHA/draft/base mismatch")
+        return created["number"]
+    except (urllib.error.URLError, TimeoutError, ValueError, KeyError,
+            TypeError) as exc:
+        raise DeliveryBlocked("GitHub PR API unavailable or malformed") from exc
 
 
 def _run_with_lease(command, *, cwd, store, issue, owner, timeout,
@@ -159,7 +245,27 @@ def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"),
         if advertised.split() != [sha, f"refs/heads/{branch}"]:
             store.fail(issue, owner)
             return {"status": "REMOTE_SHA_MISMATCH", "issue": issue}
+        # Optional strict PR gate for a real always-on controller. Without it
+        # the queue records a push-only candidate, NEVER completed delivery.
+        pr_number = None
+        if os.environ.get("HS_REQUIRE_DRAFT_PR") == "1":
+            token = os.environ.get("GH_TOKEN", "")
+            if not token:
+                store.fail(issue, owner)
+                return {"status": "BLOCKED_GITHUB_AUTH", "issue": issue}
+            try:
+                pr_number = ensure_draft_pr(
+                    repo=expected, branch=branch,
+                    base=os.environ.get("HS_PR_BASE", "automation/event-driven-ready-gate-20261031"),
+                    sha=sha, token=token)
+            except DeliveryBlocked:
+                store.fail(issue, owner)
+                return {"status": "PR_DELIVERY_BLOCKED", "issue": issue}
+            if not store.heartbeat(issue, owner, lease_seconds=3600):
+                return {"status": "LEASE_LOST", "issue": issue}
         proof = f"issue={issue} branch={branch} remote_sha={sha} agent=codex QA_PENDING"
+        if pr_number is not None:
+            proof += f" draft_pr={pr_number} CI_PENDING"
         if not store.finish(issue, owner, proof):
             return {"status": "LEASE_LOST", "issue": issue}
         return {"status": "REPORTED_QA_PENDING", "issue": issue, "proof": proof}
