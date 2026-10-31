@@ -7,7 +7,7 @@ booleans in this function are fixtures, not authentication.
 """
 import re
 
-_ID = re.compile(r"[A-Za-z0-9_-]{1,64}\\Z")
+_ID = re.compile(r"[A-Za-z0-9_-]{1,64}\Z")
 _KINDS = {"succeeded", "failed", "cancelled", "timed_out"}
 _MAX_EVENTS = 100
 
