@@ -304,6 +304,67 @@ class RunnerTests(unittest.TestCase):
                                    "refs/heads/work/qa-sim"]).stdout.strip(), "")
 
 
+    def test_fenced_push_rejects_cancel_committed_before_spawn(self):
+        """QA #174: a cancellation committed at broker entry forbids writes."""
+        code = ('from pathlib import Path; import subprocess; '
+                'Path("agent-output.txt").write_text("fake only"); '
+                'subprocess.run(["git","add","agent-output.txt"],check=True); '
+                'subprocess.run(["git","commit","-qm","fake agent commit"],check=True)')
+        original = self.store.fenced_remote_write
+
+        def revoke_then_fence(issue, owner, callback, **kwargs):
+            # Deterministic race: cancellation commits before broker lock.
+            self.store.reconcile_open(set())
+            return original(issue, owner, callback, **kwargs)
+
+        with patch.object(self.store, "fenced_remote_write",
+                          side_effect=revoke_then_fence):
+            result = self.invoke((sys.executable, "-c", code))
+        self.assertEqual(result["status"], "LEASE_LOST")
+        self.assertEqual(self.store.snapshot(301)["status"], "CANCELLED")
+        self.assertFalse(self.git(["ls-remote", "origin",
+                                   "refs/heads/work/qa-sim"]).stdout.strip())
+
+    def test_fenced_write_serializes_concurrent_cancellation_commit(self):
+        """A cancellation may request during write but cannot commit before it."""
+        claim = self.store.claim("fence-test", lease_seconds=3600)
+        self.assertIsNotNone(claim)
+        started = threading.Event()
+        finished = threading.Event()
+        timestamps = {}
+        db_path = str(Path(self.temp.name) / "worker.db")
+
+        def cancel():
+            started.wait(timeout=3)
+            separate = DurableWorkStore(db_path)
+            try:
+                timestamps["cancel_requested"] = time.monotonic()
+                separate.reconcile_open(set())
+                timestamps["cancel_committed"] = time.monotonic()
+            finally:
+                separate.close()
+                finished.set()
+
+        thread = threading.Thread(target=cancel, daemon=True)
+        thread.start()
+
+        def simulated_bounded_write():
+            started.set()
+            self.assertTrue(started.wait(timeout=1))
+            time.sleep(0.25)
+            timestamps["write_completed"] = time.monotonic()
+            return "transport completed"
+
+        result = self.store.fenced_remote_write(
+            claim["issue"], claim["owner"], simulated_bounded_write,
+            minimum_seconds=150)
+        self.assertEqual(result, "transport completed")
+        self.assertTrue(finished.wait(timeout=3))
+        thread.join(timeout=1)
+        self.assertLess(timestamps["cancel_requested"], timestamps["write_completed"])
+        self.assertLessEqual(timestamps["write_completed"], timestamps["cancel_committed"])
+        self.assertEqual(self.store.snapshot(301)["status"], "CANCELLED")
+
     def test_controller_rejects_agent_ssh_command_before_any_push(self):
         """Reproduce independent PR #172 without leaking even a fake token."""
         fake_ssh = Path(self.temp.name) / "qa-fake-ssh"
