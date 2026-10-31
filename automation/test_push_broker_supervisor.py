@@ -37,6 +37,25 @@ class SupervisorTests(unittest.TestCase):
             time.sleep(0.6)
             self.assertFalse(marker.exists())
 
+    def test_zero_exit_with_background_child_is_uncertain(self):
+        """A successful parent exit must not leave a delayed child writer."""
+        with tempfile.TemporaryDirectory() as tmp:
+            marker = Path(tmp) / "late-write"
+            code = (
+                "import subprocess,sys;"
+                "subprocess.Popen([sys.executable,'-c',"
+                "'import pathlib,sys,time;time.sleep(0.5);"
+                "pathlib.Path(sys.argv[1]).write_text(\"bad\")',"
+                "sys.argv[1]],stdin=subprocess.DEVNULL,"
+                "stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);"
+                "print('parent-exited')"
+            )
+            with self.assertRaises(PushUncertain):
+                supervise([sys.executable, "-c", code, str(marker)],
+                          lease_live=lambda: True, timeout=2)
+            time.sleep(0.65)
+            self.assertFalse(marker.exists(), "orphan child wrote after parent exit")
+
     def test_timeout_fail_closed(self):
         with self.assertRaises(PushUncertain):
             supervise([sys.executable, "-c", "import time;time.sleep(1)"],
