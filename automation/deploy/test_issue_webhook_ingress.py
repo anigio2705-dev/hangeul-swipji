@@ -66,6 +66,71 @@ class SignedIssueWebhookTests(unittest.TestCase):
                        "title": MARKER + " second", "state": "open"})
         self.assertEqual(self.call(event=event), (409, "multiple_active_requests"))
 
+    def workflow_event(self, *, sha="a" * 40, conclusion="success", run_id=99):
+        return {"repository": {"full_name": self.repo}, "action": "completed",
+                "workflow_run": {"id": run_id, "run_attempt": 1,
+                                 "event": "pull_request", "conclusion": conclusion,
+                                 "head_sha": sha, "head_branch": "support/safe-work",
+                                 "head_repository": {"full_name": self.repo},
+                                 "updated_at": "2026-10-31T08:00:00Z",
+                                 "pull_requests": [{"number": 162,
+                                     "base": {"ref": "automation/isolated-base"},
+                                     "head": {"ref": "support/safe-work",
+                                              "sha": sha}}]}}
+
+    def test_ci_success_creates_durable_b_qa_outbox_not_ready(self):
+        self.assertEqual(self.call(event=self.workflow_event(),
+                                   event_type="workflow_run"),
+                         (200, "qa_handoff_queued"))
+        import sqlite3
+        db = sqlite3.connect(self.db)
+        try:
+            row = db.execute("SELECT run_id,pr_number,head_sha,state "
+                             "FROM ci_qa_outbox").fetchone()
+            self.assertEqual(row, (99, 162, "a" * 40, "PENDING_B_QA_REQUEST"))
+            self.assertFalse(db.execute(
+                "SELECT name FROM sqlite_master WHERE name='work'").fetchone())
+        finally:
+            db.close()
+
+    def test_ci_red_does_not_create_qa_outbox(self):
+        self.assertEqual(self.call(event=self.workflow_event(conclusion="failure"),
+                                   event_type="workflow_run"),
+                         (202, "ignored_workflow"))
+        self.assertFalse(Path(self.db).exists())
+
+    def test_ci_replay_is_idempotent_even_new_delivery_id(self):
+        self.assertEqual(self.call(event=self.workflow_event(),
+                                   event_type="workflow_run")[0], 200)
+        self.assertEqual(self.call(event=self.workflow_event(),
+                                   event_type="workflow_run"),
+                         (200, "duplicate_ci_event"))
+
+    def test_ci_conflicting_same_run_id_rejected(self):
+        self.call(event=self.workflow_event(), event_type="workflow_run")
+        with self.assertRaises(InvalidDelivery):
+            self.call(event=self.workflow_event(sha="b" * 40),
+                      event_type="workflow_run")
+
+    def test_ci_head_mismatch_rejected(self):
+        event = self.workflow_event()
+        event["workflow_run"]["pull_requests"][0]["head"]["sha"] = "b" * 40
+        with self.assertRaises(InvalidDelivery):
+            self.call(event=event, event_type="workflow_run")
+        self.assertFalse(Path(self.db).exists())
+
+    def test_ci_multi_pr_or_main_target_not_enqueued(self):
+        event = self.workflow_event()
+        event["workflow_run"]["pull_requests"].append(
+            dict(event["workflow_run"]["pull_requests"][0]))
+        self.assertEqual(self.call(event=event, event_type="workflow_run"),
+                         (202, "ignored_workflow"))
+        event = self.workflow_event()
+        event["workflow_run"]["pull_requests"][0]["base"]["ref"] = "main"
+        self.assertEqual(self.call(event=event, event_type="workflow_run"),
+                         (202, "ignored_workflow"))
+        self.assertFalse(Path(self.db).exists())
+
     def test_closed_issue_cancels_existing_lease(self):
         self.assertEqual(self.call()[0], 200)
         store = DurableWorkStore(self.db)
