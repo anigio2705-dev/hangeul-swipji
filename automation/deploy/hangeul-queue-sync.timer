@@ -1,0 +1,12 @@
+[Unit]
+Description=Poll GitHub work requests into durable queue (fallback, NOT event-immediate)
+
+[Timer]
+OnBootSec=30s
+OnUnitInactiveSec=30s
+AccuracySec=1s
+Persistent=true
+Unit=hangeul-queue-sync.service
+
+[Install]
+WantedBy=timers.target
