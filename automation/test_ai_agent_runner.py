@@ -352,5 +352,36 @@ exit 23
             self.assertNotIn(key, env)
 
 
+
+    def test_qa15_pushurl_race_after_last_check_must_not_write_rogue(self):
+        """Negative test: agent-side background race at push entry.
+
+        An agent could leave a detached process that changes .git/config after
+        the controller's last URL check but before git push. Only local bare
+        repositories and a fake CLI are used; no real credentials or network.
+        """
+        rogue = Path(self.temp.name) / "qa-rogue-race.git"
+        subprocess.run(["git", "init", "--bare", "-q", str(rogue)], check=True)
+        code = ('from pathlib import Path; import subprocess; '
+                'Path("agent-output.txt").write_text("fake only"); '
+                'subprocess.run(["git","add","agent-output.txt"],check=True); '
+                'subprocess.run(["git","commit","-qm","fake agent commit"],check=True)')
+        def mutate_at_push(command, **kwargs):
+            if command[:2] == ["git", "push"]:
+                self.git(["remote", "set-url", "--push", "origin", str(rogue)])
+            return _run_with_lease(command, **kwargs)
+        with patch("ai_agent_runner._run_with_lease",
+                   side_effect=mutate_at_push):
+            result = self.invoke((sys.executable, "-c", code))
+        rogue_sha = self.git(["ls-remote", str(rogue),
+                             "refs/heads/work/qa-sim"]).stdout.strip()
+        self.assertEqual(
+            rogue_sha, "",
+            "QA_FAIL: a changed pushURL between validation and git push "
+            "caused an unauthorized remote write. Later REMOTE_SHA_MISMATCH "
+            "does not undo the rogue push. Runner status=" + result["status"]
+        )
+        self.assertNotEqual(self.store.snapshot(301)["status"], "REPORTED")
+
 if __name__ == "__main__":
     unittest.main()
