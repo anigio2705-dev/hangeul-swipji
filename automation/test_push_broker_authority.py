@@ -1,9 +1,12 @@
 import tempfile
+import sys
+import time
 import threading
 import unittest
 from pathlib import Path
 
 from push_broker_authority import BrokerAuthority, BrokerDenied
+from push_broker_supervisor import PushRevoked, PushUncertain, supervise_reserved
 
 SHA = "a" * 40
 BRANCH = "work/broker-safe"
@@ -119,6 +122,46 @@ class BrokerAuthorityTests(unittest.TestCase):
         self.broker.reserve("task-1", token, SHA, BRANCH)
         self.assertEqual(self.broker.recover(), {"uncertain": 1, "expired": 0})
         self.assertEqual(self.broker.recover(), {"uncertain": 0, "expired": 0})
+
+    def test_reserved_fake_transport_needs_separate_remote_proof(self):
+        token = self.lease()
+        result = supervise_reserved(
+            [sys.executable, "-c", "print('fake-only')"],
+            authority=self.broker, task="task-1", token=token,
+            sha=SHA, branch=BRANCH, timeout=2)
+        self.assertEqual(result.stdout.strip(), "fake-only")
+        self.assertEqual(self.broker.state("task-1"), "PUSH_IN_FLIGHT")
+        self.assertTrue(self.broker.mark_verified("task-1", token, SHA, BRANCH, SHA))
+
+    def test_reserved_failed_transport_quarantined(self):
+        token = self.lease()
+        with self.assertRaises(PushUncertain):
+            supervise_reserved(
+                [sys.executable, "-c", "import sys;sys.exit(3)"],
+                authority=self.broker, task="task-1", token=token,
+                sha=SHA, branch=BRANCH, timeout=2)
+        self.assertEqual(self.broker.state("task-1"), "PUSH_UNCERTAIN")
+
+    def test_reserved_revoked_during_fake_transport(self):
+        token = self.lease()
+        def cancel():
+            time.sleep(0.15)
+            other = BrokerAuthority(self.path, clock=lambda: self.now[0])
+            try:
+                other.revoke("task-1")
+            finally:
+                other.close()
+        t = threading.Thread(target=cancel)
+        t.start()
+        try:
+            with self.assertRaises((PushRevoked, PushUncertain)):
+                supervise_reserved(
+                    [sys.executable, "-c", "import time;time.sleep(1)"],
+                    authority=self.broker, task="task-1", token=token,
+                    sha=SHA, branch=BRANCH, timeout=2, interval=0.03)
+        finally:
+            t.join(timeout=3)
+        self.assertEqual(self.broker.state("task-1"), "PUSH_UNCERTAIN")
 
 
 if __name__ == "__main__":
