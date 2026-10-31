@@ -154,7 +154,7 @@ class SignedIssueWebhookTests(unittest.TestCase):
                         "base": {"ref": "automation/isolated-base"},
                         "merged": False, "state": "open", "draft": True}
             if "/comments?" in path:
-                return [{"body": x} for x in posted]
+                return [{"body": x, "user": {"login": "anigio2705-dev"}} for x in posted]
             if "/comments" in path and payload:
                 posted.append(payload["body"])
                 return {"id": 100}
@@ -202,7 +202,7 @@ class SignedIssueWebhookTests(unittest.TestCase):
                         "base": {"ref": "automation/isolated-base"},
                         "merged": False, "state": "open", "draft": True}
             if "/comments?" in path:
-                return [{"body": x} for x in seen]
+                return [{"body": x, "user": {"login": "anigio2705-dev"}} for x in seen]
             if "/comments" in path and payload:
                 post_attempts.append(payload["body"])
                 raise urllib.error.HTTPError(path, 503, "ambiguous", {}, None)
