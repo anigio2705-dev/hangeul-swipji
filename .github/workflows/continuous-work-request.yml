@@ -1,0 +1,26 @@
+name: Continuous work-request watchdog (pilot)
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: hs-continuous-watchdog
+  cancel-in-progress: false
+jobs:
+  enqueue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify queue deduplication
+        run: PYTHONPATH=automation python -m unittest automation/test_continuous_dispatcher.py -v
+      - name: Enqueue one outstanding work request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          APPLY_QUEUE: 'true'
+        run: python automation/continuous_dispatcher.py
