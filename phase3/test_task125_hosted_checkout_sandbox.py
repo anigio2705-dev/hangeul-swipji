@@ -74,6 +74,19 @@ class Task125HostedCheckoutTests(unittest.TestCase):
             with self.subTest(url=url), self.assertRaises(ValueError):
                 make(session_url=url)
 
+    def test_rejects_empty_query_delimiter(self):
+        with self.assertRaises(ValueError):
+            make(session_url=URL + "?")
+
+    def test_rejects_empty_fragment_delimiter(self):
+        with self.assertRaises(ValueError):
+            make(session_url=URL + "#")
+
+    def test_rejects_multiple_empty_delimiters(self):
+        for suffix in ("?#", "#?", "??", "##"):
+            with self.subTest(suffix=suffix), self.assertRaises(ValueError):
+                make(session_url=URL + suffix)
+
     def test_rejects_invalid_url_types_and_controls(self):
         for url in (None, 4, "", URL + "\n", URL + "\t", "é" + URL, "a" * 300):
             with self.subTest(url=url), self.assertRaises(ValueError):
