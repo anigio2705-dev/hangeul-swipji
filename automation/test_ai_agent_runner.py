@@ -264,6 +264,47 @@ class RunnerTests(unittest.TestCase):
                 except ProcessLookupError:
                     pass
 
+    @unittest.skipUnless(Path("/proc").is_dir(), "Linux procfs required")
+    def test_successful_parent_with_live_detached_child_is_not_success(self):
+        """Zero exit cannot report success while an observed child can still write.
+
+        This is best-effort procfs defense, NOT proof of fork/reparent races;
+        the live host still requires an OS-enforced per-task cgroup.
+        """
+        pidfile = Path(self.temp.name) / "successful-parent-child.pid"
+        marker = Path(self.temp.name) / "write-after-success"
+        child = ("import pathlib,sys,time;"
+                 "time.sleep(0.9);"
+                 "pathlib.Path(sys.argv[1]).write_text('escaped')")
+        parent = ("import pathlib,subprocess,sys,time;"
+                  "p=subprocess.Popen([sys.executable,'-c',sys.argv[3],sys.argv[2]],"
+                  "start_new_session=True,stdout=subprocess.DEVNULL,"
+                  "stderr=subprocess.DEVNULL);"
+                  "pathlib.Path(sys.argv[1]).write_text(str(p.pid));"
+                  "time.sleep(0.3)")
+
+        class LiveLease:
+            def heartbeat(self, issue, owner, lease_seconds):
+                return True
+
+        try:
+            with self.assertRaises(subprocess.TimeoutExpired):
+                _run_with_lease(
+                    [sys.executable, "-c", parent, str(pidfile),
+                     str(marker), child],
+                    cwd=str(self.workdir), store=LiveLease(),
+                    issue=162, owner="fake-qa-only", timeout=2,
+                    heartbeat_interval=0.05)
+            time.sleep(1.0)
+            self.assertFalse(marker.exists(),
+                             "zero-exit agent left detached writer alive")
+        finally:
+            if pidfile.exists():
+                try:
+                    os.kill(int(pidfile.read_text()), signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+
     def test_existing_exact_draft_pr_is_reused(self):
         sha = "a" * 40
         existing = {"number": 500, "draft": True,
