@@ -14,7 +14,7 @@ from work_request_worker import DurableWorkStore
 
 
 def run_once(store, *, workdir, agent_command=("codex", "exec"), timeout=2400):
-    claim = store.claim("central-ai", lease_seconds=3600)
+    before = subprocess.run(["git", "branch", "--show-current"], cwd=workdir,\n                            capture_output=True, text=True, check=True).stdout.strip()\n    if not before or before in {"main", "master"}:\n        return {"status": "UNSAFE_BRANCH"}\n    claim = store.claim("central-ai", lease_seconds=3600)
     if claim is None:
         return {"status": "IDLE"}
     issue, owner = claim["issue"], claim["owner"]
@@ -41,7 +41,7 @@ def run_once(store, *, workdir, agent_command=("codex", "exec"), timeout=2400):
                              capture_output=True, text=True, check=True).stdout.strip()
         branch = subprocess.run(["git", "branch", "--show-current"], cwd=workdir,
                                 capture_output=True, text=True, check=True).stdout.strip()
-        if not branch or branch in {"main", "master"}:
+        if not branch or branch != before or branch in {"main", "master"}:
             store.fail(issue, owner)
             return {"status": "UNSAFE_BRANCH", "issue": issue}
         proof = f"issue={issue} branch={branch} sha={sha} agent=codex"
