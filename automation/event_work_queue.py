@@ -54,6 +54,8 @@ def advance(state, event_id, action, sha, *, new_sha=None):
     if action == "SHA_CHANGED":
         if not valid_sha(new_sha) or new_sha == sha:
             raise ValueError("Distinct valid commit required")
+        if state.phase not in {"DEVELOP", "REWORK", "REVIEW_PENDING", "QA_PENDING"}:
+            raise ValueError("SHA change not allowed in this phase")
         result = replace(state, sha=new_sha, phase="DEVELOP")
     else:
         if new_sha is not None:
@@ -62,7 +64,7 @@ def advance(state, event_id, action, sha, *, new_sha=None):
             ("DEVELOP", "DEV_PASS"): "QA_PENDING",
             ("QA_PENDING", "QA_PASS"): "REVIEW_PENDING",
             ("REVIEW_PENDING", "CENTRAL_PASS"): "ATTESTATION_PENDING",
-            ("REWORK", "REWORK_STARTED"): "DEVELOP",
+            ("REWORK", "REWORK_STARTED"): "REWORK",
         }
         # A later independent QA failure must revoke an earlier PASS, even
         # after central review; otherwise an already-attested candidate
