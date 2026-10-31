@@ -40,7 +40,7 @@ class RunnerTests(unittest.TestCase):
                               capture_output=True, text=True)
 
     def invoke(self, agent_command=("missing-fake-cli-xyz",), *, auth="test-only", store=None,
-               remote_url="https://github.com/anigio2705-dev/hangeul-swipji.git"):
+               remote_url="https://github.com/anigio2705-dev/hangeul-swipji.git", timeout=30):
         original_run = subprocess.run
 
         def route(cmd, **kwargs):
@@ -52,7 +52,12 @@ class RunnerTests(unittest.TestCase):
             with patch.dict(os.environ, {"OPENAI_API_KEY": auth,
                                          "GITHUB_REPOSITORY": "anigio2705-dev/hangeul-swipji"}):
                 return run_once(store or self.store, workdir=str(self.workdir),
-                                agent_command=agent_command, timeout=30)
+                                agent_command=agent_command, timeout=timeout)
+
+    def test_long_timeout_rejected_before_agent_call(self):
+        result = self.invoke((sys.executable, "-c", "pass"), timeout=3600)
+        self.assertEqual(result["status"], "UNSAFE_TIMEOUT")
+        self.assertNotEqual(self.store.snapshot(301)["status"], "REPORTED")
 
     def test_missing_auth_never_invokes_cli(self):
         result = self.invoke(auth="")
