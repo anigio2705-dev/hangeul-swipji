@@ -26,6 +26,10 @@ jobs:
         env:
           PYTHONPATH: automation:automation/deploy
         run: python3 -m unittest discover -s automation/deploy -p 'test_ci_poll_fallback.py' -v
+      - name: Verify durable per-item QA fairness and ambiguous POST recovery
+        env:
+          PYTHONPATH: automation:automation/deploy
+        run: python3 -m unittest discover -s automation/deploy -p 'test_qa_handoff_dispatcher.py' -v
       - name: Compile webhook, QA dispatcher and CI polling fallback
         run: python3 -m py_compile automation/deploy/issue_webhook_ingress.py automation/deploy/qa_handoff_dispatcher.py automation/deploy/ci_poll_fallback.py
       - name: Verify systemd units
