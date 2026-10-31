@@ -35,6 +35,10 @@ class WorkerStoreTests(unittest.TestCase):
         with self.assertRaises(QueueIntegrityError):
             self.a.ingest({**self.work, "title": MARKER + " changed"}, now=101)
 
+    def test_closed_issue_rejected(self):
+        with self.assertRaises(ValueError):
+            self.a.ingest({**self.work, "state": "closed"}, now=100)
+
     def test_pull_request_rejected(self):
         with self.assertRaises(ValueError):
             self.a.ingest({**self.work, "pull_request": {}}, now=100)
