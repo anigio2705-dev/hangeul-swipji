@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>한글쉽지 · 소개 보상 정책 버전 검토</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;color:#152746;background:#f3f7fc}*{box-sizing:border-box}body{margin:0}header{background:#122e5c;color:#fff;padding:28px max(18px,calc((100vw - 920px)/2))}h1{margin:8px 0;font-size:clamp(1.45rem,3vw,2rem)}main{max-width:920px;margin:auto;padding:20px 18px 48px}.card{background:#fff;border:1px solid #d7e1ee;border-radius:14px;padding:22px;margin:14px 0}.blocked{background:#fff0d9;border-left:5px solid #9d5b00;padding:16px;border-radius:9px}ul{padding-left:22px;line-height:1.7}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.grid article{background:#f3f7fc;border-radius:10px;padding:16px}p{line-height:1.65}small{color:#465b79}a{color:#e6f2ff}@media(max-width:640px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><small style="color:#c7dcff">한글쉽지 · 내부 제품 후보 #110</small><h1>소개 보상 규칙과 취소 조건</h1><p>정책 승인과 실제 지급은 별개입니다. 이 화면은 읽기 전용 검토 후보입니다.</p></header>
+<main>
+<section class="card" aria-labelledby="policy-state"><h2 id="policy-state">정책 버전 상태</h2>
+<div class="blocked" role="status"><strong>승인된 정책 버전 없음 · POLICY_UNVERIFIED</strong><p>현재 서버가 검증한 승인 정책과 예약·결제 증빙이 연결되지 않았습니다. 따라서 가상 보상 후보 금액도 표시하지 않습니다.</p></div>
+<p><strong>실제 결제·포인트 적립·현금 지급:</strong> 모두 비활성. 브라우저 입력으로 승인 상태를 변경할 수 없습니다.</p></section>
+<section class="card"><h2>참여자별 설명</h2><div class="grid">
+<article><h3>학습자</h3><p>수업 신청과 학습은 소개 보상 승인 여부와 별개입니다.</p></article>
+<article><h3>강사</h3><p>수업 이행과 강사 보수는 이 가상 소개 보상 화면으로 변경되지 않습니다.</p></article>
+<article><h3>소개자</h3><p>정책 버전, 추천인 자격, 결제·수업 완료, 환불 가능 기간, 악용 검토를 모두 확인하기 전에는 보상 후보가 없습니다.</p></article>
+<article><h3>플랫폼</h3><p>정책 버전과 사유를 설명할 뿐 정산·회계 원장이나 실제 지급에 영향을 주지 않습니다.</p></article>
+</div></section>
+<section class="card"><h2>보류·취소 사유</h2><ul>
+<li>환불·취소·차지백 발생 시 후보 무효</li>
+<li>결제 확인 또는 수업·출석 증빙이 없으면 대기</li>
+<li>환불 가능 기간 종료 전에는 확정 후보 없음</li>
+<li>추천인 자격 상실 시 신규 보상 후보 제외 (기존 소개 관계 보존)</li>
+<li>자기추천·순환소개·가짜 거래 등 위험 신호는 독립 검토</li>
+<li>정책 버전·국가별 법률·세무 검토가 확인되지 않으면 적용 금지</li>
+</ul><p><small>실제 정책이 승인되면 서버에서 서명·버전·유효기간·증빙을 검증한 후에만 시뮬레이션을 제공하도록 설계 중입니다. 이 페이지는 배포되지 않은 격리 브랜치 후보입니다.</small></p></section>
+</main>
+</body>
+</html>
