@@ -46,7 +46,8 @@ def request(path, token, method="GET", payload=None, *, opener=None, sleeper=tim
             limited = (error.code == 403 and
                        (headers.get("X-RateLimit-Remaining") == "0" or
                         headers.get("Retry-After") is not None))
-            # A POST can commit despite a 503 response: do not replay it.\n            if method == "POST" or (error.code not in RETRYABLE and not limited) or attempt == 3:
+            # A POST can commit despite a 503 response: do not replay it.
+            if method == "POST" or (error.code not in RETRYABLE and not limited) or attempt == 3:
                 raise
             wait = min(8, 2 ** attempt)
             try:
