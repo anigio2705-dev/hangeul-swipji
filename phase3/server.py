@@ -291,6 +291,22 @@ class Handler(BaseHTTPRequestHandler):
             if not 1000<=price<=1000000: raise Error('가격 범위를 확인하세요')
             return {'currency':'KRW','basis':'hypothetical-test-only','scenarios':[dict(commissionBps=c,referralBps=r,processorBps=300,refundReserveBps=refund,taxReserveBps=tax,**money(price,c,r,300,tax,refund)) for c in (1500,2000,2500) for r in (0,300,500)],'note':'PG 3%·환불 충당·세금 충당은 가정값입니다. 법정 세율·확정 요율·순이익이 아니며 고정비·실제 세금은 별도입니다.'},None
         u=self.user(db); uid=u['id']
+        if method=='GET' and path=='/api/referrals/status':
+            # #108: read only the authenticated account's own immutable link.
+            # Never trust a client-supplied user id or expose other users' codes.
+            if u['role'] not in ('learner','partner','teacher'):
+                raise Error('소개 관계를 조회할 권한이 없습니다',403)
+            inviter=None
+            if u['referred_by']:
+                parent=db.execute('SELECT nickname FROM users WHERE id=?',(u['referred_by'],)).fetchone()
+                inviter={'nickname':parent['nickname'] if parent else None}
+            return {'referralCode':u['referral_code'],
+                    'linked':bool(u['referred_by']),
+                    'inviter':inviter,
+                    'canChange':False,
+                    'realMoney':False,
+                    'paymentEnabled':False,
+                    'policyApproved':False},None
         if method=='POST' and path=='/api/referrals/link':
             # Task #101: authenticated account consent, not client-supplied actorId.
             # This writes the SAME persistent Phase3 users.referred_by column
