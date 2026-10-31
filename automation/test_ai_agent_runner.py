@@ -222,6 +222,48 @@ class RunnerTests(unittest.TestCase):
                 except ProcessLookupError:
                     pass
 
+    @unittest.skipUnless(Path("/proc").is_dir(), "Linux procfs required")
+    def test_cancelled_lease_kills_observed_detached_writer(self):
+        """B #229 reproducer: setsid child must not write after lease loss.
+
+        Procfs cleanup fixes this bounded reproduction, NOT the fork/reparent
+        race. Live host requires an OS-owned per-task cgroup before HOST_GO.
+        """
+        pidfile = Path(self.temp.name) / "detached-writer.pid"
+        marker = Path(self.temp.name) / "write-after-cancel"
+        child = ("import pathlib,sys,time;"
+                 "time.sleep(0.55);"
+                 "pathlib.Path(sys.argv[1]).write_text('escaped')")
+        parent = ("import pathlib,subprocess,sys,time;"
+                  "p=subprocess.Popen([sys.executable,'-c',sys.argv[3],sys.argv[2]],"
+                  "start_new_session=True);"
+                  "pathlib.Path(sys.argv[1]).write_text(str(p.pid));"
+                  "time.sleep(3)")
+
+        class CancelAfterFirstHeartbeat:
+            calls = 0
+
+            def heartbeat(self, issue, owner, lease_seconds):
+                self.calls += 1
+                return self.calls < 2
+
+        try:
+            result = _run_with_lease(
+                [sys.executable, "-c", parent, str(pidfile),
+                 str(marker), child],
+                cwd=str(self.workdir), store=CancelAfterFirstHeartbeat(),
+                issue=162, owner="fake-qa-only", timeout=2,
+                heartbeat_interval=0.12)
+            self.assertIsNone(result)
+            time.sleep(0.75)
+            self.assertFalse(marker.exists(), "detached writer survived lease loss")
+        finally:
+            if pidfile.exists():
+                try:
+                    os.kill(int(pidfile.read_text()), signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+
     def test_existing_exact_draft_pr_is_reused(self):
         sha = "a" * 40
         existing = {"number": 500, "draft": True,
