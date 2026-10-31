@@ -309,9 +309,9 @@ class RunnerTests(unittest.TestCase):
         fake_ssh = Path(self.temp.name) / "qa-fake-ssh"
         exposure = Path(self.temp.name) / "qa-controller-token-exposed"
         fake_ssh.write_text(
-            "#!/bin/sh\\n"
-            + "printf '%s' \\"$GH_TOKEN\\" > " + repr(str(exposure)) + "\\n"
-            + "exit 23\\n"
+            "#!/bin/sh\n"
+            + "printf '%s' \"$GH_TOKEN\" > " + repr(str(exposure)) + "\n"
+            + "exit 23\n"
         )
         fake_ssh.chmod(0o755)
         ssh_remote = "git@github.com:anigio2705-dev/hangeul-swipji.git"
