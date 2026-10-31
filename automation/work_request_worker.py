@@ -30,7 +30,7 @@ class DurableWorkStore:
         self.db.close()
 
     def ingest(self, issue, *, now=None):
-        if not isinstance(issue, dict) or "pull_request" in issue:
+        if not isinstance(issue, dict) or "pull_request" in issue or issue.get("state") != "open":
             raise ValueError("not a work issue")
         number = issue.get("number")
         title = issue.get("title")
