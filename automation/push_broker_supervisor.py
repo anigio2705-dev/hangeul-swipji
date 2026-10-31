@@ -66,6 +66,18 @@ def supervise(command, *, lease_live, timeout=120, interval=0.05, cwd=None, env=
                     raise PushRevoked("lease revoked at completion")
                 if proc.returncode:
                     raise PushUncertain("transport exited nonzero; remote outcome unknown")
+                # The direct Git process may exit zero while a background child
+                # still owns the process group and can perform a delayed write.
+                # communicate() reaps the direct child; no member of the
+                # isolated session may remain before we accept its exit.
+                try:
+                    os.killpg(pgid, 0)
+                except ProcessLookupError:
+                    pass
+                except PermissionError as exc:
+                    raise PushUncertain("cannot prove transport group quiescent") from exc
+                else:
+                    raise PushUncertain("transport exited with live descendants")
                 return subprocess.CompletedProcess(command, proc.returncode, out, err)
             except subprocess.TimeoutExpired:
                 continue
