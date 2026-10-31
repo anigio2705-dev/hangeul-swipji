@@ -82,6 +82,7 @@ def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"), 
             return {"status": "NON_FAST_FORWARD", "issue": issue}
         # A local commit is not evidence of remote delivery. Fail closed unless
         # the isolated branch is pushed and the remote advertises the exact SHA.
+        # An expired claim must never authorize remote side effects.
         if not store.heartbeat(issue, owner, lease_seconds=3600):
             return {"status": "LEASE_LOST", "issue": issue}
         try:
