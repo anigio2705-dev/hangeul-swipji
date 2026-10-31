@@ -86,6 +86,14 @@ class OutboxFairnessTests(unittest.TestCase):
         with patch.object(handoff, "_request", side_effect=self.request):
             return handoff.dispatch_once(self.db, token="test", repo=REPO, now=now)
 
+    def test_parent_traversal_rejected_before_sqlite_open(self):
+        outside = self.tmp.name + "/../attacker-owned/qa.sqlite"
+        with patch.object(handoff.sqlite3, "connect",
+                          side_effect=AssertionError("out-of-root DB opened")) as connect:
+            with self.assertRaises(ValueError):
+                handoff.dispatch_once(outside, token="test", repo=REPO, now=1)
+            connect.assert_not_called()
+
     def test_503_first_does_not_block_second_or_repost(self):
         self.fail_first = True
         self.assertEqual(self.dispatch(1000), "AMBIGUOUS_POST")
