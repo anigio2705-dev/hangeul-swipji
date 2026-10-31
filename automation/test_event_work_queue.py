@@ -72,13 +72,27 @@ class EventQueueTest(unittest.TestCase):
     def test_max_retry_cap_blocks(self):
         s = QueueState(102, A)
         for i in range(3):
-            s = advance(s, f"dev-{i}", "DEV_PASS", A)
-            s = advance(s, f"fail-{i}", "QA_FAIL", A)
+            current_sha = chr(ord("a") + i) * 40
+            s = advance(s, f"dev-{i}", "DEV_PASS", current_sha)
+            s = advance(s, f"fail-{i}", "QA_FAIL", current_sha)
             if i < 2:
-                s = advance(s, f"rework-{i}", "REWORK_STARTED", A)
+                s = advance(s, f"rework-{i}", "REWORK_STARTED", current_sha)
+                s = advance(s, f"newsha-{i}", "SHA_CHANGED", current_sha,
+                            new_sha=chr(ord("b") + i) * 40)
         self.assertEqual((s.phase, s.qa_failures), ("BLOCKED", 3))
         with self.assertRaises(ValueError):
-            advance(s, "again", "REWORK_STARTED", A)
+            advance(s, "again", "REWORK_STARTED", s.sha)
+
+    def test_failed_sha_must_change_before_dev_pass(self):
+        s = advance(QueueState(102, A), "dev", "DEV_PASS", A)
+        s = advance(s, "fail", "QA_FAIL", A)
+        s = advance(s, "start", "REWORK_STARTED", A)
+        with self.assertRaises(ValueError):
+            advance(s, "dev-again", "DEV_PASS", A)
+        s = advance(s, "new", "SHA_CHANGED", A, new_sha=B)
+        s = advance(s, "dev-b", "DEV_PASS", B)
+        s = advance(s, "qa-b", "QA_PASS", B)
+        self.assertEqual(s.phase, "REVIEW_PENDING")
 
     def test_sha_change_invalidates_prior_qa(self):
         s = QueueState(102, A)
