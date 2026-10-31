@@ -37,7 +37,7 @@ def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"), 
     if claim is None:
         return {"status": "IDLE"}
     issue, owner = claim["issue"], claim["owner"]
-    if not os.environ.get("OPENAI_API_KEY"):
+    # Never run a coding agent when the existing lease cannot outlive the call.\n    # Long runs require a separate heartbeat loop; until then fail closed.\n    if timeout >= 3600:\n        store.fail(issue, owner)\n        return {"status": "UNSAFE_TIMEOUT", "issue": issue}\n    if not os.environ.get("OPENAI_API_KEY"):
         store.fail(issue, owner)
         return {"status": "BLOCKED_AUTH", "issue": issue}
     prompt = (
