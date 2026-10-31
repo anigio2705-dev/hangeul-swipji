@@ -160,8 +160,8 @@ class OutboxFairnessTests(unittest.TestCase):
         self.assertEqual(self.dispatch(1002), "B_QA_REQUESTED")
         self.assertEqual(len(self.posts), 3)
         self.assertIn("run=101 attempt=1", self.posts[0])
-        self.assertIn("run=103 attempt=2", self.posts[1])
-        self.assertNotEqual(self.posts[0], self.posts[1])
+        self.assertIn("run=103 attempt=2", self.posts[2])
+        self.assertNotEqual(self.posts[0], self.posts[2])
 
     def test_unrelated_ci_run_same_sha_is_not_qa_evidence(self):
         original = self.request
