@@ -166,8 +166,58 @@ def _origin_remote_status(workdir, allowed_remotes):
     return None
 
 
+
+def _controller_git_env():
+    """Never give an agent-influenced Git subprocess controller credentials.
+
+    The Git transport has no need for the Codex key or GitHub API bearer token.
+    A dedicated least-privilege credential broker is required for authenticated
+    pushes; credentials must not be present in an agent-controlled Git process.
+    """
+    env = os.environ.copy()
+    for key in list(env):
+        if (key in {"GH_TOKEN", "GITHUB_TOKEN", "OPENAI_API_KEY",
+                    "GIT_ASKPASS", "SSH_ASKPASS", "SSH_AUTH_SOCK",
+                    "GIT_SSH", "GIT_SSH_COMMAND", "GIT_CONFIG_PARAMETERS",
+                    "GIT_CONFIG_COUNT"}
+                or key.startswith(("GIT_CONFIG_KEY_", "GIT_CONFIG_VALUE_"))):
+            env.pop(key, None)
+    env["GIT_CONFIG_NOSYSTEM"] = "1"
+    env["GIT_CONFIG_GLOBAL"] = os.devnull
+    return env
+
+
+def _unsafe_git_execution_config(workdir):
+    """Fail closed on Git configuration capable of launching agent code.
+
+    Agent-owned .git/config and includeIf files must never be allowed to select
+    SSH commands, credential helpers, upload/receive-pack, or hooks in a
+    controller process. These checks supplement (not replace) OS isolation.
+    """
+    forbidden = (
+        "core.sshcommand", "credential.helper", "core.hookspath",
+        "core.fsmonitor", "remote.origin.receivepack",
+        "remote.origin.uploadpack",
+    )
+    env = _controller_git_env()
+    for key in forbidden:
+        proc = subprocess.run(["git", "config", "--get-all", key],
+                              cwd=workdir, capture_output=True, text=True,
+                              check=False, env=env)
+        if proc.returncode not in (0, 1):
+            return "UNSAFE_GIT_CONFIG"
+        if proc.returncode == 0 and proc.stdout.strip():
+            return "UNSAFE_GIT_CONFIG"
+    return None
+
+
 def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"),
              timeout=2400, heartbeat_interval=5):
+    # Before even reading status, reject untrusted executable Git settings.
+    # In particular fsmonitor may run while querying a dirty worktree.
+    config_status = _unsafe_git_execution_config(workdir)
+    if config_status:
+        return {"status": config_status}
     before = subprocess.run(["git", "branch", "--show-current"], cwd=workdir,
                             capture_output=True, text=True, check=True).stdout.strip()
     # No protected, user-facing, or unscoped branch may be written by the agent.
@@ -220,6 +270,12 @@ def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"),
             store.fail(issue, owner)
             return {"status": "AGENT_FAILED", "issue": issue,
                     "exit_code": result.returncode}
+        # The agent may rewrite local Git config after initial validation.
+        # Refuse all further Git operations if executable settings appeared.
+        config_status = _unsafe_git_execution_config(workdir)
+        if config_status:
+            store.fail(issue, owner)
+            return {"status": config_status, "issue": issue}
         sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=workdir,
                              capture_output=True, text=True, check=True).stdout.strip()
         branch = subprocess.run(["git", "branch", "--show-current"], cwd=workdir,
@@ -252,7 +308,8 @@ def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"),
             pushed = _run_with_lease(
                 ["git", "push", "--no-verify", "origin", f"HEAD:refs/heads/{branch}"],
                 cwd=workdir, store=store, issue=issue, owner=owner,
-                timeout=120, heartbeat_interval=heartbeat_interval)
+                timeout=120, heartbeat_interval=heartbeat_interval,
+                env=_controller_git_env())
             if pushed is None:
                 return {"status": "LEASE_LOST", "issue": issue}
             if pushed.returncode:
@@ -261,7 +318,7 @@ def run_once(store, *, workdir, agent_command=("codex", "exec", "--full-auto"),
             advertised = subprocess.run(
                 ["git", "ls-remote", "origin", f"refs/heads/{branch}"],
                 cwd=workdir, capture_output=True, text=True, check=True,
-                timeout=60).stdout.strip()
+                timeout=60, env=_controller_git_env()).stdout.strip()
         except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError):
             store.fail(issue, owner)
             return {"status": "PUSH_FAILED", "issue": issue}
