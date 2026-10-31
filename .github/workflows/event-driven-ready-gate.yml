@@ -23,6 +23,7 @@ on:
       - 'automation/test_push_broker_authority.py'
       - 'automation/push_broker_os_guard.py'
       - 'automation/test_push_broker_os_guard.py'
+      - 'automation/test_bqa_broker_os_ancestor_independent.py'
       - '.github/workflows/continuous-work-request.yml'
   workflow_dispatch:
 
@@ -70,6 +71,11 @@ jobs:
           set -euo pipefail
           python -m py_compile automation/push_broker_supervisor.py automation/push_broker_authority.py automation/push_broker_os_guard.py
           PYTHONPATH=automation python -m unittest automation/test_push_broker_supervisor.py automation/test_push_broker_authority.py automation/test_push_broker_os_guard.py -v
+      - name: B/15 independent ancestor and credential path reQA
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=automation python -m unittest automation/test_bqa_broker_os_ancestor_independent.py -v
       - name: Fail closed if candidate PR moved
         shell: bash
         env:
