@@ -3,6 +3,8 @@ import os
 import subprocess
 import sys
 import tempfile
+import threading
+import time
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -40,7 +42,8 @@ class RunnerTests(unittest.TestCase):
                               capture_output=True, text=True)
 
     def invoke(self, agent_command=("missing-fake-cli-xyz",), *, auth="test-only", store=None,
-               remote_url="https://github.com/anigio2705-dev/hangeul-swipji.git", timeout=30):
+               remote_url="https://github.com/anigio2705-dev/hangeul-swipji.git",
+               timeout=30, heartbeat_interval=5):
         original_run = subprocess.run
 
         def route(cmd, **kwargs):
@@ -52,7 +55,8 @@ class RunnerTests(unittest.TestCase):
             with patch.dict(os.environ, {"OPENAI_API_KEY": auth,
                                          "GITHUB_REPOSITORY": "anigio2705-dev/hangeul-swipji"}):
                 return run_once(store or self.store, workdir=str(self.workdir),
-                                agent_command=agent_command, timeout=timeout)
+                                agent_command=agent_command, timeout=timeout,
+                                heartbeat_interval=heartbeat_interval)
 
     def test_long_timeout_rejected_before_agent_call(self):
         result = self.invoke((sys.executable, "-c", "pass"), timeout=3600)
@@ -114,6 +118,28 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(sha, remote_sha)
         self.assertIn(sha, result["proof"])
         self.assertNotIn("READY=1", result["proof"])
+
+
+    def test_cancel_during_running_agent_terminates_cli_and_prevents_push(self):
+        db_path = str(Path(self.temp.name) / "worker.db")
+        def cancel():
+            time.sleep(0.3)
+            separate = DurableWorkStore(db_path)
+            try:
+                separate.reconcile_open(set())
+            finally:
+                separate.close()
+        canceller = threading.Thread(target=cancel, daemon=True)
+        canceller.start()
+        started = time.monotonic()
+        result = self.invoke((sys.executable, "-c", "import time; time.sleep(4)"),
+                             timeout=8, heartbeat_interval=0.05)
+        canceller.join(timeout=3)
+        self.assertEqual(result["status"], "LEASE_LOST")
+        self.assertLess(time.monotonic() - started, 3)
+        self.assertEqual(self.store.snapshot(301)["status"], "CANCELLED")
+        self.assertFalse(self.git(["ls-remote", "origin",
+                                   "refs/heads/work/qa-sim"]).stdout.strip())
 
     def test_push_failure_does_not_mark_reported(self):
         self.git(["remote", "remove", "origin"])
