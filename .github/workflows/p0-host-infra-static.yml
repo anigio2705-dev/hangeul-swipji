@@ -1,0 +1,27 @@
+name: P0 isolated host infrastructure static checks
+on:
+  pull_request:
+    paths:
+      - 'automation/deploy/**'
+      - 'docs/P0_DURABLE_HOST_HANDOFF_20261031.md'
+      - '.github/workflows/p0-host-infra-static.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  host-infra-static:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify shell syntax
+        run: bash -n automation/deploy/host-preflight.sh
+      - name: Verify systemd units
+        run: systemd-analyze verify automation/deploy/hangeul-queue-sync.service automation/deploy/hangeul-queue-sync.timer
+      - name: Verify fail-closed guard and no automatic activation
+        run: |
+          grep -F 'AssertPathIsMountPoint=/var/lib/hangeul-swipji' automation/deploy/hangeul-queue-sync.service
+          grep -F 'ExecStartPre=/usr/bin/bash /srv/hangeul-swipji/automation/deploy/host-preflight.sh' automation/deploy/hangeul-ai-worker.service.d/10-host-guard.conf
+          ! grep -R -E 'systemctl[[:space:]]+enable|systemctl[[:space:]]+start' automation/deploy --include='*.sh'
