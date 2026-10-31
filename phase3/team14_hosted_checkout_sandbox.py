@@ -30,6 +30,11 @@ def _sandbox_session_url(value):
         raise ValueError("invalid hosted checkout URL")
     if any(ord(ch) < 33 or ord(ch) > 126 for ch in value):
         raise ValueError("invalid URL characters")
+    # urlsplit discards *empty* query/fragment components, so checking
+    # parsed.query/fragment alone would accept trailing ?, #, ?# or #?.
+    # The sandbox contract forbids the delimiters themselves.
+    if "?" in value or "#" in value:
+        raise ValueError("query and fragment delimiters prohibited")
     try:
         parsed = urlsplit(value)
     except ValueError as exc:
