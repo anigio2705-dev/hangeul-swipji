@@ -37,7 +37,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          PYTHONPATH=automation python -m unittest discover -s automation -p 'test_event_ready_state.py' -v
+          PYTHONPATH=automation python -m unittest discover -s automation -p 'test_event_*.py' -v
       - name: Fail closed if candidate PR moved
         shell: bash
         env:
