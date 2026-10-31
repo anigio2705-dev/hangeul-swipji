@@ -304,9 +304,9 @@ class RunnerTests(unittest.TestCase):
         """Reproduce independent PR #172 without leaking even a fake token."""
         fake_ssh = Path(self.temp.name) / "qa-fake-ssh"
         exposure = Path(self.temp.name) / "qa-controller-token-exposed"
-        fake_ssh.write_text("#!/bin/sh\\n" +
-                            "printf '%s' \\"$GH_TOKEN\\" > " + repr(str(exposure)) +
-                            "\\nexit 23\\n")
+        fake_ssh.write_text('#!/bin/sh\\n' +
+                            'printf \\'%s\\' "$GH_TOKEN" > ' + repr(str(exposure)) +
+                            '\\nexit 23\\n')
         fake_ssh.chmod(0o755)
         ssh_remote = "git@github.com:anigio2705-dev/hangeul-swipji.git"
         self.git(["remote", "set-url", "origin", ssh_remote])
