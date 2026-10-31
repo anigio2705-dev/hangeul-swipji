@@ -11,6 +11,11 @@ on:
       - 'automation/test_event_ready_state.py'
       - 'automation/event_work_queue.py'
       - 'automation/test_event_work_queue.py'
+      - 'automation/continuous_dispatcher.py'
+      - 'automation/test_continuous_dispatcher.py'
+      - 'automation/work_request_worker.py'
+      - 'automation/test_work_request_worker.py'
+      - '.github/workflows/continuous-work-request.yml'
   workflow_dispatch:
 
 permissions:
@@ -40,6 +45,11 @@ jobs:
         run: |
           set -euo pipefail
           PYTHONPATH=automation python -m unittest discover -s automation -p 'test_event_*.py' -v
+      - name: Test durable queue watchdog and isolated worker handoff
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=automation python -m unittest automation/test_continuous_dispatcher.py automation/test_work_request_worker.py -v
       - name: Fail closed if candidate PR moved
         shell: bash
         env:
