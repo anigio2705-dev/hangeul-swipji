@@ -111,6 +111,44 @@ class EventQueueTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             advance(QueueState(102, A), "force", "READY", A)
 
+    def test_failed_sha_rejected_after_a_to_b_to_a(self):
+        s = advance(QueueState(102, A), "dev-a", "DEV_PASS", A)
+        s = advance(s, "fail-a", "QA_FAIL", A)
+        s = advance(s, "rework-a", "REWORK_STARTED", A)
+        s = advance(s, "a-to-b", "SHA_CHANGED", A, new_sha=B)
+        self.assertEqual(s.rejected_shas, (A,))
+        with self.assertRaises(ValueError):
+            advance(s, "b-to-a", "SHA_CHANGED", B, new_sha=A)
+        # Rejected history survives subsequent legitimate changes.
+        c = "c" * 40
+        s = advance(s, "b-to-c", "SHA_CHANGED", B, new_sha=c)
+        with self.assertRaises(ValueError):
+            advance(s, "c-to-a", "SHA_CHANGED", c, new_sha=A)
+
+    def test_failed_b_cannot_rollback_to_a_or_b(self):
+        c = "c" * 40
+        s = advance(QueueState(102, A), "dev-a", "DEV_PASS", A)
+        s = advance(s, "fail-a", "QA_FAIL", A)
+        s = advance(s, "a-to-b", "SHA_CHANGED", A, new_sha=B)
+        s = advance(s, "dev-b", "DEV_PASS", B)
+        s = advance(s, "fail-b", "QA_FAIL", B)
+        s = advance(s, "b-to-c", "SHA_CHANGED", B, new_sha=c)
+        self.assertEqual(s.rejected_shas, (A, B))
+        for candidate in (A, B):
+            with self.assertRaises(ValueError):
+                advance(s, "rollback-" + candidate[0], "SHA_CHANGED", c,
+                        new_sha=candidate)
+        s = advance(s, "dev-c", "DEV_PASS", c)
+        s = advance(s, "qa-c", "QA_PASS", c)
+        s = advance(s, "central-c", "CENTRAL_PASS", c)
+        self.assertEqual(s.phase, "ATTESTATION_PENDING")
+
+    def test_rejected_history_validation(self):
+        with self.assertRaises(ValueError):
+            QueueState(102, A, rejected_shas=(A, A))
+        with self.assertRaises(ValueError):
+            QueueState(102, A, rejected_shas=("invalid",))
+
 
 if __name__ == "__main__":
     unittest.main()
