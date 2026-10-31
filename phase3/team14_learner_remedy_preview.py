@@ -6,7 +6,7 @@ This module NEVER creates bookings, refunds, replacement sessions or payouts.
 """
 import re
 
-ID = re.compile(r"[A-Za-z0-9_-]{1,128}\\Z")
+ID = re.compile(r"[A-Za-z0-9_-]{1,128}\Z")
 OPTIONS = ("makeup_lesson", "change_tutor", "unused_lessons_refund")
 STATES = ("unverified", "review_pending", "manual_review_recorded")
 
