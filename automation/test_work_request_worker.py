@@ -58,8 +58,9 @@ class WorkerStoreTests(unittest.TestCase):
         self.a.close()
         self.a = DurableWorkStore(self.path)
         self.assertIsNone(self.a.claim("other", now=130))
-        self.assertEqual(self.a.claim("other", now=131)["attempt"], 2)
-        self.assertEqual(self.a.snapshot(101)["lease_owner"], "other")
+        recovered = self.a.claim("other", now=131)
+        self.assertEqual(recovered["attempt"], 2)
+        self.assertEqual(self.a.snapshot(101)["lease_owner"], recovered["owner"])
 
     def test_wrong_owner_cannot_heartbeat_or_complete(self):
         self.a.ingest(self.work, now=100)
@@ -70,14 +71,14 @@ class WorkerStoreTests(unittest.TestCase):
 
     def test_heartbeat_extends_live_lease(self):
         self.a.ingest(self.work, now=100)
-        self.a.claim("central", now=101, lease_seconds=30)
-        self.assertTrue(self.a.heartbeat(101, "central", now=120, lease_seconds=300))
+        claim = self.a.claim("central", now=101, lease_seconds=30)
+        self.assertTrue(self.a.heartbeat(101, claim["owner"], now=120, lease_seconds=300))
         self.assertIsNone(self.a.claim("other", now=131))
 
     def test_completion_is_report_only(self):
         self.a.ingest(self.work, now=100)
-        self.a.claim("central", now=101)
-        self.assertTrue(self.a.finish(101, "central", "run=123 sha=abc QA pending", now=102))
+        claim = self.a.claim("central", now=101)
+        self.assertTrue(self.a.finish(101, claim["owner"], "run=123 sha=abc QA pending", now=102))
         self.assertEqual(self.a.snapshot(101)["status"], "REPORTED")
         self.assertIsNone(self.a.claim("other", now=2000))
 
@@ -91,7 +92,7 @@ class WorkerStoreTests(unittest.TestCase):
         for n, t in enumerate((101, 162, 283), start=1):
             claimed = self.a.claim("central", now=t)
             self.assertEqual(claimed["attempt"], n)
-            self.assertTrue(self.a.fail(101, "central", now=t + 1))
+            self.assertTrue(self.a.fail(101, claimed["owner"], now=t + 1))
             self.assertEqual(self.a.snapshot(101)["status"],
                              "BLOCKED" if n == 3 else "PENDING")
         self.assertIsNone(self.a.claim("central", now=10000))
@@ -99,11 +100,26 @@ class WorkerStoreTests(unittest.TestCase):
     def test_crash_after_third_claim_blocks_on_expiry(self):
         self.a.ingest(self.work, now=100)
         for n, t in enumerate((101, 162), start=1):
-            self.assertEqual(self.a.claim("central", now=t)["attempt"], n)
-            self.assertTrue(self.a.fail(101, "central", now=t + 1))
+            claim = self.a.claim("central", now=t)
+            self.assertEqual(claim["attempt"], n)
+            self.assertTrue(self.a.fail(101, claim["owner"], now=t + 1))
         self.assertEqual(self.a.claim("central", now=283, lease_seconds=30)["attempt"], 3)
         self.assertIsNone(self.a.claim("other", now=314))
         self.assertEqual(self.a.snapshot(101)["status"], "BLOCKED")
+
+    def test_qa15_same_name_reclaim_cannot_mutate_new_lease(self):
+        self.a.ingest(self.work, now=100)
+        stale = self.a.claim("central", now=101, lease_seconds=30)
+        current = self.a.claim("central", now=131, lease_seconds=30)
+        self.assertEqual(current["attempt"], 2)
+        self.assertNotEqual(stale["owner"], current["owner"])
+        self.assertFalse(self.a.heartbeat(101, stale["owner"], now=132))
+        self.assertFalse(self.a.finish(101, stale["owner"], "run=stale sha=abc", now=132))
+        self.assertFalse(self.a.fail(101, stale["owner"], now=132))
+        self.assertEqual(self.a.snapshot(101)["lease_owner"], current["owner"])
+        self.assertEqual(self.a.snapshot(101)["status"], "LEASED")
+        self.assertTrue(self.a.finish(101, current["owner"], "run=current sha=def", now=132))
+        self.assertEqual(self.a.snapshot(101)["status"], "REPORTED")
 
     def test_invalid_worker_or_proof_rejected(self):
         self.a.ingest(self.work, now=100)
