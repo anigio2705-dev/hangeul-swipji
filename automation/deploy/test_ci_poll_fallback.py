@@ -81,6 +81,24 @@ class CIPollFallbackTests(unittest.TestCase):
             fallback.poll_once("/tmp/outbox.db", token="fake", fetch=self.fetch)
         self.assertEqual(self.calls, [])
 
+    def test_parent_traversal_rejected_before_network_or_write(self):
+        for outside in (
+                "/var/lib/hangeul-swipji/../attacker-owned/ci.sqlite",
+                "/var/lib/hangeul-swipji/../../tmp/attacker-ci.sqlite"):
+            with self.subTest(outside=outside):
+                with self.assertRaises(ValueError):
+                    fallback.poll_once(outside, token="fake", fetch=self.fetch)
+        self.assertEqual(self.calls, [])
+
+    def test_symlink_escape_rejected_before_network(self):
+        with tempfile.TemporaryDirectory() as outside:
+            with tempfile.TemporaryDirectory() as root:
+                link = Path(root) / "escape"
+                link.symlink_to(outside, target_is_directory=True)
+                from qa_handoff_dispatcher import _trusted_db_path
+                with self.assertRaises(ValueError):
+                    _trusted_db_path(str(link / "ci.sqlite"), root=root)
+
     def test_full_page_at_limit_fails_closed(self):
         self.responses["runs"] = [dict(self.run, conclusion="failure") for _ in range(100)]
         with self.assertRaises(fallback.PollIncomplete):
