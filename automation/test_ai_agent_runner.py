@@ -1,5 +1,6 @@
 """Isolated fake-Codex subprocess integration tests; NEVER a real API/QA approval."""
 import os
+import signal
 import subprocess
 import sys
 import tempfile
@@ -187,6 +188,39 @@ class RunnerTests(unittest.TestCase):
         self.assertFalse(self.git(["ls-remote", "origin",
                                    "refs/heads/work/qa-sim"]).stdout.strip())
 
+
+    def test_detached_agent_pipe_holder_does_not_stall_cleanup(self):
+        """An escaped child holding a pipe must not block the worker forever.
+
+        This is a progress regression only, NOT proof that an escaped child
+        cannot write or that a live host has cgroup containment.
+        """
+        pidfile = Path(self.temp.name) / "detached-agent.pid"
+        code = (
+            "import pathlib,subprocess,sys;"
+            "p=subprocess.Popen([sys.executable,'-c',"
+            "'import time;time.sleep(8)'],start_new_session=True);"
+            "pathlib.Path(sys.argv[1]).write_text(str(p.pid));"
+            "print('direct-agent-exited')"
+        )
+        claim = self.store.claim("runner-pipe-test", lease_seconds=3600)
+        self.assertIsNotNone(claim)
+        started = time.monotonic()
+        try:
+            with self.assertRaises(subprocess.TimeoutExpired):
+                _run_with_lease(
+                    [sys.executable, "-c", code, str(pidfile)],
+                    cwd=str(self.workdir), store=self.store,
+                    issue=claim["issue"], owner=claim["owner"],
+                    timeout=0.2, heartbeat_interval=0.03)
+            self.assertLess(time.monotonic() - started, 3.0,
+                            "detached pipe holder stalled Codex cleanup")
+        finally:
+            if pidfile.exists():
+                try:
+                    os.kill(int(pidfile.read_text()), signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
 
     def test_existing_exact_draft_pr_is_reused(self):
         sha = "a" * 40
