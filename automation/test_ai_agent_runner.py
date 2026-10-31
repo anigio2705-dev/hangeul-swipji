@@ -441,5 +441,96 @@ exit 23
         self.assertEqual(rogue_sha, "", "untrusted remote was written")
         self.assertEqual(result["status"], "REPORTED_QA_PENDING")
 
+
+    def test_qa15_orphaned_push_after_worker_crash_cannot_write_after_cancel(self):
+        """Independent P0 crash-fence counterexample: only local bare Git, no tokens.
+
+        A SQLite transaction serializes live writers, but a Git child can outlive
+        a killed Python worker. The remote must not change after cancellation
+        has committed, even when a child was launched before the crash.
+        """
+        import signal
+        root = Path(self.temp.name)
+        db_path = str(root / "worker.db")
+        marker = root / "child-started"
+        release = root / "release-child"
+        claim = self.store.claim("qa15-orphan", lease_seconds=3600)
+        self.assertIsNotNone(claim)
+        (self.workdir / "crash.txt").write_text("local-only crash probe")
+        self.git(["add", "crash.txt"])
+        self.git(["commit", "-qm", "qa15 local crash probe"])
+        ref = "refs/heads/qa15-orphan-crash"
+        child_code = (
+            "import subprocess,time\\n"
+            "from pathlib import Path\\n"
+            f"release=Path({str(release)!r})\\n"
+            "for _ in range(150):\\n"
+            "    if release.exists(): break\\n"
+            "    time.sleep(0.1)\\n"
+            "else: raise SystemExit(7)\\n"
+            f"raise SystemExit(subprocess.run(['git','push','origin','HEAD:{ref}'],"
+            f"cwd={str(self.workdir)!r},timeout=15).returncode)\\n"
+        )
+        worker_code = (
+            "import subprocess\\n"
+            "from pathlib import Path\\n"
+            "from work_request_worker import DurableWorkStore\\n"
+            f"store=DurableWorkStore({db_path!r})\\n"
+            "def remote_write():\\n"
+            f"    child=subprocess.Popen([{sys.executable!r},'-c',{child_code!r}],"
+            "start_new_session=True,stdout=subprocess.DEVNULL,"
+            "stderr=subprocess.DEVNULL)\\n"
+            f"    Path({str(marker)!r}).write_text(str(child.pid))\\n"
+            "    return child.wait(timeout=20)\\n"
+            "try:\\n"
+            f"    store.fenced_remote_write({claim['issue']},{claim['owner']!r},"
+            "remote_write,minimum_seconds=150)\\n"
+            "finally:\\n"
+            "    store.close()\\n"
+        )
+        worker = subprocess.Popen(
+            [sys.executable, "-c", worker_code],
+            cwd=str(Path(__file__).resolve().parent),
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        child_pid = None
+        try:
+            deadline = time.monotonic() + 8
+            while not marker.exists() and time.monotonic() < deadline:
+                self.assertIsNone(worker.poll(), "worker died before push handoff")
+                time.sleep(0.05)
+            self.assertTrue(marker.exists(), "Git child was not spawned")
+            child_pid = int(marker.read_text())
+            os.kill(worker.pid, signal.SIGKILL)
+            worker.wait(timeout=5)
+            # This is a separate SQLite connection; the cancellation must COMMIT.
+            separate = DurableWorkStore(db_path)
+            try:
+                separate.reconcile_open(set())
+                self.assertEqual(separate.snapshot(claim["issue"])["status"],
+                                 "CANCELLED")
+            finally:
+                separate.close()
+            release.touch()
+            deadline = time.monotonic() + 7
+            remote_ref = ""
+            while time.monotonic() < deadline:
+                remote_ref = self.git(["ls-remote", "origin", ref]).stdout.strip()
+                if remote_ref:
+                    break
+                time.sleep(0.1)
+            self.assertEqual(remote_ref, "",
+                             "orphan Git process wrote a remote ref AFTER "
+                             "lease cancellation committed")
+        finally:
+            release.touch()
+            if worker.poll() is None:
+                worker.kill()
+                worker.wait(timeout=5)
+            if child_pid is not None:
+                try:
+                    os.kill(child_pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+
 if __name__ == "__main__":
     unittest.main()
