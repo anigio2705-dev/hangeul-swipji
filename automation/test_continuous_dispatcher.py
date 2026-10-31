@@ -178,5 +178,22 @@ class QueueTests(unittest.TestCase):
                     write.assert_not_called()
 
 
+    def test_audit_post_503_and_rate_limit_never_blindly_replay(self):
+        """POST failure response may hide committed issue; never replay."""
+        for code, headers in ((503, {}), (429, {"Retry-After": "1"}),
+                              (403, {"X-RateLimit-Remaining": "0"})):
+            calls, sleeps = [], []
+            def ambiguous(req, timeout):
+                calls.append(req.get_method())
+                raise HTTPError(req.full_url, code, "ambiguous POST", headers, None)
+            with self.subTest(code=code):
+                with self.assertRaises(HTTPError):
+                    request("/repos/o/r/issues", "token", "POST",
+                            {"title": MARKER + " work"}, opener=ambiguous,
+                            sleeper=sleeps.append)
+                self.assertEqual(calls, ["POST"])
+                self.assertEqual(sleeps, [])
+
+
 if __name__ == "__main__":
     unittest.main()
