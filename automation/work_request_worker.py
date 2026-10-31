@@ -58,6 +58,10 @@ class DurableWorkStore:
         self.db.execute("BEGIN IMMEDIATE")
         try:
             # Expired leases are eligible for redelivery, not proof of completion.
+            # A worker crash after the final allowed attempt must not leave
+            # an expired LEASED row that looks active forever.
+            self.db.execute("""UPDATE work SET status='BLOCKED',lease_owner=NULL
+                WHERE status='LEASED' AND lease_until<=? AND attempts>=3""", (now,))
             row = self.db.execute("""SELECT issue,title,attempts FROM work
                 WHERE ((status='PENDING' AND retry_after<=?)
                        OR (status='LEASED' AND lease_until<=?))
