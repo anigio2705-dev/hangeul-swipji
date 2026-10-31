@@ -30,16 +30,17 @@ def review_teacher_accountability(dispute, *, prior_confirmed_cases=0,
     parties = {p["role"]: _id(p.get("participant_id"), "party id") for p in statements}
     if parties["student"] == parties["teacher"]:
         raise ValueError("parties must be distinct")
-    confirmed = (type(decision) is dict
-                 and decision.get("verdict") == "teacher_fault"
-                 and type(decision.get("rationale")) is str
-                 and bool(decision["rationale"].strip())
-                 and type(decision.get("evidence_ref")) is str
-                 and bool(decision["evidence_ref"].strip())
-                 and decision.get("operator_id") not in parties.values()
-                 and type(decision.get("operator_id")) is str)
-    if type(decision) is dict and decision.get("verdict") == "teacher_fault" and not confirmed:
-        raise ValueError("invalid teacher-fault confirmation")
+    # #118 requires bounded identifiers for a manual finding. An untrusted
+    # review fixture must never turn blank/path-like operator or evidence
+    # values into a confirmed teacher-fault finding.
+    confirmed = False
+    if type(decision) is dict and decision.get("verdict") == "teacher_fault":
+        operator_id = _id(decision.get("operator_id"), "operator id")
+        _id(decision.get("evidence_ref"), "decision evidence")
+        _text(decision.get("rationale"), "decision rationale")
+        if operator_id in parties.values():
+            raise ValueError("operator must be independent of both parties")
+        confirmed = True
     criteria = (
         ("warning", confirmed, "independent manual teacher-fault finding"),
         ("exposure_adjustment", confirmed and prior_confirmed_cases >= 2,
