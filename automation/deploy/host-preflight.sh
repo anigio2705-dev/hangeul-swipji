@@ -10,6 +10,17 @@ for p in /usr/local/libexec/hangeul-swipji "$trusted"; do
   [[ "$(stat -c '%u' -- "$p" 2>/dev/null)" == 0 ]] || fail 'preflight owner is not root'
   [[ -z "$(find "$p" -maxdepth 0 -perm /022 -print 2>/dev/null)" ]] || fail 'preflight writable by non-root'
 done
+# The AI must never be able to rewrite the controller that holds GitHub credentials.
+# The original unit executed ai_agent_runner.py from the agent-writable worktree.
+# Check every trusted controller path (including import dependencies) before start.
+for p in /opt /opt/hangeul-swipji-controller /opt/hangeul-swipji-controller/automation \
+         /opt/hangeul-swipji-controller/automation/ai_agent_runner.py \
+         /opt/hangeul-swipji-controller/automation/work_request_worker.py \
+         /opt/hangeul-swipji-controller/automation/continuous_dispatcher.py; do
+  [[ -e "$p" && ! -L "$p" ]] || fail 'missing or symlinked controller path'
+  [[ "$(stat -c '%u' -- "$p" 2>/dev/null)" == 0 ]] || fail 'controller path owner is not root'
+  [[ -z "$(find "$p" -maxdepth 0 -perm /022 -print 2>/dev/null)" ]] || fail 'controller path writable by non-root'
+done
 [[ "$(id -un)" == 'hangeul-worker' ]] || fail 'unexpected service user'
 [[ "${GITHUB_REPOSITORY:-}" == 'anigio2705-dev/hangeul-swipji' ]] || fail 'repository mismatch'
 [[ -n "${OPENAI_API_KEY:-}" ]] || fail 'missing AI credential'
