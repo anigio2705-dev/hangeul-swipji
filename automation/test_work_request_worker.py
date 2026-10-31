@@ -129,6 +129,19 @@ class WorkerStoreTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.a.finish(101, "central", "", now=102)
 
+    def test_closed_issue_reconciliation_invalidates_lease(self):
+        self.a.ingest(self.work, now=100)
+        claim = self.a.claim("central", now=101)
+        self.a.reconcile_open(set())
+        self.assertEqual(self.a.snapshot(101)["status"], "CANCELLED")
+        self.assertFalse(self.a.finish(101, claim["owner"], "run=old sha=abc", now=102))
+        self.assertIsNone(self.a.claim("central", now=103))
+
+    def test_reconciliation_preserves_open_issue(self):
+        self.a.ingest(self.work, now=100)
+        self.a.reconcile_open({101})
+        self.assertEqual(self.a.snapshot(101)["status"], "PENDING")
+
     def test_worker_is_not_a_chatgpt_adapter(self):
         self.a.ingest(self.work, now=100)
         self.assertNotIn("READY", self.a.snapshot(101))
