@@ -1,0 +1,62 @@
+name: b-qa-handoff-intake
+on:
+  workflow_dispatch:
+    inputs:
+      request_id: {required: true, type: string}
+      task_id: {required: true, type: string}
+      product_pr: {required: true, type: string}
+      product_sha: {required: true, type: string}
+permissions:
+  contents: read
+  pull-requests: read
+  actions: read
+jobs:
+  receive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify source PR and write intake receipt
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          TASK_ID: ${{ inputs.task_id }}
+          PRODUCT_PR: ${{ inputs.product_pr }}
+          PRODUCT_SHA: ${{ inputs.product_sha }}
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os, pathlib, re, urllib.request
+          env=os.environ
+          repo=env["GITHUB_REPOSITORY"]
+          request_id=env["REQUEST_ID"]
+          task_id=env["TASK_ID"]
+          pr=env["PRODUCT_PR"]
+          sha=env["PRODUCT_SHA"]
+          if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{7,127}",request_id):
+              raise SystemExit("INVALID_REQUEST_ID")
+          if not re.fullmatch(r"[1-9][0-9]{0,3}",task_id):
+              raise SystemExit("INVALID_TASK_ID")
+          if not re.fullmatch(r"[1-9][0-9]*",pr) or not re.fullmatch(r"[0-9a-f]{40}",sha):
+              raise SystemExit("INVALID_PR_OR_SHA")
+          req=urllib.request.Request(
+              f"https://api.github.com/repos/{repo}/pulls/{pr}",
+              headers={"Authorization":f"Bearer {env['GH_TOKEN']}","Accept":"application/vnd.github+json"})
+          with urllib.request.urlopen(req,timeout=20) as response:
+              data=json.load(response)
+          if (data["head"]["sha"]!=sha or data["head"]["repo"]["full_name"]!=repo
+                  or data["base"]["repo"]["full_name"]!=repo or data["state"]!="open"
+                  or data["number"]!=int(pr)):
+              raise SystemExit("PR_SOURCE_STATE_OR_SHA_MISMATCH")
+          receipt={"schema_version":1,"status":"QA_RECEIVED_CANDIDATE",
+              "request_id":request_id,"task_id":task_id,"product_pr":int(pr),
+              "target_product_sha":sha,"repository":repo,
+              "workflow":env["GITHUB_WORKFLOW"],"run_id":int(env["GITHUB_RUN_ID"]),
+              "run_attempt":int(env["GITHUB_RUN_ATTEMPT"])}
+          p=pathlib.Path("qa-intake-receipt.json")
+          p.write_text(json.dumps(receipt,sort_keys=True,indent=2)+"\n")
+          print("INTAKE_RECEIPT_SHA256="+hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - name: Upload intake receipt (not QA verdict)
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-intake-receipt
+          path: qa-intake-receipt.json
+          retention-days: 7

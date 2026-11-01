@@ -1,0 +1,26 @@
+[Unit]
+Description=Hangeul Swipji isolated AI coding worker (pilot, QA gated)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=hangeul-worker
+WorkingDirectory=/srv/hangeul-swipji
+EnvironmentFile=/etc/hangeul-swipji/worker.env
+Environment=PYTHONPATH=/srv/hangeul-swipji/automation
+ExecStart=/usr/bin/python3 -u /srv/hangeul-swipji/automation/ai_agent_runner.py
+Restart=on-failure
+RestartSec=10
+TimeoutStopSec=30
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/hangeul-swipji /srv/hangeul-swipji
+ProtectHome=true
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
