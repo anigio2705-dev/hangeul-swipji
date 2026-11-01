@@ -30,6 +30,10 @@ jobs:
         env:
           PYTHONPATH: automation:automation/deploy
         run: python3 -m unittest discover -s automation/deploy -p 'test_qa_handoff_dispatcher.py' -v
+      - name: Verify C/B QA receipt persistence and duplicate protection
+        env:
+          PYTHONPATH: automation:automation/deploy
+        run: python3 -m unittest discover -s automation/deploy -p 'test_cb_qa_verdict_store.py' -v
       - name: Verify append-only execution checkpoints and crash replay
         env:
           PYTHONPATH: automation:automation/deploy
