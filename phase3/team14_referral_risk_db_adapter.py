@@ -86,6 +86,15 @@ def screen_phase3_referral_evidence(db, *, referred_id, inviter_id, booking_id=N
                 for event_at, session_at in provider_rows
             )
         )
+        # A test charge cannot predate the payment session that is offered
+        # as its supporting provider evidence.  No session means the existing
+        # payment_verified conjunction remains false; do not invent proof.
+        if test_charge and provider_rows:
+            test_charge = all(
+                _finite_time(session_at)
+                and charge_rows[0][2] >= session_at
+                for _event_at, session_at in provider_rows
+            )
         if charge_rows and not test_charge:
             extra_flags.add("TEST_CHARGE_EVIDENCE_INVALID")
         attendees = {
