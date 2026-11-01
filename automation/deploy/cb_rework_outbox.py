@@ -7,6 +7,7 @@ isolation and a push broker, and consume these records in a future change.
 No public comment, unverified verdict, or AI-generated boolean may enqueue.
 """
 import re
+from contextlib import closing
 import sqlite3
 import time
 from pathlib import Path
@@ -74,13 +75,17 @@ def pending(db_path, *, request_id, product_sha):
     Even a matching event remains NON-EXECUTABLE.
     """
     if (not isinstance(request_id, str) or not request_id
-            or not SHA.fullmatch(str(product_sha))):
-        return None
-    path = Path(db_path).absolute()
-    if not path.is_file():
+            or len(request_id) > 128 or type(product_sha) is not str
+            or not SHA.fullmatch(product_sha)):
         return None
     try:
-        with sqlite3.connect(path.as_uri() + "?mode=ro", uri=True, timeout=15) as db:
+        path = Path(db_path).absolute()
+        # Never follow a caller-selected final-component symlink to another DB.
+        # A protected host must additionally control the parent directory.
+        if path.is_symlink() or not path.is_file():
+            return None
+        with closing(sqlite3.connect(path.as_uri() + "?mode=ro",
+                                     uri=True, timeout=15)) as db:
             row = db.execute(
                 """SELECT o.source_pr,o.qa_sha,o.state,o.created_at
                    FROM cb_rework_outbox AS o
@@ -94,8 +99,8 @@ def pending(db_path, *, request_id, product_sha):
                    WHERE o.request_id=? AND o.product_sha=?
                      AND o.state='AWAIT_AUTHENTICATED_CODEX'""",
                 (request_id, product_sha)).fetchone()
-    except sqlite3.Error:
-        return None  # Missing schema, corruption, or read-only failure: deny.
+    except (sqlite3.Error, TypeError, ValueError, OSError):
+        return None  # Invalid path, missing schema, corruption: deny.
     if not row:
         return None
     return dict(request_id=request_id, product_sha=product_sha,
