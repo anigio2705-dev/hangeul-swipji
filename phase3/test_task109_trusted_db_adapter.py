@@ -214,5 +214,16 @@ class Task109TrustedEvidenceTests(unittest.TestCase):
         self.assertIn("TRANSACTION_EVIDENCE_MISSING", self.check()["flags"])
 
 
+    def test_24_reject_charge_before_payment_session(self):
+        """Booking 100, charge 105, session 110, event 120 is not proof."""
+        self.add_provider_event(session_at=110.0, event_at=120.0)
+        self.add_test_charge(created_at=105.0)
+        self.add_attendance()
+        result = self.check()
+        self.assertIn("TRANSACTION_EVIDENCE_MISSING", result["flags"])
+        self.assertIn("TEST_CHARGE_EVIDENCE_INVALID", result["flags"])
+        self.assertEqual("REVIEW_ONLY", result["decision"])
+
+
 if __name__ == "__main__":
     unittest.main()
