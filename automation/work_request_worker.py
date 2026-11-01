@@ -30,7 +30,7 @@ class DurableWorkStore:
     def close(self):
         self.db.close()
 
-    def ingest(self, issue, *, now=None):
+    def ingest(self, issue, *, now=None, authoritative_open_scan=False):
         if not isinstance(issue, dict) or "pull_request" in issue or issue.get("state") != "open":
             raise ValueError("not a work issue")
         number = issue.get("number")
@@ -47,6 +47,22 @@ class DurableWorkStore:
                 self.db.execute(
                     "INSERT INTO work(issue,title,status,created_at) VALUES(?,?,'PENDING',?)",
                     (number, title, now))
+            elif authoritative_open_scan:
+                # Only a completed, authenticated GitHub open-issue scan may
+                # revive cancelled work. A delayed signed webhook is NOT proof
+                # of current GitHub state, even when its issue payload is open.
+                # A GitHub issue may be closed and subsequently reopened.
+                # Re-enable ONLY never-started work (attempts=0). A cancelled
+                # LEASED task may still have a detached AI child: it cannot be
+                # restarted without OS-enforced quiescence and a new generation
+                # fence, neither of which this store currently proves.
+                # Never revive REPORTED, BLOCKED or PUSH_UNCERTAIN.
+                self.db.execute("""UPDATE work
+                    SET status=CASE WHEN attempts=0 THEN 'PENDING'
+                                    WHEN attempts>=3 THEN 'BLOCKED'
+                                    ELSE 'CANCELLED' END,
+                        lease_owner=NULL, lease_until=0, retry_after=0
+                    WHERE issue=? AND status='CANCELLED'""", (number,))
             self.db.execute("COMMIT")
         except Exception:
             self.db.execute("ROLLBACK")
@@ -142,14 +158,104 @@ class DurableWorkStore:
             raise ValueError("complete open issue number set required")
         self.db.execute("BEGIN IMMEDIATE")
         try:
-            rows = self.db.execute("SELECT issue FROM work WHERE status IN ('PENDING','LEASED')").fetchall()
-            for (number,) in rows:
+            rows = self.db.execute(
+                "SELECT issue,status FROM work WHERE status IN "
+                "('PENDING','LEASED','PUSH_IN_FLIGHT')").fetchall()
+            for number, status in rows:
                 if number not in open_numbers:
-                    self.db.execute("""UPDATE work SET status='CANCELLED',lease_owner=NULL,
-                        lease_until=0 WHERE issue=? AND status IN ('PENDING','LEASED')""", (number,))
+                    if status == 'PUSH_IN_FLIGHT':
+                        # A worker may have died while its Git transport survived.
+                        # Never commit CANCELLED until the remote write is proven
+                        # quiescent by an independent, credential-owning broker.
+                        self.db.execute("""UPDATE work SET status='PUSH_UNCERTAIN',
+                            lease_until=0 WHERE issue=? AND status='PUSH_IN_FLIGHT'""",
+                            (number,))
+                    else:
+                        self.db.execute("""UPDATE work SET status='CANCELLED',
+                            lease_owner=NULL,lease_until=0
+                            WHERE issue=? AND status IN ('PENDING','LEASED')""",
+                            (number,))
             self.db.execute("COMMIT")
         except Exception:
             self.db.execute("ROLLBACK")
+            raise
+
+    def fenced_remote_write(self, issue, owner, callback, *, minimum_seconds=150):
+        """Crash-conservative remote-write fence.
+
+        Persist PUSH_IN_FLIGHT *before* spawning any transport. If the Python
+        controller is SIGKILLed, SQLite rolls back only the second transaction,
+        leaving a durable uncertainty marker. Reconciliation must never commit
+        CANCELLED while an orphaned transport may still write remotely.
+
+        This does NOT kill an orphan child or provide server-side fencing.
+        GitHub transport is disabled in ai_agent_runner until a separate OS
+        credential broker is verified. Never treat PUSH_UNCERTAIN as success.
+        """
+        if minimum_seconds <= 0 or minimum_seconds > 3600:
+            raise ValueError("invalid remote-write budget")
+        self.db.execute("BEGIN IMMEDIATE")
+        try:
+            now = int(time.time())
+            row = self.db.execute(
+                """SELECT lease_until FROM work
+                   WHERE issue=? AND status='LEASED' AND lease_owner=?""",
+                (issue, owner)).fetchone()
+            if not row or row[0] <= now + minimum_seconds:
+                self.db.execute("COMMIT")
+                return None
+            updated = self.db.execute(
+                """UPDATE work SET status='PUSH_IN_FLIGHT'
+                   WHERE issue=? AND status='LEASED' AND lease_owner=?""",
+                (issue, owner)).rowcount
+            if updated != 1:
+                raise RuntimeError("lost lease before push journal")
+            self.db.execute("COMMIT")
+        except BaseException:
+            self.db.execute("ROLLBACK")
+            raise
+
+        # A second connection can now observe the durable in-flight marker.
+        # Keep a write lock during the bounded callback to serialize cancellation.
+        self.db.execute("BEGIN IMMEDIATE")
+        try:
+            row = self.db.execute(
+                """SELECT lease_until FROM work WHERE issue=?
+                   AND status='PUSH_IN_FLIGHT' AND lease_owner=?""",
+                (issue, owner)).fetchone()
+            if not row or row[0] <= int(time.time()) + minimum_seconds:
+                self.db.execute("ROLLBACK")
+                self.db.execute(
+                    """UPDATE work SET status='PUSH_UNCERTAIN',lease_until=0
+                       WHERE issue=? AND status='PUSH_IN_FLIGHT' AND lease_owner=?""",
+                    (issue, owner))
+                return None
+            result = callback()
+            # A remote write may finish after the original lease expires.
+            # SQLite locking cannot revoke an in-flight network operation:
+            # never report that outcome as a successfully fenced transport.
+            # Quarantine for broker reconciliation rather than auto-retry.
+            if row[0] <= int(time.time()):
+                self.db.execute(
+                    """UPDATE work SET status='PUSH_UNCERTAIN',lease_until=0
+                       WHERE issue=? AND status='PUSH_IN_FLIGHT'
+                         AND lease_owner=?""", (issue, owner))
+                self.db.execute("COMMIT")
+                return None
+            self.db.execute(
+                """UPDATE work SET status='LEASED'
+                   WHERE issue=? AND status='PUSH_IN_FLIGHT' AND lease_owner=?""",
+                (issue, owner))
+            self.db.execute("COMMIT")
+            return result
+        except BaseException:
+            self.db.execute("ROLLBACK")
+            # A failed or interrupted callback may already have written remotely.
+            # Fail closed; no automatic retry or cancellation.
+            self.db.execute(
+                """UPDATE work SET status='PUSH_UNCERTAIN',lease_until=0
+                   WHERE issue=? AND status='PUSH_IN_FLIGHT' AND lease_owner=?""",
+                (issue, owner))
             raise
 
     def snapshot(self, issue):
@@ -177,7 +283,7 @@ def main():
             raise QueueIntegrityError("duplicate open work requests")
         store.reconcile_open({i['number'] for i in all_open if isinstance(i, dict) and type(i.get('number')) is int})
         for item in items:
-            store.ingest(item)
+            store.ingest(item, authoritative_open_scan=True)
         print(json.dumps({"ingested": len(items), "agent_invoked": False,
                           "READY": False, "worker_connected": False}))
     finally:

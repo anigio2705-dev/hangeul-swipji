@@ -1,0 +1,13 @@
+# Template only. No existing Render cron, TEST99 or production change.
+[Unit]
+Description=Hangeul C/B QA evidence read-only poll every four minutes
+
+[Timer]
+OnCalendar=*-*-* *:0/4:00
+AccuracySec=1s
+RandomizedDelaySec=0
+Persistent=true
+Unit=hangeul-cb-qa-tick.service
+
+[Install]
+WantedBy=timers.target
