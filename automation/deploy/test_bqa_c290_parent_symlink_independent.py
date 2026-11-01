@@ -56,8 +56,12 @@ class BQA290IndependentTests(unittest.TestCase):
         self.seed_and_stage()
         alias = self.root / "alias"
         alias.symlink_to(self.root, target_is_directory=True)
-        self.assertIsNone(self.lookup(alias / "inner" / ".." / self.path.name))
-        self.assertIsNotNone(self.lookup())
+        nested = self.root / "real" / "inner"
+        nested.mkdir(parents=True)
+        import shutil
+        shutil.copy2(self.path, nested / self.path.name)
+        self.assertIsNone(self.lookup(alias / "real" / "inner" / self.path.name))
+        self.assertIsNotNone(self.lookup(nested / self.path.name))
 
     def test_04_final_symlink_cannot_reach_valid_receipt(self):
         self.seed_and_stage()
