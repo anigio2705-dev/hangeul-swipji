@@ -33,18 +33,17 @@ def _raw_b_test_proof(log, verdict):
     end = log.find("##[group]", group_end + len("##[endgroup]"))
     section = log[group_end:end if end >= 0 else len(log)]
     results = re.findall(
-        r"(?m)^.*?test_[A-Za-z0-9_]+ \\(test_bqa_[^\\r\\n]+\\) \\.\\.\\. (ok|FAIL|ERROR)\\s*$",
+        r"(?m)^.*?test_[A-Za-z0-9_]+ \(test_bqa_[^\r\n]+\) \.\.\. (ok|FAIL|ERROR)\s*$",
         section)
-    summary = re.findall(r"(?m)^.*?Ran ([1-9][0-9]*) tests in [0-9.]+s\\s*$", section)
+    summary = re.findall(r"(?m)^.*?Ran ([1-9][0-9]*) tests in [0-9.]+s\s*$", section)
     if not results or len(summary) != 1 or int(summary[0]) != len(results):
         return False
     if verdict == "QA_PASS":
         return (all(x == "ok" for x in results)
-                and bool(re.search(r"(?m)^.*?Z OK\\s*$", section))
+                and bool(re.search(r"(?m)^.*?Z OK\s*$", section))
                 and not re.search(r"(?m)^.*?Z FAILED", section))
     return (any(x in ("FAIL", "ERROR") for x in results)
-            and bool(re.search(r"(?m)^.*?Z FAILED \\(", section)))
-
+            and bool(re.search(r"(?m)^.*?Z FAILED \(", section)))
 
 def _job_proof(qa_run, qa_jobs, raw_job_logs, qa_sha, verdict):
     """Bind raw B-only tests to the exact authenticated run/attempt/job."""
