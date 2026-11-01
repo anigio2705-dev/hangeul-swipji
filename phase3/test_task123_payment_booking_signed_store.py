@@ -182,5 +182,31 @@ class SignedSimulatorSqliteTests(unittest.TestCase):
             self.db, booking_id="booking_1")["version"])
 
 
+    def test_signed_json_array_ids_rejected_before_sqlite(self):
+        # Regression for B #276: no sqlite3.ProgrammingError on list IDs.
+        for field in ("booking_id", "payment_id", "event_id"):
+            for invalid in (["booking_1"], {"nested": "value"}, None, 42, True):
+                with self.subTest(field=field, invalid=invalid):
+                    candidate = make_event()
+                    candidate[field] = invalid
+                    with self.assertRaises(ValueError):
+                        self.apply(candidate)
+                    self.assertEqual(0, read_review_snapshot(
+                        self.db, booking_id="booking_1")["version"])
+                    self.assertEqual(0, self.db.execute(
+                        "SELECT COUNT(*) FROM review_payment_events").fetchone()[0])
+
+    def test_signed_invalid_id_string_rejected_before_sqlite(self):
+        for invalid in ("", " space", "bad/id", "x" * 65):
+            with self.subTest(invalid=invalid), self.assertRaises(ValueError):
+                self.apply(make_event(event_id=invalid))
+        self.assertEqual(0, self.db.execute(
+            "SELECT COUNT(*) FROM review_payment_events").fetchone()[0])
+
+    def test_review_snapshot_rejects_unbindable_id(self):
+        with self.assertRaises(ValueError):
+            read_review_snapshot(self.db, booking_id=["booking_1"])
+
+
 if __name__ == "__main__":
     unittest.main()
