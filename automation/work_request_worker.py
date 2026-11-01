@@ -30,7 +30,7 @@ class DurableWorkStore:
     def close(self):
         self.db.close()
 
-    def ingest(self, issue, *, now=None):
+    def ingest(self, issue, *, now=None, authoritative_open_scan=False):
         if not isinstance(issue, dict) or "pull_request" in issue or issue.get("state") != "open":
             raise ValueError("not a work issue")
         number = issue.get("number")
@@ -47,7 +47,10 @@ class DurableWorkStore:
                 self.db.execute(
                     "INSERT INTO work(issue,title,status,created_at) VALUES(?,?,'PENDING',?)",
                     (number, title, now))
-            else:
+            elif authoritative_open_scan:
+                # Only a completed, authenticated GitHub open-issue scan may
+                # revive cancelled work. A delayed signed webhook is NOT proof
+                # of current GitHub state, even when its issue payload is open.
                 # A GitHub issue may be closed and subsequently reopened.
                 # Re-enable ONLY a previously cancelled, exact-title task.
                 # Never revive REPORTED, BLOCKED or PUSH_UNCERTAIN; a consumed
@@ -265,7 +268,7 @@ def main():
             raise QueueIntegrityError("duplicate open work requests")
         store.reconcile_open({i['number'] for i in all_open if isinstance(i, dict) and type(i.get('number')) is int})
         for item in items:
-            store.ingest(item)
+            store.ingest(item, authoritative_open_scan=True)
         print(json.dumps({"ingested": len(items), "agent_invoked": False,
                           "READY": False, "worker_connected": False}))
     finally:
