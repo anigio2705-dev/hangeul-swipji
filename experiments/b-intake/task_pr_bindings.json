@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "source_ledger": "automation/hq_backlog_160.md",
+  "source_contract_sha": "8f4eba4e3044e75e5a137b2b1ba82e791a4b148b",
+  "scope": "isolated experiment, not proof of independent B identity",
+  "bindings": [
+    {
+      "task_id": 140,
+      "product_pr": 266,
+      "product_sha": "8f4eba4e3044e75e5a137b2b1ba82e791a4b148b",
+      "original_contract": "회원·수업 증가에 따른 서버·화상·저장·알림 비용과 손익을 계산한다.",
+      "evidence_issue": 34
+    },
+    {
+      "task_id": 123,
+      "product_pr": 275,
+      "product_sha": "e808aa0d1c35c0dfd820cc4c91917b5b3c8624fd",
+      "original_contract": "결제 성공·실패·취소·시간 초과 시 예약과 잔여 수업 상태를 맞춘다.",
+      "evidence_issue": 34,
+      "status": "QA_FAIL_HOLD"
+    }
+  ]
+}

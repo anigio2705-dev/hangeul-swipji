@@ -1,0 +1,103 @@
+name: b-qa-handoff-intake
+on:
+  workflow_dispatch:
+    inputs:
+      request_id: {required: true, type: string}
+      task_id: {required: true, type: string}
+      product_pr: {required: true, type: string}
+      product_sha: {required: true, type: string}
+permissions:
+  contents: read
+  pull-requests: read
+jobs:
+  intake:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify signed A issuance before accepting intake
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          TASK_ID: ${{ inputs.task_id }}
+          PRODUCT_PR: ${{ inputs.product_pr }}
+          PRODUCT_SHA: ${{ inputs.product_sha }}
+        run: |
+          python3 experiments/b-intake/verify_issued_request.py
+      - name: Validate task contract and source PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          TASK_ID: ${{ inputs.task_id }}
+          PRODUCT_PR: ${{ inputs.product_pr }}
+          PRODUCT_SHA: ${{ inputs.product_sha }}
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,re,urllib.request
+          e=os.environ
+          repo=e["GITHUB_REPOSITORY"]
+          request_id,task_id,pr,sha=(e[k] for k in ("REQUEST_ID","TASK_ID","PRODUCT_PR","PRODUCT_SHA"))
+          if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{7,127}",request_id): raise SystemExit("INVALID_REQUEST_ID")
+          if not re.fullmatch(r"[1-9][0-9]{0,2}",task_id) or not 1<=int(task_id)<=160: raise SystemExit("TASK_OUT_OF_RANGE")
+          if not re.fullmatch(r"[1-9][0-9]*",pr) or not re.fullmatch(r"[0-9a-f]{40}",sha): raise SystemExit("INVALID_PR_OR_SHA")
+          def api(path):
+              req=urllib.request.Request(f"https://api.github.com/repos/{repo}/{path}",headers={"Authorization":f"Bearer {e['GH_TOKEN']}","Accept":"application/vnd.github+json"})
+              with urllib.request.urlopen(req,timeout=20) as response: return json.load(response)
+          p=api(f"pulls/{pr}")
+          if (p["number"]!=int(pr) or p["state"]!="open" or p["head"]["sha"]!=sha
+              or p["head"]["repo"]["full_name"]!=repo or p["base"]["repo"]["full_name"]!=repo):
+              raise SystemExit("PR_OR_SHA_MISMATCH")
+          # Fail closed unless a pinned, reviewer-auditable task-to-PR/SHA binding exists.
+          # This is a candidate mapping, NOT independently authenticated B QA.
+          binding_req=urllib.request.Request(
+              f"https://api.github.com/repos/{repo}/contents/experiments/b-intake/task_pr_bindings.json?ref={e['GITHUB_SHA']}",
+              headers={"Authorization":f"Bearer {e['GH_TOKEN']}","Accept":"application/vnd.github.raw+json"})
+          import base64
+          with urllib.request.urlopen(binding_req,timeout=20) as response:
+              raw=json.load(response)
+          bindings=json.loads(base64.b64decode(raw["content"]).decode())
+          # Original contract MUST come from an independently pinned immutable commit.
+          pinned=bindings.get("source_contract_sha")
+          if pinned!="8f4eba4e3044e75e5a137b2b1ba82e791a4b148b":
+              raise SystemExit("UNAPPROVED_LEDGER_REVISION")
+          ledger_path="automation/hq_backlog_160.md"
+          ledger_req=urllib.request.Request(
+              f"https://api.github.com/repos/{repo}/contents/{ledger_path}?ref={pinned}",
+              headers={"Authorization":f"Bearer {e['GH_TOKEN']}","Accept":"application/vnd.github+json"})
+          with urllib.request.urlopen(ledger_req,timeout=20) as response:
+              ledger_data=json.load(response)
+          if ledger_data.get("sha")!="6590c0f27d87797201f4e7ab2cbe139c08615c29":
+              raise SystemExit("LEDGER_BLOB_SHA_MISMATCH")
+          ledger_text=base64.b64decode(ledger_data["content"]).decode("utf-8")
+          import unicodedata
+          normalized=unicodedata.normalize("NFC",ledger_text)
+          def original_clause(number):
+              matches=re.findall(r"(?m)^"+str(number)+r"\. \[ \] (.+)$",normalized)
+              if len(matches)!=1: raise SystemExit("TASK_NOT_IN_PINNED_LEDGER")
+              return matches[0].strip()
+          if not re.fullmatch(r"[1-9][0-9]*",pr):
+              raise SystemExit("INVALID_PRODUCT_PR")
+          if original_clause(int(task_id))!=unicodedata.normalize("NFC",next(
+              (x["original_contract"] for x in bindings["bindings"]
+               if x["task_id"]==int(task_id) and x["product_pr"]==int(pr) and x["product_sha"]==sha),"")):
+              raise SystemExit("ORIGINAL_CONTRACT_MISMATCH")
+          matched=[x for x in bindings["bindings"] if x["task_id"]==int(task_id)
+                   and x["product_pr"]==int(pr) and x["product_sha"]==sha]
+          if len(matched)!=1: raise SystemExit("TASK_PR_SHA_BINDING_MISSING")
+          # Mapping remains candidate: same-branch modifications are not independent approval.
+          if not matched[0].get("original_contract") or bindings.get("source_ledger")!="automation/hq_backlog_160.md":
+              raise SystemExit("TASK_CONTRACT_SOURCE_MISSING")
+          receipt={"status":"QA_RECEIVED_CANDIDATE","request_id":request_id,"task_id":int(task_id),
+                   "product_pr":int(pr),"target_product_sha":sha,"repository":repo,
+                   "source_pr_url":p["html_url"],"workflow":e["GITHUB_WORKFLOW"],
+                   "workflow_ref":e["GITHUB_WORKFLOW_REF"],"run_id":int(e["GITHUB_RUN_ID"]),
+                   "run_attempt":int(e["GITHUB_RUN_ATTEMPT"]),"job_name":"intake",
+                   "task_contract_verified":False,"task_binding_candidate":True,"qa_independent_verified":False}
+          f=pathlib.Path("qa-intake-receipt.json")
+          f.write_text(json.dumps(receipt,sort_keys=True,indent=2)+"\n")
+          print("INTAKE_RECEIPT_SHA256="+hashlib.sha256(f.read_bytes()).hexdigest())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: qa-intake-receipt
+          path: qa-intake-receipt.json
+          retention-days: 7
