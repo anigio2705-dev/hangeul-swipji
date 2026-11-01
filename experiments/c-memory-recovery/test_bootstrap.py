@@ -58,6 +58,15 @@ class RecoveryGateTests(unittest.TestCase):
                 self.assertFalse(result['execution_allowed'])
                 self.assertEqual(result['revision'], blocked['revision'])
 
+    def test_blocked_state_retains_original_evidence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            db = os.path.join(tmp, 'memory.db')
+            first = resume_gate(db, '123', OLD, NEW, OLD)
+            second = resume_gate(db, '123', OLD, OLD, NEW)
+            self.assertEqual(second['revision'], first['revision'])
+            row = sqlite3.connect(db).execute("SELECT current_sha,reason FROM resume_decisions").fetchone()
+            self.assertEqual(row, (NEW, 'PRODUCT_SHA_CHANGED_QA_NOT_TRANSFERABLE'))
+
     def test_revision_required_for_nonblocking_updates(self):
         with tempfile.TemporaryDirectory() as tmp:
             db = os.path.join(tmp, 'memory.db')
