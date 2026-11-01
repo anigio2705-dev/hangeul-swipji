@@ -50,12 +50,17 @@ def authenticated_local_referral_view(db, *, session_token, booking_id, now):
     actor_id, actor_role, actor_approved = tuple(actor)
 
     booking = db.execute(
-        "SELECT learner_id,teacher_id,referrer_id,price,status "
-        "FROM bookings WHERE id=?", (booking_id,),
+        "SELECT b.learner_id,b.teacher_id,b.referrer_id,b.price,b.status,"
+        "s.teacher_id FROM bookings b "
+        "LEFT JOIN slots s ON s.id=b.slot_id WHERE b.id=?", (booking_id,),
     ).fetchone()
     if booking is None:
         raise PermissionError("booking is unavailable")
-    learner, teacher, referrer, price, state = tuple(booking)
+    learner, teacher, referrer, price, state, slot_teacher = tuple(booking)
+    # The booking and its server-owned slot must agree on the teacher.
+    # Otherwise a modified booking row could authorize an unrelated teacher.
+    if type(slot_teacher) is not str or slot_teacher != teacher:
+        raise PermissionError("booking and slot teacher mismatch")
     if (not all(type(v) is str and _ID.fullmatch(v) for v in (learner, teacher))
             or learner == teacher or type(price) is not int
             or not 0 <= price <= MAX_KRW or state not in _ALLOWED_STATES):
