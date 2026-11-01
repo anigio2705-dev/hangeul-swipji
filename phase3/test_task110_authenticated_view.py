@@ -173,5 +173,32 @@ class AuthenticatedParticipantViewTests(unittest.TestCase):
                 booking_id="booking1", now=1000)
 
 
+    def test_19_booking_teacher_must_match_slot_owner(self):
+        self.db.execute(
+            "INSERT INTO users(id,email,password,nickname,role,approved,"
+            "referral_code,created_at) VALUES(?,?,?,?,?,?,?,?)",
+            ("tutor2", "tutor2@example.test", "test", "tutor2", "teacher",
+             1, "code_tutor2", 100),
+        )
+        token = self.token("tutor2")
+        self.db.execute(
+            "INSERT INTO sessions(token,user_id,expires) VALUES(?,?,?)",
+            (hashlib.sha256(token.encode()).hexdigest(), "tutor2", 10000),
+        )
+        self.db.execute(
+            "UPDATE bookings SET teacher_id=? WHERE id=?",
+            ("tutor2", "booking1"),
+        )
+        with self.assertRaises(PermissionError):
+            self.view("tutor2")
+        with self.assertRaises(PermissionError):
+            self.view("student")
+
+    def test_20_missing_slot_never_authorizes_participant(self):
+        self.db.execute("UPDATE bookings SET slot_id=NULL WHERE id=?", ("booking1",))
+        with self.assertRaises(PermissionError):
+            self.view("student")
+
+
 if __name__ == "__main__":
     unittest.main()
