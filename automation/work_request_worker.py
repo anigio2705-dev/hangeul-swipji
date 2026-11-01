@@ -231,6 +231,17 @@ class DurableWorkStore:
                     (issue, owner))
                 return None
             result = callback()
+            # A remote write may finish after the original lease expires.
+            # SQLite locking cannot revoke an in-flight network operation:
+            # never report that outcome as a successfully fenced transport.
+            # Quarantine for broker reconciliation rather than auto-retry.
+            if row[0] <= int(time.time()):
+                self.db.execute(
+                    """UPDATE work SET status='PUSH_UNCERTAIN',lease_until=0
+                       WHERE issue=? AND status='PUSH_IN_FLIGHT'
+                         AND lease_owner=?""", (issue, owner))
+                self.db.execute("COMMIT")
+                return None
             self.db.execute(
                 """UPDATE work SET status='LEASED'
                    WHERE issue=? AND status='PUSH_IN_FLIGHT' AND lease_owner=?""",
