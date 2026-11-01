@@ -89,7 +89,13 @@ def compare_referral_options(candidates, context):
         reasons = []
         if event not in events:
             reasons.append("EVENT_NOT_IN_CANDIDATE")
-        if transaction > referred + timedelta(days=duration):
+        try:
+            expires = referred + timedelta(days=duration)
+        except OverflowError as exc:
+            # A valid UTC string can still overflow datetime near year 9999.
+            # Fail closed instead of returning a hypothetical eligible reward.
+            raise ValueError("candidate period exceeds supported UTC range") from exc
+        if transaction > expires:
             reasons.append("CANDIDATE_PERIOD_EXPIRED")
         if context["refund_pending"]:
             reasons.append("REFUND_PENDING")
