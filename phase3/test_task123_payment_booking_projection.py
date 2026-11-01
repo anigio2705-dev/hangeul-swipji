@@ -133,7 +133,7 @@ class PaymentBookingProjectionTests(unittest.TestCase):
 
     def test_reject_invalid_events_and_spoofed_fields(self):
         for bad in (None, {}, "SUCCESS", [None], [1], [event("SUCCESS", 0)],
-                    [event("SUCCESS", -1)], [event("SUCCESS", 1, "")],
+                    [event("SUCCESS", -1)], [dict(event("SUCCESS"), event_id="")],
                     [dict(event("SUCCESS"), trusted=True)]):
             with self.subTest(bad=str(bad)[:70]), self.assertRaises(ValueError):
                 run(bad)
