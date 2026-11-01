@@ -291,6 +291,24 @@ class Handler(BaseHTTPRequestHandler):
             if not 1000<=price<=1000000: raise Error('가격 범위를 확인하세요')
             return {'currency':'KRW','basis':'hypothetical-test-only','scenarios':[dict(commissionBps=c,referralBps=r,processorBps=300,refundReserveBps=refund,taxReserveBps=tax,**money(price,c,r,300,tax,refund)) for c in (1500,2000,2500) for r in (0,300,500)],'note':'PG 3%·환불 충당·세금 충당은 가정값입니다. 법정 세율·확정 요율·순이익이 아니며 고정비·실제 세금은 별도입니다.'},None
         u=self.user(db); uid=u['id']
+        if method=='GET' and path=='/api/referrals/reward-explanation':
+            # #110 isolated local Phase3 preview. The actor is resolved only
+            # from the HttpOnly hs3 session cookie, never from query/body IDs.
+            # This is not a policy approval, live payout, or operating route.
+            if set(q) != {'bookingId'} or len(q['bookingId']) != 1:
+                raise Error('예약번호 하나만 필요합니다',400)
+            try:
+                token=http.cookies.SimpleCookie(self.headers.get('Cookie',''))['hs3'].value
+                from team14_referral_authenticated_view import authenticated_local_referral_view
+                view=authenticated_local_referral_view(
+                    db,session_token=token,booking_id=q['bookingId'][0],now=time.time())
+            except (KeyError,http.cookies.CookieError):
+                raise Error('로그인이 필요합니다',401)
+            except PermissionError:
+                # Do not reveal whether a different user's booking exists.
+                raise Error('보상 설명 접근 권한이 없습니다',403)
+            return {'view':view,'approvedPolicy':False,'realMoneyEnabled':False,
+                    'reviewOnly':True},None
         if method=='POST' and path=='/api/referrals/link':
             # Task #101: authenticated account consent, not client-supplied actorId.
             # This writes the SAME persistent Phase3 users.referred_by column
