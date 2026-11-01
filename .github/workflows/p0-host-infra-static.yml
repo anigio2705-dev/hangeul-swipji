@@ -45,7 +45,13 @@ jobs:
       - name: Run independently added B QA-only regression tests (if present)
         env:
           PYTHONPATH: automation:automation/deploy
-        run: python3 -m unittest discover -s automation/deploy -p 'test_bqa_*.py' -v
+        shell: bash
+        run: |
+          if compgen -G 'automation/deploy/test_bqa_*.py' >/dev/null; then
+            python3 -m unittest discover -s automation/deploy -p 'test_bqa_*.py' -v
+          else
+            echo 'B_QA_PENDING: no independent B-only tests present; NOT a QA PASS'
+          fi
       - name: Verify append-only execution checkpoints and crash replay
         env:
           PYTHONPATH: automation:automation/deploy
