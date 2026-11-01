@@ -194,5 +194,40 @@ class Task128ReconciliationTests(unittest.TestCase):
                 second.close()
 
 
+    def test_forged_reversal_missing_three_buckets_cannot_match(self):
+        # Raw SQL is intentionally used to simulate an incomplete ledger
+        # record bypassing the #115 API. Aggregate totals still reconcile.
+        self.ledger.db.execute(
+            "INSERT INTO sim_reversal VALUES(?,?,?,?,?,?)",
+            ("r_forged", "tx1", "refund1", "partial_refund", 100, "untrusted"))
+        self.ledger.db.execute(
+            "INSERT INTO sim_reversal_entry VALUES(?,?,?)",
+            ("r_forged", "teacher", 100))
+        result = self.check(
+            refunds=[dict(reversal_id="r_forged", tx_id="tx1",
+                          evidence_id="refund1", amount_krw=100)],
+            payouts=[dict(tx_id="tx1", teacher_net_krw=600)])
+        self.assertIn("REVERSAL_ENTRY_MISMATCH:r_forged",
+                      result["discrepancies"])
+        self.assertEqual("DISCREPANCY_HOLD", result["status"])
+        self.assert_held(result)
+
+    def test_forged_four_bucket_reversal_with_wrong_sum_is_held(self):
+        self.ledger.db.execute(
+            "INSERT INTO sim_reversal VALUES(?,?,?,?,?,?)",
+            ("r_wrong", "tx1", "refund1", "partial_refund", 100, "untrusted"))
+        self.ledger.db.executemany(
+            "INSERT INTO sim_reversal_entry VALUES(?,?,?)",
+            [("r_wrong", bucket, 90 if bucket == "teacher" else 0)
+             for bucket in ("teacher", "platform", "referral", "benefit")])
+        result = self.check(
+            refunds=[dict(reversal_id="r_wrong", tx_id="tx1",
+                          evidence_id="refund1", amount_krw=100)],
+            payouts=[dict(tx_id="tx1", teacher_net_krw=610)])
+        self.assertIn("REVERSAL_ENTRY_MISMATCH:r_wrong",
+                      result["discrepancies"])
+        self.assert_held(result)
+
+
 if __name__ == "__main__":
     unittest.main()

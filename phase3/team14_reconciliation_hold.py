@@ -71,14 +71,26 @@ def reconcile_review_statements(*, ledger, payments, refunds, payouts):
                 "SELECT reversal_id,tx_id,evidence_id,refund_krw FROM sim_reversal")
         }
         reversal_buckets = defaultdict(lambda: defaultdict(int))
+        reversal_entries = defaultdict(dict)
         for row in db.execute(
-                "SELECT r.tx_id,e.bucket,e.reversed_krw FROM sim_reversal_entry e "
+                "SELECT r.tx_id,e.reversal_id,e.bucket,e.reversed_krw "
+                "FROM sim_reversal_entry e "
                 "JOIN sim_reversal r ON r.reversal_id=e.reversal_id"):
             reversal_buckets[row["tx_id"]][row["bucket"]] += row["reversed_krw"]
+            reversal_entries[row["reversal_id"]][row["bucket"]] = row["reversed_krw"]
     finally:
         db.execute("ROLLBACK")
 
     failures = set()
+    # Aggregate conservation alone is insufficient: a forged/incomplete
+    # reversal can sum to its refund while omitting required bucket entries.
+    # Validate EACH immutable reversal's four-bucket shape before reporting
+    # a matched review. No financial release is ever authorized.
+    for reversal_id, source in reversals.items():
+        entries = reversal_entries.get(reversal_id, {})
+        if (set(entries) != set(BUCKETS)
+                or sum(entries.values()) != source["refund_krw"]):
+            failures.add("REVERSAL_ENTRY_MISMATCH:" + reversal_id)
     for tx_id in sorted(set(transactions) | set(pay) | set(out)):
         source = transactions.get(tx_id)
         if source is None:
