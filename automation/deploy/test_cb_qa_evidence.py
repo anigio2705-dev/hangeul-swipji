@@ -1,6 +1,6 @@
 """Adversarial B evidence provenance tests; synthetic fixtures are NOT real B QA."""
 import unittest
-from cb_qa_evidence import inspect_evidence, REPO
+from cb_qa_evidence import inspect_evidence, collect_github_evidence, REPO
 
 S = "a" * 40
 Q = "b" * 40
@@ -71,6 +71,60 @@ class EvidenceTests(unittest.TestCase):
             d["qa_reviews"].append(dict(d["qa_reviews"][0], state="CHANGES_REQUESTED",
                                         body=f"HS_B_QA_VERDICT status=QA_FAIL product_sha={S} qa_sha={Q}"))
         self.assertEqual(self.check(change)["status"], "UNVERIFIED")
+
+
+class GitHubReadOnlyCollectionTests(unittest.TestCase):
+    def test_fetches_only_expected_rest_evidence(self):
+        data = fixture()
+        paths = []
+        def get(path):
+            paths.append(path)
+            if path == "/pulls/168": return data["source_pr"]
+            if path == "/pulls/500": return data["qa_pr"]
+            if path.startswith("/pulls/500/files?"): return data["qa_files"]
+            if path == "/actions/runs/123": return data["qa_run"]
+            if path.startswith("/pulls/500/reviews?"): return data["qa_reviews"]
+            raise AssertionError(path)
+        result = collect_github_evidence(
+            token="fixture-not-a-real-token", source_pr_number=168,
+            qa_pr_number=500, run_id=123, source_sha=S, qa_sha=Q,
+            trusted_b_login="independent-b", get_json=get)
+        self.assertEqual(result["status"], "QA_PASS")
+        self.assertEqual(len(paths), 5)
+        self.assertTrue(all(path.startswith("/") and "POST" not in path for path in paths))
+
+    def test_untrusted_same_account_is_not_qa(self):
+        data = fixture()
+        def get(path):
+            if path == "/pulls/168": return data["source_pr"]
+            if path == "/pulls/500": return data["qa_pr"]
+            if "/files?" in path: return data["qa_files"]
+            if "/reviews?" in path: return data["qa_reviews"]
+            return data["qa_run"]
+        self.assertEqual(collect_github_evidence(
+            token="fixture", source_pr_number=168, qa_pr_number=500,
+            run_id=123, source_sha=S, qa_sha=Q,
+            trusted_b_login="developer", get_json=get)["status"], "UNVERIFIED")
+
+    def test_review_pagination_must_be_complete(self):
+        data = fixture()
+        def get(path):
+            if path == "/pulls/168": return data["source_pr"]
+            if path == "/pulls/500": return data["qa_pr"]
+            if "/files?" in path: return data["qa_files"]
+            if "/reviews?" in path: return data["qa_reviews"] * 100
+            return data["qa_run"]
+        self.assertEqual(collect_github_evidence(
+            token="fixture", source_pr_number=168, qa_pr_number=500,
+            run_id=123, source_sha=S, qa_sha=Q,
+            trusted_b_login="independent-b", get_json=get)["status"], "UNVERIFIED")
+
+    def test_invalid_request_never_fetches(self):
+        def fail(_): raise AssertionError("network should not be touched")
+        self.assertEqual(collect_github_evidence(
+            token="fixture", source_pr_number=True, qa_pr_number=500,
+            run_id=123, source_sha=S, qa_sha=Q,
+            trusted_b_login="independent-b", get_json=fail)["status"], "UNVERIFIED")
 
 
 if __name__ == "__main__":
