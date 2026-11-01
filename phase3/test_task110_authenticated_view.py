@@ -21,13 +21,16 @@ class AuthenticatedParticipantViewTests(unittest.TestCase):
                 "INSERT INTO users(id,email,password,nickname,role,approved,"
                 "referral_code,referred_by,created_at) VALUES(?,?,?,?,?,?,?,?,?)",
                 (uid, uid + "@example.test", "test", uid, role, approved,
-                 "code_" + uid, "inviter" if uid == "student" else None, 100),
+                 "code_" + uid, None, 100),
             )
             token = self.token(uid)
             self.db.execute(
                 "INSERT INTO sessions(token,user_id,expires) VALUES(?,?,?)",
                 (hashlib.sha256(token.encode()).hexdigest(), uid, 10000),
             )
+        # Seed FK parents first; attach the learner referral after all users exist.
+        self.db.execute("UPDATE users SET referred_by=? WHERE id=?",
+                        ("inviter", "student"))
         self.db.execute(
             "INSERT INTO slots(id,teacher_id,start,end) VALUES(?,?,?,?)",
             ("slot1", "tutor", 2000, 3000),
