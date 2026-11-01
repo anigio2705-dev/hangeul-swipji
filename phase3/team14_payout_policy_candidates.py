@@ -38,7 +38,7 @@ def _utc(value):
 
 
 def _stamp(dt):
-    return dt.astimezone(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+    return dt.astimezone(timezone.utc).isoformat(timespec="auto").replace("+00:00", "Z")
 
 
 def _next_cycle(now, cycle):
