@@ -194,8 +194,9 @@ class AuthenticatedParticipantViewTests(unittest.TestCase):
         with self.assertRaises(PermissionError):
             self.view("student")
 
-    def test_20_missing_slot_never_authorizes_participant(self):
-        self.db.execute("UPDATE bookings SET slot_id=NULL WHERE id=?", ("booking1",))
+    def test_20_changed_slot_owner_never_authorizes_participant(self):
+        self.db.execute("UPDATE slots SET teacher_id=? WHERE id=?",
+                        ("outsider", "slot1"))
         with self.assertRaises(PermissionError):
             self.view("student")
 
