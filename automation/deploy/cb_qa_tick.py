@@ -46,7 +46,7 @@ def _result(state, detail, next_check=None):
 
 def run_tick(db_path, *, request_id, source_pr_number, qa_pr_number,
              run_id, product_sha, qa_sha, trusted_b_login, token,
-             now=None, get_json=None, get_text=None):
+             now=None, get_json=None, get_text=None, clock=None):
     """One read-only evidence poll with durable lease and exact-SHA receipt.
 
     Unverified evidence is WAITING, not QA_FAIL. A verified QA_FAIL records a
@@ -54,7 +54,12 @@ def run_tick(db_path, *, request_id, source_pr_number, qa_pr_number,
     An expired read-only lease may be reclaimed; immutable receipts prevent
     duplicate verdict changes. No external POST or push is performed.
     """
-    now = int(time.time()) if now is None else int(now)
+    # Production uses wall time both before and after the GitHub GET. Tests
+    # may supply a pinned start time and an injected completion clock.
+    live_clock = now is None
+    now = int(time.time()) if live_clock else int(now)
+    if clock is None:
+        clock = time.time if live_clock else (lambda: now)
     if (not request_id or len(request_id) > 128
             or any(type(n) is not int or n < 1
                    for n in (source_pr_number, qa_pr_number, run_id))
@@ -113,10 +118,22 @@ def run_tick(db_path, *, request_id, source_pr_number, qa_pr_number,
         db.execute("BEGIN IMMEDIATE")
         _init(db)
         row = db.execute(
-            "SELECT lease_owner FROM cb_qa_ticks WHERE request_id=? AND product_sha=?",
+            "SELECT lease_owner,lease_until FROM cb_qa_ticks WHERE request_id=? AND product_sha=?",
             (request_id, product_sha)).fetchone()
         if not row or row[0] != owner:
             return _result("STALE_LEASE", "newer read-only poll owns state")
+        finished_at = int(clock())
+        if row[1] <= finished_at:
+            # No competing worker is required for a lease to expire. A slow
+            # GitHub GET must never persist an old PASS/FAIL after its deadline.
+            # Release this tick, retry read-only later, and insert NO receipt.
+            next_check = finished_at + POLL_SECONDS
+            db.execute("""UPDATE cb_qa_ticks SET state='WAITING_B_EVIDENCE',
+                lease_owner=NULL,lease_until=0,next_check=?,updated_at=?,
+                detail='poll lease expired before receipt'
+                WHERE request_id=? AND product_sha=?""",
+                (next_check, finished_at, request_id, product_sha))
+            return _result("EXPIRED_LEASE", "poll expired without QA receipt", next_check)
 
         verdict = evidence.get("status")
         if verdict in ("QA_PASS", "QA_FAIL"):
