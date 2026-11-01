@@ -12,7 +12,7 @@ import sqlite3
 
 from team14_payment_booking_projection import reconcile_payment_booking
 
-_SIGNATURE = re.compile(r"sha256=([0-9a-f]{64})\\Z")
+_SIGNATURE = re.compile(r"sha256=([0-9a-f]{64})\Z")
 _REQUIRED_EVENT = frozenset({
     "source", "booking_id", "payment_id", "event_id", "sequence", "outcome"
 })
