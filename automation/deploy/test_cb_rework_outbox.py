@@ -138,6 +138,35 @@ class VerifiedReworkOutboxTests(unittest.TestCase):
                        (REQUEST, S))
         self.assertIsNone(pending(self.path, request_id=REQUEST, product_sha=S))
 
+    def test_pending_rejects_symlink_to_valid_receipt_database(self):
+        self.assertEqual(self.seed(), "C_FIXING")
+        self.assertEqual(self.stage(), "STAGED")
+        link = Path(self.path).with_name("linked.sqlite3")
+        link.symlink_to(self.path)
+        self.assertIsNone(pending(str(link), request_id=REQUEST, product_sha=S))
+        self.assertIsNotNone(pending(self.path, request_id=REQUEST, product_sha=S))
+
+    def test_pending_invalid_database_path_fails_closed(self):
+        for bad_path in (None, 42, object()):
+            with self.subTest(bad_path=type(bad_path).__name__):
+                self.assertIsNone(pending(bad_path, request_id=REQUEST,
+                                          product_sha=S))
+
+    def test_pending_rejects_nonstring_sha_without_stringifying(self):
+        class UnsafeString:
+            def __str__(self):
+                raise RuntimeError("must not stringify untrusted object")
+        for bad_sha in (None, 42, UnsafeString()):
+            with self.subTest(bad_sha=type(bad_sha).__name__):
+                self.assertIsNone(pending(self.path, request_id=REQUEST,
+                                          product_sha=bad_sha))
+        self.assertFalse(Path(self.path).exists())
+
+    def test_pending_rejects_oversized_request_without_database_creation(self):
+        self.assertIsNone(pending(self.path, request_id="x" * 129,
+                                  product_sha=S))
+        self.assertFalse(Path(self.path).exists())
+
     def test_requires_existing_transaction(self):
         with sqlite3.connect(self.path) as db:
             with self.assertRaises(ValueError):
