@@ -6,7 +6,7 @@ from pathlib import Path
 
 from cb_qa_tick import run_tick
 from cb_qa_verdict_store import accept_verdict, pending_fix
-from test_cb_qa_evidence import fixture, S, Q
+from test_cb_qa_evidence import positive_fixture, set_fail_proof, S, Q
 
 
 def rest_fixture(data):
@@ -19,6 +19,8 @@ def rest_fixture(data):
             return data["qa_files"]
         if path == "/actions/runs/123":
             return data["qa_run"]
+        if path.startswith("/actions/runs/123/jobs?"):
+            return {"total_count": 1, "jobs": data["qa_jobs"]}
         if path.startswith("/pulls/500/reviews?"):
             return data["qa_reviews"]
         raise AssertionError(path)
@@ -30,7 +32,7 @@ class DurableTickTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.db = str(Path(self.temp.name) / "cb.sqlite3")
-        self.data = fixture()
+        self.data = positive_fixture()
         self.kw = dict(
             request_id="HUB-20261101-C-002",
             source_pr_number=168, qa_pr_number=500, run_id=123,
@@ -40,6 +42,7 @@ class DurableTickTests(unittest.TestCase):
     def tick(self, **changes):
         kw = self.kw | changes
         kw.setdefault("get_json", rest_fixture(self.data))
+        kw.setdefault("get_text", lambda path: self.data["raw_job_logs"][1001] if path == "/actions/jobs/1001/logs" else None)
         return run_tick(self.db, **kw)
 
     def test_verified_pass_durable_and_idempotent(self):
@@ -50,7 +53,7 @@ class DurableTickTests(unittest.TestCase):
         self.assertEqual(rows, [("QA_PASS", "AWAIT_A_REVIEW")])
 
     def test_verified_fail_requires_rework_but_does_not_execute(self):
-        self.data["qa_run"]["conclusion"] = "failure"
+        set_fail_proof(self.data)
         self.data["qa_reviews"][0]["state"] = "CHANGES_REQUESTED"
         self.data["qa_reviews"][0]["body"] = (
             f"HS_B_QA_VERDICT status=QA_FAIL product_sha={S} qa_sha={Q}")
@@ -62,7 +65,7 @@ class DurableTickTests(unittest.TestCase):
         self.data["qa_reviews"] = []
         self.assertEqual(self.tick()["state"], "WAITING_B_EVIDENCE")
         self.assertEqual(self.tick(now=1100)["state"], "WAITING")
-        self.data["qa_reviews"] = fixture()["qa_reviews"]
+        self.data["qa_reviews"] = positive_fixture()["qa_reviews"]
         self.assertEqual(self.tick(now=1240)["state"], "QA_PASS_VERIFIED")
 
     def test_same_account_review_cannot_be_accepted(self):
@@ -91,7 +94,7 @@ class DurableTickTests(unittest.TestCase):
             db.execute("""UPDATE cb_qa_ticks SET state='RUNNING',
                 lease_owner='other',lease_until=2000,next_check=0""")
         self.assertEqual(self.tick(now=1100)["state"], "RUNNING")
-        self.data["qa_reviews"] = fixture()["qa_reviews"]
+        self.data["qa_reviews"] = positive_fixture()["qa_reviews"]
         self.assertEqual(self.tick(now=2000)["state"], "QA_PASS_VERIFIED")
 
     def test_pinned_qa_sha_cannot_silently_change(self):
@@ -112,7 +115,7 @@ class DurableTickTests(unittest.TestCase):
                 qa_sha="fed"[i] * 40, verdict="QA_FAIL",
                 evidence=f"prior B QA {i}", verified_by_b=True,
                 ci_success=True, retry_count=i), "C_FIXING")
-        self.data["qa_run"]["conclusion"] = "failure"
+        set_fail_proof(self.data)
         self.data["qa_reviews"][0]["state"] = "CHANGES_REQUESTED"
         self.data["qa_reviews"][0]["body"] = (
             f"HS_B_QA_VERDICT status=QA_FAIL product_sha={S} qa_sha={Q}")
@@ -147,7 +150,7 @@ class DurableTickTests(unittest.TestCase):
                 "SELECT lease_owner FROM cb_qa_ticks").fetchone()[0], "newer")
 
     def test_stale_fail_cannot_insert_rework_receipt(self):
-        self.data["qa_run"]["conclusion"] = "failure"
+        set_fail_proof(self.data)
         self.data["qa_reviews"][0]["state"] = "CHANGES_REQUESTED"
         self.data["qa_reviews"][0]["body"] = (
             f"HS_B_QA_VERDICT status=QA_FAIL product_sha={S} qa_sha={Q}")

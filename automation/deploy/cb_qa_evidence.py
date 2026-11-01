@@ -13,13 +13,77 @@ MARKER = re.compile(
 )
 
 
+
+ALLOWED_WORKFLOW = ".github/workflows/p0-host-infra-static.yml"
+ALLOWED_JOB = "host-infra-static"
+B_STEP = "Run independently added B QA-only regression tests (if present)"
+B_COMMAND = "##[group]Run if compgen -G 'automation/deploy/test_bqa_*.py'"
+
+
+def _raw_b_test_proof(log, verdict):
+    """Inspect the actual B-only test step, not unrelated passing job output."""
+    if not isinstance(log, str) or len(log) > 2_000_000:
+        return False
+    start = log.find(B_COMMAND)
+    if start < 0 or log.find(B_COMMAND, start + 1) >= 0:
+        return False
+    group_end = log.find("##[endgroup]", start)
+    if group_end < 0:
+        return False
+    end = log.find("##[group]", group_end + len("##[endgroup]"))
+    section = log[group_end:end if end >= 0 else len(log)]
+    results = re.findall(
+        r"(?m)^.*?test_[A-Za-z0-9_]+ \(test_bqa_[^\r\n]+\) \.\.\. (ok|FAIL|ERROR)\s*$",
+        section)
+    summary = re.findall(r"(?m)^.*?Ran ([1-9][0-9]*) tests in [0-9.]+s\s*$", section)
+    if not results or len(summary) != 1 or int(summary[0]) != len(results):
+        return False
+    if verdict == "QA_PASS":
+        return (all(x == "ok" for x in results)
+                and bool(re.search(r"(?m)^.*?Z OK\s*$", section))
+                and not re.search(r"(?m)^.*?Z FAILED", section))
+    return (any(x in ("FAIL", "ERROR") for x in results)
+            and bool(re.search(r"(?m)^.*?Z FAILED \(", section)))
+
+def _job_proof(qa_run, qa_jobs, raw_job_logs, qa_sha, verdict):
+    """Bind raw B-only tests to the exact authenticated run/attempt/job."""
+    if (not isinstance(qa_jobs, list) or len(qa_jobs) != 1
+            or not isinstance(raw_job_logs, dict)
+            or qa_run.get("path", "").split("@")[0] != ALLOWED_WORKFLOW
+            or qa_run.get("name") != "P0 isolated host infrastructure static checks"
+            or type(qa_run.get("id")) is not int):
+        return False
+    job = qa_jobs[0]
+    if not isinstance(job, dict):
+        return False
+    if (job.get("name") != ALLOWED_JOB
+            or type(job.get("id")) is not int or job["id"] < 1
+            or job.get("run_id") != qa_run["id"]
+            or job.get("run_attempt") != qa_run["run_attempt"]
+            or job.get("head_sha") != qa_sha
+            or job.get("status") != "completed"
+            or job.get("conclusion") != ("success" if verdict == "QA_PASS" else "failure")):
+        return False
+    steps = job.get("steps")
+    if not isinstance(steps, list) or not steps:
+        return False
+    b_steps = [st for st in steps if isinstance(st, dict) and st.get("name") == B_STEP]
+    if (len(b_steps) != 1 or b_steps[0].get("conclusion") !=
+            ("success" if verdict == "QA_PASS" else "failure")
+            or not any(isinstance(st, dict)
+                       and st.get("name") == "Run actions/checkout@v4"
+                       and st.get("conclusion") == "success" for st in steps)):
+        return False
+    return _raw_b_test_proof(raw_job_logs.get(job["id"]), verdict)
+
+
 def _ref(obj, field):
     value = obj.get(field)
     return value if isinstance(value, dict) else {}
 
 
 def inspect_evidence(*, repo, source_pr, qa_pr, qa_files, qa_run, qa_reviews,
-                     source_sha, qa_sha, trusted_b_login):
+                     source_sha, qa_sha, trusted_b_login, qa_jobs=None, raw_job_logs=None):
     """Return a verified verdict only with independent B review + CI provenance.
 
     Inputs MUST come from authenticated GitHub REST responses fetched by the
@@ -92,11 +156,13 @@ def inspect_evidence(*, repo, source_pr, qa_pr, qa_files, qa_run, qa_reviews,
                     verdicts.append(verdict)
     if len(set(verdicts)) != 1 or not verdicts:
         return deny("missing or conflicting independent B exact-SHA review")
-    return {"status": verdicts[0], "reason": "distinct B reviewer + exact QA-only PR + Actions"}
+    if not _job_proof(qa_run, qa_jobs, raw_job_logs, qa_sha, verdicts[0]):
+        return deny("missing or invalid raw B-only Actions job evidence")
+    return {"status": verdicts[0], "reason": "independent B exact-SHA review and raw B-only Actions job proof"}
 
 
 def collect_github_evidence(*, token, source_pr_number, qa_pr_number, run_id,
-                            source_sha, qa_sha, trusted_b_login, get_json=None):
+                            source_sha, qa_sha, trusted_b_login, get_json=None, get_text=None):
     """Read-only authenticated GitHub evidence collection, never an approval.
 
     Caller must supply trusted_b_login from a protected controller setting,
@@ -121,7 +187,33 @@ def collect_github_evidence(*, token, source_pr_number, qa_pr_number, run_id,
         with urllib.request.urlopen(req, timeout=15) as response:
             return json.load(response)
 
+
+    def default_get_text(path):
+        # GitHub returns a temporary HTTPS redirect for Actions job logs.
+        # Never forward the GitHub token to a different host.
+        from urllib.parse import urlsplit
+        class SafeRedirect(urllib.request.HTTPRedirectHandler):
+            def redirect_request(self, req, fp, code, msg, headers, newurl):
+                target = urlsplit(newurl)
+                if target.scheme != "https":
+                    raise ValueError("unsafe Actions log redirect")
+                next_req = super().redirect_request(req, fp, code, msg, headers, newurl)
+                if next_req is not None and target.netloc != urlsplit(req.full_url).netloc:
+                    next_req.remove_header("Authorization")
+                return next_req
+        req = urllib.request.Request(
+            "https://api.github.com/repos/" + REPO + path,
+            headers={"Authorization": "Bearer " + token,
+                     "Accept": "application/vnd.github+json",
+                     "X-GitHub-Api-Version": "2022-11-28"})
+        with urllib.request.build_opener(SafeRedirect()).open(req, timeout=15) as response:
+            raw = response.read(2_000_001)
+        if len(raw) > 2_000_000:
+            raise ValueError("Actions job log exceeds bounded size")
+        return raw.decode("utf-8", errors="replace")
+
     get = get_json if get_json is not None else default_get
+    get_log = get_text if get_text is not None else default_get_text
     source = get(f"/pulls/{source_pr_number}")
     qa = get(f"/pulls/{qa_pr_number}")
     files = get(f"/pulls/{qa_pr_number}/files?per_page=100&page=1")
@@ -130,6 +222,26 @@ def collect_github_evidence(*, token, source_pr_number, qa_pr_number, run_id,
             or not isinstance(source, dict) or not isinstance(qa, dict)
             or not isinstance(run, dict)):
         return {"status": "UNVERIFIED", "reason": "incomplete GitHub evidence"}
+    # Reject unrelated workflow runs before requesting logs.
+    if (run.get("path", "").split("@")[0] != ALLOWED_WORKFLOW
+            or run.get("name") != "P0 isolated host infrastructure static checks"
+            or run.get("head_sha") != qa_sha
+            or run.get("status") != "completed"
+            or run.get("conclusion") not in ("success", "failure")
+            or type(run.get("id")) is not int or run["id"] != run_id):
+        return {"status": "UNVERIFIED", "reason": "untrusted QA workflow or run"}
+    jobs_payload = get(f"/actions/runs/{run_id}/jobs?per_page=100&page=1")
+    if (not isinstance(jobs_payload, dict)
+            or type(jobs_payload.get("total_count")) is not int
+            or jobs_payload["total_count"] != 1
+            or not isinstance(jobs_payload.get("jobs"), list)
+            or len(jobs_payload["jobs"]) != 1):
+        return {"status": "UNVERIFIED", "reason": "missing or paginated QA job evidence"}
+    jobs = jobs_payload["jobs"]
+    job_id = jobs[0].get("id") if isinstance(jobs[0], dict) else None
+    if type(job_id) is not int or job_id < 1:
+        return {"status": "UNVERIFIED", "reason": "invalid QA job id"}
+    raw_logs = {job_id: get_log(f"/actions/jobs/{job_id}/logs")}
     reviews = []
     for page in range(1, 4):
         batch = get(f"/pulls/{qa_pr_number}/reviews?per_page=100&page={page}")
@@ -145,4 +257,5 @@ def collect_github_evidence(*, token, source_pr_number, qa_pr_number, run_id,
     return inspect_evidence(
         repo=REPO, source_pr=source, qa_pr=qa, qa_files=files,
         qa_run=run, qa_reviews=reviews, source_sha=source_sha,
-        qa_sha=qa_sha, trusted_b_login=trusted_b_login)
+        qa_sha=qa_sha, trusted_b_login=trusted_b_login,
+        qa_jobs=jobs, raw_job_logs=raw_logs)

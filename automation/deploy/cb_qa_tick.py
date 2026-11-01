@@ -46,7 +46,7 @@ def _result(state, detail, next_check=None):
 
 def run_tick(db_path, *, request_id, source_pr_number, qa_pr_number,
              run_id, product_sha, qa_sha, trusted_b_login, token,
-             now=None, get_json=None):
+             now=None, get_json=None, get_text=None):
     """One read-only evidence poll with durable lease and exact-SHA receipt.
 
     Unverified evidence is WAITING, not QA_FAIL. A verified QA_FAIL records a
@@ -100,7 +100,8 @@ def run_tick(db_path, *, request_id, source_pr_number, qa_pr_number,
             token=token, source_pr_number=source_pr_number,
             qa_pr_number=qa_pr_number, run_id=run_id,
             source_sha=product_sha, qa_sha=qa_sha,
-            trusted_b_login=trusted_b_login, get_json=get_json)
+            trusted_b_login=trusted_b_login, get_json=get_json,
+            get_text=get_text)
     except Exception:
         # Deliberately never persist exception strings: they may leak auth.
         evidence = {"status": "UNVERIFIED", "reason": "read-only GitHub fetch failed"}
