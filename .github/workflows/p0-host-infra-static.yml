@@ -38,6 +38,10 @@ jobs:
         env:
           PYTHONPATH: automation:automation/deploy
         run: python3 -m unittest discover -s automation/deploy -p 'test_cb_qa_evidence.py' -v
+      - name: Verify 4-minute durable C/B evidence tick and crash recovery (synthetic only)
+        env:
+          PYTHONPATH: automation:automation/deploy
+        run: python3 -m unittest discover -s automation/deploy -p 'test_cb_qa_tick.py' -v
       - name: Verify append-only execution checkpoints and crash replay
         env:
           PYTHONPATH: automation:automation/deploy
