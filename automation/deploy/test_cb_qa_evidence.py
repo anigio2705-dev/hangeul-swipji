@@ -47,6 +47,10 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(self.check(lambda d: d["qa_run"].update(pull_requests=[{"number": 499}]))["status"], "UNVERIFIED")
         self.assertEqual(self.check(lambda d: d["qa_run"].update(head_repository={"full_name": "evil/repo"}))["status"], "UNVERIFIED")
 
+    def test_missing_or_malformed_pr_list_fails_closed(self):
+        self.assertEqual(self.check(lambda d: d["qa_run"].update(pull_requests=None))["status"], "UNVERIFIED")
+        self.assertEqual(self.check(lambda d: d["qa_run"].pop("pull_requests"))["status"], "UNVERIFIED")
+
     def test_no_product_code_modification(self):
         self.assertEqual(self.check(lambda d: d["qa_files"].append({"filename": "automation/ai_agent_runner.py", "status": "modified"}))["status"], "UNVERIFIED")
         self.assertEqual(self.check(lambda d: d["qa_files"][0].update(status="modified"))["status"], "UNVERIFIED")
