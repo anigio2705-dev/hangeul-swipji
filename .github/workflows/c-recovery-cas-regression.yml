@@ -1,0 +1,26 @@
+name: C recovery CAS isolated regression
+on:
+  pull_request:
+    paths:
+      - 'experiments/c-memory-recovery/**'
+      - '.github/workflows/c-recovery-cas-regression.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  recovery-cas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify isolated recovery CAS and fail-closed tests
+        run: |
+          cd experiments/c-memory-recovery
+          python -m unittest discover -v
+      - name: Declare limits
+        run: |
+          echo "C_RECOVERY_CAS_TEST_ONLY: caller flags never authorize AI execution"
+          echo "B_QA_PENDING: this workflow is C-authored, not independent B QA"
