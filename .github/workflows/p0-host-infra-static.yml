@@ -42,6 +42,10 @@ jobs:
         env:
           PYTHONPATH: automation:automation/deploy
         run: python3 -m unittest discover -s automation/deploy -p 'test_cb_qa_tick.py' -v
+      - name: Verify atomic QA_FAIL to durable non-executable rework outbox (synthetic only)
+        env:
+          PYTHONPATH: automation:automation/deploy
+        run: python3 -m unittest discover -s automation/deploy -p 'test_cb_rework_outbox.py' -v
       - name: Run independently added B QA-only regression tests (if present)
         env:
           PYTHONPATH: automation:automation/deploy
