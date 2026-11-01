@@ -70,6 +70,15 @@ class Task127PayoutCandidateTests(unittest.TestCase):
         r = review(candidate(hold_days=60))
         self.assertIn("HOLD_PERIOD_ACTIVE", r["review_reasons"])
 
+    def test_fractional_hold_cutoff_preserves_subsecond_precision(self):
+        r = review(candidate(hold_days=1),
+                   context(settled_at_utc="2026-10-31T00:00:00.500000Z",
+                           as_of_utc="2026-11-01T00:00:00Z"))
+        self.assertEqual("HOLD", r["review_status"])
+        self.assertIn("HOLD_PERIOD_ACTIVE", r["review_reasons"])
+        self.assertEqual("2026-11-01T00:00:00.500000Z", r["hold_until_utc"])
+        self.assert_never_live(r)
+
     def test_dispute_holds(self):
         r = review(x=context(disputed=True))
         self.assertIn("DISPUTE_OPEN", r["review_reasons"])
