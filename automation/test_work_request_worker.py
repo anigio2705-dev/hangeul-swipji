@@ -177,7 +177,9 @@ class WorkerStoreTests(unittest.TestCase):
         old = self.a.claim("old", now=101, lease_seconds=30)
         self.a.reconcile_open(set())
         self.assertEqual(self.a.snapshot(101)["status"], "CANCELLED")
-        self.a.ingest(self.work, now=102)  # GitHub reopened event
+        self.a.ingest(self.work, now=102)  # delayed webhook alone cannot revive
+        self.assertEqual(self.a.snapshot(101)["status"], "CANCELLED")
+        self.a.ingest(self.work, now=102, authoritative_open_scan=True)
         self.a.ingest(self.work, now=103)  # duplicate webhook is idempotent
         self.assertEqual(self.a.snapshot(101)["status"], "PENDING")
         self.assertEqual(self.a.snapshot(101)["attempts"], 1)
@@ -199,7 +201,7 @@ class WorkerStoreTests(unittest.TestCase):
         self.assertEqual(claim["attempt"], 3)
         self.a.reconcile_open(set())
         self.assertEqual(self.a.snapshot(101)["status"], "CANCELLED")
-        self.a.ingest(self.work, now=284)
+        self.a.ingest(self.work, now=284, authoritative_open_scan=True)
         self.assertEqual(self.a.snapshot(101)["status"], "BLOCKED")
         self.assertIsNone(self.a.claim("new", now=10000))
 
