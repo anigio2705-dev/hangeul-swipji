@@ -36,14 +36,26 @@ jobs:
           if (p["number"]!=int(pr) or p["state"]!="open" or p["head"]["sha"]!=sha
               or p["head"]["repo"]["full_name"]!=repo or p["base"]["repo"]["full_name"]!=repo):
               raise SystemExit("PR_OR_SHA_MISMATCH")
-          # TASK_ID is only range-checked here. Original 160-contract and PR-task binding
-          # require a separate trusted machine-readable ledger; no QA_RECEIVED asserted.
+          # Fail closed unless a pinned, reviewer-auditable task-to-PR/SHA binding exists.
+          # This is a candidate mapping, NOT independently authenticated B QA.
+          binding_req=urllib.request.Request(
+              f"https://api.github.com/repos/{repo}/contents/experiments/b-intake/task_pr_bindings.json?ref={e['GITHUB_SHA']}",
+              headers={"Authorization":f"Bearer {e['GH_TOKEN']}","Accept":"application/vnd.github.raw+json"})
+          import base64
+          with urllib.request.urlopen(binding_req,timeout=20) as response:
+              raw=json.load(response)
+          bindings=json.loads(base64.b64decode(raw["content"]).decode())
+          matched=[x for x in bindings["bindings"] if x["task_id"]==int(task_id)
+                   and x["product_pr"]==int(pr) and x["product_sha"]==sha]
+          if len(matched)!=1: raise SystemExit("TASK_PR_SHA_BINDING_MISSING")
+          if not matched[0].get("original_contract") or bindings.get("source_ledger")!="automation/hq_backlog_160.md":
+              raise SystemExit("TASK_CONTRACT_SOURCE_MISSING")
           receipt={"status":"QA_RECEIVED_CANDIDATE","request_id":request_id,"task_id":int(task_id),
                    "product_pr":int(pr),"target_product_sha":sha,"repository":repo,
                    "source_pr_url":p["html_url"],"workflow":e["GITHUB_WORKFLOW"],
                    "workflow_ref":e["GITHUB_WORKFLOW_REF"],"run_id":int(e["GITHUB_RUN_ID"]),
                    "run_attempt":int(e["GITHUB_RUN_ATTEMPT"]),"job_name":"intake",
-                   "task_contract_verified":False,"qa_independent_verified":False}
+                   "task_contract_verified":False,"task_binding_candidate":True,"qa_independent_verified":False}
           f=pathlib.Path("qa-intake-receipt.json")
           f.write_text(json.dumps(receipt,sort_keys=True,indent=2)+"\n")
           print("INTAKE_RECEIPT_SHA256="+hashlib.sha256(f.read_bytes()).hexdigest())
