@@ -4,6 +4,7 @@ on:
     paths:
       - 'automation/deploy/hub_request_intake.py'
       - 'automation/deploy/test_hub_intake_d_contract.py'
+      - 'automation/deploy/live_hub_intake_proof.py'
       - '.github/workflows/c-d-intake-regression.yml'
   workflow_dispatch:
 jobs:
@@ -20,3 +21,7 @@ jobs:
         env:
           PYTHONPATH: automation/deploy
         run: python3 -m unittest discover -s automation/deploy -p 'test_hub_intake_d_contract.py' -v
+      - name: Real public GitHub GET to ephemeral SQLite (not always-on host)
+        env:
+          PYTHONPATH: automation/deploy
+        run: python3 automation/deploy/live_hub_intake_proof.py
