@@ -61,7 +61,7 @@ jobs:
           import unicodedata
           normalized=unicodedata.normalize("NFC",ledger_text)
           def original_clause(number):
-              matches=re.findall(r"(?m)^"+str(number)+r"\\. \\[ \\] (.+)$",normalized)
+              matches=re.findall(r"(?m)^"+str(number)+r"\. \[ \] (.+)$",normalized)
               if len(matches)!=1: raise SystemExit("TASK_NOT_IN_PINNED_LEDGER")
               return matches[0].strip()
           if not re.fullmatch(r"[1-9][0-9]*",pr):
