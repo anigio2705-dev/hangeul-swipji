@@ -5,6 +5,11 @@ adapter does not prove real identity, payment, or provider settlement.  All
 outputs are REVIEW_ONLY; no reward, DB write, or real-money side effects.
 """
 import sqlite3
+import math
+
+
+def _finite_time(value):
+    return type(value) in (int, float) and math.isfinite(value)
 
 from team14_persistent import SimError, ident
 from team14_referral_risk import MAX_EDGES, screen_referral_risk
@@ -39,25 +44,50 @@ def screen_phase3_referral_evidence(db, *, referred_id, inviter_id, booking_id=N
     extra_flags = set()
     if booking_id is not None:
         booking = db.execute(
-            "SELECT learner_id,teacher_id,status,referrer_id FROM bookings "
+            "SELECT learner_id,teacher_id,status,referrer_id,price,created_at FROM bookings "
             "WHERE id=?", (booking_id,)
         ).fetchone()
         if booking is None:
             raise SimError("NOT_FOUND", "booking evidence missing")
-        learner_id, teacher_id, status, booked_referrer = tuple(booking)
+        learner_id, teacher_id, status, booked_referrer, price, booking_at = tuple(booking)
         if booked_referrer != inviter_id:
             extra_flags.add("BOOKING_REFERRER_MISMATCH")
         # Test charge alone is not trusted provider evidence. Both a recorded
         # provider test event and the matching charge must exist.
-        test_charge = db.execute(
-            "SELECT 1 FROM ledger WHERE booking_id=? AND kind='test_charge' "
-            "LIMIT 1", (booking_id,)
-        ).fetchone() is not None
-        provider_event = db.execute(
-            "SELECT 1 FROM provider_events e JOIN payment_sessions s "
-            "ON s.session_id=e.session_id AND s.booking_id=e.booking_id "
-            "WHERE e.booking_id=? LIMIT 1", (booking_id,)
-        ).fetchone() is not None
+        # Existence alone is not payment evidence: reject wrong amount, owner,
+        # sign, timestamps, and contradictory provider event records. This is
+        # STILL only locally simulated evidence, never actual settlement proof.
+        charge_rows = db.execute(
+            "SELECT amount,beneficiary,created_at FROM ledger "
+            "WHERE booking_id=? AND kind='test_charge' LIMIT 2", (booking_id,)
+        ).fetchall()
+        test_charge = (
+            len(charge_rows) == 1
+            and type(price) is int and price > 0
+            and type(charge_rows[0][0]) is int
+            and charge_rows[0][0] == price
+            and charge_rows[0][1] == learner_id
+            and _finite_time(booking_at)
+            and _finite_time(charge_rows[0][2])
+            and charge_rows[0][2] >= booking_at
+        )
+        provider_rows = db.execute(
+            "SELECT e.created_at,s.created_at FROM provider_events e "
+            "JOIN payment_sessions s ON s.session_id=e.session_id "
+            "AND s.booking_id=e.booking_id "
+            "WHERE e.booking_id=? LIMIT 33", (booking_id,)
+        ).fetchall()
+        provider_event = (
+            0 < len(provider_rows) <= 32
+            and _finite_time(booking_at)
+            and all(
+                _finite_time(event_at) and _finite_time(session_at)
+                and session_at >= booking_at and event_at >= session_at
+                for event_at, session_at in provider_rows
+            )
+        )
+        if charge_rows and not test_charge:
+            extra_flags.add("TEST_CHARGE_EVIDENCE_INVALID")
         attendees = {
             row[0] for row in db.execute(
                 "SELECT user_id FROM attendance WHERE booking_id=? "
