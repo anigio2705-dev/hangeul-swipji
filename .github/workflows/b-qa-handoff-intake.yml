@@ -45,9 +45,35 @@ jobs:
           with urllib.request.urlopen(binding_req,timeout=20) as response:
               raw=json.load(response)
           bindings=json.loads(base64.b64decode(raw["content"]).decode())
+          # Original contract MUST come from an independently pinned immutable commit.
+          pinned=bindings.get("source_contract_sha")
+          if pinned!="8f4eba4e3044e75e5a137b2b1ba82e791a4b148b":
+              raise SystemExit("UNAPPROVED_LEDGER_REVISION")
+          ledger_path="automation/hq_backlog_160.md"
+          ledger_req=urllib.request.Request(
+              f"https://api.github.com/repos/{repo}/contents/{ledger_path}?ref={pinned}",
+              headers={"Authorization":f"Bearer {e['GH_TOKEN']}","Accept":"application/vnd.github+json"})
+          with urllib.request.urlopen(ledger_req,timeout=20) as response:
+              ledger_data=json.load(response)
+          if ledger_data.get("sha")!="6590c0f27d87797201f4e7ab2cbe139c08615c29":
+              raise SystemExit("LEDGER_BLOB_SHA_MISMATCH")
+          ledger_text=base64.b64decode(ledger_data["content"]).decode("utf-8")
+          import unicodedata
+          normalized=unicodedata.normalize("NFC",ledger_text)
+          def original_clause(number):
+              matches=re.findall(r"(?m)^"+str(number)+r"\\. \\[ \\] (.+)$",normalized)
+              if len(matches)!=1: raise SystemExit("TASK_NOT_IN_PINNED_LEDGER")
+              return matches[0].strip()
+          if not re.fullmatch(r"[1-9][0-9]*",pr):
+              raise SystemExit("INVALID_PRODUCT_PR")
+          if original_clause(int(task_id))!=unicodedata.normalize("NFC",next(
+              (x["original_contract"] for x in bindings["bindings"]
+               if x["task_id"]==int(task_id) and x["product_pr"]==int(pr) and x["product_sha"]==sha),"")):
+              raise SystemExit("ORIGINAL_CONTRACT_MISMATCH")
           matched=[x for x in bindings["bindings"] if x["task_id"]==int(task_id)
                    and x["product_pr"]==int(pr) and x["product_sha"]==sha]
           if len(matched)!=1: raise SystemExit("TASK_PR_SHA_BINDING_MISSING")
+          # Mapping remains candidate: same-branch modifications are not independent approval.
           if not matched[0].get("original_contract") or bindings.get("source_ledger")!="automation/hq_backlog_160.md":
               raise SystemExit("TASK_CONTRACT_SOURCE_MISSING")
           receipt={"status":"QA_RECEIVED_CANDIDATE","request_id":request_id,"task_id":int(task_id),
