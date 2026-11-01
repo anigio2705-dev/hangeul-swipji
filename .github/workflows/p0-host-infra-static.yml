@@ -34,6 +34,10 @@ jobs:
         env:
           PYTHONPATH: automation:automation/deploy
         run: python3 -m unittest discover -s automation/deploy -p 'test_cb_qa_verdict_store.py' -v
+      - name: Verify independent B evidence provenance and forged review rejection
+        env:
+          PYTHONPATH: automation:automation/deploy
+        run: python3 -m unittest discover -s automation/deploy -p 'test_cb_qa_evidence.py' -v
       - name: Verify append-only execution checkpoints and crash replay
         env:
           PYTHONPATH: automation:automation/deploy
