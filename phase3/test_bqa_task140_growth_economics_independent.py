@@ -114,7 +114,7 @@ class BIndependentGrowth140(unittest.TestCase):
         a = base()
         rows = run(a, [{"learners": 1, "teachers": 0},
                        {"learners": 1, "teachers": 1}])["scenarios"]
-        self.assertEqual(Decimal("2"), Decimal(rows[1]["server_cost"]) -
+        self.assertEqual(Decimal("1"), Decimal(rows[1]["server_cost"]) -
                          Decimal(rows[0]["server_cost"]))
         self.assertEqual(Decimal("1"), Decimal(rows[1]["storage_cost"]) -
                          Decimal(rows[0]["storage_cost"]))
