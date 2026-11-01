@@ -186,7 +186,7 @@ class IndependentTask121AdversarialQA(unittest.TestCase):
 
     def test_17_no_external_network_or_sqlite_connection(self):
         with patch.object(socket, "create_connection",
-                          side_effect=AssertionError("network called")), \\
+                          side_effect=AssertionError("network called")), \
              patch.object(sqlite3, "connect",
                           side_effect=AssertionError("db called")):
             result = compare()
