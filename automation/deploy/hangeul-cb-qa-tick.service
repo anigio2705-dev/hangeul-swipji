@@ -1,0 +1,29 @@
+# NOT INSTALLED OR ENABLED. Isolated C/B read-only QA evidence poll.
+# Protected env must pin exact SHA/PR/run and distinct B reviewer identity.
+[Unit]
+Description=Hangeul C/B exact-SHA read-only QA evidence tick (isolated pilot)
+AssertPathIsMountPoint=/var/lib/hangeul-swipji
+ConditionPathExists=/opt/hangeul-swipji-controller/automation/deploy/cb_qa_tick.py
+
+[Service]
+Type=oneshot
+User=hangeul-qa-dispatcher
+Group=hangeul-qa-dispatcher
+WorkingDirectory=/opt/hangeul-swipji-controller
+Environment=PYTHONPATH=/opt/hangeul-swipji-controller/automation/deploy
+Environment=CB_GH_TOKEN_FILE=%d/gh_token
+EnvironmentFile=/etc/hangeul-swipji/cb-qa-tick.env
+LoadCredential=gh_token:/etc/hangeul-swipji/gh-readonly.token
+ExecStart=/usr/bin/python3 -u /opt/hangeul-swipji-controller/automation/deploy/cb_qa_tick.py
+TimeoutStartSec=150
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+ProtectKernelModules=yes
+CapabilityBoundingSet=
+ReadWritePaths=/var/lib/hangeul-swipji
+UMask=0077
