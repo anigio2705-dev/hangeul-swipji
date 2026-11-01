@@ -113,6 +113,27 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(self.check(change)["status"], "UNVERIFIED")
 
 
+    def test_no_raw_job_or_log_never_grants_qa_pass(self):
+        self.assertEqual(self.check(lambda d: d.pop("qa_jobs"))["status"], "UNVERIFIED")
+        self.assertEqual(self.check(lambda d: d.pop("raw_job_logs"))["status"], "UNVERIFIED")
+
+    def test_unrelated_workflow_or_job_attempt_fails_closed(self):
+        self.assertEqual(self.check(lambda d: d["qa_run"].update(path=".github/workflows/docs.yml"))["status"], "UNVERIFIED")
+        self.assertEqual(self.check(lambda d: d["qa_jobs"][0].update(run_attempt=2))["status"], "UNVERIFIED")
+        self.assertEqual(self.check(lambda d: d["qa_jobs"][0].update(run_id=999))["status"], "UNVERIFIED")
+
+    def test_successful_job_without_executed_b_tests_rejected(self):
+        self.assertEqual(self.check(lambda d: d["raw_job_logs"].update({1001: "2026-11-01T05:00:00Z OK"}))["status"], "UNVERIFIED")
+        self.assertEqual(self.check(lambda d: d["qa_jobs"][0]["steps"][1].update(conclusion="skipped"))["status"], "UNVERIFIED")
+
+    def test_qa_fail_requires_raw_failing_b_tests(self):
+        def missing_log(d):
+            set_fail_proof(d)
+            d["qa_reviews"][0]["state"] = "CHANGES_REQUESTED"
+            d["qa_reviews"][0]["body"] = f"HS_B_QA_VERDICT status=QA_FAIL product_sha={S} qa_sha={Q}"
+            d["raw_job_logs"][1001] = "2026-11-01T05:00:00Z FAILED (failures=1)"
+        self.assertEqual(self.check(missing_log)["status"], "UNVERIFIED")
+
 class GitHubReadOnlyCollectionTests(unittest.TestCase):
     def test_fetches_only_expected_rest_evidence(self):
         data = positive_fixture()
