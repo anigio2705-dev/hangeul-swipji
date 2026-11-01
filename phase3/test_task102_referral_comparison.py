@@ -159,6 +159,13 @@ class Task102ComparisonTests(unittest.TestCase):
         self.assertNotIn("teacher", str(r))
         self.assert_never_live(r)
 
+    def test_max_year_candidate_expiry_overflow_rejected(self):
+        with self.assertRaises(ValueError):
+            compare([candidate(duration_days=3650)],
+                    scenario(referred_at_utc="9999-12-30T00:00:00Z",
+                             transaction_at_utc="9999-12-30T00:00:00Z",
+                             as_of_utc="9999-12-30T00:00:00Z"))
+
     def test_reject_schema_extras_and_empty_inputs(self):
         for policies in ([], "bad"):
             with self.subTest(policies=policies), self.assertRaises(ValueError):
