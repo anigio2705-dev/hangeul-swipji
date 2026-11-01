@@ -18,6 +18,15 @@ _REQUIRED_EVENT = frozenset({
 })
 _SOURCE = "TEST_SIGNED_PROVIDER_SIMULATOR"
 
+_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}\\Z")
+
+
+def _validated_id(value, field):
+    """Reject untrusted JSON containers before any SQLite parameter binding."""
+    if type(value) is not str or not _ID.fullmatch(value):
+        raise ValueError("invalid " + field)
+    return value
+
 
 def _pairs_unique(pairs):
     data = {}
@@ -94,6 +103,7 @@ def _load_review_booking(connection, booking_id):
 
 def read_review_snapshot(connection, *, booking_id):
     """Read isolated review tables only; NOT an authenticated user endpoint."""
+    _validated_id(booking_id, "booking_id")
     row = connection.execute(
         "SELECT booking_id, payment_id, lesson_count, completed_lessons, "
         "payment_state, booking_state, remaining_bookable_lessons, version "
@@ -123,6 +133,9 @@ def apply_test_signed_event(connection, *, payload, signature, test_key):
         raise ValueError("invalid event fields")
     if data["source"] != _SOURCE:
         raise ValueError("untrusted event source")
+    # Signed simulator payloads are still untrusted: validate IDs before SQL.
+    for field in ("booking_id", "payment_id", "event_id"):
+        _validated_id(data[field], field)
     event = {k: data[k] for k in ("event_id", "payment_id", "sequence", "outcome")}
     digest = hashlib.sha256(payload).hexdigest()
 
