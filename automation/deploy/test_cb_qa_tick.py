@@ -118,6 +118,50 @@ class DurableTickTests(unittest.TestCase):
             f"HS_B_QA_VERDICT status=QA_FAIL product_sha={S} qa_sha={Q}")
         self.assertEqual(self.tick()["state"], "BLOCKED_245")
 
+    def _steal_lease_during_fetch(self):
+        # Deterministically emulate a new tick reclaiming the lease while
+        # the old poll is still performing read-only GitHub GETs.
+        getter = rest_fixture(self.data)
+        stolen = [False]
+        def get(path):
+            if not stolen[0]:
+                stolen[0] = True
+                with sqlite3.connect(self.db) as db:
+                    db.execute(
+                        "UPDATE cb_qa_ticks SET lease_owner='newer', "
+                        "lease_until=9999 WHERE request_id=? AND product_sha=?",
+                        (self.kw["request_id"], S))
+            return getter(path)
+        return get
+
+    def test_stale_pass_cannot_insert_receipt(self):
+        result = self.tick(get_json=self._steal_lease_during_fetch())
+        self.assertEqual(result["state"], "STALE_LEASE")
+        with sqlite3.connect(self.db) as db:
+            if db.execute(
+                "SELECT 1 FROM sqlite_master WHERE type='table' "
+                "AND name='cb_qa_receipts'").fetchone():
+                self.assertEqual(db.execute(
+                    "SELECT COUNT(*) FROM cb_qa_receipts").fetchone()[0], 0)
+            self.assertEqual(db.execute(
+                "SELECT lease_owner FROM cb_qa_ticks").fetchone()[0], "newer")
+
+    def test_stale_fail_cannot_insert_rework_receipt(self):
+        self.data["qa_run"]["conclusion"] = "failure"
+        self.data["qa_reviews"][0]["state"] = "CHANGES_REQUESTED"
+        self.data["qa_reviews"][0]["body"] = (
+            f"HS_B_QA_VERDICT status=QA_FAIL product_sha={S} qa_sha={Q}")
+        result = self.tick(get_json=self._steal_lease_during_fetch())
+        self.assertEqual(result["state"], "STALE_LEASE")
+        with sqlite3.connect(self.db) as db:
+            if db.execute(
+                "SELECT 1 FROM sqlite_master WHERE type='table' "
+                "AND name='cb_qa_receipts'").fetchone():
+                self.assertEqual(db.execute(
+                    "SELECT COUNT(*) FROM cb_qa_receipts").fetchone()[0], 0)
+            self.assertEqual(db.execute(
+                "SELECT lease_owner FROM cb_qa_ticks").fetchone()[0], "newer")
+
     def test_no_a_ready_or_external_side_effects(self):
         result = self.tick()
         self.assertEqual(result["state"], "QA_PASS_VERIFIED")
