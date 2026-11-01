@@ -146,6 +146,30 @@ class VerifiedReworkOutboxTests(unittest.TestCase):
         self.assertIsNone(pending(str(link), request_id=REQUEST, product_sha=S))
         self.assertIsNotNone(pending(self.path, request_id=REQUEST, product_sha=S))
 
+    def test_pending_rejects_symlinked_parent_directory(self):
+        self.assertEqual(self.seed(), "C_FIXING")
+        self.assertEqual(self.stage(), "STAGED")
+        real_path = Path(self.path)
+        link_dir = real_path.parent / "symlinked_parent"
+        link_dir.symlink_to(real_path.parent, target_is_directory=True)
+        linked_path = link_dir / real_path.name
+        self.assertIsNone(pending(str(linked_path), request_id=REQUEST,
+                                  product_sha=S))
+        self.assertIsNotNone(pending(self.path, request_id=REQUEST,
+                                     product_sha=S))
+
+    def test_stage_rejects_object_stringifying_to_valid_sha(self):
+        class ForgedSHA:
+            def __str__(self):
+                return S
+        with sqlite3.connect(self.path) as db:
+            db.execute("BEGIN IMMEDIATE")
+            self.assertEqual(stage_verified_failure(
+                db, request_id=REQUEST, product_sha=ForgedSHA()), "INVALID")
+            self.assertEqual(db.execute(
+                "SELECT COUNT(*) FROM sqlite_master "
+                "WHERE name='cb_rework_outbox'").fetchone()[0], 0)
+
     def test_pending_invalid_database_path_fails_closed(self):
         for bad_path in (None, 42, object()):
             with self.subTest(bad_path=type(bad_path).__name__):
