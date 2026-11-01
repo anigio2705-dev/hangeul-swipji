@@ -172,25 +172,30 @@ class WorkerStoreTests(unittest.TestCase):
         self.a.reconcile_open({101})
         self.assertEqual(self.a.snapshot(101)["status"], "PENDING")
 
-    def test_closed_then_reopened_is_claimable_with_new_fence(self):
+    def test_never_started_closed_then_reopened_is_claimable(self):
+        self.a.ingest(self.work, now=100)
+        self.a.reconcile_open(set())
+        self.assertEqual(self.a.snapshot(101)["status"], "CANCELLED")
+        self.a.ingest(self.work, now=102)  # stale signed webhook not authoritative
+        self.assertEqual(self.a.snapshot(101)["status"], "CANCELLED")
+        self.a.ingest(self.work, now=102, authoritative_open_scan=True)
+        self.a.ingest(self.work, now=103, authoritative_open_scan=True)
+        self.assertEqual(self.a.snapshot(101)["status"], "PENDING")
+        fresh = self.a.claim("new", now=105)
+        self.assertEqual(fresh["attempt"], 1)
+        self.assertTrue(self.a.finish(101, fresh["owner"], "new completion proof", now=106))
+        self.a.ingest(self.work, now=107, authoritative_open_scan=True)
+        self.assertEqual(self.a.snapshot(101)["status"], "REPORTED")
+
+    def test_reopen_after_lease_cannot_reexecute_without_containment_proof(self):
         self.a.ingest(self.work, now=100)
         old = self.a.claim("old", now=101, lease_seconds=30)
         self.a.reconcile_open(set())
-        self.assertEqual(self.a.snapshot(101)["status"], "CANCELLED")
-        self.a.ingest(self.work, now=102)  # delayed webhook alone cannot revive
-        self.assertEqual(self.a.snapshot(101)["status"], "CANCELLED")
         self.a.ingest(self.work, now=102, authoritative_open_scan=True)
-        self.a.ingest(self.work, now=103)  # duplicate webhook is idempotent
-        self.assertEqual(self.a.snapshot(101)["status"], "PENDING")
-        self.assertEqual(self.a.snapshot(101)["attempts"], 1)
-        self.assertFalse(self.a.heartbeat(101, old["owner"], now=104))
-        self.assertFalse(self.a.finish(101, old["owner"], "stale completion proof", now=104))
-        fresh = self.a.claim("new", now=105)
-        self.assertEqual(fresh["attempt"], 2)
-        self.assertNotEqual(fresh["owner"], old["owner"])
-        self.assertTrue(self.a.finish(101, fresh["owner"], "new completion proof", now=106))
-        self.a.ingest(self.work, now=107)
-        self.assertEqual(self.a.snapshot(101)["status"], "REPORTED")
+        self.assertEqual(self.a.snapshot(101)["status"], "CANCELLED")
+        self.assertFalse(self.a.heartbeat(101, old["owner"], now=103))
+        self.assertFalse(self.a.finish(101, old["owner"], "stale completion proof", now=103))
+        self.assertIsNone(self.a.claim("new", now=10000))
 
     def test_reopen_preserves_exhausted_retry_budget(self):
         self.a.ingest(self.work, now=100)
