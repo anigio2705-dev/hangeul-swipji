@@ -91,3 +91,56 @@ def inspect_evidence(*, repo, source_pr, qa_pr, qa_files, qa_run, qa_reviews,
     if len(set(verdicts)) != 1 or not verdicts:
         return deny("missing or conflicting independent B exact-SHA review")
     return {"status": verdicts[0], "reason": "distinct B reviewer + exact QA-only PR + Actions"}
+
+
+def collect_github_evidence(*, token, source_pr_number, qa_pr_number, run_id,
+                            source_sha, qa_sha, trusted_b_login, get_json=None):
+    """Read-only authenticated GitHub evidence collection, never an approval.
+
+    Caller must supply trusted_b_login from a protected controller setting,
+    not from an issue comment or AI-edited file. No POST, token logging, or
+    automatic receipt write. API failures raise; missing evidence fails closed.
+    """
+    import json
+    import urllib.request
+
+    if (not token or any(type(n) is not int or n < 1
+                         for n in (source_pr_number, qa_pr_number, run_id))
+            or not SHA.fullmatch(str(source_sha))
+            or not SHA.fullmatch(str(qa_sha))):
+        return {"status": "UNVERIFIED", "reason": "invalid collection parameters"}
+
+    def default_get(path):
+        req = urllib.request.Request(
+            "https://api.github.com/repos/" + REPO + path,
+            headers={"Authorization": "Bearer " + token,
+                     "Accept": "application/vnd.github+json",
+                     "X-GitHub-Api-Version": "2022-11-28"})
+        with urllib.request.urlopen(req, timeout=15) as response:
+            return json.load(response)
+
+    get = get_json if get_json is not None else default_get
+    source = get(f"/pulls/{source_pr_number}")
+    qa = get(f"/pulls/{qa_pr_number}")
+    files = get(f"/pulls/{qa_pr_number}/files?per_page=100&page=1")
+    run = get(f"/actions/runs/{run_id}")
+    if (not isinstance(files, list) or len(files) > 50
+            or not isinstance(source, dict) or not isinstance(qa, dict)
+            or not isinstance(run, dict)):
+        return {"status": "UNVERIFIED", "reason": "incomplete GitHub evidence"}
+    reviews = []
+    for page in range(1, 4):
+        batch = get(f"/pulls/{qa_pr_number}/reviews?per_page=100&page={page}")
+        if not isinstance(batch, list) or len(batch) > 100:
+            return {"status": "UNVERIFIED", "reason": "malformed reviews page"}
+        reviews.extend(batch)
+        if len(reviews) > 200:
+            return {"status": "UNVERIFIED", "reason": "reviews exceed safe bound"}
+        if len(batch) < 100:
+            break
+    else:
+        return {"status": "UNVERIFIED", "reason": "reviews pagination incomplete"}
+    return inspect_evidence(
+        repo=REPO, source_pr=source, qa_pr=qa, qa_files=files,
+        qa_run=run, qa_reviews=reviews, source_sha=source_sha,
+        qa_sha=qa_sha, trusted_b_login=trusted_b_login)
