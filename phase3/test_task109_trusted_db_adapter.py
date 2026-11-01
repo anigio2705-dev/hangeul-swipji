@@ -40,23 +40,23 @@ class Task109TrustedEvidenceTests(unittest.TestCase):
         args.update(changes)
         return screen_phase3_referral_evidence(self.db, **args)
 
-    def add_test_charge(self):
+    def add_test_charge(self, *, amount=20000, beneficiary="child", created_at=110.0):
         self.db.execute(
             "INSERT INTO ledger(booking_id,kind,amount,beneficiary,created_at)"
             " VALUES(?,?,?,?,?)",
-            ("booking1", "test_charge", 20000, "child", 110.0),
+            ("booking1", "test_charge", amount, beneficiary, created_at),
         )
 
-    def add_provider_event(self):
+    def add_provider_event(self, *, session_at=110.0, event_at=111.0):
         self.db.execute(
             "INSERT INTO payment_sessions(booking_id,session_id,url,created_at)"
             " VALUES(?,?,?,?)",
-            ("booking1", "session1", "https://example.test/checkout", 110.0),
+            ("booking1", "session1", "https://example.test/checkout", session_at),
         )
         self.db.execute(
             "INSERT INTO provider_events(event_id,session_id,booking_id,created_at)"
             " VALUES(?,?,?,?)",
-            ("event1", "session1", "booking1", 111.0),
+            ("event1", "session1", "booking1", event_at),
         )
 
     def add_attendance(self):
@@ -162,6 +162,55 @@ class Task109TrustedEvidenceTests(unittest.TestCase):
         self.add_test_charge()
         self.add_attendance()
         self.db.execute("UPDATE bookings SET status='test_paid' WHERE id='booking1'")
+        self.assertIn("TRANSACTION_EVIDENCE_MISSING", self.check()["flags"])
+
+
+    def _assert_invalid_charge(self, **kwargs):
+        self.add_provider_event()
+        self.add_test_charge(**kwargs)
+        self.add_attendance()
+        result = self.check()
+        self.assertIn("TRANSACTION_EVIDENCE_MISSING", result["flags"])
+        self.assertIn("TEST_CHARGE_EVIDENCE_INVALID", result["flags"])
+        self.assertEqual("REVIEW_ONLY", result["decision"])
+
+    def test_16_reject_charge_price_mismatch(self):
+        self._assert_invalid_charge(amount=1)
+
+    def test_17_reject_wrong_charge_beneficiary(self):
+        self._assert_invalid_charge(beneficiary="other")
+
+    def test_18_reject_negative_charge(self):
+        self._assert_invalid_charge(amount=-20000)
+
+    def test_19_reject_zero_charge(self):
+        self._assert_invalid_charge(amount=0)
+
+    def test_20_reject_provider_event_before_session(self):
+        self.add_provider_event(event_at=109.0)
+        self.add_test_charge()
+        self.add_attendance()
+        result = self.check()
+        self.assertIn("TRANSACTION_EVIDENCE_MISSING", result["flags"])
+        self.assertIn("PROVIDER_TEST_EVIDENCE_MISSING", result["flags"])
+
+    def test_21_reject_session_before_booking(self):
+        self.add_provider_event(session_at=90.0, event_at=111.0)
+        self.add_test_charge()
+        self.add_attendance()
+        self.assertIn("TRANSACTION_EVIDENCE_MISSING", self.check()["flags"])
+
+    def test_22_reject_charge_before_booking(self):
+        self._assert_invalid_charge(created_at=90.0)
+
+    def test_23_reject_conflicting_second_provider_event(self):
+        self.add_provider_event()
+        self.db.execute(
+            "INSERT INTO provider_events(event_id,session_id,booking_id,created_at)"
+            " VALUES(?,?,?,?)", ("event2", "session1", "booking1", 109.0)
+        )
+        self.add_test_charge()
+        self.add_attendance()
         self.assertIn("TRANSACTION_EVIDENCE_MISSING", self.check()["flags"])
 
 
