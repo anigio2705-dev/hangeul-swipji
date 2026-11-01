@@ -16,10 +16,10 @@ class BQA110SessionBooking(unittest.TestCase):
         self.db = sqlite3.connect(":memory:")
         self.db.executescript(Path(__file__).with_name("schema.sql").read_text())
         for uid, role, approved, parent in (
-            ("learner1", "learner", 0, "refer1"),
+            ("refer1", "learner", 0, None),
             ("teacher1", "teacher", 1, None),
             ("teacher2", "teacher", 1, None),
-            ("refer1", "learner", 0, None),
+            ("learner1", "learner", 0, "refer1"),
             ("admin1", "admin", 1, None),
             ("visitor", "learner", 0, None),
         ):
