@@ -65,9 +65,15 @@ class VerifiedReworkOutboxTests(unittest.TestCase):
                 db, request_id=REQUEST, product_sha=S), "NOT_VERIFIED")
 
     def test_transaction_rollback_removes_receipt_and_outbox(self):
+        # Create schemas BEFORE the transaction so a rollback preserves
+        # the tables while discarding both the receipt and staged event.
+        from cb_qa_verdict_store import init as init_receipts
+        from cb_rework_outbox import init as init_outbox
+        with sqlite3.connect(self.path) as db:
+            init_receipts(db)
+            init_outbox(db)
         with sqlite3.connect(self.path) as db:
             db.execute("BEGIN IMMEDIATE")
-            from cb_qa_verdict_store import accept_verdict
             self.assertEqual(accept_verdict(
                 self.path, request_id=REQUEST, pr_number=264,
                 product_sha=S, qa_sha=Q, verdict="QA_FAIL",
