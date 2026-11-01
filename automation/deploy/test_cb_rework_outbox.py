@@ -103,6 +103,41 @@ class VerifiedReworkOutboxTests(unittest.TestCase):
             self.assertEqual(stage_verified_failure(
                 db, request_id=REQUEST, product_sha=S), "CONFLICT")
 
+    def test_pending_missing_database_never_creates_schema(self):
+        self.assertFalse(Path(self.path).exists())
+        self.assertIsNone(pending(self.path, request_id=REQUEST, product_sha=S))
+        self.assertFalse(Path(self.path).exists())
+
+    def test_pending_requires_receipt_to_match_outbox(self):
+        self.assertEqual(self.seed(), "C_FIXING")
+        self.assertEqual(self.stage(), "STAGED")
+        self.assertIsNotNone(pending(self.path, request_id=REQUEST, product_sha=S))
+        # A stale/altered outbox must not become a worker authorization.
+        for column, changed in (
+            ("qa_sha", "c" * 40),
+            ("pr_number", 999),
+            ("qa_status", "QA_PASS"),
+            ("next_action", "BLOCKER_245"),
+        ):
+            with self.subTest(column=column):
+                with sqlite3.connect(self.path) as db:
+                    original = db.execute(
+                        f"SELECT {column} FROM cb_qa_receipts WHERE request_id=? AND product_sha=?",
+                        (REQUEST, S)).fetchone()[0]
+                    db.execute(
+                        f"UPDATE cb_qa_receipts SET {column}=? WHERE request_id=? AND product_sha=?",
+                        (changed, REQUEST, S))
+                self.assertIsNone(pending(self.path, request_id=REQUEST, product_sha=S))
+                with sqlite3.connect(self.path) as db:
+                    db.execute(
+                        f"UPDATE cb_qa_receipts SET {column}=? WHERE request_id=? AND product_sha=?",
+                        (original, REQUEST, S))
+                self.assertIsNotNone(pending(self.path, request_id=REQUEST, product_sha=S))
+        with sqlite3.connect(self.path) as db:
+            db.execute("DELETE FROM cb_qa_receipts WHERE request_id=? AND product_sha=?",
+                       (REQUEST, S))
+        self.assertIsNone(pending(self.path, request_id=REQUEST, product_sha=S))
+
     def test_requires_existing_transaction(self):
         with sqlite3.connect(self.path) as db:
             with self.assertRaises(ValueError):
