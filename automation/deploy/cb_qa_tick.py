@@ -14,6 +14,7 @@ from pathlib import Path
 
 from cb_qa_evidence import SHA, collect_github_evidence
 from cb_qa_verdict_store import accept_verdict, init as init_receipts
+from cb_rework_outbox import stage_verified_failure
 
 LEASE_SECONDS = 180
 POLL_SECONDS = 240
@@ -164,7 +165,14 @@ def run_tick(db_path, *, request_id, source_pr_number, qa_pr_number,
             if receipt == "AWAIT_A_REVIEW":
                 state, detail = "QA_PASS_VERIFIED", "QA_PASS awaits A decision"
             elif receipt == "C_FIXING":
-                state, detail = "C_REWORK_REQUIRED", "QA_FAIL requires C rework"
+                # Atomic with the immutable B receipt; no Codex execution.
+                staged = stage_verified_failure(
+                    db, request_id=request_id, product_sha=product_sha,
+                    now=finished_at)
+                if staged in ("STAGED", "ALREADY_STAGED"):
+                    state, detail = "C_REWORK_REQUIRED", "QA_FAIL requires C rework"
+                else:
+                    state, detail = "CONFLICT", "conflicting immutable receipt"
             elif receipt == "BLOCKER_245":
                 state, detail = "BLOCKED_245", "retry limit reached"
             else:
