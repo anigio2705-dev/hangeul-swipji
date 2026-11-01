@@ -6,6 +6,7 @@ from pathlib import Path
 
 from cb_qa_tick import run_tick
 from cb_qa_verdict_store import accept_verdict, pending_fix
+from cb_rework_outbox import pending as pending_rework
 from test_cb_qa_evidence import positive_fixture, set_fail_proof, S, Q
 
 
@@ -59,6 +60,9 @@ class DurableTickTests(unittest.TestCase):
             f"HS_B_QA_VERDICT status=QA_FAIL product_sha={S} qa_sha={Q}")
         self.assertEqual(self.tick()["state"], "C_REWORK_REQUIRED")
         self.assertEqual(pending_fix(self.db, self.kw["request_id"], S)["NEXT_ACTION"], "C_FIXING")
+        staged = pending_rework(self.db, request_id=self.kw["request_id"], product_sha=S)
+        self.assertEqual(staged["state"], "AWAIT_AUTHENTICATED_CODEX")
+        self.assertIs(staged["executable"], False)
         self.assertEqual(self.tick(now=1240)["state"], "C_REWORK_REQUIRED")
 
     def test_unverified_review_is_waiting_not_failure(self):
