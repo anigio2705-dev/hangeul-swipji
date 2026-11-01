@@ -138,8 +138,11 @@ class DurableTickTests(unittest.TestCase):
         result = self.tick(get_json=self._steal_lease_during_fetch())
         self.assertEqual(result["state"], "STALE_LEASE")
         with sqlite3.connect(self.db) as db:
-            self.assertEqual(db.execute(
-                "SELECT COUNT(*) FROM cb_qa_receipts").fetchone()[0], 0)
+            if db.execute(
+                "SELECT 1 FROM sqlite_master WHERE type='table' "
+                "AND name='cb_qa_receipts'").fetchone():
+                self.assertEqual(db.execute(
+                    "SELECT COUNT(*) FROM cb_qa_receipts").fetchone()[0], 0)
             self.assertEqual(db.execute(
                 "SELECT lease_owner FROM cb_qa_ticks").fetchone()[0], "newer")
 
@@ -151,8 +154,11 @@ class DurableTickTests(unittest.TestCase):
         result = self.tick(get_json=self._steal_lease_during_fetch())
         self.assertEqual(result["state"], "STALE_LEASE")
         with sqlite3.connect(self.db) as db:
-            self.assertEqual(db.execute(
-                "SELECT COUNT(*) FROM cb_qa_receipts").fetchone()[0], 0)
+            if db.execute(
+                "SELECT 1 FROM sqlite_master WHERE type='table' "
+                "AND name='cb_qa_receipts'").fetchone():
+                self.assertEqual(db.execute(
+                    "SELECT COUNT(*) FROM cb_qa_receipts").fetchone()[0], 0)
             self.assertEqual(db.execute(
                 "SELECT lease_owner FROM cb_qa_ticks").fetchone()[0], "newer")
 
