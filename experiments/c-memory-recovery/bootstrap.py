@@ -53,7 +53,8 @@ def resume_gate(db, task_id, saved_sha, current_sha=None, qa_sha=None,
             revision = 1
         else:
             old_state, old_reason, revision = row
-            if old_state == "RECOVERY_BLOCKED" and state != "RECOVERY_BLOCKED":
+            if old_state == "RECOVERY_BLOCKED":
+                # A stale BLOCKED writer must not rewrite the current SHA or reason.
                 state, reason = old_state, "BLOCKED_REQUIRES_NEW_TRUSTED_ATTESTATION"
             elif expected_revision is not None and expected_revision != revision:
                 state, reason = old_state, "STALE_REVISION"
