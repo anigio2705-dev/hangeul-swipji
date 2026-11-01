@@ -78,10 +78,25 @@ def reconcile_review_statements(*, ledger, payments, refunds, payouts):
                 "JOIN sim_reversal r ON r.reversal_id=e.reversal_id"):
             reversal_buckets[row["tx_id"]][row["bucket"]] += row["reversed_krw"]
             reversal_entries[row["reversal_id"]][row["bucket"]] = row["reversed_krw"]
+        # Inspect orphan rows inside the same read-only snapshot. An inner JOIN
+        # alone silently drops unparented buckets and can falsely MATCH.
+        orphan_entry_ids = {
+            row["reversal_id"] for row in db.execute(
+                "SELECT e.reversal_id FROM sim_reversal_entry e "
+                "LEFT JOIN sim_reversal r ON r.reversal_id=e.reversal_id "
+                "WHERE r.reversal_id IS NULL")
+        }
     finally:
         db.execute("ROLLBACK")
 
     failures = set()
+    # Reject parentless ledger evidence even if amounts appear balanced.
+    # No real-money or operating DB path is touched by this review.
+    for reversal_id, source in reversals.items():
+        if source["tx_id"] not in transactions:
+            failures.add("ORPHAN_REVERSAL_TRANSACTION:" + reversal_id)
+    for reversal_id in orphan_entry_ids:
+        failures.add("ORPHAN_REVERSAL_ENTRY:" + reversal_id)
     # Aggregate conservation alone is insufficient: a forged/incomplete
     # reversal can sum to its refund while omitting required bucket entries.
     # Validate EACH immutable reversal's four-bucket shape before reporting

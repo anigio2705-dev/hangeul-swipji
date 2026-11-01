@@ -229,5 +229,43 @@ class Task128ReconciliationTests(unittest.TestCase):
         self.assert_held(result)
 
 
+    def test_orphan_reversal_unknown_transaction_is_held(self):
+        # Simulate corrupted imported evidence bypassing SQLite FK checks.
+        self.ledger.db.execute("PRAGMA foreign_keys=OFF")
+        try:
+            self.ledger.db.execute(
+                "INSERT INTO sim_reversal VALUES(?,?,?,?,?,?)",
+                ("r_orphan", "tx_absent", "ref_evidence",
+                 "partial_refund", 100, "untrusted"))
+            self.ledger.db.executemany(
+                "INSERT INTO sim_reversal_entry VALUES(?,?,?)",
+                [("r_orphan", bucket, amount) for bucket, amount in
+                 (("teacher", 70), ("platform", 20),
+                  ("referral", 3), ("benefit", 7))])
+        finally:
+            self.ledger.db.execute("PRAGMA foreign_keys=ON")
+        result = self.check(refunds=[
+            dict(reversal_id="r_orphan", tx_id="tx_absent",
+                 evidence_id="ref_evidence", amount_krw=100)])
+        self.assertIn("ORPHAN_REVERSAL_TRANSACTION:r_orphan",
+                      result["discrepancies"])
+        self.assertEqual("DISCREPANCY_HOLD", result["status"])
+        self.assert_held(result)
+
+    def test_orphan_reversal_entry_without_parent_is_held(self):
+        self.ledger.db.execute("PRAGMA foreign_keys=OFF")
+        try:
+            self.ledger.db.execute(
+                "INSERT INTO sim_reversal_entry VALUES(?,?,?)",
+                ("r_nonexistent", "teacher", 1))
+        finally:
+            self.ledger.db.execute("PRAGMA foreign_keys=ON")
+        result = self.check()
+        self.assertIn("ORPHAN_REVERSAL_ENTRY:r_nonexistent",
+                      result["discrepancies"])
+        self.assertEqual("DISCREPANCY_HOLD", result["status"])
+        self.assert_held(result)
+
+
 if __name__ == "__main__":
     unittest.main()
