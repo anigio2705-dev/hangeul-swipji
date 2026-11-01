@@ -172,6 +172,47 @@ class WorkerStoreTests(unittest.TestCase):
         self.a.reconcile_open({101})
         self.assertEqual(self.a.snapshot(101)["status"], "PENDING")
 
+    def test_closed_then_reopened_is_claimable_with_new_fence(self):
+        self.a.ingest(self.work, now=100)
+        old = self.a.claim("old", now=101, lease_seconds=30)
+        self.a.reconcile_open(set())
+        self.assertEqual(self.a.snapshot(101)["status"], "CANCELLED")
+        self.a.ingest(self.work, now=102)  # GitHub reopened event
+        self.a.ingest(self.work, now=103)  # duplicate webhook is idempotent
+        self.assertEqual(self.a.snapshot(101)["status"], "PENDING")
+        self.assertEqual(self.a.snapshot(101)["attempts"], 1)
+        self.assertFalse(self.a.heartbeat(101, old["owner"], now=104))
+        self.assertFalse(self.a.finish(101, old["owner"], "stale completion proof", now=104))
+        fresh = self.a.claim("new", now=105)
+        self.assertEqual(fresh["attempt"], 2)
+        self.assertNotEqual(fresh["owner"], old["owner"])
+        self.assertTrue(self.a.finish(101, fresh["owner"], "new completion proof", now=106))
+        self.a.ingest(self.work, now=107)
+        self.assertEqual(self.a.snapshot(101)["status"], "REPORTED")
+
+    def test_reopen_preserves_exhausted_retry_budget(self):
+        self.a.ingest(self.work, now=100)
+        for now in (101, 162):
+            claim = self.a.claim("central", now=now)
+            self.assertTrue(self.a.fail(101, claim["owner"], now=now + 1))
+        claim = self.a.claim("central", now=283)
+        self.assertEqual(claim["attempt"], 3)
+        self.a.reconcile_open(set())
+        self.assertEqual(self.a.snapshot(101)["status"], "CANCELLED")
+        self.a.ingest(self.work, now=284)
+        self.assertEqual(self.a.snapshot(101)["status"], "BLOCKED")
+        self.assertIsNone(self.a.claim("new", now=10000))
+
+    def test_reopen_does_not_clear_uncertain_remote_write(self):
+        self.a.ingest(self.work, now=100)
+        claim = self.a.claim("central", now=101)
+        self.a.db.execute("UPDATE work SET status='PUSH_IN_FLIGHT' WHERE issue=101")
+        self.a.reconcile_open(set())
+        self.assertEqual(self.a.snapshot(101)["status"], "PUSH_UNCERTAIN")
+        self.a.ingest(self.work, now=102)
+        self.assertEqual(self.a.snapshot(101)["status"], "PUSH_UNCERTAIN")
+        self.assertIsNone(self.a.claim("new", now=103))
+
     def test_worker_is_not_a_chatgpt_adapter(self):
         self.a.ingest(self.work, now=100)
         self.assertNotIn("READY", self.a.snapshot(101))
