@@ -29,7 +29,7 @@ def init(db):
 
 def accept_verdict(db_path, *, request_id, pr_number, product_sha,
                    qa_sha, verdict, evidence, verified_by_b,
-                   ci_success, retry_count=0, now=None):
+                   ci_success, retry_count=0, now=None, db=None):
     """Store only independently verified B verdicts; new SHA is a new key.
 
     verified_by_b must come from an external trusted verifier checking the
@@ -46,25 +46,33 @@ def accept_verdict(db_path, *, request_id, pr_number, product_sha,
         return "UNVERIFIED"
     action = ("AWAIT_A_REVIEW" if verdict == "QA_PASS" else
               "C_FIXING" if retry_count < MAX_FIXES else "BLOCKER_245")
-    with sqlite3.connect(db_path, timeout=15) as db:
-        db.execute("BEGIN IMMEDIATE")
-        init(db)
-        old = db.execute(
+    def _store(connection):
+        # Caller may pass its already-locked transaction so that fencing,
+        # immutable receipt creation, and tick-state update are atomic.
+        init(connection)
+        old = connection.execute(
             "SELECT pr_number,qa_sha,qa_status,evidence,retry_count,next_action "
             "FROM cb_qa_receipts WHERE request_id=? AND product_sha=?",
             (request_id, product_sha)).fetchone()
         desired = (pr_number, qa_sha, verdict, evidence, retry_count, action)
         if old:
-            # Immutable receipt: a different result for the same product SHA
-            # cannot silently replace an independent QA decision.
             return "DUPLICATE" if old == desired else "CONFLICT"
-        db.execute("""INSERT INTO cb_qa_receipts
+        connection.execute("""INSERT INTO cb_qa_receipts
             (request_id,product_sha,pr_number,qa_sha,qa_status,evidence,
              retry_count,next_action,updated_at)
             VALUES (?,?,?,?,?,?,?,?,?)""",
             (request_id, product_sha, *desired[:5], action,
              int(time.time() if now is None else now)))
-    return action
+        return action
+
+    if db is not None:
+        # No independent transaction: caller must hold BEGIN IMMEDIATE.
+        if not db.in_transaction:
+            raise ValueError("receipt connection requires active transaction")
+        return _store(db)
+    with sqlite3.connect(db_path, timeout=15) as connection:
+        connection.execute("BEGIN IMMEDIATE")
+        return _store(connection)
 
 
 def pending_fix(db_path, request_id, product_sha):
