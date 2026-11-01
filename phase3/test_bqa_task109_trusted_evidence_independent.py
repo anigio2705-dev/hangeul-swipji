@@ -41,10 +41,10 @@ class BQA109TrustedEvidence(unittest.TestCase):
             "INSERT INTO provider_events(event_id,session_id,booking_id,created_at) "
             "VALUES(?,?,?,?)", ("ev1", "sess1", "b1", event_time))
 
-    def add_charge(self, *, amount=20000, beneficiary="student"):
+    def add_charge(self, *, amount=20000, beneficiary="student", created_at=115.0):
         self.db.execute(
             "INSERT INTO ledger(booking_id,kind,amount,beneficiary,created_at) "
-            "VALUES(?,?,?,?,?)", ("b1", "test_charge", amount, beneficiary, 115.0))
+            "VALUES(?,?,?,?,?)", ("b1", "test_charge", amount, beneficiary, created_at))
 
     def add_attendance(self, *, student_confirmed=1, tutor_confirmed=1):
         for uid, confirmed in (("student", student_confirmed),
@@ -147,17 +147,15 @@ class BQA109TrustedEvidence(unittest.TestCase):
     def test_12_charge_must_not_precede_payment_session(self):
         """A charge recorded before its payment session cannot verify a transaction."""
         self.add_provider(event_time=120.0)
-        self.add_charge()
+        self.add_charge(created_at=105.0)  # booking 100, session 110
         self.add_attendance()
-        self.db.execute(
-            "UPDATE ledger SET created_at=105.0 WHERE booking_id='b1' AND kind='test_charge'"
-        )  # booking at 100, session at 110: charge must not precede session
         self.assert_untrusted()
 
-    def test_13_duplicate_test_charges_fail_closed(self):
+    def test_13_duplicate_test_charges_blocked_by_schema(self):
         self.complete()
-        self.add_charge()
-        self.assert_untrusted()
+        with self.assertRaises(sqlite3.IntegrityError):
+            self.add_charge()  # unique (booking_id, kind) enforced by schema
+        self.assert_review_only(self.screen())
 
     def test_14_unlinked_provider_event_fails_closed(self):
         self.add_provider()
