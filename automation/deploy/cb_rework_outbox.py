@@ -9,6 +9,7 @@ No public comment, unverified verdict, or AI-generated boolean may enqueue.
 import re
 import sqlite3
 import time
+from pathlib import Path
 
 SHA = re.compile(r"^[0-9a-f]{40}$")
 STATE = "AWAIT_AUTHENTICATED_CODEX"
@@ -66,16 +67,35 @@ def stage_verified_failure(db, *, request_id, product_sha, now=None):
 
 
 def pending(db_path, *, request_id, product_sha):
-    """Read-only handoff for future protected worker; never claims or executes."""
+    """Read-only, fail-closed handoff; recheck the matching verified receipt.
+
+    Never create a DB/table on a read. An outbox row alone is not authority:
+    a missing, mismatched, or revoked QA_FAIL receipt must not be returned.
+    Even a matching event remains NON-EXECUTABLE.
+    """
     if (not isinstance(request_id, str) or not request_id
             or not SHA.fullmatch(str(product_sha))):
         return None
-    with sqlite3.connect(db_path, timeout=15) as db:
-        init(db)
-        row = db.execute(
-            """SELECT source_pr,qa_sha,state,created_at FROM cb_rework_outbox
-               WHERE request_id=? AND product_sha=?""",
-            (request_id, product_sha)).fetchone()
+    path = Path(db_path).absolute()
+    if not path.is_file():
+        return None
+    try:
+        with sqlite3.connect(path.as_uri() + "?mode=ro", uri=True, timeout=15) as db:
+            row = db.execute(
+                """SELECT o.source_pr,o.qa_sha,o.state,o.created_at
+                   FROM cb_rework_outbox AS o
+                   JOIN cb_qa_receipts AS r
+                     ON r.request_id=o.request_id
+                    AND r.product_sha=o.product_sha
+                    AND r.pr_number=o.source_pr
+                    AND r.qa_sha=o.qa_sha
+                    AND r.qa_status='QA_FAIL'
+                    AND r.next_action='C_FIXING'
+                   WHERE o.request_id=? AND o.product_sha=?
+                     AND o.state='AWAIT_AUTHENTICATED_CODEX'""",
+                (request_id, product_sha)).fetchone()
+    except sqlite3.Error:
+        return None  # Missing schema, corruption, or read-only failure: deny.
     if not row:
         return None
     return dict(request_id=request_id, product_sha=product_sha,
