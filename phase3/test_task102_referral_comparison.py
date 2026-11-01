@@ -160,9 +160,11 @@ class Task102ComparisonTests(unittest.TestCase):
         self.assert_never_live(r)
 
     def test_reject_schema_extras_and_empty_inputs(self):
-        for policies in ([], "bad", None):
+        for policies in ([], "bad"):
             with self.subTest(policies=policies), self.assertRaises(ValueError):
                 compare(policies)
+        with self.assertRaises(ValueError):
+            compare_referral_options(None, scenario())
         with self.assertRaises(ValueError):
             compare(context=scenario(password="secret"))
 
