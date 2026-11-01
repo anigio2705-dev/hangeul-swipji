@@ -65,6 +65,14 @@ def reconcile_review_statements(*, ledger, payments, refunds, payouts):
         originals = defaultdict(dict)
         for row in db.execute("SELECT tx_id,bucket,amount_krw FROM sim_entry"):
             originals[row["tx_id"]][row["bucket"]] = row["amount_krw"]
+        # Imported/corrupt entries can bypass SQLite foreign-key enforcement.
+        # Every ledger bucket must belong to an existing transaction.
+        orphan_original_ids = {
+            row["tx_id"] for row in db.execute(
+                "SELECT e.tx_id FROM sim_entry e "
+                "LEFT JOIN sim_tx t ON t.tx_id=e.tx_id "
+                "WHERE t.tx_id IS NULL")
+        }
         reversals = {
             row["reversal_id"]: dict(row)
             for row in db.execute(
@@ -90,6 +98,26 @@ def reconcile_review_statements(*, ledger, payments, refunds, payouts):
         db.execute("ROLLBACK")
 
     failures = set()
+    for tx_id in orphan_original_ids:
+        failures.add("ORPHAN_ORIGINAL_ENTRY:" + tx_id)
+
+    # One provider evidence identifier must not fund two distinct simulated
+    # transactions or refunds. Totals may balance while the same evidence is
+    # counted twice; matching amounts alone cannot establish uniqueness.
+    payment_evidence = defaultdict(set)
+    for tx_id, source in transactions.items():
+        payment_evidence[source["evidence_id"]].add(tx_id)
+    for evidence_id, tx_ids in payment_evidence.items():
+        if len(tx_ids) > 1:
+            failures.add("DUPLICATE_PAYMENT_EVIDENCE:" + evidence_id)
+
+    refund_evidence = defaultdict(set)
+    for reversal_id, source in reversals.items():
+        refund_evidence[source["evidence_id"]].add(reversal_id)
+    for evidence_id, reversal_ids in refund_evidence.items():
+        if len(reversal_ids) > 1:
+            failures.add("DUPLICATE_REFUND_EVIDENCE:" + evidence_id)
+
     # Reject parentless ledger evidence even if amounts appear balanced.
     # No real-money or operating DB path is touched by this review.
     for reversal_id, source in reversals.items():

@@ -267,5 +267,56 @@ class Task128ReconciliationTests(unittest.TestCase):
         self.assert_held(result)
 
 
+    def test_orphan_original_bucket_without_transaction_is_held(self):
+        # A raw import may disable foreign keys, leaving an invisible bucket.
+        self.ledger.db.execute("PRAGMA foreign_keys=OFF")
+        try:
+            self.ledger.db.execute(
+                "INSERT INTO sim_entry VALUES(?,?,?)",
+                ("tx_missing", "teacher", 1))
+        finally:
+            self.ledger.db.execute("PRAGMA foreign_keys=ON")
+        result = self.check()
+        self.assertIn("ORPHAN_ORIGINAL_ENTRY:tx_missing",
+                      result["discrepancies"])
+        self.assertEqual("DISCREPANCY_HOLD", result["status"])
+        self.assert_held(result)
+
+    def test_reused_payment_evidence_across_transactions_is_held(self):
+        # All four-way amounts agree, but the same payment proof was reused.
+        record(self.ledger, tx_id="tx2", evidence_id="pay1", gross=100,
+               teacher=50, platform=50, referral=0, benefit=0)
+        result = self.check(
+            payments=self.payments + [
+                dict(tx_id="tx2", evidence_id="pay1", amount_krw=100)],
+            payouts=self.payouts + [
+                dict(tx_id="tx2", teacher_net_krw=50)])
+        self.assertIn("DUPLICATE_PAYMENT_EVIDENCE:pay1",
+                      result["discrepancies"])
+        self.assertEqual("DISCREPANCY_HOLD", result["status"])
+        self.assert_held(result)
+
+    def test_reused_refund_evidence_across_reversals_is_held(self):
+        for reversal_id in ("r1", "r2"):
+            self.ledger.reverse(
+                reversal_id=reversal_id, tx_id="tx1",
+                evidence_id="same_refund", event_kind="partial_refund",
+                refund_krw=100)
+        refunded_teacher = sum(
+            self.ledger.read_reversal(rid)["reversed_entries"][0]["amount_krw"]
+            for rid in ("r1", "r2"))
+        result = self.check(
+            refunds=[
+                dict(reversal_id=rid, tx_id="tx1",
+                     evidence_id="same_refund", amount_krw=100)
+                for rid in ("r1", "r2")],
+            payouts=[dict(tx_id="tx1",
+                          teacher_net_krw=700-refunded_teacher)])
+        self.assertIn("DUPLICATE_REFUND_EVIDENCE:same_refund",
+                      result["discrepancies"])
+        self.assertEqual("DISCREPANCY_HOLD", result["status"])
+        self.assert_held(result)
+
+
 if __name__ == "__main__":
     unittest.main()
