@@ -1,0 +1,55 @@
+name: b-qa-handoff-intake
+on:
+  workflow_dispatch:
+    inputs:
+      request_id: {required: true, type: string}
+      task_id: {required: true, type: string}
+      product_pr: {required: true, type: string}
+      product_sha: {required: true, type: string}
+permissions:
+  contents: read
+  pull-requests: read
+jobs:
+  intake:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate task contract and source PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          TASK_ID: ${{ inputs.task_id }}
+          PRODUCT_PR: ${{ inputs.product_pr }}
+          PRODUCT_SHA: ${{ inputs.product_sha }}
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,re,urllib.request
+          e=os.environ
+          repo=e["GITHUB_REPOSITORY"]
+          request_id,task_id,pr,sha=(e[k] for k in ("REQUEST_ID","TASK_ID","PRODUCT_PR","PRODUCT_SHA"))
+          if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{7,127}",request_id): raise SystemExit("INVALID_REQUEST_ID")
+          if not re.fullmatch(r"[1-9][0-9]{0,2}",task_id) or not 1<=int(task_id)<=160: raise SystemExit("TASK_OUT_OF_RANGE")
+          if not re.fullmatch(r"[1-9][0-9]*",pr) or not re.fullmatch(r"[0-9a-f]{40}",sha): raise SystemExit("INVALID_PR_OR_SHA")
+          def api(path):
+              req=urllib.request.Request(f"https://api.github.com/repos/{repo}/{path}",headers={"Authorization":f"Bearer {e['GH_TOKEN']}","Accept":"application/vnd.github+json"})
+              with urllib.request.urlopen(req,timeout=20) as response: return json.load(response)
+          p=api(f"pulls/{pr}")
+          if (p["number"]!=int(pr) or p["state"]!="open" or p["head"]["sha"]!=sha
+              or p["head"]["repo"]["full_name"]!=repo or p["base"]["repo"]["full_name"]!=repo):
+              raise SystemExit("PR_OR_SHA_MISMATCH")
+          # TASK_ID is only range-checked here. Original 160-contract and PR-task binding
+          # require a separate trusted machine-readable ledger; no QA_RECEIVED asserted.
+          receipt={"status":"QA_RECEIVED_CANDIDATE","request_id":request_id,"task_id":int(task_id),
+                   "product_pr":int(pr),"target_product_sha":sha,"repository":repo,
+                   "source_pr_url":p["html_url"],"workflow":e["GITHUB_WORKFLOW"],
+                   "workflow_ref":e["GITHUB_WORKFLOW_REF"],"run_id":int(e["GITHUB_RUN_ID"]),
+                   "run_attempt":int(e["GITHUB_RUN_ATTEMPT"]),"job_name":"intake",
+                   "task_contract_verified":False,"qa_independent_verified":False}
+          f=pathlib.Path("qa-intake-receipt.json")
+          f.write_text(json.dumps(receipt,sort_keys=True,indent=2)+"\n")
+          print("INTAKE_RECEIPT_SHA256="+hashlib.sha256(f.read_bytes()).hexdigest())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: qa-intake-receipt
+          path: qa-intake-receipt.json
+          retention-days: 7
