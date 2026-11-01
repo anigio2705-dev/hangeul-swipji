@@ -105,24 +105,33 @@ def run_tick(db_path, *, request_id, source_pr_number, qa_pr_number,
         # Deliberately never persist exception strings: they may leak auth.
         evidence = {"status": "UNVERIFIED", "reason": "read-only GitHub fetch failed"}
 
-    verdict = evidence.get("status")
-    if verdict in ("QA_PASS", "QA_FAIL"):
-        proof = json.dumps({
-            "source_pr": source_pr_number, "qa_pr": qa_pr_number,
-            "run_id": run_id, "product_sha": product_sha, "qa_sha": qa_sha,
-            "reviewer": trusted_b_login, "verified_status": verdict
-        }, sort_keys=True)
-        with sqlite3.connect(db_path, timeout=15) as db:
+    # IMPORTANT: do not write a receipt before validating fencing.
+    # A slow GitHub GET may outlive LEASE_SECONDS; another tick can then
+    # acquire the lease. Receipt + state must commit in ONE transaction.
+    with sqlite3.connect(db_path, timeout=15) as db:
+        db.execute("BEGIN IMMEDIATE")
+        _init(db)
+        row = db.execute(
+            "SELECT lease_owner FROM cb_qa_ticks WHERE request_id=? AND product_sha=?",
+            (request_id, product_sha)).fetchone()
+        if not row or row[0] != owner:
+            return _result("STALE_LEASE", "newer read-only poll owns state")
+
+        verdict = evidence.get("status")
+        if verdict in ("QA_PASS", "QA_FAIL"):
+            proof = json.dumps({
+                "source_pr": source_pr_number, "qa_pr": qa_pr_number,
+                "run_id": run_id, "product_sha": product_sha, "qa_sha": qa_sha,
+                "reviewer": trusted_b_login, "verified_status": verdict
+            }, sort_keys=True)
             init_receipts(db)
             existing = db.execute(
                 """SELECT qa_sha,qa_status,evidence,next_action
                    FROM cb_qa_receipts WHERE request_id=? AND product_sha=?""",
                 (request_id, product_sha)).fetchone()
             if existing:
-                if existing[:3] != (qa_sha, verdict, proof):
-                    receipt = "CONFLICT"
-                else:
-                    receipt = existing[3]
+                receipt = ("CONFLICT" if existing[:3] !=
+                           (qa_sha, verdict, proof) else existing[3])
             else:
                 failures = db.execute(
                     """SELECT COUNT(*) FROM cb_qa_receipts
@@ -133,28 +142,20 @@ def run_tick(db_path, *, request_id, source_pr_number, qa_pr_number,
                     db_path, request_id=request_id, pr_number=source_pr_number,
                     product_sha=product_sha, qa_sha=qa_sha, verdict=verdict,
                     evidence=proof, verified_by_b=True, ci_success=True,
-                    retry_count=failures, now=now)
-        if receipt == "AWAIT_A_REVIEW":
-            state, detail = "QA_PASS_VERIFIED", "QA_PASS awaits A decision"
-        elif receipt == "C_FIXING":
-            state, detail = "C_REWORK_REQUIRED", "QA_FAIL requires C rework"
-        elif receipt == "BLOCKER_245":
-            state, detail = "BLOCKED_245", "retry limit reached"
+                    retry_count=failures, now=now, db=db)
+            if receipt == "AWAIT_A_REVIEW":
+                state, detail = "QA_PASS_VERIFIED", "QA_PASS awaits A decision"
+            elif receipt == "C_FIXING":
+                state, detail = "C_REWORK_REQUIRED", "QA_FAIL requires C rework"
+            elif receipt == "BLOCKER_245":
+                state, detail = "BLOCKED_245", "retry limit reached"
+            else:
+                state, detail = "CONFLICT", "conflicting immutable receipt"
         else:
-            state, detail = "CONFLICT", "conflicting immutable receipt"
-    else:
-        state = "WAITING_B_EVIDENCE"
-        detail = _safe_reason(evidence.get("reason"))
+            state = "WAITING_B_EVIDENCE"
+            detail = _safe_reason(evidence.get("reason"))
 
-    next_check = 0 if state in TERMINAL else now + POLL_SECONDS
-    with sqlite3.connect(db_path, timeout=15) as db:
-        db.execute("BEGIN IMMEDIATE")
-        _init(db)
-        row = db.execute(
-            "SELECT lease_owner FROM cb_qa_ticks WHERE request_id=? AND product_sha=?",
-            (request_id, product_sha)).fetchone()
-        if not row or row[0] != owner:
-            return _result("STALE_LEASE", "newer read-only poll owns state")
+        next_check = 0 if state in TERMINAL else now + POLL_SECONDS
         db.execute(
             """UPDATE cb_qa_ticks SET state=?,lease_owner=NULL,
                lease_until=0,next_check=?,updated_at=?,detail=?
