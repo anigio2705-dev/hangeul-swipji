@@ -37,7 +37,8 @@ def stage_verified_failure(db, *, request_id, product_sha, now=None):
     if not isinstance(db, sqlite3.Connection) or not db.in_transaction:
         raise ValueError("BEGIN IMMEDIATE transaction required")
     if (not isinstance(request_id, str) or not request_id
-            or len(request_id) > 128 or not SHA.fullmatch(str(product_sha))):
+            or len(request_id) > 128 or type(product_sha) is not str
+            or not SHA.fullmatch(product_sha)):
         return "INVALID"
     init(db)
     receipt = db.execute(
@@ -80,9 +81,11 @@ def pending(db_path, *, request_id, product_sha):
         return None
     try:
         path = Path(db_path).absolute()
-        # Never follow a caller-selected final-component symlink to another DB.
-        # A protected host must additionally control the parent directory.
-        if path.is_symlink() or not path.is_file():
+        # Reject symlinks in every path component, not just the DB filename.
+        # A privileged host must still pin/protect the parent directory to
+        # prevent a check/open race; this is NOT an OS-level path sandbox.
+        if (path.is_symlink() or any(parent.is_symlink() for parent in path.parents)
+                or not path.is_file()):
             return None
         with closing(sqlite3.connect(path.as_uri() + "?mode=ro",
                                      uri=True, timeout=15)) as db:
