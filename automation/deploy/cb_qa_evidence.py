@@ -59,6 +59,9 @@ def inspect_evidence(*, repo, source_pr, qa_pr, qa_files, qa_run, qa_reviews,
                 for p in paths)
             or not all(f.get("status") == "added" for f in qa_files)):
         return deny("QA PR changes more than new independent tests")
+    run_prs = qa_run.get("pull_requests")
+    if not isinstance(run_prs, list):
+        return deny("Actions run PR list missing")
     if (qa_run.get("head_sha") != qa_sha or qa_run.get("event") != "pull_request"
             or qa_run.get("status") != "completed"
             or qa_run.get("conclusion") not in ("success", "failure")
@@ -66,8 +69,7 @@ def inspect_evidence(*, repo, source_pr, qa_pr, qa_files, qa_run, qa_reviews,
             or type(qa_run.get("run_attempt")) is not int
             or qa_run["run_attempt"] < 1
             or not any(isinstance(p, dict) and p.get("number") == qa_pr.get("number")
-                       for p in qa_run.get("pull_requests", [])
-                       if isinstance(qa_run.get("pull_requests"), list))):
+                       for p in run_prs)):
         return deny("Actions run does not belong to exact B QA PR/SHA")
     if not isinstance(qa_reviews, list) or len(qa_reviews) > 200:
         return deny("review evidence incomplete")
