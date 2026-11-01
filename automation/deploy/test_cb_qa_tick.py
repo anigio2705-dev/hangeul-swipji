@@ -65,7 +65,7 @@ class DurableTickTests(unittest.TestCase):
         self.data["qa_reviews"] = []
         self.assertEqual(self.tick()["state"], "WAITING_B_EVIDENCE")
         self.assertEqual(self.tick(now=1100)["state"], "WAITING")
-        self.data["qa_reviews"] = positive_positive_fixture()["qa_reviews"]
+        self.data["qa_reviews"] = positive_fixture()["qa_reviews"]
         self.assertEqual(self.tick(now=1240)["state"], "QA_PASS_VERIFIED")
 
     def test_same_account_review_cannot_be_accepted(self):
