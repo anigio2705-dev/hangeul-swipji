@@ -46,6 +46,10 @@ jobs:
         env:
           PYTHONPATH: automation:automation/deploy
         run: python3 -m unittest discover -s automation/deploy -p 'test_cb_rework_outbox.py' -v
+      - name: Verify read-only durable A/B/C/D hub intake, spoof rejection and restart safety (synthetic only)
+        env:
+          PYTHONPATH: automation:automation/deploy
+        run: python3 -m unittest discover -s automation/deploy -p 'test_hub_request_intake.py' -v
       - name: Run independently added B QA-only regression tests (if present)
         env:
           PYTHONPATH: automation:automation/deploy
