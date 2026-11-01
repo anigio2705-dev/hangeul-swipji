@@ -21,10 +21,13 @@ def assumptions():
     }
 
 
-def calculate(cases=None, rates=None):
+_OMITTED = object()
+
+
+def calculate(cases=_OMITTED, rates=None):
     return compare_growth_economics(
         assumptions=assumptions() if rates is None else rates,
-        scenarios=[{"learners": 10, "teachers": 2}] if cases is None else cases)
+        scenarios=[{"learners": 10, "teachers": 2}] if cases is _OMITTED else cases)
 
 
 class GrowthEconomicsTests(unittest.TestCase):
@@ -164,6 +167,31 @@ class GrowthEconomicsTests(unittest.TestCase):
         row = calculate([{"learners": 0, "teachers": 0}], a)["scenarios"][0]
         self.assertEqual("0.01", row["server_cost"])
         self.assertEqual("0.01", row["total_cost"])
+
+    def test_displayed_subcent_costs_reconcile(self):
+        from decimal import Decimal
+        a = {k: "0" for k in assumptions()}
+        a.update(fixed_server_monthly="0.005", video_per_minute="0.005",
+                 minutes_per_completed_lesson="1",
+                 lessons_per_learner_monthly="1", completion_rate="1")
+        row = calculate([{"learners": 1, "teachers": 0}], a)["scenarios"][0]
+        components = sum((Decimal(row[k]) for k in
+                          ("server_cost", "video_cost", "storage_cost",
+                           "notification_cost")), Decimal(0))
+        self.assertEqual(Decimal("0.02"), components)
+        self.assertEqual(components, Decimal(row["total_cost"]))
+
+    def test_displayed_subcent_profit_reconciles(self):
+        from decimal import Decimal
+        a = {k: "0" for k in assumptions()}
+        a.update(fixed_server_monthly="0.004",
+                 lessons_per_learner_monthly="1", completion_rate="1",
+                 platform_revenue_per_completed_lesson="0.005")
+        row = calculate([{"learners": 1, "teachers": 0}], a)["scenarios"][0]
+        self.assertEqual(Decimal(row["platform_revenue"]) -
+                         Decimal(row["total_cost"]),
+                         Decimal(row["platform_profit_loss"]))
+        self.assertEqual("0.01", row["platform_profit_loss"])
 
     def test_scenario_order_is_preserved(self):
         cases = [{"learners": 100, "teachers": 5},
