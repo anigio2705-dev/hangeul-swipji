@@ -261,7 +261,7 @@ class SignedIssueWebhookTests(unittest.TestCase):
             "RETRY_WAIT")
         db.close()
 
-    def test_closed_issue_cancels_existing_lease(self):
+    def test_close_webhook_requires_authoritative_scan_before_cancellation(self):
         self.assertEqual(self.call()[0], 200)
         store = DurableWorkStore(self.db)
         try:
@@ -272,10 +272,58 @@ class SignedIssueWebhookTests(unittest.TestCase):
         event = dict(self.event, issue={"number": 1001,
                        "title": MARKER + " authorized isolated work", "state": "closed"})
         event["action"] = "closed"
-        self.assertEqual(self.call(event=event), (200, "durably_cancelled"))
+        self.assertEqual(self.call(event=event),
+                         (202, "close_awaiting_authoritative_scan"))
         store = DurableWorkStore(self.db)
         try:
+            # The webhook is signed but could be delivered after a reopen.
+            self.assertEqual(store.snapshot(1001)["status"], "LEASED")
+            # Only a complete GitHub scan that confirms absence can cancel.
+            store.reconcile_open(set())
             self.assertEqual(store.snapshot(1001)["status"], "CANCELLED")
+            self.assertFalse(store.finish(1001, lease["owner"],
+                                          "stale lease completion proof"))
+        finally:
+            store.close()
+
+    def test_delayed_closed_event_cannot_cancel_new_live_lease(self):
+        self.call()
+        store = DurableWorkStore(self.db)
+        try:
+            # First close was confirmed, then current GitHub scan saw reopen.
+            store.reconcile_open(set())
+            store.ingest(self.event["issue"], authoritative_open_scan=True)
+            lease = store.claim("new-worker")
+            self.assertIsNotNone(lease)
+        finally:
+            store.close()
+        old_close = dict(self.event, action="closed",
+                         issue={**self.event["issue"], "state": "closed"})
+        self.assertEqual(self.call(event=old_close),
+                         (202, "close_awaiting_authoritative_scan"))
+        store = DurableWorkStore(self.db)
+        try:
+            self.assertEqual(store.snapshot(1001)["status"], "LEASED")
+            # Full scan confirms currently open: stale event must not cancel.
+            store.reconcile_open({1001})
+            self.assertTrue(store.finish(1001, lease["owner"],
+                                         "fresh lease completion proof"))
+        finally:
+            store.close()
+
+    def test_close_before_delayed_open_requires_scan(self):
+        close = dict(self.event, action="closed",
+                     issue={**self.event["issue"], "state": "closed"})
+        self.assertEqual(self.call(event=close),
+                         (202, "close_awaiting_authoritative_scan"))
+        self.assertEqual(self.call(),
+                         (202, "open_awaiting_authoritative_scan"))
+        store = DurableWorkStore(self.db)
+        try:
+            self.assertIsNone(store.snapshot(1001))
+            # A genuine reopened issue is recovered by the full GitHub scan.
+            store.ingest(self.event["issue"], authoritative_open_scan=True)
+            self.assertEqual(store.snapshot(1001)["status"], "PENDING")
         finally:
             store.close()
 
