@@ -2,6 +2,7 @@
 import os
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from continuous_dispatcher import MARKER, QueueIntegrityError
 from work_request_worker import DurableWorkStore
@@ -47,6 +48,33 @@ class WorkerStoreTests(unittest.TestCase):
                 claim["issue"], claim["owner"], broken_transport)
         self.assertEqual(self.a.snapshot(101)["status"], "PUSH_UNCERTAIN")
         self.assertIsNone(self.a.claim("replacement"))
+
+    def test_remote_callback_expired_lease_quarantines_success_response(self):
+        # A slow transport can succeed remotely after its original lease
+        # expires. Never return its response as a safe, fenced completion.
+        self.a.ingest(self.work, now=100)
+        claim = self.a.claim("broker", now=100, lease_seconds=3600)
+        clock = [100]
+        def late_remote():
+            clock[0] = 3700  # exact lease expiry boundary
+            return "remote-accepted"
+        with patch("work_request_worker.time.time", side_effect=lambda: clock[0]):
+            result = self.a.fenced_remote_write(
+                101, claim["owner"], late_remote, minimum_seconds=150)
+        self.assertIsNone(result)
+        self.assertEqual(self.a.snapshot(101)["status"], "PUSH_UNCERTAIN")
+        self.assertIsNone(self.a.claim("replacement", now=3701))
+        self.assertFalse(self.a.finish(101, claim["owner"], "unsafe remote proof", now=3701))
+
+    def test_remote_callback_with_live_lease_restores_leased_state(self):
+        self.a.ingest(self.work, now=100)
+        claim = self.a.claim("broker", now=100, lease_seconds=3600)
+        with patch("work_request_worker.time.time", return_value=200):
+            result = self.a.fenced_remote_write(
+                101, claim["owner"], lambda: "remote-accepted",
+                minimum_seconds=150)
+        self.assertEqual(result, "remote-accepted")
+        self.assertEqual(self.a.snapshot(101)["status"], "LEASED")
 
     def test_persists_after_restart(self):
         self.a.ingest(self.work, now=100)
