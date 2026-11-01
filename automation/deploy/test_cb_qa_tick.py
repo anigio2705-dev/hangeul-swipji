@@ -68,7 +68,7 @@ class DurableTickTests(unittest.TestCase):
     def test_same_account_review_cannot_be_accepted(self):
         self.assertEqual(self.tick(trusted_b_login="developer")["state"], "WAITING_B_EVIDENCE")
         with sqlite3.connect(self.db) as db:
-            self.assertEqual(db.execute("SELECT COUNT(*) FROM cb_qa_receipts").fetchone()[0], 0)
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM sqlite_master WHERE name='cb_qa_receipts'").fetchone()[0], 0)
 
     def test_stale_qa_run_is_not_accepted(self):
         self.data["qa_run"]["head_sha"] = "c" * 40
@@ -108,8 +108,8 @@ class DurableTickTests(unittest.TestCase):
         for i in range(3):
             self.assertEqual(accept_verdict(
                 self.db, request_id=self.kw["request_id"], pr_number=168,
-                product_sha=chr(ord("c") + i) * 40,
-                qa_sha=chr(ord("f") + i) * 40, verdict="QA_FAIL",
+                product_sha="cde"[i] * 40,
+                qa_sha="fed"[i] * 40, verdict="QA_FAIL",
                 evidence=f"prior B QA {i}", verified_by_b=True,
                 ci_success=True, retry_count=i), "C_FIXING")
         self.data["qa_run"]["conclusion"] = "failure"
