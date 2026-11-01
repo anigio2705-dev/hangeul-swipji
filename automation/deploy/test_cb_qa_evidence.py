@@ -24,9 +24,45 @@ def fixture():
                      "body": f"HS_B_QA_VERDICT status=QA_PASS product_sha={S} qa_sha={Q}"}])
 
 
+def positive_fixture():
+    """Synthetic exact-run B job and bounded raw log proof, never a real QA."""
+    data = fixture()
+    data["qa_run"].update(
+        id=123, name="P0 isolated host infrastructure static checks",
+        path=".github/workflows/p0-host-infra-static.yml")
+    data["qa_jobs"] = [{
+        "id": 1001, "run_id": 123, "run_attempt": 1, "head_sha": Q,
+        "name": "host-infra-static", "status": "completed", "conclusion": "success",
+        "steps": [
+            {"name": "Run actions/checkout@v4", "conclusion": "success"},
+            {"name": "Run independently added B QA-only regression tests (if present)",
+             "conclusion": "success"}]}]
+    data["raw_job_logs"] = {1001: (
+        "2026-11-01T05:00:00Z ##[group]Run if compgen -G 'automation/deploy/test_bqa_*.py' >/dev/null; then\n"
+        "2026-11-01T05:00:01Z ##[endgroup]\n"
+        "2026-11-01T05:00:02Z test_positive (test_bqa_security.Case.test_positive) ... ok\n"
+        "2026-11-01T05:00:03Z Ran 1 tests in 0.001s\n"
+        "2026-11-01T05:00:04Z OK\n"
+        "2026-11-01T05:00:05Z ##[group]Run next step\n")}
+    return data
+
+
+def set_fail_proof(data):
+    data["qa_run"]["conclusion"] = "failure"
+    data["qa_jobs"][0]["conclusion"] = "failure"
+    data["qa_jobs"][0]["steps"][1]["conclusion"] = "failure"
+    data["raw_job_logs"][1001] = (
+        "2026-11-01T05:00:00Z ##[group]Run if compgen -G 'automation/deploy/test_bqa_*.py' >/dev/null; then\n"
+        "2026-11-01T05:00:01Z ##[endgroup]\n"
+        "2026-11-01T05:00:02Z test_positive (test_bqa_security.Case.test_positive) ... FAIL\n"
+        "2026-11-01T05:00:03Z Ran 1 tests in 0.001s\n"
+        "2026-11-01T05:00:04Z FAILED (failures=1)\n"
+        "2026-11-01T05:00:05Z ##[group]Run next step\n")
+
+
 class EvidenceTests(unittest.TestCase):
     def check(self, changes=None):
-        data = fixture()
+        data = positive_fixture()
         if changes:
             changes(data)
         return inspect_evidence(**data)
@@ -62,7 +98,7 @@ class EvidenceTests(unittest.TestCase):
 
     def test_qa_fail_with_independent_review(self):
         def change(d):
-            d["qa_run"]["conclusion"] = "failure"
+            set_fail_proof(d)
             d["qa_reviews"][0]["state"] = "CHANGES_REQUESTED"
             d["qa_reviews"][0]["body"] = f"HS_B_QA_VERDICT status=QA_FAIL product_sha={S} qa_sha={Q}"
         self.assertEqual(self.check(change)["status"], "QA_FAIL")
@@ -79,7 +115,7 @@ class EvidenceTests(unittest.TestCase):
 
 class GitHubReadOnlyCollectionTests(unittest.TestCase):
     def test_fetches_only_expected_rest_evidence(self):
-        data = fixture()
+        data = positive_fixture()
         paths = []
         def get(path):
             paths.append(path)
@@ -87,14 +123,16 @@ class GitHubReadOnlyCollectionTests(unittest.TestCase):
             if path == "/pulls/500": return data["qa_pr"]
             if path.startswith("/pulls/500/files?"): return data["qa_files"]
             if path == "/actions/runs/123": return data["qa_run"]
+            if path.startswith("/actions/runs/123/jobs?"): return {"total_count": 1, "jobs": data["qa_jobs"]}
             if path.startswith("/pulls/500/reviews?"): return data["qa_reviews"]
             raise AssertionError(path)
         result = collect_github_evidence(
             token="fixture-not-a-real-token", source_pr_number=168,
             qa_pr_number=500, run_id=123, source_sha=S, qa_sha=Q,
-            trusted_b_login="independent-b", get_json=get)
+            trusted_b_login="independent-b", get_json=get,
+            get_text=lambda path: data["raw_job_logs"][1001] if path == "/actions/jobs/1001/logs" else None)
         self.assertEqual(result["status"], "QA_PASS")
-        self.assertEqual(len(paths), 5)
+        self.assertEqual(len(paths), 6)
         self.assertTrue(all(path.startswith("/") and "POST" not in path for path in paths))
 
     def test_untrusted_same_account_is_not_qa(self):
