@@ -75,19 +75,34 @@ def process_delivery(body, headers, *, secret, repository, db_path):
         if store.db.execute("SELECT 1 FROM webhook_deliveries WHERE delivery_id=?",
                             (delivery_id,)).fetchone():
             return 200, "duplicate_delivery"
+        # A signed webhook proves what GitHub emitted, NOT current issue state.
+        # A delayed close can arrive after a genuine reopen/new lease. Keep a
+        # durable hint, but leave cancellation to a completed authoritative
+        # open-issue scan (work_request_worker.main -> reconcile_open).
+        store.db.execute("""CREATE TABLE IF NOT EXISTS webhook_close_hints (
+            issue INTEGER PRIMARY KEY, delivery_id TEXT NOT NULL,
+            received_at INTEGER NOT NULL)""")
         if event["action"] == "closed":
             store.db.execute("BEGIN IMMEDIATE")
             try:
-                store.db.execute("""UPDATE work SET status='CANCELLED',
-                    lease_owner=NULL, lease_until=0 WHERE issue=?
-                    AND status IN ('PENDING','LEASED')""", (issue["number"],))
-                store.db.execute("INSERT OR IGNORE INTO webhook_deliveries VALUES (?,?,?)",
+                store.db.execute("""INSERT INTO webhook_close_hints
+                    (issue,delivery_id,received_at) VALUES (?,?,?)
+                    ON CONFLICT(issue) DO UPDATE SET
+                    delivery_id=excluded.delivery_id,
+                    received_at=excluded.received_at""",
+                    (issue["number"], delivery_id, int(time.time())))
+                store.db.execute("INSERT INTO webhook_deliveries VALUES (?,?,?)",
                                  (delivery_id, issue["number"], int(time.time())))
                 store.db.execute("COMMIT")
-            except Exception:
+            except BaseException:
                 store.db.execute("ROLLBACK")
                 raise
-            return 200, "durably_cancelled"
+            return 202, "close_awaiting_authoritative_scan"
+        # An old signed 'opened' event may arrive after a close. Never use it
+        # to recreate a work item without the periodic GitHub full-state scan.
+        if store.db.execute("SELECT 1 FROM webhook_close_hints WHERE issue=?",
+                            (issue["number"],)).fetchone():
+            return 202, "open_awaiting_authoritative_scan"
         # Never introduce two distinct active work requests through this path.
         # A full GitHub scan by the fallback sync is still authoritative.
         other = store.db.execute("""SELECT issue FROM work WHERE issue != ?
