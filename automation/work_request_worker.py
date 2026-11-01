@@ -47,6 +47,15 @@ class DurableWorkStore:
                 self.db.execute(
                     "INSERT INTO work(issue,title,status,created_at) VALUES(?,?,'PENDING',?)",
                     (number, title, now))
+            else:
+                # A GitHub issue may be closed and subsequently reopened.
+                # Re-enable ONLY a previously cancelled, exact-title task.
+                # Never revive REPORTED, BLOCKED or PUSH_UNCERTAIN; a consumed
+                # retry budget must not be reset by close/reopen.
+                self.db.execute("""UPDATE work
+                    SET status=CASE WHEN attempts<3 THEN 'PENDING' ELSE 'BLOCKED' END,
+                        lease_owner=NULL, lease_until=0, retry_after=0
+                    WHERE issue=? AND status='CANCELLED'""", (number,))
             self.db.execute("COMMIT")
         except Exception:
             self.db.execute("ROLLBACK")
