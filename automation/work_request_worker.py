@@ -52,11 +52,15 @@ class DurableWorkStore:
                 # revive cancelled work. A delayed signed webhook is NOT proof
                 # of current GitHub state, even when its issue payload is open.
                 # A GitHub issue may be closed and subsequently reopened.
-                # Re-enable ONLY a previously cancelled, exact-title task.
-                # Never revive REPORTED, BLOCKED or PUSH_UNCERTAIN; a consumed
-                # retry budget must not be reset by close/reopen.
+                # Re-enable ONLY never-started work (attempts=0). A cancelled
+                # LEASED task may still have a detached AI child: it cannot be
+                # restarted without OS-enforced quiescence and a new generation
+                # fence, neither of which this store currently proves.
+                # Never revive REPORTED, BLOCKED or PUSH_UNCERTAIN.
                 self.db.execute("""UPDATE work
-                    SET status=CASE WHEN attempts<3 THEN 'PENDING' ELSE 'BLOCKED' END,
+                    SET status=CASE WHEN attempts=0 THEN 'PENDING'
+                                    WHEN attempts>=3 THEN 'BLOCKED'
+                                    ELSE 'CANCELLED' END,
                         lease_owner=NULL, lease_until=0, retry_after=0
                     WHERE issue=? AND status='CANCELLED'""", (number,))
             self.db.execute("COMMIT")
