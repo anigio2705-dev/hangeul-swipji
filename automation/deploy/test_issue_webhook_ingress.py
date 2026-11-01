@@ -408,5 +408,60 @@ class SignedIssueWebhookTests(unittest.TestCase):
 
 
 
+    def test_webhook_host_rejects_traversal_and_prefix_sibling_before_bind(self):
+        import os
+        from unittest.mock import patch
+        import issue_webhook_ingress as ingress
+        env = {"HS_WEBHOOK_SECRET": self.secret,
+               "GITHUB_REPOSITORY": self.repo}
+        for db_path in (
+                "/var/lib/hangeul-swipji/../attacker-owned/ci.sqlite",
+                "/var/lib/hangeul-swipji-evil/ci.sqlite",
+                "/tmp/untrusted.sqlite"):
+            with self.subTest(db_path=db_path), \
+                 patch.dict(os.environ, dict(env, HS_DURABLE_WORKER_DB=db_path)), \
+                 patch.object(ingress, "ThreadingHTTPServer") as server:
+                with self.assertRaisesRegex(RuntimeError, "trusted durable volume"):
+                    ingress.main()
+                server.assert_not_called()
+
+    def test_webhook_host_rejects_symlink_escape_before_bind(self):
+        import os
+        from unittest.mock import patch
+        import issue_webhook_ingress as ingress
+        import qa_handoff_dispatcher as dispatcher
+        trusted = Path(self.temp.name) / "trusted"
+        trusted.mkdir()
+        outside = Path(self.temp.name) / "outside"
+        outside.mkdir()
+        (trusted / "escape").symlink_to(outside, target_is_directory=True)
+        env = {"HS_WEBHOOK_SECRET": self.secret,
+               "GITHUB_REPOSITORY": self.repo,
+               "HS_DURABLE_WORKER_DB": str(trusted / "escape" / "ci.sqlite")}
+        with patch.object(dispatcher, "DB_ROOT", str(trusted) + os.sep), \
+             patch.dict(os.environ, env), \
+             patch.object(ingress, "ThreadingHTTPServer") as server:
+            with self.assertRaisesRegex(RuntimeError, "trusted durable volume"):
+                ingress.main()
+            server.assert_not_called()
+
+    def test_webhook_host_allows_canonical_durable_db_path(self):
+        import os
+        from unittest.mock import patch
+        import issue_webhook_ingress as ingress
+        import qa_handoff_dispatcher as dispatcher
+        trusted = Path(self.temp.name) / "trusted"
+        trusted.mkdir()
+        env = {"HS_WEBHOOK_SECRET": self.secret,
+               "GITHUB_REPOSITORY": self.repo,
+               "HS_DURABLE_WORKER_DB": str(trusted / "ci.sqlite")}
+        with patch.object(dispatcher, "DB_ROOT", str(trusted) + os.sep), \
+             patch.dict(os.environ, env), \
+             patch.object(ingress, "ThreadingHTTPServer") as server:
+            ingress.main()
+            server.assert_called_once_with(("127.0.0.1", 8778), ingress.Handler)
+            server.return_value.serve_forever.assert_called_once_with()
+
+
 if __name__ == "__main__":
     unittest.main()
