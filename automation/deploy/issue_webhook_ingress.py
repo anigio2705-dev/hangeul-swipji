@@ -243,8 +243,13 @@ def main():
             raise RuntimeError("missing required webhook environment")
     if len(os.environ["HS_WEBHOOK_SECRET"]) < 32:
         raise RuntimeError("webhook secret must be at least 32 characters")
-    if not os.environ["HS_DURABLE_WORKER_DB"].startswith("/var/lib/hangeul-swipji/"):
-        raise RuntimeError("webhook DB must be on the mounted durable volume")
+    # Use the same canonical path guard as CI polling and QA handoff.
+    # A string prefix alone accepts ../ traversal and symlink escapes.
+    from qa_handoff_dispatcher import _trusted_db_path
+    try:
+        _trusted_db_path(os.environ["HS_DURABLE_WORKER_DB"])
+    except ValueError as exc:
+        raise RuntimeError("webhook DB must be inside trusted durable volume") from exc
     ThreadingHTTPServer(("127.0.0.1", 8778), Handler).serve_forever()
 
 
