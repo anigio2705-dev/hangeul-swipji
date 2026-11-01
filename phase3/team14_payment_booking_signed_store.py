@@ -18,7 +18,7 @@ _REQUIRED_EVENT = frozenset({
 })
 _SOURCE = "TEST_SIGNED_PROVIDER_SIMULATOR"
 
-_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}\\Z")
+_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}\Z")
 
 
 def _validated_id(value, field):
