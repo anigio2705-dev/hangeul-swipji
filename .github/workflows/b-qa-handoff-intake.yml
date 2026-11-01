@@ -1,0 +1,51 @@
+name: b-qa-handoff-intake
+on:
+  workflow_dispatch:
+    inputs:
+      request_id:
+        required: true
+        type: string
+      task_id:
+        required: true
+        type: string
+      product_pr:
+        required: true
+        type: string
+      product_sha:
+        required: true
+        type: string
+permissions:
+  contents: read
+  pull-requests: read
+  actions: read
+jobs:
+  receive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify PR head and emit untrusted receipt only
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          TASK_ID: ${{ inputs.task_id }}
+          PRODUCT_PR: ${{ inputs.product_pr }}
+          PRODUCT_SHA: ${{ inputs.product_sha }}
+        run: |
+          python3 - <<'PY'
+          import json, os, re, urllib.request
+          repo=os.environ["GITHUB_REPOSITORY"]
+          pr=os.environ["PRODUCT_PR"]
+          sha=os.environ["PRODUCT_SHA"]
+          if not re.fullmatch(r"[0-9]+",pr) or not re.fullmatch(r"[0-9a-f]{40}",sha):
+              raise SystemExit("INVALID_INPUT")
+          req=urllib.request.Request(
+              f"https://api.github.com/repos/{repo}/pulls/{pr}",
+              headers={"Authorization":f"Bearer {os.environ['GH_TOKEN']}","Accept":"application/vnd.github+json"})
+          with urllib.request.urlopen(req,timeout=20) as response:
+              data=json.load(response)
+          if data["head"]["sha"]!=sha or data["head"]["repo"]["full_name"]!=repo:
+              raise SystemExit("PR_SHA_MISMATCH")
+          print(json.dumps({"status":"QA_RECEIVED_CANDIDATE","request_id":os.environ["REQUEST_ID"],
+              "task_id":os.environ["TASK_ID"],"product_pr":pr,"target_product_sha":sha,
+              "run_id":os.environ["GITHUB_RUN_ID"],"run_attempt":os.environ["GITHUB_RUN_ATTEMPT"],
+              "workflow":os.environ["GITHUB_WORKFLOW"]},sort_keys=True))
+          PY
