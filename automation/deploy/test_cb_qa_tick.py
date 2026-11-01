@@ -165,6 +165,37 @@ class DurableTickTests(unittest.TestCase):
             self.assertEqual(db.execute(
                 "SELECT lease_owner FROM cb_qa_ticks").fetchone()[0], "newer")
 
+    def _assert_no_receipts_after_expired_poll(self):
+        with sqlite3.connect(self.db) as db:
+            row = db.execute(
+                "SELECT state,lease_owner,lease_until,next_check FROM cb_qa_ticks"
+            ).fetchone()
+            self.assertEqual(row, ("WAITING_B_EVIDENCE", None, 0, 1421))
+            if db.execute(
+                "SELECT 1 FROM sqlite_master WHERE type='table' "
+                "AND name='cb_qa_receipts'").fetchone():
+                self.assertEqual(db.execute(
+                    "SELECT COUNT(*) FROM cb_qa_receipts").fetchone()[0], 0)
+
+    def test_expired_poll_without_lease_steal_cannot_save_pass(self):
+        # Simulate a GitHub GET completing after the 180s deadline even
+        # though no other worker has acquired the expired lease.
+        result = self.tick(clock=lambda: 1181)
+        self.assertEqual(result["state"], "EXPIRED_LEASE")
+        self._assert_no_receipts_after_expired_poll()
+        self.assertEqual(self.tick(now=1200)["state"], "WAITING")
+        self.assertEqual(self.tick(now=1421)["state"], "QA_PASS_VERIFIED")
+
+    def test_expired_poll_without_lease_steal_cannot_save_fail(self):
+        set_fail_proof(self.data)
+        self.data["qa_reviews"][0]["state"] = "CHANGES_REQUESTED"
+        self.data["qa_reviews"][0]["body"] = (
+            f"HS_B_QA_VERDICT status=QA_FAIL product_sha={S} qa_sha={Q}")
+        result = self.tick(clock=lambda: 1181)
+        self.assertEqual(result["state"], "EXPIRED_LEASE")
+        self._assert_no_receipts_after_expired_poll()
+        self.assertEqual(self.tick(now=1421)["state"], "C_REWORK_REQUIRED")
+
     def test_no_a_ready_or_external_side_effects(self):
         result = self.tick()
         self.assertEqual(result["state"], "QA_PASS_VERIFIED")
