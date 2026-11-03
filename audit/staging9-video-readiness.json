@@ -1,0 +1,57 @@
+{
+  "checkedAt": "2026-10-27T09:59:17.803744+00:00",
+  "baseCommit": "f72b97477d8608d3b1c8373e808074beb02c9d92",
+  "scope": "development video UI and deployment readiness; not hosted flow or actual two-device media success",
+  "stagingSourceSHA256": "e9d1368308005470c4e6cbf04e1d237eeb61ff1d0abc0f01c14558a90ee8b755",
+  "appSHA256": "2e7e9531014ca2ecfb27866721b1e53640b1f6cef79938a2a1c4ffbcd90f102e",
+  "gateSessionVersion": "signed-cookie-v1",
+  "videoUIVersion": "embedded-preview-v1",
+  "preservedFiles": 18,
+  "previousEvidencePreserved": [
+    "audit/staging99-auth-regression.json",
+    "phase3/staging-browser-results.json"
+  ],
+  "relatedBrowserChecks": 16,
+  "syntheticDevices": true,
+  "providerFrameMockedInLocalTest": true,
+  "publicSiteAuthenticatedFlowVerified": false,
+  "actualTwoDeviceCallVerified": false,
+  "renderToolsAvailable": false,
+  "renderSession": "existing cloud tab is at Render sign-in; no recovery or credential request repeated",
+  "deploymentPerformed": false,
+  "actualJitsiObservation": {
+    "url": "https://meet.jit.si/HangeulSwipji9DevCheck20261027",
+    "prejoinReached": true,
+    "cloudCameraAndMicrophoneGranted": false,
+    "moderatorRequired": true,
+    "signedIn": false,
+    "callStarted": false,
+    "leftTestRoom": true,
+    "screenshot": "/workspace/scratch/hs9-jitsi-moderator-check-20261027.jpg"
+  },
+  "externalRequirements": [
+    "Existing Render service deployment permission in user personal Chrome; no new server or paid plan.",
+    "Jitsi moderator account accepted by meet.jit.si to start a room; no gate password sent to Jitsi.",
+    "Two actual devices with camera/microphone permission and same booked room for final bidirectional media checks."
+  ],
+  "officialReference": "https://jitsi.org/blog/changes-coming/",
+  "providerLimitMinutesAsOfCheck": 95,
+  "selfRefine": [
+    "Camera preview releases tracks before opening embedded meeting to avoid competing camera ownership.",
+    "Ending and rejoining restarts validated booking attendance instead of leaving a stopped timer."
+  ],
+  "killCritic": [
+    "Guard late getUserMedia resolutions after navigation/close; release the late stream.",
+    "Preview is explicitly not a remote call; external iframe is not reported as successful media.",
+    "External iframe receives no gate Authorization/Cookie/Referer in the local route-intercept check.",
+    "Keep booking permission checks, external origin guard, passwords and operating DB isolation unchanged."
+  ],
+  "publicHealth": {
+    "mode": "test",
+    "ok": true,
+    "scope": "isolated-staging",
+    "requestGuardVersion": "document-navigation-v2",
+    "configuredOrigin": "https://hangeul-swipji99-test.onrender.com",
+    "sourceSHA256": "c5e3f132fce724f4f4f069ba8039371e369243583a247d827c736d73d64dd228"
+  }
+}

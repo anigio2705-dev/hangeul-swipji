@@ -1,0 +1,78 @@
+{
+  "checkedAt": "2026-10-27T03:54:30.772117+00:00",
+  "baseCommit": "1928a342ff401ed18232bfa4d025b33547b7e0f9",
+  "scope": "local-only automated verification; not an external deployment or human approval",
+  "python": {
+    "passed": 70,
+    "existing": 61,
+    "stagingBoundary": 9,
+    "command": "python3 -m unittest discover -s phase3 -p 'test_*.py' -q"
+  },
+  "browser": {
+    "passedFlows": 31,
+    "unitDialogs": 192,
+    "homeScreens": 26,
+    "functionalProfiles": 2,
+    "registeredAudioEndedPerProfile": 78,
+    "physicalDevices": false,
+    "stagingHTTPSProxyTested": false
+  },
+  "isolatedPostgres": {
+    "passed": 12,
+    "hostedSupabaseTested": false
+  },
+  "source": {
+    "freeLessons": 350,
+    "freeQuizItems": 1758,
+    "readingItems": 600,
+    "professionalLessons": 96,
+    "professionalChecks": 288,
+    "errors": []
+  },
+  "preservedSHA256": {
+    "index.html": "aefb7aa998033cdcd390681a407dc73ef3160381143c767807148e5ba71933fe",
+    "intro.html": "c25da89d48c9bc44036afbdb6c82c8368d8195554ee04844c91860f082c688ed",
+    "beginner1.html": "5711ddb1808101b9e5b9ac08bfd2a0ee2273617025d7c9481a53f33ce5c673c9",
+    "beginner2.html": "d864182aceda52799d2f927e81a4680d0d3a7742ad0f996728b688ac023e6dde",
+    "intermediate1.html": "af62e66636606eca0a8bc3b3e44dda6a50dd6f97bfad37e3b016df1f7266f3c6",
+    "intermediate2.html": "8bdba8738a5fa539be44827184c2fa13faca406a563061f6fef8c0ce8060a256",
+    "advanced1.html": "3875c89f3ac766203943cf6b3076827fa64204166ea20d780da23fa07081fbab",
+    "advanced2.html": "cad574d0552276ea55e7a8423f6238081b1dd8b285d9e1beb343ff5a1f2e5147",
+    "reading.html": "799738bcff9d29f521852932e055653a26f24fd479ac72c117ddd5f9d2c8f497",
+    "reading-curriculum.js": "eafa9805cf70a182f5983624227009c0927a83c82fdbde4234028173db4b71da",
+    "reading-alternates.js": "74acc7ed0ff43b62bbbadbb0d889946219c5c8fdc9a67108de8cf8140e6fc4de",
+    "hangul-audio-manifest.json": "579d2c52c44a75659dfc307e8171984d361f6093e00651ba6547f0e7c8c71553",
+    "speaking-platform.html": "c71a7a1b92469fd730e5a8a7870b68c7267db79971fcfdd216b158e25510b987",
+    "speaking-config.js": "5ff013820c5e1245714e12a8b9fbc165b2f4324c596b166adbf76d9773c6c3a3",
+    "phase3/content.json": "339bbaa8cb9f3c4d6d372b5930e1b8828066893620a90c753290f7b9d0972800",
+    "phase3/content-expansion.json": "68d2e26d84f2a0f4614879a86dcea8c3fb9d02058540da44428b5aba0daf81a1",
+    "phase3/content-remaining72.json": "a5e0221b125588fe4f10d8a029c4b65293c6ec79f513e3490afb055a4864b08d",
+    "phase3/curriculum-96.json": "8a51a737c5e6cc4bf051a7d77c4125337a0a0a13a9d02a850177072b63268db8"
+  },
+  "priorCI": {
+    "id": 40440214531,
+    "head": "1928a342ff401ed18232bfa4d025b33547b7e0f9",
+    "conclusion": "success",
+    "artifact": 12705133726
+  },
+  "externalDeployment": {
+    "performed": false,
+    "url": null,
+    "reason": "Render/Railway connections are not installed; user hosting choice and account connection required"
+  },
+  "selfRefine": [
+    "Extracted context validation while preserving default loopback-only server.",
+    "Quoted YAML off to prevent YAML 1.1 boolean conversion.",
+    "Added independent gate/admin secrets, fail-closed configuration and idempotent bootstrap."
+  ],
+  "killCritic": [
+    "Found legacy speaking page loading existing hosted Supabase config; staging redirects it and replaces config response without editing originals.",
+    "Added same-origin CSP network restriction and tested legacy routes.",
+    "Kept automatic/browser checks distinct from teacher review, physical devices, real video and production."
+  ],
+  "limits": [
+    "Provider HTTPS/Host forwarding, actual public URL, quota/billing and deployment remain unverified.",
+    "Free Render restart/spin-down deletes test SQLite records.",
+    "No real payment, operating DB, main merge or operating website deployment."
+  ]
+}

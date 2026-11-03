@@ -1,0 +1,37 @@
+name: Phase 3 isolated test platform
+on:
+  push:
+    branches: ['phase3/**']
+    paths: ['phase3/**', '.github/workflows/phase3-isolated-tests.yml']
+  pull_request:
+    paths: ['phase3/**', '.github/workflows/phase3-isolated-tests.yml']
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s phase3 -p 'test_*.py' -v
+      - run: node --check phase3/app.js
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: phase3/package-lock.json
+      - run: npm ci --prefix phase3 --ignore-scripts
+      - run: node phase3/postgres-test.cjs
+      - run: ./phase3/node_modules/.bin/playwright install --with-deps chromium
+      - run: sudo apt-get install -y fonts-noto-cjk
+      - run: node phase3/browser-test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: phase3-browser-evidence
+          path: |
+            phase3/browser-results.json
+            phase3/postgres-results.json
+            phase3/browser-artifacts/*.png

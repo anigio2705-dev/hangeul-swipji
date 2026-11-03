@@ -1,0 +1,20 @@
+{
+  "checkedAt": "2026-10-27T22:28:50.471Z",
+  "mode": "local-https-instant-auto-matching",
+  "checks": [
+    "home CTA uses current account; no booking, signup or automatic camera",
+    "no partner shows waiting rather than a false connection",
+    "existing test account can sign in on the instant page",
+    "two opt-in users automatically matched without an invitation link",
+    "room withheld until both people confirm",
+    "both account contexts open identical mocked Jitsi room without gate credentials",
+    "mobile390 has no horizontal overflow",
+    "end removes both frames and does not silently requeue",
+    "unanswered offer and stale presence expire",
+    "booked class remains separately reachable"
+  ],
+  "errors": [],
+  "providerFrameMocked": true,
+  "actualTwoDeviceCallVerified": false,
+  "publicServerDeployed": false
+}

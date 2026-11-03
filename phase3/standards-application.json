@@ -1,0 +1,30 @@
+{
+  "sourceBranch": "docs/education-standards-20261027",
+  "sourceCommit": "3bb5e7931251379a1df022515c9b71fc44bbffed",
+  "implementation": "education-standards-20261027-implementation-v1",
+  "lessons": 96,
+  "references": [
+    {
+      "path": "docs/education/ASSESSMENT_STANDARD.md",
+      "sha256": "e29dfbf3075ebdaeaa274b22390d009e9bb26a20aad5a18e15dd8ac8ff638027"
+    },
+    {
+      "path": "docs/education/EDUCATION_MASTER_STANDARD.md",
+      "sha256": "d28a503b9004ed42e3a468244acd9ff7178368193c9b89511dc872b7bb7f290c"
+    },
+    {
+      "path": "docs/education/ONLINE_KOREAN_PROGRAM_REFERENCE.md",
+      "sha256": "df1ae00a1d4cc2e7c9025bfb4ce13598a42f7ab74afc8f7fb850dc5e9e963cc9"
+    },
+    {
+      "path": "docs/education/SOURCE_REGISTER.md",
+      "sha256": "2c78bb1639c439254e654c2f9bd16d1a8eb5e9511ab271783110e736c3e570bd"
+    },
+    {
+      "path": "docs/education/TEACHER_METHOD_GUIDE.md",
+      "sha256": "48282f983cb5b8ad7eaceafc59e79e5bdd811e65051cb4e72d987285658650b5"
+    }
+  ],
+  "originalPublicTextOrMediaCopied": false,
+  "humanValidationPerformed": false
+}

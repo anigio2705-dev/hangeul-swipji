@@ -1,0 +1,125 @@
+{
+  "scope": "Candidate only: 399 composed syllables + 19 standalone consonants = 418; original 418 source list NOT yet verified",
+  "counts": {
+    "composedSyllables": 399,
+    "standaloneConsonants": 19,
+    "totalCandidate": 418
+  },
+  "standaloneConsonants": [
+    {
+      "symbol": "ㄱ",
+      "status": "not_audited",
+      "audioFile": null,
+      "sourceConfirmed": false
+    },
+    {
+      "symbol": "ㄲ",
+      "status": "not_audited",
+      "audioFile": null,
+      "sourceConfirmed": false
+    },
+    {
+      "symbol": "ㄴ",
+      "status": "not_audited",
+      "audioFile": null,
+      "sourceConfirmed": false
+    },
+    {
+      "symbol": "ㄷ",
+      "status": "not_audited",
+      "audioFile": null,
+      "sourceConfirmed": false
+    },
+    {
+      "symbol": "ㄸ",
+      "status": "not_audited",
+      "audioFile": null,
+      "sourceConfirmed": false
+    },
+    {
+      "symbol": "ㄹ",
+      "status": "not_audited",
+      "audioFile": null,
+      "sourceConfirmed": false
+    },
+    {
+      "symbol": "ㅁ",
+      "status": "not_audited",
+      "audioFile": null,
+      "sourceConfirmed": false
+    },
+    {
+      "symbol": "ㅂ",
+      "status": "not_audited",
+      "audioFile": null,
+      "sourceConfirmed": false
+    },
+    {
+      "symbol": "ㅃ",
+      "status": "not_audited",
+      "audioFile": null,
+      "sourceConfirmed": false
+    },
+    {
+      "symbol": "ㅅ",
+      "status": "not_audited",
+      "audioFile": null,
+      "sourceConfirmed": false
+    },
+    {
+      "symbol": "ㅆ",
+      "status": "not_audited",
+      "audioFile": null,
+      "sourceConfirmed": false
+    },
+    {
+      "symbol": "ㅇ",
+      "status": "not_audited",
+      "audioFile": null,
+      "sourceConfirmed": false
+    },
+    {
+      "symbol": "ㅈ",
+      "status": "not_audited",
+      "audioFile": null,
+      "sourceConfirmed": false
+    },
+    {
+      "symbol": "ㅉ",
+      "status": "not_audited",
+      "audioFile": null,
+      "sourceConfirmed": false
+    },
+    {
+      "symbol": "ㅊ",
+      "status": "not_audited",
+      "audioFile": null,
+      "sourceConfirmed": false
+    },
+    {
+      "symbol": "ㅋ",
+      "status": "not_audited",
+      "audioFile": null,
+      "sourceConfirmed": false
+    },
+    {
+      "symbol": "ㅌ",
+      "status": "not_audited",
+      "audioFile": null,
+      "sourceConfirmed": false
+    },
+    {
+      "symbol": "ㅍ",
+      "status": "not_audited",
+      "audioFile": null,
+      "sourceConfirmed": false
+    },
+    {
+      "symbol": "ㅎ",
+      "status": "not_audited",
+      "audioFile": null,
+      "sourceConfirmed": false
+    }
+  ],
+  "approval": "pending original source comparison"
+}

@@ -1,0 +1,5752 @@
+{
+  "requiredUniqueTargets": 418,
+  "missingRecordings": 359,
+  "filePresent": 59,
+  "normalPlaybackAllowed": 19,
+  "actualListeningApproved": 0,
+  "allInventory": {
+    "targets": 463,
+    "available": 78,
+    "missing": 385,
+    "decodedFiles": 78,
+    "playbackAvailable": 21,
+    "humanFiles": 78,
+    "syntheticFiles": 0,
+    "excludedSynthetic": 26,
+    "held": 57,
+    "listeningApproved": 0,
+    "signalWarnings": 6
+  },
+  "actions": [
+    {
+      "text": "기역",
+      "groups": [
+        "자음 이름",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㄱ · 기역",
+        "기역",
+        "ㄱ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/ae30-c5ed-human-name.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "니은",
+      "groups": [
+        "자음 이름",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㄴ · 니은",
+        "니은",
+        "ㄴ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b2c8-c740-human-name.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "디귿",
+      "groups": [
+        "자음 이름",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㄷ · 디귿",
+        "디귿",
+        "ㄷ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b514-adff-human-name.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "리을",
+      "groups": [
+        "자음 이름",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㄹ · 리을",
+        "리을",
+        "ㄹ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b9ac-c744-human-name.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "미음",
+      "groups": [
+        "자음 이름",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅁ · 미음",
+        "미음",
+        "ㅁ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/bbf8-c74c-human-name.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "비읍",
+      "groups": [
+        "자음 이름",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅂ · 비읍",
+        "비읍",
+        "ㅂ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/be44-c74d-human-name.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "시옷",
+      "groups": [
+        "자음 이름",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅅ · 시옷",
+        "시옷",
+        "ㅅ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c2dc-c637-human-name.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "이응",
+      "groups": [
+        "자음 이름",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅇ · 이응",
+        "이응",
+        "ㅇ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c774-c751-human-name.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "지읒",
+      "groups": [
+        "자음 이름",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅈ · 지읒",
+        "지읒",
+        "ㅈ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c9c0-c752-human-name.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "치읓",
+      "groups": [
+        "자음 이름",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅊ · 치읓",
+        "치읓",
+        "ㅊ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/ce58-c753-human-name.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "키읔",
+      "groups": [
+        "자음 이름",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅋ · 키읔",
+        "키읔",
+        "ㅋ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/d0a4-c754-human-name.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "티읕",
+      "groups": [
+        "자음 이름",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅌ · 티읕",
+        "티읕",
+        "ㅌ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/d2f0-c755-human-name.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "피읖",
+      "groups": [
+        "자음 이름",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅍ · 피읖",
+        "피읖",
+        "ㅍ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/d53c-c756-human-name.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "히읗",
+      "groups": [
+        "자음 이름",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅎ · 히읗",
+        "히읗",
+        "ㅎ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/d788-c757-human-name.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "쌍기역",
+      "groups": [
+        "자음 이름",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㄲ · 쌍기역",
+        "ㄲ"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쌍디귿",
+      "groups": [
+        "자음 이름",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㄸ · 쌍디귿",
+        "ㄸ"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쌍비읍",
+      "groups": [
+        "자음 이름",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅃ · 쌍비읍",
+        "ㅃ"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쌍시옷",
+      "groups": [
+        "자음 이름"
+      ],
+      "labels": [
+        "ㅆ · 쌍시옷"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쌍지읒",
+      "groups": [
+        "자음 이름"
+      ],
+      "labels": [
+        "ㅉ · 쌍지읒"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "아",
+      "groups": [
+        "모음",
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅏ · 아",
+        "아",
+        "ㅏ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c544-week1.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "야",
+      "groups": [
+        "모음",
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅑ · 야",
+        "야",
+        "ㅑ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c57c-week1.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "어",
+      "groups": [
+        "모음",
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅓ · 어",
+        "어",
+        "ㅓ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": true,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c5b4.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "여",
+      "groups": [
+        "모음",
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅕ · 여",
+        "여",
+        "ㅕ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c5ec-week1.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "오",
+      "groups": [
+        "모음",
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅗ · 오",
+        "오",
+        "ㅗ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": true,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c624.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "요",
+      "groups": [
+        "모음",
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅛ · 요",
+        "요",
+        "ㅛ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c694-week1.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "우",
+      "groups": [
+        "모음",
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅜ · 우",
+        "우",
+        "ㅜ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c6b0-week1.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "유",
+      "groups": [
+        "모음",
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅠ · 유",
+        "유",
+        "ㅠ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c720-week1.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "으",
+      "groups": [
+        "모음",
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅡ · 으",
+        "으",
+        "ㅡ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c73c-week1.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "이",
+      "groups": [
+        "모음",
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅣ · 이",
+        "이",
+        "ㅣ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": true,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c774.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "애",
+      "groups": [
+        "모음",
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅐ · 애",
+        "애",
+        "ㅐ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c560.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "얘",
+      "groups": [
+        "모음",
+        "글자판 음절"
+      ],
+      "labels": [
+        "ㅒ · 얘",
+        "얘"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "에",
+      "groups": [
+        "모음",
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅔ · 에",
+        "에",
+        "ㅔ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": true,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c5d0.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "예",
+      "groups": [
+        "모음",
+        "글자판 음절"
+      ],
+      "labels": [
+        "ㅖ · 예",
+        "예"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": true,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c608.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "와",
+      "groups": [
+        "모음",
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅘ · 와",
+        "와",
+        "ㅘ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": true,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c640.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "왜",
+      "groups": [
+        "모음",
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅙ · 왜",
+        "왜",
+        "ㅙ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": true,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c65c.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "외",
+      "groups": [
+        "모음",
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅚ · 외",
+        "외",
+        "ㅚ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": true,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c678.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "워",
+      "groups": [
+        "모음",
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅝ · 워",
+        "워",
+        "ㅝ"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "웨",
+      "groups": [
+        "모음",
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅞ · 웨",
+        "웨",
+        "ㅞ"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "위",
+      "groups": [
+        "모음",
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "ㅟ · 위",
+        "위",
+        "ㅟ"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": true,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c704.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "의",
+      "groups": [
+        "모음",
+        "글자판 음절"
+      ],
+      "labels": [
+        "ㅢ · 의",
+        "의"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "가",
+      "groups": [
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "가"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": true,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/ac00-r2.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "갸",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "갸"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "거",
+      "groups": [
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "거"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": true,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/ac70.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "겨",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "겨"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "고",
+      "groups": [
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "고"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "교",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "교"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "구",
+      "groups": [
+        "글자판 음절",
+        "7일 과정"
+      ],
+      "labels": [
+        "구"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/ad6c-week1.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "규",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "규"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "그",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "그"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/adf8-20261027.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "기",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "기"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "개",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "개"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/ac1c-20261027.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "걔",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "걔"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "게",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "게"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/ac8c-20261027.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "계",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "계"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/acc4-20261027.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "과",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "과"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/acfc-20261027.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "괘",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "괘"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "괴",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "괴"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/ad34-20261027.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "궈",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "궈"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "궤",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "궤"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "귀",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "귀"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "긔",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "긔"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "나",
+      "groups": [
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "나"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": true,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b098-r2.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "냐",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "냐"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "너",
+      "groups": [
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "너"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": true,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b108.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "녀",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "녀"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "노",
+      "groups": [
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "노"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뇨",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "뇨"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "누",
+      "groups": [
+        "글자판 음절",
+        "7일 과정"
+      ],
+      "labels": [
+        "누"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뉴",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "뉴"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "느",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "느"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "니",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "니"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "내",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "내"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "냬",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "냬"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "네",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "네"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "녜",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "녜"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "놔",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "놔"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "놰",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "놰"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뇌",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "뇌"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "눠",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "눠"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "눼",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "눼"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뉘",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뉘"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "늬",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "늬"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "다",
+      "groups": [
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "다"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b2e4-week1.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "댜",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "댜"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "더",
+      "groups": [
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "더"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": true,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b354.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "뎌",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뎌"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "도",
+      "groups": [
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "도"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "됴",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "됴"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "두",
+      "groups": [
+        "글자판 음절",
+        "7일 과정"
+      ],
+      "labels": [
+        "두"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": true,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b450.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "듀",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "듀"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "드",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "드"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "디",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "디"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "대",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "대"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "댸",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "댸"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "데",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "데"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b370-20261027.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "뎨",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뎨"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "돠",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "돠"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "돼",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "돼"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "되",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "되"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "둬",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "둬"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뒈",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뒈"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뒤",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뒤"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b4a4-20261027.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "듸",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "듸"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "라",
+      "groups": [
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "라"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "랴",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "랴"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "러",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "러"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "려",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "려"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "로",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "로"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "료",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "료"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "루",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "루"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "류",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "류"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "르",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "르"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "리",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "리"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "래",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "래"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "럐",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "럐"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "레",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "레"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "례",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "례"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "롸",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "롸"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뢔",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뢔"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뢰",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뢰"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뤄",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뤄"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뤠",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뤠"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뤼",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뤼"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "릐",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "릐"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "마",
+      "groups": [
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "마"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "먀",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "먀"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "머",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "머"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "며",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "며"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "모",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "모"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "묘",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "묘"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "무",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "무"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뮤",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뮤"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "므",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "므"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "미",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "미"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "매",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "매"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "먜",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "먜"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "메",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "메"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "몌",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "몌"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뫄",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뫄"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뫠",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뫠"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뫼",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뫼"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뭐",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뭐"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/bb50-20261027.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "뭬",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뭬"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뮈",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뮈"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "믜",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "믜"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "바",
+      "groups": [
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "바"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뱌",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뱌"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "버",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "버"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "벼",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "벼"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "보",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "보"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뵤",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뵤"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "부",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "부"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뷰",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뷰"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "브",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "브"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "비",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "비"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "배",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "배"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뱨",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뱨"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "베",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "베"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "볘",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "볘"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "봐",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "봐"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "봬",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "봬"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뵈",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뵈"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "붜",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "붜"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "붸",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "붸"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뷔",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뷔"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "븨",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "븨"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "사",
+      "groups": [
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "사"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": true,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c0ac.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "샤",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "샤"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "서",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "서"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "셔",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "셔"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "소",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "소"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": true,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c18c.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "쇼",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쇼"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "수",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "수"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c218-20261027.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "슈",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "슈"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "스",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "스"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "시",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "시"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c2dc-20261027.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "새",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "새"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "섀",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "섀"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "세",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "세"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "셰",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "셰"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "솨",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "솨"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쇄",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쇄"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쇠",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쇠"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "숴",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "숴"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쉐",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쉐"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쉬",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쉬"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "싀",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "싀"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "자",
+      "groups": [
+        "글자판 음절",
+        "7일 과정"
+      ],
+      "labels": [
+        "자"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쟈",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쟈"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "저",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "저"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": true,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c800.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "져",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "져"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "조",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "조"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "죠",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "죠"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "주",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "주"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쥬",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쥬"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "즈",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "즈"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "지",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "지"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "재",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "재"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쟤",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쟤"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "제",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "제"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "졔",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "졔"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "좌",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "좌"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "좨",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "좨"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "죄",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "죄"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "줘",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "줘"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "줴",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "줴"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쥐",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쥐"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "즤",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "즤"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "차",
+      "groups": [
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "차"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": true,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/cc28.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "챠",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "챠"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "처",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "처"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쳐",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쳐"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "초",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "초"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쵸",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쵸"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "추",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "추"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "츄",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "츄"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "츠",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "츠"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "치",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "치"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "채",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "채"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/cc44-20261027.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "챼",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "챼"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "체",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "체"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쳬",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쳬"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "촤",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "촤"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쵀",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쵀"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "최",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "최"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "춰",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "춰"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "췌",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "췌"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "취",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "취"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "츼",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "츼"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "카",
+      "groups": [
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "카"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "캬",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "캬"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "커",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "커"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "켜",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "켜"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "코",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "코"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쿄",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쿄"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쿠",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쿠"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "큐",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "큐"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "크",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "크"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "키",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "키"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "캐",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "캐"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "컈",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "컈"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "케",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "케"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "켸",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "켸"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "콰",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "콰"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쾌",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쾌"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쾨",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쾨"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쿼",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쿼"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "퀘",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "퀘"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "퀴",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "퀴"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "킈",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "킈"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "타",
+      "groups": [
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "타"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "탸",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "탸"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "터",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "터"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "텨",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "텨"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "토",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "토"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "툐",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "툐"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "투",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "투"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "튜",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "튜"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "트",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "트"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "티",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "티"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "태",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "태"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "턔",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "턔"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "테",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "테"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "톄",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "톄"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "톼",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "톼"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "퇘",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "퇘"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "퇴",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "퇴"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "퉈",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "퉈"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "퉤",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "퉤"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "튀",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "튀"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "틔",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "틔"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "파",
+      "groups": [
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "파"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "퍄",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "퍄"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "퍼",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "퍼"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "펴",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "펴"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "포",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "포"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "표",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "표"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "푸",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "푸"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "퓨",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "퓨"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "프",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "프"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "피",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "피"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "패",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "패"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "퍠",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "퍠"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "페",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "페"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "폐",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "폐"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "퐈",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "퐈"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "퐤",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "퐤"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "푀",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "푀"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "풔",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "풔"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "풰",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "풰"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "퓌",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "퓌"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "픠",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "픠"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "하",
+      "groups": [
+        "글자판 음절",
+        "7일 과정",
+        "입문 50단원"
+      ],
+      "labels": [
+        "하"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "햐",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "햐"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "허",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "허"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "혀",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "혀"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "호",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "호"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "효",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "효"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "후",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "후"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/d6c4-20261027.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "휴",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "휴"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "흐",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "흐"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "히",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "히"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "해",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "해"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "햬",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "햬"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "헤",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "헤"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "혜",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "혜"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "화",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "화"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "홰",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "홰"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "회",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "회"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "훠",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "훠"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "훼",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "훼"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "휘",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "휘"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "희",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "희"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "까",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "까"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "꺄",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "꺄"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "꺼",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "꺼"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "껴",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "껴"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "꼬",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "꼬"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "꾜",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "꾜"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "꾸",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "꾸"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뀨",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뀨"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "끄",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "끄"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "끼",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "끼"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "깨",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "깨"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "꺠",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "꺠"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "께",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "께"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "꼐",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "꼐"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "꽈",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "꽈"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "꽤",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "꽤"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "꾀",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "꾀"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "꿔",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "꿔"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "꿰",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "꿰"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뀌",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뀌"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "끠",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "끠"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "따",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "따"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "땨",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "땨"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "떠",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "떠"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뗘",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뗘"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "또",
+      "groups": [
+        "글자판 음절",
+        "입문 50단원"
+      ],
+      "labels": [
+        "또"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b610-20261027.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "뚀",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뚀"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뚜",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뚜"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뜌",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뜌"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뜨",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뜨"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "띠",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "띠"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "때",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "때"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/b54c-20261027.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "떄",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "떄"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "떼",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "떼"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뗴",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뗴"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "똬",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "똬"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뙈",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뙈"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뙤",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뙤"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뚸",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뚸"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뛔",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뛔"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뛰",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뛰"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "띄",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "띄"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "빠",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "빠"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뺘",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뺘"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뻐",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뻐"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뼈",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뼈"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뽀",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뽀"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뾰",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뾰"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뿌",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뿌"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쀼",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쀼"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쁘",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쁘"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "삐",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "삐"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "빼",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "빼"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뺴",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뺴"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뻬",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뻬"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뼤",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뼤"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뽜",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뽜"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뽸",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뽸"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뾔",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뾔"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "뿨",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "뿨"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쀄",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쀄"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쀠",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쀠"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쁴",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쁴"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "싸",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "싸"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쌰",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쌰"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "써",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "써"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쎠",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쎠"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쏘",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쏘"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쑈",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쑈"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쑤",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쑤"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쓔",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쓔"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쓰",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쓰"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "씨",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "씨"
+      ],
+      "recordingAvailable": true,
+      "playbackAvailable": false,
+      "listeningStatus": "pending",
+      "src": "./assets/hangul-audio/c528-20261027.mp3",
+      "action": "teacher_listening_approval_required"
+    },
+    {
+      "text": "쌔",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쌔"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "썌",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "썌"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쎄",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쎄"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쎼",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쎼"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쏴",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쏴"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쐐",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쐐"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쐬",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쐬"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쒀",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쒀"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쒜",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쒜"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쒸",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쒸"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "씌",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "씌"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "짜",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "짜"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쨔",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쨔"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쩌",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쩌"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쪄",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쪄"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쪼",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쪼"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쬬",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쬬"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쭈",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쭈"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쮸",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쮸"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쯔",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쯔"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "찌",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "찌"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "째",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "째"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쨰",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쨰"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쩨",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쩨"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쪠",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쪠"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쫘",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쫘"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쫴",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쫴"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쬐",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쬐"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쭤",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쭤"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쮀",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쮀"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쮜",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쮜"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    },
+    {
+      "text": "쯰",
+      "groups": [
+        "글자판 음절"
+      ],
+      "labels": [
+        "쯰"
+      ],
+      "recordingAvailable": false,
+      "playbackAvailable": false,
+      "listeningStatus": "no-recording",
+      "action": "recording_required"
+    }
+  ],
+  "limits": [
+    "Decode and media ended events are technical checks, not a human pronunciation review.",
+    "No pending/held recording was unblocked. No human recording or approval was invented."
+  ]
+}
