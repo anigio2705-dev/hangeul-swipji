@@ -1,0 +1,16 @@
+✔ unowned progress must never upload to newly authenticated account (2.716858ms)
+✔ another owner progress must not upload to current account (0.933729ms)
+✔ same owner retains authenticated upload (1.088873ms)
+✔ unowned progress archived without deleting original backup (0.818776ms)
+✔ GET 503 must not change owner or clear active storage (0.758625ms)
+✔ GET 401 keeps previously stored progress and does not POST (0.700807ms)
+✔ switching owner aborts in-flight POST and does not post stored A progress as B (2.031544ms)
+✔ identity change while server progress GET is pending does not bind old account (0.743802ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 108.858363

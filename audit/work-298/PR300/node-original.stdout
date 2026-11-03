@@ -1,0 +1,12 @@
+✔ unowned localStorage must not be silently uploaded to newly authenticated account (2.899594ms)
+✔ localStorage belonging to another account must not be uploaded to current account (0.914209ms)
+✔ same owner retains authenticated completion upload (1.650791ms)
+✔ unowned progress is quarantined for explicit recovery, not silently discarded (1.039238ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 100.532872

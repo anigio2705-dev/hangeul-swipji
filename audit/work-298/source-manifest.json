@@ -1,0 +1,43 @@
+{
+  "pr300_sha": "a6e812d810731f17e1dbceb239b2a8359c2d2b19",
+  "pr301_sha": "1a137c569ce8f39277d3d9f07e95b72c1cf3820e",
+  "server_sha": "a2abc3c08ec0c4d245ae0be0670a1b47148f2e00",
+  "client300_blob": "7c5689b5af8066c6c1778af454d91e56d43120df",
+  "test300_blob": "564f82a6e222e2e199b3ce2593b09eb627bd29ae",
+  "client301_blob": "27d8115af2756c7dc5cea9155dbeb91ae7c4dfbd",
+  "test301_blob": "db4a83a26c2149234a9ec3614e79a9aa4a5d7a24",
+  "server_dependencies": [
+    {
+      "path": "phase3/server.py",
+      "blob": "4749a2769675a1217a7a3710f023cd7402917161"
+    },
+    {
+      "path": "phase3/learning.py",
+      "blob": "cc630fa90018c856bf996a64720037b060956399"
+    },
+    {
+      "path": "phase3/payments.py",
+      "blob": "c07cb7d07ec8818681521220a58c810b496ea702"
+    },
+    {
+      "path": "phase3/supabase_auth.py",
+      "blob": "c57e01419e327bbd96022ecf2fc17828b27e51c4"
+    },
+    {
+      "path": "phase3/schema.sql",
+      "blob": "9cdded6c1ef4f0e21c09b1d8fbab0ec84075d0b4"
+    },
+    {
+      "path": "phase3/test_common_http_free_progress.py",
+      "blob": "eaca05edae115ea057500b9443c08b3ae7a65e63"
+    },
+    {
+      "path": "phase3/test_common_http_progress_import.py",
+      "blob": "cdaab4e86cf1349fd5759432d55bfe34549349df"
+    },
+    {
+      "path": "phase3/education_standards.py",
+      "blob": "4d9820c4da2055c061bbfee31367133a093186fd"
+    }
+  ]
+}

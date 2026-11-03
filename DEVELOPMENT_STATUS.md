@@ -264,3 +264,7 @@ Self-Refine: YAML의 off가 파서에 따라 bool로 읽히는 문제를 따옴�
 이번 변경은 GLOBAL_MASTER_PLAN.md·DEVELOPMENT_STATUS.md와 진입 지침AGENTS.md다. 앱·홈 디자인·교재·음원·DB는 수정하지 않는다. 기준5문서는 원본 브랜치 blob과 통합 파일의 일치를 확인한다. 상대 링크·Git diff 공백·문서 필수 내용과 변경 범위를 검사한다. 기능 코드 변경이 없으므로 전체 브라우저/61테스트를 새로 실행하지 않는다. 새 문서 커밋의 CI 결과는 해당 커밋 Actions에서 별도 확인한다.
 
 매 Work는 시작 전 두 문서를 읽고 실제 HEAD를 확인한다. 종료 시 이 파일에 날짜·코드 기준 SHA·변경 파일·실행한 검사/미실행 이유·남은 과제·다음 작업을 갱신한다. 완료 상태는 근거와 함께 변경하고 과거 보고서를 덮어써 과거 기록을 지우지 않는다. Self-Refine + Kill Critic에서는 과거 대화 추정,72미제작이라는 오래된 보고,미디어 자동 종료=청취 승인,테스트DB=운영DB,인원 무제한 설계=부하 검증이라는 오독을 차단한다.
+
+
+## C/Work #298 격리 HTTP 검증 (2026-11-03)
+제품 PR300 SHA a6e812d810731f17e1dbceb239b2a8359c2d2b19 및 A 수정 PR301 SHA1a137c569ce8f39277d3d9f07e95b72c1cf3820e를 원격 원본 blob 대조 후 실행. 서버는 별도 Team11 SHA a2abc3c08ec0c4d245ae0be0670a1b47148f2e00 원본. Work는 제품 소스를 수정하지 않고 audit/work-298 원시 실행 증거 및 이 현황 기록만 별도 branch에 추가. PR300 Node4 PASS이나 추가 HTTP22검사16PASS/6FAIL. PR301 Node8/8 PASS(exit0), HTTP22/22 PASS(계정격리·재로그인·독립세션·401/403·GETfault500/503/연결실패·서버재시작·진도중복·inflight경합). 전체 브라우저 UI는 Chromium executable 부재 BLOCKED. Node VM+실제 로컬 HTTP를 GUI E2E로 표기하지 않음. 실제 AI/event runner→자동PR은 미연결/미검증, LIVE0/3 및 NO_READY 유지. B 독립QA→D인과기록→A최종판정 필요. 제품merge/운영DB/배포/결제/Secrets/runner/예산 변경없음. 자세한 명령/PID/exit/로그는 audit/work-298/README.md 및 phase JSON.

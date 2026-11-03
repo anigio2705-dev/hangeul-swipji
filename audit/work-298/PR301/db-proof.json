@@ -1,0 +1,34 @@
+{
+  "integrity": "ok",
+  "synthetic_accounts": [
+    {
+      "synthetic_alias": "work-a",
+      "role": "learner",
+      "progress": [
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "synthetic_alias": "work-b",
+      "role": "learner",
+      "progress": [
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          11
+        ]
+      ]
+    },
+    {
+      "synthetic_alias": "work-teacher",
+      "role": "teacher",
+      "progress": []
+    }
+  ]
+}

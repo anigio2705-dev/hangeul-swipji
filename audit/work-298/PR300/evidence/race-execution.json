@@ -1,0 +1,97 @@
+{
+  "server_pid": 6,
+  "node_exit": 2,
+  "result": {
+    "mode": "race",
+    "node": "v24.22.1",
+    "pid": 8,
+    "scope": "exact_client_VM_with_real_loopback_HTTP_NOT_browser_UI",
+    "client_sha": "a6e812d810731f17e1dbceb239b2a8359c2d2b19",
+    "server_sha": "a2abc3c08ec0c4d245ae0be0670a1b47148f2e00",
+    "checks": [
+      {
+        "name": "inflight_A_response_does_not_drop_B_same_lesson_pending",
+        "status": "FAIL",
+        "B_local_done11": true,
+        "B_server_done11": false,
+        "pending_count": 0
+      },
+      {
+        "name": "delayed_request_stays_with_captured_A_session",
+        "status": "PASS"
+      }
+    ],
+    "http_log": [
+      {
+        "path": "/api/login",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "path": "/api/me",
+        "method": "GET",
+        "status": 200,
+        "session_captured_before_delay": true
+      },
+      {
+        "path": "/api/free-progress",
+        "method": "GET",
+        "status": 200,
+        "session_captured_before_delay": true
+      },
+      {
+        "path": "/api/free-progress",
+        "method": "POST",
+        "status": 200,
+        "session_captured_before_delay": true
+      },
+      {
+        "path": "/api/login",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "path": "/api/me",
+        "method": "GET",
+        "status": 200,
+        "session_captured_before_delay": true
+      },
+      {
+        "path": "/api/free-progress",
+        "method": "GET",
+        "status": 200,
+        "session_captured_before_delay": true
+      },
+      {
+        "path": "/api/free-progress",
+        "method": "POST",
+        "status": 200,
+        "session_captured_before_delay": true
+      },
+      {
+        "path": "/api/free-progress",
+        "method": "POST",
+        "status": 200,
+        "session_captured_before_delay": true
+      },
+      {
+        "path": "/api/free-progress",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/login",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "path": "/api/free-progress",
+        "method": "GET",
+        "status": 200
+      }
+    ],
+    "passed": 1,
+    "failed": 1
+  },
+  "server_exit": -15
+}
