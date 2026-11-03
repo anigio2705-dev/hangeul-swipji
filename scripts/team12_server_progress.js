@@ -23,6 +23,8 @@ function client(fetcher,storage,notify){
    // Verify the server response before claiming ownership or touching stored progress.
    const data=await request('/api/free-progress');
    if(!Array.isArray(data.completed))throw Error('invalid progress response');
+   const confirm=await request('/api/me');
+   if(String(confirm?.user?.id)!==String(uid))throw Error('account changed during progress read');
    if(mine!==generation)return false;
    const owner=String(uid);
    archiveOnSwitch(owner);
