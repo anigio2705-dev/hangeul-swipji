@@ -61,7 +61,7 @@ test('switching owner aborts in-flight POST and does not post stored A progress 
   throw Error('unexpected '+url);
  }});
  const oldPull=h.client.pull();
- for(let i=0;i<20&&!resolveOldPost;i++)await Promise.resolve();
+ for(let i=0;i<100&&!resolveOldPost;i++)await Promise.resolve();
  assert.equal(typeof resolveOldPost,'function');assert.equal(posts(h).length,1);
  h.setUid('learner-B');
  const newPull=h.client.pull();
@@ -70,4 +70,18 @@ test('switching owner aborts in-flight POST and does not post stored A progress 
  assert.equal(h.state.get('hs-team12-progress-owner'),'learner-B');
  assert.equal(h.state.get('hs-team12-account-learner-A-hs-intro-v1'),raw);
  assert.equal(posts(h).filter(x=>x.uid==='learner-B').length,0);
+});
+
+test('identity change while server progress GET is pending does not bind old account',async()=>{
+ const raw=JSON.stringify({done:{0:true}});let reads=0;
+ const h=harness({'hs-team12-progress-owner':'learner-A','hs-intro-v1':raw},{fetcher:async(url)=>{
+  if(url==='/api/me'){reads++;return {ok:true,json:async()=>({user:{id:reads===1?'learner-A':'learner-B'}})}};
+  if(url==='/api/free-progress')return {ok:true,json:async()=>({completed:[{stage:2,lesson:1}]})};
+  throw Error('unexpected '+url);
+ }});
+ assert.equal(await h.client.pull(),false);
+ assert.equal(h.state.get('hs-team12-progress-owner'),'learner-A');
+ assert.equal(h.state.get('hs-intro-v1'),raw);
+ assert.equal(h.state.get('hs-beginner1-v1'),undefined);
+ assert.equal(posts(h).length,0);
 });
