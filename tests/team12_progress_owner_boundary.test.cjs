@@ -40,3 +40,17 @@ test('localStorage belonging to another account must not be uploaded to current 
   assert.equal(await h.client.pull(),true);
   assert.equal(h.calls.filter(x=>x.url==='/api/free-progress'&&x.opts.method==='POST').length,0);
 });
+
+test('same owner retains authenticated completion upload',async()=>{
+  const h=harness({'hs-team12-progress-owner':'learner-B','hs-intro-v1':JSON.stringify({done:{0:true}})});
+  assert.equal(await h.client.pull(),true);
+  assert.equal(h.calls.filter(x=>x.url==='/api/free-progress'&&x.opts.method==='POST').length,1);
+});
+test('unowned progress is quarantined for explicit recovery, not silently discarded',async()=>{
+  const raw=JSON.stringify({done:{0:true}});
+  const h=harness({'hs-intro-v1':raw});
+  assert.equal(await h.client.pull(),true);
+  assert.equal(h.state.get('hs-team12-unowned-hs-intro-v1'),raw);
+  assert.equal(h.state.get('hs-team12-progress-owner'),'learner-B');
+  assert.equal(h.calls.filter(x=>x.url==='/api/free-progress'&&x.opts.method==='POST').length,0);
+});
