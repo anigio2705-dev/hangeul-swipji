@@ -12,6 +12,7 @@ import payments
 import supabase_auth
 import os
 from pathlib import Path
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 import re
 import secrets
 import sqlite3
@@ -321,6 +322,11 @@ class Handler(BaseHTTPRequestHandler):
             return {'currency':'KRW','realPayout':False,'teacherAccrued':sum(x['amount'] for x in entries if x['kind'].startswith('test_teacher_accrual')),'referralAccrued':sum(x['amount'] for x in entries if x['kind'].startswith('test_referral_accrual')),'entries':entries},None
         if method=='PUT' and path=='/api/profile':
             profile={k:text(d.get(k,u[k]),2000 if k=='qualifications' else 200) for k in ('nickname','languages','timezone','specialty','level','qualifications')}
+            if profile['timezone']:
+                try:
+                    ZoneInfo(profile['timezone'])
+                except (ZoneInfoNotFoundError, ValueError):
+                    raise Error('잘못된 시간대입니다',400)
             price=d.get('price',u['price'])
             if isinstance(price,bool) or not isinstance(price,int) or not 1000<=price<=1000000 or len(profile['nickname'])<2: raise Error('가격 또는 이름이 잘못되었습니다')
             db.execute('UPDATE users SET nickname=?,languages=?,timezone=?,specialty=?,level=?,qualifications=?,price=?,approved=CASE WHEN role IN (\'partner\',\'teacher\') THEN 0 ELSE approved END WHERE id=?',(*profile.values(),price,uid))
@@ -366,7 +372,7 @@ class Handler(BaseHTTPRequestHandler):
         if path=='/api/bookings':
             if method=='GET':
                 rows=[]
-                for b in db.execute('SELECT * FROM bookings WHERE learner_id=? OR teacher_id=? ORDER BY created_at DESC',(uid,uid)):
+                for b in db.execute('SELECT b.*, learner.timezone AS learnerTimezone, teacher.timezone AS teacherTimezone FROM bookings b LEFT JOIN users learner ON learner.id=b.learner_id LEFT JOIN users teacher ON teacher.id=b.teacher_id WHERE b.learner_id=? OR b.teacher_id=? ORDER BY b.created_at DESC',(uid,uid)):
                     v=dict(b); v.pop('room',None); v['sharedSeconds']=shared_seconds(db,b['id']); v['paymentMode']='provider-test' if db.execute('SELECT 1 FROM payment_sessions WHERE booking_id=?',(b['id'],)).fetchone() else 'simulated-test-only'; v['attendance']=[dict(a) for a in db.execute('SELECT * FROM attendance WHERE booking_id=?',(b['id'],))]; v['slot']=dict(db.execute('SELECT * FROM slots WHERE id=?',(b['slot_id'],)).fetchone()); v['disputes']=[dict(x) for x in db.execute('SELECT * FROM disputes WHERE booking_id=?',(b['id'],))]; rows.append(v)
                 return {'bookings':rows},None
             if method=='POST':
