@@ -270,3 +270,7 @@ Self-Refine: YAML의 off가 파서에 따라 bool로 읽히는 문제를 따옴�
 
 원본 59번의 한정 코드 범위: 독립 검토 B와 호스트 실제 검사 모두 PASS이므로 지정된 세 파일의 제한된 코드 범위만 승인합니다. 구문 검사와 두 Node 시뮬레이션 통과에 한정하며, 초안 PR 생성·실제 브라우저 및 음원 청취 검증·제품 또는 원래 전체 작업 완료를 의미하지 않습니다.
 검사: 독립 B 소스 검토 및 Node 기능 시뮬레이션 PASS. 실제 브라우저·청취·공개 반영·전체 항목 최종 승인은 미완료.
+
+
+## Q002 server recovery 2026-11-11
+Pinned input 62dfde31999f4ede2534ffc2f4abe638b319147b. Server only: validate nonempty IANA profile timezone before UPDATE; include participant timezone fields in bookings. Independent B source PASS. Isolated SQLite route tests: 5 tests / 188 assertions PASS; unchanged baseline fails. Fixture placeholder correction preserved with original evidence. JS local display/DST handling, full original84 acceptance and deployment remain pending. Original failed C attempt/raw and HOLD preserved.
