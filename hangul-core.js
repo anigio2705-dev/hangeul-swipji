@@ -43,6 +43,9 @@
   function status(message){
     document.querySelectorAll('[data-audio-status]').forEach(x=>x.textContent=message);
   }
+  function failureStatus(message){
+    status(message+' 선생님과 함께 글자를 읽어 주세요.');
+  }
   function stop(){
     run++;
     if(current){current.pause();current=null}
@@ -68,22 +71,22 @@
         const utterance=new window.SpeechSynthesisUtterance(words.join('. '));
         utterance.lang='ko-KR';
         let timer=null,settled=false;
-        const finish=message=>{
+        const finish=(message,failed=false)=>{
           if(settled)return;settled=true;
           if(timer!==null)cancelTimer(timer);
           utterance.onend=null;utterance.onerror=null;
-          if(speechToken===run){release=null;if(message)status(message)}
+          if(speechToken===run){release=null;if(message)(failed?failureStatus:status)(message)}
         };
         release=()=>finish();
         utterance.onend=()=>finish('기기 TTS 종료 · 사람 녹음 아님 · 발음 정확성 미검증');
-        utterance.onerror=event=>finish('기기 TTS 재생 실패: '+event.error+' · 글자를 다시 눌러 주세요.');
+        utterance.onerror=event=>finish('기기 TTS 재생 실패: '+event.error+' · 글자를 다시 눌러 이번만 듣기에 새로 동의해 주세요.',true);
         status('기기 TTS 요청: '+words.join(' · ')+' · 사람 녹음 아님 · 발음 정확성 미검증');
         if(schedule)timer=schedule(()=>{
-          finish('기기 TTS 응답 시간이 초과됐습니다. 글자를 다시 눌러 주세요.');
+          finish('기기 TTS 응답 시간이 초과됐습니다. 글자를 다시 눌러 이번만 듣기에 새로 동의해 주세요.',true);
           if(speechToken===run)stop();
         },15000);
         try{window.speechSynthesis.speak(utterance)}catch(error){
-          finish('기기 TTS를 시작하지 못했습니다: '+error.message);
+          finish('기기 TTS를 시작하지 못했습니다: '+error.message+' · 글자를 다시 눌러 이번만 듣기에 새로 동의해 주세요.',true);
           if(speechToken===run)stop();
         }
       };
@@ -107,17 +110,17 @@
   async function play(value){
     stop();const token=run;
     await (manifestError?loadManifest():(loading||ready));if(token!==run)return {status:'cancelled'};
-    if(manifestError){status('음성 목록을 불러오지 못했습니다. 글자를 다시 누르면 재시도합니다. / Audio list unavailable; click again to retry.');return {status:'manifest-error'}}
+    if(manifestError){failureStatus('음성 목록을 불러오지 못했습니다. 글자를 다시 누르면 재시도합니다. / Audio list unavailable; click again to retry.');return {status:'manifest-error'}}
     const words=Array.isArray(value)?value:[value];
     if(!words.length||words.some(w=>typeof w!=='string'||!w.trim()))return {status:'invalid'};
     const missing=words.filter(word=>!records[word]);
-    if(missing.some(w=>holds[w])){status('재생 보류: '+missing.filter(w=>holds[w]).map(w=>w+' · '+holds[w].holdReason).join(' / '));return {status:'held',missing}}
-    if(missing.length){status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요.');offerMissingTts(missing,token);return {status:'missing',missing}}
+    if(missing.some(w=>holds[w])){failureStatus('재생 보류: '+missing.filter(w=>holds[w]).map(w=>w+' · '+holds[w].holdReason).join(' / ')+'. 검수 후 녹음이 제공되면 다시 시도해 주세요.');return {status:'held',missing}}
+    if(missing.length){status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요. 녹음이 제공되면 다시 시도해 주세요.');offerMissingTts(missing,token);return {status:'missing',missing}}
     try{
       for(const word of words){if(token!==run)return {status:'cancelled'};await recording(word,token)}
       if(token===run)status('재생 완료 · 청취 정확성 미검증 / Playback ended; listening review pending.');
       return {status:token===run?'played':'cancelled',words};
-    }catch(e){if(token===run){stop();status(e.message)}return {status:'error',message:e.message}}
+    }catch(e){if(token===run){stop();failureStatus(e.message+' 글자를 다시 누르면 재시도합니다.')}return {status:'error',message:e.message}}
   }
   const el=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!==undefined)x.textContent=text;return x};
   function soundButton(word,label=word){
