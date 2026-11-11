@@ -49,6 +49,47 @@
     if(window.speechSynthesis)window.speechSynthesis.cancel();
     if(release){release();release=null}
   }
+  // A separate click grants consent for this utterance only; never enable TTS globally.
+  function offerMissingTts(words,token){
+    if(!document.getElementById('repeat-selected'))return;
+    if(!window.speechSynthesis||typeof window.SpeechSynthesisUtterance!=='function'){
+      document.querySelectorAll('[data-audio-status]').forEach(x=>x.append(document.createTextNode(' 이 브라우저는 선택형 기기 TTS를 지원하지 않습니다.')));
+      return;
+    }
+    document.querySelectorAll('[data-audio-status]').forEach(host=>{
+      host.append(document.createTextNode(' 선택형 기기 TTS는 사람 녹음이 아니며 발음 정확성을 검증하지 않았습니다. 기기 음성 서비스가 텍스트를 처리할 수 있습니다.'));
+      const button=document.createElement('button');
+      button.type='button';button.className='btn secondary';
+      button.textContent='동의하고 이번만 기기 TTS 듣기: '+words.join(' · ');
+      button.onclick=()=>{
+        if(token!==run)return;
+        if(document.activeElement===button)document.getElementById('repeat-selected').focus();
+        stop();const speechToken=run;
+        const utterance=new window.SpeechSynthesisUtterance(words.join('. '));
+        utterance.lang='ko-KR';
+        let timer=null,settled=false;
+        const finish=message=>{
+          if(settled)return;settled=true;
+          if(timer!==null)cancelTimer(timer);
+          utterance.onend=null;utterance.onerror=null;
+          if(speechToken===run){release=null;if(message)status(message)}
+        };
+        release=()=>finish();
+        utterance.onend=()=>finish('기기 TTS 종료 · 사람 녹음 아님 · 발음 정확성 미검증');
+        utterance.onerror=event=>finish('기기 TTS 재생 실패: '+event.error+' · 글자를 다시 눌러 주세요.');
+        status('기기 TTS 요청: '+words.join(' · ')+' · 사람 녹음 아님 · 발음 정확성 미검증');
+        if(schedule)timer=schedule(()=>{
+          finish('기기 TTS 응답 시간이 초과됐습니다. 글자를 다시 눌러 주세요.');
+          if(speechToken===run)stop();
+        },15000);
+        try{window.speechSynthesis.speak(utterance)}catch(error){
+          finish('기기 TTS를 시작하지 못했습니다: '+error.message);
+          if(speechToken===run)stop();
+        }
+      };
+      host.append(button);
+    });
+  }
   async function recording(word,token){
     const sound=new Audio(records[word].src);current=sound;
     status('사람 녹음 재생: '+word+' · 청취 정확성 미검증 / Human recording; listening review pending');
@@ -71,7 +112,7 @@
     if(!words.length||words.some(w=>typeof w!=='string'||!w.trim()))return {status:'invalid'};
     const missing=words.filter(word=>!records[word]);
     if(missing.some(w=>holds[w])){status('재생 보류: '+missing.filter(w=>holds[w]).map(w=>w+' · '+holds[w].holdReason).join(' / '));return {status:'held',missing}}
-    if(missing.length){status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요.');return {status:'missing',missing}}
+    if(missing.length){status('녹음 준비 중: '+missing.join(' · ')+'. 실제 사람의 녹음이 준비될 때까지 선생님과 함께 읽어 주세요.');offerMissingTts(missing,token);return {status:'missing',missing}}
     try{
       for(const word of words){if(token!==run)return {status:'cancelled'};await recording(word,token)}
       if(token===run)status('재생 완료 · 청취 정확성 미검증 / Playback ended; listening review pending.');
@@ -92,6 +133,13 @@
       b.title=info.label;
     });
     const n=document.querySelector('[data-recording-count]');if(n)n.textContent=Object.keys(records).length;
+  }
+  if(document.getElementById('repeat-selected')){
+    const policy=document.querySelector('.audio-controls span');
+    if(policy)policy.textContent='기본은 사람 녹음만 재생합니다. 녹음이 없는 항목은 별도 동의 버튼으로 이번만 기기 TTS를 선택할 수 있습니다. 검수 보류 녹음은 제외합니다.';
+    const count=document.querySelector('[data-recording-count]');
+    const note=count&&count.parentElement.lastChild;
+    if(note&&note.nodeType===3)note.textContent='. 녹음 준비 중인 항목은 자동 대체하지 않습니다. 별도 동의한 경우에만 기기 TTS를 재생합니다.';
   }
   document.addEventListener('hs-audio-ready',refreshBadges);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});
