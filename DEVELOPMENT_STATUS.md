@@ -274,3 +274,7 @@ Self-Refine: YAML의 off가 파서에 따라 bool로 읽히는 문제를 따옴�
 
 ## Q002 server recovery 2026-11-11
 Pinned input 62dfde31999f4ede2534ffc2f4abe638b319147b. Server only: validate nonempty IANA profile timezone before UPDATE; include participant timezone fields in bookings. Independent B source PASS. Isolated SQLite route tests: 5 tests / 188 assertions PASS; unchanged baseline fails. Fixture placeholder correction preserved with original evidence. JS local display/DST handling, full original84 acceptance and deployment remain pending. Original failed C attempt/raw and HOLD preserved.
+
+
+## Q002 combined code acceptance 2026-11-11
+Server PR310 preserved. JS explicit learner/teacher IANA ranges, UTC offsets and dates; profile-zone local inputs reject DST gaps/folds before API. Admin reschedule binds participant zones from existing users response. Independent B rejected missing admin binding then verified repair; combined source review PASS. Isolated JS330 assertions including12 Python-zoneinfo fixtures across3 device zones; previous Python5 tests/188 assertions preserved. A code scope accepted; actual browser/device/product deployment and final user acceptance pending. Original timeout/model attempts/rejections retained.
