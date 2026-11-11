@@ -284,3 +284,9 @@ Server PR310 preserved. JS explicit learner/teacher IANA ranges, UTC offsets and
 
 원본 87번의 한정 코드 범위: 독립 B 검토 PASS와 필수 실제 런타임 Python·Node 모두 PASS를 확인했다. 코드 범위만 승인하며 제품·브라우저·배포 검증은 대기 상태로 유지한다.
 검사: 독립 B 소스 검토 및 격리 독립 기능검사 PASS. 실제 브라우저·청취·공개 반영·전체 항목 최종 승인은 미완료.
+
+
+## ABCD 자동 작업 Q004
+
+원본 76번의 한정 코드 범위: 독립 B 검토가 PASS이며 필수 실제 런타임인 Python 7개 테스트·249개 assertion과 Node 13개 assertion이 모두 통과했습니다. 코드 범위만 승인하며 제품·브라우저·배포 검증은 보류합니다.
+검사: 독립 B 소스 검토 및 격리 독립 기능검사 PASS. 실제 브라우저·청취·공개 반영·전체 항목 최종 승인은 미완료.

@@ -11,6 +11,7 @@ import learning
 import payments
 import supabase_auth
 import teacher_alerts
+import availability
 import os
 from pathlib import Path
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
@@ -38,6 +39,7 @@ def init_db():
     with connect() as db:
         db.executescript((ROOT / 'schema.sql').read_text())
         teacher_alerts.initialize(db)
+        availability.initialize(db)
     try: os.chmod(DB_PATH, 0o600)
     except OSError: pass
 
@@ -150,7 +152,7 @@ class Handler(BaseHTTPRequestHandler):
         except (payments.PaymentError,supabase_auth.AuthError) as e:
             if db: db.rollback()
             self.send(503 if isinstance(e,(payments.NotConfigured,supabase_auth.NotConfigured)) else 400,dict(error=str(e)))
-        except Error as e:
+        except (Error, availability.ScheduleError) as e:
             if db: db.rollback()
             self.send(e.status,dict(error=e.message))
         except sqlite3.IntegrityError:
@@ -356,7 +358,7 @@ class Handler(BaseHTTPRequestHandler):
                 if not q.get('from') or not q.get('to'):raise Error('검색 시작과 종료 시각이 모두 필요합니다')
                 start,end=stamp(q['from'][0]),stamp(q['to'][0])
                 if end<=start:raise Error('검색 종료는 시작 이후여야 합니다')
-                clauses.append("EXISTS(SELECT 1 FROM slots s WHERE s.teacher_id=u.id AND s.start>=? AND s.end<=? AND s.start>? AND NOT EXISTS(SELECT 1 FROM bookings b WHERE b.slot_id=s.id AND b.status NOT IN ('cancelled','refunded','expired')))");params.extend((start,end,time.time()))
+                clauses.append("EXISTS(SELECT 1 FROM slots s WHERE s.teacher_id=u.id AND s.start>=? AND s.end<=? AND s.start>? AND NOT EXISTS(SELECT 1 FROM time_off t WHERE t.teacher_id=s.teacher_id AND t.start<s.end AND t.end>s.start) AND NOT EXISTS(SELECT 1 FROM bookings b WHERE b.slot_id=s.id AND b.status NOT IN ('cancelled','refunded','expired')))");params.extend((start,end,time.time()))
             limit=int(q.get('limit',['20'])[0]);offset=int(q.get('offset',['0'])[0])
             if not 1<=limit<=100 or offset<0:raise Error('페이지 범위를 확인하세요')
             where=' AND '.join(clauses)
@@ -367,15 +369,31 @@ class Handler(BaseHTTPRequestHandler):
                 avg=db.execute("SELECT avg(rating),count(rating) FROM bookings WHERE teacher_id=? AND rating IS NOT NULL AND status IN ('completed','test_settled')",(r['id'],)).fetchone()
                 r.update(rating=avg[0],reviewCount=avg[1],verification='local-test-review-only')
             return {'teachers':rows,'total':total,'offset':offset,'limit':limit,'hasMore':offset+len(rows)<total},None
+        if path=='/api/availability/time-off' and method in ('GET','POST'):
+            if u['role'] not in ('partner','teacher'): raise Error('수업 제공자만 가능합니다',403)
+            if method=='GET':
+                return {'timeOff':availability.list_time_off(db,uid,time.time())},None
+            time_off=availability.add_time_off(db,uid,stamp(d.get('start')),stamp(d.get('end')),time.time())
+            return {'timeOffId':time_off['id']},None
+        slot_update=re.fullmatch('/api/availability/([^/]+)',path)
+        if method=='PUT' and slot_update:
+            if u['role'] not in ('partner','teacher'): raise Error('수업 제공자만 가능합니다',403)
+            sid=slot_update[1]
+            owner=db.execute('SELECT teacher_id FROM slots WHERE id=?',(sid,)).fetchone()
+            if not owner: raise Error('일정이 없습니다',404)
+            if owner['teacher_id']!=uid: raise Error('본인 일정만 수정할 수 있습니다',403)
+            slot=availability.update_slot(db,uid,sid,stamp(d.get('start')),stamp(d.get('end')),time.time())
+            return {'slotId':sid,'slot':slot},None
         if path=='/api/availability':
             if method=='GET':
                 tid=q.get('teacherId',[uid])[0]
-                return {'slots':[dict(x) for x in db.execute("SELECT s.* FROM slots s JOIN users u ON u.id=s.teacher_id WHERE s.teacher_id=? AND (u.approved=1 OR s.teacher_id=?) AND s.start>? AND NOT EXISTS(SELECT 1 FROM bookings b WHERE b.slot_id=s.id AND b.status NOT IN ('cancelled','refunded','expired')) ORDER BY s.start",(tid,uid,time.time()))]},None
+                return {'slots':[dict(x) for x in db.execute("SELECT s.* FROM slots s JOIN users u ON u.id=s.teacher_id WHERE s.teacher_id=? AND (u.approved=1 OR s.teacher_id=?) AND s.start>? AND NOT EXISTS(SELECT 1 FROM time_off t WHERE t.teacher_id=s.teacher_id AND t.start<s.end AND t.end>s.start) AND NOT EXISTS(SELECT 1 FROM bookings b WHERE b.slot_id=s.id AND b.status NOT IN ('cancelled','refunded','expired')) ORDER BY s.start",(tid,uid,time.time()))]},None
             if method=='POST':
                 if u['role'] not in ('partner','teacher'): raise Error('수업 제공자만 가능합니다',403)
                 start,end=stamp(d.get('start')),stamp(d.get('end'))
                 if start<time.time() or not 300<=end-start<=7200: raise Error('미래의 5~120분 수업만 등록하세요')
                 if db.execute('SELECT 1 FROM slots WHERE teacher_id=? AND start<? AND end>?',(uid,end,start)).fetchone(): raise Error('시간이 겹칩니다',409)
+                availability.assert_available(db,uid,start,end)
                 sid=ident(); db.execute('INSERT INTO slots VALUES(?,?,?,?)',(sid,uid,start,end)); audit(db,uid,'availability',sid)
                 return {'slotId':sid},None
         if path=='/api/bookings':
@@ -388,6 +406,8 @@ class Handler(BaseHTTPRequestHandler):
                 if u['role']!='learner': raise Error('학습자만 예약할 수 있습니다',403)
                 unit=get_unit(d.get('unitId')); slot=db.execute('SELECT s.*,u.price,u.approved,u.role FROM slots s JOIN users u ON s.teacher_id=u.id WHERE s.id=?',(d.get('slotId'),)).fetchone()
                 if not slot or slot['teacher_id']!=d.get('teacherId') or slot['teacher_id']==uid or not slot['approved'] or slot['role'] not in ('teacher','partner') or slot['start']<=time.time(): raise Error('예약 가능한 일정이 아닙니다')
+                availability.assert_available(db,slot['teacher_id'],slot['start'],slot['end'])
+                if db.execute("SELECT 1 FROM bookings b JOIN slots s ON s.id=b.slot_id WHERE b.status NOT IN ('cancelled','refunded','expired') AND (b.slot_id=? OR (b.teacher_id=? AND s.start<? AND s.end>?))",(slot['id'],slot['teacher_id'],slot['end'],slot['start'])).fetchone(): raise Error('강사 일정이 겹치거나 이미 예약된 일정입니다',409)
                 if slot['end']-slot['start'] < int(unit.get('durationMinutes',30))*60: raise Error('단원 수업시간보다 일정이 짧습니다')
                 if db.execute("SELECT 1 FROM bookings b JOIN slots s ON s.id=b.slot_id WHERE b.learner_id=? AND b.status NOT IN ('cancelled','refunded','expired') AND s.start<? AND s.end>?",(uid,slot['end'],slot['start'])).fetchone(): raise Error('학습자 일정이 겹칩니다',409)
                 ref=u['referred_by']
@@ -487,6 +507,7 @@ class Handler(BaseHTTPRequestHandler):
             if action=='reschedule-consent':
                 slot=db.execute('SELECT * FROM slots WHERE id=? AND teacher_id=?',(d.get('slotId'),b['teacher_id'])).fetchone()
                 if not slot or slot['start']<=time.time() or b['status'] in ('completed','test_settled','refunded','cancelled'): raise Error('대체 일정 또는 수업 상태를 확인하세요',409)
+                availability.assert_available(db,b['teacher_id'],slot['start'],slot['end'])
                 db.execute('INSERT INTO reschedule_consents VALUES(?,?,?,?) ON CONFLICT(booking_id,user_id) DO UPDATE SET slot_id=excluded.slot_id,created_at=excluded.created_at',(bid,uid,slot['id'],time.time()))
                 audit(db,uid,'reschedule_consent',bid,slot['id'])
                 return {'ok':True,'slotId':slot['id']},None
@@ -541,6 +562,8 @@ class Handler(BaseHTTPRequestHandler):
                     if b['status'] in ('completed','test_settled','refunded','cancelled'): raise Error('완료·정산된 수업 보수는 자동 조정하지 않습니다',409)
                     replacement=db.execute('SELECT * FROM slots WHERE id=? AND teacher_id=?',(d.get('slotId'),b['teacher_id'])).fetchone()
                     if not replacement or replacement['start']<=time.time(): raise Error('같은 강사의 미래 대체 일정을 선택하세요')
+                    availability.assert_available(db,b['teacher_id'],replacement['start'],replacement['end'])
+                    if db.execute("SELECT 1 FROM bookings x JOIN slots s ON s.id=x.slot_id WHERE x.id<>? AND x.status NOT IN ('cancelled','refunded','expired') AND (x.slot_id=? OR (x.teacher_id=? AND s.start<? AND s.end>?))",(b['id'],replacement['id'],b['teacher_id'],replacement['end'],replacement['start'])).fetchone(): raise Error('강사 대체 일정 충돌 또는 대상 일정 점유',409)
                     duration=int(json.loads(db.execute('SELECT content FROM unit_snapshots WHERE booking_id=?',(b['id'],)).fetchone()[0]).get('durationMinutes',30))*60
                     if replacement['end']-replacement['start']<duration: raise Error('대체 일정 수업시간 부족')
                     if db.execute("SELECT 1 FROM bookings x JOIN slots s ON x.slot_id=s.id WHERE x.id<>? AND x.learner_id=? AND x.status NOT IN ('cancelled','refunded','expired') AND s.start<? AND s.end>?",(b['id'],b['learner_id'],replacement['end'],replacement['start'])).fetchone(): raise Error('학습자 대체 일정 충돌',409)
