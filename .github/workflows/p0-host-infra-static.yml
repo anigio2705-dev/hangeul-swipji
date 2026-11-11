@@ -30,6 +30,10 @@ jobs:
         env:
           PYTHONPATH: automation:automation/deploy
         run: python3 -m unittest discover -s automation/deploy -p 'test_qa_handoff_dispatcher.py' -v
+      - name: B independent QA - durable database path containment
+        env:
+          PYTHONPATH: automation:automation/deploy
+        run: python3 -m unittest discover -s automation/deploy -p 'test_bqa_pr168_dbpath_containment_independent.py' -v
       - name: Verify append-only execution checkpoints and crash replay
         env:
           PYTHONPATH: automation:automation/deploy
