@@ -10,6 +10,7 @@ import math
 import learning
 import payments
 import supabase_auth
+import teacher_alerts
 import os
 from pathlib import Path
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
@@ -34,7 +35,9 @@ def connect():
     return db
 
 def init_db():
-    with connect() as db: db.executescript((ROOT / 'schema.sql').read_text())
+    with connect() as db:
+        db.executescript((ROOT / 'schema.sql').read_text())
+        teacher_alerts.initialize(db)
     try: os.chmod(DB_PATH, 0o600)
     except OSError: pass
 
@@ -278,6 +281,12 @@ class Handler(BaseHTTPRequestHandler):
             if not 1000<=price<=1000000: raise Error('가격 범위를 확인하세요')
             return {'currency':'KRW','basis':'hypothetical-test-only','scenarios':[dict(commissionBps=c,referralBps=r,processorBps=300,refundReserveBps=refund,taxReserveBps=tax,**money(price,c,r,300,tax,refund)) for c in (1500,2000,2500) for r in (0,300,500)],'note':'PG 3%·환불 충당·세금 충당은 가정값입니다. 법정 세율·확정 요율·순이익이 아니며 고정비·실제 세금은 별도입니다.'},None
         u=self.user(db); uid=u['id']
+        if method=='POST' and path=='/api/teacher-alerts':
+            try:
+                result=teacher_alerts.register(db,uid,d.get('filters'))
+            except ValueError as e:
+                raise Error(str(e)) from None
+            return result,None
         if method=='GET' and path=='/api/learning':return learning.summary(db,uid),None
         learning_booking=re.fullmatch('/api/learning/booking/([0-9a-f]+)',path)
         if method=='GET' and learning_booking:
