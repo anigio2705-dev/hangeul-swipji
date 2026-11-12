@@ -81,14 +81,25 @@ function videoPanel(roomUrl,stopAttendance,resumeAttendance){
    const replacement=next.getVideoTracks()[0];replacement.enabled=current.enabled;stream.removeTrack(current);stream.addTrack(replacement);current.stop();preview.srcObject=stream;sync();status.textContent='미리보기 카메라를 전환했습니다.';
   }catch(e){if(!disposed&&attempt===generation)status.textContent=errorText(e);}finally{busy=false;}
  });
+ const attendanceStatus=el('p','출석 확인 중 · 실제 통화 연결 여부는 별도로 확인하세요.','small');attendanceStatus.setAttribute('role','status');
+ let reconnecting=false;
+ panel.attendancePaused=e=>{if(disposed)return;attendanceStatus.textContent='출석 확인 중단 · '+e.message;reconnect.hidden=false;};
+ const reconnect=button('출석 확인 다시 연결',async()=>{
+  if(disposed||reconnecting)return;reconnecting=true;const attempt=generation;
+  attendanceStatus.textContent='출석 확인을 다시 연결하는 중입니다.';
+  try{await resumeAttendance(()=>!disposed&&attempt===generation&&panel.isConnected&&$('#detail-dialog').open);
+   if(disposed||attempt!==generation)return;
+   attendanceStatus.textContent='출석 확인 재개 · 실제 통화 연결 성공을 뜻하지 않습니다.';reconnect.hidden=true;
+  }catch(e){if(!disposed&&attempt===generation)panel.attendancePaused(e);}finally{reconnecting=false;}
+ });reconnect.hidden=true;
  const embed=button('이 화면에서 화상방 열기',async()=>{
-  if(disposed||frame)return;const attempt=++generation;releasePreview();await resumeAttendance();
+  if(disposed||frame||reconnecting)return;const attempt=++generation;releasePreview();await resumeAttendance(()=>!disposed&&attempt===generation&&panel.isConnected&&$('#detail-dialog').open);
   if(disposed||attempt!==generation){await stopAttendance();return;}
   frame=el('iframe');frame.title='Jitsi 수업 화상방';frame.allow='camera; microphone; fullscreen; display-capture';frame.allowFullscreen=true;frame.referrerPolicy='no-referrer';frame.src=roomUrl;frameBox.append(frame);
   status.textContent='외부 Jitsi 화면을 열었습니다. 연결 성공 여부는 상대 영상·음성으로 확인해야 합니다. 진행자 인증이 막히면 위의 새 창 링크를 사용하세요. 한글쉽지 로그인을 반복하지 마세요.';
  });
- const end=button('기기·화상방 종료',async()=>{generation++;releasePreview();frameBox.replaceChildren();frame=null;status.textContent='기기를 종료하고 자기보고 종료 기록을 저장하는 중입니다.';try{await stopAttendance();status.textContent='자기보고 종료 기록을 서버에 저장했습니다. 외부 Jitsi 창의 실제 퇴장은 확인할 수 없습니다. 새 창에서는 직접 나가세요. 수업 완료 확인은 별도입니다.';}catch(e){status.textContent='종료 기록 저장을 확인하지 못했습니다. 다시 종료 버튼을 눌러 시도하세요. '+e.message;throw e;}});
- add(controls,start,mic,camera,switchCamera,embed,end);add(panel,el('h3','수업 화상 화면'),notice('미리보기는 내 기기 점검입니다. 실제 통화에서는 Jitsi 화면의 마이크·카메라·나가기 버튼을 사용하세요.'),preview,controls,status,frameBox);sync();
+ const end=button('기기·화상방 종료',async()=>{generation++;attendanceStatus.textContent='출석 확인 중단 · 기기·화상방 종료';reconnect.hidden=false;releasePreview();frameBox.replaceChildren();frame=null;status.textContent='기기를 종료하고 자기보고 종료 기록을 저장하는 중입니다.';try{await stopAttendance();status.textContent='자기보고 종료 기록을 서버에 저장했습니다. 외부 Jitsi 창의 실제 퇴장은 확인할 수 없습니다. 새 창에서는 직접 나가세요. 수업 완료 확인은 별도입니다.';}catch(e){status.textContent='종료 기록 저장을 확인하지 못했습니다. 다시 종료 버튼을 눌러 시도하세요. '+e.message;throw e;}});
+ add(controls,start,mic,camera,switchCamera,embed,reconnect,end);add(panel,el('h3','수업 화상 화면'),notice('미리보기는 내 기기 점검입니다. 실제 통화에서는 Jitsi 화면의 마이크·카메라·나가기 버튼을 사용하세요.'),notice('외부 Jitsi 오류나 연결 끊김은 상대 영상·음성으로 확인하세요. Jitsi 화면에서 재시도하거나 위 새 창 링크를 사용하고, 해결되지 않으면 내 수업의 문제 신고 · 연결 장애 및 재수업 일정 동의를 이용하세요. 출석 확인 다시 연결은 통화를 복구하지 않습니다.'),preview,controls,status,attendanceStatus,frameBox);sync();
  const dialog=$('#detail-dialog');
  function dispose(){if(disposed)return;disposed=true;generation++;releasePreview();frameBox.replaceChildren();frame=null;void stopAttendance().catch(e=>message('종료 기록 저장을 확인하지 못했습니다. '+e.message,true));observer.disconnect();dialog.removeEventListener('close',dispose);pageDocument.defaultView.removeEventListener('pagehide',dispose);}
  const observer=new MutationObserver(()=>{if(!panel.isConnected)dispose();});observer.observe($('#detail'),{childList:true});dialog.addEventListener('close',dispose);pageDocument.defaultView.addEventListener('pagehide',dispose);
@@ -113,12 +124,29 @@ async function joinRoom(b){
   if(url.protocol!=='https:'||url.hostname!=='meet.jit.si')throw Error('허용되지 않은 회의 주소입니다.');
   const link=el('a','Jitsi 테스트 방을 새 창에서 열기','primary');link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';
   box.append(link,button('공유 교재 열기',()=>unitDialog(x.unitId,b.id)));joined=true;a.hidden=true;
-  clearInterval(state.heartbeat);let heartbeat=null,pending=Promise.resolve(),leaving=null,left=false,active=true;
+  clearInterval(state.heartbeat);let heartbeat=null,pending=Promise.resolve(),leaving=null,left=false,active=true,resuming=null,epoch=0;
   const enqueue=fn=>{const request=pending.then(fn);pending=request.catch(()=>{});return request;};
   const pause=()=>{active=false;clearInterval(heartbeat);if(state.heartbeat===heartbeat)state.heartbeat=null;heartbeat=null;};
-  const stop=()=>{pause();if(leaving)return leaving;if(left)return Promise.resolve();leaving=enqueue(()=>api(`/api/bookings/${b.id}/leave`,'POST',{})).then(result=>{left=true;return result;}).finally(()=>{leaving=null;});return leaving;};
-  const begin=()=>{active=true;heartbeat=setInterval(()=>{if(!active)return;enqueue(()=>active?api(`/api/bookings/${b.id}/attendance`,'POST',{}):undefined).catch(e=>{pause();message(e.message,true);});},30000);state.heartbeat=heartbeat;};
-  begin();box.append(videoPanel(url.href,stop,async()=>{if(heartbeat)return;if(leaving)await leaving;await enqueue(()=>api(`/api/bookings/${b.id}/join`,'POST',{}));left=false;begin();}));
+  const stop=()=>{epoch++;pause();if(leaving)return leaving;if(left&&!resuming)return Promise.resolve();leaving=enqueue(()=>api(`/api/bookings/${b.id}/leave`,'POST',{})).then(result=>{left=true;return result;}).finally(()=>{leaving=null;});return leaving;};
+  const begin=()=>{if(heartbeat)return;active=true;heartbeat=setInterval(()=>{if(!active)return;enqueue(()=>active?api(`/api/bookings/${b.id}/attendance`,'POST',{}):undefined).catch(e=>{pause();panel.attendancePaused(e);message(e.message,true);});},30000);state.heartbeat=heartbeat;};
+  const panel=videoPanel(url.href,stop,async(valid=()=>true)=>{
+   if(!valid())throw Error('출석 확인 재연결이 취소되었습니다.');
+   if(heartbeat)return;
+   if(resuming)throw Error('출석 확인 재연결이 진행 중입니다.');
+   const attempt=epoch;
+   resuming=(async()=>{
+    if(leaving)await leaving;
+    if(attempt!==epoch||!valid())throw Error('출석 확인 재연결이 취소되었습니다.');
+    await enqueue(async()=>{
+     if(attempt!==epoch||!valid())throw Error('출석 확인 재연결이 취소되었습니다.');
+     await api(`/api/bookings/${b.id}/join`,'POST',{});left=false;
+    });
+    if(attempt!==epoch||!valid())throw Error('출석 확인 재연결이 취소되었습니다.');
+    begin();
+   })();
+   try{await resuming;}catch(e){panel.attendancePaused(e);throw e;}finally{resuming=null;}
+  });
+  box.append(panel);begin();
  });box.append(a);$('#detail-dialog').showModal();
 }
 function textDialog(title,label,submit,initial='',extra){const box=$('#detail');box.replaceChildren(el('h2',title));const form=el('form',null,'stack'),[w,input]=field(label,'text','textarea',initial);input.required=true;input.maxLength=10000;form.append(w);if(extra)form.append(extra.wrap);const b=el('button','저장','primary');b.type='submit';form.append(b);form.onsubmit=e=>{e.preventDefault();run(async()=>{await submit(input.value,extra?.input.value);$('#detail-dialog').close();message('기록을 저장했습니다.');await render();},b);};box.append(form);$('#detail-dialog').showModal();}
