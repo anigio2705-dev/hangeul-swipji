@@ -197,9 +197,14 @@ class Handler(BaseHTTPRequestHandler):
             if db: db.close()
     def static(self,path):
         # One canonical homepage; old studio/free URLs are compatibility redirects only.
+        if path.startswith('/free/') and any(ord(c)<32 or 127<=ord(c)<=159 for c in unquote(self.path)):
+            raise Error('잘못된 리디렉션 경로입니다',400)
         query=urlsplit(self.path).query
         if path.startswith('/free/') or path in ('/phase3/','/phase3/index.html','/teaching-platform.html'):
             destination=path[len('/free/'):] if path.startswith('/free/') else 'index.html'
+            decoded=unquote(destination)
+            if decoded.startswith('/') or '\\' in decoded or any(ord(c)<32 or 127<=ord(c)<=159 for c in decoded):
+                raise Error('잘못된 리디렉션 경로입니다',400)
             destination='/' + (destination or 'index.html')
             if query: destination+='?'+query
             if not path.startswith('/free/'):destination+='#teaching-platform'
