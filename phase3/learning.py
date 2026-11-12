@@ -42,6 +42,38 @@ def save_placement(db,uid,groups):
     score=sum(groups);stage=0 if score<=3 else 1 if score<=6 else 2 if score<=9 else 3 if score<=12 else 4 if score<=15 else 5 if score<=17 else 6
     db.execute('INSERT INTO learning_placements VALUES(?,?,?,?,?) ON CONFLICT(user_id) DO UPDATE SET stage=excluded.stage,groups_json=excluded.groups_json,source=excluded.source,created_at=excluded.created_at',(uid,stage,json.dumps(groups),'voluntary-browser-summary-unverified',time.time()))
     return dict(stage=stage,score=score,verified=False)
+def initialize_shares(db):
+    db.execute('''CREATE TABLE IF NOT EXISTS learning_placement_shares (
+        id TEXT PRIMARY KEY,
+        learner_id TEXT NOT NULL REFERENCES users(id),
+        teacher_id TEXT NOT NULL REFERENCES users(id),
+        shared_at REAL NOT NULL,
+        summary_json TEXT NOT NULL
+    )''')
+
+def share_placement(db,learner_id,teacher_id,consent):
+    if consent is not True:raise ValueError('무료 진단 요약 전달에 명시적으로 동의하세요')
+    if not isinstance(learner_id,str) or not learner_id or not isinstance(teacher_id,str) or not teacher_id:raise ValueError('학습자와 전달할 강사를 확인하세요')
+    learner=db.execute("SELECT id FROM users WHERE id=? AND role='learner'",(learner_id,)).fetchone()
+    if learner is None:raise ValueError('학습자만 요약을 전달할 수 있습니다')
+    teacher=db.execute("SELECT id FROM users WHERE id=? AND role IN ('teacher','partner') AND approved=1",(teacher_id,)).fetchone()
+    if teacher is None:raise ValueError('승인된 강사 또는 회화 파트너를 선택하세요')
+    placement=db.execute('SELECT stage,groups_json,source,created_at FROM learning_placements WHERE user_id=?',(learner_id,)).fetchone()
+    if placement is None:raise ValueError('먼저 본인의 무료 진단 요약을 저장하세요')
+    snapshot=dict(stage=placement['stage'],groups=json.loads(placement['groups_json']),source=placement['source'],created_at=placement['created_at'],verified=False)
+    share_id=secrets.token_hex(16);shared_at=time.time()
+    db.execute('INSERT INTO learning_placement_shares (id,learner_id,teacher_id,shared_at,summary_json) VALUES(?,?,?,?,?)',(share_id,learner_id,teacher_id,shared_at,json.dumps(snapshot)))
+    return dict(shareId=share_id,teacherId=teacher_id,sharedAt=shared_at,summary=snapshot)
+
+def received_placements(db,teacher_id):
+    if not isinstance(teacher_id,str) or not teacher_id:raise ValueError('수신 강사를 확인하세요')
+    teacher=db.execute("SELECT id FROM users WHERE id=? AND role IN ('teacher','partner')",(teacher_id,)).fetchone()
+    if teacher is None:raise ValueError('강사 또는 회화 파트너만 전달된 요약을 조회할 수 있습니다')
+    rows=db.execute('''SELECT s.id,s.learner_id,u.nickname,s.teacher_id,s.shared_at,s.summary_json
+        FROM learning_placement_shares s JOIN users u ON u.id=s.learner_id
+        WHERE s.teacher_id=? ORDER BY s.shared_at DESC,s.rowid DESC''',(teacher_id,))
+    return [dict(shareId=row['id'],learnerId=row['learner_id'],learnerNickname=row['nickname'],teacherId=row['teacher_id'],sharedAt=row['shared_at'],summary=json.loads(row['summary_json'])) for row in rows]
+
 def teacher_rating(db,booking,actor,phase,ratings,note):
     if phase not in ('pre','post') or not isinstance(ratings,dict) or (not {'pronunciation','grammar','interaction'}.issubset(ratings) or set(ratings)-{'pronunciation','grammar','interaction','listening','speaking','reading','writing'}):raise ValueError('수행 평가 구분과 세 영역이 필요합니다')
     if any(isinstance(n,bool) or not isinstance(n,int) or not 0<=n<=4 for n in ratings.values()) or not isinstance(note,str) or not 10<=len(note.strip())<=5000:raise ValueError('각 영역 0~4점과 10자 이상 관찰 근거가 필요합니다')

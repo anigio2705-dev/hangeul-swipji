@@ -40,6 +40,7 @@ def init_db():
         db.executescript((ROOT / 'schema.sql').read_text())
         teacher_alerts.initialize(db)
         availability.initialize(db)
+        learning.initialize_shares(db)
     try: os.chmod(DB_PATH, 0o600)
     except OSError: pass
 
@@ -290,6 +291,16 @@ class Handler(BaseHTTPRequestHandler):
                 raise Error(str(e)) from None
             return result,None
         if method=='GET' and path=='/api/learning':return learning.summary(db,uid),None
+        if method=='POST' and path=='/api/learning/share':
+            if u['role']!='learner':raise Error('학습자만 요약을 전달할 수 있습니다',403)
+            try:
+                result=learning.share_placement(db,uid,d.get('teacherId'),d.get('consent'))
+            except ValueError as e:
+                raise Error(str(e),400) from None
+            return result,None
+        if method=='GET' and path=='/api/learning/shared':
+            if u['role'] not in ('teacher','partner'):raise Error('수업 제공자만 전달된 요약을 조회할 수 있습니다',403)
+            return {'shares':learning.received_placements(db,uid)},None
         learning_booking=re.fullmatch('/api/learning/booking/([0-9a-f]+)',path)
         if method=='GET' and learning_booking:
             b=self.booking(db,learning_booking[1],u);records=[]
