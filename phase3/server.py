@@ -613,7 +613,7 @@ class Handler(BaseHTTPRequestHandler):
                     db.execute('DELETE FROM attendance WHERE booking_id=?',(b['id'],))
                     db.execute('DELETE FROM attendance_intervals WHERE booking_id=?',(b['id'],))
                     db.execute('DELETE FROM reschedule_consents WHERE booking_id=?',(b['id'],))
-                    db.execute("UPDATE bookings SET slot_id=?,status=CASE WHEN status='reserved' THEN 'reserved' ELSE 'test_paid' END,evidence='' WHERE id=?",(replacement['id'],b['id']))
+                    db.execute("UPDATE bookings SET slot_id=?,status=CASE WHEN status='reserved' THEN 'reserved' ELSE 'test_paid' END,evidence='',room=? WHERE id=?",(replacement['id'],'hs-test-'+secrets.token_urlsafe(24),b['id']))
                 db.execute("UPDATE disputes SET status='resolved',decision=?,resolution=? WHERE id=?",(decision,reason,case['id'])); audit(db,uid,'dispute_'+decision,case['id'],reason)
                 return {'ok':True,'realRefund':False},None
         raise Error('지원하지 않는 API 또는 요청 방식입니다',404)
