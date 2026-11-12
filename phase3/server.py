@@ -9,6 +9,7 @@ import json
 import math
 import learning
 import payments
+import refund_ledger
 import supabase_auth
 import teacher_alerts
 import availability
@@ -40,6 +41,7 @@ def init_db():
         db.executescript((ROOT / 'schema.sql').read_text())
         teacher_alerts.initialize(db)
         availability.initialize(db)
+        refund_ledger.initialize(db)
         learning.initialize_shares(db)
     try: os.chmod(DB_PATH, 0o600)
     except OSError: pass
@@ -87,6 +89,23 @@ def money(price, commission=2000, referral=300, processor=300, tax=0, refund=300
     fee = price*processor//10000
     tax_reserve=price*tax//10000; refund_reserve=price*refund//10000
     return dict(gross=price,teacher=teacher,referral=reward,processor=fee,tax=tax_reserve,refund=refund_reserve,platform=price-teacher-reward-fee-tax_reserve-refund_reserve)
+
+def remaining_refund(db, bid):
+    entries=list(db.execute('SELECT * FROM ledger WHERE booking_id=?',(bid,)))
+    originals=[row for row in entries if not row['kind'].endswith('_reversal') and '_reversal__refund_' not in row['kind']]
+    used={row['original_id']:row['used'] for row in db.execute('SELECT original_id,SUM(amount) AS used FROM local_refund_adjustments WHERE booking_id=? GROUP BY original_id',(bid,))}
+    allocations={}
+    for entry in originals:
+        peers=[row for row in originals if row['kind']==entry['kind']]
+        reversed_amount=sum(abs(row['amount']) for row in entries if (row['kind'].endswith('_reversal') or '_reversal__refund_' in row['kind']) and (row['kind'].split('_reversal__refund_',1)[0] if '_reversal__refund_' in row['kind'] else row['kind'][:-len('_reversal')].split('__refund_',1)[0])==entry['kind'])
+        legacy=reversed_amount-sum(used.get(str(row['id']),0) for row in peers)
+        if legacy<0 or (legacy and len(peers)!=1):
+            raise Error('기존 역분개의 원본 연결 확인이 필요합니다',409)
+        remaining=abs(entry['amount'])-used.get(str(entry['id']),0)-legacy
+        if remaining<0: raise Error('원본 항목의 누적 역분개 한도를 초과합니다',409)
+        if remaining: allocations[str(entry['id'])]=remaining
+    amount=sum(allocations.get(str(row['id']),0) for row in originals if row['kind']=='test_charge')
+    return amount,allocations
 
 def expire_holds(db):
     for b in list(db.execute("SELECT b.id FROM bookings b JOIN slots s ON s.id=b.slot_id WHERE b.status='reserved' AND (b.created_at+900<=? OR s.start<=?)",(time.time(),time.time()))):
@@ -162,7 +181,7 @@ class Handler(BaseHTTPRequestHandler):
         except (payments.PaymentError,supabase_auth.AuthError) as e:
             if db: db.rollback()
             self.send(503 if isinstance(e,(payments.NotConfigured,supabase_auth.NotConfigured)) else 400,dict(error=str(e)))
-        except (Error, availability.ScheduleError) as e:
+        except (Error, availability.ScheduleError, refund_ledger.RefundError) as e:
             if db: db.rollback()
             self.send(e.status,dict(error=e.message))
         except sqlite3.IntegrityError:
@@ -607,6 +626,8 @@ class Handler(BaseHTTPRequestHandler):
                 if db.execute("SELECT 1 FROM disputes WHERE booking_id=? AND status='open'",(b['id'],)).fetchone(): raise Error('분쟁 조사 중 정산 보류',409)
                 if b['status']=='test_settled': return {'ok':True,'realPayout':False},None
                 if b['status']!='completed': raise Error('수업 완료 확인 전 정산 불가',409)
+                if db.execute("SELECT 1 FROM ledger WHERE booking_id=? AND (kind='test_charge_reversal' OR kind GLOB 'test_charge__refund_*_reversal' OR kind GLOB 'test_charge_reversal__refund_*')",(b['id'],)).fetchone():
+                    raise Error('부분 환불 이력이 있어 기존 전액 기준으로 정산할 수 없습니다',409)
                 rates=db.execute('SELECT * FROM rate_snapshots WHERE booking_id=?',(b['id'],)).fetchone()
                 split=money(b['price'],rates['commission_bps'],rates['referral_bps'],rates['processor_bps'],rates['tax_bps'],rates['refund_bps'])
                 for kind,amount,who in [('test_teacher_accrual',split['teacher'],b['teacher_id']),('test_referral_accrual',split['referral'],b['referrer_id']),('test_platform_contribution',split['platform'],None),('test_processor_cost',split['processor'],None),('test_refund_reserve',split['refund'],None),('test_tax_reserve',split['tax'],None)]:
@@ -616,14 +637,30 @@ class Handler(BaseHTTPRequestHandler):
             m=re.fullmatch('/api/admin/disputes/([0-9a-f]+)',path)
             if method=='POST' and m:
                 case=db.execute('SELECT * FROM disputes WHERE id=?',(m[1],)).fetchone(); reason=text(d.get('reason',''),5000); decision=d.get('decision')
-                if not case or case['status']!='open' or len(reason)<10 or decision not in ('refund','dismiss','reschedule'): raise Error('미처리 신고와 판단 근거를 확인하세요',409)
+                if not case: raise Error('신고가 없습니다',404)
                 b=self.booking(db,case['booking_id'],u)
+                refund_result=None
+                if decision=='refund':
+                    explicit='amount' in d
+                    request_id=d.get('requestId') if explicit else d.get('requestId','dispute:'+case['id'])
+                    if not isinstance(request_id,str) or not request_id.strip(): raise Error('requestId가 필요합니다')
+                    if explicit and 'allocations' not in d: raise Error('원본 항목별 배분이 필요합니다')
+                    previous=db.execute('SELECT amount,allocations FROM local_refund_requests WHERE booking_id=? AND request_id=?',(b['id'],request_id)).fetchone()
+                    if explicit:
+                        amount,allocations=d['amount'],d['allocations']
+                    elif previous:
+                        amount,allocations=previous['amount'],json.loads(previous['allocations'])
+                        if 'allocations' in d and d['allocations']!=allocations: raise Error('같은 요청 ID의 환불 입력이 다릅니다',409)
+                    else:
+                        amount,allocations=remaining_refund(db,b['id'])
+                        if 'allocations' in d: allocations=d['allocations']
+                    if previous:
+                        refund_result=refund_ledger.apply_refund(db,booking_id=b['id'],request_id=request_id,amount=amount,allocations=allocations,actor_id=admin['id'])
+                        return dict(refund_result,ok=True,realRefund=False),None
+                if case['status']!='open' or len(reason)<10 or decision not in ('refund','dismiss','reschedule'): raise Error('미처리 신고와 판단 근거를 확인하세요',409)
                 if decision=='refund':
                     # Only virtual ledger reversal. Never claw back real teacher compensation.
-                    for entry in list(db.execute('SELECT * FROM ledger WHERE booking_id=?',(b['id'],))):
-                        if not entry['kind'].endswith('_reversal'):
-                            db.execute('INSERT OR IGNORE INTO ledger(booking_id,kind,amount,beneficiary,created_at) VALUES(?,?,?,?,?)',(b['id'],entry['kind']+'_reversal',-entry['amount'],entry['beneficiary'],time.time()))
-                    db.execute("UPDATE bookings SET status='refunded' WHERE id=?",(b['id'],))
+                    refund_result=refund_ledger.apply_refund(db,booking_id=b['id'],request_id=request_id,amount=amount,allocations=allocations,actor_id=admin['id'])
                 elif decision=='reschedule':
                     # Test replacement retains payment/rates/content, explicit mutual consent required.
                     consents=db.execute('SELECT count(*) FROM reschedule_consents WHERE booking_id=? AND slot_id=? AND user_id IN (?,?) AND created_at>?',(b['id'],d.get('slotId'),b['learner_id'],b['teacher_id'],time.time()-86400)).fetchone()[0]
@@ -642,7 +679,7 @@ class Handler(BaseHTTPRequestHandler):
                     db.execute('DELETE FROM reschedule_consents WHERE booking_id=?',(b['id'],))
                     db.execute("UPDATE bookings SET slot_id=?,status=CASE WHEN status='reserved' THEN 'reserved' ELSE 'test_paid' END,evidence='',room=? WHERE id=?",(replacement['id'],'hs-test-'+secrets.token_urlsafe(24),b['id']))
                 db.execute("UPDATE disputes SET status='resolved',decision=?,resolution=? WHERE id=?",(decision,reason,case['id'])); audit(db,uid,'dispute_'+decision,case['id'],reason)
-                return {'ok':True,'realRefund':False},None
+                return dict(refund_result or {},ok=True,realRefund=False),None
         raise Error('지원하지 않는 API 또는 요청 방식입니다',404)
 
 def create_admin(email,password):
