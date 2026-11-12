@@ -139,11 +139,34 @@ async function observationDialog(booking){
  for(const key of ['pronunciation','grammar','interaction','listening','speaking','reading','writing']){const [w,i]=field(skillNames[key]+' · 0~4','rating-'+key,'number','');i.min='0';i.max='4';i.step='1';i.required=true;inputs[key]=i;form.append(w);}
  const [nw,note]=field('관찰 근거 · 다음 연습 · 10자 이상','note','textarea');note.required=true;note.minLength=10;form.append(nw);const submit=el('button','수행 평가 저장','primary');submit.type='submit';form.append(submit);form.onsubmit=e=>{e.preventDefault();run(async()=>{await api('/api/learning/observation','POST',{bookingId:booking.id,phase:phase.value,ratings:Object.fromEntries(Object.entries(inputs).map(([k,v])=>[k,Number(v.value)])),note:note.value});$('#detail-dialog').close();message('수행 평가를 학습자 기록에 저장했습니다.');},submit);};box.append(form);$('#detail-dialog').showModal();
 }
+function placementPreview(summary){
+ const box=el('div');add(box,notice('자가 보고 · 미인증 무료 진단 요약입니다. 공식 급수나 강사의 관찰 평가가 아닙니다.'),el('p','단계: '+summary.stage),el('p','네 영역 정답 수: '+(summary.groups||[]).join(' / ')),el('p','출처: '+summary.source),el('p','요약 저장 시각: '+when(summary.created_at)));return box;
+}
+async function placementSharing(root,placement){
+ const ownerId=state.user.id,box=el('section',null,'card');root.append(box);
+ if(['teacher','partner'].includes(state.user.role)){
+  add(box,el('h3','내게 전달된 무료 진단 요약'),notice('전달 당시의 자가 보고 · 미인증 스냅샷입니다. 이후 학습자의 진단 변경은 반영되지 않습니다.'));
+  const list=el('div'),status=el('p');status.setAttribute('role','status');
+  const load=async()=>{status.textContent='';try{const response=await api('/api/learning/shared');if(state.user?.id!==ownerId)return;list.replaceChildren();for(const share of response.shares){const card=el('article',null,'card');add(card,el('h3',share.learnerNickname),el('p','전달 시각: '+when(share.sharedAt)),placementPreview(share.summary));list.append(card);}if(!response.shares.length)list.append(el('p','아직 전달받은 요약이 없습니다.'));}catch(error){status.textContent=error.message+' · 다시 조회할 수 있습니다.';}};
+  add(box,list,status,button('전달받은 요약 다시 조회',load));await load();return;
+ }
+ if(state.user.role!=='learner'||!placement){box.remove();return;}
+ add(box,el('h3','저장된 무료 진단 요약 확인 · 선택 전달'),placementPreview(placement),notice('아래에서 승인 제공자를 선택하고 동의한 뒤 전달 버튼을 누르면 서버에 저장된 요약이 전달됩니다.'));
+ const [tw,teacher]=field('전달할 승인 강사 · 회화 파트너','teacherId','','',[['','제공자를 선택하세요']]),[cw,consent]=field('선택한 제공자에게 위 무료 진단 요약을 전달하는 데 동의합니다.','placementShareConsent','checkbox');consent.checked=false;
+ const status=el('p');status.setAttribute('role','status');let loading=false;
+ const send=button('동의한 요약 전달',async()=>{
+  status.textContent='';try{if(state.user?.id!==ownerId)throw Error('본인 계정으로 다시 로그인하세요.');if(!teacher.value||!consent.checked)throw Error('승인 제공자를 선택하고 전달에 동의하세요.');const teacherId=teacher.value;const response=await api('/api/learning/share','POST',{teacherId,consent:consent.checked});if(!response.shareId||String(response.teacherId)!==teacherId||!response.summary||response.summary.verified!==false)throw Error('전달 응답을 확인하지 못했습니다.');if(state.user?.id!==ownerId)return;status.textContent='선택한 제공자에게 무료 진단 요약 전달을 완료했습니다.';consent.checked=false;}catch(error){status.textContent=error.message+' · 전달 완료를 확인하지 못했습니다. 다시 시도할 수 있습니다.';}
+ },'primary');
+ teacher.onchange=()=>{consent.checked=false;status.textContent='';};consent.onchange=()=>{status.textContent='';};
+ const load=async()=>{if(loading)return;loading=true;send.disabled=true;consent.checked=false;teacher.replaceChildren();const placeholder=el('option','제공자를 선택하세요');placeholder.value='';teacher.append(placeholder);status.textContent='';try{let offset=0;do{const response=await api('/api/teachers?limit=20&offset='+offset);if(state.user?.id!==ownerId)return;for(const provider of response.teachers){if(!['teacher','partner'].includes(provider.role))continue;const option=el('option',provider.nickname+' · '+roles[provider.role]);option.value=provider.id;teacher.append(option);}if(!response.hasMore)break;if(!response.teachers.length)throw Error('제공자 목록을 모두 읽지 못했습니다.');offset+=20;}while(true);if(teacher.options.length===1)status.textContent='현재 선택 가능한 승인 제공자가 없습니다.';}catch(error){teacher.replaceChildren(placeholder);status.textContent=error.message+' · 제공자 목록을 다시 불러오세요.';}finally{loading=false;send.disabled=false;}};
+ add(box,tw,cw,send,status,button('승인 제공자 목록 다시 조회',load));await load();
+}
 async function learning(root){
  add(root,section('나의 학습','최근 50개 진단·관찰 기록에 따라 다음 연습을 정합니다. 공식 급수 인증이나 학습 효과의 증명은 아닙니다.'));if(!state.user){needLogin(root);return;}
  const x=await api('/api/learning');let draft=null;try{draft=JSON.parse(sessionStorage.getItem('hs-placement-summary'));}catch(e){}
  if(state.user.role==='learner'&&draft&&Array.isArray(draft.groups)&&Date.now()-draft.createdAt<86400000)root.append(button('무료 진단 요약을 내 계정에 저장',async()=>{await api('/api/learning/placement','POST',{groups:draft.groups});sessionStorage.removeItem('hs-placement-summary');await render();},'primary'));
  if(x.placement)root.append(notice('저장된 무료 간이 진단: 단계 '+x.placement.stage+' · 본인이 저장한 브라우저 요약이며 감독·인증된 점수가 아닙니다.'));
+ await placementSharing(root,x.placement);
  for(const [key,label] of [['textCheckSkillChecks','자동 내용 확인 · 실제 네 기능 검증 아님'],['observedSkillChecks','강사 직접 관찰 · 관찰된 과제 범위']]){if(Object.keys(x[key]||{}).length){root.append(el('h3',label));root.append(table(['영역','결과'],Object.entries(x[key]).map(([k,v])=>[skillNames[k]||k,`${v.earned}/${v.possible}`])));}}
  root.append(el('p','최근 확인에서 연습할 영역: '+(x.weakSkills.map(s=>skillNames[s]).join(' · ')||'기록을 더 모아 주세요.')));
  const recommendations=el('div',null,'grid');for(const u of x.recommendations){const card=el('article',null,'card');add(card,el('h3',u.title),el('p','내부 교육과정 추천 · 강사와 난이도를 확인하세요.'),button('추천 교재 열기',()=>unitDialog(u.unitId)),button('강사와 이 수업 준비',()=>{state.preferredUnitId=u.unitId;state.view='discover';render();}));recommendations.append(card);}root.append(recommendations);
