@@ -178,7 +178,7 @@ class Handler(BaseHTTPRequestHandler):
                 if not isinstance(data,dict): raise Error('JSON 객체가 필요합니다')
             else: data={}
             db=connect(); db.execute('BEGIN IMMEDIATE')
-            if path!='/api/privacy/requests': expire_holds(db)
+            if path not in ('/api/privacy/requests','/api/auth/revoke-sessions'): expire_holds(db)
             result,cookie=self.route(db,path,data,parse_qs(urlsplit(self.path).query,keep_blank_values=path=='/api/admin/providers'))
             db.commit(); self.send(200,result,cookie)
         except (payments.PaymentError,supabase_auth.AuthError) as e:
@@ -320,6 +320,14 @@ class Handler(BaseHTTPRequestHandler):
             if not 1000<=price<=1000000: raise Error('가격 범위를 확인하세요')
             return {'currency':'KRW','basis':'hypothetical-test-only','scenarios':[dict(commissionBps=c,referralBps=r,processorBps=300,refundReserveBps=refund,taxReserveBps=tax,**money(price,c,r,300,tax,refund)) for c in (1500,2000,2500) for r in (0,300,500)],'note':'PG 3%·환불 충당·세금 충당은 가정값입니다. 법정 세율·확정 요율·순이익이 아니며 고정비·실제 세금은 별도입니다.'},None
         u=self.user(db); uid=u['id']
+        if method=='POST' and path=='/api/auth/revoke-sessions':
+            if set(d)!={'password'} or not isinstance(d['password'],str) or not 1<=len(d['password'])<=128:
+                raise Error('password 문자열 1~128자만 입력할 수 있습니다',400)
+            if not password_ok(d['password'],u['password']):
+                raise Error('비밀번호를 확인하세요',401)
+            db.execute('DELETE FROM sessions WHERE user_id=?',(uid,))
+            audit(db,uid,'sessions_revoked',uid)
+            return {'ok':True},'hs3=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0'
         if path=='/api/privacy/requests':
             if method=='GET':
                 return {'requests':privacy_requests.list_requests(db,uid)},None
