@@ -61,7 +61,7 @@ def text(value, maximum=1000):
     return value.strip()
 def audit(db, actor, action, entity, detail=''):
     db.execute('INSERT INTO audit(actor,action,entity,detail,created_at) VALUES(?,?,?,?,?)', (actor,action,entity,detail,time.time()))
-def public_user(row): return {k:row[k] for k in ('id','nickname','role','approved','languages','timezone','specialty','price','level','qualifications','referral_code')}
+def public_user(row): return dict({k:row[k] for k in ('id','nickname','role','approved','languages','timezone','specialty','price','level','qualifications','referral_code')}, qualificationVerified=False)
 def units():
     path = ROOT / 'content.json'
     data = json.loads(path.read_text()) if path.exists() else []
