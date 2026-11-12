@@ -537,6 +537,7 @@ class Handler(BaseHTTPRequestHandler):
                 category=d.get('category','other'); reason=text(d.get('reason',''),5000)
                 if len(reason)<10 or category not in ('teacher_no_show','learner_no_show','short_lesson','content','connection','false_attendance','false_completion','referral_fraud','refund','review','other'): raise Error('신고 유형과 10자 이상 증빙 설명이 필요합니다')
                 if b['status'] in ('refunded','cancelled'): raise Error('종료된 예약에는 이의신청을 작성하세요',409)
+                if db.execute("SELECT 1 FROM disputes WHERE booking_id=? AND reporter_id=? AND status='open'",(bid,uid)).fetchone(): raise Error('이미 이 예약에 본인의 미처리 신고가 있습니다. 중복 신고는 할 수 없습니다',409)
                 did=ident(); db.execute('INSERT INTO disputes(id,booking_id,reporter_id,category,reason,created_at) VALUES(?,?,?,?,?,?)',(did,bid,uid,category,reason,time.time())); audit(db,uid,'dispute',did)
                 return {'disputeId':did,'settlement':'held'},None
             if action=='appeal':
