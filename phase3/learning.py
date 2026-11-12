@@ -16,7 +16,10 @@ def decorate(unit):
     student,methods=education_standards.apply(unit,meta.get('stage',1))
     return dict(unit,performanceAreas=student,teacherStandards=methods,_diagnostics={phase:diagnostic(unit['id'],phase) for phase in ('pre','post')},learningPath={k:v for k,v in meta.items() if k!='teacherNotes'},teacherNotes=meta.get('teacherNotes',{}),performanceRubric=dict(p['rubric'],**education_standards.RUBRIC))
 def public_unit(unit,teacher=False):
-    return {k:v for k,v in unit.items() if k!='_diagnostics' and (teacher or k not in ('teacherGuide','teacherNotes','teacherStandards'))}
+    result={k:v for k,v in unit.items() if k!='_diagnostics' and (teacher or k not in ('teacherGuide','teacherNotes','teacherStandards','performanceRubric'))}
+    if not teacher and 'assessment' in result:
+        result['assessment']=[{k:v for k,v in item.items() if k=='question'} for item in result['assessment']]
+    return result
 def catalog():
     p=plan();return {k:p[k] for k in ('version','basis','scope','stages','limits')}
 def diagnostic(uid,phase):
