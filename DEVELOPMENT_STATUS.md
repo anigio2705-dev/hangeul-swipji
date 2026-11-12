@@ -368,3 +368,9 @@ Server PR310 preserved. JS explicit learner/teacher IANA ranges, UTC offsets and
 
 원본 135번의 한정 코드 범위: 실제 필수 런타임은 Python이며 독립 검증 6개 테스트·588개 assertion이 모두 통과했고 B 리뷰도 PASS입니다. Node는 not_required이므로 미실행은 차단 사유가 아니며, 기존 HOLD의 런타임 우려는 해소되었습니다. 코드 범위만 승인하며 제품·브라우저·배포 검증은 보류합니다.
 검사: 독립 B 소스 검토 및 격리 독립 기능검사 PASS. 실제 브라우저·청취·공개 반영·전체 항목 최종 승인은 미완료.
+
+
+## ABCD 자동 작업 Q029
+
+원본 38번의 한정 코드 범위: 승인된 변경은 phase3/app.js로 필수 런타임은 Node뿐이며 Python은 not_required입니다. 독립 B 검토 PASS 및 필수 Node 실제 검사 81개 통과로 기존 보류 사유가 해소되었습니다. 코드 범위만 승인하며 제품·브라우저·배포 검증은 보류합니다.
+검사: 독립 B 소스 검토 및 격리 독립 기능검사 PASS. 실제 브라우저·청취·공개 반영·전체 항목 최종 승인은 미완료.
