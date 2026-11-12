@@ -104,6 +104,15 @@ def shared_seconds(db,bid):
         intervals.append(merged)
     return sum(max(0,min(a[1],b[1])-max(a[0],b[0])) for a in intervals[0] for b in intervals[1])
 
+def participant_events(db,bid,uid=None,sid=None):
+    records=[]
+    for row in db.execute("SELECT actor,action,detail FROM audit WHERE entity=? AND action IN ('participant_leave','participant_rejoin') ORDER BY id",(bid,)):
+        detail=json.loads(row['detail'])
+        if uid is not None and row['actor']!=uid: continue
+        if sid is not None and detail['slotId']!=sid: continue
+        records.append(dict(detail,actor=row['actor'],action=row['action']))
+    return records
+
 class Handler(BaseHTTPRequestHandler):
     server_version = 'HSPhase3Test'
     def log_message(self,*args): pass
@@ -412,6 +421,11 @@ class Handler(BaseHTTPRequestHandler):
                 rows=[]
                 for b in db.execute('SELECT b.*, learner.timezone AS learnerTimezone, teacher.timezone AS teacherTimezone FROM bookings b LEFT JOIN users learner ON learner.id=b.learner_id LEFT JOIN users teacher ON teacher.id=b.teacher_id WHERE b.learner_id=? OR b.teacher_id=? ORDER BY b.created_at DESC',(uid,uid)):
                     v=dict(b); v.pop('room',None); v['sharedSeconds']=shared_seconds(db,b['id']); v['paymentMode']='provider-test' if db.execute('SELECT 1 FROM payment_sessions WHERE booking_id=?',(b['id'],)).fetchone() else 'simulated-test-only'; v['attendance']=[dict(a) for a in db.execute('SELECT * FROM attendance WHERE booking_id=?',(b['id'],))]; v['slot']=dict(db.execute('SELECT * FROM slots WHERE id=?',(b['slot_id'],)).fetchone()); v['disputes']=[dict(x) for x in db.execute('SELECT * FROM disputes WHERE booking_id=?',(b['id'],))]; rows.append(v)
+                for v in rows:
+                    for a in v['attendance']:
+                        a['lateSeconds']=max(0,a['joined']-v['slot']['start'])
+                    v['leaveRecords']=[dict(e,userId=e['actor'],early=e['leftAt']<e['slotEnd']) for e in participant_events(db,v['id']) if e['action']=='participant_leave']
+                    v['attendanceNotice']='출석·지각·자기보고 종료는 실제 통화 또는 이행의 확정 증거가 아닙니다. 브라우저 종료·요청 유실·외부 Jitsi 퇴장은 확정할 수 없습니다.'
                 return {'bookings':rows},None
             if method=='POST':
                 if u['role']!='learner': raise Error('학습자만 예약할 수 있습니다',403)
@@ -462,12 +476,29 @@ class Handler(BaseHTTPRequestHandler):
                     db.execute("UPDATE bookings SET status='test_paid' WHERE id=?",(bid,)); db.execute('INSERT INTO ledger(booking_id,kind,amount,beneficiary,created_at) VALUES(?,?,?,?,?)',(bid,'test_charge',b['price'],uid,time.time())); audit(db,uid,'test_charge',bid)
                 elif b['status'] not in ('test_paid','in_class','completed','test_settled'): raise Error('테스트 결제 불가 상태',409)
                 return {'ok':True,'payment':'simulated-test-only','chargedRealMoney':False},None
+            if action=='leave':
+                previous=db.execute('SELECT * FROM attendance WHERE booking_id=? AND user_id=?',(bid,uid)).fetchone()
+                events=participant_events(db,bid,uid,b['slot_id'])
+                if events and events[-1]['action']=='participant_leave':
+                    return {'ok':True,'leftAt':events[-1]['leftAt'],'source':'participant_report'},None
+                if b['status']!='in_class' or not previous: raise Error('진행 중인 본인 출석 기록이 필요합니다',409)
+                slot=db.execute('SELECT * FROM slots WHERE id=?',(b['slot_id'],)).fetchone()
+                now=time.time()
+                detail=dict(bookingId=bid,slotId=b['slot_id'],leftAt=now,slotEnd=slot['end'],source='participant_report')
+                audit(db,uid,'participant_leave',bid,json.dumps(detail))
+                return {'ok':True,'leftAt':now,'source':'participant_report'},None
             if action in ('join','attendance'):
                 if b['status'] not in ('test_paid','in_class'): raise Error('테스트 결제 후 입장할 수 있습니다',409)
                 slot=db.execute('SELECT * FROM slots WHERE id=?',(b['slot_id'],)).fetchone(); now=time.time()
                 if not slot['start']-300<=now<=slot['end']+300: raise Error('수업 시간에만 입장할 수 있습니다',409)
                 previous=db.execute('SELECT * FROM attendance WHERE booking_id=? AND user_id=?',(bid,uid)).fetchone()
-                if previous:
+                events=participant_events(db,bid,uid,b['slot_id'])
+                returning=bool(events and events[-1]['action']=='participant_leave')
+                if previous and returning:
+                    # Explicit leave closes the baseline without granting the intervening gap.
+                    db.execute('UPDATE attendance SET last_seen=? WHERE booking_id=? AND user_id=?',(now,bid,uid))
+                    audit(db,uid,'participant_rejoin',bid,json.dumps(dict(bookingId=bid,slotId=b['slot_id'],joinedAt=now)))
+                elif previous:
                     # Heartbeat interval <=90s is counted; leaving a tab idle does not grant elapsed hours.
                     delta=max(0,now-previous['last_seen']); increment=max(0,min(now,slot['end'])-max(previous['last_seen'],slot['start'])) if delta<=90 else 0
                     db.execute('UPDATE attendance SET last_seen=?,seconds=seconds+? WHERE booking_id=? AND user_id=?',(now,increment,bid,uid))
