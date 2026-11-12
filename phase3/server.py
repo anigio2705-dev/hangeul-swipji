@@ -45,6 +45,14 @@ def init_db():
         refund_ledger.initialize(db)
         privacy_requests.initialize(db)
         learning.initialize_shares(db)
+        db.execute('''CREATE TABLE IF NOT EXISTS dispute_statements (
+            id TEXT PRIMARY KEY,
+            dispute_id TEXT NOT NULL REFERENCES disputes(id),
+            author_id TEXT NOT NULL REFERENCES users(id),
+            role TEXT NOT NULL,
+            text TEXT NOT NULL CHECK(length(text) BETWEEN 10 AND 5000),
+            created_at REAL NOT NULL
+        )''')
     try: os.chmod(DB_PATH, 0o600)
     except OSError: pass
 
@@ -178,7 +186,9 @@ class Handler(BaseHTTPRequestHandler):
                 if not isinstance(data,dict): raise Error('JSON 객체가 필요합니다')
             else: data={}
             db=connect(); db.execute('BEGIN IMMEDIATE')
-            if path not in ('/api/privacy/requests','/api/auth/revoke-sessions'): expire_holds(db)
+            statement_request=re.fullmatch('/api/bookings/([0-9a-f]+)/disputes/([0-9a-f]+)/statements',path)
+            content_report=self.command=='POST' and re.fullmatch('/api/bookings/([0-9a-f]+)/dispute',path) and data.get('category')=='content'
+            if path not in ('/api/privacy/requests','/api/auth/revoke-sessions') and not statement_request and not content_report: expire_holds(db)
             result,cookie=self.route(db,path,data,parse_qs(urlsplit(self.path).query,keep_blank_values=path=='/api/admin/providers'))
             db.commit(); self.send(200,result,cookie)
         except (payments.PaymentError,supabase_auth.AuthError) as e:
@@ -494,6 +504,26 @@ class Handler(BaseHTTPRequestHandler):
                 db.execute('INSERT INTO rate_snapshots(booking_id,commission_bps,referral_bps,processor_bps,refund_bps,tax_bps) VALUES(?,?,?,?,?,?)',(bid,2000,300 if ref else 0,300,300,0))
                 content=json.dumps(unit,ensure_ascii=False,sort_keys=True); db.execute('INSERT INTO unit_snapshots VALUES(?,?,?)',(bid,content,hashlib.sha256(content.encode()).hexdigest()))
                 return {'bookingId':bid},None
+        statement_match=re.fullmatch('/api/bookings/([0-9a-f]+)/disputes/([0-9a-f]+)/statements',path)
+        if statement_match and method in ('GET','POST'):
+            bid,did=statement_match.groups()
+            case=db.execute('SELECT * FROM disputes WHERE id=? AND booking_id=?',(did,bid)).fetchone()
+            if not case: raise Error('신고가 없습니다',404)
+            b=self.booking(db,bid,u)
+            if method=='GET':
+                reporter=db.execute('SELECT role FROM users WHERE id=?',(case['reporter_id'],)).fetchone()
+                original=dict(id='dispute:'+did,authorId=case['reporter_id'],role='learner' if case['reporter_id']==b['learner_id'] else reporter['role'],text=case['reason'],createdAt=case['created_at'])
+                statements=[dict(id=row['id'],authorId=row['author_id'],role=row['role'],text=row['text'],createdAt=row['created_at']) for row in db.execute('SELECT * FROM dispute_statements WHERE dispute_id=? ORDER BY rowid',(did,))]
+                return {'disputeId':did,'statements':[original]+statements},None
+            if u['role']=='admin' or uid not in (b['learner_id'],b['teacher_id']): raise Error('예약 당사자 본인만 진술할 수 있습니다',403)
+            if case['status']!='open': raise Error('종료된 분쟁에는 진술을 추가할 수 없습니다',409)
+            if set(d)!={'text'}: raise Error('text만 입력할 수 있습니다')
+            body=text(d.get('text'),5000)
+            if len(body)<10: raise Error('진술은 10~5000자여야 합니다')
+            sid=ident(); now=time.time()
+            db.execute('INSERT INTO dispute_statements(id,dispute_id,author_id,role,text,created_at) VALUES(?,?,?,?,?,?)',(sid,did,uid,u['role'],body,now))
+            audit(db,uid,'dispute_statement',did,json.dumps(dict(bookingId=bid,statementId=sid)))
+            return {'statementId':sid},None
         snapshot_match=re.fullmatch('/api/bookings/([0-9a-f]+)/unit',path)
         if snapshot_match and method=='GET':
             b=self.booking(db,snapshot_match[1],u); snapshot=db.execute('SELECT * FROM unit_snapshots WHERE booking_id=?',(b['id'],)).fetchone(); unit=json.loads(snapshot['content'])
@@ -684,6 +714,9 @@ class Handler(BaseHTTPRequestHandler):
                         refund_result=refund_ledger.apply_refund(db,booking_id=b['id'],request_id=request_id,amount=amount,allocations=allocations,actor_id=admin['id'])
                         return dict(refund_result,ok=True,realRefund=False),None
                 if case['status']!='open' or len(reason)<10 or decision not in ('refund','dismiss','reschedule'): raise Error('미처리 신고와 판단 근거를 확인하세요',409)
+                counterpart=b['teacher_id'] if case['reporter_id']==b['learner_id'] else b['learner_id']
+                statements=list(db.execute('SELECT id,author_id FROM dispute_statements WHERE dispute_id=? ORDER BY rowid',(case['id'],)))
+                if not any(row['author_id']==counterpart for row in statements): raise Error('관리자 판단 전에 상대방 본인의 진술이 필요합니다',409)
                 if decision=='refund':
                     # Only virtual ledger reversal. Never claw back real teacher compensation.
                     refund_result=refund_ledger.apply_refund(db,booking_id=b['id'],request_id=request_id,amount=amount,allocations=allocations,actor_id=admin['id'])
@@ -704,7 +737,8 @@ class Handler(BaseHTTPRequestHandler):
                     db.execute('DELETE FROM attendance_intervals WHERE booking_id=?',(b['id'],))
                     db.execute('DELETE FROM reschedule_consents WHERE booking_id=?',(b['id'],))
                     db.execute("UPDATE bookings SET slot_id=?,status=CASE WHEN status='reserved' THEN 'reserved' ELSE 'test_paid' END,evidence='',room=? WHERE id=?",(replacement['id'],'hs-test-'+secrets.token_urlsafe(24),b['id']))
-                db.execute("UPDATE disputes SET status='resolved',decision=?,resolution=? WHERE id=?",(decision,reason,case['id'])); audit(db,uid,'dispute_'+decision,case['id'],reason)
+                db.execute("UPDATE disputes SET status='resolved',decision=?,resolution=? WHERE id=?",(decision,reason,case['id']))
+                audit(db,admin['id'],'dispute_'+decision,case['id'],json.dumps(dict(bookingId=b['id'],disputeId=case['id'],originalStatement=dict(id='dispute:'+case['id'],reporterId=case['reporter_id'],reason=case['reason']),statementIds=[row['id'] for row in statements],adminId=admin['id'],decidedAt=time.time(),decision=decision,reason=reason),ensure_ascii=False))
                 return dict(refund_result or {},ok=True,realRefund=False),None
         raise Error('지원하지 않는 API 또는 요청 방식입니다',404)
 
