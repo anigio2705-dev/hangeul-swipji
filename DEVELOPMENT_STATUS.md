@@ -296,3 +296,9 @@ Server PR310 preserved. JS explicit learner/teacher IANA ranges, UTC offsets and
 
 원본 90번의 한정 코드 범위: 독립 B가 PASS이고 필수 실제 Python·Node 런타임이 모두 PASS했다. 승인된 세 파일의 코드 범위만 수락하며 제품·브라우저·배포 검증은 보류한다.
 검사: 독립 B 소스 검토 및 격리 독립 기능검사 PASS. 실제 브라우저·청취·공개 반영·전체 항목 최종 승인은 미완료.
+
+
+## ABCD 자동 작업 Q006
+
+원본 47번의 한정 코드 범위: 기존 HOLD는 이력으로 보존합니다. 승인된 변경 범위는 dashboard.html로 필수 런타임은 Node뿐이며 Python은 not_required입니다. 독립 B 검토와 Node 실제 실행(종료 코드 0, 811개 검증)이 모두 PASS하여 기존 HOLD의 미해결 사유가 해소되었습니다. 코드만 승인하며 제품·브라우저·배포 검증은 계속 보류합니다.
+검사: 독립 B 소스 검토 및 격리 독립 기능검사 PASS. 실제 브라우저·청취·공개 반영·전체 항목 최종 승인은 미완료.
