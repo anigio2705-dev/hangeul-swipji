@@ -40,14 +40,31 @@ function field(label,name,type='text',value='',options){const wrap=el('label',la
 function section(title,subtitle){const top=el('div',null,'section-head');add(top,add(el('div'),el('h2',title),el('p',subtitle)));return top;}
 function table(columns,rows){const wrap=el('div',null,'table-scroll'),t=el('table'),head=el('tr');columns.forEach(c=>head.append(el('th',c)));t.append(add(el('thead'),head));if(columns.length>3)t.className='wide-table';wrap.tabIndex=0;wrap.setAttribute('aria-label','표 · 넓은 표는 좌우로 이동할 수 있습니다');const body=el('tbody');rows.forEach(r=>{const tr=el('tr');r.forEach(v=>tr.append(add(el('td',null,typeof v==='string'&&(/₩/.test(v)||/^\d+%$/.test(v))?'nowrap':null),v instanceof Node?v:el('span',v??'—'))));body.append(tr);});t.append(body);wrap.append(t);return wrap;}
 function needLogin(root){add(root,notice('로그인하면 실제 테스트 계정으로 예약·과제·진도 기록을 저장할 수 있습니다.'),button('로그인 / 회원가입',()=>showAuth()));}
-function account(){const box=$('#account');box.replaceChildren();if(state.user){add(box,el('span',`${state.user.nickname} · ${t(roles[state.user.role])}`),button('로그아웃',async()=>{await api('/api/logout','POST',{});state.user=null;clearInterval(state.heartbeat);account();await render();},'plain'));}else add(box,button('로그인',()=>showAuth(false),'plain'),button('시작하기',()=>showAuth(true),'primary'));$('#admin-nav').hidden=state.user?.role!=='admin';}
+function account(){
+ account.sessions??=new Set();account.generation??=0;account.cookieGeneration??=0;
+ account.change??=change=>{
+  account.changing=true;account.generation++;
+  account.pendingChanges=(account.pendingChanges||0)+1;
+  const request=(account.changeQueue||Promise.resolve()).then(async()=>{
+   try{
+    clearInterval(state.heartbeat);state.heartbeat=null;
+    const results=await Promise.allSettled([...account.sessions].map(session=>session.close()));
+    for(const result of results)if(result.status==='rejected')message('종료 기록 저장을 확인하지 못했습니다. '+result.reason.message,true);
+    account.cookieGeneration++;
+    return await change(results.filter(result=>result.status==='rejected').map(result=>'종료 기록 저장을 확인하지 못했습니다. '+result.reason.message).join(' '));
+   }finally{account.pendingChanges--;account.changing=account.pendingChanges>0;}
+  });
+  account.changeQueue=request.catch(()=>{});
+  return request;
+ };
+ const box=$('#account');box.replaceChildren();if(state.user){add(box,el('span',`${state.user.nickname} · ${t(roles[state.user.role])}`),button('로그아웃',async()=>{await account.change(async()=>{await api('/api/logout','POST',{});state.user=null;account();await render();});},'plain'));}else add(box,button('로그인',()=>showAuth(false),'plain'),button('시작하기',()=>showAuth(true),'primary'));$('#admin-nav').hidden=state.user?.role!=='admin';}
 function showAuth(signup=false){state.signup=signup;syncAuth();$('#auth-dialog').showModal();}
 const signupReferralValues=new URLSearchParams(location.search).getAll('referralCode');
 let signupReferralInitialized=false,signupReferralError='';
 function signupReferralInput(){let input=$('#signup-fields [name=referralCode]');if(!input){const [wrap,created]=field('직접 추천 코드 · 선택','referralCode');$('#signup-fields').append(wrap);input=created;}if(!signupReferralInitialized){signupReferralInitialized=true;const code=(signupReferralValues[0]||'').replace(/\s/g,'');if(signupReferralValues.length>1)signupReferralError='추천 코드 링크에 중복된 referralCode가 있습니다. 추천 코드를 직접 확인해 입력하세요.';else if(code.length>40)signupReferralError='추천 코드는 공백 제거 후 최대 40자입니다. 추천 코드를 직접 확인해 입력하세요.';else if(signupReferralValues.length===1)input.value=code;input.setAttribute('aria-invalid',String(Boolean(signupReferralError)));input.addEventListener('input',()=>{signupReferralError='';input.setAttribute('aria-invalid','false');$('#auth-error').textContent='';});}return input;}
 function syncAuth(){const signup=state.signup;if(signup)signupReferralInput();$('#auth-title').textContent=t(signup?'함께 시작하기':'다시 만나 반가워요');$('#signup-fields').hidden=!signup;$('#auth-submit').textContent=t(signup?'테스트 계정 만들기':'로그인');$('#toggle-auth').textContent=t(signup?'이미 계정이 있나요? 로그인':'처음 오셨나요? 회원가입');$('#auth-form [name=nickname]').required=signup;$('#auth-form [name=adultConsent]').required=signup;$('#auth-form [name=password]').minLength=signup?12:1;$('#auth-form [name=password]').autocomplete=signup?'new-password':'current-password';$('#auth-error').textContent=signup?signupReferralError:'';}
 $('#close-auth').onclick=()=>$('#auth-dialog').close();$('#toggle-auth').onclick=()=>{state.signup=!state.signup;syncAuth();};$('#close-detail').onclick=()=>$('#detail-dialog').close();
-$('#auth-form').onsubmit=async e=>{e.preventDefault();const authForm=e.currentTarget;const b=$('#auth-submit');b.disabled=true;$('#auth-error').textContent='';try{const f=new FormData(authForm);const data=Object.fromEntries(f);data.adultConsent=f.get('adultConsent')==='on';if(state.signup){const input=signupReferralInput();if(signupReferralError)throw Error(signupReferralError);const code=input.value.replace(/\s/g,'');input.value=code;if(code.length>40){input.setAttribute('aria-invalid','true');throw Error('추천 코드는 공백 제거 후 최대 40자입니다.');}input.setAttribute('aria-invalid','false');data.referralCode=code;}else delete data.referralCode;const x=await api(state.signup?'/api/register':'/api/login','POST',data);state.user=x.user;$('#auth-dialog').close();authForm.reset();account();message(state.signup?'테스트 계정을 만들었습니다. 수업 제공자는 프로필 작성 후 관리자 검토가 필요합니다.':'로그인했습니다.');await render();}catch(err){$('#auth-error').textContent=err.message;}finally{b.disabled=false;}};
+$('#auth-form').onsubmit=async e=>{e.preventDefault();const authForm=e.currentTarget;const b=$('#auth-submit');b.disabled=true;$('#auth-error').textContent='';try{const f=new FormData(authForm);const data=Object.fromEntries(f);data.adultConsent=f.get('adultConsent')==='on';if(state.signup){const input=signupReferralInput();if(signupReferralError)throw Error(signupReferralError);const code=input.value.replace(/\s/g,'');input.value=code;if(code.length>40){input.setAttribute('aria-invalid','true');throw Error('추천 코드는 공백 제거 후 최대 40자입니다.');}input.setAttribute('aria-invalid','false');data.referralCode=code;}else delete data.referralCode;const signup=state.signup;let terminationWarning='';await account.change(async warning=>{terminationWarning=warning;const x=await api(signup?'/api/register':'/api/login','POST',data);state.user=x.user;});$('#auth-dialog').close();authForm.reset();account();message((signup?'테스트 계정을 만들었습니다. 수업 제공자는 프로필 작성 후 관리자 검토가 필요합니다.':'로그인했습니다.')+(terminationWarning?' '+terminationWarning:''),Boolean(terminationWarning));await render();}catch(err){$('#auth-error').textContent=err.message;}finally{b.disabled=false;}};
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{state.view=b.dataset.view;message('');render();});
 async function render(){const rid=++state.renderId;document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===state.view));const root=el('div');$('#content').replaceChildren(el('p','화면을 불러오는 중…','muted'));try{await ({discover,lessons,bookings,profile,business,admin,learning}[state.view]||discover)(root);if(rid===state.renderId)$('#content').replaceChildren(root);}catch(e){if(rid===state.renderId){$('#content').replaceChildren(notice(e.message));if(!state.user)needLogin($('#content'));}}}
 async function discover(root){add(root,section('나에게 맞는 사람을 만나세요','한국어 강사와 일반 회화 파트너를 구분해 선택하세요. 전문 자격은 미확인이며 프로필 승인은 로컬 테스트 검토입니다.'));if(!state.user){needLogin(root);return;}const form=el('form',null,'filters');const fields=[field('이름 · 전문 분야','q'),field('참여 유형','role','', '',[['','모두'],['teacher',teacherRoleLabel],['partner','회화 파트너']]),field('수업 언어','language'),field('수준','level','', '',[['','모두'],['A0','A0 · 입문'],['A1','A1'],['A2','A2'],['B1','B1'],['B2','B2'],['C1','C1']]),field('최대 가격 · 원','maxPrice','number'),field('학습 목적 · 분야','purpose','text',state.searchPurpose||''),field('가능 시간 시작 · '+zoneLabel(state.user.timezone),'from','datetime-local'),field('가능 시간 종료 · '+zoneLabel(state.user.timezone),'to','datetime-local')];fields.forEach(([w])=>form.append(w));const submit=el('button','조건으로 찾기','primary');submit.type='submit';form.append(submit);root.append(form);const result=el('div',null,'grid');root.append(result);let offset=0,searchId=0;const pager=el('div',null,'actions');root.append(pager);async function search(){const requestId=++searchId,searchOffset=offset,ownerId=state.user.id,timeZone=state.user.timezone,timeZoneLabel=zoneLabel(timeZone);const q=new URLSearchParams({limit:'20',offset:String(searchOffset)}),filters={};new FormData(form).forEach((v,k)=>{const value=v&&['from','to'].includes(k)?localToUtc(v,timeZone):v;filters[k]=value;if(value)q.set(k,value);});const x=await api('/api/teachers?'+q);if(requestId!==searchId)return;result.replaceChildren();pager.replaceChildren(el('p',`검색 결과 ${x.total}명 · ${Math.floor(offset/20)+1}페이지`));if(offset>0)pager.append(button('이전 페이지',async()=>{offset=Math.max(0,offset-20);await search();}));if(x.hasMore)pager.append(button('다음 페이지',async()=>{offset+=20;await search();}));if(x.total===0){const empty=el('div',null,'empty'),actions=el('div',null,'actions');add(empty,el('p','조건에 맞는 승인된 테스트 수업 제공자가 없습니다. 시간이나 언어 조건을 변경해 다시 검색하거나 테스트 알림을 신청하세요.'));add(actions,button('시간 조건 변경',()=>form.querySelector('[name=from]').focus()),button('언어 조건 변경',()=>form.querySelector('[name=language]').focus()),button('알림 신청',()=>{const savedFilters={...filters},box=$('#detail');box.replaceChildren(el('h2','테스트 알림 신청 확인'),notice('마지막으로 성공한 빈 결과 검색 조건입니다. 아직 제출하지 않은 입력 변경은 포함하지 않습니다.'),el('p','검색 당시 프로필 시간대: '+timeZoneLabel),notice('계정별 테스트 신청 저장이며 실제 알림 발송은 연결되지 않았습니다.'));const labels={q:'이름 · 전문 분야',role:'참여 유형',language:'수업 언어',level:'수준',maxPrice:'최대 가격 · 원',purpose:'학습 목적 · 분야',from:'시작 · UTC',to:'종료 · UTC'};box.append(table(['검색 조건','값'],Object.entries(labels).map(([key,label])=>[label,savedFilters[key]||'조건 없음'])));const status=el('p');status.setAttribute('role','status');let registered=false;const register=button('테스트 알림 신청 저장',async()=>{if(registered)return;status.textContent='';try{if(state.user?.id!==ownerId)throw Error('검색한 계정으로 다시 로그인한 후 검색해 주세요.');const response=await api('/api/teacher-alerts','POST',{filters:savedFilters});if(response.status!=='registered'||!response.alertId||response.deliveryEnabled!==false)throw Error('신청 저장 응답을 확인하지 못했습니다. 다시 시도해 주세요.');registered=true;status.textContent=(response.duplicate?'이미 저장된 테스트 신청입니다.':'테스트 알림 신청을 저장했습니다.')+' 신청 ID: '+response.alertId+' · 실제 알림 발송은 연결되지 않았습니다.';register.hidden=true;}catch(error){status.textContent=error.message+' · 저장 완료를 확인하지 못했습니다. 다시 시도할 수 있습니다.';}} ,'primary');add(box,status,register);$('#detail-dialog').showModal();}));add(empty,actions);result.append(empty);return;}if(!x.teachers.length){result.append(el('div','현재 페이지에 결과가 없습니다. 이전 페이지로 이동하세요.','empty'));if(searchOffset===0)pager.append(button('이전 페이지',async()=>{offset=0;await search();}));return;}x.teachers.forEach(t=>{const card=el('article',null,'card');add(card,el('div',t.nickname.slice(0,1),'teacher-avatar'),el('span',roles[t.role],'badge'),el('h3',t.nickname),el('p',t.specialty||'전문 분야를 준비 중입니다.'),el('p',`${t.languages||'언어 미등록'} · ${t.level||'수준 미등록'} · ${zoneLabel(t.timezone)}`,'muted'));if(t.role==='teacher')card.append(notice('전문 자격 미확인'));if(t.role==='partner')card.append(notice('일반 한국어 사용자입니다. 전문 강사 자격을 의미하지 않습니다.'));if(t.qualifications)card.append(el('p','자기 기재 경력: '+t.qualifications,'small'));add(card,el('p',t.reviewCount?`테스트 후기 ${t.reviewCount}개 · ${Number(t.rating).toFixed(1)} / 5`:'테스트 후기 없음','small'),el('p',money(t.price),'price'),el('p','등록 일정 1회 기준 · 모의 가격','muted'),button('시간 · 단원 선택',()=>bookingDialog(t),'primary'));result.append(card);});}form.onsubmit=e=>{e.preventDefault();offset=0;run(search,submit);};await search();}
@@ -190,38 +207,59 @@ function videoPanel(roomUrl,stopAttendance,resumeAttendance){
   frame=el('iframe');frame.title='Jitsi 수업 화상방';frame.allow='camera; microphone; fullscreen; display-capture';frame.allowFullscreen=true;frame.referrerPolicy='no-referrer';frame.src=roomUrl;frameBox.append(frame);
   status.textContent='외부 Jitsi 화면을 열었습니다. 연결 성공 여부는 상대 영상·음성으로 확인해야 합니다. 진행자 인증이 막히면 위의 새 창 링크를 사용하세요. 한글쉽지 로그인을 반복하지 마세요.';
  });
- const end=button('기기·화상방 종료',async()=>{generation++;attendanceStatus.textContent='출석 확인 중단 · 기기·화상방 종료';reconnect.hidden=false;releasePreview();frameBox.replaceChildren();frame=null;status.textContent='기기를 종료하고 자기보고 종료 기록을 저장하는 중입니다.';try{await stopAttendance();status.textContent='자기보고 종료 기록을 서버에 저장했습니다. 외부 Jitsi 창의 실제 퇴장은 확인할 수 없습니다. 새 창에서는 직접 나가세요. 수업 완료 확인은 별도입니다.';}catch(e){status.textContent='종료 기록 저장을 확인하지 못했습니다. 다시 종료 버튼을 눌러 시도하세요. '+e.message;throw e;}});
+ const end=button('기기·화상방 종료',async()=>{if(disposed)return;generation++;attendanceStatus.textContent='출석 확인 중단 · 기기·화상방 종료';reconnect.hidden=false;releasePreview();frameBox.replaceChildren();frame=null;status.textContent='기기를 종료하고 자기보고 종료 기록을 저장하는 중입니다.';try{await stopAttendance();status.textContent='자기보고 종료 기록을 서버에 저장했습니다. 외부 Jitsi 창의 실제 퇴장은 확인할 수 없습니다. 새 창에서는 직접 나가세요. 수업 완료 확인은 별도입니다.';}catch(e){status.textContent='종료 기록 저장을 확인하지 못했습니다. 다시 종료 버튼을 눌러 시도하세요. '+e.message;throw e;}});
  add(controls,start,mic,camera,switchCamera,embed,reconnect,end);add(panel,el('h3','수업 화상 화면'),notice('미리보기는 내 기기 점검입니다. 실제 통화에서는 Jitsi 화면의 마이크·카메라·나가기 버튼을 사용하세요.'),notice('외부 Jitsi 오류나 연결 끊김은 상대 영상·음성으로 확인하세요. Jitsi 화면에서 재시도하거나 위 새 창 링크를 사용하고, 해결되지 않으면 내 수업의 문제 신고 · 연결 장애 및 재수업 일정 동의를 이용하세요. 출석 확인 다시 연결은 통화를 복구하지 않습니다.'),preview,controls,status,attendanceStatus,frameBox);sync();
  const dialog=$('#detail-dialog');
- function dispose(){if(disposed)return;disposed=true;generation++;releasePreview();frameBox.replaceChildren();frame=null;void stopAttendance().catch(e=>message('종료 기록 저장을 확인하지 못했습니다. '+e.message,true));observer.disconnect();dialog.removeEventListener('close',dispose);pageDocument.defaultView.removeEventListener('pagehide',dispose);}
+ let disposal=null;
+ function dispose(){if(disposed)return disposal;disposed=true;generation++;releasePreview();frameBox.replaceChildren();frame=null;observer.disconnect();dialog.removeEventListener('close',dispose);pageDocument.defaultView.removeEventListener('pagehide',dispose);disposal=stopAttendance();void disposal.catch(e=>message('종료 기록 저장을 확인하지 못했습니다. '+e.message,true));return disposal;}
+ panel.dispose=dispose;
  const observer=new MutationObserver(()=>{if(!panel.isConnected)dispose();});observer.observe($('#detail'),{childList:true});dialog.addEventListener('close',dispose);pageDocument.defaultView.addEventListener('pagehide',dispose);
  return panel;
 }
 async function joinRoom(b){
- const box=$('#detail');let joined=false;
+ if(account.changing||!state.user)return;
+ const ownerId=state.user.id,authGeneration=account.generation,cookieGeneration=account.cookieGeneration;
+ const current=()=>!account.changing&&state.user?.id===ownerId&&account.generation===authGeneration;
+ const cookieCurrent=()=>state.user?.id===ownerId&&account.cookieGeneration===cookieGeneration;
+ const box=$('#detail');let joined=false,joining=false;
  box.replaceChildren(el('h2','테스트 화상방 안내'),
   notice('공개 Jitsi 서비스의 테스트 방입니다. 인증된 비공개 수업이 아니며 링크를 아는 제3자가 입장할 수 있습니다. 민감한 정보 공유와 녹화는 하지 마세요. 외부 서비스의 이용 조건과 개인정보 처리가 적용됩니다.'),
   el('p',state.user.id===b.teacher_id?'강사는 Jitsi 방을 먼저 시작하세요. meet.jit.si는 방을 처음 여는 사람에게 별도의 Jitsi 계정 인증을 요구할 수 있습니다.':'강사가 방을 시작한 뒤 같은 링크로 참여하세요. Jitsi의 진행자 대기 화면에서는 한글쉽지 로그인을 반복할 필요가 없습니다.'),
   notice('인증 구분: 테스트 서버 접속 비밀번호 / 한글쉽지 수업 계정 / 외부 Jitsi 진행자 인증은 서로 다릅니다. Jitsi에 테스트 서버 비밀번호를 입력하지 마세요.'),
   el('p','출석 시간은 이 화면에서 30초마다 서버에 확인합니다. 이 기록만으로 실제 수업 이행이 입증되지 않으며, 양측 확인과 관리자 증빙 검토가 추가로 필요합니다.'),notice('종료 버튼·대화상자 닫기·패널 해제 시 서버에 자기보고 종료 기록을 요청합니다. 브라우저 종료나 요청 유실 시 저장을 보장할 수 없으며, 외부 Jitsi 창의 실제 퇴장 여부는 확인할 수 없습니다.'));
  const a=button('안내 확인 · 출석 시작',async()=>{
-  if(joined)return;
-  const dialog=$('#detail-dialog');let abandoned=false,x;
+  if(joined||joining||!current())return;
+  joining=true;
+  const dialog=$('#detail-dialog');let abandoned=false,x,panel=null,initial=null;
+  let heartbeat=null,pending=Promise.resolve(),leaving=null,left=false,active=false,resuming=null,epoch=0;
+  const enqueue=fn=>{const request=pending.then(fn);pending=request.catch(()=>{});return request;};
+  const pause=()=>{active=false;clearInterval(heartbeat);if(state.heartbeat===heartbeat)state.heartbeat=null;heartbeat=null;};
+  const stop=()=>{
+   epoch++;pause();if(leaving)return leaving;if(left&&!resuming)return Promise.resolve();
+   if(!cookieCurrent())return Promise.reject(Error('이전 계정의 종료 기록 저장을 확인하지 못했습니다.'));
+   leaving=enqueue(()=>{if(!cookieCurrent())throw Error('계정이 변경되어 종료 기록을 저장할 수 없습니다.');return api(`/api/bookings/${b.id}/leave`,'POST',{});}).then(result=>{left=true;return result;}).finally(()=>{leaving=null;});return leaving;
+  };
+  const session={close:async()=>{
+   abandoned=true;epoch++;pause();
+   const disposal=panel?.dispose();
+   try{if(initial)await initial;}catch{}
+   try{if(disposal)await disposal;else if(x)await stop();else await pending;}finally{account.sessions.delete(session);}
+  }};
+  account.sessions.add(session);
   const abandon=()=>{abandoned=true;};
   const observer=new MutationObserver(()=>{if(!a.isConnected)abandon();});
   observer.observe(box,{childList:true});dialog.addEventListener('close',abandon);pageDocument.defaultView.addEventListener('pagehide',abandon);
-  try{x=await api(`/api/bookings/${b.id}/join`,'POST',{});}finally{observer.disconnect();dialog.removeEventListener('close',abandon);pageDocument.defaultView.removeEventListener('pagehide',abandon);}
-  if(abandoned||!dialog.open||!a.isConnected){await api(`/api/bookings/${b.id}/leave`,'POST',{});return;}
+  try{initial=api(`/api/bookings/${b.id}/join`,'POST',{}).then(result=>{x=result;return result;});await initial;}catch(e){account.sessions.delete(session);throw e;}finally{joining=false;observer.disconnect();dialog.removeEventListener('close',abandon);pageDocument.defaultView.removeEventListener('pagehide',abandon);}
+  if(!current())return;
+  if(abandoned||!dialog.open||!a.isConnected){try{await stop();}finally{account.sessions.delete(session);}return;}
   const url=new URL(x.roomUrl);
-  if(url.protocol!=='https:'||url.hostname!=='meet.jit.si')throw Error('허용되지 않은 회의 주소입니다.');
+  if(url.protocol!=='https:'||url.hostname!=='meet.jit.si'){await session.close();throw Error('허용되지 않은 회의 주소입니다.');}
   const link=el('a','Jitsi 테스트 방을 새 창에서 열기','primary');link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';
   box.append(link,button('공유 교재 열기',()=>unitDialog(x.unitId,b.id)));joined=true;a.hidden=true;
-  clearInterval(state.heartbeat);let heartbeat=null,pending=Promise.resolve(),leaving=null,left=false,active=true,resuming=null,epoch=0;
-  const enqueue=fn=>{const request=pending.then(fn);pending=request.catch(()=>{});return request;};
-  const pause=()=>{active=false;clearInterval(heartbeat);if(state.heartbeat===heartbeat)state.heartbeat=null;heartbeat=null;};
-  const stop=()=>{epoch++;pause();if(leaving)return leaving;if(left&&!resuming)return Promise.resolve();leaving=enqueue(()=>api(`/api/bookings/${b.id}/leave`,'POST',{})).then(result=>{left=true;return result;}).finally(()=>{leaving=null;});return leaving;};
-  const begin=()=>{if(heartbeat)return;active=true;heartbeat=setInterval(()=>{if(!active)return;enqueue(()=>active?api(`/api/bookings/${b.id}/attendance`,'POST',{}):undefined).catch(e=>{pause();panel.attendancePaused(e);message(e.message,true);});},30000);state.heartbeat=heartbeat;};
-  const panel=videoPanel(url.href,stop,async(valid=()=>true)=>{
+  clearInterval(state.heartbeat);
+  const begin=()=>{if(heartbeat||!current()||abandoned)return;active=true;heartbeat=setInterval(()=>{if(!active||!current())return;enqueue(()=>active&&current()?api(`/api/bookings/${b.id}/attendance`,'POST',{}):undefined).catch(e=>{pause();if(current()){panel.attendancePaused(e);message(e.message,true);}});},30000);state.heartbeat=heartbeat;};
+  panel=videoPanel(url.href,stop,async(valid=()=>true)=>{
+   const panelValid=valid;valid=()=>current()&&!abandoned&&panelValid();
    if(!valid())throw Error('출석 확인 재연결이 취소되었습니다.');
    if(heartbeat)return;
    if(resuming)throw Error('출석 확인 재연결이 진행 중입니다.');
@@ -231,6 +269,7 @@ async function joinRoom(b){
     if(attempt!==epoch||!valid())throw Error('출석 확인 재연결이 취소되었습니다.');
     await enqueue(async()=>{
      if(attempt!==epoch||!valid())throw Error('출석 확인 재연결이 취소되었습니다.');
+     if(!current())throw Error('계정이 변경되어 재입장이 취소되었습니다.');
      await api(`/api/bookings/${b.id}/join`,'POST',{});left=false;
     });
     if(attempt!==epoch||!valid())throw Error('출석 확인 재연결이 취소되었습니다.');
