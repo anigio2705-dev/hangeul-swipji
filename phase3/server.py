@@ -10,6 +10,7 @@ import math
 import learning
 import payments
 import refund_ledger
+import privacy_requests
 import supabase_auth
 import teacher_alerts
 import availability
@@ -42,6 +43,7 @@ def init_db():
         teacher_alerts.initialize(db)
         availability.initialize(db)
         refund_ledger.initialize(db)
+        privacy_requests.initialize(db)
         learning.initialize_shares(db)
     try: os.chmod(DB_PATH, 0o600)
     except OSError: pass
@@ -175,7 +177,8 @@ class Handler(BaseHTTPRequestHandler):
                 except (ValueError,UnicodeDecodeError): raise Error('잘못된 JSON')
                 if not isinstance(data,dict): raise Error('JSON 객체가 필요합니다')
             else: data={}
-            db=connect(); db.execute('BEGIN IMMEDIATE'); expire_holds(db)
+            db=connect(); db.execute('BEGIN IMMEDIATE')
+            if path!='/api/privacy/requests': expire_holds(db)
             result,cookie=self.route(db,path,data,parse_qs(urlsplit(self.path).query,keep_blank_values=path=='/api/admin/providers'))
             db.commit(); self.send(200,result,cookie)
         except (payments.PaymentError,supabase_auth.AuthError) as e:
@@ -317,6 +320,16 @@ class Handler(BaseHTTPRequestHandler):
             if not 1000<=price<=1000000: raise Error('가격 범위를 확인하세요')
             return {'currency':'KRW','basis':'hypothetical-test-only','scenarios':[dict(commissionBps=c,referralBps=r,processorBps=300,refundReserveBps=refund,taxReserveBps=tax,**money(price,c,r,300,tax,refund)) for c in (1500,2000,2500) for r in (0,300,500)],'note':'PG 3%·환불 충당·세금 충당은 가정값입니다. 법정 세율·확정 요율·순이익이 아니며 고정비·실제 세금은 별도입니다.'},None
         u=self.user(db); uid=u['id']
+        if path=='/api/privacy/requests':
+            if method=='GET':
+                return {'requests':privacy_requests.list_requests(db,uid)},None
+            if method=='POST':
+                if set(d)!={'kind'}: raise Error('kind만 입력할 수 있습니다',400)
+                try:
+                    result=privacy_requests.submit(db,uid,kind=d['kind'],now=time.time())
+                except ValueError as e:
+                    raise Error(str(e),400) from None
+                return result,None
         if method=='POST' and path=='/api/teacher-alerts':
             try:
                 result=teacher_alerts.register(db,uid,d.get('filters'))
