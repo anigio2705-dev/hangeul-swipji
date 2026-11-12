@@ -157,7 +157,7 @@ class Handler(BaseHTTPRequestHandler):
                 if not isinstance(data,dict): raise Error('JSON 객체가 필요합니다')
             else: data={}
             db=connect(); db.execute('BEGIN IMMEDIATE'); expire_holds(db)
-            result,cookie=self.route(db,path,data,parse_qs(urlsplit(self.path).query))
+            result,cookie=self.route(db,path,data,parse_qs(urlsplit(self.path).query,keep_blank_values=path=='/api/admin/providers'))
             db.commit(); self.send(200,result,cookie)
         except (payments.PaymentError,supabase_auth.AuthError) as e:
             if db: db.rollback()
@@ -560,8 +560,34 @@ class Handler(BaseHTTPRequestHandler):
                 return {'ok':True},None
         if path.startswith('/api/admin'):
             admin=self.admin(db)
+            if method=='GET' and path=='/api/admin/providers':
+                for key in ('role','approved','limit','offset'):
+                    if key in q and len(q[key])!=1: raise Error('검색 조건은 하나씩 지정하세요')
+                clauses=["role IN ('teacher','partner')"];params=[]
+                if 'role' in q:
+                    if q['role'][0] not in ('teacher','partner'): raise Error('참여 유형을 확인하세요')
+                    clauses.append('role=?');params.append(q['role'][0])
+                if 'approved' in q:
+                    if q['approved'][0] not in ('0','1'): raise Error('승인 상태를 확인하세요')
+                    clauses.append('approved=?');params.append(int(q['approved'][0]))
+                page={}
+                for key,default in (('limit','20'),('offset','0')):
+                    value=q.get(key,[default])[0]
+                    if not re.fullmatch(r'[0-9]+',value): raise Error('페이지 범위를 확인하세요')
+                    page[key]=int(value)
+                limit,offset=page['limit'],page['offset']
+                if not 1<=limit<=100 or offset<0: raise Error('페이지 범위를 확인하세요')
+                where=' AND '.join(clauses)
+                total=db.execute('SELECT count(*) FROM users WHERE '+where,params).fetchone()[0]
+                rows=[public_user(x) for x in db.execute('SELECT * FROM users WHERE '+where+' ORDER BY created_at ASC,id ASC LIMIT ? OFFSET ?',(*params,limit,min(offset,total)))]
+                return {'providers':rows,'total':total,'limit':limit,'offset':offset,'hasMore':offset+len(rows)<total},None
             if method=='GET' and path=='/api/admin':
-                return {'users':[public_user(x) for x in db.execute('SELECT * FROM users')],'bookings':[dict(x) for x in db.execute('SELECT * FROM bookings')],'disputes':[dict(x) for x in db.execute('SELECT * FROM disputes')],'ledger':[dict(x) for x in db.execute('SELECT * FROM ledger')],'audit':[dict(x) for x in db.execute('SELECT * FROM audit ORDER BY id DESC LIMIT 500')]},None
+                result={'bookings':[dict(x) for x in db.execute('SELECT b.*, learner.timezone AS learnerTimezone, teacher.timezone AS teacherTimezone FROM bookings b LEFT JOIN users learner ON learner.id=b.learner_id LEFT JOIN users teacher ON teacher.id=b.teacher_id')],'disputes':[dict(x) for x in db.execute('SELECT * FROM disputes')],'ledger':[dict(x) for x in db.execute('SELECT * FROM ledger')],'audit':[dict(x) for x in db.execute('SELECT * FROM audit ORDER BY id DESC LIMIT 500')]}
+                if q.get('includeUsers')==['0']:
+                    result['userCount']=db.execute('SELECT count(*) FROM users').fetchone()[0]
+                else:
+                    result['users']=[public_user(x) for x in db.execute('SELECT * FROM users')]
+                return result,None
             if method=='POST' and path=='/api/admin/verify':
                 reason=text(d.get('reason',''),2000)
                 if len(reason)<10 or not isinstance(d.get('approved'),bool): raise Error('승인 판단 근거 10자 이상 필요')
