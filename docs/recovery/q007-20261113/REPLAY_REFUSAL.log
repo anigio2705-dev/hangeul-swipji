@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/workspace/scratch/0597e46d5650/q007/candidate/scripts/run-one-q007.py", line 80, in <module>
+    outcome = run(Path(__file__).resolve().parent.parent, sys.argv[1])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/0597e46d5650/q007/candidate/scripts/run-one-q007.py", line 39, in run
+    raise RuntimeError('ALREADY_STARTED_OR_STOPPED_NO_REPLAY')
+RuntimeError: ALREADY_STARTED_OR_STOPPED_NO_REPLAY

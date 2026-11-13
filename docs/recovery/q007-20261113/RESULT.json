@@ -1,0 +1,17 @@
+{
+  "task": "Q007",
+  "original_number": 45,
+  "input_sha": "ca4874635582acfffd70e3f94959a1af91d8e2fd",
+  "source_sha256": "6a276736ee6ec46a23f213d0a739ebfc61bc7e868b6d61ac8f38d5f1745d4531",
+  "test_sha256": "569fdeb00ae10d7236b9a18e92432f553189b49d45603a674c05d22ed9f27238",
+  "scope": "LOCAL_BROWSER_VERIFICATION_ONLY",
+  "next_task_created": false,
+  "server_resumed": false,
+  "server_model_calls": 0,
+  "server_D_recorded": false,
+  "accepted_total_unchanged": 24,
+  "status": "PASS_STOPPED",
+  "exit_code": 0,
+  "finished_at": 1794532448.1676044,
+  "log_sha256": "b8890ee0324b3ef9de7fa5bf3a4c349f7dc6b0491c4981a1225a3a49539ebcf8"
+}

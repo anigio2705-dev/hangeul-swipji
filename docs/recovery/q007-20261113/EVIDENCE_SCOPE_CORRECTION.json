@@ -1,0 +1,7 @@
+{
+  "original_result_preserved": true,
+  "field": "RESULT.json scope",
+  "original_value": "LOCAL_BROWSER_VERIFICATION_ONLY",
+  "correct_value": "LOCAL_NODE_DOM_VERIFICATION_ONLY",
+  "reason": "The real Chromium attempt failed before page load with socket() Operation not permitted. The completed guarded command executed Node with DOM simulation, not Chromium. No browser PASS is claimed."
+}
