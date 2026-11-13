@@ -11,6 +11,7 @@ import learning
 import payments
 import refund_ledger
 import privacy_requests
+import policy_consents
 import support_requests
 import session_evidence
 import supabase_auth
@@ -46,6 +47,7 @@ def init_db():
         availability.initialize(db)
         refund_ledger.initialize(db)
         privacy_requests.initialize(db)
+        policy_consents.initialize(db)
         support_requests.initialize(db)
         session_evidence.initialize(db)
         learning.initialize_shares(db)
@@ -199,7 +201,7 @@ class Handler(BaseHTTPRequestHandler):
         except (payments.PaymentError,supabase_auth.AuthError) as e:
             if db: db.rollback()
             self.send(503 if isinstance(e,(payments.NotConfigured,supabase_auth.NotConfigured)) else 400,dict(error=str(e)))
-        except (Error, availability.ScheduleError, refund_ledger.RefundError) as e:
+        except (Error, availability.ScheduleError, refund_ledger.RefundError, policy_consents.PolicyConsentError) as e:
             if db: db.rollback()
             self.send(e.status,dict(error=e.message))
         except sqlite3.IntegrityError:
@@ -335,6 +337,16 @@ class Handler(BaseHTTPRequestHandler):
             if not 1000<=price<=1000000: raise Error('가격 범위를 확인하세요')
             return {'currency':'KRW','basis':'hypothetical-test-only','scenarios':[dict(commissionBps=c,referralBps=r,processorBps=300,refundReserveBps=refund,taxReserveBps=tax,**money(price,c,r,300,tax,refund)) for c in (1500,2000,2500) for r in (0,300,500)],'note':'PG 3%·환불 충당·세금 충당은 가정값입니다. 법정 세율·확정 요율·순이익이 아니며 고정비·실제 세금은 별도입니다.'},None
         u=self.user(db); uid=u['id']
+        if method=='GET' and path=='/api/policies':
+            return {'policies':policy_consents.catalog(u['role']),'simulated':True,'legallyApproved':False},None
+        if path=='/api/policy-consents' and method in ('GET','POST'):
+            if q: raise Error('정책 확인 조회 조건은 지정할 수 없습니다',400)
+            if method=='GET':
+                return {'records':policy_consents.list_records(db,user_id=uid),'simulated':True,'legallyApproved':False},None
+            if set(d)!={'simulated','acknowledgements'} or d['simulated'] is not True:
+                raise Error('simulated=True와 acknowledgements만 입력할 수 있습니다',400)
+            records=policy_consents.record(db,user_id=uid,acknowledgements=d['acknowledgements'],simulated=d['simulated'],now=time.time())
+            return {'records':records,'simulated':True,'legallyApproved':False},None
         if path=='/api/support/requests' and method in ('GET','POST'):
             if q: raise Error('문의 조회 조건은 지정할 수 없습니다',400)
             if method=='GET':
@@ -531,6 +543,7 @@ class Handler(BaseHTTPRequestHandler):
                 bid=ident(); db.execute('INSERT INTO bookings(id,learner_id,teacher_id,slot_id,unit_id,price,referrer_id,room,created_at) VALUES(?,?,?,?,?,?,?,?,?)',(bid,uid,slot['teacher_id'],slot['id'],str(unit['id']),slot['price'],ref,'hs-test-'+secrets.token_urlsafe(24),time.time())); audit(db,uid,'booking',bid)
                 db.execute('INSERT INTO rate_snapshots(booking_id,commission_bps,referral_bps,processor_bps,refund_bps,tax_bps) VALUES(?,?,?,?,?,?)',(bid,2000,300 if ref else 0,300,300,0))
                 content=json.dumps(unit,ensure_ascii=False,sort_keys=True); db.execute('INSERT INTO unit_snapshots VALUES(?,?,?)',(bid,content,hashlib.sha256(content.encode()).hexdigest()))
+                policy_consents.link_booking(db,booking_id=bid,user_id=uid)
                 return {'bookingId':bid},None
         statement_match=re.fullmatch('/api/bookings/([0-9a-f]+)/disputes/([0-9a-f]+)/statements',path)
         if statement_match and method in ('GET','POST'):
