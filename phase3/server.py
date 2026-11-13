@@ -11,6 +11,7 @@ import learning
 import payments
 import refund_ledger
 import privacy_requests
+import session_evidence
 import supabase_auth
 import teacher_alerts
 import availability
@@ -44,6 +45,7 @@ def init_db():
         availability.initialize(db)
         refund_ledger.initialize(db)
         privacy_requests.initialize(db)
+        session_evidence.initialize(db)
         learning.initialize_shares(db)
         db.execute('''CREATE TABLE IF NOT EXISTS dispute_statements (
             id TEXT PRIMARY KEY,
@@ -188,7 +190,8 @@ class Handler(BaseHTTPRequestHandler):
             db=connect(); db.execute('BEGIN IMMEDIATE')
             statement_request=re.fullmatch('/api/bookings/([0-9a-f]+)/disputes/([0-9a-f]+)/statements',path)
             content_report=self.command=='POST' and re.fullmatch('/api/bookings/([0-9a-f]+)/dispute',path) and data.get('category')=='content'
-            if path not in ('/api/privacy/requests','/api/auth/revoke-sessions') and not statement_request and not content_report: expire_holds(db)
+            observation_request=re.fullmatch('/api/bookings/([0-9a-f]+)/observations',path)
+            if path not in ('/api/privacy/requests','/api/auth/revoke-sessions') and not statement_request and not content_report and not observation_request: expire_holds(db)
             result,cookie=self.route(db,path,data,parse_qs(urlsplit(self.path).query,keep_blank_values=path=='/api/admin/providers'))
             db.commit(); self.send(200,result,cookie)
         except (payments.PaymentError,supabase_auth.AuthError) as e:
@@ -477,6 +480,7 @@ class Handler(BaseHTTPRequestHandler):
                 for b in db.execute('SELECT b.*, learner.timezone AS learnerTimezone, teacher.timezone AS teacherTimezone FROM bookings b LEFT JOIN users learner ON learner.id=b.learner_id LEFT JOIN users teacher ON teacher.id=b.teacher_id WHERE b.learner_id=? OR b.teacher_id=? ORDER BY b.created_at DESC',(uid,uid)):
                     v=dict(b); v.pop('room',None); v['sharedSeconds']=shared_seconds(db,b['id']); v['paymentMode']='provider-test' if db.execute('SELECT 1 FROM payment_sessions WHERE booking_id=?',(b['id'],)).fetchone() else 'simulated-test-only'; v['attendance']=[dict(a) for a in db.execute('SELECT * FROM attendance WHERE booking_id=?',(b['id'],))]; v['slot']=dict(db.execute('SELECT * FROM slots WHERE id=?',(b['slot_id'],)).fetchone()); v['disputes']=[dict(x) for x in db.execute('SELECT * FROM disputes WHERE booking_id=?',(b['id'],))]; rows.append(v)
                 for v in rows:
+                    v['observations']=session_evidence.list_observations(db,booking_id=v['id'])
                     for a in v['attendance']:
                         a['lateSeconds']=max(0,a['joined']-v['slot']['start'])
                     v['leaveRecords']=[dict(e,userId=e['actor'],early=e['leftAt']<e['slotEnd']) for e in participant_events(db,v['id']) if e['action']=='participant_leave']
@@ -524,6 +528,19 @@ class Handler(BaseHTTPRequestHandler):
             db.execute('INSERT INTO dispute_statements(id,dispute_id,author_id,role,text,created_at) VALUES(?,?,?,?,?,?)',(sid,did,uid,u['role'],body,now))
             audit(db,uid,'dispute_statement',did,json.dumps(dict(bookingId=bid,statementId=sid)))
             return {'statementId':sid},None
+        observation_match=re.fullmatch('/api/bookings/([0-9a-f]+)/observations',path)
+        if observation_match and method=='POST':
+            b=self.booking(db,observation_match[1],u)
+            if u['role']=='admin' or uid not in (b['learner_id'],b['teacher_id']):
+                raise Error('예약 당사자만 기록할 수 있습니다',403)
+            if b['status'] not in ('test_paid','in_class'):
+                raise Error('테스트 결제 후 진행 중인 수업만 기록할 수 있습니다',409)
+            if set(d)!={'kind','outcome'}:
+                raise Error('kind와 outcome만 입력할 수 있습니다',400)
+            observation=session_evidence.append_observation(
+                db,booking_id=b['id'],slot_id=b['slot_id'],actor_id=uid,
+                kind=d['kind'],outcome=d['outcome'],now=time.time())
+            return {'observation':observation},None
         snapshot_match=re.fullmatch('/api/bookings/([0-9a-f]+)/unit',path)
         if snapshot_match and method=='GET':
             b=self.booking(db,snapshot_match[1],u); snapshot=db.execute('SELECT * FROM unit_snapshots WHERE booking_id=?',(b['id'],)).fetchone(); unit=json.loads(snapshot['content'])
