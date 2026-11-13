@@ -1,0 +1,23 @@
+node:internal/assert/utils:77
+    throw err;
+    ^
+
+AssertionError [ERR_ASSERTION]: lesson 1 ko: expected 5 rendered explanations, got 0
+    at check (/workspace/scratch/0597e46d5650/q007/candidate/scripts/test-q007-explanations.cjs:39:43)
+    at Object.<anonymous> (/workspace/scratch/0597e46d5650/q007/candidate/scripts/test-q007-explanations.cjs:52:2)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14)
+    at Object..js (node:internal/modules/cjs/loader:2060:10)
+    at Module.load (node:internal/modules/cjs/loader:1651:32)
+    at Module._load (node:internal/modules/cjs/loader:1443:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.22.1

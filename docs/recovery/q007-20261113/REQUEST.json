@@ -1,0 +1,11 @@
+{
+  "task": "Q007",
+  "original_number": 45,
+  "input_sha": "ca4874635582acfffd70e3f94959a1af91d8e2fd",
+  "source_sha256": "6a276736ee6ec46a23f213d0a739ebfc61bc7e868b6d61ac8f38d5f1745d4531",
+  "test_sha256": "569fdeb00ae10d7236b9a18e92432f553189b49d45603a674c05d22ed9f27238",
+  "created_at": 1794532445.2700844,
+  "deadline": 1794532565.2700844,
+  "authorization": "User authorized one deferred task only; stop before 30 minutes; no next task",
+  "scope": "LOCAL_NODE_DOM_ONLY; Render stays suspended"
+}
