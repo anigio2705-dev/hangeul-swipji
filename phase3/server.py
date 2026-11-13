@@ -11,6 +11,7 @@ import learning
 import payments
 import refund_ledger
 import privacy_requests
+import support_requests
 import session_evidence
 import supabase_auth
 import teacher_alerts
@@ -45,6 +46,7 @@ def init_db():
         availability.initialize(db)
         refund_ledger.initialize(db)
         privacy_requests.initialize(db)
+        support_requests.initialize(db)
         session_evidence.initialize(db)
         learning.initialize_shares(db)
         db.execute('''CREATE TABLE IF NOT EXISTS dispute_statements (
@@ -191,8 +193,8 @@ class Handler(BaseHTTPRequestHandler):
             statement_request=re.fullmatch('/api/bookings/([0-9a-f]+)/disputes/([0-9a-f]+)/statements',path)
             content_report=self.command=='POST' and re.fullmatch('/api/bookings/([0-9a-f]+)/dispute',path) and data.get('category')=='content'
             observation_request=re.fullmatch('/api/bookings/([0-9a-f]+)/observations',path)
-            if path not in ('/api/privacy/requests','/api/auth/revoke-sessions') and not statement_request and not content_report and not observation_request: expire_holds(db)
-            result,cookie=self.route(db,path,data,parse_qs(urlsplit(self.path).query,keep_blank_values=path=='/api/admin/providers'))
+            if path not in ('/api/privacy/requests','/api/auth/revoke-sessions','/api/support/requests','/api/admin/support/requests') and not statement_request and not content_report and not observation_request: expire_holds(db)
+            result,cookie=self.route(db,path,data,parse_qs(urlsplit(self.path).query,keep_blank_values=path in ('/api/admin/providers','/api/support/requests','/api/admin/support/requests')))
             db.commit(); self.send(200,result,cookie)
         except (payments.PaymentError,supabase_auth.AuthError) as e:
             if db: db.rollback()
@@ -333,6 +335,28 @@ class Handler(BaseHTTPRequestHandler):
             if not 1000<=price<=1000000: raise Error('가격 범위를 확인하세요')
             return {'currency':'KRW','basis':'hypothetical-test-only','scenarios':[dict(commissionBps=c,referralBps=r,processorBps=300,refundReserveBps=refund,taxReserveBps=tax,**money(price,c,r,300,tax,refund)) for c in (1500,2000,2500) for r in (0,300,500)],'note':'PG 3%·환불 충당·세금 충당은 가정값입니다. 법정 세율·확정 요율·순이익이 아니며 고정비·실제 세금은 별도입니다.'},None
         u=self.user(db); uid=u['id']
+        if path=='/api/support/requests' and method in ('GET','POST'):
+            if q: raise Error('문의 조회 조건은 지정할 수 없습니다',400)
+            if method=='GET':
+                return {'requests':support_requests.list_requests(db,uid)},None
+            if set(d)!={'subject','body'}: raise Error('subject와 body만 입력할 수 있습니다',400)
+            result=support_requests.submit(db,uid,subject=d['subject'],body=d['body'],now=time.time())
+            audit(db,uid,'support_request',result['requestId'])
+            return result,None
+        if method=='GET' and path=='/api/admin/support/requests':
+            self.admin(db)
+            if set(q)-{'limit','offset'} or any(len(values)!=1 for values in q.values()):
+                raise Error('지원하지 않거나 중복된 조회 조건입니다',400)
+            page={}
+            for key,default in (('limit','20'),('offset','0')):
+                value=q.get(key,[default])[0]
+                if not re.fullmatch(r'[0-9]+',value): raise Error('페이지 범위를 확인하세요',400)
+                page[key]=int(value)
+            if not 1<=page['limit']<=100 or page['offset']<0:
+                raise Error('페이지 범위를 확인하세요',400)
+            if page['offset']>9223372036854775807:
+                return {'requests':[],'limit':page['limit'],'offset':page['offset'],'hasMore':False},None
+            return support_requests.list_admin_requests(db,**page),None
         if method=='POST' and path=='/api/auth/revoke-sessions':
             if set(d)!={'password'} or not isinstance(d['password'],str) or not 1<=len(d['password'])<=128:
                 raise Error('password 문자열 1~128자만 입력할 수 있습니다',400)
