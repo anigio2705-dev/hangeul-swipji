@@ -237,6 +237,30 @@ function videoPanel(roomUrl,stopAttendance,resumeAttendance,recordObservation=as
  const observer=new MutationObserver(()=>{if(!panel.isConnected)dispose();});observer.observe($('#detail'),{childList:true});dialog.addEventListener('close',dispose);pageDocument.defaultView.addEventListener('pagehide',dispose);
  return panel;
 }
+function roomSchedule(b,current){
+ const box=$('#detail'),dialog=$('#detail-dialog'),display=el('section'),status=el('p'),remaining=el('p'),progress=el('p');
+ add(display,el('h3','일정 기준 진도'),notice('학습 성취·실제 통화·출석·완료 판정이 아닌 일정 기준 표시입니다.'),status,remaining,progress);box.append(display);
+ let disposed=false,timer=null;
+ const session={close:()=>{dispose();return Promise.resolve();}};
+ const observer=new MutationObserver(()=>{if(!display.isConnected||!box.contains(display))dispose();});
+ function dispose(){if(disposed)return;disposed=true;clearInterval(timer);timer=null;observer.disconnect();dialog.removeEventListener('close',dispose);pageDocument.defaultView.removeEventListener('pagehide',dispose);account.sessions.delete(session);}
+ function update(){
+  if(disposed)return;
+  if(!current()||!dialog.open||!display.isConnected||!box.contains(display)){dispose();return;}
+  const start=b.slot?.start,end=b.slot?.end,duration=end-start,now=Date.now()/1000;
+  if(!Number.isFinite(start)||!Number.isFinite(end)||end<=start||!Number.isFinite(duration)||!Number.isFinite(now)){
+   status.textContent='일정 시간 확인 불가';remaining.textContent='';progress.textContent='';return;
+  }
+  const before=now<start,ended=now>=end;
+  const seconds=Math.ceil(before?duration:ended?0:Math.min(duration,end-now));
+  const percent=before?0:ended?100:Math.max(0,Math.min(100,(now-start)/duration*100));
+  status.textContent=before?'시작 전':ended?'예정 시간 종료':'일정 진행 중';
+  remaining.textContent='남은 시간 '+String(Math.floor(seconds/60)).padStart(2,'0')+':'+String(seconds%60).padStart(2,'0');
+  progress.textContent='일정 기준 진도 '+(ended?100:Math.floor(percent))+'%';
+ }
+ account.sessions.add(session);observer.observe(box,{childList:true});dialog.addEventListener('close',dispose);pageDocument.defaultView.addEventListener('pagehide',dispose);
+ update();if(!disposed)timer=setInterval(update,1000);
+}
 async function joinRoom(b){
  if(account.changing||!state.user)return;
  const ownerId=state.user.id,authGeneration=account.generation,cookieGeneration=account.cookieGeneration;
@@ -306,7 +330,7 @@ async function joinRoom(b){
    void panel.recordObservation('room_open','external_link_clicked');
   });
   box.append(panel);begin();
- });box.append(a);$('#detail-dialog').showModal();
+ });box.append(a);$('#detail-dialog').showModal();roomSchedule(b,current);
 }
 function textDialog(title,label,submit,initial='',extra,afterSave){const box=$('#detail');box.replaceChildren(el('h2',title));const form=el('form',null,'stack'),[w,input]=field(label,'text','textarea',initial);input.required=true;input.maxLength=10000;form.append(w);if(extra)form.append(extra.wrap);const b=el('button','저장','primary');b.type='submit';form.append(b);form.onsubmit=e=>{e.preventDefault();run(async()=>{await submit(input.value,extra?.input.value);$('#detail-dialog').close();message('기록을 저장했습니다.');if(afterSave)await afterSave();else await render();},b);};box.append(form);$('#detail-dialog').showModal();}
 function assignmentDialog(b){const learner=state.user.id===b.learner_id;let extra;if(!learner){const [wrap,input]=field('평가 점수 · 0~100','score','number',b.score??80);input.min=0;input.max=100;input.required=true;extra={wrap,input};}textDialog(learner?'과제 제출':'강사 피드백',learner?'과제 내용':'피드백 내용',(text,score)=>api(`/api/bookings/${b.id}/${learner?'homework':'feedback'}`,'POST',learner?{text}:{text,score:Number(score)}),learner?b.homework:b.feedback,extra);}
