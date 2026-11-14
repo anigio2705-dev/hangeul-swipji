@@ -195,8 +195,8 @@ class Handler(BaseHTTPRequestHandler):
             statement_request=re.fullmatch('/api/bookings/([0-9a-f]+)/disputes/([0-9a-f]+)/statements',path)
             content_report=self.command=='POST' and re.fullmatch('/api/bookings/([0-9a-f]+)/dispute',path) and data.get('category')=='content'
             observation_request=re.fullmatch('/api/bookings/([0-9a-f]+)/observations',path)
-            if path not in ('/api/privacy/requests','/api/auth/revoke-sessions','/api/support/requests','/api/admin/support/requests') and not statement_request and not content_report and not observation_request: expire_holds(db)
-            result,cookie=self.route(db,path,data,parse_qs(urlsplit(self.path).query,keep_blank_values=path in ('/api/admin/providers','/api/support/requests','/api/admin/support/requests')))
+            if path not in ('/api/privacy/requests','/api/auth/revoke-sessions','/api/support/requests','/api/admin/support/requests','/api/payments/monthly') and not statement_request and not content_report and not observation_request: expire_holds(db)
+            result,cookie=self.route(db,path,data,parse_qs(urlsplit(self.path).query,keep_blank_values=path in ('/api/admin/providers','/api/support/requests','/api/admin/support/requests','/api/payments/monthly')))
             db.commit(); self.send(200,result,cookie)
         except (payments.PaymentError,supabase_auth.AuthError) as e:
             if db: db.rollback()
@@ -337,6 +337,45 @@ class Handler(BaseHTTPRequestHandler):
             if not 1000<=price<=1000000: raise Error('가격 범위를 확인하세요')
             return {'currency':'KRW','basis':'hypothetical-test-only','scenarios':[dict(commissionBps=c,referralBps=r,processorBps=300,refundReserveBps=refund,taxReserveBps=tax,**money(price,c,r,300,tax,refund)) for c in (1500,2000,2500) for r in (0,300,500)],'note':'PG 3%·환불 충당·세금 충당은 가정값입니다. 법정 세율·확정 요율·순이익이 아니며 고정비·실제 세금은 별도입니다.'},None
         u=self.user(db); uid=u['id']
+        if method=='GET' and path=='/api/payments/monthly':
+            if u['role']!='learner': raise Error('학습자만 조회할 수 있습니다',403)
+            if set(q)!={'month'} or len(q['month'])!=1:
+                raise Error('month를 하나만 지정하세요',400)
+            month=q['month'][0]
+            if not re.fullmatch(r'[0-9]{4}-(0[1-9]|1[0-2])',month):
+                raise Error('month는 YYYY-MM 형식이어야 합니다',400)
+            year,number=map(int,month.split('-'))
+            if not 1<=year<=9998: raise Error('연도는 0001~9998이어야 합니다',400)
+            start=dt.datetime(year,number,1,tzinfo=dt.timezone.utc).timestamp()
+            end=dt.datetime(year+1 if number==12 else year,1 if number==12 else number+1,1,tzinfo=dt.timezone.utc).timestamp()
+            categories={'completed':'completed','test_settled':'completed',
+                        'test_paid':'remaining','in_class':'remaining',
+                        'cancelled':'cancelled','refunded':'cancelled'}
+            counts=dict(total=0,completed=0,remaining=0,cancelled=0)
+            payments_by_booking={}
+            rows=db.execute('''SELECT b.id AS booking_id,b.slot_id,b.unit_id,b.status,b.price,
+                s.start AS slot_start,s.end AS slot_end,
+                l.id AS charge_id,l.amount,l.created_at
+                FROM ledger l JOIN bookings b ON b.id=l.booking_id
+                JOIN slots s ON s.id=b.slot_id
+                WHERE l.kind='test_charge' AND l.beneficiary=? AND b.learner_id=?
+                AND l.created_at>=? AND l.created_at<?
+                ORDER BY b.id,l.created_at,l.id''',(uid,uid,start,end))
+            for row in rows:
+                category=categories.get(row['status'])
+                if category is None:
+                    raise Error('결제된 예약의 상태 확인이 필요합니다',409)
+                bid=row['booking_id']
+                if bid not in payments_by_booking:
+                    payments_by_booking[bid]=dict(bookingId=bid,slotId=row['slot_id'],
+                        unitId=row['unit_id'],status=row['status'],price=row['price'],
+                        slotStart=row['slot_start'],slotEnd=row['slot_end'],charges=[])
+                    counts['total']+=1
+                    counts[category]+=1
+                payments_by_booking[bid]['charges'].append(dict(id=row['charge_id'],
+                    amount=row['amount'],createdAt=row['created_at']))
+            return dict(month=month,timezone='UTC',currency='KRW',realMoney=False,
+                        payments=list(payments_by_booking.values()),counts=counts),None
         if method=='GET' and path=='/api/policies':
             return {'policies':policy_consents.catalog(u['role']),'simulated':True,'legallyApproved':False},None
         if path=='/api/policy-consents' and method in ('GET','POST'):
