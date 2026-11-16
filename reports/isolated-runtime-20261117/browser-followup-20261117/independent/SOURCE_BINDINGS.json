@@ -1,0 +1,21 @@
+{
+  "reviewed_test_sha256": {
+    "phase3/test_q002_timezone_server.py": "78c73e22403a73b76d8c9f6ae8531d97c436a1ab15104777a8e9b4b854ec5aac",
+    "phase3/test_q002_timezone_ui.cjs": "2f845b1b70a924d9b3f47794ad8564bd84f870a14bb8871663cc7284ca7cc36c",
+    "phase3/test_security.py": "50fa68cd79ef6c6c3e1500c7073c793dcacc2a2aff5b293f763305d8c5480d22",
+    "phase3/test_server.py": "32c7ce8dc7b7be39cf2dc6602742eafdd76ab34a360d76fc0c13d8adf33c38fe",
+    "scripts/check-foundations.cjs": "95ce3dd9cd0e27cee868830f0a3e54f94328a0b19a9c31e20b6cef3039ed72fe",
+    "phase3/test_isolated_review_20261117.py": "2da184d43ad6bc400fc4577a35075e944ba9828107a91d2aed19693fcd6fda1c"
+  },
+  "original_files_matching": 311,
+  "changed_tracked": [
+    "DEVELOPMENT_STATUS.md",
+    "phase3/test_q002_timezone_server.py",
+    "phase3/test_q002_timezone_ui.cjs",
+    "phase3/test_security.py",
+    "phase3/test_server.py",
+    "scripts/check-foundations.cjs"
+  ],
+  "product_runtime_changed": false,
+  "original_source": "94a40b84c4c5665b5964b47f128b9472cfdae6eb"
+}

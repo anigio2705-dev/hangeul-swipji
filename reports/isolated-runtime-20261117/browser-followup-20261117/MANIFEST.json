@@ -1,0 +1,222 @@
+[
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/REPAIR_SCOPE.md",
+    "sha256": "75c51e47da44b63991e084658aaa54941550964518061ce747a3ee6eb1ff675e",
+    "bytes": 776
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/REPORT.ko.md",
+    "sha256": "925f78c06217500797195337453f9bed672204bd1b0a5044073fc9905a166a54",
+    "bytes": 8448
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/RESULTS.json",
+    "sha256": "f494384c702967b4aa00d19df771865a1ee6a8b7df7390146600fbfe9df0291e",
+    "bytes": 937
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/SCREENSHOT_MANIFEST.json",
+    "sha256": "7cf16d66e68c0d5f4839bd0abece41f52d3264c99b21c962869ce3a0ba29b838",
+    "bytes": 1483
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/browser-fixture.patch",
+    "sha256": "b680987a045a9cd40c51e8b4aba4d766faae3f64f4ab591cd4b76c658961c9a2",
+    "bytes": 12174
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/browser-functional-followup.log",
+    "sha256": "53cf7b2bc0cf75cefad3372ee7891e233f5ca4d56c4f1247418fb31626ee6645",
+    "bytes": 658
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/browser-functional.json",
+    "sha256": "a8608799e6c51aa333c1833722b5b0a971a9512133d0ad26b3d0cb3d5c128249",
+    "bytes": 910
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/browser-instant-followup.log",
+    "sha256": "1772c7b942d44c1a33c523294b0faca9fe198fb9f2a2d5bc9f0a8388d6543d95",
+    "bytes": 592
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/browser-lessons-followup.log",
+    "sha256": "f61ca13cc522b90c9d4eefc0649f0742dbef9cf8776aabcaeb62c394323baf94",
+    "bytes": 298
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/browser-lessons.json",
+    "sha256": "d2e134ec8c286b41037a008fceaf42b718f434cae4e746a3ef0cf4c52ebdbb60",
+    "bytes": 80
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/browser-reading-followup.log",
+    "sha256": "babe61225c14a954c0b0057f02128f5028eebfc540eac360e4bf0dabb4c71043",
+    "bytes": 101
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/browser-smoke-followup.log",
+    "sha256": "0de823deafdc0221855abaccde6a559450ed75afd2839db16e3feaf2ccba92d1",
+    "bytes": 731
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/browser-staging-after-selectors.log",
+    "sha256": "392e7c12c3e3c3e03ffec9c851f2cae8e641c5031b517043affe90d19e6309a1",
+    "bytes": 1358
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/browser-staging-after-statement-ui.log",
+    "sha256": "c34a4dc2c242c3f220739243b8a1a83f911986dc1c5199d6fcf1a573c0522797",
+    "bytes": 1593
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/browser-staging-final.log",
+    "sha256": "ccf88b579c9b1edb06859ed635ea24b3a6fe4c70a92130a9608403f69282c0dc",
+    "bytes": 1787
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/browser-staging-followup.log",
+    "sha256": "05df04061a268930f46cc51fda203ea8d0fbbab780ef09862ef35bb697889bd3",
+    "bytes": 883
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/browser-staging-verified.log",
+    "sha256": "f36980af974a99755694dd3c33507d435284d07927b4e1ae666a2bf548840428",
+    "bytes": 3978
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/browser-video-followup.log",
+    "sha256": "d70c440b41b4866d49cc6d2b446291be32fc3aa32c1a4133f915c7d3ac502fc7",
+    "bytes": 2141
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/headless-shell-install.log",
+    "sha256": "579c154c09cd840b02f95be54bbfa21c5fab9fe7fa848a8a670d835a1a439d95",
+    "bytes": 6953
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/independent/BROWSER_RESULTS.json",
+    "sha256": "0cbdbec086678c5f8973d2ebca88ce6db64ec1bd241f94bf058cf7f5aed3d642",
+    "bytes": 513
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/independent/DISPUTE_BROWSER_RESULTS.json",
+    "sha256": "1bd6c4119876ccd8e84c3176e00af512953e3cdd301c328395da897e5f2c902a",
+    "bytes": 530
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/independent/INDEPENDENT_BROWSER.log",
+    "sha256": "0cbdbec086678c5f8973d2ebca88ce6db64ec1bd241f94bf058cf7f5aed3d642",
+    "bytes": 513
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/independent/INDEPENDENT_DISPUTE_BROWSER.log",
+    "sha256": "1bd6c4119876ccd8e84c3176e00af512953e3cdd301c328395da897e5f2c902a",
+    "bytes": 530
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/independent/INDEPENDENT_TESTS.log",
+    "sha256": "692327d9ca5f99b880407213c8dabff69dfbfcdc4e2dbb1c3c5af07c2851f0ba",
+    "bytes": 758
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/independent/MANIFEST.json",
+    "sha256": "2ac5f523504d589c85b9d7be7971074c6d0fcc494fb101c964f8ea5246d6b9aa",
+    "bytes": 1900
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/independent/PRELIMINARY_REVIEW.json",
+    "sha256": "ad4f77f716df352e6e01e143c656af520b3207ac60cb2293f135534232790b53",
+    "bytes": 1014
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/independent/REVIEW.json",
+    "sha256": "e269b03e03556179d6e6c1f318053a1e4e8b9c4dcfb70395fe39a670c9e60220",
+    "bytes": 2269
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/independent/REVIEW.md",
+    "sha256": "f08efcbaa01c340e6c88534999d2991c6bf619d0ba2becd4704be96bb85aaf62",
+    "bytes": 3723
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/independent/SOURCE_BINDINGS.json",
+    "sha256": "61d57d2094b51f2756d57ce6fe51314216c7aa5d5d9171cd2e8b532893d22e92",
+    "bytes": 1041
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/independent/browser_dispute_independent.cjs",
+    "sha256": "dfbd7ce84f2f5d4a75a1fdd10a8fc8aff1473acf970df7468c2f80ff6fc3d141",
+    "bytes": 7254
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/independent/browser_independent.cjs",
+    "sha256": "10d352a1ae44e9dd5fdafb31288105eaa8d0af0a68577383f31b9ab3edc27037",
+    "bytes": 5637
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/independent/independent-desktop.png",
+    "sha256": "7839073dae153ccb6741139994e7278bf45d47c4d18aca826c270d4470b74157",
+    "bytes": 1614855
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/independent/independent-mobile.png",
+    "sha256": "b54d5f6c16229af08dbf8df288c919bc11c57c06098873efeadad3d02f65aa48",
+    "bytes": 772305
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/independent/test_independent_boundaries.py",
+    "sha256": "bf91b965db959a6fb09147f076d58608b34de53ba846eb3716d5d61d66fa4eed",
+    "bytes": 4707
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/python-after-browser-repair.log",
+    "sha256": "6cc849e4d403586f76efd07bac84137c5423e10a6f9d93249f1a53c3e3ae04ad",
+    "bytes": 13706
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/screenshots/scenario-1440.png",
+    "sha256": "ff716de327fe159e876860ba7b67dc141a389d4ea20cbe7b26e327fe12220bd4",
+    "bytes": 1529573
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/screenshots/scenario-390.png",
+    "sha256": "e652e1e0d455c7b1fc2a830303031712f65325561b6219842de863211320bc5f",
+    "bytes": 677225
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/screenshots/standards96-teacher.png",
+    "sha256": "a7196067edb62abceb7775660cf484b4b760ee0fd25db5f88e160b1f56eeeeac",
+    "bytes": 128497
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/screenshots/unified-classroom-mobile.png",
+    "sha256": "3495d14cdf3fe0fb26c40948833814462606676cb5f88f13ab569f913da60699",
+    "bytes": 88479
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/staging-browser-results.json",
+    "sha256": "9b1e6416e79b3ccbf7ff6c56c5fe090b95077b13ad93a116dbef5e649b4c2449",
+    "bytes": 2234
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/staging9-instant-results.json",
+    "sha256": "b3083c949ff06adc59355d04dbb19e07d9c998b7efd2e5b8041cedb47a5bb4f2",
+    "bytes": 843
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/statement-ui.patch",
+    "sha256": "e907bae1bbe6be2f8479f08ee8dc0943e24a2180862d9c4771a8aed25111675d",
+    "bytes": 40104
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/timezone-ui-after-statement.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "reports/isolated-runtime-20261117/browser-followup-20261117/video-browser-results.json",
+    "sha256": "76d954a24ea215362b03f6b6e92cbe7f43eafde82af41f326b2b8e84700062e3",
+    "bytes": 1256
+  }
+]

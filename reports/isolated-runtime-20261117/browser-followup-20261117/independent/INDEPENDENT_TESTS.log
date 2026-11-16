@@ -1,0 +1,9 @@
+test_other_account_and_admin_cannot_forge_counterpart_statement (__main__.IndependentBoundaries.test_other_account_and_admin_cannot_forge_counterpart_statement) ... ok
+test_placement_and_profile_are_owned_by_authenticated_user (__main__.IndependentBoundaries.test_placement_and_profile_are_owned_by_authenticated_user) ... ok
+test_revoked_session_does_not_return_after_server_recreation (__main__.IndependentBoundaries.test_revoked_session_does_not_return_after_server_recreation) ... ok
+test_same_request_changed_amount_is_rejected_and_ledger_unchanged (__main__.IndependentBoundaries.test_same_request_changed_amount_is_rejected_and_ledger_unchanged) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 3.388s
+
+OK

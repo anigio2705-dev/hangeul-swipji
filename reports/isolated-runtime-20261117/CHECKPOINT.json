@@ -1,5 +1,5 @@
 {
-  "status": "BROWSER_AND_INDEPENDENT_REVIEW_IN_PROGRESS",
+  "status": "PASS_SCOPED_REAL_BROWSER_STORAGE_ISOLATION_AND_STATEMENT_UI_REPAIR",
   "source_sha": "94a40b84c4c5665b5964b47f128b9472cfdae6eb",
   "python_tests": 92,
   "python_passed": 92,
@@ -18,9 +18,9 @@
   "intended_404": 1,
   "intended_302": 1,
   "real_process_restart": true,
-  "browser": "BLOCKED_ENVIRONMENT",
-  "independent_B": false,
-  "product_runtime_files_changed": 0,
+  "browser": "PASS_SCOPED_REAL_CHROMIUM",
+  "independent_B": true,
+  "product_runtime_files_changed": 1,
   "test_files_changed": [
     "phase3/test_q002_timezone_server.py",
     "phase3/test_q002_timezone_ui.cjs",
@@ -32,13 +32,32 @@
   "model_calls": 0,
   "paid_resources_created": 0,
   "existing_soak24_modified": false,
-  "lease": {
-    "owner": "work-browser-followup-20261117T234741Z",
-    "expires_at_utc": "2026-11-17T00:17:41Z",
-    "scope": "Owned audit branch browser tooling/isolated tests and evidence; independent review; no production or existing soak24 mutation"
-  },
+  "lease": null,
   "active_execution": null,
-  "finished_at_utc": "2026-11-16T23:02:52.280396+00:00",
-  "report": "reports/isolated-runtime-20261117/REPORT.ko.md",
-  "next_action": "Run preserved exact product source and test-only corrections in an approved browser-capable isolated environment; complete desktop/mobile real UI+storage/permissions acceptance. No existing soak24 mutation."
+  "finished_at_utc": "2026-11-16T23:57:57.920562+00:00",
+  "report": "reports/isolated-runtime-20261117/browser-followup-20261117/REPORT.ko.md",
+  "next_action": "Keep current24htrial untouched. Review scoped app.js repair for integration. Physical-device/real-call/hostedAuth/payment/production acceptance remain separate. Prior UI-blocked evidence is historical and preserved.",
+  "browser_followup": {
+    "status": "PASS_SCOPED_REAL_BROWSER_STORAGE_ISOLATION_AND_STATEMENT_UI_REPAIR",
+    "app_sha256": "1254ad0d1698541a8a67a6ad287c2d8c6425108fcab20d062dc7d040fef5ba24",
+    "browser_test_sha256": "9c392980d4018745e837656a09231ed9706aa2598fe95ee00e7847beec8c46de",
+    "real_browser": true,
+    "browser_version": "Chromium134 HeadlessShell1161 Playwright1.51.1",
+    "integrated_browser_checks": 34,
+    "Python_tests_passed": 92,
+    "independent_http_tests": 4,
+    "independent_profile_browser_checks": 6,
+    "independent_statement_browser_checks": 6,
+    "unit_dialogs": 192,
+    "free_lesson_views": 700,
+    "reading_items": 600,
+    "independent_review": "ACCEPT_SCOPED_FIXTURE_REPAIR_STATEMENT_UI_STORAGE_AND_ACCOUNT_ISOLATION",
+    "product_defects_fixed": 1,
+    "production_changes": 0,
+    "model_calls": 0,
+    "current_soak24_modified": false,
+    "physical_mobile_tested": false,
+    "actual_two_device_call_tested": false,
+    "real_payments_tested": false
+  }
 }

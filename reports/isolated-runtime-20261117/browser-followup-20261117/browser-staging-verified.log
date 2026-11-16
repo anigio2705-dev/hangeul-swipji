@@ -1,0 +1,86 @@
+PASS HTTPS gate authenticated once per browser; all later steps use cookies without Basic header
+PASS teacher UI signup
+PASS free learning to20-question placement to studio advisory context
+PASS learner UI signup
+PASS voluntary free placement summary saved to learner only
+PASS new independent lesson and precheck UI persisted
+PASS partner UI signup
+PASS admin UI approval
+PASS teacher availability UI
+PASS learner UI search booking and test payment
+PASS same immutable content hash
+PASS teacher guide role separation
+PASS booked lesson UI
+PASS both users same Jitsi test room URL
+PASS homework and feedback UI persisted
+PASS postcheck teacher rubric and next-lesson record UI
+PASS UI premature completion blocked
+PASS full booking to completion with shared30m simulated server clock
+PASS completed lesson review and admin test settlement UI
+PASS provider private earnings UI after settlement
+PASS counterpart statement saved through actual UI
+PASS dispute refund appeal UI
+PASS 9 profitability scenarios rendered
+PASS one original homepage with inline classroom at desktop and mobile
+PASS untrusted placement value ignored
+PASS desktop1440 mobile390 no page horizontal overflow
+PASS no JavaScript page errors
+PASS policy and runbook links resolve
+PASS eight supported core UI languages on unified mobile homepage
+PASS profile New York participant timezone overrides device Honolulu; stored UTC unchanged
+PASS rebooking opens next lesson and persists a new72-unit reservation
+PASS all96 student lessons desktop/mobile:192 dialogs,288 questions each viewport, answer keys hidden
+PASS new final lesson teacher flow prompts errors and four-skill guidance UI
+PASS expired gate at startup produces one clear error, no app-login dialog or retry loop
+{
+  "mode": "local-https-staging-cookie-test-only",
+  "checkedAt": "2026-11-16T23:54:20.430Z",
+  "browser": "Chromium134 / Playwright1.51.1",
+  "checks": [
+    "HTTPS gate authenticated once per browser; all later steps use cookies without Basic header",
+    "teacher UI signup",
+    "free learning to20-question placement to studio advisory context",
+    "learner UI signup",
+    "voluntary free placement summary saved to learner only",
+    "new independent lesson and precheck UI persisted",
+    "partner UI signup",
+    "admin UI approval",
+    "teacher availability UI",
+    "learner UI search booking and test payment",
+    "same immutable content hash",
+    "teacher guide role separation",
+    "booked lesson UI",
+    "both users same Jitsi test room URL",
+    "homework and feedback UI persisted",
+    "postcheck teacher rubric and next-lesson record UI",
+    "UI premature completion blocked",
+    "full booking to completion with shared30m simulated server clock",
+    "completed lesson review and admin test settlement UI",
+    "provider private earnings UI after settlement",
+    "counterpart statement saved through actual UI",
+    "dispute refund appeal UI",
+    "9 profitability scenarios rendered",
+    "one original homepage with inline classroom at desktop and mobile",
+    "untrusted placement value ignored",
+    "desktop1440 mobile390 no page horizontal overflow",
+    "no JavaScript page errors",
+    "policy and runbook links resolve",
+    "eight supported core UI languages on unified mobile homepage",
+    "profile New York participant timezone overrides device Honolulu; stored UTC unchanged",
+    "rebooking opens next lesson and persists a new72-unit reservation",
+    "all96 student lessons desktop/mobile:192 dialogs,288 questions each viewport, answer keys hidden",
+    "new final lesson teacher flow prompts errors and four-skill guidance UI",
+    "expired gate at startup produces one clear error, no app-login dialog or retry loop"
+  ],
+  "viewportWidths": [
+    1440,
+    390
+  ],
+  "errors": [],
+  "externalVideoMediaTested": false,
+  "physicalMobileTested": false,
+  "realPaymentsTested": false,
+  "serverClockSimulated": true,
+  "hostedSupabaseTested": false,
+  "providerSandboxTested": false
+}

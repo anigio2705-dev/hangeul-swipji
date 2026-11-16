@@ -1,0 +1,38 @@
+[
+  {
+    "filename": "standards96-teacher.png",
+    "bytes": 128497,
+    "sha256": "a7196067edb62abceb7775660cf484b4b760ee0fd25db5f88e160b1f56eeeeac",
+    "location": "local original screenshot; unified-classroom-mobile.png also stored in Git"
+  },
+  {
+    "filename": "scenario-1440.png",
+    "bytes": 1529573,
+    "sha256": "ff716de327fe159e876860ba7b67dc141a389d4ea20cbe7b26e327fe12220bd4",
+    "location": "local original screenshot; unified-classroom-mobile.png also stored in Git"
+  },
+  {
+    "filename": "scenario-390.png",
+    "bytes": 677225,
+    "sha256": "e652e1e0d455c7b1fc2a830303031712f65325561b6219842de863211320bc5f",
+    "location": "local original screenshot; unified-classroom-mobile.png also stored in Git"
+  },
+  {
+    "filename": "unified-classroom-mobile.png",
+    "bytes": 88479,
+    "sha256": "3495d14cdf3fe0fb26c40948833814462606676cb5f88f13ab569f913da60699",
+    "location": "local original screenshot; unified-classroom-mobile.png also stored in Git"
+  },
+  {
+    "filename": "independent-desktop.png",
+    "bytes": 1614855,
+    "sha256": "7839073dae153ccb6741139994e7278bf45d47c4d18aca826c270d4470b74157",
+    "location": "local original screenshot; unified-classroom-mobile.png also stored in Git"
+  },
+  {
+    "filename": "independent-mobile.png",
+    "bytes": 772305,
+    "sha256": "b54d5f6c16229af08dbf8df288c919bc11c57c06098873efeadad3d02f65aa48",
+    "location": "local original screenshot; unified-classroom-mobile.png also stored in Git"
+  }
+]

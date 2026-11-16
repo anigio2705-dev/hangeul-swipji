@@ -1,0 +1,43 @@
+PASS HTTPS gate authenticated once per browser; all later steps use cookies without Basic header
+PASS teacher UI signup
+PASS free learning to20-question placement to studio advisory context
+PASS learner UI signup
+PASS voluntary free placement summary saved to learner only
+PASS new independent lesson and precheck UI persisted
+PASS partner UI signup
+PASS admin UI approval
+PASS teacher availability UI
+PASS learner UI search booking and test payment
+PASS same immutable content hash
+PASS teacher guide role separation
+PASS booked lesson UI
+PASS both users same Jitsi test room URL
+PASS homework and feedback UI persisted
+PASS postcheck teacher rubric and next-lesson record UI
+PASS UI premature completion blocked
+PASS full booking to completion with shared30m simulated server clock
+PASS completed lesson review and admin test settlement UI
+PASS provider private earnings UI after settlement
+PASS counterpart statement saved through actual UI
+PASS dispute refund appeal UI
+PASS 9 profitability scenarios rendered
+PASS one original homepage with inline classroom at desktop and mobile
+PASS untrusted placement value ignored
+PASS desktop1440 mobile390 no page horizontal overflow
+PASS no JavaScript page errors
+PASS policy and runbook links resolve
+PASS eight supported core UI languages on unified mobile homepage
+PASS profile New York participant timezone overrides device Honolulu; stored UTC unchanged
+PASS rebooking opens next lesson and persists a new72-unit reservation
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+0 !== 3
+
+    at /workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/phase3/browser-test.cjs:108:454 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 3,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
