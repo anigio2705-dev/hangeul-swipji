@@ -1,0 +1,12 @@
+{
+  "status": "TESTING_IN_ISOLATED_LOCAL_COPY",
+  "source_sha": "94a40b84c4c5665b5964b47f128b9472cfdae6eb",
+  "lease": {
+    "owner": "work-isolated-runtime-review-20261117",
+    "scope": "Only owned audit branch; test fixture repair, new tests, reports; no product runtime change",
+    "expires_at_utc": "2026-11-16T23:17:00Z"
+  },
+  "active_execution": null,
+  "production_changes": 0,
+  "model_calls": 0
+}
