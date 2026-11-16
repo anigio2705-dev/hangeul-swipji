@@ -1,0 +1,16 @@
+PASS HTTPS gate authenticated once per browser; all later steps use cookies without Basic header
+PASS teacher UI signup
+PASS free learning to20-question placement to studio advisory context
+PASS learner UI signup
+PASS voluntary free placement summary saved to learner only
+PASS new independent lesson and precheck UI persisted
+PASS partner UI signup
+PASS admin UI approval
+locator.fill: Error: strict mode violation: locator('#content [name=start]') resolved to 2 elements:
+    1) <input required="" name="start" type="datetime-local"/> aka getByRole('textbox', { name: '시작', exact: true })
+    2) <input required="" name="start" type="datetime-local"/> aka getByRole('textbox', { name: '휴무 시작' })
+
+Call log:
+[2m  - waiting for locator('#content [name=start]')[22m
+
+    at /workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/phase3/browser-test.cjs:68:338

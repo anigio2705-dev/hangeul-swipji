@@ -1,0 +1,8 @@
+test_full_refund_requires_counterpart_then_zeroes_teacher_and_replays_once (test_isolated_review_20261117.CurrentWorkflowReview.test_full_refund_requires_counterpart_then_zeroes_teacher_and_replays_once) ... ok
+test_reschedule_requires_statement_and_both_actual_consents (test_isolated_review_20261117.CurrentWorkflowReview.test_reschedule_requires_statement_and_both_actual_consents) ... ok
+test_saved_profile_and_bookings_survive_http_server_recreation (test_isolated_review_20261117.CurrentWorkflowReview.test_saved_profile_and_bookings_survive_http_server_recreation) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 2.888s
+
+OK

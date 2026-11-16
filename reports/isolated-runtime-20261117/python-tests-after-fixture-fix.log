@@ -1,0 +1,173 @@
+test_assessment_evidence_is_present_in_declared_source (test_content.CurriculumTests.test_assessment_evidence_is_present_in_declared_source) ... ok
+test_complete_role_linked_materials_and_answer_explanations (test_content.CurriculumTests.test_complete_role_linked_materials_and_answer_explanations) ... ok
+test_independent_readings_and_internal_level_progression (test_content.CurriculumTests.test_independent_readings_and_internal_level_progression) ... ok
+test_free_content_bytes_preserved (test_free_mount.FreeMountTests.test_free_content_bytes_preserved) ... ok
+test_legacy_urls_redirect_to_the_one_homepage (test_free_mount.FreeMountTests.test_legacy_urls_redirect_to_the_one_homepage) ... ok
+test_no_private_files_or_traversal (test_free_mount.FreeMountTests.test_no_private_files_or_traversal) ... ok
+test_unknown_public_file_not_exposed (test_free_mount.FreeMountTests.test_unknown_public_file_not_exposed) ... ok
+test_96_authored_slots_with_original_24_untouched (test_global_learning.GlobalLearningTests.test_96_authored_slots_with_original_24_untouched) ... ok
+test_many_providers_can_be_found_across_pages_and_time_filters (test_global_learning.GlobalLearningTests.test_many_providers_can_be_found_across_pages_and_time_filters) ... ok
+test_placement_validation_and_account_isolation (test_global_learning.GlobalLearningTests.test_placement_validation_and_account_isolation) ... ok
+test_public_catalog_and_unapproved_provider_do_not_receive_private_guides (test_global_learning.GlobalLearningTests.test_public_catalog_and_unapproved_provider_do_not_receive_private_guides) ... ok
+test_real_pre_post_grading_not_client_score_and_immutable_snapshot (test_global_learning.GlobalLearningTests.test_real_pre_post_grading_not_client_score_and_immutable_snapshot) ... ok
+test_teacher_observation_is_booked_provider_only_and_requires_evidence (test_global_learning.GlobalLearningTests.test_teacher_observation_is_booked_provider_only_and_requires_evidence) ... ok
+test_concurrent_join_assigns_only_one_partner (test_instant_matching.InstantMatchingTests.test_concurrent_join_assigns_only_one_partner) ... ok
+test_expired_presence_and_offers_do_not_requeue (test_instant_matching.InstantMatchingTests.test_expired_presence_and_offers_do_not_requeue) ... ok
+test_ineligible_roles_revocation_and_methods (test_instant_matching.InstantMatchingTests.test_ineligible_roles_revocation_and_methods) ... ok
+test_new_tables_do_not_modify_existing_booking (test_instant_matching.InstantMatchingTests.test_new_tables_do_not_modify_existing_booking) ... ok
+test_wait_match_consent_room_privacy_and_end (test_instant_matching.InstantMatchingTests.test_wait_match_consent_room_privacy_and_end) ... ok
+test_bad_login_counter_not_reset_by_another_accounts_success (test_integration_flows.IntegrationFlowTests.test_bad_login_counter_not_reset_by_another_accounts_success) ... ok
+test_expired_hold_releases_slot_and_does_not_charge (test_integration_flows.IntegrationFlowTests.test_expired_hold_releases_slot_and_does_not_charge) ... ok
+test_late_provider_event_is_held_without_reopening_booking (test_integration_flows.IntegrationFlowTests.test_late_provider_event_is_held_without_reopening_booking) ... ok
+test_signed_provider_event_reconciles_once_and_rejects_tampering (test_integration_flows.IntegrationFlowTests.test_signed_provider_event_reconciles_once_and_rejects_tampering) ... ok
+test_supabase_identity_mapping_ignores_admin_claim_and_email_takeover (test_integration_flows.IntegrationFlowTests.test_supabase_identity_mapping_ignores_admin_claim_and_email_takeover) ... ok
+test_unconfigured_provider_is_not_fake_success (test_integration_flows.IntegrationFlowTests.test_unconfigured_provider_is_not_fake_success) ... ok
+test_full_refund_requires_counterpart_then_zeroes_teacher_and_replays_once (test_isolated_review_20261117.CurrentWorkflowReview.test_full_refund_requires_counterpart_then_zeroes_teacher_and_replays_once) ... ok
+test_reschedule_requires_statement_and_both_actual_consents (test_isolated_review_20261117.CurrentWorkflowReview.test_reschedule_requires_statement_and_both_actual_consents) ... ok
+test_saved_profile_and_bookings_survive_http_server_recreation (test_isolated_review_20261117.CurrentWorkflowReview.test_saved_profile_and_bookings_survive_http_server_recreation) ... ok
+test_bad_provider_response_and_redirect_are_rejected (test_payments.PaymentContractTests.test_bad_provider_response_and_redirect_are_rejected) ... ok
+test_live_webhook_rejected_even_with_valid_signature (test_payments.PaymentContractTests.test_live_webhook_rejected_even_with_valid_signature) ... ok
+test_payload_tampering_expiry_future_and_duplicate_timestamp_denied (test_payments.PaymentContractTests.test_payload_tampering_expiry_future_and_duplicate_timestamp_denied) ... ok
+test_provider_request_uses_server_amount_and_stable_idempotency (test_payments.PaymentContractTests.test_provider_request_uses_server_amount_and_stable_idempotency) ... ok
+test_replay_contract_uses_event_and_session_identifiers (test_payments.PaymentContractTests.test_replay_contract_uses_event_and_session_identifiers) ... ok
+test_signed_raw_payload_success_and_key_rotation (test_payments.PaymentContractTests.test_signed_raw_payload_success_and_key_rotation) ... ok
+test_success_event_must_match_preexisting_session_booking_currency_amount (test_payments.PaymentContractTests.test_success_event_must_match_preexisting_session_booking_currency_amount) ... ok
+test_unconfigured_and_live_keys_cannot_make_network_request (test_payments.PaymentContractTests.test_unconfigured_and_live_keys_cannot_make_network_request) ... ok
+test_unsupported_refund_connect_and_malformed_events_never_mark_paid (test_payments.PaymentContractTests.test_unsupported_refund_connect_and_malformed_events_never_mark_paid) ... ok
+test_booking_keeps_empty_participant_timezone (test_q002_timezone_server.ServerQ002Tests.test_booking_keeps_empty_participant_timezone) ... 
+  test_booking_keeps_empty_participant_timezone (test_q002_timezone_server.ServerQ002Tests.test_booking_keeps_empty_participant_timezone) (uid='learner') ... ERROR
+  test_booking_keeps_empty_participant_timezone (test_q002_timezone_server.ServerQ002Tests.test_booking_keeps_empty_participant_timezone) (uid='teacher') ... ERROR
+test_booking_participant_views_authorization_and_utc (test_q002_timezone_server.ServerQ002Tests.test_booking_participant_views_authorization_and_utc) ... 
+  test_booking_participant_views_authorization_and_utc (test_q002_timezone_server.ServerQ002Tests.test_booking_participant_views_authorization_and_utc) (uid='learner') ... ERROR
+  test_booking_participant_views_authorization_and_utc (test_q002_timezone_server.ServerQ002Tests.test_booking_participant_views_authorization_and_utc) (uid='teacher') ... ERROR
+test_empty_legacy_zone_explicit_and_omitted (test_q002_timezone_server.ServerQ002Tests.test_empty_legacy_zone_explicit_and_omitted) ... ok
+test_invalid_zone_rejected_before_any_update (test_q002_timezone_server.ServerQ002Tests.test_invalid_zone_rejected_before_any_update) ... ok
+test_valid_iana_zones (test_q002_timezone_server.ServerQ002Tests.test_valid_iana_zones) ... ok
+test_initial_booking_referrer_cannot_change_on_later_booking (test_regressions.RoundTwoTests.test_initial_booking_referrer_cannot_change_on_later_booking) ... ok
+test_nonoverlapping_attendance_cannot_complete_a_conversation (test_regressions.RoundTwoTests.test_nonoverlapping_attendance_cannot_complete_a_conversation) ... ok
+test_past_unpaid_booking_cannot_record_new_charge (test_regressions.RoundTwoTests.test_past_unpaid_booking_cannot_record_new_charge) ... ok
+test_admin_cannot_be_self_assigned_and_approval_is_protected (test_security.SecurityTests.test_admin_cannot_be_self_assigned_and_approval_is_protected) ... ok
+test_adult_guard_and_password_policy (test_security.SecurityTests.test_adult_guard_and_password_policy) ... ok
+test_booking_conflict_and_password_not_exposed (test_security.SecurityTests.test_booking_conflict_and_password_not_exposed) ... ok
+test_csrf_host_and_static_leakage (test_security.SecurityTests.test_csrf_host_and_static_leakage) ... ok
+test_duplicate_charge_and_refund_reversal_are_idempotent (test_security.SecurityTests.test_duplicate_charge_and_refund_reversal_are_idempotent) ... ok
+test_idor_and_premature_completion_blocked (test_security.SecurityTests.test_idor_and_premature_completion_blocked) ... ok
+test_approval_and_search_filters (test_server.PlatformTests.test_approval_and_search_filters) ... ok
+test_completion_insufficient_and_admin_evidence_gate (test_server.PlatformTests.test_completion_insufficient_and_admin_evidence_gate) ... ok
+test_direct_referral_only_and_no_signup_reward (test_server.PlatformTests.test_direct_referral_only_and_no_signup_reward) ... ok
+test_duplicate_booking_concurrent (test_server.PlatformTests.test_duplicate_booking_concurrent) ... ok
+test_full_30min_complete_settle_refund_and_review_exclusion (test_server.PlatformTests.test_full_30min_complete_settle_refund_and_review_exclusion) ... ok
+test_heartbeat_no_credit_outside_slot_or_large_gap (test_server.PlatformTests.test_heartbeat_no_credit_outside_slot_or_large_gap) ... ok
+test_idor_and_unauthorized_state_changes (test_server.PlatformTests.test_idor_and_unauthorized_state_changes) ... ok
+test_logout_revokes_session (test_server.PlatformTests.test_logout_revokes_session) ... ok
+test_overlapping_teacher_and_learner_slots (test_server.PlatformTests.test_overlapping_teacher_and_learner_slots) ... ok
+test_pay_is_idempotent_and_no_real_money (test_server.PlatformTests.test_pay_is_idempotent_and_no_real_money) ... ok
+test_private_earnings_visible_only_to_beneficiary (test_server.PlatformTests.test_private_earnings_visible_only_to_beneficiary) ... ok
+test_reschedule_requires_actual_both_participant_consents (test_server.PlatformTests.test_reschedule_requires_actual_both_participant_consents) ... ok
+test_scenarios_integer_conservation (test_server.PlatformTests.test_scenarios_integer_conservation) ... ok
+test_signup_admin_escalation_and_underage_denied (test_server.PlatformTests.test_signup_admin_escalation_and_underage_denied) ... ok
+test_unit_and_rates_immutable (test_server.PlatformTests.test_unit_and_rates_immutable) ... ok
+test_admin_bootstrap_idempotent_and_no_password_reset (test_staging.StagingTests.test_admin_bootstrap_idempotent_and_no_password_reset) ... ok
+test_config_fails_closed (test_staging.StagingTests.test_config_fails_closed) ... ok
+test_direct_navigation_and_same_origin_fetch_allowed (test_staging.StagingTests.test_direct_navigation_and_same_origin_fetch_allowed) ... ok
+test_exact_host_origin_and_forwarded_spoofing (test_staging.StagingTests.test_exact_host_origin_and_forwarded_spoofing) ... ok
+test_external_api_frames_and_mutations_still_denied (test_staging.StagingTests.test_external_api_frames_and_mutations_still_denied) ... ok
+test_external_integrations_blocked_and_mock_only (test_staging.StagingTests.test_external_integrations_blocked_and_mock_only) ... ok
+test_external_link_document_navigation_allowed_with_gate (test_staging.StagingTests.test_external_link_document_navigation_allowed_with_gate) ... ok
+test_gate_cookie_expiry_tampering_and_no_background_challenges (test_staging.StagingTests.test_gate_cookie_expiry_tampering_and_no_background_challenges) ... ok
+test_gate_cookie_keeps_navigation_and_app_login_without_basic (test_staging.StagingTests.test_gate_cookie_keeps_navigation_and_app_login_without_basic) ... ok
+test_gate_cookie_preserves_admission_on_instant_speaking (test_staging.StagingTests.test_gate_cookie_preserves_admission_on_instant_speaking) ... ok
+test_gate_covers_home_assets_and_api (test_staging.StagingTests.test_gate_covers_home_assets_and_api) ... ok
+test_health_only_without_gate_and_db_failure (test_staging.StagingTests.test_health_only_without_gate_and_db_failure) ... ok
+test_home_unchanged_and_private_files_blocked (test_staging.StagingTests.test_home_unchanged_and_private_files_blocked) ... ok
+test_legacy_links_cannot_reach_existing_hosted_database (test_staging.StagingTests.test_legacy_links_cannot_reach_existing_hosted_database) ... ok
+test_referer_validation_does_not_use_prefix_matching (test_staging.StagingTests.test_referer_validation_does_not_use_prefix_matching) ... ok
+test_render_origin_fallback_matches_explicit_configuration (test_staging.StagingTests.test_render_origin_fallback_matches_explicit_configuration) ... ok
+test_same_origin_login_booking_homework_feedback_and_second_booking (test_staging.StagingTests.test_same_origin_login_booking_homework_feedback_and_second_booking) ... ok
+test_signup_secure_cookie_96_units_and_logout (test_staging.StagingTests.test_signup_secure_cookie_96_units_and_logout) ... ok
+test_all_96_link_four_skills_five_phases_and_exact_five_reference_documents (test_standards96.Standards96Tests.test_all_96_link_four_skills_five_phases_and_exact_five_reference_documents) ... ok
+test_all_new_72_have_unique_reading_questions_and_correct_grade_without_client_score (test_standards96.Standards96Tests.test_all_new_72_have_unique_reading_questions_and_correct_grade_without_client_score) ... ok
+test_new_guide_is_only_for_approved_provider_and_snapshot_keeps_standards (test_standards96.Standards96Tests.test_new_guide_is_only_for_approved_provider_and_snapshot_keeps_standards) ... ok
+test_original_24_source_materials_preserved_exactly (test_standards96.Standards96Tests.test_original_24_source_materials_preserved_exactly) ... ok
+test_teacher_observation_separates_real_four_skills_from_text_checks (test_standards96.Standards96Tests.test_teacher_observation_separates_real_four_skills_from_text_checks) ... ok
+test_credentials_not_configured_is_explicit (test_supabase_auth.SupabaseAuthContractTests.test_credentials_not_configured_is_explicit) ... ok
+test_network_verified_identity_ignores_self_asserted_roles (test_supabase_auth.SupabaseAuthContractTests.test_network_verified_identity_ignores_self_asserted_roles) ... ok
+test_production_target_and_secret_keys_fail_before_network (test_supabase_auth.SupabaseAuthContractTests.test_production_target_and_secret_keys_fail_before_network) ... ok
+test_unverified_anonymous_and_malformed_identity_rejected (test_supabase_auth.SupabaseAuthContractTests.test_unverified_anonymous_and_malformed_identity_rejected) ... ok
+
+======================================================================
+ERROR: test_booking_keeps_empty_participant_timezone (test_q002_timezone_server.ServerQ002Tests.test_booking_keeps_empty_participant_timezone) (uid='learner')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/phase3/test_q002_timezone_server.py", line 159, in test_booking_keeps_empty_participant_timezone
+    result, _ = self.call(uid, 'GET', '/api/bookings')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/phase3/test_q002_timezone_server.py", line 75, in call
+    return self.handler.route(self.db, path, data or {}, {})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/phase3/server.py", line 561, in route
+    v['leaveRecords']=[dict(e,userId=e['actor'],early=e['leftAt']<e['slotEnd']) for e in participant_events(db,v['id']) if e['action']=='participant_leave']
+                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/phase3/server.py", line 144, in participant_events
+    for row in db.execute("SELECT actor,action,detail FROM audit WHERE entity=? AND action IN ('participant_leave','participant_rejoin') ORDER BY id",(bid,)):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: id
+
+======================================================================
+ERROR: test_booking_keeps_empty_participant_timezone (test_q002_timezone_server.ServerQ002Tests.test_booking_keeps_empty_participant_timezone) (uid='teacher')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/phase3/test_q002_timezone_server.py", line 159, in test_booking_keeps_empty_participant_timezone
+    result, _ = self.call(uid, 'GET', '/api/bookings')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/phase3/test_q002_timezone_server.py", line 75, in call
+    return self.handler.route(self.db, path, data or {}, {})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/phase3/server.py", line 561, in route
+    v['leaveRecords']=[dict(e,userId=e['actor'],early=e['leftAt']<e['slotEnd']) for e in participant_events(db,v['id']) if e['action']=='participant_leave']
+                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/phase3/server.py", line 144, in participant_events
+    for row in db.execute("SELECT actor,action,detail FROM audit WHERE entity=? AND action IN ('participant_leave','participant_rejoin') ORDER BY id",(bid,)):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: id
+
+======================================================================
+ERROR: test_booking_participant_views_authorization_and_utc (test_q002_timezone_server.ServerQ002Tests.test_booking_participant_views_authorization_and_utc) (uid='learner')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/phase3/test_q002_timezone_server.py", line 133, in test_booking_participant_views_authorization_and_utc
+    result, cookie = self.call(uid, 'GET', '/api/bookings')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/phase3/test_q002_timezone_server.py", line 75, in call
+    return self.handler.route(self.db, path, data or {}, {})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/phase3/server.py", line 561, in route
+    v['leaveRecords']=[dict(e,userId=e['actor'],early=e['leftAt']<e['slotEnd']) for e in participant_events(db,v['id']) if e['action']=='participant_leave']
+                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/phase3/server.py", line 144, in participant_events
+    for row in db.execute("SELECT actor,action,detail FROM audit WHERE entity=? AND action IN ('participant_leave','participant_rejoin') ORDER BY id",(bid,)):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: id
+
+======================================================================
+ERROR: test_booking_participant_views_authorization_and_utc (test_q002_timezone_server.ServerQ002Tests.test_booking_participant_views_authorization_and_utc) (uid='teacher')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/phase3/test_q002_timezone_server.py", line 133, in test_booking_participant_views_authorization_and_utc
+    result, cookie = self.call(uid, 'GET', '/api/bookings')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/phase3/test_q002_timezone_server.py", line 75, in call
+    return self.handler.route(self.db, path, data or {}, {})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/phase3/server.py", line 561, in route
+    v['leaveRecords']=[dict(e,userId=e['actor'],early=e['leftAt']<e['slotEnd']) for e in participant_events(db,v['id']) if e['action']=='participant_leave']
+                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/phase3/server.py", line 144, in participant_events
+    for row in db.execute("SELECT actor,action,detail FROM audit WHERE entity=? AND action IN ('participant_leave','participant_rejoin') ORDER BY id",(bid,)):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: id
+
+----------------------------------------------------------------------
+Ran 92 tests in 47.517s
+
+FAILED (errors=4)

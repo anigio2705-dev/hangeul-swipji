@@ -1,0 +1,13 @@
+{
+  "scope": "INDEPENDENT_REAL_STATEMENT_UI_AND_NEGATIVE_AUTHORIZATION",
+  "checks": [
+    "unrelated account GET403 on actual statement endpoint",
+    "teacher reads original and saves own statement through actual UI",
+    "saved text survives reload and markup stays text",
+    "admin actual UI is read-only statement viewer",
+    "admin direct POST403 even with visible statement access",
+    "late statement response does not open dialog after actual logout"
+  ],
+  "page_errors": [],
+  "status": "PASS_SCOPED_STATEMENT_UI"
+}

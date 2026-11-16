@@ -1,0 +1,29 @@
+{
+  "page_count": 36,
+  "same_bytes": 34,
+  "non_identical": [
+    {
+      "path": "index-backup-2026-10-26.html",
+      "status": 404,
+      "same_source_bytes": false,
+      "redirect": null
+    },
+    {
+      "path": "teaching-platform.html",
+      "status": 302,
+      "same_source_bytes": false,
+      "redirect": "/index.html#teaching-platform"
+    }
+  ],
+  "restart": {
+    "first_pid": 6,
+    "exit_code": -15,
+    "second_pid": 47,
+    "different_pid": true,
+    "placement_preserved": true,
+    "session_preserved": true,
+    "profile_preserved": true,
+    "real_process_restart": true,
+    "production_data": false
+  }
+}

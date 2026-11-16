@@ -1,0 +1,60 @@
+{
+  "summary": {
+    "units": 350,
+    "questions": 1758,
+    "errors": 0,
+    "warnings": 0
+  },
+  "courses": [
+    {
+      "course": "intro",
+      "units": 50,
+      "questions": 258,
+      "duplicateTitles": 0,
+      "weakExplanations": 0
+    },
+    {
+      "course": "beginner1",
+      "units": 50,
+      "questions": 250,
+      "duplicateTitles": 0,
+      "weakExplanations": 0
+    },
+    {
+      "course": "beginner2",
+      "units": 50,
+      "questions": 250,
+      "duplicateTitles": 0,
+      "weakExplanations": 0
+    },
+    {
+      "course": "intermediate1",
+      "units": 50,
+      "questions": 250,
+      "duplicateTitles": 0,
+      "weakExplanations": 0
+    },
+    {
+      "course": "intermediate2",
+      "units": 50,
+      "questions": 250,
+      "duplicateTitles": 0,
+      "weakExplanations": 0
+    },
+    {
+      "course": "advanced1",
+      "units": 50,
+      "questions": 250,
+      "duplicateTitles": 0,
+      "weakExplanations": 0
+    },
+    {
+      "course": "advanced2",
+      "units": 50,
+      "questions": 250,
+      "duplicateTitles": 0,
+      "weakExplanations": 0
+    }
+  ],
+  "findings": []
+}

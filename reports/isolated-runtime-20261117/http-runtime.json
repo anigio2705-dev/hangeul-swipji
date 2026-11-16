@@ -1,0 +1,231 @@
+{
+  "pages": [
+    {
+      "path": "academy.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "advanced1.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "advanced2.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "beginner1.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "beginner2.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "bts-gyeongbokgung-preview.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "culture.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "daily.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "dashboard.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "drama.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "experience.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "global-language.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "guide.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "hangul-audio-credits.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "hangul-audio-review.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "hangul-basics.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "hangul-week-pilot.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "hangul-week.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "heritage-skin-preview.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "index-backup-2026-10-26.html",
+      "status": 404,
+      "same_source_bytes": false,
+      "redirect": null
+    },
+    {
+      "path": "index.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "intermediate1.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "intermediate2.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "intro.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "kpop.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "learn.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "live.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "market.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "placement.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "reading.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "self-study-guide.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "speaking-platform-demo.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "speaking-platform.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "students.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    },
+    {
+      "path": "teaching-platform.html",
+      "status": 302,
+      "same_source_bytes": false,
+      "redirect": "/index.html#teaching-platform"
+    },
+    {
+      "path": "vowel-a.html",
+      "status": 200,
+      "same_source_bytes": true,
+      "redirect": null
+    }
+  ],
+  "restart": {
+    "first_pid": 6,
+    "exit_code": -15,
+    "second_pid": 47,
+    "different_pid": true,
+    "placement_preserved": true,
+    "session_preserved": true,
+    "profile_preserved": true,
+    "real_process_restart": true,
+    "production_data": false
+  }
+}

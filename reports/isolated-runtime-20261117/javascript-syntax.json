@@ -1,0 +1,82 @@
+[
+  {
+    "path": "active-recall.js",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "path": "global-language.js",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "path": "hangul-audio-review-state.js",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "path": "hangul-audio-review.js",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "path": "hangul-board.js",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "path": "hangul-core.js",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "path": "hangul-week-data.js",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "path": "hangul-week.js",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "path": "homepage.js",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "path": "phase3/app.js",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "path": "reading-alternates.js",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "path": "reading-curriculum.js",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "path": "site-language.js",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "path": "speaking-config.js",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "path": "teaching-entry.js",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "path": "teaching-home.js",
+    "exit": 0,
+    "error": ""
+  }
+]

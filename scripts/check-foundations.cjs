@@ -10,7 +10,7 @@ function quiz(q){assert.equal(new Set(q[2]).size,q[2].length,'Duplicate choices'
     if(name==='intro'){assert.equal(units[14].sent[0][0],'외');assert.equal(units[19].sent[0][0],'바');assert.equal(units[0].v.length,10);assert.equal(units[1].v.length,14);assert.equal(new Set(units.map(x=>x.grammar[0][0])).size,50);for(let i=0;i<35;i++){if(i===4||i===3||i>=30)continue;for(const q of units[i].quiz)assert(!/뜻|mean|interpret/i.test(q[0]+' '+q[1]),'A letter sound is not a meaning.');}}
   }
   assert.equal(total,350);assert.equal(questions,1758);
-  const context={window:{},document:{addEventListener(){},dispatchEvent(){}},Event:function(){},fetch:async()=>({ok:true,json:async()=>({recordings:{}})})};context.window.addEventListener=()=>{};vm.createContext(context);
+  const context={window:{},document:{addEventListener(){},dispatchEvent(){},getElementById(){return null;}},Event:function(){},fetch:async()=>({ok:true,json:async()=>({recordings:{}})})};context.window.addEventListener=()=>{};vm.createContext(context);
   for(const file of ['hangul-core.js','hangul-week-data.js','hangul-week.js','hangul-board.js','active-recall.js'])new vm.Script(read(file));
   vm.runInContext(read('hangul-core.js'),context);await context.window.HSHangul.ready;vm.runInContext(read('hangul-week-data.js'),context);
   const H=context.window.HSHangul;assert.equal(H.consonants.length,19);assert.equal(H.vowels.length,21);const combinations=new Set();

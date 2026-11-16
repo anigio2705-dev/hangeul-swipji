@@ -1,0 +1,2 @@
+Browser Use cannot open http://127.0.0.1:8765 in tab 2. Browser reported: net::ERR_CONNECTION_REFUSED
+Observed UI browser error; no page rendered, no UI acceptance claimed. Same-command local HTTP checks later passed.

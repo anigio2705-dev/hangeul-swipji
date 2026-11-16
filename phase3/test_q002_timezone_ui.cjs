@@ -113,7 +113,7 @@ async function main(){for(const device of ["UTC","Asia/Tokyo","America/Los_Angel
   rangeContains(lessons.textContent,'America/New_York',['19:00','20:00','-05:00']);
 
   a.state.user={...teacher,role:'teacher',approved:true,timezone:'America/New_York'};
-  h.setResponse(url=>url.startsWith('/api/earnings')?{teacherAccrued:0,referralAccrued:0,entries:[]}:{slots:[]});
+  h.setResponse(url=>url==='/api/me'?{user:{...a.state.user}}:url==='/api/availability/time-off'?{timeOff:[]}:url.startsWith('/api/earnings')?{teacherAccrued:0,referralAccrued:0,entries:[]}:{slots:[]});
   const profile=new Element();await a.profile(profile);
   const availability=descendants(profile).find(x=>x.tagName==='FORM'&&descendants(x).some(y=>y.name==='start'));
   assert.ok(availability,'availability form exists');
@@ -148,7 +148,8 @@ async function adminParticipantZoneRegression(){
   assert.ok(!('learnerTimezone' in booking)&&!('teacherTimezone' in booking)&&!('timezone' in booking));
   h.setResponse((url,opts)=>{
     assert.equal(opts.method,'GET','regression must only read fake API data');
-    if(url==='/api/admin')return {users,bookings:[booking],disputes:[dispute],ledger:[],audit:[]};
+    if(url==='/api/admin?includeUsers=0')return {userCount:users.length,bookings:[{...booking,learnerTimezone:'America/New_York',teacherTimezone:'Asia/Seoul'}],disputes:[dispute],ledger:[],audit:[]};
+    if(url.startsWith('/api/admin/providers?'))return {providers:users.filter(u=>u.role==='teacher'),total:1,hasMore:false};
     if(url==='/api/availability?teacherId=teacher-84')return {slots:[slot]};
     throw Error('Unexpected API request: '+url);
   });
@@ -158,7 +159,7 @@ async function adminParticipantZoneRegression(){
   assert.equal(actions.length,1,'actual admin UI must expose reschedule action');
   actions[0].onclick();
   await flush();
-  assert.deepEqual(h.calls.map(c=>c.url),['/api/admin','/api/availability?teacherId=teacher-84']);
+  assert.deepEqual(h.calls.map(c=>c.url),['/api/admin?includeUsers=0','/api/admin/providers?limit=20&offset=0','/api/availability?teacherId=teacher-84']);
   assert.equal(h.ids.get('#detail-dialog')?.open,true,'admin action must open dialog');
   const detail=h.ids.get('#detail');
   assert.ok(detail,'admin dialog content must exist');

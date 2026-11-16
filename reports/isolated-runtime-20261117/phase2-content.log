@@ -1,0 +1,216 @@
+{
+  "lessons": {
+    "units": 350,
+    "questions": 1758,
+    "pairGroundedQuestions": 1513,
+    "mechanicallyGroundedQuestions": 178,
+    "otherQuestions": 67,
+    "examples": 1050,
+    "vocabularyEntries": 2112,
+    "placeholderNotes": 0
+  },
+  "reading": {
+    "items": 600,
+    "questions": 1800,
+    "languages": 2,
+    "exactDuplicates": 0,
+    "levels": [
+      {
+        "level": 1,
+        "entries": 40,
+        "minEojeol": 5,
+        "maxEojeol": 11,
+        "meanEojeol": 8.55,
+        "maxSentenceEojeol": 4,
+        "uniqueSurfaceForms": 204
+      },
+      {
+        "level": 2,
+        "entries": 40,
+        "minEojeol": 9,
+        "maxEojeol": 19,
+        "meanEojeol": 14.07,
+        "maxSentenceEojeol": 8,
+        "uniqueSurfaceForms": 352
+      },
+      {
+        "level": 3,
+        "entries": 40,
+        "minEojeol": 13,
+        "maxEojeol": 27,
+        "meanEojeol": 19.52,
+        "maxSentenceEojeol": 8,
+        "uniqueSurfaceForms": 488
+      },
+      {
+        "level": 4,
+        "entries": 40,
+        "minEojeol": 18,
+        "maxEojeol": 34,
+        "meanEojeol": 25.18,
+        "maxSentenceEojeol": 8,
+        "uniqueSurfaceForms": 621
+      },
+      {
+        "level": 5,
+        "entries": 40,
+        "minEojeol": 24,
+        "maxEojeol": 42,
+        "meanEojeol": 31.98,
+        "maxSentenceEojeol": 9,
+        "uniqueSurfaceForms": 766
+      },
+      {
+        "level": 6,
+        "entries": 40,
+        "minEojeol": 30,
+        "maxEojeol": 48,
+        "meanEojeol": 38.63,
+        "maxSentenceEojeol": 11,
+        "uniqueSurfaceForms": 898
+      },
+      {
+        "level": 7,
+        "entries": 40,
+        "minEojeol": 39,
+        "maxEojeol": 54,
+        "meanEojeol": 45.73,
+        "maxSentenceEojeol": 11,
+        "uniqueSurfaceForms": 1032
+      },
+      {
+        "level": 8,
+        "entries": 40,
+        "minEojeol": 46,
+        "maxEojeol": 61,
+        "meanEojeol": 52.45,
+        "maxSentenceEojeol": 11,
+        "uniqueSurfaceForms": 1152
+      },
+      {
+        "level": 9,
+        "entries": 40,
+        "minEojeol": 55,
+        "maxEojeol": 71,
+        "meanEojeol": 60.65,
+        "maxSentenceEojeol": 12,
+        "uniqueSurfaceForms": 1323
+      },
+      {
+        "level": 10,
+        "entries": 40,
+        "minEojeol": 62,
+        "maxEojeol": 82,
+        "meanEojeol": 69.85,
+        "maxSentenceEojeol": 12,
+        "uniqueSurfaceForms": 1517
+      },
+      {
+        "level": 11,
+        "entries": 40,
+        "minEojeol": 68,
+        "maxEojeol": 93,
+        "meanEojeol": 78.7,
+        "maxSentenceEojeol": 13,
+        "uniqueSurfaceForms": 1684
+      },
+      {
+        "level": 12,
+        "entries": 40,
+        "minEojeol": 77,
+        "maxEojeol": 104,
+        "meanEojeol": 87.83,
+        "maxSentenceEojeol": 13,
+        "uniqueSurfaceForms": 1841
+      },
+      {
+        "level": 13,
+        "entries": 40,
+        "minEojeol": 85,
+        "maxEojeol": 115,
+        "meanEojeol": 97,
+        "maxSentenceEojeol": 13,
+        "uniqueSurfaceForms": 2006
+      },
+      {
+        "level": 14,
+        "entries": 40,
+        "minEojeol": 93,
+        "maxEojeol": 125,
+        "meanEojeol": 106.1,
+        "maxSentenceEojeol": 13,
+        "uniqueSurfaceForms": 2145
+      },
+      {
+        "level": 15,
+        "entries": 40,
+        "minEojeol": 102,
+        "maxEojeol": 135,
+        "meanEojeol": 115.6,
+        "maxSentenceEojeol": 14,
+        "uniqueSurfaceForms": 2287
+      }
+    ]
+  },
+  "audio": {
+    "targets": 463,
+    "available": 78,
+    "missing": 385,
+    "decodedFiles": 78,
+    "playbackAvailable": 21,
+    "humanFiles": 78,
+    "syntheticFiles": 0,
+    "excludedSynthetic": 26,
+    "held": 57,
+    "listeningApproved": 0,
+    "signalWarnings": 6,
+    "groups": {
+      "consonantNames": {
+        "targets": 19,
+        "filePresent": 14,
+        "playbackAvailable": 0,
+        "missing": 5,
+        "listeningApproved": 0
+      },
+      "vowels": {
+        "targets": 21,
+        "filePresent": 17,
+        "playbackAvailable": 9,
+        "missing": 4,
+        "listeningApproved": 0
+      },
+      "syllables": {
+        "targets": 399,
+        "filePresent": 45,
+        "playbackAvailable": 19,
+        "missing": 354,
+        "listeningApproved": 0
+      }
+    },
+    "requiredHangul": {
+      "uniqueTargets": 418,
+      "filePresent": 59,
+      "missing": 359,
+      "playbackAvailable": 19,
+      "listeningApproved": 0
+    }
+  },
+  "completion": {
+    "sourceChecksPassed": true,
+    "complete": false,
+    "blockers": [
+      "Required Hangul human recordings missing: 359",
+      "Actual pronunciation listening approvals incomplete."
+    ],
+    "limits": [
+      "AI source review does not establish learning effectiveness.",
+      "Browser mobile emulation does not establish iPhone/Android physical-device compatibility."
+    ]
+  },
+  "errors": [],
+  "warnings": [
+    "Audio: missing human recordings and listening approval remain; no synthetic substitution.",
+    "Exact supported-option uniqueness is an automated property, not a proof of every possible semantic interpretation.",
+    "Level metrics describe this graded curriculum; no CEFR/TOPIK calibration or learner trial was performed."
+  ]
+}

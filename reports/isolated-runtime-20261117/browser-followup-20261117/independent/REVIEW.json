@@ -1,0 +1,44 @@
+{
+  "reviewer": "independent_review_agent",
+  "verdict": "ACCEPT_SCOPED_FIXTURE_REPAIR_STATEMENT_UI_STORAGE_AND_ACCOUNT_ISOLATION",
+  "original_source": "94a40b84c4c5665b5964b47f128b9472cfdae6eb",
+  "reviewed_app_sha256": "1254ad0d1698541a8a67a6ad287c2d8c6425108fcab20d062dc7d040fef5ba24",
+  "reviewed_browser_harness_sha256": "9c392980d4018745e837656a09231ed9706aa2598fe95ee00e7847beec8c46de",
+  "independent_HTTP_cases": 4,
+  "independent_Chromium_scenarios": [
+    {
+      "file": "browser_independent.cjs",
+      "checks": 6,
+      "status": "PASS_SCOPED_REAL_UI"
+    },
+    {
+      "file": "browser_dispute_independent.cjs",
+      "checks": 6,
+      "status": "PASS_SCOPED_STATEMENT_UI"
+    }
+  ],
+  "blocking_findings": [],
+  "reviewed_fixture_adjustments": [
+    "q002 minimal SQLite schema now includes production observation table/audit.id; original date assertions preserved; explicit lateSeconds verified",
+    "Profile/administration mock endpoints now match existing API; participant timezone expectations unchanged",
+    "Counterpart statement required before refund/reschedule; existing role protections preserved",
+    "Repeated identical refund returns duplicate=true while amount/ledger invariants remain",
+    "Foundations utility DOM adds getElementById returning null, no education assertions removed",
+    "Browser harness availability form selector scoped to actual form; profile timezone dominates device per existing contract",
+    "Student lesson questions remain visible while correct answers/teacher guide remain hidden per existing privacy contract"
+  ],
+  "reviewed_product_fix": "Existing authenticated statement GET/POST API now reachable from participant booking UI and read-only administrator UI; stale account responses suppressed",
+  "not_claimed": [
+    "All product workflows universally correct",
+    "Teacher or pronunciation/content quality review",
+    "Actual mobile hardware or two-device media",
+    "Real hosted Auth/RLS/PG",
+    "24hour runtime passed",
+    "Independent execution of parent entire existing browser suite"
+  ],
+  "server_and_browser_processes_terminated": true,
+  "temporary_databases_removed": true,
+  "production_changes": 0,
+  "model_calls": 0,
+  "finished_at_utc": "2026-11-16T23:55:07.749126+00:00"
+}

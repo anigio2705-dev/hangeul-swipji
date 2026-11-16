@@ -82,8 +82,9 @@ class SecurityTests(unittest.TestCase):
             s,_,_=self.call('POST',endpoint+'/pay-test',{},self.learner);self.assertEqual(s,200)
         _,d,_=self.call('POST',endpoint+'/dispute',{'category':'refund','reason':'A local test refund request with evidence'},self.learner)
         did=d['disputeId']
+        status,_,_=self.call('POST',f'/api/bookings/{self.booking}/disputes/{did}/statements',{'text':'Counterpart statement for isolated refund verification.'},self.teacher);self.assertEqual(status,200)
         s,_,_=self.call('POST','/api/admin/disputes/'+did,{'decision':'refund','reason':'Evidence confirmed local test refund'},self.admin);self.assertEqual(s,200)
-        s,_,_=self.call('POST','/api/admin/disputes/'+did,{'decision':'refund','reason':'Repeated decision must not double-refund'},self.admin);self.assertEqual(s,409)
+        s,replayed,_=self.call('POST','/api/admin/disputes/'+did,{'decision':'refund','reason':'Repeated decision must not double-refund'},self.admin);self.assertEqual(s,200);self.assertTrue(replayed['duplicate'])
         with server.connect() as db:
             rows=db.execute('SELECT kind,amount FROM ledger WHERE booking_id=?',(self.booking,)).fetchall()
             self.assertEqual(len(rows),2)

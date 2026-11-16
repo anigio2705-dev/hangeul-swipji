@@ -1,0 +1,80 @@
+{
+  "kind": "automated-learning-simulation",
+  "humanLearners": 0,
+  "humanTeacherListeningApprovals": 0,
+  "days": 7,
+  "questions": 40,
+  "results": [
+    {
+      "day": "H01",
+      "title": "자음 이름부터",
+      "questions": 5,
+      "perfect": 5,
+      "wrong": 0,
+      "passThreshold": 4,
+      "teacherSteps": 4,
+      "practice": 14
+    },
+    {
+      "day": "H02",
+      "title": "모음 10개",
+      "questions": 5,
+      "perfect": 5,
+      "wrong": 0,
+      "passThreshold": 4,
+      "teacherSteps": 4,
+      "practice": 10
+    },
+    {
+      "day": "H03",
+      "title": "합치면 가·나·다",
+      "questions": 5,
+      "perfect": 5,
+      "wrong": 0,
+      "passThreshold": 4,
+      "teacherSteps": 4,
+      "practice": 14
+    },
+    {
+      "day": "H04",
+      "title": "모음을 바꿔요",
+      "questions": 5,
+      "perfect": 5,
+      "wrong": 0,
+      "passThreshold": 4,
+      "teacherSteps": 4,
+      "practice": 12
+    },
+    {
+      "day": "H05",
+      "title": "낱말을 읽어요",
+      "questions": 5,
+      "perfect": 5,
+      "wrong": 0,
+      "passThreshold": 4,
+      "teacherSteps": 4,
+      "practice": 9
+    },
+    {
+      "day": "H06",
+      "title": "쉬운 받침",
+      "questions": 5,
+      "perfect": 5,
+      "wrong": 0,
+      "passThreshold": 4,
+      "teacherSteps": 4,
+      "practice": 8
+    },
+    {
+      "day": "H07",
+      "title": "읽고, 쓰고, 확인",
+      "questions": 10,
+      "perfect": 10,
+      "wrong": 0,
+      "passThreshold": 8,
+      "teacherSteps": 4,
+      "practice": 8
+    }
+  ],
+  "conclusion": "Code and answer-key consistency checks only. No pronunciation, usability, or human learning outcomes validated."
+}

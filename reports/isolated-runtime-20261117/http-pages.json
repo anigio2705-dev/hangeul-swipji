@@ -1,0 +1,146 @@
+[
+  {
+    "path": "academy.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "advanced1.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "advanced2.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "beginner1.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "beginner2.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "bts-gyeongbokgung-preview.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "culture.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "daily.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "dashboard.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "drama.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "experience.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "global-language.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "guide.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "hangul-audio-credits.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "hangul-audio-review.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "hangul-basics.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "hangul-week-pilot.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "hangul-week.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "heritage-skin-preview.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "index-backup-2026-10-26.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "index.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "intermediate1.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "intermediate2.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "intro.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "kpop.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "learn.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "live.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "market.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "placement.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "reading.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "self-study-guide.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "speaking-platform-demo.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "speaking-platform.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "students.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "teaching-platform.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+    "path": "vowel-a.html",
+    "error": "<urlopen error [Errno 111] Connection refused>"
+  }
+]
