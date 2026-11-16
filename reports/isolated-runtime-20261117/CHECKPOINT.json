@@ -1,5 +1,5 @@
 {
-  "status": "LOCAL_SERVER_API_PASS_UI_INCOMPLETE",
+  "status": "BROWSER_AND_INDEPENDENT_REVIEW_IN_PROGRESS",
   "source_sha": "94a40b84c4c5665b5964b47f128b9472cfdae6eb",
   "python_tests": 92,
   "python_passed": 92,
@@ -32,7 +32,11 @@
   "model_calls": 0,
   "paid_resources_created": 0,
   "existing_soak24_modified": false,
-  "lease": null,
+  "lease": {
+    "owner": "work-browser-followup-20261117T234741Z",
+    "expires_at_utc": "2026-11-17T00:17:41Z",
+    "scope": "Owned audit branch browser tooling/isolated tests and evidence; independent review; no production or existing soak24 mutation"
+  },
   "active_execution": null,
   "finished_at_utc": "2026-11-16T23:02:52.280396+00:00",
   "report": "reports/isolated-runtime-20261117/REPORT.ko.md",
