@@ -1,0 +1,10 @@
+test_booking_keeps_empty_participant_timezone (test_q002_timezone_server.ServerQ002Tests.test_booking_keeps_empty_participant_timezone) ... ok
+test_booking_participant_views_authorization_and_utc (test_q002_timezone_server.ServerQ002Tests.test_booking_participant_views_authorization_and_utc) ... ok
+test_empty_legacy_zone_explicit_and_omitted (test_q002_timezone_server.ServerQ002Tests.test_empty_legacy_zone_explicit_and_omitted) ... ok
+test_invalid_zone_rejected_before_any_update (test_q002_timezone_server.ServerQ002Tests.test_invalid_zone_rejected_before_any_update) ... ok
+test_valid_iana_zones (test_q002_timezone_server.ServerQ002Tests.test_valid_iana_zones) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.010s
+
+OK

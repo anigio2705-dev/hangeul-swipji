@@ -1,0 +1,17 @@
+evalmachine.<anonymous>:140
+  if(document.getElementById('repeat-selected')){
+              ^
+
+TypeError: document.getElementById is not a function
+    at evalmachine.<anonymous>:140:15
+    at evalmachine.<anonymous>:151:3
+    at Script.runInContext (node:vm:149:12)
+    at Object.runInContext (node:vm:301:6)
+    at /workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/scripts/check-foundations.cjs:15:6
+    at Object.<anonymous> (/workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/scripts/check-foundations.cjs:21:3)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14)
+    at Object..js (node:internal/modules/cjs/loader:2060:10)
+    at Module.load (node:internal/modules/cjs/loader:1651:32)
+    at Module._load (node:internal/modules/cjs/loader:1443:12)
+
+Node.js v24.22.1

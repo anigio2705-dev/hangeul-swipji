@@ -1,0 +1,12 @@
+PASS preview refuses installation without isolated gate
+PASS full proposal SQL installs in isolated PostgreSQL
+PASS RLS enabled on every hs3 table
+PASS anonymous schema access denied
+PASS authenticated client denied without explicit grants
+PASS owner RLS reads only self and rejects role escalation
+PASS provider overlapping availability rejected by GiST
+PASS cross-user booking homework and earnings RLS denied
+PASS authorized participant reads booking and homework
+PASS beneficiary reads own ledger but cannot write or delete
+PASS duplicate ledger event rejected
+PASS learner overlapping claim rejected across different providers

@@ -1,0 +1,24 @@
+{
+  "targetCount": 63,
+  "humanCandidateCount": 51,
+  "missingCount": 12,
+  "missing": [
+    "라",
+    "마",
+    "바",
+    "자",
+    "카",
+    "타",
+    "파",
+    "하",
+    "고",
+    "노",
+    "누",
+    "도"
+  ],
+  "heldCount": 40,
+  "readyForPlaybackCount": 11,
+  "invalid": [],
+  "teacherListeningApproved": false,
+  "notes": "File presence is not pronunciation approval. Held candidates require human listening review."
+}

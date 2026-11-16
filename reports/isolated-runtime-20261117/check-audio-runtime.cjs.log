@@ -1,0 +1,1 @@
+PASS audio runtime: ended, held, missing, source-type rejection, play rejection, file error, manifest failure, timeout and cancellation; no TTS substitution.

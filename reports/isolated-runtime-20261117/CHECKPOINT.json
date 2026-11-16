@@ -1,12 +1,40 @@
 {
-  "status": "TESTING_IN_ISOLATED_LOCAL_COPY",
+  "status": "LOCAL_SERVER_API_PASS_UI_INCOMPLETE",
   "source_sha": "94a40b84c4c5665b5964b47f128b9472cfdae6eb",
-  "lease": {
-    "owner": "work-isolated-runtime-review-20261117",
-    "scope": "Only owned audit branch; test fixture repair, new tests, reports; no product runtime change",
-    "expires_at_utc": "2026-11-16T23:17:00Z"
-  },
-  "active_execution": null,
+  "python_tests": 92,
+  "python_passed": 92,
+  "python_failures": 0,
+  "python_errors": 0,
+  "original_python_tests": 89,
+  "original_failures": 4,
+  "original_error_subtests": 4,
+  "new_tests": 3,
+  "PGlite_checks": 12,
+  "js_syntax_files": 16,
+  "node_checks": 8,
+  "node_final_pass": 8,
+  "mock_DOM_timezone_test_exit": 0,
+  "real_HTML_delivery_identical": 34,
+  "intended_404": 1,
+  "intended_302": 1,
+  "real_process_restart": true,
+  "browser": "BLOCKED_ENVIRONMENT",
+  "independent_B": false,
+  "product_runtime_files_changed": 0,
+  "test_files_changed": [
+    "phase3/test_q002_timezone_server.py",
+    "phase3/test_q002_timezone_ui.cjs",
+    "phase3/test_security.py",
+    "phase3/test_server.py",
+    "scripts/check-foundations.cjs"
+  ],
   "production_changes": 0,
-  "model_calls": 0
+  "model_calls": 0,
+  "paid_resources_created": 0,
+  "existing_soak24_modified": false,
+  "lease": null,
+  "active_execution": null,
+  "finished_at_utc": "2026-11-16T23:02:52.280396+00:00",
+  "report": "reports/isolated-runtime-20261117/REPORT.ko.md",
+  "next_action": "Run preserved exact product source and test-only corrections in an approved browser-capable isolated environment; complete desktop/mobile real UI+storage/permissions acceptance. No existing soak24 mutation."
 }

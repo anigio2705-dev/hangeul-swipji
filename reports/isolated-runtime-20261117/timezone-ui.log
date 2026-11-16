@@ -1,0 +1,7 @@
+Error: 서버 응답을 읽지 못했습니다. 테스트 서버 실행 상태를 확인하세요.
+    at api (phase3/app.js:37:273)
+    at async Object.admin (phase3/app.js:365:245)
+    at async adminParticipantZoneRegression (/workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/phase3/test_q002_timezone_ui.cjs:156:3)
+Error: 최신 프로필을 확인하지 못했습니다. 다시 조회해 주세요.
+    at Object.profile (phase3/app.js:161:391)
+    at async main (/workspace/scratch/c49b32afa5ab/hangeul-isolated-review-20261117/phase3/test_q002_timezone_ui.cjs:117:31)

@@ -464,3 +464,8 @@ Server PR310 preserved. JS explicit learner/teacher IANA ranges, UTC offsets and
 
 원본 79번의 한정 코드 범위: 승인된 phase3/app.js 범위의 필수 런타임은 Node이며, 독립 실행에서 종료 코드 0·91개 검증 PASS와 B 리뷰 PASS가 확인되어 기존 HOLD가 해소되었습니다. Python은 not_required이므로 요구하지 않습니다. 수락은 코드 범위에 한정하며 제품·브라우저·배포 검증은 대기 상태입니다.
 검사: 독립 B 소스 검토 및 격리 독립 기능검사 PASS. 실제 브라우저·청취·공개 반영·전체 항목 최종 승인은 미완료.
+
+
+## 2026-11-17 한글쉽지 별도 복사본 구동·코드 검토
+
+기준 PR344 코드94a40b84c4c5665b5964b47f128b9472cfdae6eb를 별도 로컬 복사본으로 실행했다. 새 임시 SQLite/loopback에서 원본 회귀89개 중 실패4·오류4를 보존하고, 최신 진술/멱등환불/관측스키마와 맞지 않는 검사 자료만 보완했다. 신규 현재절차3개를 포함한 Python92개 통과. Node검사8개 및 모의DOM 시간대 검사 통과, PGlite12검사 통과, JS16파일 구문 통과. HTML34개 원본200 및 백업404/옛경로302 확인. 실제 서버 프로세스 종료·재시작 후 같은 임시DB의 프로필/세션/진단 보존 통과. 제품 실행 코드/콘텐츠 변경0, 운영/기존24시간 시험/모델 호출/유료자원/main 변경0. 실제 브라우저는 로컬 Chromium socket제약 및 UI브라우저 loopback접속 실패로 미완료이며 전체 화면/실기기/통화/교육효과/운영 배포 합격을 주장하지 않는다. 독립 B 검토 없음. 재현 명령·실패 원문·다음 조건: reports/isolated-runtime-20261117/REPORT.ko.md 및 CHECKPOINT.json.

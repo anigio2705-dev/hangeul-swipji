@@ -22,7 +22,7 @@ class ServerQ002Tests(unittest.TestCase):
                 level TEXT, qualifications TEXT, referral_code TEXT
             );
             CREATE TABLE audit (
-                actor TEXT, action TEXT, entity TEXT, detail TEXT, created_at REAL
+                id INTEGER PRIMARY KEY AUTOINCREMENT, actor TEXT, action TEXT, entity TEXT, detail TEXT, created_at REAL
             );
             CREATE TABLE slots (
                 id TEXT PRIMARY KEY, teacher_id TEXT, start REAL, end REAL
@@ -65,6 +65,7 @@ class ServerQ002Tests(unittest.TestCase):
         self.db.execute('INSERT INTO disputes VALUES (?,?,?)',
                         ('case', 'abc123', 1900000070.75))
         self.db.commit()
+        server.session_evidence.initialize(self.db)
         self.handler = object.__new__(server.Handler)
 
     def call(self, uid, method, path, data=None):
@@ -140,7 +141,8 @@ class ServerQ002Tests(unittest.TestCase):
                     if key != 'room':
                         self.assertEqual(booking[key], value, key)
                 self.assertEqual(booking['slot'], slot_before)
-                self.assertEqual(booking['attendance'], attendance_before)
+                expected_attendance=[dict(row,lateSeconds=max(0,row['joined']-slot_before['start'])) for row in attendance_before]
+                self.assertEqual(booking['attendance'], expected_attendance)
                 self.assertEqual(booking['disputes'], disputes_before)
                 self.assertEqual(booking['sharedSeconds'], 0)
                 self.assertEqual(booking['paymentMode'], 'simulated-test-only')

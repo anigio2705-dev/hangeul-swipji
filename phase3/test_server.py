@@ -105,6 +105,7 @@ class PlatformTests(unittest.TestCase):
         status,earned=self.teacher.call('/api/earnings');self.assertEqual(200,status);self.assertEqual(16000,earned['teacherAccrued']);self.assertFalse(earned['realPayout'])
         outsider=self.outsider.call('/api/earnings')[1];self.assertEqual([],outsider['entries']);self.assertEqual(0,outsider['teacherAccrued'])
         _,case=self.action(self.learner,bid,'dispute',{'category':'refund','reason':'Local test refund evidence and review'})
+        self.assertEqual(200,self.teacher.call(f"/api/bookings/{bid}/disputes/{case['disputeId']}/statements",{'text':'Counterpart evidence for local-only refund review.'})[0])
         self.admin.call('/api/admin/disputes/'+case['disputeId'],{'decision':'refund','reason':'Local test reason with sufficient evidence'})
         self.assertEqual(0,self.teacher.call('/api/earnings')[1]['teacherAccrued'])
     def test_full_30min_complete_settle_refund_and_review_exclusion(self):
@@ -114,6 +115,7 @@ class PlatformTests(unittest.TestCase):
         first=self.admin.call('/api/admin/settle',{'bookingId':bid});self.assertEqual(200,first[0]);self.assertFalse(first[1]['realPayout']);self.assertEqual(200,self.admin.call('/api/admin/settle',{'bookingId':bid})[0])
         _,case=self.action(self.learner,bid,'dispute',{'category':'connection','reason':'Test connection failure evidence'})
         self.assertEqual(409,self.admin.call('/api/admin/settle',{'bookingId':bid})[0])
+        self.assertEqual(200,self.teacher.call(f"/api/bookings/{bid}/disputes/{case['disputeId']}/statements",{'text':'Counterpart evidence for local-only refund review.'})[0])
         self.assertEqual(200,self.admin.call('/api/admin/disputes/'+case['disputeId'],{'decision':'refund','reason':'Test-only refund approved after evidence'})[0])
         with server.connect() as db:
             for group in db.execute("SELECT replace(kind,'_reversal','') AS k,sum(amount) AS total FROM ledger GROUP BY k"):self.assertEqual(0,group['total'])
@@ -131,7 +133,10 @@ class PlatformTests(unittest.TestCase):
         bid=self.booking();self.action(self.learner,bid,'pay-test');_,replacement=self.teacher.call('/api/availability',{'start':self.clock+5000,'end':self.clock+8600})
         _,case=self.action(self.learner,bid,'dispute',{'category':'connection','reason':'Test need a mutually agreed replacement'})
         body={'decision':'reschedule','slotId':replacement['slotId'],'learnerConsent':True,'teacherConsent':True,'reason':'Mutual test replacement evidence'}
-        endpoint='/api/admin/disputes/'+case['disputeId'];self.assertEqual(400,self.admin.call(endpoint,body)[0])
+        endpoint='/api/admin/disputes/'+case['disputeId']
+        self.assertEqual(409,self.admin.call(endpoint,body)[0])  # No counterpart statement yet.
+        self.assertEqual(200,self.teacher.call(f"/api/bookings/{bid}/disputes/{case['disputeId']}/statements",{'text':'Counterpart evidence for local-only reschedule review.'})[0])
+        self.assertEqual(400,self.admin.call(endpoint,body)[0])
         self.action(self.learner,bid,'reschedule-consent',{'slotId':replacement['slotId']});self.assertEqual(400,self.admin.call(endpoint,body)[0])
         self.action(self.teacher,bid,'reschedule-consent',{'slotId':replacement['slotId']});self.assertEqual(200,self.admin.call(endpoint,body)[0])
         with server.connect() as db:self.assertEqual(replacement['slotId'],db.execute('SELECT slot_id FROM bookings WHERE id=?',(bid,)).fetchone()[0])

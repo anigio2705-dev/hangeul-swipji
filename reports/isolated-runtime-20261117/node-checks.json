@@ -1,0 +1,42 @@
+[
+  {
+    "command": "node scripts/audit-350-lessons.cjs",
+    "exit": 0,
+    "seconds": 0.082
+  },
+  {
+    "command": "node scripts/check-audio-runtime.cjs",
+    "exit": 0,
+    "seconds": 0.115
+  },
+  {
+    "command": "node scripts/check-phase2-pages.cjs",
+    "exit": 0,
+    "seconds": 0.09
+  },
+  {
+    "command": "node scripts/check-foundations.cjs",
+    "exit": 1,
+    "seconds": 0.092
+  },
+  {
+    "command": "node scripts/check-human-audio.cjs",
+    "exit": 0,
+    "seconds": 0.064
+  },
+  {
+    "command": "node scripts/check-week-audio-step1.cjs",
+    "exit": 0,
+    "seconds": 0.056
+  },
+  {
+    "command": "node scripts/check-week-human-audio.cjs",
+    "exit": 0,
+    "seconds": 0.055
+  },
+  {
+    "command": "node scripts/check-week-learning-simulation.cjs",
+    "exit": 0,
+    "seconds": 0.06
+  }
+]
