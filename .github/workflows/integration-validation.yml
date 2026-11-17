@@ -8,7 +8,8 @@ permissions:
   contents: read
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
         with:
@@ -16,6 +17,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - run: python -m unittest discover -s scripts -p 'test_ci_evidence.py' -v
+      - name: Prepare fresh CI evidence
+        run: python scripts/ci-evidence.py prepare integration --output "$RUNNER_TEMP/integration-evidence"
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -42,16 +46,12 @@ jobs:
       - run: node scripts/browser-functional-phase2.cjs
         env:
           NODE_PATH: ./phase3/node_modules
+      - name: Collect this job's evidence
+        if: always()
+        run: python scripts/ci-evidence.py collect integration --output "$RUNNER_TEMP/integration-evidence" --status "${{ job.status }}"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: integration-evidence
-          path: |
-            phase3/browser-results.json
-            phase3/staging-browser-results.json
-            phase3/video-browser-results.json
-            audit/staging9-instant-results.json
-            phase3/postgres-results.json
-            phase3/browser-artifacts/*.png
-            audit/phase2-content.json
-            audit/professional96-*.json
+          name: integration-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/integration-evidence
+          if-no-files-found: error
