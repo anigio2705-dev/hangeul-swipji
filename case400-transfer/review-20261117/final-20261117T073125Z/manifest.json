@@ -1,0 +1,71 @@
+{
+  "format": "AES-256-GCM",
+  "version": 1,
+  "nonce_b64": "ZpTHRo9enHd65mWS",
+  "aad": "CASE400-final-expanded-20261117",
+  "plaintext_sha256": "acc31489cab9246f2204b09b26ad22586ecd22bd2af94a76307a477f0c696ed4",
+  "ciphertext_sha256": "72a2b13e42dd975889a4d70c479ff7154de5f00aee7776bab4b3f8a0e5c1e0bb",
+  "parts": [
+    {
+      "name": "payload.part001.b64",
+      "characters": 600000,
+      "sha256": "2100c00aa18eb4cc1f51ddedb778233209b526e922acc4089449a00619883260"
+    },
+    {
+      "name": "payload.part002.b64",
+      "characters": 600000,
+      "sha256": "efa095626c7122aa183b6784573f349abd2a233ee93e57e42461594a1c8ba0ae"
+    },
+    {
+      "name": "payload.part003.b64",
+      "characters": 600000,
+      "sha256": "ef11517dda6be05984b4f298e121984bb73b7005a9bdbe25fad4694bf26bc574"
+    },
+    {
+      "name": "payload.part004.b64",
+      "characters": 600000,
+      "sha256": "7d23eb2a25ff30d0af46a8c16e95241b776691d4105f682d0643b22d1c8f03ef"
+    },
+    {
+      "name": "payload.part005.b64",
+      "characters": 600000,
+      "sha256": "f10d4565fd9e28bfafbbd4d181a9c8e4be2bc695c40a2062846593f1f2b55226"
+    },
+    {
+      "name": "payload.part006.b64",
+      "characters": 600000,
+      "sha256": "0baceeeb98a6912e92a7b4d571ead15ba8ba58af5c04db5918fddb6d49a979bf"
+    },
+    {
+      "name": "payload.part007.b64",
+      "characters": 600000,
+      "sha256": "71bfad530ad974de5ef90862a3d883054d5c38f08ab57d44f2fb7066df6f3071"
+    },
+    {
+      "name": "payload.part008.b64",
+      "characters": 600000,
+      "sha256": "428802f3a4ae4acda5bbb28e557a49612c35a39ad47f538ef9360a298b043653"
+    },
+    {
+      "name": "payload.part009.b64",
+      "characters": 600000,
+      "sha256": "dd205304838c75322237c6ad64ca6ff8182f49fc609c02c2ed07714b0ac32726"
+    },
+    {
+      "name": "payload.part010.b64",
+      "characters": 600000,
+      "sha256": "ffe698beffb4ff9f3d0a26ba39696921be41fe01710c51c90147192648a9227d"
+    },
+    {
+      "name": "payload.part011.b64",
+      "characters": 600000,
+      "sha256": "2662082e695c1a50aec8cfc5e83262d491359e168800f01609f559e199d1b97b"
+    },
+    {
+      "name": "payload.part012.b64",
+      "characters": 160992,
+      "sha256": "530ddc35b4ba045c7b91d4b9049064b79550e50963558759e1a6ce7a6b234afd"
+    }
+  ],
+  "note": "Encrypted preservation of expanded review and evidence texts. Key is retained separately and is not in this public repository."
+}
