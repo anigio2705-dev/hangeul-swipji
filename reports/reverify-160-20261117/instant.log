@@ -1,0 +1,10 @@
+PASS home CTA uses current account; no booking, signup or automatic camera
+PASS no partner shows waiting rather than a false connection
+PASS existing test account can sign in on the instant page
+PASS two opt-in users automatically matched without an invitation link
+PASS room withheld until both people confirm
+PASS both account contexts open identical mocked Jitsi room without gate credentials
+PASS mobile390 has no horizontal overflow
+PASS end removes both frames and does not silently requeue
+PASS unanswered offer and stale presence expire
+PASS booked class remains separately reachable

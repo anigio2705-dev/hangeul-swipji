@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "scope": "source-structure-and-heuristic-review",
+  "generatedAt": "2026-11-17T14:15:18.649Z",
+  "courses": [
+    {
+      "course": "intro",
+      "units": 50,
+      "questions": 258,
+      "duplicateTitles": 0,
+      "weakExplanations": 0
+    },
+    {
+      "course": "beginner1",
+      "units": 50,
+      "questions": 250,
+      "duplicateTitles": 0,
+      "weakExplanations": 0
+    },
+    {
+      "course": "beginner2",
+      "units": 50,
+      "questions": 250,
+      "duplicateTitles": 0,
+      "weakExplanations": 0
+    },
+    {
+      "course": "intermediate1",
+      "units": 50,
+      "questions": 250,
+      "duplicateTitles": 0,
+      "weakExplanations": 0
+    },
+    {
+      "course": "intermediate2",
+      "units": 50,
+      "questions": 250,
+      "duplicateTitles": 0,
+      "weakExplanations": 0
+    },
+    {
+      "course": "advanced1",
+      "units": 50,
+      "questions": 250,
+      "duplicateTitles": 0,
+      "weakExplanations": 0
+    },
+    {
+      "course": "advanced2",
+      "units": 50,
+      "questions": 250,
+      "duplicateTitles": 0,
+      "weakExplanations": 0
+    }
+  ],
+  "findings": [],
+  "summary": {
+    "units": 350,
+    "questions": 1758,
+    "errors": 0,
+    "warnings": 0
+  }
+}

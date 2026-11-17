@@ -1,0 +1,14 @@
+PASS 1440: eight languages, protected lesson text, safe separate translation link
+PASS 1440: rapid navigation never loads external translator
+PASS 1440: selection navigates, saves and survives reload
+PASS 1440: native bilingual course handler remains active
+PASS 1440: local page gives browser translation guidance without external requests
+PASS 1440: invalid language and duplicate initialization remain safe
+PASS 1440: unrelated JavaScript errors are not suppressed
+PASS 390: eight languages, protected lesson text, safe separate translation link
+PASS 390: rapid navigation never loads external translator
+PASS 390: selection navigates, saves and survives reload
+PASS 390: native bilingual course handler remains active
+PASS 390: local page gives browser translation guidance without external requests
+PASS 390: invalid language and duplicate initialization remain safe
+PASS 390: unrelated JavaScript errors are not suppressed
