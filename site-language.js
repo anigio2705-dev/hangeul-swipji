@@ -27,13 +27,13 @@ if(lang==='ko'||(nativeBilingual&&lang==='en')){cookie('ko');status('');return}
 // classroom languages and bilingual course handlers above remain local.
 cookie('ko');
 var messages={
- en:['Translate public page ↗','Machine translation opens in a new tab. Use this tab for lessons and your account.'],
- ja:['公開ページを翻訳 ↗','機械翻訳は新しいタブで開きます。授業とアカウントはこのタブで利用してください。'],
- es:['Traducir página pública ↗','La traducción automática se abre en otra pestaña. Usa esta pestaña para clases y tu cuenta.'],
- ru:['Перевести открытую страницу ↗','Машинный перевод откроется в новой вкладке. Уроки и аккаунт доступны в этой вкладке.'],
- 'zh-CN':['翻译公开页面 ↗','机器翻译将在新标签页中打开。课程和账户请在当前标签页使用。'],
- mn:['Нийтийн хуудсыг орчуулах ↗','Машин орчуулга шинэ табд нээгдэнэ. Хичээл болон бүртгэлээ энэ табаас ашиглана уу.'],
- vi:['Dịch trang công khai ↗','Bản dịch máy mở trong thẻ mới. Hãy dùng thẻ này cho lớp học và tài khoản.']
+ en:['Translate public page ↗','Machine translation opens in a new tab. Use this tab for lessons and your account. You can also use your browser’s translation.'],
+ ja:['公開ページを翻訳 ↗','機械翻訳は新しいタブで開きます。授業とアカウントはこのタブで利用してください。ブラウザの翻訳も利用できます。'],
+ es:['Traducir página pública ↗','La traducción automática se abre en otra pestaña. Usa esta pestaña para clases y tu cuenta. También puedes usar la traducción del navegador.'],
+ ru:['Перевести открытую страницу ↗','Машинный перевод откроется в новой вкладке. Уроки и аккаунт доступны в этой вкладке. Также можно использовать перевод браузера.'],
+ 'zh-CN':['翻译公开页面 ↗','机器翻译将在新标签页中打开。课程和账户请在当前标签页使用。也可使用浏览器翻译。'],
+ mn:['Нийтийн хуудсыг орчуулах ↗','Машин орчуулга шинэ табд нээгдэнэ. Хичээл болон бүртгэлээ энэ табаас ашиглана уу. Хөтчийн орчуулгыг мөн ашиглаж болно.'],
+ vi:['Dịch trang công khai ↗','Bản dịch máy mở trong thẻ mới. Hãy dùng thẻ này cho lớp học và tài khoản. Bạn cũng có thể dùng bản dịch của trình duyệt.']
 };
 var copy=messages[lang]||messages.en;
 var output=document.getElementById('hs-header-language-status')||document.getElementById('hs-language-status');

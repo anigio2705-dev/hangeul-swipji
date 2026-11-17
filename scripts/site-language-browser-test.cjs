@@ -69,6 +69,7 @@ const fixture=native=>`<!doctype html><html lang="ko"><head><meta charset="utf-8
    assert.match((await observed).message,/intentional error observation probe/);
    check(`${width}: unrelated JavaScript errors are not suppressed`);
    await context.close();
+   assert.deepEqual(errors,['intentional error observation probe']);
   }
  }catch(e){report.errors.push(e.stack||e.message);throw e;}
  finally{await browser.close();fs.mkdirSync(path.join(root,'audit'),{recursive:true});fs.writeFileSync(path.join(root,'audit/site-language-browser.json'),JSON.stringify(report,null,2)+'\n');}
