@@ -51,6 +51,7 @@ def collect(kind, output, status):
     if state['kind'] != kind or state['workspace'] != str(ROOT) or state['context'] != context():
         raise RuntimeError('CI_EVIDENCE_CONTEXT_CHANGED')
     files = []
+    report_errors = []
     for path in artifacts(kind):
         if path.is_symlink():
             raise RuntimeError('CI_EVIDENCE_SYMLINK')
@@ -58,17 +59,22 @@ def collect(kind, output, status):
         target = output / 'files' / relative
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(path, target)
+        if target.suffix == '.json':
+            report = json.loads(target.read_text())
+            if isinstance(report, dict) and report.get('errors'):
+                report_errors.append(str(relative))
         files.append({'path': str(relative), 'sha256': hashlib.sha256(target.read_bytes()).hexdigest(),
                       'bytes': target.stat().st_size})
     present = {item['path'] for item in files}
     missing = [path for path in REQUIRED[kind] if path not in present]
     state.update(collected_at=now(), job_status_before_collection=status,
                  files=files, missing_required=missing,
-                 evidence_complete=status == 'success' and not missing,
+                 reports_with_errors=report_errors,
+                 evidence_complete=status == 'success' and not missing and not report_errors,
                  note='Artifact existence alone is not a test pass; inspect workflow step results.')
     (output / 'manifest.json').write_text(json.dumps(state, indent=2) + '\n')
     print(json.dumps({'status': status, 'files': len(files), 'missing': missing}))
-    return 1 if status == 'success' and missing else 0
+    return 1 if status == 'success' and (missing or report_errors) else 0
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

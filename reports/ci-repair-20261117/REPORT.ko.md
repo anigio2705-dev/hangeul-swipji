@@ -34,3 +34,18 @@ intro.html만 기존 수락 커밋 c6ec5657c76e567e1796704a8b9ef75ec89b94ee에 �
 - https://github.com/anigio2705-dev/hangeul-swipji/pull/347
 - https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/43994246651
 - https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/43994246989
+
+## 두 번째 실제 실행과 추가 반례
+
+검사 소스 cf89977a0cd7b91baeb320d0c57d515f8cfb8754, GitHub 임시 merge checkout 0cb2c803b71020a4f6e88eaa1e283bc26c8988db. 이 merge의 부모는 원래 base39a7c09와 cf89977이고 tree는 cf89977과 같다.
+
+- phase3 run43995684821 / job133747035929: GitHub success. Python92, PostgreSQL12, 일반 브라우저33검사. 1440/390 화면, 96교재 검사. JSON errors=[]이며 artifact6파일 해시 대조 완료.
+- integration run43995684837 / job133747036073: GitHub success로 표시됐다. Python92, 원본 보존3, 증거4, 일반33/HTTPS35/모의화상17/즉시매칭10검사와 PC·모바일 각각78녹음 재생 종료 검사가 실행됐다.
+- 하지만 통합 artifact를 직접 읽자 일반 브라우저 결과 errors에 `Cannot read properties of undefined (reading 'dispose')` 1건이 있었다. 다른 브라우저 JSON은 errors=[]였다. 이 실행은 최종 수락하지 않는다.
+- 원인: 기존 오류0 검사가 시나리오 중간에만 있었다. 뒤쪽에서 생긴 오류가 보고서에 남아도 프로세스 성공으로 끝날 수 있었다. 오류 발생 코드의 출처는 아직 확정하지 않았다.
+- 보강: 끝까지 검사한 뒤와 브라우저 종료 뒤에도 오류를 검사한다. 후속 오류는 URL·stack을 기록한다. 증거 수집기도 errors가 있는 JSON을 성공으로 인정하지 않는다. 실제 발견한 반례를 회귀 검사에 추가해5개 통과했다(원본 보존3개 별도).
+- 세 번째 실행에서 이 보강본을 확인한다. 재발 시 출처를 보고 수정하며, 재발하지 않아도 첫 오류의 원인이 해결됐다고 단정하지 않는다.
+
+## 범위와 재개 기준
+
+이 작업은 한글쉽지 제품 저장소의 두 CI workflow 복구다. 자동화 실험 저장소의 다른 CI, 완료 집계(2번), 실행기 복구·감시·백업(3~5번), 24시간 시험 판정은 별도이며 완료로 확대하지 않는다. 현재24시간 서버는 손대지 않았다. 제한 시간까지 세 번째 실행 결과와 소스 버전을 PR347에 기록하고 종료한다. 새 독립 B 검토/실제 모바일 기기/외부 화상 통화/실제 결제/운영 배포 수락은 없다.

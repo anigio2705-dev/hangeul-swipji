@@ -68,5 +68,14 @@ class EvidenceTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, 'CI_EVIDENCE_CONTEXT_CHANGED'):
                 evidence.collect('phase3', self.output, 'success')
 
+    def test_green_job_with_late_browser_error_is_rejected(self):
+        evidence.prepare('phase3', self.output)
+        self.write('phase3/postgres-results.json', {'checks': ['fresh database']})
+        self.write('phase3/browser-results.json', {'checks': ['earlier pass'],
+                    'errors': ["Cannot read properties of undefined (reading 'dispose')"]})
+        self.assertEqual(evidence.collect('phase3', self.output, 'success'), 1)
+        self.assertFalse(self.manifest()['evidence_complete'])
+        self.assertEqual(self.manifest()['reports_with_errors'], ['phase3/browser-results.json'])
+
 if __name__ == '__main__':
     unittest.main()

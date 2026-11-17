@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "kind": "integration",
+  "workspace": "/home/runner/work/hangeul-swipji/hangeul-swipji",
+  "prepared_at": "2026-11-17T01:16:29.405108+00:00",
+  "context": {
+    "GITHUB_REPOSITORY": "anigio2705-dev/hangeul-swipji",
+    "GITHUB_RUN_ID": "43994246651",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_JOB": "validate",
+    "GITHUB_SHA": "b0ede25ceebd44cbff00421d87effaafd8e552fb"
+  },
+  "checkout_sha": "b0ede25ceebd44cbff00421d87effaafd8e552fb",
+  "removed_prior_artifacts": [
+    "audit/browser-functional.json",
+    "audit/phase2-content.json",
+    "audit/professional96-audio-actions.json",
+    "audit/professional96-content.json",
+    "audit/staging9-instant-results.json",
+    "phase3/browser-results.json",
+    "phase3/postgres-results.json",
+    "phase3/staging-browser-results.json",
+    "phase3/video-browser-results.json"
+  ],
+  "collected_at": "2026-11-17T01:18:08.942741+00:00",
+  "job_status_before_collection": "failure",
+  "files": [
+    {
+      "path": "audit/professional96-content.json",
+      "sha256": "4bb2e665039019c307e5885378821ff25492309130b0a3462d89d608fa072b81",
+      "bytes": 3783
+    },
+    {
+      "path": "phase3/postgres-results.json",
+      "sha256": "74cf1361b49354f97dcb96b246c0202fbd52ce39e3c669b526d10d8b786f521f",
+      "bytes": 1049
+    }
+  ],
+  "missing_required": [
+    "phase3/browser-results.json",
+    "phase3/staging-browser-results.json",
+    "phase3/video-browser-results.json",
+    "audit/staging9-instant-results.json",
+    "audit/phase2-content.json",
+    "audit/browser-functional.json"
+  ],
+  "evidence_complete": false,
+  "note": "Artifact existence alone is not a test pass; inspect workflow step results."
+}
