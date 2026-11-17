@@ -1,0 +1,31 @@
+{
+  "scope": "REAL_LOCAL_BROWSER_DELAYED_PROFILE_SAVE_ACCOUNT_BOUNDARIES",
+  "cases": [
+    {
+      "scenario": "logout_success",
+      "status": "PASS",
+      "violations": [],
+      "server_session_status": 401,
+      "account_text": "로그인\n시작하기",
+      "old_profile_committed_to_correct_account": true
+    },
+    {
+      "scenario": "switch_success",
+      "status": "PASS",
+      "violations": [],
+      "server_session_status": 200,
+      "account_text": "Bob_switch_success · 학습자\n로그아웃",
+      "old_profile_committed_to_correct_account": true
+    },
+    {
+      "scenario": "switch_failure",
+      "status": "PASS",
+      "violations": [],
+      "server_session_status": 200,
+      "account_text": "Bob_switch_failure · 학습자\n로그아웃",
+      "old_profile_committed_to_correct_account": true
+    }
+  ],
+  "page_errors": [],
+  "status": "PASS"
+}

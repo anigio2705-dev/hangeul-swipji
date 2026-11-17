@@ -1,0 +1,14 @@
+SOURCE_SERVER_SHA256=00323b6ad6b2068a21540bd1731ac7852a31e4444b06d9405396a8a79824cb04
+test_charge_committed_lost_response_replays_without_duplicate (__main__.CrashBoundaries.test_charge_committed_lost_response_replays_without_duplicate) ... {"boundary": "after_commit_before_response", "endpoint_kind": "pay-test", "killed_pid": 6, "new_pid": 17, "exit": -9, "integrity": "ok", "session_preserved": true}
+ok
+test_charge_uncommitted_kill_rolls_back_then_concurrent_retry_posts_once (__main__.CrashBoundaries.test_charge_uncommitted_kill_rolls_back_then_concurrent_retry_posts_once) ... {"boundary": "before_commit", "endpoint_kind": "pay-test", "killed_pid": 21, "new_pid": 32, "exit": -9, "integrity": "ok", "session_preserved": true}
+ok
+test_refund_committed_lost_response_concurrent_replay_is_idempotent (__main__.CrashBoundaries.test_refund_committed_lost_response_concurrent_replay_is_idempotent) ... {"boundary": "after_commit_before_response", "endpoint_kind": "refund", "killed_pid": 51, "new_pid": 65, "exit": -9, "integrity": "ok", "session_preserved": true}
+ok
+test_refund_uncommitted_kill_preserves_all_tables_then_retries_once (__main__.CrashBoundaries.test_refund_uncommitted_kill_preserves_all_tables_then_retries_once) ... {"boundary": "before_commit", "endpoint_kind": "refund", "killed_pid": 84, "new_pid": 98, "exit": -9, "integrity": "ok", "session_preserved": true}
+ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 2.016s
+
+OK
