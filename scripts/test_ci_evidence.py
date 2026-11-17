@@ -58,7 +58,7 @@ class EvidenceTests(unittest.TestCase):
         report = self.manifest()
         self.assertTrue(report['evidence_complete'])
         self.assertEqual(len(report['checkout_sha']), 40)
-        self.assertEqual(len(report['files']), 2)
+        self.assertEqual(len(report['files']), 3)
         self.assertTrue(all(len(item['sha256']) == 64 for item in report['files']))
         self.assertEqual(report['context'], evidence.context())
 
@@ -70,12 +70,14 @@ class EvidenceTests(unittest.TestCase):
 
     def test_green_job_with_late_browser_error_is_rejected(self):
         evidence.prepare('phase3', self.output)
+        self.write('audit/site-language-browser.json', {'errors': []})
         self.write('phase3/postgres-results.json', {'checks': ['fresh database']})
         self.write('phase3/browser-results.json', {'checks': ['earlier pass'],
                     'errors': ["Cannot read properties of undefined (reading 'dispose')"]})
         self.assertEqual(evidence.collect('phase3', self.output, 'success'), 1)
         self.assertFalse(self.manifest()['evidence_complete'])
         self.assertEqual(self.manifest()['reports_with_errors'], ['phase3/browser-results.json'])
+        self.assertEqual(self.manifest()['missing_required'], [])
 
 if __name__ == '__main__':
     unittest.main()

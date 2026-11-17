@@ -9,14 +9,14 @@ import shutil
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
-COMMON = ['phase3/browser-results.json', 'phase3/postgres-results.json',
+COMMON = ['audit/site-language-browser.json', 'phase3/browser-results.json', 'phase3/postgres-results.json',
           'phase3/browser-artifacts/*.png']
 EXTRA = ['phase3/staging-browser-results.json', 'phase3/video-browser-results.json',
          'audit/staging9-instant-results.json', 'audit/phase2-content.json',
          'audit/professional96-*.json', 'audit/browser-functional.json']
 REQUIRED = {
-    'phase3': ['phase3/browser-results.json', 'phase3/postgres-results.json'],
-    'integration': ['phase3/browser-results.json', 'phase3/postgres-results.json',
+    'phase3': ['audit/site-language-browser.json', 'phase3/browser-results.json', 'phase3/postgres-results.json'],
+    'integration': ['audit/site-language-browser.json', 'phase3/browser-results.json', 'phase3/postgres-results.json',
                     'phase3/staging-browser-results.json', 'phase3/video-browser-results.json',
                     'audit/staging9-instant-results.json', 'audit/phase2-content.json',
                     'audit/professional96-content.json', 'audit/browser-functional.json'],
