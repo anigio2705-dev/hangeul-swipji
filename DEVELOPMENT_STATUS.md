@@ -497,3 +497,8 @@ Server PR310 preserved. JS explicit learner/teacher IANA ranges, UTC offsets and
 ## 2026-11-17 추가 장애·프로필 지연 응답 수리
 
 기준 a0fae280cf6f03e9959be99349ee33841eda3ee0에서 별도 시험 branch로 후속 검사. 실제 HTTP/SQLite의 모의결제·모의환불 commit 직전/commit후 응답전 SIGKILL4사례 통과; 같은 임시DB로 시험기가 재시작한 새PID에서 무결성·세션·롤백·8개 동시재요청 멱등 확인. ABCD/AS 자동복구 증거가 아님. 실제 Chromium 지연 프로필 응답이 로그아웃/계정전환 뒤 과거 사용자·메시지를 표시하는 결함1건 재현(3FAIL) 후 app.js 저장응답/오류의 사용자·화면/계정세대 확인으로 수리(3PASS). 정상프로필UI6·기존진술UI6·통합HTTPS34확인·Python92·시간대VM회귀 통과. 기존독립검사 스크립트 재실행이며 새 독립B 수락 아님. 운영/기존24시간시험/main/실결제/모델/유료자원 변경0. 최초harness오류·제품최초실패·최종증거와 재개조건: reports/runtime-faults-20261117/REPORT.ko.md, MANIFEST.json. 다음: 한정 수리본 별도 코드 수락/통합 검토; 실제기기/실통화/운영Auth/실금전/배포 미완료.
+
+
+## 2026-11-17 160항목 재검증 — 공통 실행기 재개 미실행
+
+기준3175d267. 별도 환경 Python92·증거5·보존3·DB12·HTTPS35·즉시매칭10·언어14 및 콘텐츠 검사를 재실행했다. 재예약 POST 완료 전에 건수를 조회하던 검사경쟁을 수정했고 최초실패/수정후통과를 보존했다.160개는 사업목록이며 전체최종완료/자동실행재개를 주장하지 않는다. 상세 reports/reverify-160-20261117/REPORT.ko.md 및 items160.csv. 제품코드·운영·AS팀소유·배포·예산·예약변경0. 실제 자동수리→원업무복귀→다음업무는 별도미확인.
