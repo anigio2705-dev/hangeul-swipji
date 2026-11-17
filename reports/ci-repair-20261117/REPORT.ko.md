@@ -1,0 +1,36 @@
+# 1번 CI 복구 — 2026-11-17
+
+시작 10:12:21 KST. 사용자 요청에 따라25분쯤 저장하고30분 전에 이 회차를 종료한다. 현재24시간 시험 서버/운영/main은 변경하지 않는다.
+
+## 원인과 변경
+
+- 기존 제품39a7c09의 phase3 run43986480515:92개 중 과거7418e32 객체 부재로1오류. phase3 checkout fetch-depth0으로 수정.
+- 기존 integration run43986477014:ubuntu-latest의26.04와 Playwright1.51.1 불일치. 두 workflow를 도구가 지원하는 ubuntu24.04로 고정.
+- 실패 뒤 체크인된 과거JSON이 artifact에 섞임. 알려진 생성물만 검사 전에 제거하고 실행ID/attempt/checkoutSHA/status/파일해시를 새 디렉터리에 기록. 필수 결과가 없으면 성공 상태라도 실패한다.
+
+## 첫 실제 CI에서 발견한 후속 검사 오류
+
+검사 소스 e98000781dd22fef645e703294b7a0d2add72785. 설치와 Python92는 실제CI에서 통과했지만 두 전체job은 실패했다. 원문은 아래 실행에 보존된다.
+- integration43994246651: audit-professional-96.py가 승인된 task45의 intro.html 변경도7418e32와 비교해 original modified로 거부.
+- phase3 43994246989: 실제 브라우저가 UTC시간을 기본Asia/Seoul 프로필용 일정에 입력해 과거 시간으로 계산되며 저장 단계에서 멈춤.
+- 새 증거 수집기는 실패 상태와 브라우저 결과 누락을 정확히 기록했다. 과거 브라우저 성공 파일은 업로드하지 않았다.
+
+intro.html만 기존 수락 커밋 c6ec5657c76e567e1796704a8b9ef75ec89b94ee에 고정한다. 해당 커밋의 DEVELOPMENT_STATUS에는 task45 독립Node2463단언/B검토의 한정 수락 기록이 있다. 그 부모의 intro.html은7418e32와 동일하다. 다른13개 원본은 기존7418e32 비교를 유지한다. 교육 효과/내용 전체 수락으로 확대하지 않는다.
+
+브라우저 입력은 실제 계정의 시간대를 읽어 작성한다. 브라우저 장치는UTC로 고정하고 예약에 저장된UTC가 의도한 시작/종료와 정확히 같은지 추가 확인한다. 제품 시간대 로직은 변경하지 않는다.
+
+## 로컬 검증과 진행 상태
+
+- 증거 수집 회귀4개 통과: 과거 성공 제거, 누락 성공 거부, 실행/소스 연결, 다른run의 증거 재사용 거부.
+- 원본 보존 회귀3개 통과: 승인본 통과, intro 임의변경 거부, 다른 원본 임의변경 거부.
+- 수정한96교재 검사는 오류0. 교재 원고 변경0.
+- YAML 구문·브라우저JS 구문·diff 공백 검사 통과.
+- 두 번째 실제CI는 후속 수정 커밋에서 확인할 예정이다. 첫 실패를 성공으로 덮지 않는다.
+
+제품 실행 코드·실제결제·운영DB·24시간 서버·새 모델 호출 변경0. 새 독립 B 수락은 없다.
+
+## 원문
+
+- https://github.com/anigio2705-dev/hangeul-swipji/pull/347
+- https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/43994246651
+- https://github.com/anigio2705-dev/hangeul-swipji/actions/runs/43994246989

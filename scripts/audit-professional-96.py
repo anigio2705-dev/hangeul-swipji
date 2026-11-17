@@ -30,8 +30,11 @@ for u in units:
   for a in qs:check(0<=a['answerIndex']<len(a['choices']),u['id']+': diagnostic key')
 original=['intro.html','beginner1.html','beginner2.html','intermediate1.html','intermediate2.html','advanced1.html','advanced2.html','reading.html','reading-curriculum.js','reading-alternates.js','hangul-audio-manifest.json','index.html','phase3/content.json','phase3/content-expansion.json']
 preserved={}
+# Task45 added quiz explanations after the original preservation baseline.
+# Its exact accepted revision is fixed here; arbitrary later changes still fail.
+preservationBaselines={'intro.html': 'c6ec5657c76e567e1796704a8b9ef75ec89b94ee'}
 for f in original:
- old=subprocess.check_output(['git','show',base+':'+f],cwd=R);actual=(R/f).read_bytes();preserved[f]=hashlib.sha256(actual).hexdigest();check(old==actual,'original modified: '+f)
+ old=subprocess.check_output(['git','show',preservationBaselines.get(f,base)+':'+f],cwd=R);actual=(R/f).read_bytes();preserved[f]=hashlib.sha256(actual).hexdigest();check(old==actual,'original modified: '+f)
 def grams(text):
  w=text.split();return set(tuple(w[i:i+3]) for i in range(len(w)-2))
 features={u['id']:grams(u['reading']) for u in units};pairs=[]
@@ -48,5 +51,6 @@ check([x['uniqueSurfaceForms'] for x in stages]==sorted(x['uniqueSurfaceForms'] 
 # Common courtesy phrases and intentionally shared prechecks are reported, not mislabelled unique.
 repeatedQuestions=[{'question':q,'count':c} for q,c in Counter(questions).items() if c>1]
 report=dict(baseCommit=base,units=len(units),newUnits=72,assessmentItems=288,stages=stages,passagePairs=len(pairs),exactPassageDuplicates=96-len(set(u['reading'] for u in units)),highestSimilarityPairs=[dict(score=round(s,4),a=a,b=b) for s,a,b in pairs[:12]],repeatedAssessmentStems=repeatedQuestions,preservedSHA256=preserved,errors=errors,limits=['Morphological difficulty, official CEFR/TOPIK calibration and educational effectiveness are not established by length or surface forms.','Shared stage prechecks and shared lesson-flow layouts are intentional.','Answer evidence/key tests do not establish every possible semantic interpretation; author review and teacher review are distinct.'])
+report['preservationBaselines']={f:preservationBaselines.get(f,base) for f in original}
 (R/'audit/professional96-content.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
 print(json.dumps({k:v for k,v in report.items() if k not in ('preservedSHA256','highestSimilarityPairs')},ensure_ascii=False,indent=2));sys.exit(bool(errors))
