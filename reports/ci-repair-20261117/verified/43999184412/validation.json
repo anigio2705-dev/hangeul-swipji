@@ -1,0 +1,56 @@
+{
+  "run_id": "43999184412",
+  "checkout_sha": "07af2f0163510705520559bd8836a0c60b1a44b5",
+  "artifact_sha256": "ac648f66294f46b0d552198c90f57e0acfd0ee24fe2c7f4c59a969938e795e6e",
+  "file_count": 13,
+  "all_hashes_match": true,
+  "required_complete": true,
+  "json_errors_empty": true,
+  "reports": {
+    "audit/browser-functional.json": {
+      "checks": 0,
+      "profiles": 2,
+      "errors": []
+    },
+    "audit/phase2-content.json": {
+      "checks": 0,
+      "profiles": 0,
+      "errors": []
+    },
+    "audit/professional96-content.json": {
+      "checks": 0,
+      "profiles": 0,
+      "errors": []
+    },
+    "audit/site-language-browser.json": {
+      "checks": 14,
+      "profiles": 0,
+      "errors": []
+    },
+    "audit/staging9-instant-results.json": {
+      "checks": 10,
+      "profiles": 0,
+      "errors": []
+    },
+    "phase3/browser-results.json": {
+      "checks": 33,
+      "profiles": 0,
+      "errors": []
+    },
+    "phase3/postgres-results.json": {
+      "checks": 12,
+      "profiles": 0,
+      "errors": null
+    },
+    "phase3/staging-browser-results.json": {
+      "checks": 35,
+      "profiles": 0,
+      "errors": []
+    },
+    "phase3/video-browser-results.json": {
+      "checks": 17,
+      "profiles": 0,
+      "errors": []
+    }
+  }
+}

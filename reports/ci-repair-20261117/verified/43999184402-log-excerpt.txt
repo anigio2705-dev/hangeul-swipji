@@ -1,0 +1,67 @@
+2026-11-17T01:55:59.6451348Z Ran 5 tests in 0.040s
+2026-11-17T01:55:59.6451776Z OK
+2026-11-17T01:55:59.6456214Z {"status": "success", "files": 3, "missing": []}
+2026-11-17T01:55:59.6457601Z {"status": "success", "files": 3, "missing": []}
+2026-11-17T01:55:59.6459236Z {"status": "success", "files": 1, "missing": ["audit/site-language-browser.json", "phase3/browser-results.json"]}
+2026-11-17T01:56:47.1859004Z Ran 92 tests in 46.865s
+2026-11-17T01:56:47.1859243Z OK
+2026-11-17T01:57:01.6890039Z PASS preview refuses installation without isolated gate
+2026-11-17T01:57:01.7284424Z PASS full proposal SQL installs in isolated PostgreSQL
+2026-11-17T01:57:01.7295535Z PASS RLS enabled on every hs3 table
+2026-11-17T01:57:01.7364301Z PASS anonymous schema access denied
+2026-11-17T01:57:01.7374917Z PASS authenticated client denied without explicit grants
+2026-11-17T01:57:01.7408191Z PASS owner RLS reads only self and rejects role escalation
+2026-11-17T01:57:01.7450216Z PASS provider overlapping availability rejected by GiST
+2026-11-17T01:57:01.7536097Z PASS cross-user booking homework and earnings RLS denied
+2026-11-17T01:57:01.7566216Z PASS authorized participant reads booking and homework
+2026-11-17T01:57:01.7592633Z PASS beneficiary reads own ledger but cannot write or delete
+2026-11-17T01:57:01.7613580Z PASS duplicate ledger event rejected
+2026-11-17T01:57:01.7642977Z PASS learner overlapping claim rejected across different providers
+2026-11-17T01:57:48.3022875Z PASS 1440: eight languages, protected lesson text, safe separate translation link
+2026-11-17T01:57:48.3696371Z PASS 1440: rapid navigation never loads external translator
+2026-11-17T01:57:48.4158162Z PASS 1440: selection navigates, saves and survives reload
+2026-11-17T01:57:48.4357970Z PASS 1440: native bilingual course handler remains active
+2026-11-17T01:57:48.4812659Z PASS 1440: local page gives browser translation guidance without external requests
+2026-11-17T01:57:48.5374411Z PASS 1440: invalid language and duplicate initialization remain safe
+2026-11-17T01:57:48.5393552Z PASS 1440: unrelated JavaScript errors are not suppressed
+2026-11-17T01:57:48.7690389Z PASS 390: eight languages, protected lesson text, safe separate translation link
+2026-11-17T01:57:48.8379249Z PASS 390: rapid navigation never loads external translator
+2026-11-17T01:57:48.8795772Z PASS 390: selection navigates, saves and survives reload
+2026-11-17T01:57:48.8989642Z PASS 390: native bilingual course handler remains active
+2026-11-17T01:57:48.9421641Z PASS 390: local page gives browser translation guidance without external requests
+2026-11-17T01:57:48.9968763Z PASS 390: invalid language and duplicate initialization remain safe
+2026-11-17T01:57:48.9981554Z PASS 390: unrelated JavaScript errors are not suppressed
+2026-11-17T01:57:50.0865692Z PASS teacher UI signup
+2026-11-17T01:57:52.2860384Z PASS free learning to20-question placement to studio advisory context
+2026-11-17T01:57:52.6014745Z PASS learner UI signup
+2026-11-17T01:57:52.7360964Z PASS voluntary free placement summary saved to learner only
+2026-11-17T01:57:53.1971670Z PASS new independent lesson and precheck UI persisted
+2026-11-17T01:57:53.5509091Z PASS partner UI signup
+2026-11-17T01:57:53.9694638Z PASS admin UI approval
+2026-11-17T01:57:55.8001677Z PASS teacher availability UI
+2026-11-17T01:57:56.0186368Z PASS learner UI search booking and test payment
+2026-11-17T01:57:56.0222286Z PASS profile-zone availability retains exact UTC on a UTC browser
+2026-11-17T01:57:56.0273766Z PASS same immutable content hash
+2026-11-17T01:57:56.0274214Z PASS teacher guide role separation
+2026-11-17T01:57:56.0473653Z PASS booked lesson UI
+2026-11-17T01:57:56.4402626Z PASS both users same Jitsi test room URL
+2026-11-17T01:57:56.7009645Z PASS homework and feedback UI persisted
+2026-11-17T01:57:57.2175976Z PASS postcheck teacher rubric and next-lesson record UI
+2026-11-17T01:57:57.2946339Z PASS UI premature completion blocked
+2026-11-17T01:57:57.7288881Z PASS full booking to completion with shared30m simulated server clock
+2026-11-17T01:57:57.9518503Z PASS completed lesson review and admin test settlement UI
+2026-11-17T01:57:58.0009950Z PASS provider private earnings UI after settlement
+2026-11-17T01:57:58.2426817Z PASS counterpart statement saved through actual UI
+2026-11-17T01:57:58.5504824Z PASS dispute refund appeal UI
+2026-11-17T01:57:58.5999822Z PASS 9 profitability scenarios rendered
+2026-11-17T01:57:58.6774677Z PASS one original homepage with inline classroom at desktop and mobile
+2026-11-17T01:57:58.7401300Z PASS untrusted placement value ignored
+2026-11-17T01:58:00.6865298Z PASS desktop1440 mobile390 no page horizontal overflow
+2026-11-17T01:58:00.6865786Z PASS no JavaScript page errors
+2026-11-17T01:58:00.6926786Z PASS policy and runbook links resolve
+2026-11-17T01:58:01.1698923Z PASS eight supported core UI languages on unified mobile homepage
+2026-11-17T01:58:01.3696597Z PASS profile New York participant timezone overrides device Honolulu; stored UTC unchanged
+2026-11-17T01:58:02.4064363Z PASS rebooking opens next lesson and persists a new72-unit reservation
+2026-11-17T01:58:22.9397576Z PASS all96 student lessons desktop/mobile:192 dialogs,288 questions each viewport, answer keys hidden
+2026-11-17T01:58:23.2830625Z PASS new final lesson teacher flow prompts errors and four-skill guidance UI
+2026-11-17T01:58:23.3727357Z {"status": "success", "files": 7, "missing": []}

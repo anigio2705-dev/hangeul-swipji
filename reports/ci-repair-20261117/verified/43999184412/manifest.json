@@ -1,0 +1,98 @@
+{
+  "schema": 1,
+  "kind": "integration",
+  "workspace": "/home/runner/work/hangeul-swipji/hangeul-swipji",
+  "prepared_at": "2026-11-17T01:55:56.192429+00:00",
+  "context": {
+    "GITHUB_REPOSITORY": "anigio2705-dev/hangeul-swipji",
+    "GITHUB_RUN_ID": "43999184412",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_JOB": "validate",
+    "GITHUB_SHA": "07af2f0163510705520559bd8836a0c60b1a44b5"
+  },
+  "checkout_sha": "07af2f0163510705520559bd8836a0c60b1a44b5",
+  "removed_prior_artifacts": [
+    "audit/browser-functional.json",
+    "audit/phase2-content.json",
+    "audit/professional96-audio-actions.json",
+    "audit/professional96-content.json",
+    "audit/staging9-instant-results.json",
+    "phase3/browser-results.json",
+    "phase3/postgres-results.json",
+    "phase3/staging-browser-results.json",
+    "phase3/video-browser-results.json"
+  ],
+  "collected_at": "2026-11-17T02:00:18.421156+00:00",
+  "job_status_before_collection": "success",
+  "files": [
+    {
+      "path": "audit/browser-functional.json",
+      "sha256": "a8608799e6c51aa333c1833722b5b0a971a9512133d0ad26b3d0cb3d5c128249",
+      "bytes": 910
+    },
+    {
+      "path": "audit/phase2-content.json",
+      "sha256": "ca901118e82d2f1518ca4689c42bbfb54f87131698d150024dee3275d88b1bc4",
+      "bytes": 198020
+    },
+    {
+      "path": "audit/professional96-content.json",
+      "sha256": "938ba987300977174600460ceb190363f4ab44c78f1b72ac925f4b250002f14f",
+      "bytes": 4745
+    },
+    {
+      "path": "audit/site-language-browser.json",
+      "sha256": "32e5da858fae5b78088e307085682797aa0e8703fcb0496bedd3ec5506f2e422",
+      "bytes": 1065
+    },
+    {
+      "path": "audit/staging9-instant-results.json",
+      "sha256": "6d9c73c9dde34ebf34ec19347c797ff5c089d73c37e617c14c2538808f215c28",
+      "bytes": 843
+    },
+    {
+      "path": "phase3/browser-artifacts/scenario-1440.png",
+      "sha256": "90b2dcec3d9f30a1dbaf46f973dd59dae8a56d8f503a9b21420470093e5d651e",
+      "bytes": 1549997
+    },
+    {
+      "path": "phase3/browser-artifacts/scenario-390.png",
+      "sha256": "dd8b447f65de8377d472c8230273c4282255cdfb4e032cbc7af942eb619fc1ae",
+      "bytes": 689074
+    },
+    {
+      "path": "phase3/browser-artifacts/standards96-teacher.png",
+      "sha256": "32cc0071128f83c7bffa01334fb79f36e8494c889b2da59836cb3e3f31ed0bed",
+      "bytes": 126021
+    },
+    {
+      "path": "phase3/browser-artifacts/unified-classroom-mobile.png",
+      "sha256": "810ca66436745a014387ddca6edabe46da59a5b79b418cca08952d269a2c9aeb",
+      "bytes": 89934
+    },
+    {
+      "path": "phase3/browser-results.json",
+      "sha256": "38d2b40f158d666776daae79453e8fcd0c25867d8ef3c9b378d783c297fb9759",
+      "bytes": 2091
+    },
+    {
+      "path": "phase3/postgres-results.json",
+      "sha256": "74cf1361b49354f97dcb96b246c0202fbd52ce39e3c669b526d10d8b786f521f",
+      "bytes": 1049
+    },
+    {
+      "path": "phase3/staging-browser-results.json",
+      "sha256": "f4cdd7f77c4b6abedfa828855099bbb2be471366f7d85a839ecd0b02507c88ad",
+      "bytes": 2302
+    },
+    {
+      "path": "phase3/video-browser-results.json",
+      "sha256": "1e8fe67c114defc82bdb6a0b712cd894e9d1a2c6cddf6c3ef98d7be1328bc46a",
+      "bytes": 1324
+    }
+  ],
+  "missing_required": [],
+  "reports_with_errors": [],
+  "evidence_complete": true,
+  "note": "Artifact existence alone is not a test pass; inspect workflow step results."
+}
