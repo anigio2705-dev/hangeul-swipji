@@ -1,0 +1,14 @@
+{
+  "scope": "INDEPENDENT_REAL_CHROMIUM_LOCAL_PROFILE_PERSISTENCE_AND_ACCOUNT_ISOLATION",
+  "checks": [
+    "two real UI signups in separate browser contexts",
+    "UI edit saved and visible after real reload",
+    "other browser account profile not overwritten",
+    "same actual UI sessions API readback agrees",
+    "read-only SQLite oracle agrees with both UI accounts",
+    "390px whole document no horizontal overflow"
+  ],
+  "external_blocked": [],
+  "page_errors": [],
+  "status": "PASS_SCOPED_REAL_UI"
+}

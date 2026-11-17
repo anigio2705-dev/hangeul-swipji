@@ -1,0 +1,40 @@
+{
+  "base_commit": "a0fae280cf6f03e9959be99349ee33841eda3ee0",
+  "checked_at_utc": "2026-11-17T00:16:24.882188+00:00",
+  "product_files_changed": [
+    "phase3/app.js"
+  ],
+  "source_sha256": {
+    "phase3/app.js": "ff84dce3def7cebda871a9c6d2e07b07dac6fb7e6560c29a128d2bf737136912",
+    "phase3/server.py": "00323b6ad6b2068a21540bd1731ac7852a31e4444b06d9405396a8a79824cb04",
+    "phase3/browser-test.cjs": "9c392980d4018745e837656a09231ed9706aa2598fe95ee00e7847beec8c46de"
+  },
+  "new_crash_cases": 4,
+  "browser_race_cases": 3,
+  "staging_checks": 34,
+  "python_tests": 92,
+  "new_independent_acceptance": false,
+  "current_24h_changed": false,
+  "production_changes": 0,
+  "status": "PASS_SCOPED_LOCAL_FAULT_AND_PROFILE_RACE_REPAIR",
+  "files": {
+    "REPORT.ko.md": "70b257a06bfcadb8b3a684f899680dbcf1da2fb49eac073a71b7ea91518ee718",
+    "browser_profile_races.cjs": "37304eafcc3778909e856ddafc6a620c17bea77fb2f9cd476cd5c6596da49706",
+    "crash-harness-initial-error.log": "c406c8747fdba41cfa212ea6140b41bfcfcd537fde025887c64e6cc794b390dc",
+    "crash-verified.log": "90e4eb62f91850a92672e759a0ef6595a557cb296b46c4286c2fbf65c42e4adc",
+    "profile-positive-regression.json": "0cbdbec086678c5f8973d2ebca88ce6db64ec1bd241f94bf058cf7f5aed3d642",
+    "profile-positive-regression.log": "0cbdbec086678c5f8973d2ebca88ce6db64ec1bd241f94bf058cf7f5aed3d642",
+    "profile-races-after.json": "00039e748f5b6c6672a41b26f51978964a173f68359f9b89b2dc542ff1eff47f",
+    "profile-races-after.log": "00039e748f5b6c6672a41b26f51978964a173f68359f9b89b2dc542ff1eff47f",
+    "profile-races-before.json": "c50324e6a1f86b179289601d57364bc3622e8aedd036d3f3abc6b06013ad2e7f",
+    "profile-races-before.log": "c50324e6a1f86b179289601d57364bc3622e8aedd036d3f3abc6b06013ad2e7f",
+    "profile-save-repair.patch": "bb5e0a8bc24846f7e24ca8bfc2cd67e59b113311faaf853972bfa9fad8054cff",
+    "python-regression.log": "86dc9e1ea494b2aacb9afaf5fa83c119c3edd5be63bf3584bab1aebce8c1af16",
+    "staging-browser-results.json": "a74c8a89566a1f72cd0194585a0c5e4d2892703c23a8db2b4ad92f378ad0c1ff",
+    "staging-browser.log": "2aef67abba9a87edea3e293d099a81385a95d48f1a02513b1155df3c50f5d8f5",
+    "statement-regression.json": "1bd6c4119876ccd8e84c3176e00af512953e3cdd301c328395da897e5f2c902a",
+    "statement-regression.log": "1bd6c4119876ccd8e84c3176e00af512953e3cdd301c328395da897e5f2c902a",
+    "test_crash_boundaries.py": "c81148eecc739e3d2762b6fdc98671771f6cc7a6af83c6d8d001eb9ff1b923b4",
+    "timezone-regression.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

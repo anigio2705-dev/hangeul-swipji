@@ -1,0 +1,98 @@
+SOURCE_SERVER_SHA256=00323b6ad6b2068a21540bd1731ac7852a31e4444b06d9405396a8a79824cb04
+test_charge_committed_lost_response_replays_without_duplicate (__main__.CrashBoundaries.test_charge_committed_lost_response_replays_without_duplicate) ... ERROR
+test_charge_uncommitted_kill_rolls_back_then_concurrent_retry_posts_once (__main__.CrashBoundaries.test_charge_uncommitted_kill_rolls_back_then_concurrent_retry_posts_once) ... ERROR
+test_refund_committed_lost_response_concurrent_replay_is_idempotent (__main__.CrashBoundaries.test_refund_committed_lost_response_concurrent_replay_is_idempotent) ... ERROR
+test_refund_uncommitted_kill_preserves_all_tables_then_retries_once (__main__.CrashBoundaries.test_refund_uncommitted_kill_preserves_all_tables_then_retries_once) ... ERROR
+
+======================================================================
+ERROR: test_charge_committed_lost_response_replays_without_duplicate (__main__.CrashBoundaries.test_charge_committed_lost_response_replays_without_duplicate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/reports/runtime-faults-20261117/test_crash_boundaries.py", line 194, in test_charge_committed_lost_response_replays_without_duplicate
+    self.crash('after_commit_before_response', self.pay, {}, self.learner)
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/reports/runtime-faults-20261117/test_crash_boundaries.py", line 173, in crash
+    self.launch()
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/reports/runtime-faults-20261117/test_crash_boundaries.py", line 113, in launch
+    raise RuntimeError((self.folder/'server.log').read_text())
+RuntimeError: READY
+Traceback (most recent call last):
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/reports/runtime-faults-20261117/test_crash_boundaries.py", line 234, in <module>
+    child(*sys.argv[2:])
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/reports/runtime-faults-20261117/test_crash_boundaries.py", line 63, in child
+    server.create_admin('crash-admin@example.test', 'Local-Crash-Admin-12345!')
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/phase3/server.py", line 841, in create_admin
+    uid=ident(); db.execute('INSERT INTO users(id,email,password,nickname,role,referral_code,created_at) VALUES(?,?,?,?,?,?,?)',(uid,email.lower(),hash_password(password),'테스트 관리자','admin',secrets.token_hex(5),time.time())); audit(db,uid,'admin_bootstrap',uid)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: UNIQUE constraint failed: users.email
+
+
+======================================================================
+ERROR: test_charge_uncommitted_kill_rolls_back_then_concurrent_retry_posts_once (__main__.CrashBoundaries.test_charge_uncommitted_kill_rolls_back_then_concurrent_retry_posts_once)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/reports/runtime-faults-20261117/test_crash_boundaries.py", line 185, in test_charge_uncommitted_kill_rolls_back_then_concurrent_retry_posts_once
+    self.crash('before_commit', self.pay, {}, self.learner)
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/reports/runtime-faults-20261117/test_crash_boundaries.py", line 173, in crash
+    self.launch()
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/reports/runtime-faults-20261117/test_crash_boundaries.py", line 113, in launch
+    raise RuntimeError((self.folder/'server.log').read_text())
+RuntimeError: READY
+Traceback (most recent call last):
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/reports/runtime-faults-20261117/test_crash_boundaries.py", line 234, in <module>
+    child(*sys.argv[2:])
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/reports/runtime-faults-20261117/test_crash_boundaries.py", line 63, in child
+    server.create_admin('crash-admin@example.test', 'Local-Crash-Admin-12345!')
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/phase3/server.py", line 841, in create_admin
+    uid=ident(); db.execute('INSERT INTO users(id,email,password,nickname,role,referral_code,created_at) VALUES(?,?,?,?,?,?,?)',(uid,email.lower(),hash_password(password),'테스트 관리자','admin',secrets.token_hex(5),time.time())); audit(db,uid,'admin_bootstrap',uid)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: UNIQUE constraint failed: users.email
+
+
+======================================================================
+ERROR: test_refund_committed_lost_response_concurrent_replay_is_idempotent (__main__.CrashBoundaries.test_refund_committed_lost_response_concurrent_replay_is_idempotent)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/reports/runtime-faults-20261117/test_crash_boundaries.py", line 222, in test_refund_committed_lost_response_concurrent_replay_is_idempotent
+    self.crash('after_commit_before_response', endpoint, body, self.admin)
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/reports/runtime-faults-20261117/test_crash_boundaries.py", line 173, in crash
+    self.launch()
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/reports/runtime-faults-20261117/test_crash_boundaries.py", line 113, in launch
+    raise RuntimeError((self.folder/'server.log').read_text())
+RuntimeError: READY
+Traceback (most recent call last):
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/reports/runtime-faults-20261117/test_crash_boundaries.py", line 234, in <module>
+    child(*sys.argv[2:])
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/reports/runtime-faults-20261117/test_crash_boundaries.py", line 63, in child
+    server.create_admin('crash-admin@example.test', 'Local-Crash-Admin-12345!')
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/phase3/server.py", line 841, in create_admin
+    uid=ident(); db.execute('INSERT INTO users(id,email,password,nickname,role,referral_code,created_at) VALUES(?,?,?,?,?,?,?)',(uid,email.lower(),hash_password(password),'테스트 관리자','admin',secrets.token_hex(5),time.time())); audit(db,uid,'admin_bootstrap',uid)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: UNIQUE constraint failed: users.email
+
+
+======================================================================
+ERROR: test_refund_uncommitted_kill_preserves_all_tables_then_retries_once (__main__.CrashBoundaries.test_refund_uncommitted_kill_preserves_all_tables_then_retries_once)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/reports/runtime-faults-20261117/test_crash_boundaries.py", line 212, in test_refund_uncommitted_kill_preserves_all_tables_then_retries_once
+    self.crash('before_commit', endpoint, body, self.admin)
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/reports/runtime-faults-20261117/test_crash_boundaries.py", line 173, in crash
+    self.launch()
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/reports/runtime-faults-20261117/test_crash_boundaries.py", line 113, in launch
+    raise RuntimeError((self.folder/'server.log').read_text())
+RuntimeError: READY
+Traceback (most recent call last):
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/reports/runtime-faults-20261117/test_crash_boundaries.py", line 234, in <module>
+    child(*sys.argv[2:])
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/reports/runtime-faults-20261117/test_crash_boundaries.py", line 63, in child
+    server.create_admin('crash-admin@example.test', 'Local-Crash-Admin-12345!')
+  File "/workspace/scratch/3b40a3c8366d/hangeul-audit/phase3/server.py", line 841, in create_admin
+    uid=ident(); db.execute('INSERT INTO users(id,email,password,nickname,role,referral_code,created_at) VALUES(?,?,?,?,?,?,?)',(uid,email.lower(),hash_password(password),'테스트 관리자','admin',secrets.token_hex(5),time.time())); audit(db,uid,'admin_bootstrap',uid)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: UNIQUE constraint failed: users.email
+
+
+----------------------------------------------------------------------
+Ran 4 tests in 2.256s
+
+FAILED (errors=4)

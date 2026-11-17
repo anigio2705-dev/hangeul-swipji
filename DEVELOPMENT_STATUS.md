@@ -474,3 +474,8 @@ Server PR310 preserved. JS explicit learner/teacher IANA ranges, UTC offsets and
 ## 2026-11-17 실제 화면 후속 검사·진술 UI 수리
 
 공식 Playwright HeadlessShell로 이전 실행환경 막힘을 해소했다. 실제 통합 HTTPS화면34확인,96교재PC/mobile192dialog(학생정답숨김),350단원700언어보기,읽기600,무료진도·음원78개재생종료,8언어,즉시매칭10확인,합성미디어16확인 통과. 실제 화면에서 상대방진술 입력UI 누락을 발견하여 phase3/app.js에 기존API 본인저장/조회·관리자읽기 연결만 수리했다. 기존 서버권한/환불검사는 유지. 구형 browser-test의 일정selector/프로필timezone/학생정답숨김 기대값을 보완. Python92 재통과. 독립HTTP4·실제프로필6·진술UI6확인 및 scopedACCEPT, app SHA256 1254ad0d1698541a8a67a6ad287c2d8c6425108fcab20d062dc7d040fef5ba24. 실제기기/두기기통화/운영Auth/실금전/교육효과/24시간운행의 합격은 아님. 운영과 기존24시간시험 변경0. 원문·스크린샷·독립검토·재현명령: reports/isolated-runtime-20261117/browser-followup-20261117/.
+
+
+## 2026-11-17 추가 장애·프로필 지연 응답 수리
+
+기준 a0fae280cf6f03e9959be99349ee33841eda3ee0에서 별도 시험 branch로 후속 검사. 실제 HTTP/SQLite의 모의결제·모의환불 commit 직전/commit후 응답전 SIGKILL4사례 통과; 같은 임시DB로 시험기가 재시작한 새PID에서 무결성·세션·롤백·8개 동시재요청 멱등 확인. ABCD/AS 자동복구 증거가 아님. 실제 Chromium 지연 프로필 응답이 로그아웃/계정전환 뒤 과거 사용자·메시지를 표시하는 결함1건 재현(3FAIL) 후 app.js 저장응답/오류의 사용자·화면/계정세대 확인으로 수리(3PASS). 정상프로필UI6·기존진술UI6·통합HTTPS34확인·Python92·시간대VM회귀 통과. 기존독립검사 스크립트 재실행이며 새 독립B 수락 아님. 운영/기존24시간시험/main/실결제/모델/유료자원 변경0. 최초harness오류·제품최초실패·최종증거와 재개조건: reports/runtime-faults-20261117/REPORT.ko.md, MANIFEST.json. 다음: 한정 수리본 별도 코드 수락/통합 검토; 실제기기/실통화/운영Auth/실금전/배포 미완료.
