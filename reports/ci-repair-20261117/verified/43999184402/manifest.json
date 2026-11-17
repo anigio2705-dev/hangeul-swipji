@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "kind": "phase3",
+  "workspace": "/home/runner/work/hangeul-swipji/hangeul-swipji",
+  "prepared_at": "2026-11-17T01:55:59.696047+00:00",
+  "context": {
+    "GITHUB_REPOSITORY": "anigio2705-dev/hangeul-swipji",
+    "GITHUB_RUN_ID": "43999184402",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_JOB": "test",
+    "GITHUB_SHA": "07af2f0163510705520559bd8836a0c60b1a44b5"
+  },
+  "checkout_sha": "07af2f0163510705520559bd8836a0c60b1a44b5",
+  "removed_prior_artifacts": [
+    "phase3/browser-results.json",
+    "phase3/postgres-results.json"
+  ],
+  "collected_at": "2026-11-17T01:58:23.372304+00:00",
+  "job_status_before_collection": "success",
+  "files": [
+    {
+      "path": "audit/site-language-browser.json",
+      "sha256": "32e5da858fae5b78088e307085682797aa0e8703fcb0496bedd3ec5506f2e422",
+      "bytes": 1065
+    },
+    {
+      "path": "phase3/browser-artifacts/scenario-1440.png",
+      "sha256": "90b2dcec3d9f30a1dbaf46f973dd59dae8a56d8f503a9b21420470093e5d651e",
+      "bytes": 1549997
+    },
+    {
+      "path": "phase3/browser-artifacts/scenario-390.png",
+      "sha256": "dd8b447f65de8377d472c8230273c4282255cdfb4e032cbc7af942eb619fc1ae",
+      "bytes": 689074
+    },
+    {
+      "path": "phase3/browser-artifacts/standards96-teacher.png",
+      "sha256": "32cc0071128f83c7bffa01334fb79f36e8494c889b2da59836cb3e3f31ed0bed",
+      "bytes": 126021
+    },
+    {
+      "path": "phase3/browser-artifacts/unified-classroom-mobile.png",
+      "sha256": "810ca66436745a014387ddca6edabe46da59a5b79b418cca08952d269a2c9aeb",
+      "bytes": 89934
+    },
+    {
+      "path": "phase3/browser-results.json",
+      "sha256": "2b154aa8692d0c63a0a31b964b3846e2a60e46d23c60b8bc529465debdf1b50e",
+      "bytes": 2091
+    },
+    {
+      "path": "phase3/postgres-results.json",
+      "sha256": "74cf1361b49354f97dcb96b246c0202fbd52ce39e3c669b526d10d8b786f521f",
+      "bytes": 1049
+    }
+  ],
+  "missing_required": [],
+  "reports_with_errors": [],
+  "evidence_complete": true,
+  "note": "Artifact existence alone is not a test pass; inspect workflow step results."
+}

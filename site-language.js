@@ -16,17 +16,40 @@ var nativeBilingual=!!(existingSelect&&typeof existingSelect.onchange==='functio
 // Preserve the language being studied when translating the surrounding interface.
 document.querySelectorAll('#content,#skillArea,#lessonTitle,#lessonDesc,#recallPanel,#lessonCoach,#story,#translation,#questions,#legacy-source,#lesson,#consonants,#vowels,#syllables').forEach(function(el){el.classList.add('notranslate');el.setAttribute('translate','no')});if(existingSelect){bar.style.setProperty('display','none','important');var headerStatus=document.createElement('p');headerStatus.id='hs-header-language-status';headerStatus.setAttribute('role','status');headerStatus.className='notranslate';headerStatus.style.cssText='margin:0;padding:0 16px;font-size:12px;color:#795322;max-width:100%';(existingSelect.closest('header')||existingSelect.parentElement).appendChild(headerStatus)}
 var select=document.getElementById('hs-site-language-select');select.replaceChildren();languages.forEach(function(x){var o=document.createElement('option');o.value=x[0];o.textContent=x[1];select.appendChild(o)});select.value=lang;
-function go(code){if(!valid.has(code))return;store(code);cookie(code);var url=new URL(location.href);url.searchParams.set('lang',code);url.searchParams.set('translate_version','4');location.assign(url.toString())}
+function go(code){if(!valid.has(code))return;store(code);cookie('ko');var url=new URL(location.href);url.searchParams.set('lang',code);url.searchParams.set('translate_version','4');location.assign(url.toString())}
 select.addEventListener('change',function(){go(select.value)});
 var desktop=document.getElementById('language')||document.getElementById('lang');
 if(desktop){var nativeOptions=Array.from(desktop.options||[]);if(nativeOptions.length){languages.forEach(function(x){if(!nativeOptions.some(function(o){return o.value===x[0]})){var opt=document.createElement('option');opt.value=x[0];opt.textContent=x[1];desktop.appendChild(opt)}});Array.from(desktop.options).forEach(function(o){o.hidden=!valid.has(o.value);o.disabled=!valid.has(o.value)});desktop.value=lang;desktop.addEventListener('change',function(e){var code=desktop.value;if(!valid.has(code))return;if(nativeBilingual&&(code==='ko'||code==='en')){lang=code;store(code);cookie('ko');var u=new URL(location.href);u.searchParams.set('lang',code);history.replaceState(null,'',u);document.documentElement.lang=code;status('');return}e.stopImmediatePropagation();go(code)},true);if(nativeBilingual&&(lang==='ko'||lang==='en'))desktop.onchange({target:desktop})}}
 document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(!a)return;try{var u=new URL(a.href,location.href);if(u.origin===location.origin&&(u.pathname.endsWith('.html')||u.pathname.endsWith('/'))){u.searchParams.set('lang',lang);a.href=u.href}}catch(err){}},true);
 document.querySelectorAll('a[href]').forEach(function(a){var raw=a.getAttribute('href');if(!raw||raw[0]==='#'||/^(mailto:|tel:|javascript:)/i.test(raw))return;try{var u=new URL(raw,location.href);if(u.origin===location.origin&&(u.pathname.endsWith('.html')||u.pathname.endsWith('/'))){u.searchParams.set('lang',lang);a.href=u.href}}catch(e){}});
 if(lang==='ko'||(nativeBilingual&&lang==='en')){cookie('ko');status('');return}
-cookie(lang);status('번역을 불러오는 중… / Loading translation…');
-var host=document.createElement('div');host.id='hs-google-translate-host';host.className='notranslate';document.body.appendChild(host);
-window.hsGoogleTranslateReady=function(){try{new google.translate.TranslateElement({pageLanguage:'ko',includedLanguages:languages.filter(function(x){return x[0]!=='ko'}).map(function(x){return x[0]}).join(','),autoDisplay:false},'hs-google-translate-host');var n=0;var timer=setInterval(function(){n++;var combo=document.querySelector('.goog-te-combo');if(combo){clearInterval(timer);combo.value=lang;combo.dispatchEvent(new Event('change',{bubbles:true}));status('기계 번역 · 정확성 미검수 / Machine translation · Unreviewed')}else if(n>35){clearInterval(timer);status('자동 번역을 사용할 수 없습니다. 브라우저 번역을 이용해 주세요.')}},200)}catch(e){status('번역을 불러오지 못했습니다. 브라우저 번역을 이용해 주세요.')}};
-var script=document.createElement('script');script.src='https://translate.google.com/translate_a/element.js?cb=hsGoogleTranslateReady';script.async=true;script.onerror=function(){status('Google 번역 연결 실패. 브라우저 번역을 이용해 주세요.')};document.head.appendChild(script);
+// Keep third-party scripts out of the learning/account page. The native
+// classroom languages and bilingual course handlers above remain local.
+cookie('ko');
+var messages={
+ en:['Translate public page ↗','Machine translation opens in a new tab. Use this tab for lessons and your account. You can also use your browser’s translation.'],
+ ja:['公開ページを翻訳 ↗','機械翻訳は新しいタブで開きます。授業とアカウントはこのタブで利用してください。ブラウザの翻訳も利用できます。'],
+ es:['Traducir página pública ↗','La traducción automática se abre en otra pestaña. Usa esta pestaña para clases y tu cuenta. También puedes usar la traducción del navegador.'],
+ ru:['Перевести открытую страницу ↗','Машинный перевод откроется в новой вкладке. Уроки и аккаунт доступны в этой вкладке. Также можно использовать перевод браузера.'],
+ 'zh-CN':['翻译公开页面 ↗','机器翻译将在新标签页中打开。课程和账户请在当前标签页使用。也可使用浏览器翻译。'],
+ mn:['Нийтийн хуудсыг орчуулах ↗','Машин орчуулга шинэ табд нээгдэнэ. Хичээл болон бүртгэлээ энэ табаас ашиглана уу. Хөтчийн орчуулгыг мөн ашиглаж болно.'],
+ vi:['Dịch trang công khai ↗','Bản dịch máy mở trong thẻ mới. Hãy dùng thẻ này cho lớp học và tài khoản. Bạn cũng có thể dùng bản dịch của trình duyệt.']
+};
+var copy=messages[lang]||messages.en;
+var output=document.getElementById('hs-header-language-status')||document.getElementById('hs-language-status');
+output.replaceChildren();
+var localHost=/^(localhost|127\.|0\.0\.0\.0$|\[?::1\]?$)/i.test(location.hostname)||location.hostname.endsWith('.localhost');
+if((location.protocol==='https:'||location.protocol==='http:')&&!localHost){
+ var publicUrl=new URL(location.pathname,location.origin);publicUrl.searchParams.set('lang',lang);
+ var link=document.createElement('a');link.id='hs-public-translation';link.textContent=copy[0];
+ var translationUrl=new URL('https://translate.google.com/translate');
+ translationUrl.searchParams.set('sl','ko');translationUrl.searchParams.set('tl',lang);translationUrl.searchParams.set('u',publicUrl.href);
+ link.href=translationUrl.href;link.target='_blank';link.rel='noopener noreferrer';link.referrerPolicy='no-referrer';
+ output.append(link,document.createTextNode(' · '+copy[1]));
+}else{
+ output.textContent='브라우저의 페이지 번역을 이용해 주세요. / Use your browser’s page translation.';
+}
+
 }
 store(lang);document.documentElement.lang=lang;document.documentElement.dir=['ar','ur','fa','he'].includes(lang)?'rtl':'ltr';
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',attach,{once:true});else attach();

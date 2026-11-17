@@ -1,0 +1,55 @@
+2026-11-17T01:27:27.9297526Z Ran 4 tests in 0.040s
+2026-11-17T01:27:27.9297767Z OK
+2026-11-17T01:27:27.9299031Z {"status": "failure", "files": 0, "missing": ["phase3/browser-results.json", "phase3/postgres-results.json"]}
+2026-11-17T01:27:27.9299799Z {"status": "success", "files": 2, "missing": []}
+2026-11-17T01:27:27.9300271Z {"status": "success", "files": 1, "missing": ["phase3/browser-results.json"]}
+2026-11-17T01:28:16.7711897Z Ran 92 tests in 48.643s
+2026-11-17T01:28:16.7712106Z OK
+2026-11-17T01:28:21.1975087Z PASS preview refuses installation without isolated gate
+2026-11-17T01:28:21.2315601Z PASS full proposal SQL installs in isolated PostgreSQL
+2026-11-17T01:28:21.2328327Z PASS RLS enabled on every hs3 table
+2026-11-17T01:28:21.2383874Z PASS anonymous schema access denied
+2026-11-17T01:28:21.2390220Z PASS authenticated client denied without explicit grants
+2026-11-17T01:28:21.2420806Z PASS owner RLS reads only self and rejects role escalation
+2026-11-17T01:28:21.2459004Z PASS provider overlapping availability rejected by GiST
+2026-11-17T01:28:21.2519584Z PASS cross-user booking homework and earnings RLS denied
+2026-11-17T01:28:21.2540570Z PASS authorized participant reads booking and homework
+2026-11-17T01:28:21.2564719Z PASS beneficiary reads own ledger but cannot write or delete
+2026-11-17T01:28:21.2582658Z PASS duplicate ledger event rejected
+2026-11-17T01:28:21.2606070Z PASS learner overlapping claim rejected across different providers
+2026-11-17T01:28:43.1257216Z PASS teacher UI signup
+2026-11-17T01:28:45.1913970Z PASS free learning to20-question placement to studio advisory context
+2026-11-17T01:28:45.5046067Z PASS learner UI signup
+2026-11-17T01:28:45.6597682Z PASS voluntary free placement summary saved to learner only
+2026-11-17T01:28:46.0636091Z PASS new independent lesson and precheck UI persisted
+2026-11-17T01:28:46.4052428Z PASS partner UI signup
+2026-11-17T01:28:46.8457801Z PASS admin UI approval
+2026-11-17T01:28:48.7583425Z PASS teacher availability UI
+2026-11-17T01:28:49.0099357Z PASS learner UI search booking and test payment
+2026-11-17T01:28:49.0137577Z PASS profile-zone availability retains exact UTC on a UTC browser
+2026-11-17T01:28:49.0185562Z PASS same immutable content hash
+2026-11-17T01:28:49.0185862Z PASS teacher guide role separation
+2026-11-17T01:28:49.0383355Z PASS booked lesson UI
+2026-11-17T01:28:54.0495035Z PASS both users same Jitsi test room URL
+2026-11-17T01:28:54.3066928Z PASS homework and feedback UI persisted
+2026-11-17T01:28:54.8254121Z PASS postcheck teacher rubric and next-lesson record UI
+2026-11-17T01:28:54.8849986Z PASS UI premature completion blocked
+2026-11-17T01:28:55.4189605Z PASS full booking to completion with shared30m simulated server clock
+2026-11-17T01:28:55.6418833Z PASS completed lesson review and admin test settlement UI
+2026-11-17T01:28:55.6895968Z PASS provider private earnings UI after settlement
+2026-11-17T01:28:55.9905879Z PASS counterpart statement saved through actual UI
+2026-11-17T01:28:56.2717516Z PASS dispute refund appeal UI
+2026-11-17T01:28:56.3199373Z PASS 9 profitability scenarios rendered
+2026-11-17T01:28:56.3999680Z PASS one original homepage with inline classroom at desktop and mobile
+2026-11-17T01:28:56.5149109Z PASS untrusted placement value ignored
+2026-11-17T01:28:58.4269754Z PASS desktop1440 mobile390 no page horizontal overflow
+2026-11-17T01:28:58.4270135Z PASS no JavaScript page errors
+2026-11-17T01:28:58.4318536Z PASS policy and runbook links resolve
+2026-11-17T01:28:58.9633865Z PASS eight supported core UI languages on unified mobile homepage
+2026-11-17T01:28:59.3352465Z PASS profile New York participant timezone overrides device Honolulu; stored UTC unchanged
+2026-11-17T01:29:00.3915834Z PASS rebooking opens next lesson and persists a new72-unit reservation
+2026-11-17T01:29:20.9115999Z PASS all96 student lessons desktop/mobile:192 dialogs,288 questions each viewport, answer keys hidden
+2026-11-17T01:29:21.2156846Z PASS new final lesson teacher flow prompts errors and four-skill guidance UI
+2026-11-17T01:29:21.2171365Z   "viewportWidths": [
+2026-11-17T01:29:21.2171885Z   "errors": [],
+2026-11-17T01:29:21.3203907Z {"status": "success", "files": 6, "missing": []}

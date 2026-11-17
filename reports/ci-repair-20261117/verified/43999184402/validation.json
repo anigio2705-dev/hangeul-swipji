@@ -1,0 +1,26 @@
+{
+  "run_id": "43999184402",
+  "checkout_sha": "07af2f0163510705520559bd8836a0c60b1a44b5",
+  "artifact_sha256": "e998407914c813e1884296231752d322a86d0ccc9b64beef29f8d795a6284939",
+  "file_count": 7,
+  "all_hashes_match": true,
+  "required_complete": true,
+  "json_errors_empty": true,
+  "reports": {
+    "audit/site-language-browser.json": {
+      "checks": 14,
+      "profiles": 0,
+      "errors": []
+    },
+    "phase3/browser-results.json": {
+      "checks": 33,
+      "profiles": 0,
+      "errors": []
+    },
+    "phase3/postgres-results.json": {
+      "checks": 12,
+      "profiles": 0,
+      "errors": null
+    }
+  }
+}

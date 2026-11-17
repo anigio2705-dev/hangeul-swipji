@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "kind": "phase3",
+  "workspace": "/home/runner/work/hangeul-swipji/hangeul-swipji",
+  "prepared_at": "2026-11-17T01:27:27.977018+00:00",
+  "context": {
+    "GITHUB_REPOSITORY": "anigio2705-dev/hangeul-swipji",
+    "GITHUB_RUN_ID": "43995684821",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_JOB": "test",
+    "GITHUB_SHA": "0cb2c803b71020a4f6e88eaa1e283bc26c8988db"
+  },
+  "checkout_sha": "0cb2c803b71020a4f6e88eaa1e283bc26c8988db",
+  "removed_prior_artifacts": [
+    "phase3/browser-results.json",
+    "phase3/postgres-results.json"
+  ],
+  "collected_at": "2026-11-17T01:29:21.320050+00:00",
+  "job_status_before_collection": "success",
+  "files": [
+    {
+      "path": "phase3/browser-artifacts/scenario-1440.png",
+      "sha256": "fef47233e23b277cd8c0282635a4d5192e43baa23231969ac00252824a0ec443",
+      "bytes": 1549999
+    },
+    {
+      "path": "phase3/browser-artifacts/scenario-390.png",
+      "sha256": "dd8b447f65de8377d472c8230273c4282255cdfb4e032cbc7af942eb619fc1ae",
+      "bytes": 689074
+    },
+    {
+      "path": "phase3/browser-artifacts/standards96-teacher.png",
+      "sha256": "32cc0071128f83c7bffa01334fb79f36e8494c889b2da59836cb3e3f31ed0bed",
+      "bytes": 126021
+    },
+    {
+      "path": "phase3/browser-artifacts/unified-classroom-mobile.png",
+      "sha256": "810ca66436745a014387ddca6edabe46da59a5b79b418cca08952d269a2c9aeb",
+      "bytes": 89934
+    },
+    {
+      "path": "phase3/browser-results.json",
+      "sha256": "09384b6e590cbfb22231f824ea47dbe97d2e0fec2b3b0781c54c5426413fd1a0",
+      "bytes": 2091
+    },
+    {
+      "path": "phase3/postgres-results.json",
+      "sha256": "74cf1361b49354f97dcb96b246c0202fbd52ce39e3c669b526d10d8b786f521f",
+      "bytes": 1049
+    }
+  ],
+  "missing_required": [],
+  "evidence_complete": true,
+  "note": "Artifact existence alone is not a test pass; inspect workflow step results."
+}

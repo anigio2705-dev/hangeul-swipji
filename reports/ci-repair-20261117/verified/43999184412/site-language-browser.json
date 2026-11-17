@@ -1,0 +1,21 @@
+{
+  "checks": [
+    "1440: eight languages, protected lesson text, safe separate translation link",
+    "1440: rapid navigation never loads external translator",
+    "1440: selection navigates, saves and survives reload",
+    "1440: native bilingual course handler remains active",
+    "1440: local page gives browser translation guidance without external requests",
+    "1440: invalid language and duplicate initialization remain safe",
+    "1440: unrelated JavaScript errors are not suppressed",
+    "390: eight languages, protected lesson text, safe separate translation link",
+    "390: rapid navigation never loads external translator",
+    "390: selection navigates, saves and survives reload",
+    "390: native bilingual course handler remains active",
+    "390: local page gives browser translation guidance without external requests",
+    "390: invalid language and duplicate initialization remain safe",
+    "390: unrelated JavaScript errors are not suppressed"
+  ],
+  "errors": [],
+  "externalTranslationTested": false,
+  "physicalMobileTested": false
+}
